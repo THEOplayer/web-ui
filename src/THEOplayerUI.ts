@@ -44,7 +44,7 @@ template.innerHTML = `
     </div>
 `;
 
-class THEOplayerUI extends HTMLElement {
+export class THEOplayerUI extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });

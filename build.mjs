@@ -7,7 +7,7 @@ const bundle = await esbuild.build({
     bundle: true,
     write: false,
     platform: 'browser',
-    entryPoints: ['./src/THEOplayerUI.ts'],
+    entryPoints: ['./src/index.ts'],
     outfile: './dist/THEOplayerUI.js',
     format: 'esm',
     target: 'es2019',
