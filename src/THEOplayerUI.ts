@@ -10,7 +10,6 @@ template.innerHTML = `
             width: 600px;
             height: 400px;
             display: inline-block;
-            line-height: 0;
             background-color: var(--media-background-color, #000);
         }
 
@@ -21,10 +20,18 @@ template.innerHTML = `
             bottom: 0;
             right: 0;
             display: flex;
-            flex-flow: column nowrap;
-            align-items: start;
             pointer-events: none;
             background: none;
+        }
+
+        [part~=layer][part~=vertical-layer] {
+            flex-flow: column nowrap;
+            align-items: flex-start;
+        }
+
+        [part~=layer][part~=centered-layer] {
+            align-items: center;
+            justify-content: center;
         }
 
         [part~=middle] {
