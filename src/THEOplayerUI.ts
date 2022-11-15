@@ -1,31 +1,9 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import css from './THEOplayerUI.css';
+import html from './THEOplayerUI.html';
 
 const template = document.createElement('template');
-// language=HTML
-template.innerHTML = `
-    <style>${css}</style>
-    <div part="layer media-layer">
-        <slot name="media"></slot>
-    </div>
-    <div part="layer poster-layer">
-        <slot name="poster"></slot>
-    </div>
-    <div part="layer vertical-layer">
-        <div part="top chrome">
-            <slot name="top-chrome"></slot>
-        </div>
-        <div part="middle chrome">
-            <slot name="middle-chrome"></slot>
-        </div>
-        <div part="layer centered-layer center centered chrome">
-            <slot name="centered-chrome"></slot>
-        </div>
-        <div part="bottom chrome">
-            <slot>${/* default, effectively "bottom-chrome" */ ''}</slot>
-        </div>
-    </div>
-`;
+template.innerHTML = `<style>${css}</style>${html}`;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
 export class THEOplayerUI extends HTMLElement {

@@ -2,3 +2,8 @@ declare module '*.css' {
     const cssText: string;
     export default cssText;
 }
+
+declare module '*.html' {
+    const htmlText: string;
+    export default htmlText;
+}

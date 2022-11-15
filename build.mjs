@@ -16,7 +16,8 @@ const bundleOptions = {
     sourcemap: true,
     tsconfig: './tsconfig.json',
     loader: {
-        '.css': 'text'
+        '.css': 'text',
+        '.html': 'text'
     },
     plugins: [swcPlugin()]
 };
