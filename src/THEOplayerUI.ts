@@ -1,3 +1,5 @@
+import * as shadyCss from '@webcomponents/shadycss';
+
 const template = document.createElement('template');
 // language=HTML
 template.innerHTML = `
@@ -43,12 +45,19 @@ template.innerHTML = `
         <slot class="bottom chrome"></slot>
     </div>
 `;
+shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
 export class THEOplayerUI extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot!.appendChild(template.content.cloneNode(true));
+    }
+
+    connectedCallback() {
+        shadyCss.styleElement(this);
+        if (!this.shadowRoot) {
+            this.attachShadow({ mode: 'open' });
+            this.shadowRoot!.appendChild(template.content.cloneNode(true));
+        }
     }
 }
 
