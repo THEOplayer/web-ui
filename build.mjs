@@ -35,27 +35,24 @@ async function build() {
         ...bundleOptions,
         write: false
     });
-    for (const outputFile of bundle.outputFiles) {
-        await writeFile(outputFile.path, outputFile.contents);
-    }
+    await writeOutputFiles(bundle.outputFiles);
     const buildEnd = process.hrtime(buildStart);
     console.log(`Done in ${buildEnd[0]}s ${buildEnd[1] / 1e6}ms`);
 }
 
 async function watch() {
-    await esbuild.build({
+    const bundle = await esbuild.build({
         ...bundleOptions,
         write: false,
         watch: {
             async onRebuild(error, result) {
                 if (!error && result) {
-                    for (const outputFile of result.outputFiles) {
-                        await writeFile(outputFile.path, outputFile.contents);
-                    }
+                    await writeOutputFiles(result.outputFiles);
                 }
             }
         }
     });
+    await writeOutputFiles(bundle.outputFiles);
     console.log(`Watching...`);
 }
 
@@ -90,6 +87,15 @@ function swcPlugin(swcOptions = {}) {
  */
 function updateOutputFile(outputFile, text) {
     outputFile.contents = new TextEncoder().encode(text);
+}
+
+/**
+ * @param {import("esbuild").OutputFile[]} outputFiles
+ */
+async function writeOutputFiles(outputFiles) {
+    for (const outputFile of outputFiles) {
+        await writeFile(outputFile.path, outputFile.contents);
+    }
 }
 
 await main();
