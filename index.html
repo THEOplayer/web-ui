@@ -3,6 +3,11 @@
     <head>
         <meta charset="UTF-8" />
         <title>THEOplayer Web UI Demo</title>
+        <script>
+            ShadyDOM = { force: true };
+            (self.customElements || (self.customElements = {})).forcePolyfill = true;
+        </script>
+        <script src="node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
         <script src="dist/THEOplayerUI.js"></script>
         <style>
             p {
