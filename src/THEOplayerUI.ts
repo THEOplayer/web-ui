@@ -1,46 +1,10 @@
 import * as shadyCss from '@webcomponents/shadycss';
+import css from './THEOplayerUI.css';
 
 const template = document.createElement('template');
 // language=HTML
 template.innerHTML = `
-    <style>
-        :host {
-            box-sizing: border-box;
-            position: relative;
-            width: 600px;
-            height: 400px;
-            display: inline-block;
-            background-color: var(--media-background-color, #000);
-        }
-
-        [part~=layer]:not([part~=media-layer]) {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            display: flex;
-            pointer-events: none;
-            background: none;
-        }
-
-        [part~=layer][part~=vertical-layer] {
-            flex-flow: column nowrap;
-            align-items: flex-start;
-        }
-
-        [part~=layer][part~=centered-layer] {
-            align-items: center;
-            justify-content: center;
-        }
-
-        [part~=middle] {
-            display: inline;
-            flex-grow: 1;
-            pointer-events: none;
-            background: none;
-        }
-    </style>
+    <style>${css}</style>
     <div part="layer media-layer">
         <slot name="media"></slot>
     </div>

@@ -15,6 +15,9 @@ const bundleOptions = {
     target: 'es2019',
     sourcemap: true,
     tsconfig: './tsconfig.json',
+    loader: {
+        '.css': 'text'
+    },
     plugins: [swcPlugin()]
 };
 
