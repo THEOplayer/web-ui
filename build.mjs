@@ -2,10 +2,11 @@ import esbuild from 'esbuild';
 import swc from '@swc/core';
 import { writeFile } from 'fs/promises';
 
-const buildStart = process.hrtime();
-const bundle = await esbuild.build({
+/**
+ * @type {import("esbuild").BuildOptions}
+ */
+const bundleOptions = {
     bundle: true,
-    write: false,
     platform: 'browser',
     entryPoints: ['./src/index.ts'],
     outfile: './dist/THEOplayerUI.js',
@@ -14,12 +15,20 @@ const bundle = await esbuild.build({
     sourcemap: true,
     tsconfig: './tsconfig.json',
     plugins: [swcPlugin()]
-});
-for (const outputFile of bundle.outputFiles) {
-    await writeFile(outputFile.path, outputFile.contents);
+};
+
+async function main() {
+    const buildStart = process.hrtime();
+    const bundle = await esbuild.build({
+        ...bundleOptions,
+        write: false
+    });
+    for (const outputFile of bundle.outputFiles) {
+        await writeFile(outputFile.path, outputFile.contents);
+    }
+    const buildEnd = process.hrtime(buildStart);
+    console.log(`Done in ${buildEnd[0]}s ${buildEnd[1] / 1e6}ms`);
 }
-const buildEnd = process.hrtime(buildStart);
-console.log(`Done in ${buildEnd[0]}s ${buildEnd[1] / 1e6}ms`);
 
 /**
  * @returns {import("esbuild").Plugin}
@@ -53,3 +62,5 @@ function swcPlugin(swcOptions = {}) {
 function updateOutputFile(outputFile, text) {
     outputFile.contents = new TextEncoder().encode(text);
 }
+
+await main();
