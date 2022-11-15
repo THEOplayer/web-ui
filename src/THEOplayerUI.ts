@@ -14,7 +14,7 @@ template.innerHTML = `
             background-color: var(--media-background-color, #000);
         }
 
-        .layer:not(.media-layer) {
+        [part~=layer]:not([part~=media-layer]) {
             position: absolute;
             top: 0;
             left: 0;
@@ -27,22 +27,32 @@ template.innerHTML = `
             background: none;
         }
 
-        .middle.chrome {
+        [part~=middle] {
             display: inline;
             flex-grow: 1;
             pointer-events: none;
             background: none;
         }
     </style>
-
-    <slot name="media" class="layer media-layer"></slot>
-    <slot name="poster" class="layer poster-layer"></slot>
-    <div class="layer vertical-layer">
-        <slot name="top-chrome" class="top chrome"></slot>
-        <slot name="middle-chrome" class="middle chrome"></slot>
-        <slot name="centered-chrome" class="layer centered-layer center centered chrome"></slot>
-    ${/* default, effectively "bottom-chrome" */ ''}
-        <slot class="bottom chrome"></slot>
+    <div part="layer media-layer">
+        <slot name="media"></slot>
+    </div>
+    <div part="layer poster-layer">
+        <slot name="poster"></slot>
+    </div>
+    <div part="layer vertical-layer">
+        <div part="top chrome">
+            <slot name="top-chrome"></slot>
+        </div>
+        <div part="middle chrome">
+            <slot name="middle-chrome"></slot>
+        </div>
+        <div part="layer centered-layer center centered chrome">
+            <slot name="centered-chrome"></slot>
+        </div>
+        <div part="bottom chrome">
+            <slot>${/* default, effectively "bottom-chrome" */ ''}</slot>
+        </div>
     </div>
 `;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
