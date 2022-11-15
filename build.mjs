@@ -12,24 +12,44 @@ const bundle = await esbuild.build({
     format: 'esm',
     target: 'es2019',
     sourcemap: true,
-    tsconfig: './tsconfig.json'
+    tsconfig: './tsconfig.json',
+    plugins: [swcPlugin()]
 });
-const bundleEnd = process.hrtime(buildStart);
-console.log(`Bundling took ${bundleEnd[0]}s ${bundleEnd[1] / 1e6}ms`);
-const transpileStart = process.hrtime();
-for (const outputFile of bundle.outputFiles.filter((x) => x.path.endsWith('.js'))) {
-    const sourceMapPath = `${outputFile.path}.map`;
-    const inputSourceMap = bundle.outputFiles.find((x) => x.path === sourceMapPath);
-    const transpiled = await swc.transform(outputFile.text, {
-        filename: outputFile.path,
-        inputSourceMap: inputSourceMap?.text
-    });
-    await writeFile(outputFile.path, transpiled.code, { encoding: 'utf8' });
-    if (transpiled.map) {
-        await writeFile(sourceMapPath, transpiled.map, { encoding: 'utf8' });
-    }
+for (const outputFile of bundle.outputFiles) {
+    await writeFile(outputFile.path, outputFile.contents);
 }
-const transpileEnd = process.hrtime(transpileStart);
 const buildEnd = process.hrtime(buildStart);
-console.log(`Transpiling took ${transpileEnd[0]}s ${transpileEnd[1] / 1e6}ms`);
 console.log(`Done in ${buildEnd[0]}s ${buildEnd[1] / 1e6}ms`);
+
+/**
+ * @returns {import("esbuild").Plugin}
+ */
+function swcPlugin(swcOptions = {}) {
+    return {
+        name: 'swcPlugin',
+        setup(build) {
+            build.onEnd(async (result) => {
+                for (const jsFile of result.outputFiles.filter((x) => x.path.endsWith('.js'))) {
+                    const mapFile = result.outputFiles.find((x) => x.path === `${jsFile.path}.map`);
+                    const transpiled = await swc.transform(jsFile.text, {
+                        filename: jsFile.path,
+                        inputSourceMap: mapFile?.text,
+                        ...swcOptions
+                    });
+                    updateOutputFile(jsFile, transpiled.code);
+                    if (mapFile && transpiled.map) {
+                        updateOutputFile(mapFile, transpiled.map);
+                    }
+                }
+            });
+        }
+    };
+}
+
+/**
+ * @param {import("esbuild").OutputFile} outputFile
+ * @param {string} text
+ */
+function updateOutputFile(outputFile, text) {
+    outputFile.contents = new TextEncoder().encode(text);
+}
