@@ -1,6 +1,7 @@
 import esbuild from 'esbuild';
 import swc from '@swc/core';
 import { writeFile } from 'fs/promises';
+import minimist from 'minimist';
 
 /**
  * @type {import("esbuild").BuildOptions}
@@ -18,6 +19,17 @@ const bundleOptions = {
 };
 
 async function main() {
+    const argv = minimist(process.argv.slice(2), {
+        boolean: ['watch']
+    });
+    if (argv.watch) {
+        await watch();
+    } else {
+        await build();
+    }
+}
+
+async function build() {
     const buildStart = process.hrtime();
     const bundle = await esbuild.build({
         ...bundleOptions,
@@ -28,6 +40,23 @@ async function main() {
     }
     const buildEnd = process.hrtime(buildStart);
     console.log(`Done in ${buildEnd[0]}s ${buildEnd[1] / 1e6}ms`);
+}
+
+async function watch() {
+    await esbuild.build({
+        ...bundleOptions,
+        write: false,
+        watch: {
+            async onRebuild(error, result) {
+                if (!error && result) {
+                    for (const outputFile of result.outputFiles) {
+                        await writeFile(outputFile.path, outputFile.contents);
+                    }
+                }
+            }
+        }
+    });
+    console.log(`Watching...`);
 }
 
 /**
