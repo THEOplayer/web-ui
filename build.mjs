@@ -1,6 +1,8 @@
 import esbuild from 'esbuild';
 import swc from '@swc/core';
-import { writeFile } from 'fs/promises';
+import postcss from 'postcss';
+import autoprefixer from 'autoprefixer';
+import { readFile, writeFile } from 'fs/promises';
 import minimist from 'minimist';
 
 /**
@@ -19,7 +21,7 @@ const bundleOptions = {
         '.css': 'text',
         '.html': 'text'
     },
-    plugins: [swcPlugin()]
+    plugins: [postcssPlugin([autoprefixer()]), swcPlugin()]
 };
 
 async function main() {
@@ -61,6 +63,7 @@ async function watch() {
 }
 
 /**
+ * @param {import("@swc/core").Options} swcOptions
  * @returns {import("esbuild").Plugin}
  */
 function swcPlugin(swcOptions = {}) {
@@ -83,6 +86,54 @@ function swcPlugin(swcOptions = {}) {
             });
         }
     };
+}
+
+/**
+ * @param {import("postcss").AcceptedPlugin[]} plugins
+ * @returns {import("esbuild").Plugin}
+ */
+function postcssPlugin(plugins) {
+    return {
+        name: 'postcssPlugin',
+        setup(build) {
+            build.onLoad({ filter: /\.css$/ }, async (args) => {
+                const input = await readFile(args.path, { encoding: 'utf8' });
+                const result = await postcss(plugins).process(input, { from: args.path });
+                return {
+                    contents: result.css,
+                    warnings: convertPostcssWarnings(args.path, input, result.warnings()),
+                    loader: 'text'
+                };
+            });
+        }
+    };
+}
+
+/**
+ * @param {string} path
+ * @param {string} source
+ * @param {import("postcss").Warning[]} warnings
+ * @returns {import("esbuild").PartialMessage[]}
+ */
+function convertPostcssWarnings(path, source, warnings) {
+    if (warnings.length === 0) {
+        return warnings;
+    }
+    const sourceLines = source.split(/\r\n|\r|\n/g);
+    return warnings.map((warning) => {
+        let lineText = sourceLines[warning.line - 1];
+        let lineEnd = warning.line === warning.line ? warning.column : lineText.length;
+        return {
+            text: `[${warning.plugin}] ${warning.text}`,
+            location: {
+                file: path,
+                line: warning.line, // 1-based
+                column: warning.column - 1, // 0-based
+                length: lineEnd - warning.column,
+                lineText
+            }
+        };
+    });
 }
 
 /**
