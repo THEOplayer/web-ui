@@ -1,9 +1,6 @@
 {
     "env": {
-        "targets": {
-            "chrome": "47",
-            "ie": "11"
-        }
+        "path": "./package.json"
     },
     "jsc": {
         "parser": {

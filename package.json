@@ -22,5 +22,9 @@
     "minimist": "^1.2.7",
     "prettier": "^2.7.1",
     "typescript": "^4.8.4"
-  }
+  },
+  "browserslist": [
+    "chrome >= 47",
+    "ie >= 11"
+  ]
 }
