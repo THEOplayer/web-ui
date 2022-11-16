@@ -2,6 +2,7 @@ import esbuild from 'esbuild';
 import swc from '@swc/core';
 import postcss from 'postcss';
 import autoprefixer from 'autoprefixer';
+import htmlMinifier from 'html-minifier';
 import { readFile, writeFile } from 'fs/promises';
 import minimist from 'minimist';
 
@@ -21,7 +22,16 @@ const bundleOptions = {
         '.css': 'text',
         '.html': 'text'
     },
-    plugins: [postcssPlugin([autoprefixer()]), swcPlugin()]
+    plugins: [
+        postcssPlugin([autoprefixer()]),
+        htmlMinifierPlugin({
+            removeComments: true,
+            removeRedundantAttributes: true,
+            sortClassName: true,
+            collapseWhitespace: true
+        }),
+        swcPlugin()
+    ]
 };
 
 async function main() {
@@ -134,6 +144,26 @@ function convertPostcssWarnings(path, source, warnings) {
             }
         };
     });
+}
+
+/**
+ * @param {import("html-minifier").Options} options
+ * @returns {import("esbuild").Plugin}
+ */
+function htmlMinifierPlugin(options) {
+    return {
+        name: 'htmlMinifierPlugin',
+        setup(build) {
+            build.onLoad({ filter: /\.html$/ }, async (args) => {
+                const input = await readFile(args.path, { encoding: 'utf8' });
+                const output = htmlMinifier.minify(input, options);
+                return {
+                    contents: output,
+                    loader: 'text'
+                };
+            });
+        }
+    };
 }
 
 /**
