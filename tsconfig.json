@@ -7,6 +7,13 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipDefaultLibCheck": true,
-    "noEmit": true
+    "experimentalDecorators": true,
+    "noEmit": true,
+    "plugins": [
+      {
+        "name": "ts-lit-plugin",
+        "strict": true
+      }
+    ]
   }
 }

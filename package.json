@@ -13,7 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "@webcomponents/shadycss": "^1.11.1",
-    "@webcomponents/webcomponentsjs": "^2.7.0"
+    "@webcomponents/webcomponentsjs": "^2.7.0",
+    "lit": "^2.4.1"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.57",
