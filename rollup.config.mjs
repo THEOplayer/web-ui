@@ -1,6 +1,6 @@
 import { defineConfig } from 'rollup';
 import nodeResolve from '@rollup/plugin-node-resolve';
-import swc from 'rollup-plugin-swc3';
+import swcPlugin from 'rollup-plugin-swc';
 import replace from '@rollup/plugin-replace';
 import { minifyHTML } from './build/minify-html-literals.mjs';
 import postcss from 'rollup-plugin-postcss';
@@ -8,6 +8,7 @@ import postcssLit from 'rollup-plugin-postcss-lit';
 import autoprefixer from 'autoprefixer';
 import { readFile } from 'fs/promises';
 
+const { default: swc } = swcPlugin;
 const { browserslist } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
 
 export default defineConfig({
@@ -43,21 +44,27 @@ export default defineConfig({
             include: './src/**'
         }),
         swc({
-            include: './src/**',
+            rollup: {
+                include: './src/**'
+            },
             sourceMaps: true,
-            tsconfig: './tsconfig.json',
             env: {
                 targets: browserslist
             },
             jsc: {
-                loose: true
+                loose: true,
+                parser: {
+                    syntax: 'typescript',
+                    decorators: true
+                }
             }
         }),
         swc({
-            include: './node_modules/**',
-            exclude: './src/**',
+            rollup: {
+                include: './node_modules/**',
+                exclude: './src/**'
+            },
             sourceMaps: true,
-            tsconfig: false,
             env: {
                 targets: browserslist
             },
