@@ -1,6 +1,7 @@
 import { defineConfig } from 'rollup';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import swc from 'rollup-plugin-swc3';
+import replace from '@rollup/plugin-replace';
 
 export default defineConfig({
     input: './src/index.ts',
@@ -14,6 +15,14 @@ export default defineConfig({
     context: 'self',
     plugins: [
         nodeResolve(),
+        replace({
+            include: './node_modules/**',
+            preventAssignment: true,
+            delimiters: ['\\b', '\\b'],
+            values: {
+                globalThis: 'self'
+            }
+        }),
         swc({
             include: './src/**',
             sourceMaps: true,
