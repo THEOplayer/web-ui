@@ -1,5 +1,6 @@
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import elementCss from './THEOplayerUI.css';
 
 @customElement('theoplayer-ui')
 export class THEOplayerUI extends LitElement {
@@ -7,44 +8,7 @@ export class THEOplayerUI extends LitElement {
         super();
     }
 
-    static styles = css`
-        :host {
-            box-sizing: border-box;
-            position: relative;
-            width: 600px;
-            height: 400px;
-            display: inline-block;
-            background-color: var(--media-background-color, #000);
-        }
-
-        [part~='layer']:not([part~='media-layer']) {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            display: flex;
-            pointer-events: none;
-            background: none;
-        }
-
-        [part~='layer'][part~='vertical-layer'] {
-            flex-flow: column nowrap;
-            align-items: flex-start;
-        }
-
-        [part~='layer'][part~='centered-layer'] {
-            align-items: center;
-            justify-content: center;
-        }
-
-        [part~='middle'] {
-            display: inline;
-            flex-grow: 1;
-            pointer-events: none;
-            background: none;
-        }
-    `;
+    static styles = elementCss;
 
     render() {
         return html`

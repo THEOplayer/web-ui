@@ -1,6 +1,7 @@
 declare module '*.css' {
-    const cssText: string;
-    export default cssText;
+    import { CSSResult } from 'lit';
+    const css: CSSResult;
+    export default css;
 }
 
 declare module '*.html' {
