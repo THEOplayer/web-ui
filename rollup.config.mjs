@@ -1,4 +1,5 @@
 import { defineConfig } from 'rollup';
+import { typescriptPaths } from 'rollup-plugin-typescript-resolve';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import swcPlugin from 'rollup-plugin-swc';
 import replace from '@rollup/plugin-replace';
@@ -22,6 +23,7 @@ export default defineConfig({
     },
     context: 'self',
     plugins: [
+        typescriptPaths(),
         nodeResolve(),
         replace({
             include: './node_modules/**',
