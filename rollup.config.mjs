@@ -26,7 +26,7 @@ export default defineConfig({
         typescriptPaths(),
         nodeResolve(),
         replace({
-            include: './node_modules/**',
+            include: ['./node_modules/lit/**', './node_modules/lit-element/**'],
             preventAssignment: true,
             delimiters: ['\\b', '\\b'],
             values: {
