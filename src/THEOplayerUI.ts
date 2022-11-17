@@ -10,7 +10,7 @@ export class THEOplayerUI extends LitElement {
 
     static styles = elementCss;
 
-    render() {
+    override render() {
         return html`
             <div part="layer media-layer">
                 <slot name="media"></slot>
