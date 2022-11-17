@@ -23,8 +23,10 @@ export default defineConfig({
     },
     context: 'self',
     plugins: [
+        // Use TypeScript's module resolution for source files, and Node's for dependencies.
         typescriptPaths(),
         nodeResolve(),
+        // Replace `globalThis` with `self` for older browsers.
         replace({
             include: ['./node_modules/lit/**', './node_modules/lit-element/**'],
             preventAssignment: true,
@@ -33,6 +35,7 @@ export default defineConfig({
                 globalThis: 'self'
             }
         }),
+        // Run PostCSS on .css files, and wrap them in a `css` tagged template literal for use in Lit.
         postcss({
             include: './src/**/*.css',
             inject: false,
@@ -42,9 +45,11 @@ export default defineConfig({
             include: './src/**/*.css',
             importPackage: 'lit'
         }),
+        // Minify HTML and CSS inside tagged template literals.
         minifyHTML({
             include: './src/**'
         }),
+        // Transpile TypeScript.
         swc({
             rollup: {
                 include: './src/**'
@@ -61,6 +66,7 @@ export default defineConfig({
                 }
             }
         }),
+        // Transpile dependencies for older browsers.
         swc({
             rollup: {
                 include: './node_modules/**',
