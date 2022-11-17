@@ -60,6 +60,7 @@ export default defineConfig({
             },
             jsc: {
                 loose: true,
+                externalHelpers: true,
                 parser: {
                     syntax: 'typescript',
                     decorators: true
@@ -77,7 +78,8 @@ export default defineConfig({
                 targets: browserslist
             },
             jsc: {
-                loose: true
+                loose: true,
+                externalHelpers: true
             }
         })
     ]
