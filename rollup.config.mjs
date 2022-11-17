@@ -3,6 +3,9 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import swc from 'rollup-plugin-swc3';
 import replace from '@rollup/plugin-replace';
 import { minifyHTML } from './build/minify-html-literals.mjs';
+import { readFile } from 'fs/promises';
+
+const { browserslist } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
 
 export default defineConfig({
     input: './src/index.ts',
@@ -30,7 +33,7 @@ export default defineConfig({
             sourceMaps: true,
             tsconfig: './tsconfig.json',
             env: {
-                path: './package.json'
+                targets: browserslist
             },
             jsc: {
                 loose: true
@@ -42,7 +45,7 @@ export default defineConfig({
             sourceMaps: true,
             tsconfig: false,
             env: {
-                path: './package.json'
+                targets: browserslist
             },
             jsc: {
                 loose: true
