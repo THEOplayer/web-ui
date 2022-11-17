@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node build.mjs",
-    "start": "node build.mjs --watch",
+    "build": "rollup -c",
+    "start": "rollup -c --watch",
     "format": "prettier --write ."
   },
   "keywords": [],
@@ -17,15 +17,18 @@
     "lit": "^2.4.1"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.1",
     "@swc/cli": "^0.1.57",
     "@swc/core": "^1.3.14",
+    "@swc/helpers": "^0.4.13",
     "@types/html-minifier": "^4.0.2",
     "autoprefixer": "^10.4.13",
-    "esbuild": "^0.15.13",
     "html-minifier": "^4.0.0",
-    "minimist": "^1.2.7",
     "postcss": "^8.4.19",
     "prettier": "^2.7.1",
+    "rollup": "^3.3.0",
+    "rollup-plugin-swc3": "^0.7.0",
+    "tslib": "^2.4.1",
     "typescript": "^4.8.4"
   },
   "browserslist": [

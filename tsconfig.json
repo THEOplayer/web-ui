@@ -8,7 +8,7 @@
     "strict": true,
     "skipDefaultLibCheck": true,
     "experimentalDecorators": true,
-    "noEmit": true,
+    "importHelpers": true,
     "plugins": [
       {
         "name": "ts-lit-plugin",
