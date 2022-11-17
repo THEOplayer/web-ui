@@ -2,6 +2,7 @@ import { defineConfig } from 'rollup';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import swc from 'rollup-plugin-swc3';
 import replace from '@rollup/plugin-replace';
+import { minifyHTML } from './build/minify-html-literals.mjs';
 
 export default defineConfig({
     input: './src/index.ts',
@@ -23,6 +24,7 @@ export default defineConfig({
                 globalThis: 'self'
             }
         }),
+        minifyHTML(),
         swc({
             include: './src/**',
             sourceMaps: true,
