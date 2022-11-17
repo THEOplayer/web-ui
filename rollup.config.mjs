@@ -27,7 +27,9 @@ export default defineConfig({
                 globalThis: 'self'
             }
         }),
-        minifyHTML(),
+        minifyHTML({
+            include: './src/**'
+        }),
         swc({
             include: './src/**',
             sourceMaps: true,
