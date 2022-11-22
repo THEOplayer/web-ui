@@ -14,23 +14,27 @@
     bottom: 0;
     right: 0;
     display: flex;
-    pointer-events: none;
     background: none;
 }
 
-[part~='layer'][part~='vertical-layer'] {
+[part~='media-layer'],
+[part~='poster-layer'] {
+    pointer-events: none;
+}
+
+[part~='vertical-layer'] {
     flex-flow: column nowrap;
     align-items: flex-start;
 }
 
-[part~='layer'][part~='centered-layer'] {
+[part~='centered-layer'] {
     align-items: center;
     justify-content: center;
+    pointer-events: none;
 }
 
 [part~='middle'] {
     display: inline;
     flex-grow: 1;
-    pointer-events: none;
     background: none;
 }
