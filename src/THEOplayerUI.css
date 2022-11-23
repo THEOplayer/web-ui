@@ -7,12 +7,15 @@
     background-color: var(--media-background-color, #000);
 }
 
-[part~='layer']:not([part~='media-layer']) {
+[part~='layer'] {
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
+}
+
+[part~='layer']:not([part~='media-layer']) {
     display: flex;
     background: none;
 }
