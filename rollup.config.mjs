@@ -19,9 +19,13 @@ export default defineConfig({
         format: 'umd',
         name: 'THEOplayerUI',
         sourcemap: true,
-        indent: false
+        indent: false,
+        globals: {
+            theoplayer: 'THEOplayer'
+        }
     },
     context: 'self',
+    external: ['theoplayer'],
     plugins: [
         // Use TypeScript's module resolution for source files, and Node's for dependencies.
         typescriptPaths(),

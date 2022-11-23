@@ -16,6 +16,9 @@
     "@webcomponents/webcomponentsjs": "^2.7.0",
     "lit": "^2.4.1"
   },
+  "peerDependencies": {
+    "theoplayer": "^4"
+  },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.1",
@@ -32,6 +35,7 @@
     "rollup-plugin-postcss-lit": "^2.0.0",
     "rollup-plugin-swc": "^0.2.1",
     "rollup-plugin-typescript-resolve": "^1.0.1",
+    "theoplayer": "^4.3.1",
     "tslib": "^2.4.1",
     "typescript": "^4.8.4",
     "web-types-lit": "^0.1.0"
