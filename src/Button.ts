@@ -18,7 +18,7 @@ export abstract class Button extends HTMLElement {
         return ['disabled'];
     }
 
-    protected constructor(options: ButtonOptions) {
+    constructor(options: ButtonOptions) {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(options.template.content.cloneNode(true));
@@ -40,7 +40,7 @@ export abstract class Button extends HTMLElement {
         this.addEventListener('click', this._onClick);
     }
 
-    private _upgradeProperty(prop: keyof this) {
+    protected _upgradeProperty(prop: keyof this) {
         if (this.hasOwnProperty(prop)) {
             let value = this[prop];
             delete this[prop];

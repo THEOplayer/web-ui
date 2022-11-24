@@ -21,6 +21,12 @@ export class PlayButton extends PlayerReceiverMixin(Button) {
         super({ template });
     }
 
+    connectedCallback(): void {
+        super.connectedCallback();
+        this._upgradeProperty('paused');
+        this._upgradeProperty('player');
+    }
+
     get paused(): boolean {
         return this.hasAttribute('paused');
     }
