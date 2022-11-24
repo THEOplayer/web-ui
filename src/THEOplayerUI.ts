@@ -82,10 +82,10 @@ export class THEOplayerUI extends HTMLElement {
                 license: this.license,
                 licenseUrl: this.licenseUrl
             });
-            if (this._source) {
-                this._player.source = this._source;
-                this._source = undefined;
-            }
+        }
+        if (this._source) {
+            this._player.source = this._source;
+            this._source = undefined;
         }
     }
 
