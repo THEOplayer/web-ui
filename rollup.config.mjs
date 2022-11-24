@@ -2,7 +2,7 @@ import { defineConfig } from 'rollup';
 import { typescriptPaths } from 'rollup-plugin-typescript-resolve';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import swcPlugin from 'rollup-plugin-swc';
-import { minifyHTML } from './build/minify-html-literals.mjs';
+import { minifyHTML } from './build/minify-html.mjs';
 import postcss from 'rollup-plugin-postcss';
 import autoprefixer from 'autoprefixer';
 import { readFile } from 'fs/promises';
