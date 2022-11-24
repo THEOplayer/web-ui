@@ -8,6 +8,10 @@ template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
 export class THEOplayerUI extends HTMLElement {
+    static get observedAttributes() {
+        return ['library-location', 'license', 'license-url', 'source'];
+    }
+
     private readonly _playerEl: HTMLElement;
     private _player: ChromelessPlayer | undefined = undefined;
     private _source: SourceDescription | undefined = undefined;

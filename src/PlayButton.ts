@@ -10,6 +10,10 @@ template.innerHTML = `<style>${buttonCss}\n${playButtonCss}</style>${playButtonH
 shadyCss.prepareTemplate(template, 'theoplayer-play-button');
 
 export class PlayButton extends Button {
+    static get observedAttributes() {
+        return [...Button.observedAttributes, 'paused'];
+    }
+
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
