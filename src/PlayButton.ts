@@ -60,6 +60,9 @@ export class PlayButton extends PlayerReceiverMixin(Button) {
     }
 
     set player(player: ChromelessPlayer | undefined) {
+        if (this._player === player) {
+            return;
+        }
         if (this._player !== undefined) {
             this._player.removeEventListener('play', this._updateFromPlayer);
             this._player.removeEventListener('pause', this._updateFromPlayer);
