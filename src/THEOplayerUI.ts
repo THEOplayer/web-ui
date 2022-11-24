@@ -9,9 +9,14 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
+const ATTR_LIBRARY_LOCATION = 'library-location';
+const ATTR_LICENSE = 'license';
+const ATTR_LICENSE_URL = 'license-url';
+const ATTR_SOURCE = 'source';
+
 export class THEOplayerUI extends HTMLElement {
     static get observedAttributes() {
-        return ['library-location', 'license', 'license-url', 'source'];
+        return [ATTR_LIBRARY_LOCATION, ATTR_LICENSE, ATTR_LICENSE_URL, ATTR_SOURCE];
     }
 
     private readonly _playerEl: HTMLElement;
@@ -30,14 +35,14 @@ export class THEOplayerUI extends HTMLElement {
     }
 
     get libraryLocation(): string | undefined {
-        return this.getAttribute('library-location') ?? undefined;
+        return this.getAttribute(ATTR_LIBRARY_LOCATION) ?? undefined;
     }
 
     set libraryLocation(value: string | undefined) {
         if (value) {
-            this.setAttribute('library-location', value);
+            this.setAttribute(ATTR_LIBRARY_LOCATION, value);
         } else {
-            this.removeAttribute('library-location');
+            this.removeAttribute(ATTR_LIBRARY_LOCATION);
         }
     }
 
@@ -47,21 +52,21 @@ export class THEOplayerUI extends HTMLElement {
 
     set license(value: string | undefined) {
         if (value) {
-            this.setAttribute('license', value);
+            this.setAttribute(ATTR_LICENSE, value);
         } else {
-            this.removeAttribute('license');
+            this.removeAttribute(ATTR_LICENSE);
         }
     }
 
     get licenseUrl(): string | undefined {
-        return this.getAttribute('license-url') ?? undefined;
+        return this.getAttribute(ATTR_LICENSE_URL) ?? undefined;
     }
 
     set licenseUrl(value: string | undefined) {
         if (value) {
-            this.setAttribute('license-url', value);
+            this.setAttribute(ATTR_LICENSE_URL, value);
         } else {
-            this.removeAttribute('license-url');
+            this.removeAttribute(ATTR_LICENSE_URL);
         }
     }
 
@@ -120,7 +125,7 @@ export class THEOplayerUI extends HTMLElement {
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
-        if (attrName === 'source' && newValue !== oldValue) {
+        if (attrName === ATTR_SOURCE && newValue !== oldValue) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
         }
     }

@@ -10,9 +10,11 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${buttonCss}\n${playButtonCss}</style>${playButtonHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-play-button');
 
+const ATTR_PAUSED = 'paused';
+
 export class PlayButton extends PlayerReceiverMixin(Button) {
     static get observedAttributes() {
-        return [...Button.observedAttributes, 'paused'];
+        return [...Button.observedAttributes, ATTR_PAUSED];
     }
 
     private _player: ChromelessPlayer | undefined;
@@ -28,14 +30,14 @@ export class PlayButton extends PlayerReceiverMixin(Button) {
     }
 
     get paused(): boolean {
-        return this.hasAttribute('paused');
+        return this.hasAttribute(ATTR_PAUSED);
     }
 
     set paused(paused: boolean) {
         if (paused) {
-            this.setAttribute('paused', '');
+            this.setAttribute(ATTR_PAUSED, '');
         } else {
-            this.removeAttribute('paused');
+            this.removeAttribute(ATTR_PAUSED);
         }
     }
 
@@ -71,7 +73,7 @@ export class PlayButton extends PlayerReceiverMixin(Button) {
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
         super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (attrName === 'paused' && newValue !== oldValue) {
+        if (attrName === ATTR_PAUSED && newValue !== oldValue) {
             const hasValue = newValue != null;
             if (this._player !== undefined && hasValue !== this._player.paused) {
                 if (hasValue) {

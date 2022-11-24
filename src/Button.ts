@@ -9,13 +9,15 @@ const enum KeyCode {
     ENTER = 13
 }
 
+const ATTR_DISABLED = 'disabled';
+
 /**
  * Based on howto-toggle-button
  * https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-toggle-button/howto-toggle-button.js
  */
 export abstract class Button extends HTMLElement {
     static get observedAttributes() {
-        return ['disabled'];
+        return [ATTR_DISABLED];
     }
 
     constructor(options: ButtonOptions) {
@@ -49,19 +51,19 @@ export abstract class Button extends HTMLElement {
     }
 
     get disabled() {
-        return this.hasAttribute('disabled');
+        return this.hasAttribute(ATTR_DISABLED);
     }
 
     set disabled(disabled: boolean) {
         if (disabled) {
-            this.setAttribute('disabled', '');
+            this.setAttribute(ATTR_DISABLED, '');
         } else {
-            this.removeAttribute('disabled');
+            this.removeAttribute(ATTR_DISABLED);
         }
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (attrName === 'disabled' && newValue !== oldValue) {
+        if (attrName === ATTR_DISABLED && newValue !== oldValue) {
             const hasValue = newValue != null;
             this.setAttribute('aria-disabled', hasValue ? 'true' : 'false');
             // The `tabindex` attribute does not provide a way to fully remove focusability from an element.
