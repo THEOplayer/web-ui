@@ -102,7 +102,7 @@ export class THEOplayerUI extends HTMLElement {
             this._source = undefined;
         }
 
-        void this._registerPlayerReceivers(this);
+        void attachPlayerToReceivers(this, this._player);
         this._mutationObserver.observe(this, { childList: true, subtree: true });
     }
 
@@ -116,7 +116,7 @@ export class THEOplayerUI extends HTMLElement {
 
     disconnectedCallback(): void {
         this._mutationObserver.disconnect();
-        void this._unregisterPlayerReceivers(this);
+        void attachPlayerToReceivers(this, undefined);
 
         if (this._player) {
             this._player.destroy();
@@ -137,29 +137,23 @@ export class THEOplayerUI extends HTMLElement {
                 for (let i = 0; i < addedNodes.length; i++) {
                     const node = addedNodes[i];
                     if (isElement(node)) {
-                        void this._registerPlayerReceivers(node);
+                        void attachPlayerToReceivers(node, this._player);
                     }
                 }
                 for (let i = 0; i < removedNodes.length; i++) {
                     const node = removedNodes[i];
                     if (isElement(node)) {
-                        void this._unregisterPlayerReceivers(node);
+                        void attachPlayerToReceivers(node, undefined);
                     }
                 }
             }
         }
     };
+}
 
-    private async _registerPlayerReceivers(element: Element): Promise<void> {
-        for (const receiver of await findPlayerReceiverElements(element)) {
-            receiver.attachPlayer(this._player);
-        }
-    }
-
-    private async _unregisterPlayerReceivers(element: Element): Promise<void> {
-        for (const receiver of await findPlayerReceiverElements(element)) {
-            receiver.attachPlayer(undefined);
-        }
+async function attachPlayerToReceivers(element: Element, player: ChromelessPlayer | undefined): Promise<void> {
+    for (const receiver of await findPlayerReceiverElements(element)) {
+        receiver.attachPlayer(player);
     }
 }
 
