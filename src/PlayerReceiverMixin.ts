@@ -10,7 +10,7 @@ export interface PlayerReceiverElement extends Element {
 }
 
 export function isPlayerReceiverElement(element: Element): element is PlayerReceiverElement {
-    return PlayerReceiverMarker in element;
+    return (element as Partial<PlayerReceiverElement>)[PlayerReceiverMarker] === true;
 }
 
 export function PlayerReceiverMixin<T extends Constructor<Element>>(base: T) {
@@ -32,7 +32,7 @@ export async function findPlayerReceiverElements(element: Element): Promise<Play
 }
 
 async function collectPlayerReceiverElements(element: Element, result: PlayerReceiverElement[]): Promise<void> {
-    if (element.nodeName.includes('-')) {
+    if (element.nodeName.indexOf('-') >= 0 && !isPlayerReceiverElement(element)) {
         await window.customElements.whenDefined(element.nodeName.toLowerCase());
     }
     if (isPlayerReceiverElement(element)) {
