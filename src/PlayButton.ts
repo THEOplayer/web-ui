@@ -66,9 +66,9 @@ export class PlayButton extends PlayerReceiverMixin(Button) {
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (attrName === 'paused' && newValue !== oldValue) {
-            const newPaused = Boolean(newValue);
-            if (this._player !== undefined && newPaused !== this._player.paused) {
-                if (newPaused) {
+            const hasValue = newValue != null;
+            if (this._player !== undefined && hasValue !== this._player.paused) {
+                if (hasValue) {
                     this._player.pause();
                 } else {
                     this._player.play();
