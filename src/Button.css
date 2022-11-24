@@ -1,16 +1,10 @@
 :host {
     display: inline-flex;
     box-sizing: border-box;
-}
-
-button {
-    flex-grow: 1;
-    display: flex;
     align-items: center;
     justify-content: center;
     vertical-align: middle;
-    box-sizing: border-box;
-
     pointer-events: auto;
     cursor: pointer;
+    user-select: none;
 }

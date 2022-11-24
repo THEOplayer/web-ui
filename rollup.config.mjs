@@ -2,12 +2,11 @@ import { defineConfig } from 'rollup';
 import { typescriptPaths } from 'rollup-plugin-typescript-resolve';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import swcPlugin from 'rollup-plugin-swc';
-import replace from '@rollup/plugin-replace';
 import { minifyHTML } from './build/minify-html-literals.mjs';
 import postcss from 'rollup-plugin-postcss';
-import postcssLit from 'rollup-plugin-postcss-lit';
 import autoprefixer from 'autoprefixer';
 import { readFile } from 'fs/promises';
+import { string } from 'rollup-plugin-string';
 
 const { default: swc } = swcPlugin;
 const { browserslist } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
@@ -30,28 +29,24 @@ export default defineConfig({
         // Use TypeScript's module resolution for source files, and Node's for dependencies.
         typescriptPaths(),
         nodeResolve(),
-        // Replace `globalThis` with `self` for older browsers.
-        replace({
-            include: ['./node_modules/lit/**', './node_modules/lit-element/**'],
-            preventAssignment: true,
-            delimiters: ['\\b', '\\b'],
-            values: {
-                globalThis: 'self'
-            }
-        }),
-        // Run PostCSS on .css files, and wrap them in a `css` tagged template literal for use in Lit.
+        // Run PostCSS on .css files.
         postcss({
             include: './src/**/*.css',
             inject: false,
-            plugins: [autoprefixer()]
+            plugins: [autoprefixer()],
+            minimize: true
         }),
-        postcssLit({
-            include: './src/**/*.css',
-            importPackage: 'lit'
-        }),
-        // Minify HTML and CSS inside tagged template literals.
+        // Minify HTML and CSS.
         minifyHTML({
-            include: './src/**'
+            include: ['./src/**/*.html'],
+            removeComments: true,
+            removeRedundantAttributes: true,
+            sortClassName: true,
+            collapseWhitespace: true
+        }),
+        // Import HTML and CSS as strings.
+        string({
+            include: ['./src/**/*.html']
         }),
         // Transpile TypeScript.
         swc({
