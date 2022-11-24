@@ -9,6 +9,7 @@
     "skipDefaultLibCheck": true,
     "experimentalDecorators": true,
     "importHelpers": true,
+    "useDefineForClassFields": true,
     "plugins": [
       {
         "name": "ts-lit-plugin",
