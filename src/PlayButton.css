@@ -1,0 +1,4 @@
+:host([paused]) [part='pause-icon'],
+:host(:not([paused])) [part='play-icon'] {
+    display: none !important;
+}
