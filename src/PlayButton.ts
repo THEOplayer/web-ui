@@ -11,6 +11,7 @@ template.innerHTML = `<style>${buttonCss}\n${playButtonCss}</style>${playButtonH
 shadyCss.prepareTemplate(template, 'theoplayer-play-button');
 
 const ATTR_PAUSED = 'paused';
+const ATTR_ENDED = 'ended';
 
 export class PlayButton extends PlayerReceiverMixin(Button) {
     static get observedAttributes() {
@@ -26,6 +27,7 @@ export class PlayButton extends PlayerReceiverMixin(Button) {
     connectedCallback(): void {
         super.connectedCallback();
         this._upgradeProperty('paused');
+        this._upgradeProperty('ended');
         this._upgradeProperty('player');
     }
 
@@ -41,20 +43,34 @@ export class PlayButton extends PlayerReceiverMixin(Button) {
         }
     }
 
+    get ended(): boolean {
+        return this.hasAttribute(ATTR_ENDED);
+    }
+
+    set ended(ended: boolean) {
+        if (ended) {
+            this.setAttribute(ATTR_ENDED, '');
+        } else {
+            this.removeAttribute(ATTR_ENDED);
+        }
+    }
+
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
     set player(player: ChromelessPlayer | undefined) {
         if (this._player !== undefined) {
-            this._player.removeEventListener('play', this.handlePlayPause);
-            this._player.removeEventListener('pause', this.handlePlayPause);
+            this._player.removeEventListener('play', this._updateFromPlayer);
+            this._player.removeEventListener('pause', this._updateFromPlayer);
+            this._player.removeEventListener('ended', this._updateFromPlayer);
         }
         this._player = player;
         if (this._player !== undefined) {
             this.paused = this._player.paused;
-            this._player.addEventListener('play', this.handlePlayPause);
-            this._player.addEventListener('pause', this.handlePlayPause);
+            this._player.addEventListener('play', this._updateFromPlayer);
+            this._player.addEventListener('pause', this._updateFromPlayer);
+            this._player.addEventListener('ended', this._updateFromPlayer);
         }
     }
 
@@ -62,9 +78,10 @@ export class PlayButton extends PlayerReceiverMixin(Button) {
         this.player = player;
     }
 
-    private readonly handlePlayPause = () => {
+    private readonly _updateFromPlayer = () => {
         if (this._player !== undefined) {
             this.paused = this._player.paused;
+            this.ended = this._player.ended;
         }
     };
 

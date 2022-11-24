@@ -1,4 +1,7 @@
 :host([paused]) [part='pause-icon'],
-:host(:not([paused])) [part='play-icon'] {
+:host([ended]) [part='pause-icon'],
+:host([ended]) [part='play-icon'],
+:host(:not([paused])) [part='play-icon'],
+:host(:not([ended])) [part='replay-icon'] {
     display: none !important;
 }
