@@ -2,6 +2,8 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, SourceDescription } from 'theoplayer';
 import elementCss from './THEOplayerUI.css';
 import elementHtml from './THEOplayerUI.html';
+import { isElement } from './utils';
+import { findPlayerReceiverElements } from './PlayerReceiverMixin';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -13,6 +15,7 @@ export class THEOplayerUI extends HTMLElement {
     }
 
     private readonly _playerEl: HTMLElement;
+    private readonly _mutationObserver: MutationObserver;
     private _player: ChromelessPlayer | undefined = undefined;
     private _source: SourceDescription | undefined = undefined;
 
@@ -22,6 +25,8 @@ export class THEOplayerUI extends HTMLElement {
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._playerEl = shadowRoot.querySelector('[part~="media-layer"]')!;
+
+        this._mutationObserver = new MutationObserver(this._onMutation);
     }
 
     get libraryLocation(): string | undefined {
@@ -91,6 +96,9 @@ export class THEOplayerUI extends HTMLElement {
             this._player.source = this._source;
             this._source = undefined;
         }
+
+        void this._registerPlayerReceivers(this);
+        this._mutationObserver.observe(this, { childList: true, subtree: true });
     }
 
     private _upgradeProperty(prop: keyof this) {
@@ -102,6 +110,9 @@ export class THEOplayerUI extends HTMLElement {
     }
 
     disconnectedCallback(): void {
+        this._mutationObserver.disconnect();
+        void this._unregisterPlayerReceivers(this);
+
         if (this._player) {
             this._player.destroy();
             this._player = undefined;
@@ -111,6 +122,38 @@ export class THEOplayerUI extends HTMLElement {
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
         if (attrName === 'source' && newValue !== oldValue) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
+        }
+    }
+
+    private readonly _onMutation = (mutations: MutationRecord[]): void => {
+        for (const mutation of mutations) {
+            if (mutation.type === 'childList') {
+                const { addedNodes, removedNodes } = mutation;
+                for (let i = 0; i < addedNodes.length; i++) {
+                    const node = addedNodes[i];
+                    if (isElement(node)) {
+                        void this._registerPlayerReceivers(node);
+                    }
+                }
+                for (let i = 0; i < removedNodes.length; i++) {
+                    const node = removedNodes[i];
+                    if (isElement(node)) {
+                        void this._unregisterPlayerReceivers(node);
+                    }
+                }
+            }
+        }
+    };
+
+    private async _registerPlayerReceivers(element: Element): Promise<void> {
+        for (const receiver of await findPlayerReceiverElements(element)) {
+            receiver.attachPlayer(this._player);
+        }
+    }
+
+    private async _unregisterPlayerReceivers(element: Element): Promise<void> {
+        for (const receiver of await findPlayerReceiverElements(element)) {
+            receiver.attachPlayer(undefined);
         }
     }
 }

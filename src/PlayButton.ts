@@ -4,12 +4,13 @@ import { ChromelessPlayer } from 'theoplayer';
 import buttonCss from './Button.css';
 import playButtonCss from './PlayButton.css';
 import playButtonHtml from './PlayButton.html';
+import { PlayerReceiverMixin } from './PlayerReceiverMixin';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${buttonCss}\n${playButtonCss}</style>${playButtonHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-play-button');
 
-export class PlayButton extends Button {
+export class PlayButton extends PlayerReceiverMixin(Button) {
     static get observedAttributes() {
         return [...Button.observedAttributes, 'paused'];
     }
@@ -46,6 +47,10 @@ export class PlayButton extends Button {
             this._player.addEventListener('play', this.handlePlayPause);
             this._player.addEventListener('pause', this.handlePlayPause);
         }
+    }
+
+    attachPlayer(player: ChromelessPlayer | undefined): void {
+        this.player = player;
     }
 
     private readonly handlePlayPause = () => {
