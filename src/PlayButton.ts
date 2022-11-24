@@ -66,8 +66,8 @@ export class PlayButton extends PlayerReceiverMixin(Button) {
             this._player.removeEventListener('ended', this._updateFromPlayer);
         }
         this._player = player;
+        this._updateFromPlayer();
         if (this._player !== undefined) {
-            this.paused = this._player.paused;
             this._player.addEventListener('play', this._updateFromPlayer);
             this._player.addEventListener('pause', this._updateFromPlayer);
             this._player.addEventListener('ended', this._updateFromPlayer);
