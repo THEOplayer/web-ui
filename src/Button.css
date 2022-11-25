@@ -18,6 +18,10 @@
     color: #fff;
 }
 
+:host([hidden]) {
+    display: none;
+}
+
 /*
  * Hide default focus ring, particularly when using mouse.
  */
