@@ -3,11 +3,16 @@ import { Button } from './Button';
 import { ChromelessPlayer } from 'theoplayer';
 import buttonCss from './Button.css';
 import playButtonCss from './PlayButton.css';
-import playButtonHtml from './PlayButton.html';
+import playIcon from './icons/play.svg';
+import pauseIcon from './icons/pause.svg';
+import replayIcon from './icons/replay.svg';
 import { PlayerReceiverMixin } from './PlayerReceiverMixin';
 
 const template = document.createElement('template');
-template.innerHTML = `<style>${buttonCss}\n${playButtonCss}</style>${playButtonHtml}`;
+template.innerHTML = `<style>${buttonCss}\n${playButtonCss}</style>
+<div part="play-icon"><slot name="play-icon">${playIcon}</slot></div>
+<div part="pause-icon"><slot name="pause-icon">${pauseIcon}</slot></div>
+<div part="replay-icon"><slot name="replay-icon">${replayIcon}</slot></div>`;
 shadyCss.prepareTemplate(template, 'theoplayer-play-button');
 
 const ATTR_PAUSED = 'paused';

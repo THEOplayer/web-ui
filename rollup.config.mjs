@@ -44,9 +44,9 @@ export default defineConfig({
             sortClassName: true,
             collapseWhitespace: true
         }),
-        // Import HTML and CSS as strings.
+        // Import HTML and SVG as strings.
         string({
-            include: ['./src/**/*.html']
+            include: ['./src/**/*.html', './src/**/*.svg']
         }),
         // Transpile TypeScript.
         swc({
