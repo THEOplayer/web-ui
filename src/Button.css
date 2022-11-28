@@ -22,21 +22,20 @@
     display: none;
 }
 
-/*
- * Hide default focus ring, particularly when using mouse.
- */
 :host(:focus) {
-    box-shadow: none;
+    box-shadow: inset 0 0 0 2px rgba(27, 127, 204, 0.9);
     outline: 0;
 }
 
-/*
- * Only show outline when keyboard focusing.
+/**
+ * Hide focus ring when using mouse.
  * https://drafts.csswg.org/selectors-4/#the-focus-visible-pseudo
+ *
+ * Note: browsers that don't support :focus-visible will ignore this rule,
+ * and will use the :focus rule above instead.
  */
-:host(:focus-visible) {
-    box-shadow: inset 0 0 0 2px rgba(27, 127, 204, 0.9);
-    outline: 0;
+:host(:focus:not(:focus-visible)) {
+    box-shadow: none;
 }
 
 :host(:hover) {
