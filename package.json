@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup -c",
-    "start": "rollup -c --watch",
+    "watch": "rollup -c --watch",
+    "start": "serve .",
     "format": "prettier --write ."
   },
   "keywords": [],
@@ -34,6 +35,7 @@
     "rollup-plugin-string": "^3.0.0",
     "rollup-plugin-swc": "^0.2.1",
     "rollup-plugin-typescript-resolve": "^1.0.1",
+    "serve": "^14.1.2",
     "theoplayer": "^4.3.1",
     "tslib": "^2.4.1",
     "typescript": "^4.8.4"
