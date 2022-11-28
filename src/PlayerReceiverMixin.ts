@@ -38,7 +38,7 @@ async function collectPlayerReceiverElements(element: Element, result: PlayerRec
     if (isPlayerReceiverElement(element)) {
         result.push(element);
     }
-    const children: Element[] = [...fromArrayLike(element.children), ...fromArrayLike(element.shadowRoot?.children ?? [])];
+    const children: Element[] = [...fromArrayLike(element.children ?? []), ...fromArrayLike(element.shadowRoot?.children ?? [])];
     if (children.length > 0) {
         await Promise.all(children.map((child) => collectPlayerReceiverElements(child, result)));
     }
