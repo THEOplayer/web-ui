@@ -67,6 +67,10 @@ input[type='range']::-moz-range-thumb {
     translate: var(--theoplayer-range-track-translate-x, 0) var(--theoplayer-range-track-translate-y, 0);
 }
 
+input[type='range']::-ms-thumb {
+    @mixin thumb-styles;
+}
+
 @define-mixin track-styles {
     width: var(--theoplayer-range-track-width, 100%);
     min-width: 40px;
@@ -100,4 +104,10 @@ input[type='range']::-ms-track {
     color: transparent;
 
     @mixin track-styles;
+}
+
+input[type='range']::-ms-fill-lower,
+input[type='range']::-ms-fill-upper,
+input[type='range']::-ms-tooltip {
+    display: none;
 }
