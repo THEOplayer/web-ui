@@ -105,9 +105,58 @@ export abstract class Range extends HTMLElement {
 
     protected update(): void {
         this._rangeEl.setAttribute('aria-valuetext', this.getAriaValueText());
+        this.updateBar_();
     }
 
     protected abstract getAriaLabel(): string;
 
     protected abstract getAriaValueText(): string;
+
+    /**
+     * Native ranges have a single color for the whole track, which is different
+     * from most video players that have a colored "bar" to the left of the handle
+     * showing playback progress or volume level. Here we're building that bar
+     * by using a background gradient that moves with the range value.
+     */
+    private updateBar_() {
+        const colorArray = this.getBarColors();
+
+        const gradientStops: string[] = [];
+        let prevPercent = 0;
+        for (const [color, percent] of colorArray) {
+            if (percent < prevPercent) continue;
+            gradientStops.push(`${color} ${prevPercent}%`);
+            gradientStops.push(`${color} ${percent}%`);
+            prevPercent = percent;
+        }
+
+        shadyCss.styleSubtree(this, {
+            '--theoplayer-range-track-progress-internal': `linear-gradient(to right, ${gradientStops.join(', ')})`
+        });
+    }
+
+    /**
+     * Build the color gradient for the range bar.
+     * Creating an array so progress-bar can insert the buffered bar.
+     */
+    protected getBarColors(): Array<[string, number]> {
+        const relativeValue = this.value - this.min;
+        const relativeMax = this.max - this.min;
+        const rangePercent = (relativeValue / relativeMax) * 100;
+
+        let thumbPercent = 0;
+        // If the range thumb is at min or max don't correct the time range.
+        // Ideally the thumb center would go all the way to min and max values
+        // but input[type=range] doesn't play like that.
+        if (this.min < this.value && this.value < this.max) {
+            const thumbWidth = getComputedStyle(this).getPropertyValue('--media-range-thumb-width') || '10px';
+            const thumbOffset = parseInt(thumbWidth) * (0.5 - rangePercent / 100);
+            thumbPercent = (thumbOffset / this._rangeEl.offsetWidth) * 100;
+        }
+
+        return [
+            ['var(--theoplayer-range-bar-color, #fff)', rangePercent + thumbPercent],
+            ['transparent', 100]
+        ];
+    }
 }
