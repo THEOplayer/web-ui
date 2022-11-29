@@ -3,7 +3,7 @@ import { ChromelessPlayer, SourceDescription } from 'theoplayer';
 import elementCss from './THEOplayerUI.css';
 import elementHtml from './THEOplayerUI.html';
 import { isElement } from './utils';
-import { findPlayerReceiverElements } from './PlayerReceiverMixin';
+import { forEachPlayerReceiverElement } from './PlayerReceiverMixin';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -117,7 +117,7 @@ export class THEOplayerUI extends HTMLElement {
         }
         this._player.autoplay = this.autoplay;
 
-        void attachPlayerToReceivers(this, this._player);
+        attachPlayerToReceivers(this, this._player);
         this._mutationObserver.observe(this, { childList: true, subtree: true });
     }
 
@@ -131,7 +131,7 @@ export class THEOplayerUI extends HTMLElement {
 
     disconnectedCallback(): void {
         this._mutationObserver.disconnect();
-        void attachPlayerToReceivers(this, undefined);
+        attachPlayerToReceivers(this, undefined);
 
         if (this._player) {
             this._player.destroy();
@@ -161,13 +161,13 @@ export class THEOplayerUI extends HTMLElement {
                 for (let i = 0; i < addedNodes.length; i++) {
                     const node = addedNodes[i];
                     if (isElement(node)) {
-                        void attachPlayerToReceivers(node, this._player);
+                        attachPlayerToReceivers(node, this._player);
                     }
                 }
                 for (let i = 0; i < removedNodes.length; i++) {
                     const node = removedNodes[i];
                     if (isElement(node)) {
-                        void attachPlayerToReceivers(node, undefined);
+                        attachPlayerToReceivers(node, undefined);
                     }
                 }
             }
@@ -175,10 +175,10 @@ export class THEOplayerUI extends HTMLElement {
     };
 }
 
-async function attachPlayerToReceivers(element: Element, player: ChromelessPlayer | undefined): Promise<void> {
-    for (const receiver of await findPlayerReceiverElements(element)) {
+function attachPlayerToReceivers(element: Element, player: ChromelessPlayer | undefined): void {
+    void forEachPlayerReceiverElement(element, (receiver) => {
         receiver.attachPlayer(player);
-    }
+    });
 }
 
 customElements.define('theoplayer-ui', THEOplayerUI);
