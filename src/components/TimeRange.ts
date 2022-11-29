@@ -15,9 +15,13 @@ const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
 export class TimeRange extends PlayerReceiverMixin(Range) {
     private _player: ChromelessPlayer | undefined;
+    private _pausedWhileScrubbing: boolean = false;
 
     constructor() {
         super({ template });
+
+        this._rangeEl.addEventListener('mousedown', this._pauseOnScrubStart);
+        this._rangeEl.addEventListener('touchstart', this._pauseOnScrubStart);
     }
 
     get player(): ChromelessPlayer | undefined {
@@ -76,6 +80,33 @@ export class TimeRange extends PlayerReceiverMixin(Range) {
         }
         super.handleInput();
     }
+
+    private readonly _pauseOnScrubStart = () => {
+        if (this._pausedWhileScrubbing) {
+            // Already scrubbing.
+            return;
+        }
+        if (this._player === undefined || this._player.paused) {
+            // Player is already paused.
+            return;
+        }
+        this._pausedWhileScrubbing = true;
+        this._player.pause();
+        document.addEventListener('mouseup', this._playOnScrubEnd);
+        document.addEventListener('touchend', this._playOnScrubEnd);
+    };
+
+    private readonly _playOnScrubEnd = () => {
+        if (!this._pausedWhileScrubbing) {
+            return;
+        }
+        this._pausedWhileScrubbing = false;
+        document.removeEventListener('mouseup', this._playOnScrubEnd);
+        document.removeEventListener('touchend', this._playOnScrubEnd);
+        if (this._player !== undefined && this._player.paused) {
+            this._player.play();
+        }
+    };
 }
 
 customElements.define('theoplayer-time-range', TimeRange);
