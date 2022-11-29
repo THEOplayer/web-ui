@@ -18,7 +18,7 @@ export function formatAsTimePhrase(time: number): string {
     const negative = time < 0;
     time = Math.abs(time);
 
-    const seconds = time % 60;
+    const seconds = Math.floor(time % 60);
     const minutes = Math.floor(time / 60) % 60;
     const hours = Math.floor(time / 3600);
 
