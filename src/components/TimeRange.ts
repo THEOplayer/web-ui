@@ -43,9 +43,18 @@ export class TimeRange extends PlayerReceiverMixin(Range) {
     }
 
     private readonly _updateFromPlayer = () => {
-        if (this._player !== undefined) {
-            this.value = this._player.currentTime;
+        if (this._player === undefined) {
+            return;
         }
+        const seekable = this._player.seekable;
+        if (seekable.length !== 0) {
+            this.min = seekable.start(0);
+            this.max = seekable.end(0);
+        } else {
+            this.min = 0;
+            this.max = this._player.duration;
+        }
+        this.value = this._player.currentTime;
     };
 
     protected override getAriaLabel(): string {
