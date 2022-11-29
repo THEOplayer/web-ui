@@ -31,7 +31,7 @@
 
 [part~='vertical-layer'] {
     flex-flow: column nowrap;
-    align-items: flex-start;
+    align-items: stretch;
 }
 
 [part~='centered-layer'] {
