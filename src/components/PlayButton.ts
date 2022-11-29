@@ -18,6 +18,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-play-button');
 const ATTR_PAUSED = 'paused';
 const ATTR_ENDED = 'ended';
 
+const PLAYER_EVENTS = ['play', 'pause', 'ended'] as const;
+
 export class PlayButton extends PlayerReceiverMixin(Button) {
     static get observedAttributes() {
         return [...Button.observedAttributes, ATTR_PAUSED];
@@ -69,16 +71,12 @@ export class PlayButton extends PlayerReceiverMixin(Button) {
             return;
         }
         if (this._player !== undefined) {
-            this._player.removeEventListener('play', this._updateFromPlayer);
-            this._player.removeEventListener('pause', this._updateFromPlayer);
-            this._player.removeEventListener('ended', this._updateFromPlayer);
+            this._player.removeEventListener(PLAYER_EVENTS, this._updateFromPlayer);
         }
         this._player = player;
         this._updateFromPlayer();
         if (this._player !== undefined) {
-            this._player.addEventListener('play', this._updateFromPlayer);
-            this._player.addEventListener('pause', this._updateFromPlayer);
-            this._player.addEventListener('ended', this._updateFromPlayer);
+            this._player.addEventListener(PLAYER_EVENTS, this._updateFromPlayer);
         }
     }
 
