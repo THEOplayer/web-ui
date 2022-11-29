@@ -10,6 +10,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "useDefineForClassFields": true,
+    "isolatedModules": true,
     "plugins": [
       {
         "name": "ts-lit-plugin",
