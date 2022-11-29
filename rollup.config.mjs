@@ -4,6 +4,7 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import swcPlugin from 'rollup-plugin-swc';
 import { minifyHTML } from './build/minify-html.mjs';
 import postcss from 'rollup-plugin-postcss';
+import postcssMixins from 'postcss-mixins';
 import autoprefixer from 'autoprefixer';
 import { readFile } from 'fs/promises';
 import { string } from 'rollup-plugin-string';
@@ -33,7 +34,7 @@ export default defineConfig({
         postcss({
             include: './src/**/*.css',
             inject: false,
-            plugins: [autoprefixer()],
+            plugins: [autoprefixer(), postcssMixins()],
             minimize: true
         }),
         // Minify HTML and CSS.
