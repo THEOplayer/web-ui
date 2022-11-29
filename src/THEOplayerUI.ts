@@ -35,6 +35,10 @@ export class THEOplayerUI extends HTMLElement {
         this._mutationObserver = new MutationObserver(this._onMutation);
     }
 
+    get player(): ChromelessPlayer | undefined {
+        return this._player;
+    }
+
     get libraryLocation(): string | undefined {
         return this.getAttribute(ATTR_LIBRARY_LOCATION) ?? undefined;
     }
