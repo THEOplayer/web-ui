@@ -16,6 +16,13 @@
                 color: white;
             }
 
+            .control-bar {
+                display: flex;
+            }
+
+            theoplayer-time-range {
+                flex-grow: 1;
+            }
             theoplayer-ui::part(centered-layer) {
                 --theoplayer-control-background: transparent;
                 --theoplayer-control-height: 48px;
@@ -31,6 +38,9 @@
             <p slot="top-chrome">Elephant's Dream</p>
             <div slot="centered-chrome">
                 <theoplayer-play-button></theoplayer-play-button>
+            </div>
+            <div class="control-bar">
+                <theoplayer-time-range></theoplayer-time-range>
             </div>
             <div class="control-bar">
                 <theoplayer-play-button></theoplayer-play-button>
