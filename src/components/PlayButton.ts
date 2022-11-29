@@ -3,9 +3,9 @@ import { Button } from './Button';
 import { ChromelessPlayer } from 'theoplayer';
 import buttonCss from './Button.css';
 import playButtonCss from './PlayButton.css';
-import playIcon from './icons/play.svg';
-import pauseIcon from './icons/pause.svg';
-import replayIcon from './icons/replay.svg';
+import playIcon from '../icons/play.svg';
+import pauseIcon from '../icons/pause.svg';
+import replayIcon from '../icons/replay.svg';
 import { PlayerReceiverMixin } from './PlayerReceiverMixin';
 
 const template = document.createElement('template');

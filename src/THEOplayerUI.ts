@@ -3,7 +3,7 @@ import { ChromelessPlayer, SourceDescription } from 'theoplayer';
 import elementCss from './THEOplayerUI.css';
 import elementHtml from './THEOplayerUI.html';
 import { isElement } from './utils';
-import { forEachPlayerReceiverElement } from './PlayerReceiverMixin';
+import { forEachPlayerReceiverElement } from './components/PlayerReceiverMixin';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;

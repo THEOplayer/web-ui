@@ -1,2 +1,2 @@
 export * from './THEOplayerUI';
-export * from './PlayButton';
+export * from './components/PlayButton';
