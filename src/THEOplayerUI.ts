@@ -13,10 +13,11 @@ const ATTR_LIBRARY_LOCATION = 'library-location';
 const ATTR_LICENSE = 'license';
 const ATTR_LICENSE_URL = 'license-url';
 const ATTR_SOURCE = 'source';
+const ATTR_AUTOPLAY = 'autoplay';
 
 export class THEOplayerUI extends HTMLElement {
     static get observedAttributes() {
-        return [ATTR_LIBRARY_LOCATION, ATTR_LICENSE, ATTR_LICENSE_URL, ATTR_SOURCE];
+        return [ATTR_LIBRARY_LOCATION, ATTR_LICENSE, ATTR_LICENSE_URL, ATTR_SOURCE, ATTR_AUTOPLAY];
     }
 
     private readonly _playerEl: HTMLElement;
@@ -82,6 +83,18 @@ export class THEOplayerUI extends HTMLElement {
         }
     }
 
+    get autoplay(): boolean {
+        return this.hasAttribute(ATTR_AUTOPLAY);
+    }
+
+    set autoplay(value: boolean) {
+        if (value) {
+            this.setAttribute(ATTR_AUTOPLAY, '');
+        } else {
+            this.removeAttribute(ATTR_AUTOPLAY);
+        }
+    }
+
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
@@ -89,6 +102,7 @@ export class THEOplayerUI extends HTMLElement {
         this._upgradeProperty('license');
         this._upgradeProperty('licenseUrl');
         this._upgradeProperty('source');
+        this._upgradeProperty('autoplay');
 
         if (!this._player) {
             this._player = new ChromelessPlayer(this._playerEl, {
@@ -101,6 +115,7 @@ export class THEOplayerUI extends HTMLElement {
             this._player.source = this._source;
             this._source = undefined;
         }
+        this._player.autoplay = this.autoplay;
 
         void attachPlayerToReceivers(this, this._player);
         this._mutationObserver.observe(this, { childList: true, subtree: true });
@@ -125,8 +140,17 @@ export class THEOplayerUI extends HTMLElement {
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
-        if (attrName === ATTR_SOURCE && newValue !== oldValue) {
+        if (newValue === oldValue) {
+            return;
+        }
+        const hasValue = newValue != null;
+        if (attrName === ATTR_SOURCE) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
+        }
+        if (attrName === ATTR_AUTOPLAY && newValue !== oldValue) {
+            if (this._player) {
+                this._player.autoplay = hasValue;
+            }
         }
     }
 
