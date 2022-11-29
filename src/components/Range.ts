@@ -20,6 +20,8 @@ export abstract class Range extends HTMLElement {
 
         this._rangeEl = shadowRoot.querySelector('input[type="range"]')!;
         this._rangeEl.addEventListener('input', this._onInput);
+        // Internet Explorer does not fire 'input' events for <input> elements... use 'change' instead.
+        this._rangeEl.addEventListener('change', this._onInput);
     }
 
     connectedCallback(): void {
