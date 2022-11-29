@@ -56,11 +56,11 @@ export class VolumeRange extends PlayerReceiverMixin(Range) {
         return formatAsPercentString(this.value, this.max);
     }
 
-    protected override update(): void {
-        if (this._player !== undefined) {
+    protected override handleInput(): void {
+        if (this._player !== undefined && this._player.volume !== this.value) {
             this._player.volume = this.value;
         }
-        super.update();
+        super.handleInput();
     }
 }
 

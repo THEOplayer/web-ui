@@ -57,7 +57,7 @@ export abstract class Range extends HTMLElement {
 
     set value(value: number) {
         this._rangeEl.valueAsNumber = value;
-        this.update();
+        this.handleInput();
     }
 
     get min(): number {
@@ -100,8 +100,12 @@ export abstract class Range extends HTMLElement {
     }
 
     private readonly _onInput = () => {
-        this.update();
+        this.handleInput();
     };
+
+    protected handleInput(): void {
+        this.update();
+    }
 
     protected update(): void {
         this._rangeEl.setAttribute('aria-valuetext', this.getAriaValueText());

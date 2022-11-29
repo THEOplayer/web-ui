@@ -61,11 +61,11 @@ export class TimeRange extends PlayerReceiverMixin(Range) {
         return DEFAULT_MISSING_TIME_PHRASE;
     }
 
-    protected override update(): void {
+    protected override handleInput(): void {
         if (this._player !== undefined && this._player.currentTime !== this.value) {
             this._player.currentTime = this.value;
         }
-        super.update();
+        super.handleInput();
     }
 }
 
