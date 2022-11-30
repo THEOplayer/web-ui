@@ -1,7 +1,12 @@
 import * as shadyCss from '@webcomponents/shadycss';
+import rangeCss from './Range.css';
 
 export interface RangeOptions {
     template: HTMLTemplateElement;
+}
+
+export function rangeTemplate(range: string, extraCss: string = ''): string {
+    return `<style>${rangeCss}\n${extraCss}</style>${range}`;
 }
 
 const ATTR_DISABLED = 'disabled';

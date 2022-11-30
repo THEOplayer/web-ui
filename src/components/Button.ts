@@ -1,7 +1,12 @@
 import * as shadyCss from '@webcomponents/shadycss';
+import buttonCss from './Button.css';
 
 export interface ButtonOptions {
     template: HTMLTemplateElement;
+}
+
+export function buttonTemplate(button: string, extraCss: string = ''): string {
+    return `<style>${buttonCss}\n${extraCss}</style>${button}`;
 }
 
 const enum KeyCode {
