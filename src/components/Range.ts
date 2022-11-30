@@ -38,6 +38,10 @@ export abstract class Range extends HTMLElement {
         this.update();
     }
 
+    disconnectedCallback(): void {
+        return;
+    }
+
     protected _upgradeProperty(prop: keyof this) {
         if (this.hasOwnProperty(prop)) {
             let value = this[prop];
