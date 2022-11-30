@@ -26,6 +26,22 @@
     background: var(--theoplayer-control-hover-background, rgba(50, 50, 70, 0.7));
 }
 
+[part='container'] {
+    position: relative;
+    height: 100%;
+}
+
+[part='background'] {
+    min-width: 40px;
+    width: var(--theoplayer-range-track-width, 100%);
+    height: var(--track-height);
+    border-radius: var(--theoplayer-range-track-border-radius, 0);
+    position: absolute;
+    top: 50%;
+    transform: translate(var(--theoplayer-range-track-translate-x, 0px), calc(var(--theoplayer-range-track-translate-y, 0px) - 50%));
+    background: var(--theoplayer-range-track-background, #333);
+}
+
 input[type='range'] {
     /* Reset */
     -webkit-appearance: none; /* Hides the slider so that custom slider can be made */

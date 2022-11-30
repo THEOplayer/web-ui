@@ -6,7 +6,7 @@ export interface RangeOptions {
 }
 
 export function rangeTemplate(range: string, extraCss: string = ''): string {
-    return `<style>${rangeCss}\n${extraCss}</style>${range}`;
+    return `<style>${rangeCss}\n${extraCss}</style><div part="container"><div part="background"></div>${range}</div>`;
 }
 
 const ATTR_DISABLED = 'disabled';
