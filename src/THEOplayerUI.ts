@@ -194,7 +194,7 @@ export class THEOplayerUI extends HTMLElement {
     };
 
     private _onMenuSlotChange = () => {
-        const newMenus = this._menuSlot.assignedElements();
+        const newMenus = this._menuSlot.assignedNodes().filter(isElement);
         for (const oldMenu of this._menus) {
             if (newMenus.indexOf(oldMenu) < 0) {
                 oldMenu.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
