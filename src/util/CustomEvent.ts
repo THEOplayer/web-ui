@@ -32,4 +32,6 @@ export type CustomEventFactory = <TType extends string = string, TDetail = any>(
  *
  * https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent.CustomEvent
  */
-export const createCustomEvent: CustomEventFactory = supportsNativeCustomEvent() ? createWithNativeCustomEvent : createWithCreateEvent;
+export const createCustomEvent: CustomEventFactory = (
+    supportsNativeCustomEvent() ? createWithNativeCustomEvent : createWithCreateEvent
+) as CustomEventFactory;

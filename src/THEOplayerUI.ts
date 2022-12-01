@@ -208,7 +208,8 @@ export class THEOplayerUI extends HTMLElement {
         this._menus = newMenus;
     };
 
-    private readonly _onOpenMenu = (event: OpenMenuEvent): void => {
+    private readonly _onOpenMenu = (rawEvent: Event): void => {
+        const event = rawEvent as OpenMenuEvent;
         event.stopPropagation();
         const menuId = event.detail.menu;
         const menuToOpen = arrayFind(this._menus, (element) => element.id === menuId);
@@ -223,7 +224,8 @@ export class THEOplayerUI extends HTMLElement {
         this.setAttribute(ATTR_MENU_OPENED, '');
     };
 
-    private readonly _onCloseMenu = (event: CloseMenuEvent): void => {
+    private readonly _onCloseMenu = (rawEvent: Event): void => {
+        const event = rawEvent as CloseMenuEvent;
         event.stopPropagation();
         const menuToClose = event.currentTarget as HTMLElement;
         menuToClose.setAttribute('hidden', '');
