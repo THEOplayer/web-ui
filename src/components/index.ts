@@ -1,5 +1,6 @@
 export * from './Button';
 export * from './PlayButton';
+export * from './Menu';
 export * from './MenuButton';
 export * from './CloseMenuButton';
 export * from './Range';
