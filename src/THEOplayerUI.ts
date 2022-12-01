@@ -2,8 +2,10 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, SourceDescription } from 'theoplayer';
 import elementCss from './THEOplayerUI.css';
 import elementHtml from './THEOplayerUI.html';
-import { isElement } from './util/CommonUtils';
+import { arrayFind, isElement } from './util/CommonUtils';
 import { forEachPlayerReceiverElement } from './components/PlayerReceiverMixin';
+import { OPEN_MENU_EVENT, type OpenMenuEvent } from './events/OpenMenuEvent';
+import { CLOSE_MENU_EVENT, type CloseMenuEvent } from './events/CloseMenuEvent';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -14,6 +16,7 @@ const ATTR_LICENSE = 'license';
 const ATTR_LICENSE_URL = 'license-url';
 const ATTR_SOURCE = 'source';
 const ATTR_AUTOPLAY = 'autoplay';
+const ATTR_MENU_OPENED = 'menu-opened';
 
 export class THEOplayerUI extends HTMLElement {
     static get observedAttributes() {
@@ -21,6 +24,9 @@ export class THEOplayerUI extends HTMLElement {
     }
 
     private readonly _playerEl: HTMLElement;
+    private readonly _menuEl: HTMLElement;
+    private _menus: Element[] = [];
+    private readonly _menuSlot: HTMLSlotElement;
     private readonly _mutationObserver: MutationObserver;
     private _player: ChromelessPlayer | undefined = undefined;
     private _source: SourceDescription | undefined = undefined;
@@ -31,8 +37,12 @@ export class THEOplayerUI extends HTMLElement {
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._playerEl = shadowRoot.querySelector('[part~="media-layer"]')!;
+        this._menuEl = shadowRoot.querySelector('[part~="menu-layer"]')!;
+        this._menuSlot = shadowRoot.querySelector('slot[name="menu"]')!;
 
         this._mutationObserver = new MutationObserver(this._onMutation);
+
+        shadowRoot.addEventListener(OPEN_MENU_EVENT, this._onOpenMenu);
     }
 
     get player(): ChromelessPlayer | undefined {
@@ -123,6 +133,9 @@ export class THEOplayerUI extends HTMLElement {
 
         attachPlayerToReceivers(this, this._player);
         this._mutationObserver.observe(this, { childList: true, subtree: true });
+
+        this._onMenuSlotChange();
+        this._menuSlot.addEventListener('slotchange', this._onMenuSlotChange);
     }
 
     private _upgradeProperty(prop: keyof this) {
@@ -136,6 +149,8 @@ export class THEOplayerUI extends HTMLElement {
     disconnectedCallback(): void {
         this._mutationObserver.disconnect();
         attachPlayerToReceivers(this, undefined);
+
+        this._menuSlot.removeEventListener('slotchange', this._onMenuSlotChange);
 
         if (this._player) {
             this._player.destroy();
@@ -176,6 +191,43 @@ export class THEOplayerUI extends HTMLElement {
                 }
             }
         }
+    };
+
+    private _onMenuSlotChange = () => {
+        const newMenus = this._menuSlot.assignedElements();
+        for (const oldMenu of this._menus) {
+            if (newMenus.indexOf(oldMenu) < 0) {
+                oldMenu.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
+            }
+        }
+        for (const newMenu of newMenus) {
+            if (this._menus.indexOf(newMenu) < 0) {
+                newMenu.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
+            }
+        }
+        this._menus = newMenus;
+    };
+
+    private readonly _onOpenMenu = (event: OpenMenuEvent): void => {
+        event.stopPropagation();
+        const menuId = event.detail.menu;
+        const menuToOpen = arrayFind(this._menus, (element) => element.id === menuId);
+        if (menuToOpen === undefined) {
+            console.error(`<theoplayer-ui>: cannot find menu with ID "${event.detail.menu}"`);
+            return;
+        }
+        for (const menu of this._menus) {
+            menu.setAttribute('hidden', '');
+        }
+        menuToOpen.removeAttribute('hidden');
+        this.setAttribute(ATTR_MENU_OPENED, '');
+    };
+
+    private readonly _onCloseMenu = (event: CloseMenuEvent): void => {
+        event.stopPropagation();
+        const menuToClose = event.currentTarget as HTMLElement;
+        menuToClose.setAttribute('hidden', '');
+        this.removeAttribute(ATTR_MENU_OPENED);
     };
 }
 

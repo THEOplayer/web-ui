@@ -45,3 +45,8 @@
     flex-grow: 1;
     background: none;
 }
+
+:host(:not([menu-opened])) [part~='menu-layer'],
+:host([menu-opened]) [part~='vertical-layer'] {
+    display: none !important;
+}

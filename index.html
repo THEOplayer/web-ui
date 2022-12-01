@@ -45,6 +45,16 @@
             <div class="control-bar">
                 <theoplayer-play-button></theoplayer-play-button>
                 <theoplayer-volume-range></theoplayer-volume-range>
+                <theoplayer-menu-button menu="language-menu">Language</theoplayer-menu-button>
+                <theoplayer-menu-button menu="settings-menu">Settings</theoplayer-menu-button>
+            </div>
+            <div id="language-menu" slot="menu" hidden>
+                <p>Language menu</p>
+                <theoplayer-menu-close-button>Close</theoplayer-menu-close-button>
+            </div>
+            <div id="settings-menu" slot="menu" hidden>
+                <p>Settings menu</p>
+                <theoplayer-menu-close-button>Close</theoplayer-menu-close-button>
             </div>
         </theoplayer-ui>
     </body>
