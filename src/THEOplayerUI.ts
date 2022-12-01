@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, SourceDescription } from 'theoplayer';
 import elementCss from './THEOplayerUI.css';
 import elementHtml from './THEOplayerUI.html';
-import { isElement } from './utils';
+import { isElement } from './util/CommonUtils';
 import { forEachPlayerReceiverElement } from './components/PlayerReceiverMixin';
 
 const template = document.createElement('template');

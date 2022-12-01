@@ -1,4 +1,4 @@
-import { Constructor, fromArrayLike } from '../utils';
+import { Constructor, fromArrayLike } from '../util/CommonUtils';
 import type { ChromelessPlayer } from 'theoplayer';
 
 export const PlayerReceiverMarker = Symbol('THEOplayerPlayerReceiver');
