@@ -1,0 +1,4 @@
+:host([aria-checked='true']) {
+    background: #fff;
+    color: #000;
+}
