@@ -3,6 +3,7 @@ import { ATTR_CHECKED, RadioButton } from './RadioButton';
 import { buttonTemplate } from './Button';
 import trackMenuButtonCss from './TrackMenuButton.css';
 import type { MediaTrack } from 'theoplayer';
+import { localizeLanguageName } from '../util/CommonUtils';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<span></span>`, trackMenuButtonCss);
@@ -35,7 +36,7 @@ export class MediaTrackMenuButton extends RadioButton {
     }
 
     private _updateFromTrack(): void {
-        this._labelEl.textContent = this._track ? this._track.label || this._track.language : '';
+        this._labelEl.textContent = this._track ? getTrackLabel(this._track) : '';
         this.checked = this._track ? this._track.enabled : false;
     }
 
@@ -59,6 +60,18 @@ export class MediaTrackMenuButton extends RadioButton {
             this._updateTrack();
         }
     }
+}
+
+function getTrackLabel(track: MediaTrack): string {
+    let label = track.label;
+    if (label) {
+        return label;
+    }
+    let languageCode = track.language;
+    if (!languageCode) {
+        return '';
+    }
+    return localizeLanguageName(languageCode) || languageCode || '';
 }
 
 customElements.define('theoplayer-media-track-menu-button', MediaTrackMenuButton);
