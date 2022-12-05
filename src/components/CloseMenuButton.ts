@@ -4,7 +4,7 @@ import { createCustomEvent } from '../util/CustomEvent';
 import { CLOSE_MENU_EVENT, CloseMenuEvent } from '../events/CloseMenuEvent';
 
 const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<slot></slot>`);
+template.innerHTML = buttonTemplate(`<slot>Close</slot>`);
 shadyCss.prepareTemplate(template, 'theoplayer-menu-close-button');
 
 export class CloseMenuButton extends Button {

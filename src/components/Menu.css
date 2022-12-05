@@ -1,8 +1,13 @@
 :host {
     display: block;
     box-sizing: border-box;
+    color: #fff;
 }
 
 :host([hidden]) {
     display: none;
+}
+
+[part='heading'] {
+    display: flex;
 }
