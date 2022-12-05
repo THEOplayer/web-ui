@@ -87,11 +87,12 @@ export class RadioGroup extends HTMLElement {
     }
 
     get firstRadioButton(): HTMLElement | null {
-        return this.querySelector('[role="radio"]:first-of-type');
+        return this.querySelector('[role="radio"]');
     }
 
     get lastRadioButton(): HTMLElement | null {
-        return this.querySelector('[role="radio"]:last-of-type');
+        const radioButtons = this.allRadioButtons();
+        return radioButtons.length > 0 ? radioButtons[radioButtons.length - 1] : null;
     }
 
     allRadioButtons(): NodeListOf<HTMLElement> {
