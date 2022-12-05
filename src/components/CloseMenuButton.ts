@@ -18,7 +18,8 @@ export class CloseMenuButton extends Button {
 
     protected override handleClick() {
         const event: CloseMenuEvent = createCustomEvent(CLOSE_MENU_EVENT, {
-            bubbles: true
+            bubbles: true,
+            composed: true
         });
         this.dispatchEvent(event);
     }

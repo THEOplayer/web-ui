@@ -52,6 +52,7 @@ export class MenuButton extends Button {
         if (menu) {
             const event: OpenMenuEvent = createCustomEvent(OPEN_MENU_EVENT, {
                 bubbles: true,
+                composed: true,
                 detail: { menu }
             });
             this.dispatchEvent(event);
