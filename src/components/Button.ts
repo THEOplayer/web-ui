@@ -1,5 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import buttonCss from './Button.css';
+import { KeyCode } from '../util/KeyCode';
 
 export interface ButtonOptions {
     template: HTMLTemplateElement;
@@ -7,11 +8,6 @@ export interface ButtonOptions {
 
 export function buttonTemplate(button: string, extraCss: string = ''): string {
     return `<style>${buttonCss}\n${extraCss}</style>${button}`;
-}
-
-const enum KeyCode {
-    SPACE = 32,
-    ENTER = 13
 }
 
 const ATTR_DISABLED = 'disabled';
