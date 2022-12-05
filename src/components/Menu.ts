@@ -1,13 +1,26 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import menuCss from './Menu.css';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${menuCss}</style><slot></slot>`;
-shadyCss.prepareTemplate(template, 'theoplayer-menu');
+export interface MenuOptions {
+    template?: HTMLTemplateElement;
+}
+
+export function menuTemplate(heading: string, content: string, extraCss: string = ''): string {
+    return (
+        `<style>${menuCss}${extraCss}</style>` +
+        `<div part="heading">${heading}<theoplayer-menu-close-button></theoplayer-menu-close-button></div>` +
+        `<div part="content">${content}</div>`
+    );
+}
+
+const defaultTemplate = document.createElement('template');
+defaultTemplate.innerHTML = menuTemplate('<slot name="heading"></slot>', '<slot></slot>');
+shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu');
 
 export class Menu extends HTMLElement {
-    constructor() {
+    constructor(options?: MenuOptions) {
         super();
+        const template = options?.template ?? defaultTemplate;
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
     }
