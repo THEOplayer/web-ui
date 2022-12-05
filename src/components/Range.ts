@@ -164,7 +164,7 @@ export abstract class Range extends HTMLElement {
         // Ideally the thumb center would go all the way to min and max values
         // but input[type=range] doesn't play like that.
         if (this.min < this.value && this.value < this.max) {
-            const thumbWidth = getComputedStyle(this).getPropertyValue('--media-range-thumb-width') || '10px';
+            const thumbWidth = getComputedStyle(this).getPropertyValue('--theoplayer-range-thumb-width') || '10px';
             const thumbOffset = parseInt(thumbWidth) * (0.5 - rangePercent / 100);
             thumbPercent = (thumbOffset / this._rangeEl.offsetWidth) * 100;
         }
