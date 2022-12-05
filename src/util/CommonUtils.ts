@@ -28,7 +28,7 @@ export const arrayFind: <T>(array: readonly T[], predicate: (element: T, index: 
 export const localizeLanguageName: (languageCode: string) => string | undefined =
     typeof Intl !== 'undefined' && Intl.DisplayNames
         ? (languageCode) => {
-              const displayNames = new Intl.DisplayNames(languageCode, { type: 'language', fallback: 'none' });
+              const displayNames = new Intl.DisplayNames([languageCode, 'en'], { type: 'language', fallback: 'none' });
               const localName = displayNames.of(languageCode);
               if (localName) {
                   return localName.slice(0, 1).toUpperCase() + localName.slice(1);
