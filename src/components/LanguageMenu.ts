@@ -70,7 +70,7 @@ export class LanguageMenu extends PlayerReceiverMixin(Menu) {
         }
         for (const newTrack of newAudioTracks) {
             if (!hasButtonForTrack(oldAudioButtons, newTrack)) {
-                const newButton = document.createElement('theoplayer-media-track-menu-button') as MediaTrackMenuButton;
+                const newButton = new MediaTrackMenuButton();
                 newButton.track = newTrack;
                 this._audioGroup.appendChild(newButton);
             }
@@ -89,7 +89,7 @@ export class LanguageMenu extends PlayerReceiverMixin(Menu) {
         }
         for (const newTrack of newSubtitleTracks) {
             if (!hasButtonForTrack(oldSubtitleButtons, newTrack)) {
-                const newButton = document.createElement('theoplayer-text-track-menu-button') as TextTrackMenuButton;
+                const newButton = new TextTrackMenuButton();
                 newButton.track = newTrack;
                 this._subtitleGroup.appendChild(newButton);
             }
