@@ -3,24 +3,27 @@ import { Button, buttonTemplate } from './Button';
 import { ChromelessPlayer } from 'theoplayer';
 import muteButtonCss from './MuteButton.css';
 import offIcon from '../icons/volume-off.svg';
+import lowIcon from '../icons/volume-low.svg';
 import highIcon from '../icons/volume-high.svg';
 import { PlayerReceiverMixin } from './PlayerReceiverMixin';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
     `<span part="off-icon"><slot name="off-icon">${offIcon}</slot></span>` +
-        `<span part="volume-icon"><slot name="volume-icon">${highIcon}</slot></span>`,
+        `<span part="low-icon"><slot name="low-icon">${lowIcon}</slot></span>` +
+        `<span part="high-icon"><slot name="high-icon">${highIcon}</slot></span>`,
     muteButtonCss
 );
 shadyCss.prepareTemplate(template, 'theoplayer-mute-button');
 
-const ATTR_MUTED = 'muted';
+const ATTR_VOLUME_LEVEL = 'volume-level';
+export type VolumeLevel = 'off' | 'low' | 'high';
 
 const PLAYER_EVENTS = ['volumechange'] as const;
 
 export class MuteButton extends PlayerReceiverMixin(Button) {
     static get observedAttributes() {
-        return [...Button.observedAttributes, ATTR_MUTED];
+        return [...Button.observedAttributes, ATTR_VOLUME_LEVEL];
     }
 
     private _player: ChromelessPlayer | undefined;
@@ -31,18 +34,18 @@ export class MuteButton extends PlayerReceiverMixin(Button) {
 
     connectedCallback(): void {
         super.connectedCallback();
-        this._upgradeProperty('muted');
+        this._upgradeProperty('volumeLevel');
     }
 
-    get muted(): boolean {
-        return this.hasAttribute(ATTR_MUTED);
+    get volumeLevel(): VolumeLevel {
+        return (this.getAttribute(ATTR_VOLUME_LEVEL) as VolumeLevel | null) || 'off';
     }
 
-    set muted(paused: boolean) {
-        if (paused) {
-            this.setAttribute(ATTR_MUTED, '');
+    set volumeLevel(level: VolumeLevel) {
+        if (level) {
+            this.setAttribute(ATTR_VOLUME_LEVEL, level);
         } else {
-            this.removeAttribute(ATTR_MUTED);
+            this.removeAttribute(ATTR_VOLUME_LEVEL);
         }
     }
 
@@ -70,21 +73,22 @@ export class MuteButton extends PlayerReceiverMixin(Button) {
 
     private readonly _updateFromPlayer = () => {
         if (this._player !== undefined) {
-            this.muted = this._player.muted;
+            const volume = this._player.volume;
+            const muted = this._player.muted;
+            if (muted) {
+                this.volumeLevel = 'off';
+            } else if (volume < 0.5) {
+                this.volumeLevel = 'low';
+            } else {
+                this.volumeLevel = 'high';
+            }
         }
     };
 
     protected override handleClick() {
-        this.muted = !this.muted;
-    }
-
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (attrName === ATTR_MUTED && newValue !== oldValue) {
-            const hasValue = newValue != null;
-            if (this._player !== undefined && hasValue !== this._player.muted) {
-                this._player.muted = hasValue;
-            }
+        if (this._player !== undefined) {
+            this._player.muted = !this._player.muted;
+            this._updateFromPlayer();
         }
     }
 }

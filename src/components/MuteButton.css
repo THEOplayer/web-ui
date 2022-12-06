@@ -1,4 +1,5 @@
-:host([muted]) [part='volume-icon'],
-:host(:not([muted])) [part='off-icon'] {
+:host(:not([volume-level='high'])) [part='high-icon'],
+:host(:not([volume-level='low'])) [part='low-icon'],
+:host(:not([volume-level='off'])) [part='off-icon'] {
     display: none !important;
 }
