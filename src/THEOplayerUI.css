@@ -47,6 +47,11 @@
     background: none;
 }
 
+[part~='menu-layer'] {
+    align-items: center;
+    justify-content: center;
+}
+
 :host(:not([menu-opened])) [part~='menu-layer'],
 :host([menu-opened]) [part~='vertical-layer'] {
     display: none !important;

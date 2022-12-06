@@ -1,0 +1,17 @@
+[part='content'] {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+}
+
+[part='audio'],
+[part='subtitles'] {
+    flex-grow: 1;
+    text-align: center;
+}
+
+theoplayer-radio-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}

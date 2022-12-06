@@ -8,7 +8,7 @@ export interface MenuOptions {
 export function menuTemplate(heading: string, content: string, extraCss: string = ''): string {
     return (
         `<style>${menuCss}${extraCss}</style>` +
-        `<div part="heading">${heading}<theoplayer-menu-close-button></theoplayer-menu-close-button></div>` +
+        `<div part="heading"><h1>${heading}</h1><theoplayer-menu-close-button></theoplayer-menu-close-button></div>` +
         `<div part="content">${content}</div>`
     );
 }
@@ -23,6 +23,10 @@ export class Menu extends HTMLElement {
         const template = options?.template ?? defaultTemplate;
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
     }
 }
 
