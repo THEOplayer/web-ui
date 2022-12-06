@@ -1,5 +1,5 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import { Button, buttonTemplate } from './Button';
+import { Button, ButtonOptions, buttonTemplate } from './Button';
 import { createCustomEvent } from '../util/CustomEvent';
 import { OPEN_MENU_EVENT, type OpenMenuEvent } from '../events/OpenMenuEvent';
 
@@ -14,8 +14,8 @@ export class MenuButton extends Button {
         return [...Button.observedAttributes, ATTR_MENU];
     }
 
-    constructor() {
-        super({ template });
+    constructor(options?: Partial<ButtonOptions>) {
+        super({ template, ...options });
     }
 
     connectedCallback() {

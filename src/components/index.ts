@@ -8,6 +8,7 @@ export * from './CloseMenuButton';
 export * from './MediaTrackMenuButton';
 export * from './TextTrackMenuButton';
 export * from './LanguageMenu';
+export * from './LanguageMenuButton';
 export * from './Range';
 export * from './TimeRange';
 export * from './VolumeRange';
