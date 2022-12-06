@@ -20,6 +20,11 @@ export class TextTrackMenuButton extends RadioButton {
         this._labelEl = this.shadowRoot!.querySelector('span')!;
     }
 
+    connectedCallback(): void {
+        super.connectedCallback();
+        this._upgradeProperty('track');
+    }
+
     get track(): TextTrack | undefined {
         return this._track;
     }
