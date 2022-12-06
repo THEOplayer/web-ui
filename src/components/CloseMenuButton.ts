@@ -1,10 +1,11 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Button, buttonTemplate } from './Button';
+import closeIcon from '../icons/close.svg';
 import { createCustomEvent } from '../util/CustomEvent';
 import { CLOSE_MENU_EVENT, CloseMenuEvent } from '../events/CloseMenuEvent';
 
 const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<slot>Close</slot>`);
+template.innerHTML = buttonTemplate(`<span part="icon"><slot>${closeIcon}</slot></span>`);
 shadyCss.prepareTemplate(template, 'theoplayer-menu-close-button');
 
 export class CloseMenuButton extends Button {
