@@ -27,6 +27,7 @@
 [part~='media-layer'],
 [part~='poster-layer'] {
     pointer-events: none;
+    z-index: 0;
 }
 
 [part~='vertical-layer'] {
