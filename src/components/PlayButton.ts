@@ -9,9 +9,9 @@ import { PlayerReceiverMixin } from './PlayerReceiverMixin';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
-    `<div part="play-icon"><slot name="play-icon">${playIcon}</slot></div>` +
-        `<div part="pause-icon"><slot name="pause-icon">${pauseIcon}</slot></div>` +
-        `<div part="replay-icon"><slot name="replay-icon">${replayIcon}</slot></div>`,
+    `<span part="play-icon"><slot name="play-icon">${playIcon}</slot></span>` +
+        `<span part="pause-icon"><slot name="pause-icon">${pauseIcon}</slot></span>` +
+        `<span part="replay-icon"><slot name="replay-icon">${replayIcon}</slot></span>`,
     playButtonCss
 );
 shadyCss.prepareTemplate(template, 'theoplayer-play-button');
