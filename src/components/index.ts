@@ -1,3 +1,4 @@
+export * from './ControlBar';
 export * from './Button';
 export * from './PlayButton';
 export * from './RadioGroup';

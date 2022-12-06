@@ -19,7 +19,8 @@
     right: 0;
 }
 
-[part~='layer']:not([part~='media-layer']) {
+[part~='layer']:not([part~='media-layer']),
+[part~='chrome'] {
     display: flex;
     background: none;
 }
@@ -30,7 +31,8 @@
     z-index: 0;
 }
 
-[part~='vertical-layer'] {
+[part~='vertical-layer'],
+[part~='chrome'] {
     flex-flow: column nowrap;
     align-items: stretch;
 }
@@ -55,4 +57,9 @@
 :host(:not([menu-opened])) [part~='menu-layer'],
 :host([menu-opened]) [part~='vertical-layer'] {
     display: none !important;
+}
+
+theoplayer-control-bar,
+[part~='chrome'] ::slotted(theoplayer-control-bar) {
+    align-self: stretch;
 }

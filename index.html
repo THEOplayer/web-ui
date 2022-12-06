@@ -16,13 +16,6 @@
                 color: white;
             }
 
-            .control-bar {
-                display: flex;
-            }
-
-            theoplayer-time-range {
-                flex-grow: 1;
-            }
             theoplayer-ui::part(centered-layer) {
                 --theoplayer-control-background: transparent;
                 --theoplayer-control-height: 48px;
@@ -39,15 +32,15 @@
             <div slot="centered-chrome">
                 <theoplayer-play-button></theoplayer-play-button>
             </div>
-            <div class="control-bar">
+            <theoplayer-control-bar>
                 <theoplayer-time-range></theoplayer-time-range>
-            </div>
-            <div class="control-bar">
+            </theoplayer-control-bar>
+            <theoplayer-control-bar>
                 <theoplayer-play-button></theoplayer-play-button>
                 <theoplayer-volume-range></theoplayer-volume-range>
                 <theoplayer-language-menu-button menu="language-menu"></theoplayer-language-menu-button>
                 <theoplayer-menu-button menu="settings-menu">Settings</theoplayer-menu-button>
-            </div>
+            </theoplayer-control-bar>
             <theoplayer-language-menu id="language-menu" slot="menu" hidden></theoplayer-language-menu>
             <theoplayer-menu id="settings-menu" slot="menu" hidden>
                 <h2 slot="heading">Settings menu</h2>

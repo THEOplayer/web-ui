@@ -1,0 +1,13 @@
+:host {
+    box-sizing: border-box;
+    display: inline-flex;
+}
+
+:host([hidden]) {
+    display: none;
+}
+
+theoplayer-time-range,
+::slotted(theoplayer-time-range) {
+    flex-grow: 1;
+}
