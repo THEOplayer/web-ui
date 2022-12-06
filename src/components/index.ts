@@ -1,6 +1,7 @@
 export * from './ControlBar';
 export * from './Button';
 export * from './PlayButton';
+export * from './MuteButton';
 export * from './RadioGroup';
 export * from './RadioButton';
 export * from './Menu';
