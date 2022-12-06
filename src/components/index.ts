@@ -9,6 +9,7 @@ export * from './MenuButton';
 export * from './CloseMenuButton';
 export * from './MediaTrackMenuButton';
 export * from './TextTrackMenuButton';
+export * from './TextTrackOffMenuButton';
 export * from './LanguageMenu';
 export * from './LanguageMenuButton';
 export * from './Range';

@@ -7,6 +7,8 @@ import { PlayerReceiverMixin } from './PlayerReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, TextTrack } from 'theoplayer';
 import { MediaTrackMenuButton } from './MediaTrackMenuButton';
 import { TextTrackMenuButton } from './TextTrackMenuButton';
+import { TextTrackOffMenuButton } from './TextTrackOffMenuButton';
+import { isSubtitleTrack } from '../util/TrackUtils';
 
 const template = document.createElement('template');
 template.innerHTML = menuTemplate(`<slot name="heading">Language</slot>`, languageMenuHtml, languageMenuCss);
@@ -17,6 +19,7 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 export class LanguageMenu extends PlayerReceiverMixin(Menu) {
     private readonly _audioGroup: RadioGroup;
     private readonly _subtitleGroup: RadioGroup;
+    private readonly _subtitleOffButton: TextTrackOffMenuButton;
 
     private _player: ChromelessPlayer | undefined;
 
@@ -25,6 +28,9 @@ export class LanguageMenu extends PlayerReceiverMixin(Menu) {
 
         this._audioGroup = this.shadowRoot!.querySelector('[part="audio"] theoplayer-radio-group')!;
         this._subtitleGroup = this.shadowRoot!.querySelector('[part="subtitles"] theoplayer-radio-group')!;
+
+        this._subtitleOffButton = new TextTrackOffMenuButton();
+        this._subtitleGroup.appendChild(this._subtitleOffButton);
     }
 
     get player(): ChromelessPlayer | undefined {
@@ -42,6 +48,7 @@ export class LanguageMenu extends PlayerReceiverMixin(Menu) {
         this._player = player;
         this._updateAudioTracks();
         this._updateTextTracks();
+        this._subtitleOffButton.trackList = player?.textTracks;
         if (this._player !== undefined) {
             this._player.audioTracks.addEventListener(TRACK_EVENTS, this._updateAudioTracks);
             this._player.textTracks.addEventListener(TRACK_EVENTS, this._updateTextTracks);
@@ -73,7 +80,8 @@ export class LanguageMenu extends PlayerReceiverMixin(Menu) {
     private readonly _updateTextTracks = (): void => {
         const oldSubtitleButtons = this._subtitleGroup.children as HTMLCollectionOf<TextTrackMenuButton>;
         const newSubtitleTracks: readonly TextTrack[] = this._player?.textTracks.filter(isSubtitleTrack) ?? [];
-        for (let i = 0; i < oldSubtitleButtons.length; i++) {
+        // Start at index 1, since the first child is the "off" button
+        for (let i = 1; i < oldSubtitleButtons.length; i++) {
             const oldButton = oldSubtitleButtons[i];
             if (!oldButton.track || newSubtitleTracks.indexOf(oldButton.track) < 0) {
                 this._subtitleGroup.removeChild(oldButton);
@@ -98,8 +106,4 @@ function hasButtonForTrack(buttons: HTMLCollectionOf<MediaTrackMenuButton | Text
         }
     }
     return false;
-}
-
-function isSubtitleTrack(track: TextTrack): boolean {
-    return track.kind === 'subtitles' || track.kind === 'captions';
 }
