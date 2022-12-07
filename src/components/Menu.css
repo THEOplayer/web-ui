@@ -5,6 +5,8 @@
     background: var(--theoplayer-menu-background, rgba(200, 200, 200, 0.7));
     box-shadow: var(--theoplayer-menu-box-shadow, 0 5px 5px rgba(0, 0, 0, 0.25));
     max-width: 100%;
+    min-height: 0;
+    max-height: 100%;
     margin: var(--theoplayer-menu-margin, 20px);
     padding: var(--theoplayer-menu-padding, 10px);
     border-radius: var(--theoplayer-menu-border-radius, 5px);

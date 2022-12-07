@@ -17,6 +17,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-language-menu');
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 export class LanguageMenu extends PlayerReceiverMixin(Menu) {
+    private readonly _contentEl: HTMLElement;
     private readonly _audioGroup: RadioGroup;
     private readonly _subtitleGroup: RadioGroup;
     private readonly _subtitleOffButton: TextTrackOffMenuButton;
@@ -26,6 +27,7 @@ export class LanguageMenu extends PlayerReceiverMixin(Menu) {
     constructor() {
         super({ template });
 
+        this._contentEl = this.shadowRoot!.querySelector('[part="content"]')!;
         this._audioGroup = this.shadowRoot!.querySelector('[part="audio"] theoplayer-radio-group')!;
         this._subtitleGroup = this.shadowRoot!.querySelector('[part="subtitles"] theoplayer-radio-group')!;
 
@@ -62,6 +64,11 @@ export class LanguageMenu extends PlayerReceiverMixin(Menu) {
     private readonly _updateAudioTracks = (): void => {
         const oldAudioButtons = this._audioGroup.children as HTMLCollectionOf<MediaTrackMenuButton>;
         const newAudioTracks: readonly MediaTrack[] = this._player?.audioTracks ?? [];
+        if (newAudioTracks.length === 0) {
+            this._contentEl.removeAttribute('has-audio');
+        } else {
+            this._contentEl.setAttribute('has-audio', '');
+        }
         for (let i = 0; i < oldAudioButtons.length; i++) {
             const oldButton = oldAudioButtons[i];
             if (!oldButton.track || newAudioTracks.indexOf(oldButton.track) < 0) {
@@ -80,6 +87,11 @@ export class LanguageMenu extends PlayerReceiverMixin(Menu) {
     private readonly _updateTextTracks = (): void => {
         const oldSubtitleButtons = this._subtitleGroup.children as HTMLCollectionOf<TextTrackMenuButton>;
         const newSubtitleTracks: readonly TextTrack[] = this._player?.textTracks.filter(isSubtitleTrack) ?? [];
+        if (newSubtitleTracks.length === 0) {
+            this._contentEl.removeAttribute('has-subtitles');
+        } else {
+            this._contentEl.setAttribute('has-subtitles', '');
+        }
         // Start at index 1, since the first child is the "off" button
         for (let i = 1; i < oldSubtitleButtons.length; i++) {
             const oldButton = oldSubtitleButtons[i];

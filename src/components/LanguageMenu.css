@@ -1,12 +1,45 @@
-[part='content'] {
+:host,
+[part='audio'],
+[part='subtitles'] {
     display: flex;
-    align-items: stretch;
-    gap: 10px;
+    /*
+     * By default, a flex container cannot be smaller than the size of its content along the main axis.
+     * However, we want to show a scroll bar instead if the container gets too small, so override its min-height.
+     * https://stackoverflow.com/a/36247448/1321716
+     */
+    min-height: 0;
+}
+
+:host {
+    flex-direction: column;
+}
+
+[part='content'] {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+[part='content'][has-audio][has-subtitles] {
+    grid-template-columns: 1fr 10px 1fr;
+}
+
+[part='content'][has-audio][has-subtitles] [part='audio'] {
+    grid-column: 1;
+}
+
+[part='content'][has-audio][has-subtitles] [part='subtitles'] {
+    grid-column: 3;
+}
+
+[part='content']:not([has-audio]) [part='audio'],
+[part='content']:not([has-subtitles]) [part='subtitles'] {
+    display: none !important;
 }
 
 [part='audio'],
 [part='subtitles'] {
-    flex-grow: 1;
+    align-self: stretch;
+    flex-direction: column;
     text-align: center;
 }
 
@@ -14,4 +47,8 @@ theoplayer-radio-group {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    /*
+     * Show a scroll bar if the list becomes too long.
+     */
+    overflow-y: auto;
 }

@@ -34,7 +34,7 @@ export default defineConfig({
         postcss({
             include: './src/**/*.css',
             inject: false,
-            plugins: [autoprefixer(), postcssMixins()],
+            plugins: [autoprefixer({ grid: 'no-autoplace' }), postcssMixins()],
             minimize: true
         }),
         // Minify HTML and CSS.
