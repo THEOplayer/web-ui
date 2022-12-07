@@ -35,3 +35,11 @@ export const localizeLanguageName: (languageCode: string) => string | undefined 
               }
           }
         : (_languageCode) => undefined;
+
+export function setTextContent(el: HTMLElement, text: string): void {
+    if (typeof el.textContent === 'undefined') {
+        el.innerText = text;
+    } else {
+        el.textContent = text;
+    }
+}
