@@ -13,6 +13,7 @@ export * from './TextTrackMenuButton';
 export * from './TextTrackOffMenuButton';
 export * from './LanguageMenu';
 export * from './LanguageMenuButton';
+export * from './FullscreenButton';
 export * from './Range';
 export * from './TimeRange';
 export * from './VolumeRange';

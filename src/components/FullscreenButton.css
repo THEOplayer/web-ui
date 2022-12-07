@@ -1,0 +1,4 @@
+:host([fullscreen]) [part='enter-icon'],
+:host(:not([fullscreen])) [part='exit-icon'] {
+    display: none !important;
+}
