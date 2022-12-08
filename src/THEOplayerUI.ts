@@ -155,6 +155,14 @@ export class THEOplayerUI extends HTMLElement {
         }
     }
 
+    private _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
+    }
+
     private tryInitializePlayer_(): void {
         if (this._player !== undefined) {
             return;
@@ -175,14 +183,6 @@ export class THEOplayerUI extends HTMLElement {
             this._source = undefined;
         }
         this._player.autoplay = this.autoplay;
-    }
-
-    private _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
     }
 
     disconnectedCallback(): void {
@@ -212,16 +212,13 @@ export class THEOplayerUI extends HTMLElement {
         const hasValue = newValue != null;
         if (attrName === ATTR_LIBRARY_LOCATION || attrName === ATTR_LICENSE || attrName === ATTR_LICENSE_URL) {
             this.tryInitializePlayer_();
-        }
-        if (attrName === ATTR_SOURCE) {
+        } else if (attrName === ATTR_SOURCE) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
-        }
-        if (attrName === ATTR_AUTOPLAY && newValue !== oldValue) {
+        } else if (attrName === ATTR_AUTOPLAY) {
             if (this._player) {
                 this._player.autoplay = hasValue;
             }
-        }
-        if (attrName === ATTR_FULLSCREEN && newValue !== oldValue) {
+        } else if (attrName === ATTR_FULLSCREEN) {
             for (const receiver of this._stateReceivers) {
                 if (receiver[StateReceiverProps].indexOf('fullscreen') >= 0) {
                     receiver.setFullscreen!(hasValue);
