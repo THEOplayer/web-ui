@@ -1,7 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, SourceDescription } from 'theoplayer';
-import elementCss from './THEOplayerUI.css';
-import elementHtml from './THEOplayerUI.html';
+import elementCss from './UIContainer.css';
+import elementHtml from './UIContainer.html';
 import { arrayFind, arrayRemove, isElement } from './util/CommonUtils';
 import { forEachStateReceiverElement, StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { OPEN_MENU_EVENT, type OpenMenuEvent } from './events/OpenMenuEvent';
@@ -22,7 +22,7 @@ const ATTR_AUTOPLAY = 'autoplay';
 const ATTR_FULLSCREEN = 'fullscreen';
 const ATTR_MENU_OPENED = 'menu-opened';
 
-export class THEOplayerUI extends HTMLElement {
+export class UIContainer extends HTMLElement {
     static get observedAttributes() {
         return [ATTR_LIBRARY_LOCATION, ATTR_LICENSE, ATTR_LICENSE_URL, ATTR_SOURCE, ATTR_AUTOPLAY, ATTR_FULLSCREEN];
     }
@@ -363,4 +363,4 @@ export class THEOplayerUI extends HTMLElement {
     };
 }
 
-customElements.define('theoplayer-ui', THEOplayerUI);
+customElements.define('theoplayer-ui', UIContainer);

@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, SourceDescription } from 'theoplayer';
-import { THEOplayerUI } from './THEOplayerUI';
+import { UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
 import defaultUiHtml from './DefaultUI.html';
 
@@ -19,7 +19,7 @@ export class DefaultUI extends HTMLElement {
         return [ATTR_LIBRARY_LOCATION, ATTR_LICENSE, ATTR_LICENSE_URL, ATTR_SOURCE, ATTR_AUTOPLAY];
     }
 
-    private readonly _ui: THEOplayerUI;
+    private readonly _ui: UIContainer;
 
     constructor() {
         super();
