@@ -173,6 +173,7 @@ export class THEOplayerUI extends HTMLElement {
         if (this.license === undefined && this.licenseUrl === undefined) {
             return;
         }
+
         this._player = new ChromelessPlayer(this._playerEl, {
             libraryLocation: this.libraryLocation,
             license: this.license,
@@ -183,6 +184,12 @@ export class THEOplayerUI extends HTMLElement {
             this._source = undefined;
         }
         this._player.autoplay = this.autoplay;
+
+        for (const receiver of this._stateReceivers) {
+            if (receiver[StateReceiverProps].indexOf('player') >= 0) {
+                receiver.setPlayer!(this._player);
+            }
+        }
     }
 
     disconnectedCallback(): void {
