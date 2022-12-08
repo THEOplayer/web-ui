@@ -16,7 +16,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-language-menu');
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
-export class LanguageMenu extends StateReceiverMixin(Menu) {
+export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
     private readonly _contentEl: HTMLElement;
     private readonly _audioGroup: RadioGroup;
     private readonly _subtitleGroup: RadioGroup;

@@ -12,7 +12,7 @@ const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 
 const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'readystatechange', 'error'] as const;
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
-export class TimeRange extends StateReceiverMixin(Range) {
+export class TimeRange extends StateReceiverMixin(Range, ['player']) {
     private _player: ChromelessPlayer | undefined;
     private _pausedWhileScrubbing: boolean = false;
 

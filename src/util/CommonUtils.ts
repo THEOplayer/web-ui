@@ -4,6 +4,13 @@ export function isElement(node: Node): node is Element {
     return node.nodeType === Node.ELEMENT_NODE;
 }
 
+export const isArray: (arg: unknown) => arg is any[] =
+    typeof Array.isArray === 'function'
+        ? Array.isArray
+        : (arg): arg is any[] => {
+              return Object.prototype.toString.call(arg) === '[object Array]';
+          };
+
 export const fromArrayLike: <T>(arrayLike: ArrayLike<T>) => T[] =
     typeof Array.from === 'function'
         ? (arrayLike) => {

@@ -21,7 +21,7 @@ export type VolumeLevel = 'off' | 'low' | 'high';
 
 const PLAYER_EVENTS = ['volumechange'] as const;
 
-export class MuteButton extends StateReceiverMixin(Button) {
+export class MuteButton extends StateReceiverMixin(Button, ['player']) {
     static get observedAttributes() {
         return [...Button.observedAttributes, ATTR_VOLUME_LEVEL];
     }

@@ -21,7 +21,7 @@ const ATTR_ENDED = 'ended';
 
 const PLAYER_EVENTS = ['play', 'pause', 'ended'] as const;
 
-export class PlayButton extends StateReceiverMixin(Button) {
+export class PlayButton extends StateReceiverMixin(Button, ['player']) {
     static get observedAttributes() {
         return [...Button.observedAttributes, ATTR_PAUSED];
     }

@@ -1,25 +1,29 @@
-import { Constructor, fromArrayLike } from '../util/CommonUtils';
+import { Constructor, fromArrayLike, isArray } from '../util/CommonUtils';
 import type { ChromelessPlayer } from 'theoplayer';
 
-export const StateReceiverMarker = Symbol('THEOplayerUIStateReceiver');
+export const StateReceiverProps = Symbol('THEOplayerUIStateReceiver');
 
-export interface StateReceiverElement extends Element {
-    readonly [StateReceiverMarker]: true;
+export interface StateReceiverPropertyMap {
+    player: ChromelessPlayer | undefined;
+}
 
-    attachPlayer(player: ChromelessPlayer | undefined): void;
+export type StateReceiverMethods = {
+    [T in keyof StateReceiverPropertyMap as `attach${Capitalize<T>}`]?: (value: StateReceiverPropertyMap[T]) => void;
+};
+
+export interface StateReceiverElement extends StateReceiverMethods, Element {
+    readonly [StateReceiverProps]: Array<keyof StateReceiverPropertyMap>;
 }
 
 export function isStateReceiverElement(element: Element): element is StateReceiverElement {
-    return (element as Partial<StateReceiverElement>)[StateReceiverMarker] === true;
+    return isArray((element as Partial<StateReceiverElement>)[StateReceiverProps]);
 }
 
-export function StateReceiverMixin<T extends Constructor<Element>>(base: T) {
+export function StateReceiverMixin<T extends Constructor<Element>>(base: T, props: Array<keyof StateReceiverPropertyMap>) {
     abstract class StateReceiver extends base implements StateReceiverElement {
-        get [StateReceiverMarker](): true {
-            return true;
+        get [StateReceiverProps](): Array<keyof StateReceiverPropertyMap> {
+            return props;
         }
-
-        abstract attachPlayer(player: ChromelessPlayer | undefined): void;
     }
 
     return StateReceiver;

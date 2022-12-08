@@ -11,7 +11,7 @@ function formatAsPercentString(value: number, max: number) {
     return `${Math.round((value / max) * 100)}%`;
 }
 
-export class VolumeRange extends StateReceiverMixin(Range) {
+export class VolumeRange extends StateReceiverMixin(Range, ['player']) {
     private _player: ChromelessPlayer | undefined;
 
     constructor() {

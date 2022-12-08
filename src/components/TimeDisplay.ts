@@ -16,7 +16,7 @@ const ATTR_SHOW_DURATION = 'show-duration';
 
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
-export class TimeDisplay extends StateReceiverMixin(HTMLElement) {
+export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
     private readonly _spanEl: HTMLElement;
     private _player: ChromelessPlayer | undefined;
 
