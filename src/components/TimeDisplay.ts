@@ -1,7 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import textDisplayCss from './TextDisplay.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import { ChromelessPlayer } from 'theoplayer';
+import type { ChromelessPlayer } from 'theoplayer';
 import { setTextContent } from '../util/CommonUtils';
 import { formatAsTimePhrase, formatTime } from '../util/TimeUtils';
 

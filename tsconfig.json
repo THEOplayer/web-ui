@@ -11,6 +11,7 @@
     "importHelpers": true,
     "useDefineForClassFields": true,
     "isolatedModules": true,
+    "importsNotUsedAsValues": "error",
     "plugins": [
       {
         "name": "ts-lit-plugin",

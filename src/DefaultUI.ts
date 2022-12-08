@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import { ChromelessPlayer, PlayerConfiguration, SourceDescription } from 'theoplayer';
-import { UIContainer } from './UIContainer';
+import type { ChromelessPlayer, PlayerConfiguration, SourceDescription } from 'theoplayer';
+import type { UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
 import defaultUiHtml from './DefaultUI.html';
 
