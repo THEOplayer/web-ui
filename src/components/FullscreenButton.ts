@@ -41,7 +41,7 @@ export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen'])
         }
     }
 
-    attachFullscreen(fullscreen: boolean): void {
+    setFullscreen(fullscreen: boolean): void {
         this.fullscreen = fullscreen;
     }
 

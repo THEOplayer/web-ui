@@ -53,7 +53,7 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
         }
     }
 
-    attachPlayer(player: ChromelessPlayer | undefined): void {
+    setPlayer(player: ChromelessPlayer | undefined): void {
         this.player = player;
     }
 

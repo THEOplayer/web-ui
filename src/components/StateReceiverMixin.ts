@@ -9,7 +9,7 @@ export interface StateReceiverPropertyMap {
 }
 
 export type StateReceiverMethods = {
-    [T in keyof StateReceiverPropertyMap as `attach${Capitalize<T>}`]?: (value: StateReceiverPropertyMap[T]) => void;
+    [T in keyof StateReceiverPropertyMap as `set${Capitalize<T>}`]?: (value: StateReceiverPropertyMap[T]) => void;
 };
 
 export interface StateReceiverElement extends StateReceiverMethods, Element {

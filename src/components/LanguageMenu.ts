@@ -57,7 +57,7 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
         }
     }
 
-    attachPlayer(player: ChromelessPlayer | undefined): void {
+    setPlayer(player: ChromelessPlayer | undefined): void {
         this.player = player;
     }
 

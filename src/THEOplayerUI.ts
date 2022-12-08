@@ -194,7 +194,7 @@ export class THEOplayerUI extends HTMLElement {
         if (attrName === ATTR_FULLSCREEN && newValue !== oldValue) {
             for (const receiver of this._stateReceivers) {
                 if (receiver[StateReceiverProps].indexOf('fullscreen') >= 0) {
-                    receiver.attachFullscreen!(hasValue);
+                    receiver.setFullscreen!(hasValue);
                 }
             }
         }
@@ -238,14 +238,14 @@ export class THEOplayerUI extends HTMLElement {
     private propagateStateToReceiver_(receiver: StateReceiverElement): void {
         const receiverProps = receiver[StateReceiverProps];
         if (receiverProps.indexOf('player') >= 0) {
-            receiver.attachPlayer!(this._player);
+            receiver.setPlayer!(this._player);
         }
     }
 
     private removeStateFromReceiver_(receiver: StateReceiverElement): void {
         const receiverProps = receiver[StateReceiverProps];
         if (receiverProps.indexOf('player') >= 0) {
-            receiver.attachPlayer!(undefined);
+            receiver.setPlayer!(undefined);
         }
     }
 
