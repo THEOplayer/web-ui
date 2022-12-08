@@ -23,6 +23,34 @@
                 --theoplayer-control-background: transparent;
                 --theoplayer-control-height: 48px;
             }
+
+            theoplayer-volume-range {
+                --theoplayer-range-padding-left: 0;
+            }
+
+            theoplayer-mute-button + theoplayer-volume-range {
+                width: 0;
+                overflow: hidden;
+                --theoplayer-range-padding-right: 0;
+
+                /* Set the internal width so it reveals, not grows */
+                --theoplayer-range-track-width: 70px;
+                transition: width 0.2s ease-in;
+            }
+
+            /* Expand volume control in all relevant states */
+            theoplayer-mute-button:hover + theoplayer-volume-range,
+            theoplayer-mute-button:focus + theoplayer-volume-range,
+            theoplayer-volume-range:hover,
+            theoplayer-volume-range:focus {
+                width: 70px;
+            }
+
+            /* IE doesn't support :focus-within, so keep these separate (and use a polyfill?) */
+            theoplayer-mute-button:focus-within + theoplayer-volume-range,
+            theoplayer-volume-range:focus-within {
+                width: 70px;
+            }
         </style>
         <script>
             ShadyCSS.CustomStyleInterface.addCustomStyle(document.getElementById('global-styles'));
