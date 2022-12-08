@@ -137,18 +137,7 @@ export class THEOplayerUI extends HTMLElement {
         this._upgradeProperty('source');
         this._upgradeProperty('autoplay');
 
-        if (!this._player) {
-            this._player = new ChromelessPlayer(this._playerEl, {
-                libraryLocation: this.libraryLocation,
-                license: this.license,
-                licenseUrl: this.licenseUrl
-            });
-        }
-        if (this._source) {
-            this._player.source = this._source;
-            this._source = undefined;
-        }
-        this._player.autoplay = this.autoplay;
+        this.tryInitializePlayer_();
 
         for (const receiver of this._stateReceivers) {
             this.propagateStateToReceiver_(receiver);
@@ -164,6 +153,28 @@ export class THEOplayerUI extends HTMLElement {
             document.addEventListener(fullscreenAPI.fullscreenerror_, this._onFullscreenChange);
             this._onFullscreenChange();
         }
+    }
+
+    private tryInitializePlayer_(): void {
+        if (this._player !== undefined) {
+            return;
+        }
+        if (this.libraryLocation === undefined) {
+            return;
+        }
+        if (this.license === undefined && this.licenseUrl === undefined) {
+            return;
+        }
+        this._player = new ChromelessPlayer(this._playerEl, {
+            libraryLocation: this.libraryLocation,
+            license: this.license,
+            licenseUrl: this.licenseUrl
+        });
+        if (this._source) {
+            this._player.source = this._source;
+            this._source = undefined;
+        }
+        this._player.autoplay = this.autoplay;
     }
 
     private _upgradeProperty(prop: keyof this) {
@@ -199,6 +210,9 @@ export class THEOplayerUI extends HTMLElement {
             return;
         }
         const hasValue = newValue != null;
+        if (attrName === ATTR_LIBRARY_LOCATION || attrName === ATTR_LICENSE || attrName === ATTR_LICENSE_URL) {
+            this.tryInitializePlayer_();
+        }
         if (attrName === ATTR_SOURCE) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
         }
@@ -255,6 +269,9 @@ export class THEOplayerUI extends HTMLElement {
         const receiverProps = receiver[StateReceiverProps];
         if (receiverProps.indexOf('player') >= 0) {
             receiver.setPlayer!(this._player);
+        }
+        if (receiverProps.indexOf('fullscreen') >= 0) {
+            receiver.setFullscreen!(this.fullscreen);
         }
     }
 
