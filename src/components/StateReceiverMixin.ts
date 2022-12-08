@@ -31,12 +31,16 @@ export function StateReceiverMixin<T extends Constructor<Element>>(base: T, prop
 }
 
 export async function forEachStateReceiverElement(element: Element, callback: (receiver: StateReceiverElement) => void): Promise<void> {
+    // Upgrade custom elements if needed
     if (element.nodeName.indexOf('-') >= 0 && !isStateReceiverElement(element)) {
-        await window.customElements.whenDefined(element.nodeName.toLowerCase());
+        await customElements.whenDefined(element.nodeName.toLowerCase());
+        customElements.upgrade(element);
     }
+    // Check the element
     if (isStateReceiverElement(element)) {
         callback(element);
     }
+    // Check all its children
     const children: Element[] = [...fromArrayLike(element.children ?? []), ...fromArrayLike(element.shadowRoot?.children ?? [])];
     if (children.length > 0) {
         await Promise.all(children.map((child) => forEachStateReceiverElement(child, callback)));
