@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type PlayerConfiguration, type SourceDescription } from 'theoplayer';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
-import { arrayFind, arrayRemove, isElement } from './util/CommonUtils';
+import { arrayFind, arrayRemove, containsComposedNode, isElement, noOp } from './util/CommonUtils';
 import { forEachStateReceiverElement, StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { OPEN_MENU_EVENT, type OpenMenuEvent } from './events/OpenMenuEvent';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from './events/CloseMenuEvent';
@@ -349,7 +349,7 @@ export class UIContainer extends HTMLElement {
         if (fullscreenAPI && document[fullscreenAPI.fullscreenEnabled_] && this[fullscreenAPI.requestFullscreen_]) {
             const promise = this[fullscreenAPI.requestFullscreen_]();
             if (promise && promise.then) {
-                promise.then(this._onFullscreenChange, this._onFullscreenChange);
+                promise.then(noOp, noOp);
             }
         } else if (this._player && this._player.presentation.supportsMode('fullscreen')) {
             this._player.presentation.requestMode('fullscreen');
@@ -362,7 +362,7 @@ export class UIContainer extends HTMLElement {
         if (fullscreenAPI) {
             const promise = document[fullscreenAPI.exitFullscreen_]();
             if (promise && promise.then) {
-                promise.then(this._onFullscreenChange, this._onFullscreenChange);
+                promise.then(noOp, noOp);
             }
         }
         if (this._player && this._player.presentation.currentMode === 'fullscreen') {
@@ -371,13 +371,20 @@ export class UIContainer extends HTMLElement {
     };
 
     private readonly _onFullscreenChange = (): void => {
-        if (fullscreenAPI && document[fullscreenAPI.fullscreenElement_] === this) {
-            this.fullscreen = true;
-        } else if (this._player && this._player.presentation.currentMode === 'fullscreen') {
-            this.fullscreen = true;
-        } else {
-            this.fullscreen = false;
+        let isFullscreen: boolean = false;
+        if (fullscreenAPI !== undefined) {
+            const fullscreenElement = document[fullscreenAPI.fullscreenElement_];
+            if (fullscreenElement) {
+                // If <theoplayer-ui> is nested within another custom element,
+                // then document.fullscreenElement will equal that other custom element.
+                // Look for the nearest shadow host that is contained in the fullscreen element.
+                isFullscreen = containsComposedNode(fullscreenElement, this);
+            }
         }
+        if (!isFullscreen && this._player !== undefined && this._player.presentation.currentMode === 'fullscreen') {
+            isFullscreen = true;
+        }
+        this.fullscreen = isFullscreen;
     };
 }
 

@@ -1,5 +1,9 @@
 export type Constructor<T> = abstract new (...args: any[]) => T;
 
+export function noOp(): void {
+    return;
+}
+
 export function isElement(node: Node): node is Element {
     return node.nodeType === Node.ELEMENT_NODE;
 }
@@ -62,4 +66,18 @@ export function setTextContent(el: HTMLElement, text: string): void {
     } else {
         el.textContent = text;
     }
+}
+
+export function containsComposedNode(rootNode: Node, childNode: Node): boolean {
+    if (!rootNode || !childNode) {
+        return false;
+    }
+    if (rootNode.contains(childNode)) {
+        return true;
+    }
+    const childRoot = childNode.getRootNode();
+    if ((childRoot as ShadowRoot).host) {
+        return containsComposedNode(rootNode, (childRoot as ShadowRoot).host);
+    }
+    return false;
 }
