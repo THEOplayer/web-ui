@@ -5,7 +5,7 @@ import playButtonCss from './PlayButton.css';
 import playIcon from '../icons/play.svg';
 import pauseIcon from '../icons/pause.svg';
 import replayIcon from '../icons/replay.svg';
-import { PlayerReceiverMixin } from './StateReceiverMixin';
+import { StateReceiverMixin } from './StateReceiverMixin';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -21,7 +21,7 @@ const ATTR_ENDED = 'ended';
 
 const PLAYER_EVENTS = ['play', 'pause', 'ended'] as const;
 
-export class PlayButton extends PlayerReceiverMixin(Button) {
+export class PlayButton extends StateReceiverMixin(Button) {
     static get observedAttributes() {
         return [...Button.observedAttributes, ATTR_PAUSED];
     }

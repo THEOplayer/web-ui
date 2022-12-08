@@ -3,7 +3,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import languageMenuHtml from './LanguageMenu.html';
 import languageMenuCss from './LanguageMenu.css';
 import { RadioGroup } from './RadioGroup';
-import { PlayerReceiverMixin } from './StateReceiverMixin';
+import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, TextTrack } from 'theoplayer';
 import { MediaTrackMenuButton } from './MediaTrackMenuButton';
 import { TextTrackMenuButton } from './TextTrackMenuButton';
@@ -16,7 +16,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-language-menu');
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
-export class LanguageMenu extends PlayerReceiverMixin(Menu) {
+export class LanguageMenu extends StateReceiverMixin(Menu) {
     private readonly _contentEl: HTMLElement;
     private readonly _audioGroup: RadioGroup;
     private readonly _subtitleGroup: RadioGroup;

@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import textDisplayCss from './TextDisplay.css';
-import { PlayerReceiverMixin } from './StateReceiverMixin';
+import { StateReceiverMixin } from './StateReceiverMixin';
 import { ChromelessPlayer } from 'theoplayer';
 import { setTextContent } from '../util/CommonUtils';
 import { formatAsTimePhrase, formatTime } from '../util/TimeUtils';
@@ -16,7 +16,7 @@ const ATTR_SHOW_DURATION = 'show-duration';
 
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
-export class TimeDisplay extends PlayerReceiverMixin(HTMLElement) {
+export class TimeDisplay extends StateReceiverMixin(HTMLElement) {
     private readonly _spanEl: HTMLElement;
     private _player: ChromelessPlayer | undefined;
 

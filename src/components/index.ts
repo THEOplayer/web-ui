@@ -17,4 +17,4 @@ export * from './FullscreenButton';
 export * from './Range';
 export * from './TimeRange';
 export * from './VolumeRange';
-export { type PlayerReceiverElement, PlayerReceiverMixin } from './StateReceiverMixin';
+export { type StateReceiverElement, StateReceiverMixin } from './StateReceiverMixin';

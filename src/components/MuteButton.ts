@@ -5,7 +5,7 @@ import muteButtonCss from './MuteButton.css';
 import offIcon from '../icons/volume-off.svg';
 import lowIcon from '../icons/volume-low.svg';
 import highIcon from '../icons/volume-high.svg';
-import { PlayerReceiverMixin } from './StateReceiverMixin';
+import { StateReceiverMixin } from './StateReceiverMixin';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -21,7 +21,7 @@ export type VolumeLevel = 'off' | 'low' | 'high';
 
 const PLAYER_EVENTS = ['volumechange'] as const;
 
-export class MuteButton extends PlayerReceiverMixin(Button) {
+export class MuteButton extends StateReceiverMixin(Button) {
     static get observedAttributes() {
         return [...Button.observedAttributes, ATTR_VOLUME_LEVEL];
     }

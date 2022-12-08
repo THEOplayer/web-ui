@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Range, rangeTemplate } from './Range';
-import { PlayerReceiverMixin } from './StateReceiverMixin';
+import { StateReceiverMixin } from './StateReceiverMixin';
 import { ChromelessPlayer } from 'theoplayer';
 
 const template = document.createElement('template');
@@ -11,7 +11,7 @@ function formatAsPercentString(value: number, max: number) {
     return `${Math.round((value / max) * 100)}%`;
 }
 
-export class VolumeRange extends PlayerReceiverMixin(Range) {
+export class VolumeRange extends StateReceiverMixin(Range) {
     private _player: ChromelessPlayer | undefined;
 
     constructor() {

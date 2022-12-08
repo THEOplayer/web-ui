@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Range, rangeTemplate } from './Range';
-import { PlayerReceiverMixin } from './StateReceiverMixin';
+import { StateReceiverMixin } from './StateReceiverMixin';
 import { ChromelessPlayer } from 'theoplayer';
 import { formatAsTimePhrase } from '../util/TimeUtils';
 
@@ -12,7 +12,7 @@ const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 
 const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'readystatechange', 'error'] as const;
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
-export class TimeRange extends PlayerReceiverMixin(Range) {
+export class TimeRange extends StateReceiverMixin(Range) {
     private _player: ChromelessPlayer | undefined;
     private _pausedWhileScrubbing: boolean = false;
 

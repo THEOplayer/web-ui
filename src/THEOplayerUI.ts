@@ -3,7 +3,7 @@ import { ChromelessPlayer, SourceDescription } from 'theoplayer';
 import elementCss from './THEOplayerUI.css';
 import elementHtml from './THEOplayerUI.html';
 import { arrayFind, isElement } from './util/CommonUtils';
-import { forEachPlayerReceiverElement } from './components/StateReceiverMixin';
+import { forEachStateReceiverElement } from './components/StateReceiverMixin';
 import { OPEN_MENU_EVENT, type OpenMenuEvent } from './events/OpenMenuEvent';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from './events/CloseMenuEvent';
 
@@ -234,7 +234,7 @@ export class THEOplayerUI extends HTMLElement {
 }
 
 function attachPlayerToReceivers(element: Element, player: ChromelessPlayer | undefined): void {
-    void forEachPlayerReceiverElement(element, (receiver) => {
+    void forEachStateReceiverElement(element, (receiver) => {
         receiver.attachPlayer(player);
     });
 }
