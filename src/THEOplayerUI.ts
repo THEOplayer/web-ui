@@ -142,7 +142,7 @@ export class THEOplayerUI extends HTMLElement {
         for (const receiver of this._stateReceivers) {
             this.propagateStateToReceiver_(receiver);
         }
-        void forEachStateReceiverElement(this, this.registerStateReceiver_);
+        void forEachStateReceiverElement(this, this._playerEl, this.registerStateReceiver_);
         this._mutationObserver.observe(this, { childList: true, subtree: true });
 
         this._onMenuSlotChange();
@@ -241,13 +241,13 @@ export class THEOplayerUI extends HTMLElement {
                 for (let i = 0; i < addedNodes.length; i++) {
                     const node = addedNodes[i];
                     if (isElement(node)) {
-                        void forEachStateReceiverElement(node, this.registerStateReceiver_);
+                        void forEachStateReceiverElement(node, this._playerEl, this.registerStateReceiver_);
                     }
                 }
                 for (let i = 0; i < removedNodes.length; i++) {
                     const node = removedNodes[i];
                     if (isElement(node)) {
-                        void forEachStateReceiverElement(node, this.unregisterStateReceiver_);
+                        void forEachStateReceiverElement(node, this._playerEl, this.unregisterStateReceiver_);
                     }
                 }
             }

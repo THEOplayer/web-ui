@@ -30,7 +30,15 @@ export function StateReceiverMixin<T extends Constructor<Element>>(base: T, prop
     return StateReceiver;
 }
 
-export async function forEachStateReceiverElement(element: Element, callback: (receiver: StateReceiverElement) => void): Promise<void> {
+export async function forEachStateReceiverElement(
+    element: Element,
+    playerElement: HTMLElement,
+    callback: (receiver: StateReceiverElement) => void
+): Promise<void> {
+    // Don't look inside the THEOplayer chromeless player
+    if (playerElement.contains(element)) {
+        return;
+    }
     // Upgrade custom elements if needed
     if (element.nodeName.indexOf('-') >= 0 && !isStateReceiverElement(element)) {
         await customElements.whenDefined(element.nodeName.toLowerCase());
@@ -43,6 +51,6 @@ export async function forEachStateReceiverElement(element: Element, callback: (r
     // Check all its children
     const children: Element[] = [...fromArrayLike(element.children ?? []), ...fromArrayLike(element.shadowRoot?.children ?? [])];
     if (children.length > 0) {
-        await Promise.all(children.map((child) => forEachStateReceiverElement(child, callback)));
+        await Promise.all(children.map((child) => forEachStateReceiverElement(child, playerElement, callback)));
     }
 }
