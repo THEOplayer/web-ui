@@ -37,6 +37,7 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
         this._upgradeProperty('paused');
         this._upgradeProperty('ended');
         this._upgradeProperty('player');
+        this._updateFromPlayer();
     }
 
     get paused(): boolean {
@@ -89,23 +90,18 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
         if (this._player !== undefined) {
             this.paused = this._player.paused;
             this.ended = this._player.ended;
+        } else {
+            this.paused = true;
+            this.ended = false;
         }
     };
 
     protected override handleClick() {
-        this.paused = !this.paused;
-    }
-
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (attrName === ATTR_PAUSED && newValue !== oldValue) {
-            const hasValue = newValue != null;
-            if (this._player !== undefined && hasValue !== this._player.paused) {
-                if (hasValue) {
-                    this._player.pause();
-                } else {
-                    this._player.play();
-                }
+        if (this._player !== undefined) {
+            if (this._player.paused) {
+                this._player.play();
+            } else {
+                this._player.pause();
             }
         }
     }

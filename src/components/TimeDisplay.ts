@@ -33,6 +33,7 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+        this._updateFromPlayer();
     }
 
     get player(): ChromelessPlayer | undefined {
