@@ -11,6 +11,13 @@
     display: none !important;
 }
 
+/* Safari and IE need this to actually make the element fill the window */
+:host(:fullscreen) {
+    /* Needs to use !important otherwise easy to break */
+    width: 100% !important;
+    height: 100% !important;
+}
+
 [part~='layer'] {
     position: absolute;
     top: 0;
