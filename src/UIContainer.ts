@@ -1,5 +1,5 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import { ChromelessPlayer, SourceDescription } from 'theoplayer';
+import { ChromelessPlayer, type PlayerConfiguration, type SourceDescription } from 'theoplayer';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
 import { arrayFind, arrayRemove, isElement } from './util/CommonUtils';
@@ -27,6 +27,7 @@ export class UIContainer extends HTMLElement {
         return [ATTR_LIBRARY_LOCATION, ATTR_LICENSE, ATTR_LICENSE_URL, ATTR_SOURCE, ATTR_AUTOPLAY, ATTR_FULLSCREEN];
     }
 
+    private _playerConfiguration: PlayerConfiguration = {};
     private readonly _playerEl: HTMLElement;
     private readonly _menuEl: HTMLElement;
     private _menus: Element[] = [];
@@ -36,10 +37,12 @@ export class UIContainer extends HTMLElement {
     private _player: ChromelessPlayer | undefined = undefined;
     private _source: SourceDescription | undefined = undefined;
 
-    constructor() {
+    constructor(playerConfiguration: PlayerConfiguration = {}) {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
+
+        this.playerConfiguration = playerConfiguration;
 
         this._playerEl = shadowRoot.querySelector('[part~="media-layer"]')!;
         this._menuEl = shadowRoot.querySelector('[part~="menu-layer"]')!;
@@ -54,6 +57,17 @@ export class UIContainer extends HTMLElement {
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
+    }
+
+    get playerConfiguration(): PlayerConfiguration {
+        return this._playerConfiguration;
+    }
+
+    set playerConfiguration(playerConfiguration: PlayerConfiguration) {
+        this._playerConfiguration = { ...playerConfiguration };
+        this.libraryLocation = playerConfiguration.libraryLocation;
+        this.license = playerConfiguration.license;
+        this.licenseUrl = playerConfiguration.licenseUrl;
     }
 
     get libraryLocation(): string | undefined {
@@ -131,6 +145,7 @@ export class UIContainer extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
+        this._upgradeProperty('playerConfiguration');
         this._upgradeProperty('libraryLocation');
         this._upgradeProperty('license');
         this._upgradeProperty('licenseUrl');
@@ -174,11 +189,7 @@ export class UIContainer extends HTMLElement {
             return;
         }
 
-        this._player = new ChromelessPlayer(this._playerEl, {
-            libraryLocation: this.libraryLocation,
-            license: this.license,
-            licenseUrl: this.licenseUrl
-        });
+        this._player = new ChromelessPlayer(this._playerEl, this._playerConfiguration);
         if (this._source) {
             this._player.source = this._source;
             this._source = undefined;
@@ -217,7 +228,14 @@ export class UIContainer extends HTMLElement {
             return;
         }
         const hasValue = newValue != null;
-        if (attrName === ATTR_LIBRARY_LOCATION || attrName === ATTR_LICENSE || attrName === ATTR_LICENSE_URL) {
+        if (attrName === ATTR_LIBRARY_LOCATION) {
+            this._playerConfiguration.libraryLocation = newValue;
+            this.tryInitializePlayer_();
+        } else if (attrName === ATTR_LICENSE) {
+            this._playerConfiguration.license = newValue;
+            this.tryInitializePlayer_();
+        } else if (attrName === ATTR_LICENSE_URL) {
+            this._playerConfiguration.licenseUrl = newValue;
             this.tryInitializePlayer_();
         } else if (attrName === ATTR_SOURCE) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;

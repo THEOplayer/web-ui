@@ -1,5 +1,5 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import { ChromelessPlayer, SourceDescription } from 'theoplayer';
+import { ChromelessPlayer, PlayerConfiguration, SourceDescription } from 'theoplayer';
 import { UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
 import defaultUiHtml from './DefaultUI.html';
@@ -21,16 +21,25 @@ export class DefaultUI extends HTMLElement {
 
     private readonly _ui: UIContainer;
 
-    constructor() {
+    constructor(playerConfiguration: PlayerConfiguration = {}) {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._ui = shadowRoot.querySelector('theoplayer-ui')!;
+        this._ui.playerConfiguration = playerConfiguration;
     }
 
     get player(): ChromelessPlayer | undefined {
         return this._ui.player;
+    }
+
+    get playerConfiguration(): PlayerConfiguration {
+        return this._ui.playerConfiguration;
+    }
+
+    set playerConfiguration(playerConfiguration: PlayerConfiguration) {
+        this._ui.playerConfiguration = playerConfiguration;
     }
 
     get libraryLocation(): string | undefined {
@@ -76,6 +85,7 @@ export class DefaultUI extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
+        this._upgradeProperty('playerConfiguration');
         this._upgradeProperty('libraryLocation');
         this._upgradeProperty('license');
         this._upgradeProperty('licenseUrl');
