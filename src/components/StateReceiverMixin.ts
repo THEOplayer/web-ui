@@ -5,6 +5,7 @@ export const StateReceiverProps = Symbol('THEOplayerUIStateReceiver');
 
 export interface StateReceiverPropertyMap {
     player: ChromelessPlayer | undefined;
+    fullscreen: boolean;
 }
 
 export type StateReceiverMethods = {

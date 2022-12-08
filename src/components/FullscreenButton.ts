@@ -3,6 +3,7 @@ import { Button, buttonTemplate } from './Button';
 import fullscreenButtonCss from './FullscreenButton.css';
 import enterIcon from '../icons/fullscreen-enter.svg';
 import exitIcon from '../icons/fullscreen-exit.svg';
+import { StateReceiverMixin } from './StateReceiverMixin';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -14,7 +15,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-fullscreen-button');
 
 const ATTR_FULLSCREEN = 'fullscreen';
 
-export class FullscreenButton extends Button {
+export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen']) {
     static get observedAttributes() {
         return [...Button.observedAttributes, ATTR_FULLSCREEN];
     }
@@ -38,6 +39,10 @@ export class FullscreenButton extends Button {
         } else {
             this.removeAttribute(ATTR_FULLSCREEN);
         }
+    }
+
+    attachFullscreen(fullscreen: boolean): void {
+        this.fullscreen = fullscreen;
     }
 
     protected override handleClick(): void {

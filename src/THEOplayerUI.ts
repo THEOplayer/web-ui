@@ -16,11 +16,12 @@ const ATTR_LICENSE = 'license';
 const ATTR_LICENSE_URL = 'license-url';
 const ATTR_SOURCE = 'source';
 const ATTR_AUTOPLAY = 'autoplay';
+const ATTR_FULLSCREEN = 'fullscreen';
 const ATTR_MENU_OPENED = 'menu-opened';
 
 export class THEOplayerUI extends HTMLElement {
     static get observedAttributes() {
-        return [ATTR_LIBRARY_LOCATION, ATTR_LICENSE, ATTR_LICENSE_URL, ATTR_SOURCE, ATTR_AUTOPLAY];
+        return [ATTR_LIBRARY_LOCATION, ATTR_LICENSE, ATTR_LICENSE_URL, ATTR_SOURCE, ATTR_AUTOPLAY, ATTR_FULLSCREEN];
     }
 
     private readonly _playerEl: HTMLElement;
@@ -110,6 +111,18 @@ export class THEOplayerUI extends HTMLElement {
         }
     }
 
+    get fullscreen(): boolean {
+        return this.hasAttribute(ATTR_FULLSCREEN);
+    }
+
+    set fullscreen(value: boolean) {
+        if (value) {
+            this.setAttribute(ATTR_FULLSCREEN, '');
+        } else {
+            this.removeAttribute(ATTR_FULLSCREEN);
+        }
+    }
+
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
@@ -176,6 +189,13 @@ export class THEOplayerUI extends HTMLElement {
         if (attrName === ATTR_AUTOPLAY && newValue !== oldValue) {
             if (this._player) {
                 this._player.autoplay = hasValue;
+            }
+        }
+        if (attrName === ATTR_FULLSCREEN && newValue !== oldValue) {
+            for (const receiver of this._stateReceivers) {
+                if (receiver[StateReceiverProps].indexOf('fullscreen') >= 0) {
+                    receiver.attachFullscreen!(hasValue);
+                }
             }
         }
     }
