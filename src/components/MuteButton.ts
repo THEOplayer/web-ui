@@ -5,7 +5,7 @@ import muteButtonCss from './MuteButton.css';
 import offIcon from '../icons/volume-off.svg';
 import lowIcon from '../icons/volume-low.svg';
 import highIcon from '../icons/volume-high.svg';
-import { PlayerReceiverMixin } from './PlayerReceiverMixin';
+import { PlayerReceiverMixin } from './StateReceiverMixin';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(

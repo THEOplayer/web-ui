@@ -5,7 +5,7 @@ import playButtonCss from './PlayButton.css';
 import playIcon from '../icons/play.svg';
 import pauseIcon from '../icons/pause.svg';
 import replayIcon from '../icons/replay.svg';
-import { PlayerReceiverMixin } from './PlayerReceiverMixin';
+import { PlayerReceiverMixin } from './StateReceiverMixin';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(

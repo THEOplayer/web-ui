@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Range, rangeTemplate } from './Range';
-import { PlayerReceiverMixin } from './PlayerReceiverMixin';
+import { PlayerReceiverMixin } from './StateReceiverMixin';
 import { ChromelessPlayer } from 'theoplayer';
 import { formatAsTimePhrase } from '../util/TimeUtils';
 

@@ -3,7 +3,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import languageMenuHtml from './LanguageMenu.html';
 import languageMenuCss from './LanguageMenu.css';
 import { RadioGroup } from './RadioGroup';
-import { PlayerReceiverMixin } from './PlayerReceiverMixin';
+import { PlayerReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, TextTrack } from 'theoplayer';
 import { MediaTrackMenuButton } from './MediaTrackMenuButton';
 import { TextTrackMenuButton } from './TextTrackMenuButton';
