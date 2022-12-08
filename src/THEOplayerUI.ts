@@ -2,8 +2,8 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, SourceDescription } from 'theoplayer';
 import elementCss from './THEOplayerUI.css';
 import elementHtml from './THEOplayerUI.html';
-import { arrayFind, isElement } from './util/CommonUtils';
-import { forEachStateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
+import { arrayFind, arrayRemove, isElement } from './util/CommonUtils';
+import { forEachStateReceiverElement, StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { OPEN_MENU_EVENT, type OpenMenuEvent } from './events/OpenMenuEvent';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from './events/CloseMenuEvent';
 
@@ -28,6 +28,7 @@ export class THEOplayerUI extends HTMLElement {
     private _menus: Element[] = [];
     private readonly _menuSlot: HTMLSlotElement;
     private readonly _mutationObserver: MutationObserver;
+    private readonly _stateReceivers: StateReceiverElement[] = [];
     private _player: ChromelessPlayer | undefined = undefined;
     private _source: SourceDescription | undefined = undefined;
 
@@ -131,7 +132,10 @@ export class THEOplayerUI extends HTMLElement {
         }
         this._player.autoplay = this.autoplay;
 
-        attachPlayerToReceivers(this, this._player);
+        for (const receiver of this._stateReceivers) {
+            this.propagateStateToReceiver_(receiver);
+        }
+        void forEachStateReceiverElement(this, this.registerStateReceiver_);
         this._mutationObserver.observe(this, { childList: true, subtree: true });
 
         this._onMenuSlotChange();
@@ -148,7 +152,10 @@ export class THEOplayerUI extends HTMLElement {
 
     disconnectedCallback(): void {
         this._mutationObserver.disconnect();
-        attachPlayerToReceivers(this, undefined);
+        for (const receiver of this._stateReceivers) {
+            this.removeStateFromReceiver_(receiver);
+        }
+        this._stateReceivers.length = 0;
 
         this._menuSlot.removeEventListener('slotchange', this._onMenuSlotChange);
 
@@ -180,18 +187,47 @@ export class THEOplayerUI extends HTMLElement {
                 for (let i = 0; i < addedNodes.length; i++) {
                     const node = addedNodes[i];
                     if (isElement(node)) {
-                        attachPlayerToReceivers(node, this._player);
+                        void forEachStateReceiverElement(node, this.registerStateReceiver_);
                     }
                 }
                 for (let i = 0; i < removedNodes.length; i++) {
                     const node = removedNodes[i];
                     if (isElement(node)) {
-                        attachPlayerToReceivers(node, undefined);
+                        void forEachStateReceiverElement(node, this.unregisterStateReceiver_);
                     }
                 }
             }
         }
     };
+
+    private readonly registerStateReceiver_ = (receiver: StateReceiverElement): void => {
+        if (this._stateReceivers.indexOf(receiver) >= 0) {
+            return;
+        }
+        this._stateReceivers.push(receiver);
+        this.propagateStateToReceiver_(receiver);
+    };
+
+    private readonly unregisterStateReceiver_ = (receiver: StateReceiverElement): void => {
+        if (!arrayRemove(this._stateReceivers, receiver)) {
+            return;
+        }
+        this.removeStateFromReceiver_(receiver);
+    };
+
+    private propagateStateToReceiver_(receiver: StateReceiverElement): void {
+        const receiverProps = receiver[StateReceiverProps];
+        if (receiverProps.indexOf('player') >= 0) {
+            receiver.attachPlayer!(this._player);
+        }
+    }
+
+    private removeStateFromReceiver_(receiver: StateReceiverElement): void {
+        const receiverProps = receiver[StateReceiverProps];
+        if (receiverProps.indexOf('player') >= 0) {
+            receiver.attachPlayer!(undefined);
+        }
+    }
 
     private _onMenuSlotChange = () => {
         const newMenus = this._menuSlot.assignedNodes().filter(isElement);
@@ -231,14 +267,6 @@ export class THEOplayerUI extends HTMLElement {
         menuToClose.setAttribute('hidden', '');
         this.removeAttribute(ATTR_MENU_OPENED);
     };
-}
-
-function attachPlayerToReceivers(element: Element, player: ChromelessPlayer | undefined): void {
-    void forEachStateReceiverElement(element, (receiver) => {
-        if (receiver[StateReceiverProps].indexOf('player') >= 0) {
-            receiver.attachPlayer!(player);
-        }
-    });
 }
 
 customElements.define('theoplayer-ui', THEOplayerUI);

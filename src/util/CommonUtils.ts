@@ -32,6 +32,19 @@ export const arrayFind: <T>(array: readonly T[], predicate: (element: T, index: 
               return undefined;
           };
 
+export function arrayRemove<T>(array: T[], element: T): boolean {
+    const index = array.indexOf(element);
+    if (index < 0) {
+        return false;
+    }
+    arrayRemoveAt(array, index);
+    return true;
+}
+
+export function arrayRemoveAt<T>(array: T[], index: number): void {
+    array.splice(index, 1);
+}
+
 export const localizeLanguageName: (languageCode: string) => string | undefined =
     typeof Intl !== 'undefined' && Intl.DisplayNames
         ? (languageCode) => {
