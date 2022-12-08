@@ -12,7 +12,7 @@ export function formatTime(time: number, guide: number = 0): string {
 
     let timeParts: string[];
     if (!isValidNumber(time)) {
-        timeParts = [guideHours > 0 ? '-' : '', guideMinutes > 0 ? '-' : '', '-'];
+        timeParts = [guideHours > 0 ? '--' : '', '--', '--'];
     } else {
         const seconds = Math.floor(time % 60);
         const minutes = Math.floor((time / 60) % 60);

@@ -59,13 +59,12 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
 
     private readonly _updateFromPlayer = () => {
         const currentTime = this._player ? this._player.currentTime : 0;
-        const duration = this._player ? this._player.duration : 0;
+        const duration = this._player ? this._player.duration : NaN;
         const seekable = this._player?.seekable;
-        const endTime = isFinite(duration) ? duration : seekable && seekable.length > 0 ? seekable.end(0) : 0;
-        const hasValidDuration = this._player !== undefined && !isNaN(this._player.duration);
+        const endTime = isFinite(duration) ? duration : seekable && seekable.length > 0 ? seekable.end(0) : NaN;
         let time = currentTime;
         if (this.hasAttribute(ATTR_REMAINING)) {
-            time = -(endTime - currentTime);
+            time = -((endTime || 0) - currentTime);
         }
         const showDuration = this.hasAttribute(ATTR_SHOW_DURATION);
         let text: string;
@@ -75,7 +74,7 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
             text = formatTime(time, endTime);
         }
         let ariaValueText: string;
-        if (!hasValidDuration) {
+        if (isNaN(duration)) {
             ariaValueText = DEFAULT_MISSING_TIME_PHRASE;
         } else if (showDuration) {
             ariaValueText = `${formatAsTimePhrase(time)} of ${formatAsTimePhrase(endTime)}`;
