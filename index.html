@@ -6,21 +6,27 @@
         <script>
             ShadyDOM = { force: true };
             (self.customElements || (self.customElements = {})).forcePolyfill = true;
+            ShadyCSS = { shimcssproperties: true };
         </script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015"></script>
         <script src="node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
         <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+        <script src="node_modules/@webcomponents/shadycss/custom-style-interface.min.js"></script>
         <script src="node_modules/theoplayer/THEOplayer.chromeless.js"></script>
         <script src="dist/THEOplayerUI.js"></script>
-        <style>
+        <style id="global-styles">
             p {
                 color: white;
             }
 
-            theoplayer-ui::part(centered-layer) {
+            theoplayer-ui .centered-chrome > * {
                 --theoplayer-control-background: transparent;
                 --theoplayer-control-height: 48px;
             }
         </style>
+        <script>
+            ShadyCSS.CustomStyleInterface.addCustomStyle(document.getElementById('global-styles'));
+        </script>
     </head>
     <body>
         <h1>THEOplayer Web UI</h1>
@@ -29,7 +35,7 @@
             source='{"sources":"https://amssamples.streaming.mediaservices.windows.net/7ceb010f-d9a3-467a-915e-5728acced7e3/ElephantsDreamMultiAudio.ism/manifest(format=mpd-time-csf)"}'
         >
             <p slot="top-chrome">Elephant's Dream</p>
-            <div slot="centered-chrome">
+            <div slot="centered-chrome" class="centered-chrome">
                 <theoplayer-play-button></theoplayer-play-button>
             </div>
             <theoplayer-control-bar>
