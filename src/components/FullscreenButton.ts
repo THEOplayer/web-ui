@@ -4,6 +4,9 @@ import fullscreenButtonCss from './FullscreenButton.css';
 import enterIcon from '../icons/fullscreen-enter.svg';
 import exitIcon from '../icons/fullscreen-exit.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
+import { createCustomEvent } from '../util/CustomEvent';
+import { ENTER_FULLSCREEN_EVENT, EnterFullscreenEvent } from '../events/EnterFullscreenEvent';
+import { EXIT_FULLSCREEN_EVENT, ExitFullscreenEvent } from '../events/ExitFullscreenEvent';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -46,8 +49,19 @@ export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen'])
     }
 
     protected override handleClick(): void {
-        // TODO
-        this.fullscreen = !this.fullscreen;
+        if (!this.fullscreen) {
+            const event: EnterFullscreenEvent = createCustomEvent(ENTER_FULLSCREEN_EVENT, {
+                bubbles: true,
+                composed: true
+            });
+            this.dispatchEvent(event);
+        } else {
+            const event: ExitFullscreenEvent = createCustomEvent(EXIT_FULLSCREEN_EVENT, {
+                bubbles: true,
+                composed: true
+            });
+            this.dispatchEvent(event);
+        }
     }
 }
 

@@ -6,6 +6,9 @@ import { arrayFind, arrayRemove, isElement } from './util/CommonUtils';
 import { forEachStateReceiverElement, StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { OPEN_MENU_EVENT, type OpenMenuEvent } from './events/OpenMenuEvent';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from './events/CloseMenuEvent';
+import { ENTER_FULLSCREEN_EVENT, EnterFullscreenEvent } from './events/EnterFullscreenEvent';
+import { EXIT_FULLSCREEN_EVENT, ExitFullscreenEvent } from './events/ExitFullscreenEvent';
+import { fullscreenAPI } from './util/FullscreenUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -45,6 +48,8 @@ export class THEOplayerUI extends HTMLElement {
         this._mutationObserver = new MutationObserver(this._onMutation);
 
         shadowRoot.addEventListener(OPEN_MENU_EVENT, this._onOpenMenu);
+        shadowRoot.addEventListener(ENTER_FULLSCREEN_EVENT, this._onEnterFullscreen);
+        shadowRoot.addEventListener(EXIT_FULLSCREEN_EVENT, this._onExitFullscreen);
     }
 
     get player(): ChromelessPlayer | undefined {
@@ -153,6 +158,12 @@ export class THEOplayerUI extends HTMLElement {
 
         this._onMenuSlotChange();
         this._menuSlot.addEventListener('slotchange', this._onMenuSlotChange);
+
+        if (fullscreenAPI !== undefined) {
+            document.addEventListener(fullscreenAPI.fullscreenchange_, this._onFullscreenChange);
+            document.addEventListener(fullscreenAPI.fullscreenerror_, this._onFullscreenChange);
+            this._onFullscreenChange();
+        }
     }
 
     private _upgradeProperty(prop: keyof this) {
@@ -171,6 +182,11 @@ export class THEOplayerUI extends HTMLElement {
         this._stateReceivers.length = 0;
 
         this._menuSlot.removeEventListener('slotchange', this._onMenuSlotChange);
+
+        if (fullscreenAPI !== undefined) {
+            document.removeEventListener(fullscreenAPI.fullscreenchange_, this._onFullscreenChange);
+            document.removeEventListener(fullscreenAPI.fullscreenerror_, this._onFullscreenChange);
+        }
 
         if (this._player) {
             this._player.destroy();
@@ -286,6 +302,43 @@ export class THEOplayerUI extends HTMLElement {
         const menuToClose = event.currentTarget as HTMLElement;
         menuToClose.setAttribute('hidden', '');
         this.removeAttribute(ATTR_MENU_OPENED);
+    };
+
+    private readonly _onEnterFullscreen = (rawEvent: Event): void => {
+        const event = rawEvent as EnterFullscreenEvent;
+        event.stopPropagation();
+        if (fullscreenAPI && document[fullscreenAPI.fullscreenEnabled_] && this[fullscreenAPI.requestFullscreen_]) {
+            const promise = this[fullscreenAPI.requestFullscreen_]();
+            if (promise && promise.then) {
+                promise.then(this._onFullscreenChange, this._onFullscreenChange);
+            }
+        } else if (this._player && this._player.presentation.supportsMode('fullscreen')) {
+            this._player.presentation.requestMode('fullscreen');
+        }
+    };
+
+    private readonly _onExitFullscreen = (rawEvent: Event): void => {
+        const event = rawEvent as ExitFullscreenEvent;
+        event.stopPropagation();
+        if (fullscreenAPI) {
+            const promise = document[fullscreenAPI.exitFullscreen_]();
+            if (promise && promise.then) {
+                promise.then(this._onFullscreenChange, this._onFullscreenChange);
+            }
+        }
+        if (this._player && this._player.presentation.currentMode === 'fullscreen') {
+            this._player.presentation.requestMode('inline');
+        }
+    };
+
+    private readonly _onFullscreenChange = (): void => {
+        if (fullscreenAPI && document[fullscreenAPI.fullscreenElement_] === this) {
+            this.fullscreen = true;
+        } else if (this._player && this._player.presentation.currentMode === 'fullscreen') {
+            this.fullscreen = true;
+        } else {
+            this.fullscreen = false;
+        }
     };
 }
 
