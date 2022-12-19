@@ -14,7 +14,7 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
-const ATTR_PLAYER_CONFIGURATION = 'player-configuration';
+const ATTR_CONFIGURATION = 'configuration';
 const ATTR_SOURCE = 'source';
 const ATTR_AUTOPLAY = 'autoplay';
 const ATTR_FULLSCREEN = 'fullscreen';
@@ -22,10 +22,10 @@ const ATTR_MENU_OPENED = 'menu-opened';
 
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {
-        return [ATTR_PLAYER_CONFIGURATION, ATTR_SOURCE, ATTR_AUTOPLAY, ATTR_FULLSCREEN];
+        return [ATTR_CONFIGURATION, ATTR_SOURCE, ATTR_AUTOPLAY, ATTR_FULLSCREEN];
     }
 
-    private _playerConfiguration: PlayerConfiguration = {};
+    private _configuration: PlayerConfiguration = {};
     private readonly _playerEl: HTMLElement;
     private readonly _menuEl: HTMLElement;
     private _menus: Element[] = [];
@@ -35,12 +35,12 @@ export class UIContainer extends HTMLElement {
     private _player: ChromelessPlayer | undefined = undefined;
     private _source: SourceDescription | undefined = undefined;
 
-    constructor(playerConfiguration: PlayerConfiguration = {}) {
+    constructor(configuration: PlayerConfiguration = {}) {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
 
-        this._playerConfiguration = playerConfiguration;
+        this._configuration = configuration;
 
         this._playerEl = shadowRoot.querySelector('[part~="media-layer"]')!;
         this._menuEl = shadowRoot.querySelector('[part~="menu-layer"]')!;
@@ -57,12 +57,12 @@ export class UIContainer extends HTMLElement {
         return this._player;
     }
 
-    get playerConfiguration(): PlayerConfiguration {
-        return this._playerConfiguration;
+    get configuration(): PlayerConfiguration {
+        return this._configuration;
     }
 
-    set playerConfiguration(playerConfiguration: PlayerConfiguration) {
-        this._playerConfiguration = playerConfiguration ?? {};
+    set configuration(playerConfiguration: PlayerConfiguration) {
+        this._configuration = playerConfiguration ?? {};
     }
 
     get source(): SourceDescription | undefined {
@@ -104,7 +104,7 @@ export class UIContainer extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
-        this._upgradeProperty('playerConfiguration');
+        this._upgradeProperty('configuration');
         this._upgradeProperty('source');
         this._upgradeProperty('autoplay');
 
@@ -138,14 +138,14 @@ export class UIContainer extends HTMLElement {
         if (this._player !== undefined) {
             return;
         }
-        if (this._playerConfiguration.libraryLocation === undefined) {
+        if (this._configuration.libraryLocation === undefined) {
             return;
         }
-        if (this._playerConfiguration.license === undefined && this._playerConfiguration.licenseUrl === undefined) {
+        if (this._configuration.license === undefined && this._configuration.licenseUrl === undefined) {
             return;
         }
 
-        this._player = new ChromelessPlayer(this._playerEl, this._playerConfiguration);
+        this._player = new ChromelessPlayer(this._playerEl, this._configuration);
         if (this._source) {
             this._player.source = this._source;
             this._source = undefined;
@@ -184,8 +184,8 @@ export class UIContainer extends HTMLElement {
             return;
         }
         const hasValue = newValue != null;
-        if (attrName === ATTR_PLAYER_CONFIGURATION) {
-            this.playerConfiguration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
+        if (attrName === ATTR_CONFIGURATION) {
+            this.configuration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
             this.tryInitializePlayer_();
         } else if (attrName === ATTR_SOURCE) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;

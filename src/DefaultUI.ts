@@ -8,36 +8,36 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
 
-const ATTR_PLAYER_CONFIGURATION = 'player-configuration';
+const ATTR_CONFIGURATION = 'configuration';
 const ATTR_SOURCE = 'source';
 const ATTR_AUTOPLAY = 'autoplay';
 
 export class DefaultUI extends HTMLElement {
     static get observedAttributes() {
-        return [ATTR_PLAYER_CONFIGURATION, ATTR_SOURCE, ATTR_AUTOPLAY];
+        return [ATTR_CONFIGURATION, ATTR_SOURCE, ATTR_AUTOPLAY];
     }
 
     private readonly _ui: UIContainer;
 
-    constructor(playerConfiguration: PlayerConfiguration = {}) {
+    constructor(configuration: PlayerConfiguration = {}) {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._ui = shadowRoot.querySelector('theoplayer-ui')!;
-        this._ui.playerConfiguration = playerConfiguration;
+        this._ui.configuration = configuration;
     }
 
     get player(): ChromelessPlayer | undefined {
         return this._ui.player;
     }
 
-    get playerConfiguration(): PlayerConfiguration {
-        return this._ui.playerConfiguration;
+    get configuration(): PlayerConfiguration {
+        return this._ui.configuration;
     }
 
-    set playerConfiguration(playerConfiguration: PlayerConfiguration) {
-        this._ui.playerConfiguration = playerConfiguration;
+    set configuration(configuration: PlayerConfiguration) {
+        this._ui.configuration = configuration;
     }
 
     get source(): SourceDescription | undefined {
@@ -59,7 +59,7 @@ export class DefaultUI extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
-        this._upgradeProperty('playerConfiguration');
+        this._upgradeProperty('configuration');
         this._upgradeProperty('source');
         this._upgradeProperty('autoplay');
     }
@@ -83,8 +83,8 @@ export class DefaultUI extends HTMLElement {
         const hasValue = newValue != null;
         if (attrName === ATTR_SOURCE) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
-        } else if (attrName === ATTR_PLAYER_CONFIGURATION) {
-            this.playerConfiguration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
+        } else if (attrName === ATTR_CONFIGURATION) {
+            this.configuration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
         } else if (attrName === ATTR_AUTOPLAY) {
             this.autoplay = hasValue;
         }
