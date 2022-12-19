@@ -29,7 +29,6 @@
 [part~='layer']:not([part~='media-layer']),
 [part~='chrome'] {
     display: flex;
-    background: none;
 }
 
 [part~='media-layer'],
@@ -53,12 +52,12 @@
 [part~='middle'] {
     display: inline;
     flex-grow: 1;
-    background: none;
 }
 
 [part~='menu-layer'] {
     align-items: center;
     justify-content: center;
+    background-color: var(--theoplayer-menu-backdrop-background-color, rgba(0, 0, 0, 0.5));
 }
 
 :host(:not([menu-opened])) [part~='menu-layer'],
