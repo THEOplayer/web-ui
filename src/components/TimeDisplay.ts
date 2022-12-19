@@ -4,6 +4,7 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer';
 import { setTextContent } from '../util/CommonUtils';
 import { formatAsTimePhrase, formatTime } from '../util/TimeUtils';
+import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${textDisplayCss}</style><span></span>`;
@@ -11,8 +12,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-time-display');
 
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as const;
 
-const ATTR_REMAINING = 'remaining';
-const ATTR_SHOW_DURATION = 'show-duration';
+const ATTR_REMAINING = Attribute.REMAINING;
+const ATTR_SHOW_DURATION = Attribute.SHOW_DURATION;
 
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 

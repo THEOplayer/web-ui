@@ -3,14 +3,15 @@ import type { ChromelessPlayer, PlayerConfiguration, SourceDescription } from 't
 import type { UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
 import defaultUiHtml from './DefaultUI.html';
+import { Attribute } from './util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
 
-const ATTR_CONFIGURATION = 'configuration';
-const ATTR_SOURCE = 'source';
-const ATTR_AUTOPLAY = 'autoplay';
+const ATTR_CONFIGURATION = Attribute.CONFIGURATION;
+const ATTR_SOURCE = Attribute.SOURCE;
+const ATTR_AUTOPLAY = Attribute.AUTOPLAY;
 
 export class DefaultUI extends HTMLElement {
     static get observedAttributes() {

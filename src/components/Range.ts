@@ -1,5 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import rangeCss from './Range.css';
+import { Attribute } from '../util/Attribute';
 
 export interface RangeOptions {
     template: HTMLTemplateElement;
@@ -9,7 +10,7 @@ export function rangeTemplate(range: string, extraCss: string = ''): string {
     return `<style>${rangeCss}\n${extraCss}</style><div part="container"><div part="background"></div>${range}</div>`;
 }
 
-const ATTR_DISABLED = 'disabled';
+const ATTR_DISABLED = Attribute.DISABLED;
 
 export abstract class Range extends HTMLElement {
     static get observedAttributes() {

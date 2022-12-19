@@ -7,6 +7,7 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import { createCustomEvent } from '../util/CustomEvent';
 import { ENTER_FULLSCREEN_EVENT, EnterFullscreenEvent } from '../events/EnterFullscreenEvent';
 import { EXIT_FULLSCREEN_EVENT, ExitFullscreenEvent } from '../events/ExitFullscreenEvent';
+import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -16,7 +17,7 @@ template.innerHTML = buttonTemplate(
 );
 shadyCss.prepareTemplate(template, 'theoplayer-fullscreen-button');
 
-const ATTR_FULLSCREEN = 'fullscreen';
+const ATTR_FULLSCREEN = Attribute.FULLSCREEN;
 
 export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen']) {
     static get observedAttributes() {

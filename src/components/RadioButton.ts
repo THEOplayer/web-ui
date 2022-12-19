@@ -1,6 +1,7 @@
 import { Button } from './Button';
+import { Attribute } from '../util/Attribute';
 
-export const ATTR_CHECKED = 'aria-checked';
+export const ATTR_CHECKED = Attribute.ARIA_CHECKED;
 
 export abstract class RadioButton extends Button {
     static get observedAttributes() {

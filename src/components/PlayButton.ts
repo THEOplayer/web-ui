@@ -6,6 +6,7 @@ import playIcon from '../icons/play.svg';
 import pauseIcon from '../icons/pause.svg';
 import replayIcon from '../icons/replay.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
+import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -16,8 +17,8 @@ template.innerHTML = buttonTemplate(
 );
 shadyCss.prepareTemplate(template, 'theoplayer-play-button');
 
-const ATTR_PAUSED = 'paused';
-const ATTR_ENDED = 'ended';
+const ATTR_PAUSED = Attribute.PAUSED;
+const ATTR_ENDED = Attribute.ENDED;
 
 const PLAYER_EVENTS = ['play', 'pause', 'ended'] as const;
 

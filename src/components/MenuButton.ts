@@ -2,12 +2,13 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { Button, ButtonOptions, buttonTemplate } from './Button';
 import { createCustomEvent } from '../util/CustomEvent';
 import { OPEN_MENU_EVENT, type OpenMenuEvent } from '../events/OpenMenuEvent';
+import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<slot></slot>`);
 shadyCss.prepareTemplate(template, 'theoplayer-menu-button');
 
-const ATTR_MENU = 'menu';
+const ATTR_MENU = Attribute.MENU;
 
 export class MenuButton extends Button {
     static get observedAttributes() {

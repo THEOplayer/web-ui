@@ -6,6 +6,7 @@ import offIcon from '../icons/volume-off.svg';
 import lowIcon from '../icons/volume-low.svg';
 import highIcon from '../icons/volume-high.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
+import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -16,7 +17,7 @@ template.innerHTML = buttonTemplate(
 );
 shadyCss.prepareTemplate(template, 'theoplayer-mute-button');
 
-const ATTR_VOLUME_LEVEL = 'volume-level';
+const ATTR_VOLUME_LEVEL = Attribute.VOLUME_LEVEL;
 export type VolumeLevel = 'off' | 'low' | 'high';
 
 const PLAYER_EVENTS = ['volumechange'] as const;

@@ -1,6 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import buttonCss from './Button.css';
 import { KeyCode } from '../util/KeyCode';
+import { Attribute } from '../util/Attribute';
 
 export interface ButtonOptions {
     template: HTMLTemplateElement;
@@ -10,7 +11,7 @@ export function buttonTemplate(button: string, extraCss: string = ''): string {
     return `<style>${buttonCss}\n${extraCss}</style>${button}`;
 }
 
-const ATTR_DISABLED = 'disabled';
+const ATTR_DISABLED = Attribute.DISABLED;
 
 /**
  * Based on howto-toggle-button

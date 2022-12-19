@@ -9,16 +9,17 @@ import { CLOSE_MENU_EVENT, type CloseMenuEvent } from './events/CloseMenuEvent';
 import { ENTER_FULLSCREEN_EVENT, EnterFullscreenEvent } from './events/EnterFullscreenEvent';
 import { EXIT_FULLSCREEN_EVENT, ExitFullscreenEvent } from './events/ExitFullscreenEvent';
 import { fullscreenAPI } from './util/FullscreenUtils';
+import { Attribute } from './util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
-const ATTR_CONFIGURATION = 'configuration';
-const ATTR_SOURCE = 'source';
-const ATTR_AUTOPLAY = 'autoplay';
-const ATTR_FULLSCREEN = 'fullscreen';
-const ATTR_MENU_OPENED = 'menu-opened';
+const ATTR_CONFIGURATION = Attribute.CONFIGURATION;
+const ATTR_SOURCE = Attribute.SOURCE;
+const ATTR_AUTOPLAY = Attribute.AUTOPLAY;
+const ATTR_FULLSCREEN = Attribute.FULLSCREEN;
+const ATTR_MENU_OPENED = Attribute.MENU_OPENED;
 
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {
