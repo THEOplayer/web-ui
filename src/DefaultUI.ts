@@ -8,15 +8,13 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
 
-const ATTR_LIBRARY_LOCATION = 'library-location';
-const ATTR_LICENSE = 'license';
-const ATTR_LICENSE_URL = 'license-url';
+const ATTR_PLAYER_CONFIGURATION = 'player-configuration';
 const ATTR_SOURCE = 'source';
 const ATTR_AUTOPLAY = 'autoplay';
 
 export class DefaultUI extends HTMLElement {
     static get observedAttributes() {
-        return [ATTR_LIBRARY_LOCATION, ATTR_LICENSE, ATTR_LICENSE_URL, ATTR_SOURCE, ATTR_AUTOPLAY];
+        return [ATTR_PLAYER_CONFIGURATION, ATTR_SOURCE, ATTR_AUTOPLAY];
     }
 
     private readonly _ui: UIContainer;
@@ -42,30 +40,6 @@ export class DefaultUI extends HTMLElement {
         this._ui.playerConfiguration = playerConfiguration;
     }
 
-    get libraryLocation(): string | undefined {
-        return this._ui.libraryLocation;
-    }
-
-    set libraryLocation(value: string | undefined) {
-        this._ui.libraryLocation = value;
-    }
-
-    get license(): string | undefined {
-        return this._ui.license;
-    }
-
-    set license(value: string | undefined) {
-        this._ui.license = value;
-    }
-
-    get licenseUrl(): string | undefined {
-        return this._ui.licenseUrl;
-    }
-
-    set licenseUrl(value: string | undefined) {
-        this._ui.licenseUrl = value;
-    }
-
     get source(): SourceDescription | undefined {
         return this._ui.source;
     }
@@ -86,9 +60,6 @@ export class DefaultUI extends HTMLElement {
         shadyCss.styleElement(this);
 
         this._upgradeProperty('playerConfiguration');
-        this._upgradeProperty('libraryLocation');
-        this._upgradeProperty('license');
-        this._upgradeProperty('licenseUrl');
         this._upgradeProperty('source');
         this._upgradeProperty('autoplay');
     }
@@ -112,12 +83,8 @@ export class DefaultUI extends HTMLElement {
         const hasValue = newValue != null;
         if (attrName === ATTR_SOURCE) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
-        } else if (attrName === ATTR_LIBRARY_LOCATION) {
-            this.libraryLocation = newValue;
-        } else if (attrName === ATTR_LICENSE) {
-            this.license = newValue;
-        } else if (attrName === ATTR_LICENSE_URL) {
-            this.licenseUrl = newValue;
+        } else if (attrName === ATTR_PLAYER_CONFIGURATION) {
+            this.playerConfiguration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
         } else if (attrName === ATTR_AUTOPLAY) {
             this.autoplay = hasValue;
         }

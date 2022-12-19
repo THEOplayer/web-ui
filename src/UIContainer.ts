@@ -14,9 +14,7 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
-const ATTR_LIBRARY_LOCATION = 'library-location';
-const ATTR_LICENSE = 'license';
-const ATTR_LICENSE_URL = 'license-url';
+const ATTR_PLAYER_CONFIGURATION = 'player-configuration';
 const ATTR_SOURCE = 'source';
 const ATTR_AUTOPLAY = 'autoplay';
 const ATTR_FULLSCREEN = 'fullscreen';
@@ -24,7 +22,7 @@ const ATTR_MENU_OPENED = 'menu-opened';
 
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {
-        return [ATTR_LIBRARY_LOCATION, ATTR_LICENSE, ATTR_LICENSE_URL, ATTR_SOURCE, ATTR_AUTOPLAY, ATTR_FULLSCREEN];
+        return [ATTR_PLAYER_CONFIGURATION, ATTR_SOURCE, ATTR_AUTOPLAY, ATTR_FULLSCREEN];
     }
 
     private _playerConfiguration: PlayerConfiguration = {};
@@ -42,7 +40,7 @@ export class UIContainer extends HTMLElement {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
 
-        this.playerConfiguration = playerConfiguration;
+        this._playerConfiguration = playerConfiguration;
 
         this._playerEl = shadowRoot.querySelector('[part~="media-layer"]')!;
         this._menuEl = shadowRoot.querySelector('[part~="menu-layer"]')!;
@@ -64,46 +62,7 @@ export class UIContainer extends HTMLElement {
     }
 
     set playerConfiguration(playerConfiguration: PlayerConfiguration) {
-        this._playerConfiguration = { ...playerConfiguration };
-        this.libraryLocation = playerConfiguration.libraryLocation;
-        this.license = playerConfiguration.license;
-        this.licenseUrl = playerConfiguration.licenseUrl;
-    }
-
-    get libraryLocation(): string | undefined {
-        return this.getAttribute(ATTR_LIBRARY_LOCATION) ?? undefined;
-    }
-
-    set libraryLocation(value: string | undefined) {
-        if (value) {
-            this.setAttribute(ATTR_LIBRARY_LOCATION, value);
-        } else {
-            this.removeAttribute(ATTR_LIBRARY_LOCATION);
-        }
-    }
-
-    get license(): string | undefined {
-        return this.getAttribute('license') ?? undefined;
-    }
-
-    set license(value: string | undefined) {
-        if (value) {
-            this.setAttribute(ATTR_LICENSE, value);
-        } else {
-            this.removeAttribute(ATTR_LICENSE);
-        }
-    }
-
-    get licenseUrl(): string | undefined {
-        return this.getAttribute(ATTR_LICENSE_URL) ?? undefined;
-    }
-
-    set licenseUrl(value: string | undefined) {
-        if (value) {
-            this.setAttribute(ATTR_LICENSE_URL, value);
-        } else {
-            this.removeAttribute(ATTR_LICENSE_URL);
-        }
+        this._playerConfiguration = playerConfiguration ?? {};
     }
 
     get source(): SourceDescription | undefined {
@@ -146,9 +105,6 @@ export class UIContainer extends HTMLElement {
         shadyCss.styleElement(this);
 
         this._upgradeProperty('playerConfiguration');
-        this._upgradeProperty('libraryLocation');
-        this._upgradeProperty('license');
-        this._upgradeProperty('licenseUrl');
         this._upgradeProperty('source');
         this._upgradeProperty('autoplay');
 
@@ -182,10 +138,10 @@ export class UIContainer extends HTMLElement {
         if (this._player !== undefined) {
             return;
         }
-        if (this.libraryLocation === undefined) {
+        if (this._playerConfiguration.libraryLocation === undefined) {
             return;
         }
-        if (this.license === undefined && this.licenseUrl === undefined) {
+        if (this._playerConfiguration.license === undefined && this._playerConfiguration.licenseUrl === undefined) {
             return;
         }
 
@@ -228,14 +184,8 @@ export class UIContainer extends HTMLElement {
             return;
         }
         const hasValue = newValue != null;
-        if (attrName === ATTR_LIBRARY_LOCATION) {
-            this._playerConfiguration.libraryLocation = newValue;
-            this.tryInitializePlayer_();
-        } else if (attrName === ATTR_LICENSE) {
-            this._playerConfiguration.license = newValue;
-            this.tryInitializePlayer_();
-        } else if (attrName === ATTR_LICENSE_URL) {
-            this._playerConfiguration.licenseUrl = newValue;
+        if (attrName === ATTR_PLAYER_CONFIGURATION) {
+            this.playerConfiguration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
             this.tryInitializePlayer_();
         } else if (attrName === ATTR_SOURCE) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
