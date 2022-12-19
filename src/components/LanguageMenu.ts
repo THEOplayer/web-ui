@@ -9,6 +9,7 @@ import { MediaTrackMenuButton } from './MediaTrackMenuButton';
 import { TextTrackMenuButton } from './TextTrackMenuButton';
 import { TextTrackOffMenuButton } from './TextTrackOffMenuButton';
 import { isSubtitleTrack } from '../util/TrackUtils';
+import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = menuTemplate(`<slot name="heading">Language</slot>`, languageMenuHtml, languageMenuCss);
@@ -65,9 +66,9 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
         const oldAudioButtons = this._audioGroup.children as HTMLCollectionOf<MediaTrackMenuButton>;
         const newAudioTracks: readonly MediaTrack[] = this._player?.audioTracks ?? [];
         if (newAudioTracks.length === 0) {
-            this._contentEl.removeAttribute('has-audio');
+            this._contentEl.removeAttribute(Attribute.HAS_AUDIO);
         } else {
-            this._contentEl.setAttribute('has-audio', '');
+            this._contentEl.setAttribute(Attribute.HAS_AUDIO, '');
         }
         for (let i = 0; i < oldAudioButtons.length; i++) {
             const oldButton = oldAudioButtons[i];
@@ -88,9 +89,9 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
         const oldSubtitleButtons = this._subtitleGroup.children as HTMLCollectionOf<TextTrackMenuButton>;
         const newSubtitleTracks: readonly TextTrack[] = this._player?.textTracks.filter(isSubtitleTrack) ?? [];
         if (newSubtitleTracks.length === 0) {
-            this._contentEl.removeAttribute('has-subtitles');
+            this._contentEl.removeAttribute(Attribute.HAS_SUBTITLES);
         } else {
-            this._contentEl.setAttribute('has-subtitles', '');
+            this._contentEl.setAttribute(Attribute.HAS_SUBTITLES, '');
         }
         // Start at index 1, since the first child is the "off" button
         for (let i = 1; i < oldSubtitleButtons.length; i++) {

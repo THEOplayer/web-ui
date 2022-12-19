@@ -11,5 +11,7 @@ export enum Attribute {
     SHOW_DURATION = 'show-duration',
     MENU = 'menu',
     MENU_OPENED = 'menu-opened',
-    ARIA_CHECKED = 'aria-checked'
+    ARIA_CHECKED = 'aria-checked',
+    HAS_AUDIO = 'has-audio',
+    HAS_SUBTITLES = 'has-subtitles'
 }
