@@ -21,6 +21,7 @@
 [part~='layer'] {
     position: absolute;
     inset: 0;
+    z-index: 0;
 }
 
 [part~='layer']:not([part~='media-layer']),
@@ -31,7 +32,6 @@
 [part~='media-layer'],
 [part~='poster-layer'] {
     pointer-events: none;
-    z-index: 0;
 }
 
 [part~='vertical-layer'],
