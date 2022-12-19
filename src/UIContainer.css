@@ -18,6 +18,10 @@
     height: 100% !important;
 }
 
+[part~='chrome'] {
+    position: relative;
+}
+
 [part~='layer'] {
     position: absolute;
     inset: 0;

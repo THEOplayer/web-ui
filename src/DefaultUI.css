@@ -2,6 +2,8 @@
     box-sizing: border-box;
     position: relative;
     display: inline-block;
+
+    --theoplayer-control-background: transparent;
 }
 
 :host([hidden]) {
@@ -9,7 +11,6 @@
 }
 
 [part='centered-chrome'] > * {
-    --theoplayer-control-background: transparent;
     --theoplayer-control-height: 48px;
 }
 
