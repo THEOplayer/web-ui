@@ -15,15 +15,9 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
-const ATTR_CONFIGURATION = Attribute.CONFIGURATION;
-const ATTR_SOURCE = Attribute.SOURCE;
-const ATTR_AUTOPLAY = Attribute.AUTOPLAY;
-const ATTR_FULLSCREEN = Attribute.FULLSCREEN;
-const ATTR_MENU_OPENED = Attribute.MENU_OPENED;
-
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {
-        return [ATTR_CONFIGURATION, ATTR_SOURCE, ATTR_AUTOPLAY, ATTR_FULLSCREEN];
+        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FULLSCREEN];
     }
 
     private _configuration: PlayerConfiguration = {};
@@ -79,26 +73,26 @@ export class UIContainer extends HTMLElement {
     }
 
     get autoplay(): boolean {
-        return this.hasAttribute(ATTR_AUTOPLAY);
+        return this.hasAttribute(Attribute.AUTOPLAY);
     }
 
     set autoplay(value: boolean) {
         if (value) {
-            this.setAttribute(ATTR_AUTOPLAY, '');
+            this.setAttribute(Attribute.AUTOPLAY, '');
         } else {
-            this.removeAttribute(ATTR_AUTOPLAY);
+            this.removeAttribute(Attribute.AUTOPLAY);
         }
     }
 
     get fullscreen(): boolean {
-        return this.hasAttribute(ATTR_FULLSCREEN);
+        return this.hasAttribute(Attribute.FULLSCREEN);
     }
 
     set fullscreen(value: boolean) {
         if (value) {
-            this.setAttribute(ATTR_FULLSCREEN, '');
+            this.setAttribute(Attribute.FULLSCREEN, '');
         } else {
-            this.removeAttribute(ATTR_FULLSCREEN);
+            this.removeAttribute(Attribute.FULLSCREEN);
         }
     }
 
@@ -185,16 +179,16 @@ export class UIContainer extends HTMLElement {
             return;
         }
         const hasValue = newValue != null;
-        if (attrName === ATTR_CONFIGURATION) {
+        if (attrName === Attribute.CONFIGURATION) {
             this.configuration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
             this.tryInitializePlayer_();
-        } else if (attrName === ATTR_SOURCE) {
+        } else if (attrName === Attribute.SOURCE) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
-        } else if (attrName === ATTR_AUTOPLAY) {
+        } else if (attrName === Attribute.AUTOPLAY) {
             if (this._player) {
                 this._player.autoplay = hasValue;
             }
-        } else if (attrName === ATTR_FULLSCREEN) {
+        } else if (attrName === Attribute.FULLSCREEN) {
             for (const receiver of this._stateReceivers) {
                 if (receiver[StateReceiverProps].indexOf('fullscreen') >= 0) {
                     receiver.setFullscreen!(hasValue);
@@ -283,7 +277,7 @@ export class UIContainer extends HTMLElement {
             menu.setAttribute('hidden', '');
         }
         menuToOpen.removeAttribute('hidden');
-        this.setAttribute(ATTR_MENU_OPENED, '');
+        this.setAttribute(Attribute.MENU_OPENED, '');
     };
 
     private readonly _onCloseMenu = (rawEvent: Event): void => {
@@ -291,7 +285,7 @@ export class UIContainer extends HTMLElement {
         event.stopPropagation();
         const menuToClose = event.currentTarget as HTMLElement;
         menuToClose.setAttribute('hidden', '');
-        this.removeAttribute(ATTR_MENU_OPENED);
+        this.removeAttribute(Attribute.MENU_OPENED);
     };
 
     private readonly _onEnterFullscreen = (rawEvent: Event): void => {

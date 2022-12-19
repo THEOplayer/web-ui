@@ -8,11 +8,9 @@ const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<slot></slot>`);
 shadyCss.prepareTemplate(template, 'theoplayer-menu-button');
 
-const ATTR_MENU = Attribute.MENU;
-
 export class MenuButton extends Button {
     static get observedAttributes() {
-        return [...Button.observedAttributes, ATTR_MENU];
+        return [...Button.observedAttributes, Attribute.MENU];
     }
 
     constructor(options?: Partial<ButtonOptions>) {
@@ -28,20 +26,20 @@ export class MenuButton extends Button {
     }
 
     get menu(): string | null {
-        return this.getAttribute(ATTR_MENU);
+        return this.getAttribute(Attribute.MENU);
     }
 
     set menu(menuId: string | null) {
         if (menuId) {
-            this.setAttribute(ATTR_MENU, menuId);
+            this.setAttribute(Attribute.MENU, menuId);
         } else {
-            this.removeAttribute(ATTR_MENU);
+            this.removeAttribute(Attribute.MENU);
         }
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (attrName === ATTR_MENU) {
+        if (attrName === Attribute.MENU) {
             if (!this.hasAttribute('aria-controls') || this.getAttribute('aria-controls') === oldValue) {
                 this.setAttribute('aria-controls', newValue);
             }

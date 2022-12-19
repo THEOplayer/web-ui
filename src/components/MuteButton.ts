@@ -17,14 +17,13 @@ template.innerHTML = buttonTemplate(
 );
 shadyCss.prepareTemplate(template, 'theoplayer-mute-button');
 
-const ATTR_VOLUME_LEVEL = Attribute.VOLUME_LEVEL;
 export type VolumeLevel = 'off' | 'low' | 'high';
 
 const PLAYER_EVENTS = ['volumechange'] as const;
 
 export class MuteButton extends StateReceiverMixin(Button, ['player']) {
     static get observedAttributes() {
-        return [...Button.observedAttributes, ATTR_VOLUME_LEVEL];
+        return [...Button.observedAttributes, Attribute.VOLUME_LEVEL];
     }
 
     private _player: ChromelessPlayer | undefined;
@@ -40,14 +39,14 @@ export class MuteButton extends StateReceiverMixin(Button, ['player']) {
     }
 
     get volumeLevel(): VolumeLevel {
-        return (this.getAttribute(ATTR_VOLUME_LEVEL) as VolumeLevel | null) || 'off';
+        return (this.getAttribute(Attribute.VOLUME_LEVEL) as VolumeLevel | null) || 'off';
     }
 
     set volumeLevel(level: VolumeLevel) {
         if (level) {
-            this.setAttribute(ATTR_VOLUME_LEVEL, level);
+            this.setAttribute(Attribute.VOLUME_LEVEL, level);
         } else {
-            this.removeAttribute(ATTR_VOLUME_LEVEL);
+            this.removeAttribute(Attribute.VOLUME_LEVEL);
         }
     }
 

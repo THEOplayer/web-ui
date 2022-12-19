@@ -12,9 +12,6 @@ shadyCss.prepareTemplate(template, 'theoplayer-time-display');
 
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as const;
 
-const ATTR_REMAINING = Attribute.REMAINING;
-const ATTR_SHOW_DURATION = Attribute.SHOW_DURATION;
-
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
 export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
@@ -22,7 +19,7 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
     private _player: ChromelessPlayer | undefined;
 
     static get observedAttributes() {
-        return [ATTR_REMAINING, ATTR_SHOW_DURATION];
+        return [Attribute.REMAINING, Attribute.SHOW_DURATION];
     }
 
     constructor() {
@@ -65,10 +62,10 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
         const seekable = this._player?.seekable;
         const endTime = isFinite(duration) ? duration : seekable && seekable.length > 0 ? seekable.end(0) : NaN;
         let time = currentTime;
-        if (this.hasAttribute(ATTR_REMAINING)) {
+        if (this.hasAttribute(Attribute.REMAINING)) {
             time = -((endTime || 0) - currentTime);
         }
-        const showDuration = this.hasAttribute(ATTR_SHOW_DURATION);
+        const showDuration = this.hasAttribute(Attribute.SHOW_DURATION);
         let text: string;
         if (showDuration) {
             text = `${formatTime(time, endTime)} / ${formatTime(endTime)}`;
@@ -88,7 +85,7 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
     };
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if ((attrName === ATTR_REMAINING || attrName === ATTR_SHOW_DURATION) && newValue !== oldValue) {
+        if ((attrName === Attribute.REMAINING || attrName === Attribute.SHOW_DURATION) && newValue !== oldValue) {
             this._updateFromPlayer();
         }
     }

@@ -17,14 +17,11 @@ template.innerHTML = buttonTemplate(
 );
 shadyCss.prepareTemplate(template, 'theoplayer-play-button');
 
-const ATTR_PAUSED = Attribute.PAUSED;
-const ATTR_ENDED = Attribute.ENDED;
-
 const PLAYER_EVENTS = ['play', 'pause', 'ended'] as const;
 
 export class PlayButton extends StateReceiverMixin(Button, ['player']) {
     static get observedAttributes() {
-        return [...Button.observedAttributes, ATTR_PAUSED];
+        return [...Button.observedAttributes, Attribute.PAUSED];
     }
 
     private _player: ChromelessPlayer | undefined;
@@ -42,26 +39,26 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
     }
 
     get paused(): boolean {
-        return this.hasAttribute(ATTR_PAUSED);
+        return this.hasAttribute(Attribute.PAUSED);
     }
 
     set paused(paused: boolean) {
         if (paused) {
-            this.setAttribute(ATTR_PAUSED, '');
+            this.setAttribute(Attribute.PAUSED, '');
         } else {
-            this.removeAttribute(ATTR_PAUSED);
+            this.removeAttribute(Attribute.PAUSED);
         }
     }
 
     get ended(): boolean {
-        return this.hasAttribute(ATTR_ENDED);
+        return this.hasAttribute(Attribute.ENDED);
     }
 
     set ended(ended: boolean) {
         if (ended) {
-            this.setAttribute(ATTR_ENDED, '');
+            this.setAttribute(Attribute.ENDED, '');
         } else {
-            this.removeAttribute(ATTR_ENDED);
+            this.removeAttribute(Attribute.ENDED);
         }
     }
 

@@ -1,11 +1,9 @@
 import { Button } from './Button';
 import { Attribute } from '../util/Attribute';
 
-export const ATTR_CHECKED = Attribute.ARIA_CHECKED;
-
 export abstract class RadioButton extends Button {
     static get observedAttributes() {
-        return [...Button.observedAttributes, ATTR_CHECKED];
+        return [...Button.observedAttributes, Attribute.ARIA_CHECKED];
     }
 
     override connectedCallback() {
@@ -19,10 +17,10 @@ export abstract class RadioButton extends Button {
     }
 
     get checked(): boolean {
-        return this.getAttribute(ATTR_CHECKED) === 'true';
+        return this.getAttribute(Attribute.ARIA_CHECKED) === 'true';
     }
 
     set checked(checked: boolean) {
-        this.setAttribute(ATTR_CHECKED, checked ? 'true' : 'false');
+        this.setAttribute(Attribute.ARIA_CHECKED, checked ? 'true' : 'false');
     }
 }

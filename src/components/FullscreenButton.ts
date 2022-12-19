@@ -17,11 +17,9 @@ template.innerHTML = buttonTemplate(
 );
 shadyCss.prepareTemplate(template, 'theoplayer-fullscreen-button');
 
-const ATTR_FULLSCREEN = Attribute.FULLSCREEN;
-
 export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen']) {
     static get observedAttributes() {
-        return [...Button.observedAttributes, ATTR_FULLSCREEN];
+        return [...Button.observedAttributes, Attribute.FULLSCREEN];
     }
 
     constructor() {
@@ -34,14 +32,14 @@ export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen'])
     }
 
     get fullscreen(): boolean {
-        return this.hasAttribute(ATTR_FULLSCREEN);
+        return this.hasAttribute(Attribute.FULLSCREEN);
     }
 
     set fullscreen(fullscreen: boolean) {
         if (fullscreen) {
-            this.setAttribute(ATTR_FULLSCREEN, '');
+            this.setAttribute(Attribute.FULLSCREEN, '');
         } else {
-            this.removeAttribute(ATTR_FULLSCREEN);
+            this.removeAttribute(Attribute.FULLSCREEN);
         }
     }
 

@@ -1,9 +1,10 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import { ATTR_CHECKED, RadioButton } from './RadioButton';
+import { RadioButton } from './RadioButton';
 import { buttonTemplate } from './Button';
 import trackMenuButtonCss from './TrackMenuButton.css';
 import type { MediaTrack } from 'theoplayer';
 import { localizeLanguageName } from '../util/CommonUtils';
+import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<span></span>`, trackMenuButtonCss);
@@ -61,7 +62,7 @@ export class MediaTrackMenuButton extends RadioButton {
 
     override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (attrName === ATTR_CHECKED && oldValue !== newValue) {
+        if (attrName === Attribute.ARIA_CHECKED && oldValue !== newValue) {
             this._updateTrack();
         }
     }

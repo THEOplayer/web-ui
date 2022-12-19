@@ -10,11 +10,9 @@ export function rangeTemplate(range: string, extraCss: string = ''): string {
     return `<style>${rangeCss}\n${extraCss}</style><div part="container"><div part="background"></div>${range}</div>`;
 }
 
-const ATTR_DISABLED = Attribute.DISABLED;
-
 export abstract class Range extends HTMLElement {
     static get observedAttributes() {
-        return [ATTR_DISABLED];
+        return [Attribute.DISABLED];
     }
 
     protected readonly _rangeEl: HTMLInputElement;
@@ -52,14 +50,14 @@ export abstract class Range extends HTMLElement {
     }
 
     get disabled() {
-        return this.hasAttribute(ATTR_DISABLED);
+        return this.hasAttribute(Attribute.DISABLED);
     }
 
     set disabled(disabled: boolean) {
         if (disabled) {
-            this.setAttribute(ATTR_DISABLED, '');
+            this.setAttribute(Attribute.DISABLED, '');
         } else {
-            this.removeAttribute(ATTR_DISABLED);
+            this.removeAttribute(Attribute.DISABLED);
         }
     }
 
@@ -100,7 +98,7 @@ export abstract class Range extends HTMLElement {
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (attrName === ATTR_DISABLED && newValue !== oldValue) {
+        if (attrName === Attribute.DISABLED && newValue !== oldValue) {
             const hasValue = newValue != null;
             this.setAttribute('aria-disabled', hasValue ? 'true' : 'false');
             if (hasValue) {

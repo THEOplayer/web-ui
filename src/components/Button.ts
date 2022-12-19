@@ -11,15 +11,13 @@ export function buttonTemplate(button: string, extraCss: string = ''): string {
     return `<style>${buttonCss}\n${extraCss}</style>${button}`;
 }
 
-const ATTR_DISABLED = Attribute.DISABLED;
-
 /**
  * Based on howto-toggle-button
  * https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-toggle-button/howto-toggle-button.js
  */
 export abstract class Button extends HTMLElement {
     static get observedAttributes() {
-        return [ATTR_DISABLED];
+        return [Attribute.DISABLED];
     }
 
     constructor(options: ButtonOptions) {
@@ -53,19 +51,19 @@ export abstract class Button extends HTMLElement {
     }
 
     get disabled() {
-        return this.hasAttribute(ATTR_DISABLED);
+        return this.hasAttribute(Attribute.DISABLED);
     }
 
     set disabled(disabled: boolean) {
         if (disabled) {
-            this.setAttribute(ATTR_DISABLED, '');
+            this.setAttribute(Attribute.DISABLED, '');
         } else {
-            this.removeAttribute(ATTR_DISABLED);
+            this.removeAttribute(Attribute.DISABLED);
         }
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (attrName === ATTR_DISABLED && newValue !== oldValue) {
+        if (attrName === Attribute.DISABLED && newValue !== oldValue) {
             const hasValue = newValue != null;
             this.setAttribute('aria-disabled', hasValue ? 'true' : 'false');
             // The `tabindex` attribute does not provide a way to fully remove focusability from an element.

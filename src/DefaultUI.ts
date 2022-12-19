@@ -9,13 +9,9 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
 
-const ATTR_CONFIGURATION = Attribute.CONFIGURATION;
-const ATTR_SOURCE = Attribute.SOURCE;
-const ATTR_AUTOPLAY = Attribute.AUTOPLAY;
-
 export class DefaultUI extends HTMLElement {
     static get observedAttributes() {
-        return [ATTR_CONFIGURATION, ATTR_SOURCE, ATTR_AUTOPLAY];
+        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY];
     }
 
     private readonly _ui: UIContainer;
@@ -82,11 +78,11 @@ export class DefaultUI extends HTMLElement {
             return;
         }
         const hasValue = newValue != null;
-        if (attrName === ATTR_SOURCE) {
+        if (attrName === Attribute.SOURCE) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
-        } else if (attrName === ATTR_CONFIGURATION) {
+        } else if (attrName === Attribute.CONFIGURATION) {
             this.configuration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
-        } else if (attrName === ATTR_AUTOPLAY) {
+        } else if (attrName === Attribute.AUTOPLAY) {
             this.autoplay = hasValue;
         }
     }
