@@ -274,6 +274,8 @@ export class UIContainer extends HTMLElement {
         }
         this.removeEventListener('keydown', this._onMenuKeyDown);
         this.addEventListener('keydown', this._onMenuKeyDown);
+        this._menuEl.removeEventListener('click', this._onMenuClick);
+        this._menuEl.addEventListener('click', this._onMenuClick);
 
         menuToOpen.focus();
     }
@@ -302,6 +304,7 @@ export class UIContainer extends HTMLElement {
         }
 
         this.removeEventListener('keydown', this._onMenuKeyDown);
+        this._menuEl.removeEventListener('click', this._onMenuClick);
         this.removeAttribute(Attribute.MENU_OPENED);
 
         oldEntry?.opener?.focus();
@@ -346,6 +349,15 @@ export class UIContainer extends HTMLElement {
         event.stopPropagation();
         const menuToClose = event.currentTarget as HTMLElement;
         this.closeMenu_(menuToClose);
+    };
+
+    private readonly _onMenuClick = (event: MouseEvent) => {
+        if (event.target === this._menuEl) {
+            // Close menu when clicking on menu backdrop
+            // TODO Only on desktop!
+            event.preventDefault();
+            this.closeCurrentMenu_();
+        }
     };
 
     private readonly _onMenuKeyDown = (event: KeyboardEvent) => {
