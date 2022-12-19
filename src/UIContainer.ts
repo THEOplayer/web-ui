@@ -259,7 +259,7 @@ export class UIContainer extends HTMLElement {
             menu.setAttribute('hidden', '');
         }
         menuToOpen.removeAttribute('hidden');
-        menuToOpen.focus();
+        this.setAttribute(Attribute.MENU_OPENED, '');
 
         if (!this.hasAttribute('tabindex')) {
             this.setAttribute('tabindex', '-1');
@@ -267,7 +267,7 @@ export class UIContainer extends HTMLElement {
         this.removeEventListener('keydown', this._onMenuKeyDown);
         this.addEventListener('keydown', this._onMenuKeyDown);
 
-        this.setAttribute(Attribute.MENU_OPENED, '');
+        menuToOpen.focus();
     }
 
     private closeMenu_(menuToClose: HTMLElement): void {
@@ -278,8 +278,8 @@ export class UIContainer extends HTMLElement {
         if (this._openMenuStack.length > 0) {
             const nextMenu = this._openMenuStack[this._openMenuStack.length - 1];
             nextMenu.removeAttribute('hidden');
-            nextMenu.focus();
             this.setAttribute(Attribute.MENU_OPENED, '');
+            nextMenu.focus();
             return;
         }
 
