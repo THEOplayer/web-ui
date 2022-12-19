@@ -34,7 +34,7 @@ export class UIContainer extends HTMLElement {
 
     constructor(configuration: PlayerConfiguration = {}) {
         super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
+        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._configuration = configuration;

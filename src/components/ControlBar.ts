@@ -8,7 +8,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-control-bar');
 export class ControlBar extends HTMLElement {
     constructor() {
         super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
+        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
         shadowRoot.appendChild(template.content.cloneNode(true));
     }
 

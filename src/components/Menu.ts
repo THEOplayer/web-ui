@@ -21,7 +21,7 @@ export class Menu extends HTMLElement {
     constructor(options?: MenuOptions) {
         super();
         const template = options?.template ?? defaultTemplate;
-        const shadowRoot = this.attachShadow({ mode: 'open' });
+        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
         shadowRoot.appendChild(template.content.cloneNode(true));
     }
 
