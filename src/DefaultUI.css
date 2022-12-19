@@ -13,6 +13,10 @@
     --theoplayer-control-height: 48px;
 }
 
+.spacer {
+    flex-grow: 1;
+}
+
 theoplayer-volume-range {
     --theoplayer-range-padding-left: 0;
 }
