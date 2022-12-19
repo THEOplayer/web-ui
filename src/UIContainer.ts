@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type PlayerConfiguration, type SourceDescription } from 'theoplayer';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
-import { arrayFind, arrayRemove, containsComposedNode, isElement, isHTMLElement, noOp } from './util/CommonUtils';
+import { arrayFind, arrayFindIndex, arrayRemove, arrayRemoveAt, containsComposedNode, isElement, isHTMLElement, noOp } from './util/CommonUtils';
 import { forEachStateReceiverElement, StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { OPEN_MENU_EVENT, type OpenMenuEvent } from './events/OpenMenuEvent';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from './events/CloseMenuEvent';
@@ -16,6 +16,11 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
+interface OpenMenuEntry {
+    menu: HTMLElement;
+    opener: HTMLElement | undefined;
+}
+
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {
         return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FULLSCREEN];
@@ -26,7 +31,7 @@ export class UIContainer extends HTMLElement {
     private readonly _menuEl: HTMLElement;
     private _menus: HTMLElement[] = [];
     private readonly _menuSlot: HTMLSlotElement;
-    private readonly _openMenuStack: HTMLElement[] = [];
+    private readonly _openMenuStack: OpenMenuEntry[] = [];
     private readonly _mutationObserver: MutationObserver;
     private readonly _stateReceivers: StateReceiverElement[] = [];
     private _player: ChromelessPlayer | undefined = undefined;
@@ -251,9 +256,12 @@ export class UIContainer extends HTMLElement {
         }
     }
 
-    private openMenu_(menuToOpen: HTMLElement): void {
-        arrayRemove(this._openMenuStack, menuToOpen);
-        this._openMenuStack.push(menuToOpen);
+    private openMenu_(menuToOpen: HTMLElement, opener: HTMLElement | undefined): void {
+        const index = arrayFindIndex(this._openMenuStack, (entry) => entry.menu === menuToOpen);
+        if (index >= 0) {
+            arrayRemoveAt(this._openMenuStack, index);
+        }
+        this._openMenuStack.push({ menu: menuToOpen, opener });
 
         for (const menu of this._menus) {
             menu.setAttribute('hidden', '');
@@ -271,25 +279,37 @@ export class UIContainer extends HTMLElement {
     }
 
     private closeMenu_(menuToClose: HTMLElement): void {
-        arrayRemove(this._openMenuStack, menuToClose);
+        const index = arrayFindIndex(this._openMenuStack, (entry) => entry.menu === menuToClose);
+        let oldEntry: OpenMenuEntry | undefined;
+        if (index >= 0) {
+            oldEntry = this._openMenuStack[index];
+            arrayRemoveAt(this._openMenuStack, index);
+        }
+
         menuToClose.setAttribute('hidden', '');
         menuToClose.blur();
 
         if (this._openMenuStack.length > 0) {
-            const nextMenu = this._openMenuStack[this._openMenuStack.length - 1];
-            nextMenu.removeAttribute('hidden');
+            const nextEntry = this._openMenuStack[this._openMenuStack.length - 1];
+            nextEntry.menu.removeAttribute('hidden');
             this.setAttribute(Attribute.MENU_OPENED, '');
-            nextMenu.focus();
+            if (oldEntry && oldEntry.opener && nextEntry.menu.contains(oldEntry.opener)) {
+                oldEntry.opener.focus();
+            } else {
+                nextEntry.menu.focus();
+            }
             return;
         }
 
         this.removeEventListener('keydown', this._onMenuKeyDown);
         this.removeAttribute(Attribute.MENU_OPENED);
+
+        oldEntry?.opener?.focus();
     }
 
     private closeCurrentMenu_(): void {
         if (this._openMenuStack.length > 0) {
-            this.closeMenu_(this._openMenuStack[this._openMenuStack.length - 1]);
+            this.closeMenu_(this._openMenuStack[this._openMenuStack.length - 1].menu);
         }
     }
 
@@ -317,7 +337,8 @@ export class UIContainer extends HTMLElement {
             console.error(`<theoplayer-ui>: cannot find menu with ID "${event.detail.menu}"`);
             return;
         }
-        this.openMenu_(menuToOpen);
+        const opener = isHTMLElement(event.target) ? event.target : undefined;
+        this.openMenu_(menuToOpen, opener);
     };
 
     private readonly _onCloseMenu = (rawEvent: Event): void => {

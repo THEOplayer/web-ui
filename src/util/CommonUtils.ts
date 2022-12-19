@@ -8,7 +8,7 @@ export function isElement(node: Node): node is Element {
     return node.nodeType === Node.ELEMENT_NODE;
 }
 
-export function isHTMLElement(node: Node): node is HTMLElement {
+export function isHTMLElement(node: unknown): node is HTMLElement {
     return node instanceof HTMLElement;
 }
 
@@ -38,6 +38,18 @@ export const arrayFind: <T>(array: readonly T[], predicate: (element: T, index: 
                   }
               }
               return undefined;
+          };
+
+export const arrayFindIndex: <T>(array: readonly T[], predicate: (element: T, index: number, array: readonly T[]) => boolean) => number =
+    typeof Array.prototype.findIndex === 'function'
+        ? (array, predicate) => array.findIndex(predicate)
+        : (array, predicate) => {
+              for (let i = 0; i < array.length; i++) {
+                  if (predicate(array[i], i, array)) {
+                      return i;
+                  }
+              }
+              return -1;
           };
 
 export function arrayRemove<T>(array: T[], element: T): boolean {
