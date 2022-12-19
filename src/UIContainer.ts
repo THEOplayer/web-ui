@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type PlayerConfiguration, type SourceDescription } from 'theoplayer';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
-import { arrayFind, arrayRemove, containsComposedNode, isElement, noOp } from './util/CommonUtils';
+import { arrayFind, arrayRemove, containsComposedNode, isElement, isHTMLElement, noOp } from './util/CommonUtils';
 import { forEachStateReceiverElement, StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { OPEN_MENU_EVENT, type OpenMenuEvent } from './events/OpenMenuEvent';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from './events/CloseMenuEvent';
@@ -10,6 +10,7 @@ import { ENTER_FULLSCREEN_EVENT, EnterFullscreenEvent } from './events/EnterFull
 import { EXIT_FULLSCREEN_EVENT, ExitFullscreenEvent } from './events/ExitFullscreenEvent';
 import { fullscreenAPI } from './util/FullscreenUtils';
 import { Attribute } from './util/Attribute';
+import { KeyCode } from './util/KeyCode';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -23,8 +24,9 @@ export class UIContainer extends HTMLElement {
     private _configuration: PlayerConfiguration = {};
     private readonly _playerEl: HTMLElement;
     private readonly _menuEl: HTMLElement;
-    private _menus: Element[] = [];
+    private _menus: HTMLElement[] = [];
     private readonly _menuSlot: HTMLSlotElement;
+    private readonly _openMenuStack: HTMLElement[] = [];
     private readonly _mutationObserver: MutationObserver;
     private readonly _stateReceivers: StateReceiverElement[] = [];
     private _player: ChromelessPlayer | undefined = undefined;
@@ -249,8 +251,50 @@ export class UIContainer extends HTMLElement {
         }
     }
 
+    private openMenu_(menuToOpen: HTMLElement): void {
+        arrayRemove(this._openMenuStack, menuToOpen);
+        this._openMenuStack.push(menuToOpen);
+
+        for (const menu of this._menus) {
+            menu.setAttribute('hidden', '');
+        }
+        menuToOpen.removeAttribute('hidden');
+        menuToOpen.focus();
+
+        if (!this.hasAttribute('tabindex')) {
+            this.setAttribute('tabindex', '-1');
+        }
+        this.removeEventListener('keydown', this._onMenuKeyDown);
+        this.addEventListener('keydown', this._onMenuKeyDown);
+
+        this.setAttribute(Attribute.MENU_OPENED, '');
+    }
+
+    private closeMenu_(menuToClose: HTMLElement): void {
+        arrayRemove(this._openMenuStack, menuToClose);
+        menuToClose.setAttribute('hidden', '');
+        menuToClose.blur();
+
+        if (this._openMenuStack.length > 0) {
+            const nextMenu = this._openMenuStack[this._openMenuStack.length - 1];
+            nextMenu.removeAttribute('hidden');
+            nextMenu.focus();
+            this.setAttribute(Attribute.MENU_OPENED, '');
+            return;
+        }
+
+        this.removeEventListener('keydown', this._onMenuKeyDown);
+        this.removeAttribute(Attribute.MENU_OPENED);
+    }
+
+    private closeCurrentMenu_(): void {
+        if (this._openMenuStack.length > 0) {
+            this.closeMenu_(this._openMenuStack[this._openMenuStack.length - 1]);
+        }
+    }
+
     private _onMenuSlotChange = () => {
-        const newMenus = this._menuSlot.assignedNodes().filter(isElement);
+        const newMenus = this._menuSlot.assignedNodes().filter(isHTMLElement);
         for (const oldMenu of this._menus) {
             if (newMenus.indexOf(oldMenu) < 0) {
                 oldMenu.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
@@ -273,19 +317,29 @@ export class UIContainer extends HTMLElement {
             console.error(`<theoplayer-ui>: cannot find menu with ID "${event.detail.menu}"`);
             return;
         }
-        for (const menu of this._menus) {
-            menu.setAttribute('hidden', '');
-        }
-        menuToOpen.removeAttribute('hidden');
-        this.setAttribute(Attribute.MENU_OPENED, '');
+        this.openMenu_(menuToOpen);
     };
 
     private readonly _onCloseMenu = (rawEvent: Event): void => {
         const event = rawEvent as CloseMenuEvent;
         event.stopPropagation();
         const menuToClose = event.currentTarget as HTMLElement;
-        menuToClose.setAttribute('hidden', '');
-        this.removeAttribute(Attribute.MENU_OPENED);
+        this.closeMenu_(menuToClose);
+    };
+
+    private readonly _onMenuKeyDown = (event: KeyboardEvent) => {
+        // Don't handle modifier shortcuts typically used by assistive technology.
+        if (event.altKey) return;
+
+        switch (event.keyCode) {
+            case KeyCode.ESCAPE:
+                event.preventDefault();
+                this.closeCurrentMenu_();
+                break;
+            // Any other key press is ignored and passed back to the browser.
+            default:
+                return;
+        }
     };
 
     private readonly _onEnterFullscreen = (rawEvent: Event): void => {

@@ -6,5 +6,6 @@ export enum KeyCode {
     ENTER = 13,
     UP = 38,
     HOME = 36,
-    END = 35
+    END = 35,
+    ESCAPE = 27
 }

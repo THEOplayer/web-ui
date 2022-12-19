@@ -8,6 +8,10 @@ export function isElement(node: Node): node is Element {
     return node.nodeType === Node.ELEMENT_NODE;
 }
 
+export function isHTMLElement(node: Node): node is HTMLElement {
+    return node instanceof HTMLElement;
+}
+
 export const isArray: (arg: unknown) => arg is any[] =
     typeof Array.isArray === 'function'
         ? Array.isArray
