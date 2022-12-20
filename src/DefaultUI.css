@@ -10,6 +10,10 @@
     display: none !important;
 }
 
+theoplayer-ui {
+    width: 100%;
+}
+
 [part='centered-chrome'] > * {
     --theoplayer-control-height: 48px;
 }
