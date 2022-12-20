@@ -65,6 +65,7 @@ export class UIContainer extends HTMLElement {
 
     set configuration(playerConfiguration: PlayerConfiguration) {
         this._configuration = playerConfiguration ?? {};
+        this.tryInitializePlayer_();
     }
 
     get source(): SourceDescription | undefined {
