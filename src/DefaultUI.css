@@ -41,13 +41,13 @@ theoplayer-mute-button + theoplayer-volume-range {
 /* Expand volume control in all relevant states */
 theoplayer-mute-button:hover + theoplayer-volume-range,
 theoplayer-mute-button:focus + theoplayer-volume-range,
-theoplayer-volume-range:hover,
-theoplayer-volume-range:focus {
+theoplayer-mute-button + theoplayer-volume-range:hover,
+theoplayer-mute-button + theoplayer-volume-range:focus {
     width: 70px;
 }
 
 /* IE doesn't support :focus-within, so keep these separate (and use a polyfill?) */
 theoplayer-mute-button:focus-within + theoplayer-volume-range,
-theoplayer-volume-range:focus-within {
+theoplayer-mute-button + theoplayer-volume-range:focus-within {
     width: 70px;
 }
