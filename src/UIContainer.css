@@ -1,9 +1,10 @@
 :host {
     box-sizing: border-box;
     position: relative;
-    width: 600px;
-    height: 400px;
     display: inline-block;
+    min-width: 300px;
+    min-height: 200px;
+    aspect-ratio: 16 / 9;
     background-color: var(--theoplayer-background-color, #000);
 }
 

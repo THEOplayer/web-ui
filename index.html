@@ -14,6 +14,10 @@
         <script src="node_modules/theoplayer/THEOplayer.chromeless.js"></script>
         <script src="dist/THEOplayerUI.js"></script>
         <style id="global-styles">
+            theoplayer-default-ui {
+                width: 100%;
+            }
+
             .title {
                 color: white;
             }
@@ -24,6 +28,7 @@
         <theoplayer-default-ui
             configuration='{"libraryLocation":"node_modules/theoplayer/"}'
             source='{"sources":"https://amssamples.streaming.mediaservices.windows.net/7ceb010f-d9a3-467a-915e-5728acced7e3/ElephantsDreamMultiAudio.ism/manifest(format=mpd-time-csf)"}'
+            fluid
         >
             <span class="title" slot="title">Elephant's Dream</span>
         </theoplayer-default-ui>

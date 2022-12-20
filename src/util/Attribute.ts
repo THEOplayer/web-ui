@@ -3,6 +3,7 @@ export enum Attribute {
     SOURCE = 'source',
     AUTOPLAY = 'autoplay',
     FULLSCREEN = 'fullscreen',
+    FLUID = 'fluid',
     DISABLED = 'disabled',
     PAUSED = 'paused',
     ENDED = 'ended',

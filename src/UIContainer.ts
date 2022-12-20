@@ -23,7 +23,7 @@ interface OpenMenuEntry {
 
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {
-        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FULLSCREEN];
+        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FULLSCREEN, Attribute.FLUID];
     }
 
     private _configuration: PlayerConfiguration = {};
@@ -159,6 +159,9 @@ export class UIContainer extends HTMLElement {
                 receiver.setPlayer!(this._player);
             }
         }
+
+        this._updateAspectRatio();
+        this._player.addEventListener('resize', this._updateAspectRatio);
     }
 
     disconnectedCallback(): void {
@@ -201,6 +204,8 @@ export class UIContainer extends HTMLElement {
                     receiver.setFullscreen!(hasValue);
                 }
             }
+        } else if (attrName === Attribute.FLUID) {
+            this._updateAspectRatio();
         }
     }
 
@@ -417,6 +422,18 @@ export class UIContainer extends HTMLElement {
             isFullscreen = true;
         }
         this.fullscreen = isFullscreen;
+    };
+
+    private readonly _updateAspectRatio = (): void => {
+        if (!this.hasAttribute(Attribute.FLUID) || this._player === undefined) {
+            return;
+        }
+        const { videoWidth, videoHeight } = this._player;
+        if (videoWidth > 0 && videoHeight > 0) {
+            this.style.aspectRatio = `${videoWidth} / ${videoHeight}`;
+        } else {
+            this.style.aspectRatio = '';
+        }
     };
 }
 

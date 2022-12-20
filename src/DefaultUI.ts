@@ -11,7 +11,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
 
 export class DefaultUI extends HTMLElement {
     static get observedAttributes() {
-        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY];
+        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FLUID];
     }
 
     private readonly _ui: UIContainer;
@@ -84,6 +84,12 @@ export class DefaultUI extends HTMLElement {
             this.configuration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
         } else if (attrName === Attribute.AUTOPLAY) {
             this.autoplay = hasValue;
+        } else if (attrName === Attribute.FLUID) {
+            if (hasValue) {
+                this._ui.setAttribute(Attribute.FLUID, newValue);
+            } else {
+                this._ui.removeAttribute(Attribute.FLUID);
+            }
         }
     }
 }
