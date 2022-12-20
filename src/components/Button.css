@@ -44,8 +44,8 @@
 
 svg,
 img,
-* ::slotted(svg),
-* ::slotted(img) {
+::slotted(svg),
+::slotted(img) {
     width: var(--theoplayer-button-icon-width, var(--theoplayer-control-height, 24px));
     height: var(--theoplayer-button-icon-height, var(--theoplayer-control-height, 24px));
     transition: var(--theoplayer-button-icon-transition, none);
@@ -57,11 +57,11 @@ img,
 }
 
 :host(:hover) img,
-:host(:hover) * ::slotted(img) {
+:host(:hover) ::slotted(img) {
     box-shadow: var(--theoplayer-button-hover-icon-shadow, none);
 }
 
 :host(:hover) svg,
-:host(:hover) * ::slotted(svg) {
+:host(:hover) ::slotted(svg) {
     filter: drop-shadow(var(--theoplayer-button-hover-icon-shadow, 0 0 0 transparent));
 }
