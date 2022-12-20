@@ -4,6 +4,7 @@ import type { UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
 import defaultUiHtml from './DefaultUI.html';
 import { Attribute } from './util/Attribute';
+import { applyExtensions } from './extensions/ExtensionRegistry';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
@@ -15,6 +16,7 @@ export class DefaultUI extends HTMLElement {
     }
 
     private readonly _ui: UIContainer;
+    private _appliedExtensions: boolean = false;
 
     constructor(configuration: PlayerConfiguration = {}) {
         super();
@@ -59,6 +61,12 @@ export class DefaultUI extends HTMLElement {
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
         this._upgradeProperty('autoplay');
+
+        if (!this._appliedExtensions) {
+            this._appliedExtensions = true;
+            applyExtensions(this);
+            shadyCss.styleSubtree(this);
+        }
     }
 
     private _upgradeProperty(prop: keyof this) {

@@ -1,6 +1,7 @@
 <theoplayer-ui>
     <theoplayer-control-bar slot="top-chrome">
         <slot name="title"></slot>
+        <slot name="extension-top-control-bar"></slot>
     </theoplayer-control-bar>
     <div slot="centered-chrome" part="centered-chrome">
         <theoplayer-play-button></theoplayer-play-button>
@@ -17,6 +18,7 @@
             <span class="spacer"></span>
             <theoplayer-language-menu-button menu="language-menu"></theoplayer-language-menu-button>
             <theoplayer-settings-menu-button menu="settings-menu"></theoplayer-settings-menu-button>
+            <slot name="extension-bottom-control-bar"></slot>
             <theoplayer-fullscreen-button></theoplayer-fullscreen-button>
         </theoplayer-control-bar>
     </div>
@@ -24,4 +26,5 @@
     <theoplayer-menu id="settings-menu" slot="menu" hidden>
         <h2 slot="heading">Settings menu</h2>
     </theoplayer-menu>
+    <slot name="extension-menu" slot="menu"></slot>
 </theoplayer-ui>
