@@ -3,8 +3,8 @@
     position: relative;
     display: inline-block;
     min-width: 300px;
-    min-height: 200px;
-    aspect-ratio: 16 / 9;
+    height: 0;
+    padding-bottom: 56.25%;
     background-color: var(--theoplayer-background-color, #000);
 }
 

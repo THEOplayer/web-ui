@@ -430,9 +430,9 @@ export class UIContainer extends HTMLElement {
         }
         const { videoWidth, videoHeight } = this._player;
         if (videoWidth > 0 && videoHeight > 0) {
-            this.style.aspectRatio = `${videoWidth} / ${videoHeight}`;
+            this.style.paddingBottom = `${((videoHeight / videoWidth) * 100).toFixed(3)}%`;
         } else {
-            this.style.aspectRatio = '';
+            this.style.paddingBottom = '';
         }
     };
 }
