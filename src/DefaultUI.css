@@ -20,6 +20,22 @@ theoplayer-ui {
     --theoplayer-control-height: 48px;
 }
 
+[part='bottom-chrome'] {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: stretch;
+}
+
+[part='bottom-chrome']::before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to bottom, transparent, black);
+    pointer-events: none;
+}
+
 .spacer {
     flex-grow: 1;
 }
