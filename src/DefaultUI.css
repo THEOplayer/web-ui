@@ -4,6 +4,8 @@
     display: inline-block;
 
     --theoplayer-control-background: transparent;
+    --theoplayer-control-hover-background: transparent;
+    --theoplayer-button-hover-icon-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
 :host([hidden]) {
