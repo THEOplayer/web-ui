@@ -37,7 +37,8 @@ export default defineConfig({
             plugins: [
                 postcssPresetEnv({
                     browsers: browserslist,
-                    autoprefixer: { grid: 'no-autoplace' }
+                    autoprefixer: { grid: 'no-autoplace' },
+                    enableClientSidePolyfills: false
                 }),
                 postcssMixins()
             ],
