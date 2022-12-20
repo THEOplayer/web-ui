@@ -14,6 +14,7 @@ export * from './TextTrackMenuButton';
 export * from './TextTrackOffMenuButton';
 export * from './LanguageMenu';
 export * from './LanguageMenuButton';
+export * from './SettingsMenuButton';
 export * from './FullscreenButton';
 export * from './Range';
 export * from './TimeRange';
