@@ -3,6 +3,9 @@
     <head>
         <meta charset="UTF-8" />
         <title>THEOplayer Web UI Demo</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
         <script>
             // ShadyDOM = { force: true };
             // (self.customElements || (self.customElements = {})).forcePolyfill = true;
@@ -14,6 +17,10 @@
         <script src="node_modules/theoplayer/THEOplayer.chromeless.js"></script>
         <script src="dist/THEOplayerUI.js"></script>
         <style id="global-styles">
+            body {
+                font-family: 'Noto Sans', sans-serif;
+            }
+
             theoplayer-default-ui {
                 width: 100%;
             }

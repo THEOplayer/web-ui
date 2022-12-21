@@ -14,7 +14,6 @@
     /* Vertically center any text */
     font-size: 14px;
     line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
-    font-family: Arial, sans-serif;
     text-align: center;
     color: #fff;
     pointer-events: auto;
