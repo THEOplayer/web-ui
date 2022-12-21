@@ -34,8 +34,7 @@
     display: flex;
 }
 
-[part~='media-layer'],
-[part~='poster-layer'] {
+[part~='media-layer'] {
     pointer-events: none;
 }
 
