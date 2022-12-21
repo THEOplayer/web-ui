@@ -7,7 +7,7 @@
     box-sizing: border-box;
     display: inline-block;
     position: relative;
-    background: var(--theoplayer-control-background, rgba(20, 20, 30, 0.7));
+    background: var(--theoplayer-control-background, transparent);
     transition: background 0.15s linear;
     width: 100px;
     height: calc(var(--theoplayer-control-height, 24px) + 2 * var(--theoplayer-range-padding));
@@ -23,7 +23,7 @@
 }
 
 :host(:hover) {
-    background: var(--theoplayer-control-hover-background, rgba(50, 50, 70, 0.7));
+    background: var(--theoplayer-control-hover-background, var(--theoplayer-control-background, transparent));
 }
 
 [part='container'] {

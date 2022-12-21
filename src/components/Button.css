@@ -8,7 +8,7 @@
     cursor: pointer;
     user-select: none;
 
-    background: var(--theoplayer-control-background, rgba(20, 20, 30, 0.7));
+    background: var(--theoplayer-control-background, transparent);
 
     padding: var(--theoplayer-control-padding, 10px);
 
@@ -39,7 +39,7 @@
 }
 
 :host(:hover) {
-    background: var(--theoplayer-control-hover-background, rgba(50, 50, 70, 0.7));
+    background: var(--theoplayer-control-hover-background, var(--theoplayer-control-background, transparent));
 }
 
 svg,
@@ -58,10 +58,10 @@ img,
 
 :host(:hover) img,
 :host(:hover) ::slotted(img) {
-    box-shadow: var(--theoplayer-button-hover-icon-shadow, none);
+    box-shadow: var(--theoplayer-button-hover-icon-shadow, 0 0 5px rgba(255, 255, 255, 0.5));
 }
 
 :host(:hover) svg,
 :host(:hover) ::slotted(svg) {
-    filter: drop-shadow(var(--theoplayer-button-hover-icon-shadow, 0 0 0 transparent));
+    filter: drop-shadow(var(--theoplayer-button-hover-icon-shadow, 0 0 5px rgba(255, 255, 255, 0.5)));
 }
