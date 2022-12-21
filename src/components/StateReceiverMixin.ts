@@ -1,11 +1,12 @@
 import { Constructor, fromArrayLike, isArray } from '../util/CommonUtils';
-import type { ChromelessPlayer } from 'theoplayer';
+import type { ChromelessPlayer, THEOplayerError } from 'theoplayer';
 
 export const StateReceiverProps = Symbol('THEOplayerUIStateReceiver');
 
 export interface StateReceiverPropertyMap {
     player: ChromelessPlayer | undefined;
     fullscreen: boolean;
+    error: THEOplayerError | undefined;
 }
 
 export type StateReceiverMethods = {

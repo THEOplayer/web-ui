@@ -1,0 +1,42 @@
+:host {
+    display: flex;
+    box-sizing: border-box;
+    gap: var(--theoplayer-error-icon-gap, 10px);
+    min-width: var(--theoplayer-error-min-width, 0);
+    max-width: var(--theoplayer-error-max-width, 80%);
+}
+
+:host([hidden]) {
+    display: none !important;
+}
+
+[part~='icon'] {
+    flex: 0 0 auto;
+}
+
+svg,
+img,
+::slotted(svg),
+::slotted(img) {
+    width: var(--theoplayer-error-icon-width, 48px);
+    height: var(--theoplayer-error-icon-height, 48px);
+    fill: var(--theoplayer-error-icon-color, var(--theoplayer-icon-color, #fff));
+    vertical-align: middle;
+    max-width: 100%;
+    max-height: 100%;
+    min-width: 100%;
+}
+
+[part~='heading'] {
+    margin: var(--theoplayer-error-heading-margin, 0 0 10px);
+    padding: 0;
+    color: var(--theoplayer-error-heading-color, #fff);
+    /* Align with icon */
+    line-height: var(--theoplayer-error-icon-height, 48px);
+}
+
+[part~='message'] {
+    margin: var(--theoplayer-error-message-margin, 0);
+    padding: 0;
+    color: var(--theoplayer-error-message-color, #fff);
+}

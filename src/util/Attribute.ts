@@ -14,5 +14,6 @@ export enum Attribute {
     MENU_OPENED = 'menu-opened',
     ARIA_CHECKED = 'aria-checked',
     HAS_AUDIO = 'has-audio',
-    HAS_SUBTITLES = 'has-subtitles'
+    HAS_SUBTITLES = 'has-subtitles',
+    HAS_ERROR = 'has-error'
 }

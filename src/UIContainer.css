@@ -66,6 +66,17 @@
     display: none !important;
 }
 
+[part~='error-layer'] {
+    align-items: center;
+    justify-content: center;
+    background-color: var(--theoplayer-error-background-color, rgba(0, 0, 0, 0.5));
+}
+
+:host(:not([has-error])) [part~='error-layer'],
+:host([has-error]) [part~='layer']:not([part~='media-layer']):not([part~='error-layer']) {
+    display: none !important;
+}
+
 theoplayer-control-bar,
 [part~='chrome'] ::slotted(theoplayer-control-bar) {
     align-self: stretch;

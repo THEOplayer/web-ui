@@ -23,7 +23,7 @@ interface OpenMenuEntry {
 
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {
-        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FULLSCREEN, Attribute.FLUID];
+        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FULLSCREEN, Attribute.FLUID, Attribute.HAS_ERROR];
     }
 
     private _configuration: PlayerConfiguration = {};
@@ -163,6 +163,7 @@ export class UIContainer extends HTMLElement {
 
         this._updateAspectRatio();
         this._player.addEventListener('resize', this._updateAspectRatio);
+        this._player.addEventListener(['error', 'emptied'], this._updateError);
     }
 
     disconnectedCallback(): void {
@@ -252,6 +253,9 @@ export class UIContainer extends HTMLElement {
         }
         if (receiverProps.indexOf('fullscreen') >= 0) {
             receiver.setFullscreen!(this.fullscreen);
+        }
+        if (receiverProps.indexOf('error') >= 0) {
+            receiver.setError!(this._player?.errorObject);
         }
     }
 
@@ -434,6 +438,20 @@ export class UIContainer extends HTMLElement {
             this.style.paddingBottom = `${((videoHeight / videoWidth) * 100).toFixed(3)}%`;
         } else {
             this.style.paddingBottom = '';
+        }
+    };
+
+    private readonly _updateError = (): void => {
+        const error = this._player?.errorObject;
+        if (error) {
+            this.setAttribute(Attribute.HAS_ERROR, '');
+        } else {
+            this.removeAttribute(Attribute.HAS_ERROR);
+        }
+        for (const receiver of this._stateReceivers) {
+            if (receiver[StateReceiverProps].indexOf('error') >= 0) {
+                receiver.setError!(error);
+            }
         }
     };
 }

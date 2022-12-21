@@ -19,4 +19,5 @@ export * from './FullscreenButton';
 export * from './Range';
 export * from './TimeRange';
 export * from './VolumeRange';
+export * from './ErrorDisplay';
 export { type StateReceiverElement, StateReceiverMixin } from './StateReceiverMixin';
