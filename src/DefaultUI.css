@@ -12,6 +12,12 @@ theoplayer-ui {
     width: 100%;
 }
 
+:host(:fullscreen),
+:host(:fullscreen) theoplayer-ui {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 [part='centered-chrome'] > * {
     --theoplayer-control-height: 48px;
 }
