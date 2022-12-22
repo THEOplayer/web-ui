@@ -15,5 +15,6 @@ export enum Attribute {
     ARIA_CHECKED = 'aria-checked',
     HAS_AUDIO = 'has-audio',
     HAS_SUBTITLES = 'has-subtitles',
-    HAS_ERROR = 'has-error'
+    HAS_ERROR = 'has-error',
+    CAST_STATE = 'cast-state'
 }

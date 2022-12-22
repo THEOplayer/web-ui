@@ -1,0 +1,112 @@
+/* Unavailable: hide button */
+:host([cast-state='unavailable']) {
+    display: none !important;
+}
+
+/* Connecting: animate rings */
+:host([cast-state='connecting']) .theoplayer-chromecast-ring {
+    animation: 0.9s linear infinite;
+}
+
+:host([cast-state='connecting']) .theoplayer-chromecast-ring1 {
+    animation-name: theoplayer-chromecast-connecting-ring1;
+}
+
+:host([cast-state='connecting']) .theoplayer-chromecast-ring2 {
+    animation-name: theoplayer-chromecast-connecting-ring2;
+}
+
+:host([cast-state='connecting']) .theoplayer-chromecast-ring3 {
+    animation-name: theoplayer-chromecast-connecting-ring3;
+}
+
+:host([cast-state='connecting']) .theoplayer-chromecast-ring4 {
+    animation-name: theoplayer-chromecast-connecting-ring4;
+}
+
+/* Connected: fill screen */
+.theoplayer-chromecast-inner {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+:host([cast-state='connected']) .theoplayer-chromecast-inner {
+    opacity: 1;
+}
+
+/*
+ * iOS/WebView does not support <svg clip-path> property
+ * Workaround using CSS clip-path instead
+ */
+.theoplayer-chromecast-rings {
+    clip-path: polygon(50% -100%, 50% 50%, 100% 50%, 100% -100%);
+}
+
+@keyframes theoplayer-chromecast-connecting-ring1 {
+    0%,
+    37.5% {
+        transform: scale(0);
+    }
+    62.5%,
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes theoplayer-chromecast-connecting-ring2 {
+    0%,
+    20% {
+        transform: scale(0.25);
+        stroke-width: 24;
+    }
+    35% {
+        transform: scale(0.5);
+        stroke-width: 10;
+    }
+    55%,
+    100% {
+        transform: scale(1);
+        stroke-width: 4;
+    }
+}
+
+@keyframes theoplayer-chromecast-connecting-ring3 {
+    0%,
+    15% {
+        transform: scale(0.6);
+        stroke-width: 6.66667;
+    }
+    45%,
+    100% {
+        transform: scale(1);
+        stroke-width: 4;
+    }
+}
+
+@keyframes theoplayer-chromecast-connecting-ring4 {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+        stroke-width: 4;
+        stroke-dashoffset: 0;
+        stroke-dasharray: 32, 99;
+    }
+    35% {
+        opacity: 1;
+        transform: scale(1.4);
+        stroke-width: 2.8571;
+        stroke-dashoffset: -18;
+        stroke-dasharray: 0, 99;
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+        stroke-width: 0;
+        stroke-dashoffset: -18;
+        stroke-dasharray: 0, 99;
+    }
+    50.001%,
+    100% {
+        opacity: 0;
+    }
+}

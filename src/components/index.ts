@@ -20,4 +20,6 @@ export * from './Range';
 export * from './TimeRange';
 export * from './VolumeRange';
 export * from './ErrorDisplay';
+export * from './CastButton';
+export * from './ChromecastButton';
 export { type StateReceiverElement, StateReceiverMixin } from './StateReceiverMixin';
