@@ -6,16 +6,16 @@
         <slot name="extension-top-control-bar"></slot>
     </theoplayer-control-bar>
     <div slot="centered-chrome" part="centered-chrome">
-        <theoplayer-play-button></theoplayer-play-button>
+        <theoplayer-play-button mobile-only></theoplayer-play-button>
     </div>
     <div part="bottom-chrome">
         <theoplayer-control-bar>
             <theoplayer-time-range></theoplayer-time-range>
         </theoplayer-control-bar>
         <theoplayer-control-bar>
-            <theoplayer-play-button></theoplayer-play-button>
+            <theoplayer-play-button mobile-hidden></theoplayer-play-button>
             <theoplayer-mute-button></theoplayer-mute-button>
-            <theoplayer-volume-range></theoplayer-volume-range>
+            <theoplayer-volume-range mobile-hidden></theoplayer-volume-range>
             <theoplayer-time-display show-duration></theoplayer-time-display>
             <span class="spacer"></span>
             <theoplayer-language-menu-button menu="language-menu"></theoplayer-language-menu-button>

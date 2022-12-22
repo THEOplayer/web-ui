@@ -42,6 +42,16 @@ theoplayer-ui {
     flex-grow: 1;
 }
 
+/*
+ * Mobile-only and mobile-hidden elements
+ */
+:host([mobile]) [mobile-hidden],
+:host([mobile]) ::slotted([mobile-hidden]),
+:host(:not([mobile])) [mobile-only],
+:host(:not([mobile])) ::slotted([mobile-only]) {
+    display: none !important;
+}
+
 theoplayer-volume-range {
     --theoplayer-range-padding-left: 0;
 }

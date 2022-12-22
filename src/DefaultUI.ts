@@ -5,6 +5,7 @@ import defaultUiCss from './DefaultUI.css';
 import defaultUiHtml from './DefaultUI.html';
 import { Attribute } from './util/Attribute';
 import { applyExtensions } from './extensions/ExtensionRegistry';
+import { isMobile } from './util/Environment';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
@@ -12,7 +13,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
 
 export class DefaultUI extends HTMLElement {
     static get observedAttributes() {
-        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FLUID];
+        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FLUID, Attribute.MOBILE];
     }
 
     private readonly _ui: UIContainer;
@@ -61,6 +62,10 @@ export class DefaultUI extends HTMLElement {
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
         this._upgradeProperty('autoplay');
+
+        if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
+            this.setAttribute(Attribute.MOBILE, '');
+        }
 
         if (!this._appliedExtensions) {
             this._appliedExtensions = true;
