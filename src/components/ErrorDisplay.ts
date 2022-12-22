@@ -4,6 +4,7 @@ import errorIcon from '../icons/error.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { THEOplayerError } from 'theoplayer';
 import { setTextContent } from '../util/CommonUtils';
+import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML =
@@ -12,10 +13,13 @@ template.innerHTML =
     `<div part="text">` +
     `<h1 part="heading"><slot name="heading">An error occurred</slot></h1>` +
     `<p part="message"><slot name="message"></slot></p>` +
+    `</div>` +
+    `<div part="fullscreen-controls">` +
+    `<slot name="fullscreen-controls"><theoplayer-fullscreen-button></theoplayer-fullscreen-button></slot>` +
     `</div>`;
 shadyCss.prepareTemplate(template, 'theoplayer-error-display');
 
-export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error']) {
+export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error', 'fullscreen']) {
     private readonly _messageSlot: HTMLSlotElement;
     private _error: THEOplayerError | undefined;
 
@@ -35,6 +39,14 @@ export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error']) {
     setError(error: THEOplayerError | undefined): void {
         this._error = error;
         setTextContent(this._messageSlot, error ? error.message : '');
+    }
+
+    setFullscreen(fullscreen: boolean): void {
+        if (fullscreen) {
+            this.setAttribute(Attribute.FULLSCREEN, '');
+        } else {
+            this.removeAttribute(Attribute.FULLSCREEN);
+        }
     }
 }
 

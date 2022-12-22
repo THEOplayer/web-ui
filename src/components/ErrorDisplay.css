@@ -40,3 +40,16 @@ img,
     padding: 0;
     color: var(--theoplayer-error-message-color, #fff);
 }
+
+[part~='fullscreen-controls'] {
+    position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+:host(:not([fullscreen])) [part~='fullscreen-controls'] {
+    display: none !important;
+}
