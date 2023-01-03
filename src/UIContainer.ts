@@ -12,6 +12,7 @@ import { fullscreenAPI } from './util/FullscreenUtils';
 import { Attribute } from './util/Attribute';
 import { KeyCode } from './util/KeyCode';
 import { isMobile } from './util/Environment';
+import './components/GestureReceiver';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;

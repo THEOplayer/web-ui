@@ -22,4 +22,5 @@ export * from './VolumeRange';
 export * from './ErrorDisplay';
 export * from './CastButton';
 export * from './ChromecastButton';
+export * from './GestureReceiver';
 export { type StateReceiverElement, StateReceiverMixin } from './StateReceiverMixin';

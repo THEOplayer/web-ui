@@ -34,8 +34,16 @@
     display: flex;
 }
 
-[part~='media-layer'] {
+/*
+ * Disable pointer events on all layers,
+ * but re-enable them on all elements slotted into those layers.
+ */
+[part~='layer']:not([part~='media-layer']) {
     pointer-events: none;
+}
+
+::slotted(*) {
+    pointer-events: auto;
 }
 
 [part~='vertical-layer'],
@@ -79,6 +87,10 @@
 
 [part~='chrome'] ::slotted(theoplayer-control-bar) {
     align-self: stretch;
+}
+
+theoplayer-gesture-receiver {
+    flex-grow: 1;
 }
 
 /*
