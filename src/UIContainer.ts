@@ -11,6 +11,7 @@ import { EXIT_FULLSCREEN_EVENT, ExitFullscreenEvent } from './events/ExitFullscr
 import { fullscreenAPI } from './util/FullscreenUtils';
 import { Attribute } from './util/Attribute';
 import { KeyCode } from './util/KeyCode';
+import { isMobile } from './util/Environment';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -23,7 +24,15 @@ interface OpenMenuEntry {
 
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {
-        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FULLSCREEN, Attribute.FLUID, Attribute.HAS_ERROR];
+        return [
+            Attribute.CONFIGURATION,
+            Attribute.SOURCE,
+            Attribute.AUTOPLAY,
+            Attribute.FULLSCREEN,
+            Attribute.FLUID,
+            Attribute.MOBILE,
+            Attribute.HAS_ERROR
+        ];
     }
 
     private _configuration: PlayerConfiguration = {};
@@ -102,6 +111,10 @@ export class UIContainer extends HTMLElement {
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
         this._upgradeProperty('autoplay');
+
+        if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
+            this.setAttribute(Attribute.MOBILE, '');
+        }
 
         this.tryInitializePlayer_();
 
