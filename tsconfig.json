@@ -11,6 +11,12 @@
     "importHelpers": true,
     "useDefineForClassFields": true,
     "isolatedModules": true,
-    "importsNotUsedAsValues": "error"
+    "importsNotUsedAsValues": "error",
+    "lib": [
+      "dom",
+      "es2015",
+      "es2020.intl"
+    ],
+    "types": []
   }
 }
