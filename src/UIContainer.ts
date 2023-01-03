@@ -34,6 +34,7 @@ export class UIContainer extends HTMLElement {
             Attribute.MOBILE,
             Attribute.PAUSED,
             Attribute.ENDED,
+            Attribute.CASTING,
             Attribute.HAS_ERROR,
             Attribute.USER_IDLE_TIMEOUT
         ];
@@ -199,9 +200,11 @@ export class UIContainer extends HTMLElement {
         this._updateAspectRatio();
         this._updateError();
         this._updatePaused();
+        this._updateCasting();
         this._player.addEventListener('resize', this._updateAspectRatio);
         this._player.addEventListener(['error', 'emptied'], this._updateError);
         this._player.addEventListener(['play', 'pause', 'ended', 'emptied'], this._updatePaused);
+        this._player.cast?.addEventListener('castingchange', this._updateCasting);
     }
 
     disconnectedCallback(): void {
@@ -516,6 +519,15 @@ export class UIContainer extends HTMLElement {
             this.setAttribute(Attribute.ENDED, '');
         } else {
             this.removeAttribute(Attribute.ENDED);
+        }
+    };
+
+    private readonly _updateCasting = (): void => {
+        const casting = this._player?.cast?.casting ?? false;
+        if (casting) {
+            this.setAttribute(Attribute.CASTING, '');
+        } else {
+            this.removeAttribute(Attribute.CASTING);
         }
     };
 

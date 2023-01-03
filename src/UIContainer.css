@@ -104,14 +104,14 @@ theoplayer-gesture-receiver {
 /*
  * Hide cursor when user is idle
  */
-:host([user-idle]:not([paused])) {
+:host([user-idle]:not([paused]):not([casting])) {
     cursor: none;
 }
 
 /*
  * Auto-hide elements when user is idle
  */
-:host([user-idle]:not([paused])) ::slotted(:not([no-auto-hide])) {
+:host([user-idle]:not([paused]):not([casting])) ::slotted(:not([no-auto-hide])) {
     opacity: 0;
     transition: opacity 1s;
 }
