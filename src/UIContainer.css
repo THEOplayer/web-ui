@@ -90,6 +90,13 @@
 }
 
 /*
+ * Hide cursor when user is idle
+ */
+:host([user-idle]:not([paused])) {
+    cursor: none;
+}
+
+/*
  * Auto-hide elements when user is idle
  */
 :host([user-idle]:not([paused])) ::slotted(:not([no-auto-hide])) {
