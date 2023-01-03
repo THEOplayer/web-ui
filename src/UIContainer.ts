@@ -96,14 +96,6 @@ export class UIContainer extends HTMLElement {
         return this.hasAttribute(Attribute.FULLSCREEN);
     }
 
-    set fullscreen(value: boolean) {
-        if (value) {
-            this.setAttribute(Attribute.FULLSCREEN, '');
-        } else {
-            this.removeAttribute(Attribute.FULLSCREEN);
-        }
-    }
-
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
@@ -426,7 +418,11 @@ export class UIContainer extends HTMLElement {
         if (!isFullscreen && this._player !== undefined && this._player.presentation.currentMode === 'fullscreen') {
             isFullscreen = true;
         }
-        this.fullscreen = isFullscreen;
+        if (isFullscreen) {
+            this.setAttribute(Attribute.FULLSCREEN, '');
+        } else {
+            this.removeAttribute(Attribute.FULLSCREEN);
+        }
     };
 
     private readonly _updateAspectRatio = (): void => {
