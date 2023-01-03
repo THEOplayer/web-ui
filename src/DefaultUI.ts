@@ -13,7 +13,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
 
 export class DefaultUI extends HTMLElement {
     static get observedAttributes() {
-        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FLUID, Attribute.MOBILE];
+        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FLUID, Attribute.MOBILE, Attribute.USER_IDLE_TIMEOUT];
     }
 
     private readonly _ui: UIContainer;
@@ -56,12 +56,21 @@ export class DefaultUI extends HTMLElement {
         this._ui.autoplay = value;
     }
 
+    get userIdleTimeout(): number {
+        return this._ui.userIdleTimeout;
+    }
+
+    set userIdleTimeout(value: number) {
+        this._ui.userIdleTimeout = value;
+    }
+
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
         this._upgradeProperty('autoplay');
+        this._upgradeProperty('userIdleTimeout');
 
         if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
             this.setAttribute(Attribute.MOBILE, '');
@@ -103,6 +112,8 @@ export class DefaultUI extends HTMLElement {
             } else {
                 this._ui.removeAttribute(Attribute.FLUID);
             }
+        } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
+            this.userIdleTimeout = Number(newValue);
         }
     }
 }

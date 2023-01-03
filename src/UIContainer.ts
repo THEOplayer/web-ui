@@ -31,7 +31,8 @@ export class UIContainer extends HTMLElement {
             Attribute.FULLSCREEN,
             Attribute.FLUID,
             Attribute.MOBILE,
-            Attribute.HAS_ERROR
+            Attribute.HAS_ERROR,
+            Attribute.USER_IDLE_TIMEOUT
         ];
     }
 
@@ -45,6 +46,9 @@ export class UIContainer extends HTMLElement {
     private readonly _stateReceivers: StateReceiverElement[] = [];
     private _player: ChromelessPlayer | undefined = undefined;
     private _source: SourceDescription | undefined = undefined;
+
+    private _userIdleTimeout: number = 2;
+    private _userIdleTimer: number = 0;
 
     constructor(configuration: PlayerConfiguration = {}) {
         super();
@@ -105,6 +109,15 @@ export class UIContainer extends HTMLElement {
         return this.hasAttribute(Attribute.FULLSCREEN);
     }
 
+    get userIdleTimeout(): number {
+        return this._userIdleTimeout;
+    }
+
+    set userIdleTimeout(value: number) {
+        value = Number(value);
+        this._userIdleTimeout = isNaN(value) ? 0 : value;
+    }
+
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
@@ -132,6 +145,12 @@ export class UIContainer extends HTMLElement {
             document.addEventListener(fullscreenAPI.fullscreenerror_, this._onFullscreenChange);
             this._onFullscreenChange();
         }
+
+        this.setUserIdle_();
+        this.addEventListener('keyup', this._onKeyUp);
+        this.addEventListener('pointerup', this._onPointerUp);
+        this.addEventListener('pointermove', this._onPointerMove);
+        this.addEventListener('mouseleave', this._onMouseLeave);
     }
 
     private _upgradeProperty(prop: keyof this) {
@@ -185,6 +204,11 @@ export class UIContainer extends HTMLElement {
             document.removeEventListener(fullscreenAPI.fullscreenerror_, this._onFullscreenChange);
         }
 
+        this.removeEventListener('keyup', this._onKeyUp);
+        this.removeEventListener('pointerup', this._onPointerUp);
+        this.removeEventListener('pointermove', this._onPointerMove);
+        this.removeEventListener('mouseleave', this._onMouseLeave);
+
         if (this._player) {
             this._player.destroy();
             this._player = undefined;
@@ -213,6 +237,8 @@ export class UIContainer extends HTMLElement {
             }
         } else if (attrName === Attribute.FLUID) {
             this._updateAspectRatio();
+        } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
+            this.userIdleTimeout = newValue;
         }
     }
 
@@ -462,6 +488,75 @@ export class UIContainer extends HTMLElement {
                 receiver.setError!(error);
             }
         }
+    };
+
+    private setUserActive_(): void {
+        clearTimeout(this._userIdleTimer);
+        this.removeAttribute(Attribute.USER_IDLE);
+    }
+
+    private readonly setUserIdle_ = (): void => {
+        clearTimeout(this._userIdleTimer);
+        this._userIdleTimer = 0;
+
+        if (this.userIdleTimeout < 0) {
+            return;
+        }
+
+        this.setAttribute(Attribute.USER_IDLE, '');
+    };
+
+    private readonly scheduleUserIdle_ = (): void => {
+        this.setUserActive_();
+
+        clearTimeout(this._userIdleTimer);
+
+        // Setting the timeout to -1 turns off idle detection.
+        if (this.userIdleTimeout < 0) {
+            this._userIdleTimer = 0;
+            return;
+        }
+
+        this._userIdleTimer = setTimeout(this.setUserIdle_, this.userIdleTimeout * 1000);
+    };
+
+    private isPlayerOrMedia_(node: Node): boolean {
+        return node === this || this._playerEl.contains(node);
+    }
+
+    private readonly _onKeyUp = (): void => {
+        // Show the controls while navigating with the keyboard.
+        this.scheduleUserIdle_();
+    };
+
+    private readonly _onPointerUp = (event: PointerEvent): void => {
+        if (event.pointerType === 'touch') {
+            // On mobile, when you tap the media while the controls are showing, immediately hide the controls.
+            // Otherwise, show the controls (and schedule a timer to hide them again later on).
+            if (this.isPlayerOrMedia_(event.target! as Node) && !this.hasAttribute(Attribute.USER_IDLE)) {
+                this.setUserIdle_();
+            } else {
+                this.scheduleUserIdle_();
+            }
+        }
+    };
+
+    private readonly _onPointerMove = (event: PointerEvent): void => {
+        // "pointermove" doesn't happen with touch on taps on iOS, but does on Android. Therefore, only run for mouse.
+        if (event.pointerType !== 'mouse') return;
+
+        this.setUserActive_();
+
+        // If hovering a control, keep the user active even when they stop moving.
+        // Otherwise, when hovering the media, we can consider the user to be idle.
+        if (this.isPlayerOrMedia_(event.target! as Node)) {
+            this.scheduleUserIdle_();
+        }
+    };
+
+    private readonly _onMouseLeave = (): void => {
+        // Immediately hide the controls when mouse leaves the player.
+        this.setUserIdle_();
     };
 }
 

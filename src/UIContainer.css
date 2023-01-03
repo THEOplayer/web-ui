@@ -88,3 +88,11 @@
 :host(:not([mobile])) ::slotted([mobile-only]) {
     display: none !important;
 }
+
+/*
+ * Auto-hide elements when user is idle
+ */
+:host([user-idle]) ::slotted(:not([no-auto-hide])) {
+    opacity: 0;
+    transition: opacity 1s;
+}
