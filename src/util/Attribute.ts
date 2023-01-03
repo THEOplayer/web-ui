@@ -15,6 +15,7 @@ export enum Attribute {
     ENDED = 'ended',
     VOLUME_LEVEL = 'volume-level',
     CASTING = 'casting',
+    LOADING = 'loading',
     REMAINING = 'remaining',
     SHOW_DURATION = 'show-duration',
     MENU = 'menu',
