@@ -77,7 +77,6 @@
     display: none !important;
 }
 
-theoplayer-control-bar,
 [part~='chrome'] ::slotted(theoplayer-control-bar) {
     align-self: stretch;
 }
@@ -85,9 +84,7 @@ theoplayer-control-bar,
 /*
  * Mobile-only and mobile-hidden elements
  */
-:host([mobile]) [mobile-hidden],
 :host([mobile]) ::slotted([mobile-hidden]),
-:host(:not([mobile])) [mobile-only],
 :host(:not([mobile])) ::slotted([mobile-only]) {
     display: none !important;
 }

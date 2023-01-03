@@ -7,7 +7,6 @@
     display: none !important;
 }
 
-theoplayer-time-range,
 ::slotted(theoplayer-time-range) {
     flex-grow: 1;
 }
