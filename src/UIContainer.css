@@ -92,7 +92,7 @@
 /*
  * Auto-hide elements when user is idle
  */
-:host([user-idle]) ::slotted(:not([no-auto-hide])) {
+:host([user-idle]:not([paused])) ::slotted(:not([no-auto-hide])) {
     opacity: 0;
     transition: opacity 1s;
 }

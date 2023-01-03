@@ -31,6 +31,8 @@ export class UIContainer extends HTMLElement {
             Attribute.FULLSCREEN,
             Attribute.FLUID,
             Attribute.MOBILE,
+            Attribute.PAUSED,
+            Attribute.ENDED,
             Attribute.HAS_ERROR,
             Attribute.USER_IDLE_TIMEOUT
         ];
@@ -107,6 +109,14 @@ export class UIContainer extends HTMLElement {
 
     get fullscreen(): boolean {
         return this.hasAttribute(Attribute.FULLSCREEN);
+    }
+
+    get paused(): boolean {
+        return this.hasAttribute(Attribute.PAUSED);
+    }
+
+    get ended(): boolean {
+        return this.hasAttribute(Attribute.ENDED);
     }
 
     get userIdleTimeout(): number {
@@ -187,8 +197,10 @@ export class UIContainer extends HTMLElement {
 
         this._updateAspectRatio();
         this._updateError();
+        this._updatePaused();
         this._player.addEventListener('resize', this._updateAspectRatio);
         this._player.addEventListener(['error', 'emptied'], this._updateError);
+        this._player.addEventListener(['play', 'pause', 'ended', 'emptied'], this._updatePaused);
     }
 
     disconnectedCallback(): void {
@@ -488,6 +500,21 @@ export class UIContainer extends HTMLElement {
             if (receiver[StateReceiverProps].indexOf('error') >= 0) {
                 receiver.setError!(error);
             }
+        }
+    };
+
+    private readonly _updatePaused = (): void => {
+        const paused = this._player ? this._player.paused : true;
+        const ended = this._player ? this._player.ended : false;
+        if (paused) {
+            this.setAttribute(Attribute.PAUSED, '');
+        } else {
+            this.removeAttribute(Attribute.PAUSED);
+        }
+        if (ended) {
+            this.setAttribute(Attribute.ENDED, '');
+        } else {
+            this.removeAttribute(Attribute.ENDED);
         }
     };
 
