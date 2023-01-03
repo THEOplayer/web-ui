@@ -17,7 +17,7 @@ template.innerHTML = buttonTemplate(
 );
 shadyCss.prepareTemplate(template, 'theoplayer-play-button');
 
-const PLAYER_EVENTS = ['play', 'pause', 'ended'] as const;
+const PLAYER_EVENTS = ['play', 'pause', 'ended', 'emptied'] as const;
 
 export class PlayButton extends StateReceiverMixin(Button, ['player']) {
     static get observedAttributes() {

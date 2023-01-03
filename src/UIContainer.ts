@@ -186,6 +186,7 @@ export class UIContainer extends HTMLElement {
         }
 
         this._updateAspectRatio();
+        this._updateError();
         this._player.addEventListener('resize', this._updateAspectRatio);
         this._player.addEventListener(['error', 'emptied'], this._updateError);
     }
