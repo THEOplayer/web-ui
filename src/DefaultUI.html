@@ -5,7 +5,7 @@
         <theoplayer-language-menu-button menu="language-menu" mobile-only></theoplayer-language-menu-button>
         <theoplayer-settings-menu-button menu="settings-menu" mobile-only></theoplayer-settings-menu-button>
         <theoplayer-chromecast-button mobile-only></theoplayer-chromecast-button>
-        <slot name="extension-top-control-bar"></slot>
+        <slot name="top-control-bar"></slot>
     </theoplayer-control-bar>
     <theoplayer-loading-indicator slot="centered-chrome" no-auto-hide></theoplayer-loading-indicator>
     <div slot="centered-chrome" part="centered-chrome">
@@ -24,7 +24,7 @@
             <theoplayer-language-menu-button menu="language-menu" mobile-hidden></theoplayer-language-menu-button>
             <theoplayer-settings-menu-button menu="settings-menu" mobile-hidden></theoplayer-settings-menu-button>
             <theoplayer-chromecast-button mobile-hidden></theoplayer-chromecast-button>
-            <slot name="extension-bottom-control-bar"></slot>
+            <slot name="bottom-control-bar"></slot>
             <theoplayer-fullscreen-button></theoplayer-fullscreen-button>
         </theoplayer-control-bar>
     </div>
@@ -33,5 +33,5 @@
         <h2 slot="heading">Settings menu</h2>
     </theoplayer-menu>
     <theoplayer-error-display slot="error"></theoplayer-error-display>
-    <slot name="extension-menu" slot="menu"></slot>
+    <slot name="menu" slot="menu"></slot>
 </theoplayer-ui>
