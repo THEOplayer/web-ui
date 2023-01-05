@@ -54,7 +54,7 @@
     align-items: stretch;
 }
 
-[part~='centered-layer'] {
+[part~='centered'] {
     align-items: center;
     justify-content: center;
 }
