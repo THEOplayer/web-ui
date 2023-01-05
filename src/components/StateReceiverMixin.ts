@@ -42,6 +42,10 @@ export async function forEachStateReceiverElement(
     }
     // Upgrade custom elements if needed
     if (element.nodeName.indexOf('-') >= 0 && !isStateReceiverElement(element)) {
+        // web-components-polyfill does not correctly resolve `whenDefined()`
+        // when called during an upgrade reaction such as `connectedCallback()`.
+        // Workaround by waiting one microtask.
+        await Promise.resolve();
         await customElements.whenDefined(element.nodeName.toLowerCase());
         customElements.upgrade(element);
     }
