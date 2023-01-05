@@ -347,7 +347,6 @@ export class UIContainer extends HTMLElement {
         }
 
         menuToClose.setAttribute('hidden', '');
-        menuToClose.blur();
 
         if (this._openMenuStack.length > 0) {
             const nextEntry = this._openMenuStack[this._openMenuStack.length - 1];
