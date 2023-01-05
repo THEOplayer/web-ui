@@ -26,7 +26,7 @@
  * Based on the Circular Progress component from Material Components Web (License: MIT)
  * https://github.com/material-components/material-components-web/tree/v14.0.0/packages/mdc-circular-progress
  */
-.progress {
+.theoplayer-loading-progress {
     display: inline-flex;
     position: relative;
     direction: ltr;
@@ -55,18 +55,18 @@
     /* $timing-function: cubic-bezier(0.4, 0, 0.2, 1); */
 }
 
-.progress svg,
-.spinner {
+.theoplayer-loading-progress svg,
+.theoplayer-loading-spinner {
     position: absolute;
     width: 100%;
     height: 100%;
 }
 
-.progress svg {
+.theoplayer-loading-progress svg {
     stroke: var(--theoplayer-loading-icon-color, var(--theoplayer-icon-color, #fff));
 }
 
-.gap-patch {
+.theoplayer-loading-gap-patch {
     position: absolute;
     top: 0;
     left: 47.5%;
@@ -76,13 +76,13 @@
     overflow: hidden;
 }
 
-.gap-patch svg {
+.theoplayer-loading-gap-patch svg {
     left: -900%;
     width: 2000%;
     transform: rotate(180deg);
 }
 
-.circle-clipper {
+.theoplayer-loading-circle-clipper {
     display: inline-flex;
     position: relative;
     width: 50%;
@@ -90,15 +90,15 @@
     overflow: hidden;
 }
 
-.circle-clipper svg {
+.theoplayer-loading-circle-clipper svg {
     width: 200%;
 }
 
-.circle-right svg {
+.theoplayer-loading-circle-right svg {
     left: -100%;
 }
 
-.progress {
+.theoplayer-loading-progress {
     /*
      * $duration: (360deg * $arc-time) / ($arc-start-rotation-interval + (360 - $arc-size))
      * = (360deg * 1333ms) / (216deg + (360 - 270deg))
@@ -107,18 +107,18 @@
     animation: theoplayer-circular-progress-container-rotate 1568ms linear infinite;
 }
 
-.spinner {
+.theoplayer-loading-spinner {
     /*
      * $spinner-rotate-animation: theoplayer-circular-progress-spinner-layer-rotate (4 * $arc-time) $timing-function infinite both;
      */
     animation: theoplayer-circular-progress-spinner-layer-rotate 5333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
-.circle-left svg {
+.theoplayer-loading-circle-left svg {
     animation: theoplayer-circular-progress-left-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
-.circle-right svg {
+.theoplayer-loading-circle-right svg {
     animation: theoplayer-circular-progress-right-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
