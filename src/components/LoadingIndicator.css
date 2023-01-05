@@ -2,6 +2,7 @@
     display: inline-flex;
     box-sizing: border-box;
     vertical-align: middle;
+    pointer-events: none !important;
 }
 
 [part='icon'] {
