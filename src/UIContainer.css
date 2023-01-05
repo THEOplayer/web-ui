@@ -42,7 +42,8 @@
     pointer-events: none;
 }
 
-::slotted(*) {
+[part~='layer'] ::slotted(*),
+[part~='chrome'] ::slotted(*) {
     pointer-events: auto;
 }
 
@@ -96,8 +97,8 @@ theoplayer-gesture-receiver {
 /*
  * Mobile-only and mobile-hidden elements
  */
-:host([mobile]) ::slotted([mobile-hidden]),
-:host(:not([mobile])) ::slotted([mobile-only]) {
+:host([mobile]) [part~='chrome'] ::slotted([mobile-hidden]),
+:host(:not([mobile])) [part~='chrome'] ::slotted([mobile-only]) {
     display: none !important;
 }
 
@@ -111,7 +112,7 @@ theoplayer-gesture-receiver {
 /*
  * Auto-hide elements when user is idle
  */
-:host([user-idle]:not([paused]):not([casting])) ::slotted(:not([no-auto-hide])) {
+:host([user-idle]:not([paused]):not([casting])) [part~='chrome'] ::slotted(:not([no-auto-hide])) {
     opacity: 0;
     transition: opacity 1s;
 }

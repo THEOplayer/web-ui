@@ -4,19 +4,17 @@
     vertical-align: middle;
 }
 
-slot[name='icon'] > *,
-::slotted([slot='icon']) {
+[part='icon'] {
     opacity: 1;
     transition: opacity 0.15s;
 }
 
-:host(:not([loading])) slot[name='icon'] > *,
-:host(:not([loading])) ::slotted([slot='icon']) {
+:host(:not([loading])) [part='icon'] {
     opacity: 0;
 }
 
-::slotted(svg),
-::slotted(img) {
+[part='icon'] ::slotted(svg),
+[part='icon'] ::slotted(img) {
     width: var(--theoplayer-loading-icon-width, 48px);
     height: var(--theoplayer-loading-icon-height, var(--theoplayer-loading-icon-width, 48px));
     fill: var(--theoplayer-loading-icon-color, var(--theoplayer-icon-color, #fff));

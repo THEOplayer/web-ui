@@ -46,9 +46,9 @@ theoplayer-ui {
  * Mobile-only and mobile-hidden elements
  */
 :host([mobile]) [mobile-hidden],
-:host([mobile]) ::slotted([mobile-hidden]),
+:host([mobile]) theoplayer-control-bar ::slotted([mobile-hidden]),
 :host(:not([mobile])) [mobile-only],
-:host(:not([mobile])) ::slotted([mobile-only]) {
+:host(:not([mobile])) theoplayer-control-bar ::slotted([mobile-only]) {
     display: none !important;
 }
 
