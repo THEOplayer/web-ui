@@ -103,28 +103,28 @@
      * = (360deg * 1333ms) / (216deg + (360 - 270deg))
      * = 1568ms
      */
-    animation: mdc-circular-progress-container-rotate 1568ms linear infinite;
+    animation: theoplayer-circular-progress-container-rotate 1568ms linear infinite;
 }
 
 .spinner {
     /*
-     * $spinner-rotate-animation: mdc-circular-progress-spinner-layer-rotate (4 * $arc-time) $timing-function infinite both;
+     * $spinner-rotate-animation: theoplayer-circular-progress-spinner-layer-rotate (4 * $arc-time) $timing-function infinite both;
      */
-    animation: mdc-circular-progress-spinner-layer-rotate 5333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+    animation: theoplayer-circular-progress-spinner-layer-rotate 5333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
 .circle-left svg {
-    animation: mdc-circular-progress-left-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+    animation: theoplayer-circular-progress-left-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
 .circle-right svg {
-    animation: mdc-circular-progress-right-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+    animation: theoplayer-circular-progress-right-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
 /*
  * Keyframes for the persistent rotation of the outermost container
  */
-@keyframes mdc-circular-progress-container-rotate {
+@keyframes theoplayer-circular-progress-container-rotate {
     to {
         transform: rotate(360deg);
     }
@@ -133,7 +133,7 @@
 /*
  * Keyframes for the rotation of the spinner layer
  */
-@keyframes mdc-circular-progress-spinner-layer-rotate {
+@keyframes theoplayer-circular-progress-spinner-layer-rotate {
     12.5% {
         transform: rotate(135deg); /* $arc-size * 0.5 */
     }
@@ -163,7 +163,7 @@
 /*
  * Keyframes for the expansion and contraction of the arc for the left semi-circle.
  */
-@keyframes mdc-circular-progress-left-spin {
+@keyframes theoplayer-circular-progress-left-spin {
     from {
         transform: rotate(265deg);
     }
@@ -178,7 +178,7 @@
 /*
  * Keyframes for the expansion and contraction of the arc for the right semi-circle.
  */
-@keyframes mdc-circular-progress-right-spin {
+@keyframes theoplayer-circular-progress-right-spin {
     from {
         transform: rotate(-265deg);
     }
