@@ -23,6 +23,7 @@ theoplayer-ui {
 }
 
 [part='bottom-chrome'] {
+    position: relative;
     display: flex;
     flex-flow: column nowrap;
     align-items: stretch;
