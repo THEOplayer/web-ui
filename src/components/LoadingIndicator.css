@@ -35,6 +35,14 @@ slot[name='icon'] > *,
     width: var(--theoplayer-loading-icon-width, 48px);
     height: var(--theoplayer-loading-icon-height, var(--theoplayer-loading-icon-width, 48px));
 
+    /*
+     * Font size, letter spacing and nowrap are required in order to ignore
+     * whitespaces between HTML elements.
+     */
+    font-size: 0;
+    letter-spacing: 0;
+    white-space: nowrap;
+
     /* Amount of circle the arc takes up */
     /* $arc-size: 270deg */
     /* Time it takes to expand and contract arc */
@@ -48,25 +56,14 @@ slot[name='icon'] > *,
     /* $timing-function: cubic-bezier(0.4, 0, 0.2, 1); */
 }
 
-.mdc-circular-progress__indeterminate-circle-graphic,
-.mdc-circular-progress__indeterminate-container,
+.mdc-circular-progress svg,
 .mdc-circular-progress__spinner-layer {
     position: absolute;
     width: 100%;
     height: 100%;
 }
 
-.mdc-circular-progress__indeterminate-container {
-    /*
-     * Font size, letter spacing and nowrap are required in order to ignore
-     * whitespaces between HTML elements.
-     */
-    font-size: 0;
-    letter-spacing: 0;
-    white-space: nowrap;
-}
-
-.mdc-circular-progress__indeterminate-circle-graphic {
+.mdc-circular-progress svg {
     stroke: var(--theoplayer-loading-icon-color, var(--theoplayer-icon-color, #fff));
 }
 
@@ -80,7 +77,7 @@ slot[name='icon'] > *,
     overflow: hidden;
 }
 
-.mdc-circular-progress__gap-patch .mdc-circular-progress__indeterminate-circle-graphic {
+.mdc-circular-progress__gap-patch svg {
     left: -900%;
     width: 2000%;
     transform: rotate(180deg);
@@ -94,15 +91,15 @@ slot[name='icon'] > *,
     overflow: hidden;
 }
 
-.mdc-circular-progress__circle-clipper .mdc-circular-progress__indeterminate-circle-graphic {
+.mdc-circular-progress__circle-clipper svg {
     width: 200%;
 }
 
-.mdc-circular-progress__circle-right .mdc-circular-progress__indeterminate-circle-graphic {
+.mdc-circular-progress__circle-right svg {
     left: -100%;
 }
 
-.mdc-circular-progress--indeterminate .mdc-circular-progress__indeterminate-container {
+.mdc-circular-progress {
     /*
      * $duration: (360deg * $arc-time) / ($arc-start-rotation-interval + (360 - $arc-size))
      * = (360deg * 1333ms) / (216deg + (360 - 270deg))
@@ -111,18 +108,18 @@ slot[name='icon'] > *,
     animation: mdc-circular-progress-container-rotate 1568ms linear infinite;
 }
 
-.mdc-circular-progress--indeterminate .mdc-circular-progress__spinner-layer {
+.mdc-circular-progress__spinner-layer {
     /*
      * $spinner-rotate-animation: mdc-circular-progress-spinner-layer-rotate (4 * $arc-time) $timing-function infinite both;
      */
     animation: mdc-circular-progress-spinner-layer-rotate 5333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
-.mdc-circular-progress--indeterminate .mdc-circular-progress__circle-left .mdc-circular-progress__indeterminate-circle-graphic {
+.mdc-circular-progress__circle-left svg {
     animation: mdc-circular-progress-left-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
-.mdc-circular-progress--indeterminate .mdc-circular-progress__circle-right .mdc-circular-progress__indeterminate-circle-graphic {
+.mdc-circular-progress__circle-right svg {
     animation: mdc-circular-progress-right-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
