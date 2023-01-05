@@ -15,12 +15,182 @@ slot[name='icon'] > *,
     opacity: 0;
 }
 
-svg,
-img,
 ::slotted(svg),
 ::slotted(img) {
-    width: var(--theoplayer-loading-icon-width, 100px);
-    height: var(--theoplayer-loading-icon-height, var(--theoplayer-loading-icon-width, 100px));
+    width: var(--theoplayer-loading-icon-width, 48px);
+    height: var(--theoplayer-loading-icon-height, var(--theoplayer-loading-icon-width, 48px));
     fill: var(--theoplayer-loading-icon-color, var(--theoplayer-icon-color, #fff));
     vertical-align: middle;
+}
+
+/*
+ * Based on the Circular Progress component from Material Components Web (License: MIT)
+ * https://github.com/material-components/material-components-web/tree/v14.0.0/packages/mdc-circular-progress
+ */
+.mdc-circular-progress {
+    display: inline-flex;
+    position: relative;
+    direction: ltr;
+    line-height: 0;
+    width: var(--theoplayer-loading-icon-width, 48px);
+    height: var(--theoplayer-loading-icon-height, var(--theoplayer-loading-icon-width, 48px));
+
+    /* Amount of circle the arc takes up */
+    /* $arc-size: 270deg */
+    /* Time it takes to expand and contract arc */
+    /* $arc-time: 1333ms */
+    /*
+     * How much the start location of the arc should rotate each time; 216 gives
+     * us a 5 pointed star shape (it's 360/5 * 3)
+     */
+    /* $arc-start-rotation-interval: 216deg; */
+    /* The timing function used for the core spinner animations. */
+    /* $timing-function: cubic-bezier(0.4, 0, 0.2, 1); */
+}
+
+.mdc-circular-progress__indeterminate-circle-graphic,
+.mdc-circular-progress__indeterminate-container,
+.mdc-circular-progress__spinner-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.mdc-circular-progress__indeterminate-container {
+    /*
+     * Font size, letter spacing and nowrap are required in order to ignore
+     * whitespaces between HTML elements.
+     */
+    font-size: 0;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+
+.mdc-circular-progress__indeterminate-circle-graphic {
+    stroke: var(--theoplayer-loading-icon-color, var(--theoplayer-icon-color, #fff));
+}
+
+.mdc-circular-progress__gap-patch {
+    position: absolute;
+    top: 0;
+    left: 47.5%;
+    box-sizing: border-box;
+    width: 5%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.mdc-circular-progress__gap-patch .mdc-circular-progress__indeterminate-circle-graphic {
+    left: -900%;
+    width: 2000%;
+    transform: rotate(180deg);
+}
+
+.mdc-circular-progress__circle-clipper {
+    display: inline-flex;
+    position: relative;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.mdc-circular-progress__circle-clipper .mdc-circular-progress__indeterminate-circle-graphic {
+    width: 200%;
+}
+
+.mdc-circular-progress__circle-right .mdc-circular-progress__indeterminate-circle-graphic {
+    left: -100%;
+}
+
+.mdc-circular-progress--indeterminate .mdc-circular-progress__indeterminate-container {
+    /*
+     * $duration: (360deg * $arc-time) / ($arc-start-rotation-interval + (360 - $arc-size))
+     * = (360deg * 1333ms) / (216deg + (360 - 270deg))
+     * = 1568ms
+     */
+    animation: mdc-circular-progress-container-rotate 1568ms linear infinite;
+}
+
+.mdc-circular-progress--indeterminate .mdc-circular-progress__spinner-layer {
+    /*
+     * $spinner-rotate-animation: mdc-circular-progress-spinner-layer-rotate (4 * $arc-time) $timing-function infinite both;
+     */
+    animation: mdc-circular-progress-spinner-layer-rotate 5333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+}
+
+.mdc-circular-progress--indeterminate .mdc-circular-progress__circle-left .mdc-circular-progress__indeterminate-circle-graphic {
+    animation: mdc-circular-progress-left-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+}
+
+.mdc-circular-progress--indeterminate .mdc-circular-progress__circle-right .mdc-circular-progress__indeterminate-circle-graphic {
+    animation: mdc-circular-progress-right-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+}
+
+/*
+ * Keyframes for the persistent rotation of the outermost container
+ */
+@keyframes mdc-circular-progress-container-rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/*
+ * Keyframes for the rotation of the spinner layer
+ */
+@keyframes mdc-circular-progress-spinner-layer-rotate {
+    12.5% {
+        transform: rotate(135deg); /* $arc-size * 0.5 */
+    }
+    25% {
+        transform: rotate(270deg); /* $arc-size * 1 */
+    }
+    37.5% {
+        transform: rotate(405deg); /* $arc-size * 1.5 */
+    }
+    50% {
+        transform: rotate(540deg); /* $arc-size * 2 */
+    }
+    62.5% {
+        transform: rotate(675deg); /* $arc-size * 2.5 */
+    }
+    75% {
+        transform: rotate(810deg); /* $arc-size * 3 */
+    }
+    87.5% {
+        transform: rotate(945deg); /* $arc-size * 3.5 */
+    }
+    100% {
+        transform: rotate(1080deg); /* $arc-size * 4 */
+    }
+}
+
+/*
+ * Keyframes for the expansion and contraction of the arc for the left semi-circle.
+ */
+@keyframes mdc-circular-progress-left-spin {
+    from {
+        transform: rotate(265deg);
+    }
+    50% {
+        transform: rotate(130deg);
+    }
+    to {
+        transform: rotate(265deg);
+    }
+}
+
+/*
+ * Keyframes for the expansion and contraction of the arc for the right semi-circle.
+ */
+@keyframes mdc-circular-progress-right-spin {
+    from {
+        transform: rotate(-265deg);
+    }
+    50% {
+        transform: rotate(-130deg);
+    }
+    to {
+        transform: rotate(-265deg);
+    }
 }

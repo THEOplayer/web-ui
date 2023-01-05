@@ -1,15 +1,23 @@
 <slot name="icon">
-    <svg aria-hidden="true" viewBox="0 0 100 100">
-        <path d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
-            <animateTransform
-                attributeName="transform"
-                attributeType="XML"
-                type="rotate"
-                dur="1s"
-                from="0 50 50"
-                to="360 50 50"
-                repeatCount="indefinite"
-            />
-        </path>
-    </svg>
+    <div aria-hidden="true" class="mdc-circular-progress mdc-circular-progress--indeterminate">
+        <div class="mdc-circular-progress__indeterminate-container">
+            <div class="mdc-circular-progress__spinner-layer">
+                <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left">
+                    <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="24" r="18" fill="none" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4" />
+                    </svg>
+                </div>
+                <div class="mdc-circular-progress__gap-patch">
+                    <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="24" r="18" fill="none" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="3.2" />
+                    </svg>
+                </div>
+                <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right">
+                    <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="24" r="18" fill="none" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
 </slot>
