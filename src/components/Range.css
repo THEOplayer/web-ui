@@ -39,7 +39,7 @@
     position: absolute;
     top: 50%;
     transform: translate(var(--theoplayer-range-track-translate-x, 0px), calc(var(--theoplayer-range-track-translate-y, 0px) - 50%));
-    background: var(--theoplayer-range-track-background, #333);
+    background: var(--theoplayer-range-track-background, rgba(255, 255, 255, 0.2));
 }
 
 input[type='range'] {
@@ -96,7 +96,7 @@ input[type='range']::-ms-thumb {
     outline: var(--theoplayer-range-track-outline);
     outline-offset: var(--theoplayer-range-track-outline-offset);
     border-radius: var(--theoplayer-range-track-border-radius, 0);
-    background: var(--theoplayer-range-track-progress-internal, var(--theoplayer-range-track-background, #eee));
+    background: var(--theoplayer-range-track-progress-internal, var(--theoplayer-range-bar-color, #fff));
     box-shadow: var(--theoplayer-range-track-box-shadow, none);
     transition: var(--theoplayer-range-track-transition, none);
     transform: translate(var(--theoplayer-range-track-translate-x, 0), var(--theoplayer-range-track-translate-y, 0));
