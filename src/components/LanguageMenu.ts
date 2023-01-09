@@ -6,7 +6,7 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, TextTrack } from 'theoplayer';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
-import './MediaTrackRadioGroup';
+import './TrackRadioGroup';
 
 const template = document.createElement('template');
 template.innerHTML = menuTemplate(`<slot name="heading">Language</slot>`, languageMenuHtml, languageMenuCss);

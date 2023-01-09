@@ -11,13 +11,13 @@ import { isSubtitleTrack } from '../util/TrackUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${trackRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`;
-shadyCss.prepareTemplate(template, 'theoplayer-media-track-radio-group');
+shadyCss.prepareTemplate(template, 'theoplayer-track-radio-group');
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 export type TrackType = 'audio' | 'video' | 'subtitles';
 
-export class MediaTrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
+export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
     static get observedAttributes() {
         return [Attribute.TRACK_TYPE];
     }
@@ -142,7 +142,7 @@ export class MediaTrackRadioGroup extends StateReceiverMixin(HTMLElement, ['play
     }
 }
 
-customElements.define('theoplayer-media-track-radio-group', MediaTrackRadioGroup);
+customElements.define('theoplayer-track-radio-group', TrackRadioGroup);
 
 function hasButtonForTrack(buttons: HTMLCollectionOf<MediaTrackMenuButton | TextTrackMenuButton>, track: MediaTrack | TextTrack): boolean {
     for (let i = 0; i < buttons.length; i++) {
