@@ -12,7 +12,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-text-track-off-menu-button');
 
 const TRACK_EVENTS = ['change'] as const;
 
-export class TextTrackOffMenuButton extends RadioButton {
+export class TextTrackOffRadioButton extends RadioButton {
     private _trackList: TextTracksList | undefined = undefined;
 
     constructor() {
@@ -72,4 +72,4 @@ function disableSubtitleTracks(trackList: TextTracksList): void {
     }
 }
 
-customElements.define('theoplayer-text-track-off-menu-button', TextTrackOffMenuButton);
+customElements.define('theoplayer-text-track-off-menu-button', TextTrackOffRadioButton);

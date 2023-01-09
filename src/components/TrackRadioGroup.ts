@@ -4,10 +4,10 @@ import trackRadioGroupCss from './TrackRadioGroup.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer';
 import { Attribute } from '../util/Attribute';
-import { MediaTrackMenuButton } from './MediaTrackMenuButton';
-import { TextTrackMenuButton } from './TextTrackMenuButton';
+import { MediaTrackRadioButton } from './MediaTrackRadioButton';
+import { TextTrackRadioButton } from './TextTrackRadioButton';
 import { isSubtitleTrack } from '../util/TrackUtils';
-import { TextTrackOffMenuButton } from './TextTrackOffMenuButton';
+import { TextTrackOffRadioButton } from './TextTrackOffRadioButton';
 import './RadioGroup';
 
 const template = document.createElement('template');
@@ -24,7 +24,7 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
     }
 
     private readonly _radioGroup: RadioGroup;
-    private _offButton: TextTrackOffMenuButton | undefined;
+    private _offButton: TextTrackOffRadioButton | undefined;
     private _player: ChromelessPlayer | undefined;
     private _tracksList: MediaTrackList | TextTracksList | undefined;
 
@@ -123,7 +123,7 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
     }
 
     private readonly _updateTracks = (): void => {
-        const oldButtons = this._radioGroup.children as HTMLCollectionOf<MediaTrackMenuButton | TextTrackMenuButton>;
+        const oldButtons = this._radioGroup.children as HTMLCollectionOf<MediaTrackRadioButton | TextTrackRadioButton>;
         const newTracks = this._getTracks();
         const firstTrackButtonIndex = this._offButton !== undefined ? 1 : 0;
         for (let i = oldButtons.length - 1; i >= firstTrackButtonIndex; i--) {
@@ -140,13 +140,13 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
         }
     };
 
-    private _createTrackButton(track: MediaTrack | TextTrack): MediaTrackMenuButton | TextTrackMenuButton {
+    private _createTrackButton(track: MediaTrack | TextTrack): MediaTrackRadioButton | TextTrackRadioButton {
         if (this.trackType === 'subtitles') {
-            let button = new TextTrackMenuButton();
+            let button = new TextTrackRadioButton();
             button.track = track as TextTrack;
             return button;
         } else {
-            let button = new MediaTrackMenuButton();
+            let button = new MediaTrackRadioButton();
             button.track = track as MediaTrack;
             return button;
         }
@@ -155,7 +155,7 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
     private _updateOffButton(): void {
         if (this.trackType === 'subtitles' && this.showOffButton) {
             if (this._offButton === undefined) {
-                this._offButton = new TextTrackOffMenuButton();
+                this._offButton = new TextTrackOffRadioButton();
                 this._radioGroup.insertBefore(this._offButton, this._radioGroup.firstChild);
             }
             this._offButton.trackList = this._tracksList! as TextTracksList;
@@ -181,7 +181,7 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
 
 customElements.define('theoplayer-track-radio-group', TrackRadioGroup);
 
-function hasButtonForTrack(buttons: HTMLCollectionOf<MediaTrackMenuButton | TextTrackMenuButton>, track: MediaTrack | TextTrack): boolean {
+function hasButtonForTrack(buttons: HTMLCollectionOf<MediaTrackRadioButton | TextTrackRadioButton>, track: MediaTrack | TextTrack): boolean {
     for (let i = 0; i < buttons.length; i++) {
         if (buttons[i].track === track) {
             return true;

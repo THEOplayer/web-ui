@@ -2,19 +2,19 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { RadioButton } from './RadioButton';
 import { buttonTemplate } from './Button';
 import trackMenuButtonCss from './TrackMenuButton.css';
-import type { MediaTrack } from 'theoplayer';
+import type { TextTrack } from 'theoplayer';
 import { localizeLanguageName } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<span></span>`, trackMenuButtonCss);
-shadyCss.prepareTemplate(template, 'theoplayer-media-track-menu-button');
+shadyCss.prepareTemplate(template, 'theoplayer-text-track-radio-button');
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
-export class MediaTrackMenuButton extends RadioButton {
+export class TextTrackRadioButton extends RadioButton {
     private _labelEl: HTMLElement;
-    private _track: MediaTrack | undefined = undefined;
+    private _track: TextTrack | undefined = undefined;
 
     constructor() {
         super({ template });
@@ -26,11 +26,11 @@ export class MediaTrackMenuButton extends RadioButton {
         this._upgradeProperty('track');
     }
 
-    get track(): MediaTrack | undefined {
+    get track(): TextTrack | undefined {
         return this._track;
     }
 
-    set track(track: MediaTrack | undefined) {
+    set track(track: TextTrack | undefined) {
         if (this._track) {
             this._track.removeEventListener(TRACK_EVENTS, this._onTrackChange);
         }
@@ -43,12 +43,12 @@ export class MediaTrackMenuButton extends RadioButton {
 
     private _updateFromTrack(): void {
         this._labelEl.textContent = this._track ? getTrackLabel(this._track) : '';
-        this.checked = this._track ? this._track.enabled : false;
+        this.checked = this._track ? this._track.mode === 'showing' : false;
     }
 
     private _updateTrack(): void {
         if (this._track) {
-            this._track.enabled = this.checked;
+            this._track.mode = this.checked ? 'showing' : 'disabled';
         }
     }
 
@@ -68,7 +68,7 @@ export class MediaTrackMenuButton extends RadioButton {
     }
 }
 
-function getTrackLabel(track: MediaTrack): string {
+function getTrackLabel(track: TextTrack): string {
     let label = track.label;
     if (label) {
         return label;
@@ -80,4 +80,4 @@ function getTrackLabel(track: MediaTrack): string {
     return localizeLanguageName(languageCode) || languageCode || '';
 }
 
-customElements.define('theoplayer-media-track-menu-button', MediaTrackMenuButton);
+customElements.define('theoplayer-text-track-radio-button', TextTrackRadioButton);
