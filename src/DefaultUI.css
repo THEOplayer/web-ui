@@ -62,6 +62,10 @@ theoplayer-ui {
     flex-grow: 1;
 }
 
+theoplayer-time-range {
+    --theoplayer-control-height: 12px;
+}
+
 /*
  * Mobile-only and mobile-hidden elements
  */
