@@ -46,6 +46,7 @@ export class UIContainer extends HTMLElement {
     private _menus: HTMLElement[] = [];
     private readonly _menuSlot: HTMLSlotElement;
     private readonly _openMenuStack: OpenMenuEntry[] = [];
+    private _pointerType: string = '';
     private readonly _mutationObserver: MutationObserver;
     private readonly _stateReceivers: StateReceiverElement[] = [];
     private _player: ChromelessPlayer | undefined = undefined;
@@ -332,7 +333,9 @@ export class UIContainer extends HTMLElement {
         }
         this.removeEventListener('keydown', this._onMenuKeyDown);
         this.addEventListener('keydown', this._onMenuKeyDown);
+        this._menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
         this._menuEl.removeEventListener('click', this._onMenuClick);
+        this._menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
         this._menuEl.addEventListener('click', this._onMenuClick);
 
         menuToOpen.focus();
@@ -361,6 +364,7 @@ export class UIContainer extends HTMLElement {
         }
 
         this.removeEventListener('keydown', this._onMenuKeyDown);
+        this._menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
         this._menuEl.removeEventListener('click', this._onMenuClick);
         this.removeAttribute(Attribute.MENU_OPENED);
 
@@ -408,10 +412,16 @@ export class UIContainer extends HTMLElement {
         this.closeMenu_(menuToClose);
     };
 
+    private readonly _onMenuPointerDown = (event: PointerEvent) => {
+        this._pointerType = event.pointerType;
+    };
+
     private readonly _onMenuClick = (event: MouseEvent) => {
-        if (event.target === this._menuEl) {
-            // Close menu when clicking on menu backdrop
-            // TODO Only on desktop!
+        // If the browser doesn't support yet `pointerType` on `click` events,
+        // we use the type from the previous `pointerdown` event.
+        const pointerType = (event as PointerEvent).pointerType ?? this._pointerType;
+        if (event.target === this._menuEl && pointerType === 'mouse') {
+            // Close menu when clicking (with mouse) on menu backdrop
             event.preventDefault();
             this.closeCurrentMenu_();
         }
