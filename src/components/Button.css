@@ -56,6 +56,16 @@ img,
     min-width: 100%;
 }
 
+img,
+::slotted(img) {
+    box-shadow: var(--theoplayer-button-icon-shadow, none);
+}
+
+svg,
+::slotted(svg) {
+    filter: drop-shadow(var(--theoplayer-button-icon-shadow, none));
+}
+
 :host(:hover) img,
 :host(:hover) ::slotted(img) {
     box-shadow: var(--theoplayer-button-hover-icon-shadow, 0 0 5px rgba(255, 255, 255, 0.5));

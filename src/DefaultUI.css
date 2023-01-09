@@ -18,6 +18,15 @@ theoplayer-ui {
     height: 100% !important;
 }
 
+[part='top-chrome'] {
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.75);
+}
+
+[part='top-chrome'] * {
+    --theoplayer-button-icon-shadow: 0 0 2px rgba(0, 0, 0, 0.75);
+    --theoplayer-button-hover-icon-shadow: 0 0 2px rgba(0, 0, 0, 1.0);
+}
+
 [part='centered-chrome'] > * {
     --theoplayer-control-height: 48px;
 }
