@@ -2,11 +2,8 @@ import { Menu, menuTemplate } from './Menu';
 import * as shadyCss from '@webcomponents/shadycss';
 import languageMenuHtml from './LanguageMenu.html';
 import languageMenuCss from './LanguageMenu.css';
-import type { RadioGroup } from './RadioGroup';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, TextTrack } from 'theoplayer';
-import { TextTrackMenuButton } from './TextTrackMenuButton';
-import { TextTrackOffMenuButton } from './TextTrackOffMenuButton';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import './MediaTrackRadioGroup';
@@ -19,19 +16,12 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
     private readonly _contentEl: HTMLElement;
-    private readonly _subtitleGroup: RadioGroup;
-    private readonly _subtitleOffButton: TextTrackOffMenuButton;
-
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
         super({ template });
 
         this._contentEl = this.shadowRoot!.querySelector('[part="content"]')!;
-        this._subtitleGroup = this.shadowRoot!.querySelector('[part="subtitles"] theoplayer-radio-group')!;
-
-        this._subtitleOffButton = new TextTrackOffMenuButton();
-        this._subtitleGroup.appendChild(this._subtitleOffButton);
     }
 
     get player(): ChromelessPlayer | undefined {
@@ -49,7 +39,6 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
         this._player = player;
         this._updateAudioTracks();
         this._updateTextTracks();
-        this._subtitleOffButton.trackList = player?.textTracks;
         if (this._player !== undefined) {
             this._player.audioTracks.addEventListener(TRACK_EVENTS, this._updateAudioTracks);
             this._player.textTracks.addEventListener(TRACK_EVENTS, this._updateTextTracks);
@@ -70,37 +59,13 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
     };
 
     private readonly _updateTextTracks = (): void => {
-        const oldSubtitleButtons = this._subtitleGroup.children as HTMLCollectionOf<TextTrackMenuButton>;
         const newSubtitleTracks: readonly TextTrack[] = this._player?.textTracks.filter(isSubtitleTrack) ?? [];
         if (newSubtitleTracks.length === 0) {
             this._contentEl.removeAttribute(Attribute.HAS_SUBTITLES);
         } else {
             this._contentEl.setAttribute(Attribute.HAS_SUBTITLES, '');
         }
-        // Start at index 1, since the first child is the "off" button
-        for (let i = 1; i < oldSubtitleButtons.length; i++) {
-            const oldButton = oldSubtitleButtons[i];
-            if (!oldButton.track || newSubtitleTracks.indexOf(oldButton.track) < 0) {
-                this._subtitleGroup.removeChild(oldButton);
-            }
-        }
-        for (const newTrack of newSubtitleTracks) {
-            if (!hasButtonForTrack(oldSubtitleButtons, newTrack)) {
-                const newButton = new TextTrackMenuButton();
-                newButton.track = newTrack;
-                this._subtitleGroup.appendChild(newButton);
-            }
-        }
     };
 }
 
 customElements.define('theoplayer-language-menu', LanguageMenu);
-
-function hasButtonForTrack(buttons: HTMLCollectionOf<MediaTrackMenuButton | TextTrackMenuButton>, track: MediaTrack | TextTrack): boolean {
-    for (let i = 0; i < buttons.length; i++) {
-        if (buttons[i].track === track) {
-            return true;
-        }
-    }
-    return false;
-}
