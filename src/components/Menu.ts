@@ -8,7 +8,7 @@ export interface MenuOptions {
 export function menuTemplate(heading: string, content: string, extraCss: string = ''): string {
     return (
         `<style>${menuCss}${extraCss}</style>` +
-        `<div part="heading"><h1>${heading}</h1><theoplayer-menu-close-button></theoplayer-menu-close-button></div>` +
+        `<div part="heading"><theoplayer-menu-close-button></theoplayer-menu-close-button><span>${heading}</span></div>` +
         `<div part="content">${content}</div>`
     );
 }

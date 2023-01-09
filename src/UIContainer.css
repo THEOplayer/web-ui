@@ -65,9 +65,13 @@
 }
 
 [part~='menu-layer'] {
-    align-items: center;
-    justify-content: center;
     background-color: var(--theoplayer-menu-backdrop-background-color, rgba(0, 0, 0, 0.5));
+}
+
+[part~='menu-layer'] ::slotted(*) {
+    align-self: stretch;
+    justify-self: stretch;
+    flex-grow: 1;
 }
 
 :host(:not([menu-opened])) [part~='menu-layer'],
