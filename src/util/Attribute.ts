@@ -25,5 +25,6 @@ export enum Attribute {
     HAS_SUBTITLES = 'has-subtitles',
     HAS_ERROR = 'has-error',
     CAST_STATE = 'cast-state',
-    TRACK_TYPE = 'track-type'
+    TRACK_TYPE = 'track-type',
+    SHOW_OFF = 'show-off'
 }

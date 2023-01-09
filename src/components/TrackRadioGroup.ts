@@ -5,9 +5,10 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer';
 import { Attribute } from '../util/Attribute';
 import { MediaTrackMenuButton } from './MediaTrackMenuButton';
-import './RadioGroup';
 import { TextTrackMenuButton } from './TextTrackMenuButton';
 import { isSubtitleTrack } from '../util/TrackUtils';
+import { TextTrackOffMenuButton } from './TextTrackOffMenuButton';
+import './RadioGroup';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${trackRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`;
@@ -19,10 +20,11 @@ export type TrackType = 'audio' | 'video' | 'subtitles';
 
 export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
     static get observedAttributes() {
-        return [Attribute.TRACK_TYPE];
+        return [Attribute.TRACK_TYPE, Attribute.SHOW_OFF];
     }
 
     private readonly _radioGroup: RadioGroup;
+    private _offButton: TextTrackOffMenuButton | undefined;
     private _player: ChromelessPlayer | undefined;
     private _tracksList: MediaTrackList | TextTracksList | undefined;
 
@@ -42,6 +44,18 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
         this.setAttribute(Attribute.TRACK_TYPE, value || 'audio');
     }
 
+    get showOffButton(): boolean {
+        return this.hasAttribute(Attribute.SHOW_OFF);
+    }
+
+    set showOffButton(value: boolean) {
+        if (value) {
+            this.setAttribute(Attribute.SHOW_OFF, '');
+        } else {
+            this.removeAttribute(Attribute.SHOW_OFF);
+        }
+    }
+
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
@@ -54,6 +68,7 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
             this._getTracksList()?.removeEventListener(TRACK_EVENTS, this._updateTracks);
         }
         this._player = player;
+        this._updateTracksList();
         this._updateTracks();
         if (this._player !== undefined) {
             this._getTracksList()?.addEventListener(TRACK_EVENTS, this._updateTracks);
@@ -86,7 +101,8 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
         if (oldList !== newList) {
             oldList?.removeEventListener(TRACK_EVENTS, this._updateTracks);
             newList?.addEventListener(TRACK_EVENTS, this._updateTracks);
-            this._updateTracks();
+            this._tracksList = newList;
+            this._updateOffButton();
         }
     }
 
@@ -109,7 +125,8 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
     private readonly _updateTracks = (): void => {
         const oldButtons = this._radioGroup.children as HTMLCollectionOf<MediaTrackMenuButton | TextTrackMenuButton>;
         const newTracks = this._getTracks();
-        for (let i = oldButtons.length - 1; i >= 0; i--) {
+        const firstTrackButtonIndex = this._offButton !== undefined ? 1 : 0;
+        for (let i = oldButtons.length - 1; i >= firstTrackButtonIndex; i--) {
             const oldButton = oldButtons[i];
             if (!oldButton.track || newTracks.indexOf(oldButton.track) < 0) {
                 this._radioGroup.removeChild(oldButton);
@@ -135,9 +152,29 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
         }
     }
 
+    private _updateOffButton(): void {
+        if (this.trackType === 'subtitles' && this.showOffButton) {
+            if (this._offButton === undefined) {
+                this._offButton = new TextTrackOffMenuButton();
+                this._radioGroup.insertBefore(this._offButton, this._radioGroup.firstChild);
+            }
+            this._offButton.trackList = this._tracksList! as TextTracksList;
+        } else if (this._offButton !== undefined) {
+            this._radioGroup.removeChild(this._offButton);
+            this._offButton = undefined;
+        }
+    }
+
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (attrName === Attribute.TRACK_TYPE && newValue !== oldValue) {
+        if (newValue === oldValue) {
+            return;
+        }
+        if (attrName === Attribute.TRACK_TYPE) {
             this._updateTracksList();
+            this._updateTracks();
+        } else if (attrName === Attribute.SHOW_OFF) {
+            this._updateOffButton();
+            this._updateTracks();
         }
     }
 }
