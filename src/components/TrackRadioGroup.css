@@ -1,0 +1,17 @@
+:host {
+    display: block;
+}
+
+:host([hidden]) {
+    display: none !important;
+}
+
+theoplayer-radio-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    /*
+     * Show a scroll bar if the list becomes too long.
+     */
+    overflow-y: auto;
+}

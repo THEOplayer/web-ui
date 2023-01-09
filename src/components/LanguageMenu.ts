@@ -5,11 +5,11 @@ import languageMenuCss from './LanguageMenu.css';
 import type { RadioGroup } from './RadioGroup';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, TextTrack } from 'theoplayer';
-import { MediaTrackMenuButton } from './MediaTrackMenuButton';
 import { TextTrackMenuButton } from './TextTrackMenuButton';
 import { TextTrackOffMenuButton } from './TextTrackOffMenuButton';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
+import './MediaTrackRadioGroup';
 
 const template = document.createElement('template');
 template.innerHTML = menuTemplate(`<slot name="heading">Language</slot>`, languageMenuHtml, languageMenuCss);
@@ -19,7 +19,6 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
     private readonly _contentEl: HTMLElement;
-    private readonly _audioGroup: RadioGroup;
     private readonly _subtitleGroup: RadioGroup;
     private readonly _subtitleOffButton: TextTrackOffMenuButton;
 
@@ -29,7 +28,6 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
         super({ template });
 
         this._contentEl = this.shadowRoot!.querySelector('[part="content"]')!;
-        this._audioGroup = this.shadowRoot!.querySelector('[part="audio"] theoplayer-radio-group')!;
         this._subtitleGroup = this.shadowRoot!.querySelector('[part="subtitles"] theoplayer-radio-group')!;
 
         this._subtitleOffButton = new TextTrackOffMenuButton();
@@ -63,25 +61,11 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
     }
 
     private readonly _updateAudioTracks = (): void => {
-        const oldAudioButtons = this._audioGroup.children as HTMLCollectionOf<MediaTrackMenuButton>;
         const newAudioTracks: readonly MediaTrack[] = this._player?.audioTracks ?? [];
         if (newAudioTracks.length === 0) {
             this._contentEl.removeAttribute(Attribute.HAS_AUDIO);
         } else {
             this._contentEl.setAttribute(Attribute.HAS_AUDIO, '');
-        }
-        for (let i = 0; i < oldAudioButtons.length; i++) {
-            const oldButton = oldAudioButtons[i];
-            if (!oldButton.track || newAudioTracks.indexOf(oldButton.track) < 0) {
-                this._audioGroup.removeChild(oldButton);
-            }
-        }
-        for (const newTrack of newAudioTracks) {
-            if (!hasButtonForTrack(oldAudioButtons, newTrack)) {
-                const newButton = new MediaTrackMenuButton();
-                newButton.track = newTrack;
-                this._audioGroup.appendChild(newButton);
-            }
         }
     };
 

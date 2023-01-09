@@ -10,6 +10,7 @@ export * from './Menu';
 export * from './MenuButton';
 export * from './CloseMenuButton';
 export * from './MediaTrackMenuButton';
+export * from './MediaTrackRadioGroup';
 export * from './TextTrackMenuButton';
 export * from './TextTrackOffMenuButton';
 export * from './LanguageMenu';
