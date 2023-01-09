@@ -36,6 +36,12 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
         this._radioGroup = shadowRoot.querySelector('theoplayer-radio-group')!;
     }
 
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
+        this._updateOffButton();
+        this._updateTracks();
+    }
+
     get trackType(): TrackType {
         return (this.getAttribute(Attribute.TRACK_TYPE) || 'audio') as TrackType;
     }
