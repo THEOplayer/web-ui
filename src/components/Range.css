@@ -130,7 +130,7 @@ input[type='range']::-ms-tooltip {
 }
 
 input[type='range']:focus {
-    box-shadow: inset 0 0 0 2px rgba(27, 127, 204, 0.9);
+    box-shadow: inset 0 0 0 2px var(--theoplayer-focus-ring-color, rgba(27, 127, 204, 0.9));
     outline: 0;
 }
 
