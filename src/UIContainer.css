@@ -38,12 +38,12 @@
  * Disable pointer events on all layers,
  * but re-enable them on all elements slotted into those layers.
  */
-[part~='layer']:not([part~='media-layer']),
+[part~='gesture-layer'],
+[part~='vertical-layer'],
 [part~='chrome'] {
     pointer-events: none;
 }
 
-[part~='layer']:not([part~='vertical-layer']) ::slotted(*),
 [part~='chrome'] ::slotted(*) {
     pointer-events: auto;
 }
