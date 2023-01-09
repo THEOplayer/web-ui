@@ -8,6 +8,7 @@ import { MediaTrackRadioButton } from './MediaTrackRadioButton';
 import { TextTrackRadioButton } from './TextTrackRadioButton';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { TextTrackOffRadioButton } from './TextTrackOffRadioButton';
+import { fromArrayLike } from '../util/CommonUtils';
 import './RadioGroup';
 
 const template = document.createElement('template');
@@ -129,11 +130,13 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
     }
 
     private readonly _updateTracks = (): void => {
-        const oldButtons = this._radioGroup.children as HTMLCollectionOf<MediaTrackRadioButton | TextTrackRadioButton>;
+        let oldButtons = fromArrayLike(this._radioGroup.children) as (MediaTrackRadioButton | TextTrackRadioButton)[];
         const newTracks = this._getTracks();
-        const firstTrackButtonIndex = this._offButton !== undefined ? 1 : 0;
-        for (let i = oldButtons.length - 1; i >= firstTrackButtonIndex; i--) {
-            const oldButton = oldButtons[i];
+        if (this._offButton !== undefined) {
+            // First child is the "off" button, skip it.
+            oldButtons = oldButtons.slice(1);
+        }
+        for (const oldButton of oldButtons) {
             if (!oldButton.track || newTracks.indexOf(oldButton.track) < 0) {
                 this._radioGroup.removeChild(oldButton);
             }
@@ -187,7 +190,7 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
 
 customElements.define('theoplayer-track-radio-group', TrackRadioGroup);
 
-function hasButtonForTrack(buttons: HTMLCollectionOf<MediaTrackRadioButton | TextTrackRadioButton>, track: MediaTrack | TextTrack): boolean {
+function hasButtonForTrack(buttons: readonly (MediaTrackRadioButton | TextTrackRadioButton)[], track: MediaTrack | TextTrack): boolean {
     for (let i = 0; i < buttons.length; i++) {
         if (buttons[i].track === track) {
             return true;
