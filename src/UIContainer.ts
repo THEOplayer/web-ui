@@ -12,6 +12,7 @@ import { fullscreenAPI } from './util/FullscreenUtils';
 import { Attribute } from './util/Attribute';
 import { KeyCode } from './util/KeyCode';
 import { isMobile } from './util/Environment';
+import { Rectangle } from './util/GeometryUtils';
 import './components/GestureReceiver';
 
 const template = document.createElement('template');
@@ -36,6 +37,7 @@ export class UIContainer extends HTMLElement {
             Attribute.ENDED,
             Attribute.CASTING,
             Attribute.HAS_ERROR,
+            Attribute.USER_IDLE,
             Attribute.USER_IDLE_TIMEOUT
         ];
     }
@@ -43,11 +45,15 @@ export class UIContainer extends HTMLElement {
     private _configuration: PlayerConfiguration = {};
     private readonly _playerEl: HTMLElement;
     private readonly _menuEl: HTMLElement;
-    private _menus: HTMLElement[] = [];
     private readonly _menuSlot: HTMLSlotElement;
+    private readonly _topChromeSlot: HTMLSlotElement;
+    private readonly _bottomChromeSlot: HTMLSlotElement;
+
+    private _menus: HTMLElement[] = [];
     private readonly _openMenuStack: OpenMenuEntry[] = [];
     private _pointerType: string = '';
     private readonly _mutationObserver: MutationObserver;
+    private readonly _resizeObserver: ResizeObserver | undefined;
     private readonly _stateReceivers: StateReceiverElement[] = [];
     private _player: ChromelessPlayer | undefined = undefined;
     private _source: SourceDescription | undefined = undefined;
@@ -65,12 +71,22 @@ export class UIContainer extends HTMLElement {
         this._playerEl = shadowRoot.querySelector('[part~="media-layer"]')!;
         this._menuEl = shadowRoot.querySelector('[part~="menu-layer"]')!;
         this._menuSlot = shadowRoot.querySelector('slot[name="menu"]')!;
+        this._topChromeSlot = shadowRoot.querySelector('slot[name="top-chrome"]')!;
+        this._bottomChromeSlot = shadowRoot.querySelector('slot:not([name])')!;
 
         this._mutationObserver = new MutationObserver(this._onMutation);
+        if (typeof ResizeObserver !== 'undefined') {
+            this._resizeObserver = new ResizeObserver(this._updateTextTrackMargins);
+        }
 
         shadowRoot.addEventListener(OPEN_MENU_EVENT, this._onOpenMenu);
         shadowRoot.addEventListener(ENTER_FULLSCREEN_EVENT, this._onEnterFullscreen);
         shadowRoot.addEventListener(EXIT_FULLSCREEN_EVENT, this._onExitFullscreen);
+
+        this._topChromeSlot.addEventListener('transitionstart', this._onChromeSlotTransition);
+        this._topChromeSlot.addEventListener('transitionend', this._onChromeSlotTransition);
+        this._bottomChromeSlot.addEventListener('transitionstart', this._onChromeSlotTransition);
+        this._bottomChromeSlot.addEventListener('transitionend', this._onChromeSlotTransition);
     }
 
     get player(): ChromelessPlayer | undefined {
@@ -150,6 +166,9 @@ export class UIContainer extends HTMLElement {
         void forEachStateReceiverElement(this, this._playerEl, this.registerStateReceiver_);
         this._mutationObserver.observe(this, { childList: true, subtree: true });
 
+        this._resizeObserver?.observe(this);
+        this._updateTextTrackMargins();
+
         this._onMenuSlotChange();
         this._menuSlot.addEventListener('slotchange', this._onMenuSlotChange);
 
@@ -209,6 +228,7 @@ export class UIContainer extends HTMLElement {
     }
 
     disconnectedCallback(): void {
+        this._resizeObserver?.disconnect();
         this._mutationObserver.disconnect();
         for (const receiver of this._stateReceivers) {
             this.removeStateFromReceiver_(receiver);
@@ -255,6 +275,8 @@ export class UIContainer extends HTMLElement {
             }
         } else if (attrName === Attribute.FLUID) {
             this._updateAspectRatio();
+        } else if (attrName === Attribute.USER_IDLE || attrName === Attribute.PAUSED || attrName === Attribute.CASTING) {
+            this._updateTextTrackMargins();
         } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
             this.userIdleTimeout = newValue;
         }
@@ -608,6 +630,39 @@ export class UIContainer extends HTMLElement {
         // Immediately hide the controls when mouse leaves the player.
         this.setUserIdle_();
     };
+
+    private readonly _onChromeSlotTransition = (event: TransitionEvent): void => {
+        // When the control bars become visible, move the text tracks out of the way.
+        // When they become invisible, move the text tracks back.
+        if (event.propertyName === 'opacity') {
+            this._updateTextTrackMargins();
+        }
+    };
+
+    private readonly _updateTextTrackMargins = (): void => {
+        const player = this._player;
+        if (player === undefined) {
+            return;
+        }
+        const topChromeRect = getVisibleRect(this._topChromeSlot);
+        const bottomChromeRect = getVisibleRect(this._bottomChromeSlot);
+        player.textTrackStyle.marginTop = topChromeRect?.height;
+        player.textTrackStyle.marginBottom = bottomChromeRect?.height;
+    };
 }
 
 customElements.define('theoplayer-ui', UIContainer);
+
+function getVisibleRect(slot: HTMLSlotElement): Rectangle | undefined {
+    let result: Rectangle | undefined;
+    const children = slot.assignedNodes().filter(isHTMLElement);
+    for (const child of children) {
+        if (getComputedStyle(child).opacity !== '0') {
+            const childRect = child.getBoundingClientRect();
+            if (childRect.width > 0 && childRect.height > 0) {
+                result = result ? result.union(childRect) : Rectangle.fromRect(childRect);
+            }
+        }
+    }
+    return result;
+}
