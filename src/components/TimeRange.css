@@ -1,0 +1,8 @@
+input[type='range'] {
+    /*
+     * Do not mirror media playback buttons and the media progress indicator
+     * as they refer to the direction of tape being played, not the direction of time.
+     * https://m2.material.io/design/usability/bidirectionality.html#mirroring-elements
+     */
+    direction: ltr;
+}

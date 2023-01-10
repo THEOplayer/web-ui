@@ -1,11 +1,12 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Range, rangeTemplate } from './Range';
+import timeRangeCss from './TimeRange.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer';
 import { formatAsTimePhrase } from '../util/TimeUtils';
 
 const template = document.createElement('template');
-template.innerHTML = rangeTemplate(`<input type="range" min="0" max="1000" step="any" value="0">`);
+template.innerHTML = rangeTemplate(`<input type="range" min="0" max="1000" step="any" value="0">`, timeRangeCss);
 shadyCss.prepareTemplate(template, 'theoplayer-time-range');
 
 const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 'seeked'] as const;
