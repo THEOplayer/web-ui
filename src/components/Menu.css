@@ -4,8 +4,6 @@
     box-sizing: border-box;
     color: var(--theoplayer-menu-color, #fff);
     pointer-events: none;
-
-    --theoplayer-menu-heading-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
 }
 
 :host([hidden]) {
@@ -17,7 +15,6 @@
     align-self: flex-start;
     align-items: center;
     font-size: var(--theoplayer-text-font-size, 14px);
-    line-height: var(--theoplayer-menu-heading-height);
     pointer-events: auto;
 }
 
@@ -27,7 +24,6 @@
 
 [part='heading'] > theoplayer-menu-close-button {
     pointer-events: auto;
-    --theoplayer-control-height: var(--theoplayer-menu-heading-height);
 }
 
 [part='content'] {
