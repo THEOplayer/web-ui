@@ -19,6 +19,8 @@
 }
 
 [part='heading'] > span {
+    padding: var(--theoplayer-control-padding, 10px);
+    padding-left: 0;
     user-select: none;
 }
 
