@@ -18,8 +18,8 @@ theoplayer-ui {
     height: 100% !important;
 }
 
-[part='top-chrome'] {
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.75);
+[part='title'] {
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.75));
 }
 
 [part='top-chrome'] * {
