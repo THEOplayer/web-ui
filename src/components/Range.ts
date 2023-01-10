@@ -7,7 +7,7 @@ export interface RangeOptions {
 }
 
 export function rangeTemplate(range: string, extraCss: string = ''): string {
-    return `<style>${rangeCss}\n${extraCss}</style><div part="container"><div part="background"></div>${range}</div>`;
+    return `<style>${rangeCss}\n${extraCss}</style><div part="container"><div part="background"></div><div part="pointer"></div>${range}</div>`;
 }
 
 export abstract class Range extends HTMLElement {
@@ -16,6 +16,7 @@ export abstract class Range extends HTMLElement {
     }
 
     protected readonly _rangeEl: HTMLInputElement;
+    protected readonly _pointerEl: HTMLElement;
 
     constructor(options: RangeOptions) {
         super();
@@ -26,6 +27,8 @@ export abstract class Range extends HTMLElement {
         this._rangeEl.addEventListener('input', this._onInput);
         // Internet Explorer does not fire 'input' events for <input> elements... use 'change' instead.
         this._rangeEl.addEventListener('change', this._onInput);
+
+        this._pointerEl = shadowRoot.querySelector('[part="pointer"]')!;
     }
 
     connectedCallback(): void {
@@ -35,10 +38,12 @@ export abstract class Range extends HTMLElement {
 
         this._rangeEl.setAttribute('aria-label', this.getAriaLabel());
         this.update();
+
+        this.addEventListener('pointermove', this._updatePointerBar);
     }
 
     disconnectedCallback(): void {
-        return;
+        this.removeEventListener('pointermove', this._updatePointerBar);
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -173,4 +178,13 @@ export abstract class Range extends HTMLElement {
             ['transparent', 100]
         ];
     }
+
+    private readonly _updatePointerBar = (e: PointerEvent): void => {
+        // Get mouse position percent
+        const rangeRect = this._rangeEl.getBoundingClientRect();
+        let mousePercent = (e.clientX - rangeRect.left) / rangeRect.width;
+        // Lock between 0 and 1
+        mousePercent = Math.max(0, Math.min(1, mousePercent));
+        this._pointerEl.style.width = `${mousePercent * rangeRect.width}px`;
+    };
 }

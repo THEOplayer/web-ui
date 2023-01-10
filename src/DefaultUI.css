@@ -61,6 +61,7 @@ theoplayer-ui {
 
 theoplayer-time-range {
     --theoplayer-control-height: 12px;
+    --theoplayer-range-track-pointer-background: rgba(255, 255, 255, 0.5);
 }
 
 /*

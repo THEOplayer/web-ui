@@ -31,15 +31,33 @@
     height: 100%;
 }
 
-[part='background'] {
-    min-width: 40px;
-    width: var(--theoplayer-range-track-width, 100%);
+[part='background'],
+[part='pointer'] {
     height: var(--track-height);
     border-radius: var(--theoplayer-range-track-border-radius, 0);
     position: absolute;
     top: 50%;
     transform: translate(var(--theoplayer-range-track-translate-x, 0px), calc(var(--theoplayer-range-track-translate-y, 0px) - 50%));
+}
+
+[part='background'] {
+    min-width: 40px;
+    width: var(--theoplayer-range-track-width, 100%);
     background: var(--theoplayer-range-track-background, rgba(255, 255, 255, 0.2));
+}
+
+[part='pointer'] {
+    background: var(--theoplayer-range-track-pointer-background, transparent);
+    border-right: var(--theoplayer-range-track-pointer-border-right, none);
+    transition: visibility .25s, opacity .25s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+:host(:hover) [part='pointer'] {
+    transition: visibility .5s, opacity .5s;
+    visibility: visible;
+    opacity: 1;
 }
 
 input[type='range'] {
