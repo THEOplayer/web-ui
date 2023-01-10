@@ -658,9 +658,9 @@ function getVisibleRect(slot: HTMLSlotElement): Rectangle | undefined {
     const children = slot.assignedNodes().filter(isHTMLElement);
     for (const child of children) {
         if (getComputedStyle(child).opacity !== '0') {
-            const childRect = child.getBoundingClientRect();
+            const childRect = Rectangle.fromRect(child.getBoundingClientRect());
             if (childRect.width > 0 && childRect.height > 0) {
-                result = result ? result.union(childRect) : Rectangle.fromRect(childRect);
+                result = result ? result.union(childRect) : childRect;
             }
         }
     }

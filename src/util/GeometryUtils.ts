@@ -43,8 +43,9 @@ export class Rectangle implements DOMRect {
         this.y = value - this.height;
     }
 
-    static fromRect({ x = 0, y = 0, width = 0, height = 0 }: DOMRectInit): Rectangle {
-        return new Rectangle(x, y, width, height);
+    static fromRect(rect: Partial<DOMRectReadOnly>): Rectangle {
+        // Note: Internet Explorer doesn't support DOMRect.x and .y, only .left and .top
+        return new Rectangle(rect.left ?? rect.x ?? 0, rect.top ?? rect.y ?? 0, rect.width ?? 0, rect.height ?? 0);
     }
 
     overlaps(other: DOMRectReadOnly): boolean {
