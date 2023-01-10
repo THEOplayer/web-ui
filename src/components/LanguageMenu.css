@@ -1,6 +1,7 @@
 :host,
 [part='audio'],
-[part='subtitles'] {
+[part='subtitles'],
+theoplayer-track-radio-group {
     display: flex;
     /*
      * By default, a flex container cannot be smaller than the size of its content along the main axis.
@@ -45,14 +46,4 @@
 
 h2 {
     margin: 0.5em 0;
-}
-
-theoplayer-radio-group {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    /*
-     * Show a scroll bar if the list becomes too long.
-     */
-    overflow-y: auto;
 }
