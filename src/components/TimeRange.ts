@@ -1,12 +1,17 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Range, rangeTemplate } from './Range';
+import timeRangeHtml from './TimeRange.html';
 import timeRangeCss from './TimeRange.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer';
 import { formatAsTimePhrase } from '../util/TimeUtils';
+import { createCustomEvent } from '../util/CustomEvent';
+import type { PreviewTimeChangeEvent } from '../events/PreviewTimeChangeEvent';
+import { PREVIEW_TIME_CHANGE_EVENT } from '../events/PreviewTimeChangeEvent';
+import './PreviewTimeDisplay';
 
 const template = document.createElement('template');
-template.innerHTML = rangeTemplate(`<input type="range" min="0" max="1000" step="any" value="0">`, timeRangeCss);
+template.innerHTML = rangeTemplate(timeRangeHtml, timeRangeCss);
 shadyCss.prepareTemplate(template, 'theoplayer-time-range');
 
 const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 'seeked'] as const;
@@ -14,6 +19,8 @@ const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'readystatechange', 'erro
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
 export class TimeRange extends StateReceiverMixin(Range, ['player']) {
+    private readonly _previewRailEl: HTMLElement;
+
     private _player: ChromelessPlayer | undefined;
     private _pausedWhileScrubbing: boolean = false;
 
@@ -24,6 +31,8 @@ export class TimeRange extends StateReceiverMixin(Range, ['player']) {
 
     constructor() {
         super({ template });
+
+        this._previewRailEl = this.shadowRoot!.querySelector('.theoplayer-time-range-preview-rail')!;
 
         this._rangeEl.addEventListener('mousedown', this._pauseOnScrubStart);
         this._rangeEl.addEventListener('touchstart', this._pauseOnScrubStart);
@@ -168,6 +177,26 @@ export class TimeRange extends StateReceiverMixin(Range, ['player']) {
 
         this._autoAdvanceId = requestAnimationFrame(this._autoAdvanceWhilePlaying);
     };
+
+    protected override updatePointer_(mousePercent: number, rangeWidth: number): void {
+        super.updatePointer_(mousePercent, rangeWidth);
+
+        // Update preview rail
+        this._previewRailEl.style.transform = `translateX(${(mousePercent * 100 * 100).toFixed(6)}%)`;
+
+        // Propagate preview time to parent
+        if (this._player === undefined) {
+            return;
+        }
+        const { min, max } = this;
+        const previewTime = min + mousePercent * (max - min);
+        const previewTimeChangeEvent: PreviewTimeChangeEvent = createCustomEvent(PREVIEW_TIME_CHANGE_EVENT, {
+            bubbles: true,
+            composed: true,
+            detail: { previewTime }
+        });
+        this.dispatchEvent(previewTimeChangeEvent);
+    }
 }
 
 customElements.define('theoplayer-time-range', TimeRange);

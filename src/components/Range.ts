@@ -185,6 +185,10 @@ export abstract class Range extends HTMLElement {
         let mousePercent = (e.clientX - rangeRect.left) / rangeRect.width;
         // Lock between 0 and 1
         mousePercent = Math.max(0, Math.min(1, mousePercent));
-        this._pointerEl.style.width = `${mousePercent * rangeRect.width}px`;
+        this.updatePointer_(mousePercent, rangeRect.width);
     };
+
+    protected updatePointer_(mousePercent: number, rangeWidth: number): void {
+        this._pointerEl.style.width = `${mousePercent * rangeWidth}px`;
+    }
 }

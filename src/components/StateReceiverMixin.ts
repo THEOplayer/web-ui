@@ -7,6 +7,7 @@ export interface StateReceiverPropertyMap {
     player: ChromelessPlayer | undefined;
     fullscreen: boolean;
     error: THEOplayerError | undefined;
+    previewTime: number;
 }
 
 export type StateReceiverMethods = {

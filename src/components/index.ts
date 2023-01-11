@@ -25,4 +25,5 @@ export * from './CastButton';
 export * from './ChromecastButton';
 export * from './LoadingIndicator';
 export * from './GestureReceiver';
+export * from './PreviewTimeDisplay';
 export { type StateReceiverElement, StateReceiverMixin } from './StateReceiverMixin';

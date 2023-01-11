@@ -14,6 +14,7 @@ import { KeyCode } from './util/KeyCode';
 import { isMobile } from './util/Environment';
 import { Rectangle } from './util/GeometryUtils';
 import './components/GestureReceiver';
+import { PREVIEW_TIME_CHANGE_EVENT, PreviewTimeChangeEvent } from './events/PreviewTimeChangeEvent';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -57,9 +58,9 @@ export class UIContainer extends HTMLElement {
     private readonly _stateReceivers: StateReceiverElement[] = [];
     private _player: ChromelessPlayer | undefined = undefined;
     private _source: SourceDescription | undefined = undefined;
-
     private _userIdleTimeout: number = 2;
     private _userIdleTimer: number = 0;
+    private _previewTime: number = NaN;
 
     constructor(configuration: PlayerConfiguration = {}) {
         super();
@@ -82,6 +83,7 @@ export class UIContainer extends HTMLElement {
         shadowRoot.addEventListener(OPEN_MENU_EVENT, this._onOpenMenu);
         shadowRoot.addEventListener(ENTER_FULLSCREEN_EVENT, this._onEnterFullscreen);
         shadowRoot.addEventListener(EXIT_FULLSCREEN_EVENT, this._onExitFullscreen);
+        shadowRoot.addEventListener(PREVIEW_TIME_CHANGE_EVENT, this._onPreviewTimeChange);
 
         this._topChromeSlot.addEventListener('transitionstart', this._onChromeSlotTransition);
         this._topChromeSlot.addEventListener('transitionend', this._onChromeSlotTransition);
@@ -327,6 +329,9 @@ export class UIContainer extends HTMLElement {
         }
         if (receiverProps.indexOf('error') >= 0) {
             receiver.setError!(this._player?.errorObject);
+        }
+        if (receiverProps.indexOf('previewTime') >= 0) {
+            receiver.setPreviewTime!(this._previewTime);
         }
     }
 
@@ -648,6 +653,17 @@ export class UIContainer extends HTMLElement {
         const bottomChromeRect = getVisibleRect(this._bottomChromeSlot);
         player.textTrackStyle.marginTop = topChromeRect?.height;
         player.textTrackStyle.marginBottom = bottomChromeRect?.height;
+    };
+
+    private readonly _onPreviewTimeChange = (rawEvent: Event): void => {
+        const event = rawEvent as PreviewTimeChangeEvent;
+        this._previewTime = event.detail.previewTime;
+
+        for (const receiver of this._stateReceivers) {
+            if (receiver[StateReceiverProps].indexOf('previewTime') >= 0) {
+                receiver.setPreviewTime!(this._previewTime);
+            }
+        }
     };
 }
 
