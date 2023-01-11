@@ -10,6 +10,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-preview-time-display');
 
 export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['previewTime']) {
     private readonly _spanEl: HTMLElement;
+    private _previewTime: number = NaN;
 
     constructor() {
         super();
@@ -22,8 +23,17 @@ export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['previe
         shadyCss.styleElement(this);
     }
 
-    setPreviewTime(previewTime: number): void {
+    get previewTime(): number {
+        return this._previewTime;
+    }
+
+    set previewTime(previewTime: number) {
+        this._previewTime = previewTime;
         setTextContent(this._spanEl, formatTime(previewTime));
+    }
+
+    setPreviewTime(previewTime: number): void {
+        this.previewTime = previewTime;
     }
 }
 

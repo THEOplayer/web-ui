@@ -1,0 +1,12 @@
+:host {
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+:host([hidden]) {
+    display: none !important;
+}
+
+canvas {
+    display: none;
+}

@@ -8,6 +8,7 @@ import { formatAsTimePhrase } from '../util/TimeUtils';
 import { createCustomEvent } from '../util/CustomEvent';
 import type { PreviewTimeChangeEvent } from '../events/PreviewTimeChangeEvent';
 import { PREVIEW_TIME_CHANGE_EVENT } from '../events/PreviewTimeChangeEvent';
+import './PreviewThumbnail';
 import './PreviewTimeDisplay';
 
 const template = document.createElement('template');
