@@ -12,11 +12,21 @@
     display: none !important;
 }
 
-/* Safari and IE need this to actually make the element fill the window */
-:host(:fullscreen) {
+@define-mixin fullscreen-styles {
     /* Needs to use !important otherwise easy to break */
     width: 100% !important;
     height: 100% !important;
+    padding: 0 !important;
+}
+
+:host([fullscreen]) {
+    @mixin fullscreen-styles;
+}
+
+/* Safari and IE need this to actually make the element fill the window */
+:host(:fullscreen) {
+    @mixin fullscreen-styles;
+}
 }
 
 [part~='chrome'] {
