@@ -2,7 +2,7 @@ import { Button } from './Button';
 import { Attribute } from '../util/Attribute';
 import type { CastState, VendorCast } from 'theoplayer';
 
-export abstract class CastButton extends Button {
+export class CastButton extends Button {
     private _castApi: VendorCast | undefined;
 
     static get observedAttributes() {

@@ -11,19 +11,24 @@ export function buttonTemplate(button: string, extraCss: string = ''): string {
     return `<style>${buttonCss}\n${extraCss}</style>${button}`;
 }
 
+const defaultTemplate = document.createElement('template');
+defaultTemplate.innerHTML = buttonTemplate('<slot></slot>');
+shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-button');
+
 /**
  * Based on howto-toggle-button
  * https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-toggle-button/howto-toggle-button.js
  */
-export abstract class Button extends HTMLElement {
+export class Button extends HTMLElement {
     static get observedAttributes() {
         return [Attribute.DISABLED];
     }
 
-    constructor(options: ButtonOptions) {
+    constructor(options?: ButtonOptions) {
         super();
+        const template = options?.template ?? defaultTemplate;
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(options.template.content.cloneNode(true));
+        shadowRoot.appendChild(template.content.cloneNode(true));
     }
 
     connectedCallback(): void {
@@ -99,5 +104,7 @@ export abstract class Button extends HTMLElement {
         this.handleClick();
     };
 
-    protected abstract handleClick(): void;
+    protected handleClick(): void {}
 }
+
+customElements.define('theoplayer-button', Button);
