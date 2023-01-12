@@ -6,12 +6,14 @@
 }
 
 [part='icon'] {
-    opacity: 1;
-    transition: opacity 0.15s;
+    transition: visibility 0.15s, opacity 0.15s;
+    opacity: 0;
+    visibility: hidden;
 }
 
-:host(:not([loading])) [part='icon'] {
-    opacity: 0;
+:host([loading]) [part='icon'] {
+    opacity: 1;
+    visibility: visible;
 }
 
 [part='icon'] ::slotted(svg),
