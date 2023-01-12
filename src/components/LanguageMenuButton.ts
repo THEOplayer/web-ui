@@ -44,7 +44,7 @@ export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player'
     }
 
     private readonly _updateTracks = (): void => {
-        const hasTracks = this._player !== undefined && (this._player.audioTracks.length > 0 || this._player.textTracks.some(isSubtitleTrack));
+        const hasTracks = this._player !== undefined && (this._player.audioTracks.length >= 2 || this._player.textTracks.some(isSubtitleTrack));
         if (hasTracks) {
             this.removeAttribute('hidden');
         } else {
