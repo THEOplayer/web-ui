@@ -21,6 +21,7 @@ const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
 export class TimeRange extends StateReceiverMixin(Range, ['player']) {
     private readonly _previewRailEl: HTMLElement;
+    private readonly _previewBoxEl: HTMLElement;
 
     private _player: ChromelessPlayer | undefined;
     private _pausedWhileScrubbing: boolean = false;
@@ -34,6 +35,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player']) {
         super({ template });
 
         this._previewRailEl = this.shadowRoot!.querySelector('.theoplayer-time-range-preview-rail')!;
+        this._previewBoxEl = this._previewRailEl.querySelector('[part~="preview-box"]')!;
 
         this._rangeEl.addEventListener('mousedown', this._pauseOnScrubStart);
         this._rangeEl.addEventListener('touchstart', this._pauseOnScrubStart);
@@ -179,11 +181,17 @@ export class TimeRange extends StateReceiverMixin(Range, ['player']) {
         this._autoAdvanceId = requestAnimationFrame(this._autoAdvanceWhilePlaying);
     };
 
-    protected override updatePointer_(mousePercent: number, rangeWidth: number): void {
-        super.updatePointer_(mousePercent, rangeWidth);
+    protected override updatePointer_(mousePercent: number, rangeRect: DOMRectReadOnly): void {
+        super.updatePointer_(mousePercent, rangeRect);
 
-        // Update preview rail
-        this._previewRailEl.style.transform = `translateX(${(mousePercent * 100 * 100).toFixed(6)}%)`;
+        // Update preview rail, keeping the preview box within bounds
+        let previewPos = rangeRect.left + mousePercent * rangeRect.width;
+        const previewBoxRect = this._previewBoxEl.getBoundingClientRect();
+        const minPreviewPos = rangeRect.left + previewBoxRect.width / 2;
+        const maxPreviewPos = rangeRect.right - previewBoxRect.width / 2;
+        previewPos = Math.max(minPreviewPos, Math.min(maxPreviewPos, previewPos));
+        const previewPosFraction = (previewPos - rangeRect.left) / rangeRect.width;
+        this._previewRailEl.style.transform = `translateX(${(previewPosFraction * 100 * 100).toFixed(6)}%)`;
 
         // Propagate preview time to parent
         if (this._player === undefined) {
