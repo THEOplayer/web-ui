@@ -1,9 +1,18 @@
-import { Button } from './Button';
+import { Button, ButtonOptions, buttonTemplate } from './Button';
 import { Attribute } from '../util/Attribute';
+import * as shadyCss from '@webcomponents/shadycss';
 
-export abstract class RadioButton extends Button {
+const defaultTemplate = document.createElement('template');
+defaultTemplate.innerHTML = buttonTemplate('<slot></slot>');
+shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-radio-button');
+
+export class RadioButton extends Button {
     static get observedAttributes() {
         return [...Button.observedAttributes, Attribute.ARIA_CHECKED];
+    }
+
+    constructor(options?: ButtonOptions) {
+        super({ template: defaultTemplate, ...options });
     }
 
     override connectedCallback() {
@@ -24,3 +33,5 @@ export abstract class RadioButton extends Button {
         this.setAttribute(Attribute.ARIA_CHECKED, checked ? 'true' : 'false');
     }
 }
+
+customElements.define('theoplayer-radio-button', RadioButton);
