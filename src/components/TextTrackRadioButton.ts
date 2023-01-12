@@ -56,10 +56,6 @@ export class TextTrackRadioButton extends RadioButton {
         this._updateFromTrack();
     };
 
-    protected handleClick(): void {
-        this.checked = true;
-    }
-
     override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (attrName === Attribute.ARIA_CHECKED && oldValue !== newValue) {

@@ -32,6 +32,10 @@ export class RadioButton extends Button {
     set checked(checked: boolean) {
         this.setAttribute(Attribute.ARIA_CHECKED, checked ? 'true' : 'false');
     }
+
+    protected handleClick(): void {
+        this.checked = true;
+    }
 }
 
 customElements.define('theoplayer-radio-button', RadioButton);
