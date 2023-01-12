@@ -1,7 +1,7 @@
 import { Constructor, fromArrayLike, isArray } from '../util/CommonUtils';
 import type { ChromelessPlayer, THEOplayerError } from 'theoplayer';
 
-export const StateReceiverProps = Symbol('THEOplayerUIStateReceiver');
+export const StateReceiverProps = 'theoplayerUiObservedProperties' as const;
 
 export interface StateReceiverPropertyMap {
     player: ChromelessPlayer | undefined;
@@ -19,7 +19,7 @@ export interface StateReceiverElement extends StateReceiverMethods, Element {
 }
 
 export function isStateReceiverElement(element: Element): element is StateReceiverElement {
-    return isArray((element as Partial<StateReceiverElement>)[StateReceiverProps]);
+    return StateReceiverProps in element && isArray((element as Partial<StateReceiverElement>)[StateReceiverProps]);
 }
 
 export function StateReceiverMixin<T extends Constructor<Element>>(base: T, props: Array<keyof StateReceiverPropertyMap>) {
