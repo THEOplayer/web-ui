@@ -518,14 +518,20 @@ export class UIContainer extends HTMLElement {
     };
 
     private readonly _updateAspectRatio = (): void => {
-        if (!this.hasAttribute(Attribute.FLUID) || this._player === undefined) {
+        if (this._player === undefined) {
             return;
         }
         const { videoWidth, videoHeight } = this._player;
         if (videoWidth > 0 && videoHeight > 0) {
-            this.style.paddingBottom = `${((videoHeight / videoWidth) * 100).toFixed(3)}%`;
+            shadyCss.styleSubtree(this, {
+                '--theoplayer-video-width': `${videoWidth}`,
+                '--theoplayer-video-height': `${videoHeight}`
+            });
         } else {
-            this.style.paddingBottom = '';
+            shadyCss.styleSubtree(this, {
+                '--theoplayer-video-width': '',
+                '--theoplayer-video-height': ''
+            });
         }
     };
 

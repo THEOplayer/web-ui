@@ -27,6 +27,9 @@
 :host(:fullscreen) {
     @mixin fullscreen-styles;
 }
+
+:host([fluid]) {
+    padding-bottom: calc(100% * var(--theoplayer-video-height, 9) / var(--theoplayer-video-width, 16));
 }
 
 [part~='chrome'] {
