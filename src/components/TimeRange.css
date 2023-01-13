@@ -39,4 +39,5 @@ input[type='range'] {
 
     font-size: var(--theoplayer-text-font-size, 14px);
     line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
+    text-shadow: var(--theoplayer-preview-text-shadow, 0 0 4px rgba(0, 0, 0, 0.75));
 }
