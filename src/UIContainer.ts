@@ -15,6 +15,10 @@ import { isMobile } from './util/Environment';
 import { Rectangle } from './util/GeometryUtils';
 import './components/GestureReceiver';
 import { PREVIEW_TIME_CHANGE_EVENT, PreviewTimeChangeEvent } from './events/PreviewTimeChangeEvent';
+import type { StreamType } from './util/StreamType';
+import type { StreamTypeChangeEvent } from './events/StreamTypeChangeEvent';
+import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
+import { createCustomEvent } from './util/CustomEvent';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -38,6 +42,7 @@ export class UIContainer extends HTMLElement {
             Attribute.ENDED,
             Attribute.CASTING,
             Attribute.HAS_ERROR,
+            Attribute.STREAM_TYPE,
             Attribute.USER_IDLE,
             Attribute.USER_IDLE_TIMEOUT
         ];
@@ -149,6 +154,14 @@ export class UIContainer extends HTMLElement {
         this._userIdleTimeout = isNaN(value) ? 0 : value;
     }
 
+    get streamType(): StreamType {
+        return this.getAttribute(Attribute.STREAM_TYPE) as StreamType;
+    }
+
+    set streamType(streamType: StreamType) {
+        this.setAttribute(Attribute.STREAM_TYPE, streamType);
+    }
+
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
@@ -226,6 +239,7 @@ export class UIContainer extends HTMLElement {
         this._player.addEventListener('resize', this._updateAspectRatio);
         this._player.addEventListener(['error', 'emptied'], this._updateError);
         this._player.addEventListener(['play', 'pause', 'ended', 'emptied'], this._updatePaused);
+        this._player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updateStreamType);
         this._player.cast?.addEventListener('castingchange', this._updateCasting);
     }
 
@@ -275,6 +289,18 @@ export class UIContainer extends HTMLElement {
                     receiver.setFullscreen!(hasValue);
                 }
             }
+        } else if (attrName === Attribute.STREAM_TYPE) {
+            for (const receiver of this._stateReceivers) {
+                if (receiver[StateReceiverProps].indexOf('streamType') >= 0) {
+                    receiver.setStreamType!(newValue);
+                }
+            }
+            const streamTypeChangeEvent: StreamTypeChangeEvent = createCustomEvent(STREAM_TYPE_CHANGE_EVENT, {
+                bubbles: true,
+                composed: true,
+                detail: { streamType: newValue }
+            });
+            this.dispatchEvent(streamTypeChangeEvent);
         } else if (attrName === Attribute.FLUID) {
             this._updateAspectRatio();
         } else if (attrName === Attribute.USER_IDLE || attrName === Attribute.PAUSED || attrName === Attribute.CASTING) {
@@ -326,6 +352,9 @@ export class UIContainer extends HTMLElement {
         }
         if (receiverProps.indexOf('fullscreen') >= 0) {
             receiver.setFullscreen!(this.fullscreen);
+        }
+        if (receiverProps.indexOf('streamType') >= 0) {
+            receiver.setStreamType!(this.streamType);
         }
         if (receiverProps.indexOf('error') >= 0) {
             receiver.setError!(this._player?.errorObject);
@@ -562,6 +591,17 @@ export class UIContainer extends HTMLElement {
         } else {
             this.removeAttribute(Attribute.ENDED);
         }
+    };
+
+    private readonly _updateStreamType = (): void => {
+        if (this._player === undefined) {
+            return;
+        }
+        const duration = this._player.duration;
+        if (isNaN(duration)) {
+            return;
+        }
+        this.streamType = duration === Infinity ? 'live' : 'vod';
     };
 
     private readonly _updateCasting = (): void => {

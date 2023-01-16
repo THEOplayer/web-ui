@@ -6,6 +6,8 @@ import defaultUiHtml from './DefaultUI.html';
 import { Attribute } from './util/Attribute';
 import { applyExtensions } from './extensions/ExtensionRegistry';
 import { isMobile } from './util/Environment';
+import type { StreamType } from './util/StreamType';
+import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
@@ -13,7 +15,15 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
 
 export class DefaultUI extends HTMLElement {
     static get observedAttributes() {
-        return [Attribute.CONFIGURATION, Attribute.SOURCE, Attribute.AUTOPLAY, Attribute.FLUID, Attribute.MOBILE, Attribute.USER_IDLE_TIMEOUT];
+        return [
+            Attribute.CONFIGURATION,
+            Attribute.SOURCE,
+            Attribute.AUTOPLAY,
+            Attribute.FLUID,
+            Attribute.MOBILE,
+            Attribute.STREAM_TYPE,
+            Attribute.USER_IDLE_TIMEOUT
+        ];
     }
 
     private readonly _ui: UIContainer;
@@ -26,6 +36,7 @@ export class DefaultUI extends HTMLElement {
 
         this._ui = shadowRoot.querySelector('theoplayer-ui')!;
         this._ui.configuration = configuration;
+        this._ui.addEventListener(STREAM_TYPE_CHANGE_EVENT, this._updateStreamType);
     }
 
     get player(): ChromelessPlayer | undefined {
@@ -56,6 +67,14 @@ export class DefaultUI extends HTMLElement {
         this._ui.autoplay = value;
     }
 
+    get streamType(): StreamType {
+        return this._ui.streamType;
+    }
+
+    set streamType(value: StreamType) {
+        this._ui.streamType = value;
+    }
+
     get userIdleTimeout(): number {
         return this._ui.userIdleTimeout;
     }
@@ -70,6 +89,7 @@ export class DefaultUI extends HTMLElement {
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
         this._upgradeProperty('autoplay');
+        this._upgradeProperty('streamType');
         this._upgradeProperty('userIdleTimeout');
 
         if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
@@ -112,10 +132,16 @@ export class DefaultUI extends HTMLElement {
             } else {
                 this._ui.removeAttribute(Attribute.FLUID);
             }
+        } else if (attrName === Attribute.STREAM_TYPE) {
+            this.streamType = newValue;
         } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
             this.userIdleTimeout = Number(newValue);
         }
     }
+
+    private readonly _updateStreamType = () => {
+        this.setAttribute(Attribute.STREAM_TYPE, this.streamType);
+    };
 }
 
 customElements.define('theoplayer-default-ui', DefaultUI);

@@ -5,6 +5,7 @@ import liveButtonCss from './LiveButton.css';
 import liveIcon from '../icons/live.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
+import type { StreamType } from '../util/StreamType';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -15,13 +16,10 @@ template.innerHTML = buttonTemplate(
 );
 shadyCss.prepareTemplate(template, 'theoplayer-live-button');
 
-export type StreamType = 'vod' | 'live';
-
 const PAUSED_EVENTS = ['play', 'pause', 'emptied'] as const;
-const STREAM_TYPE_EVENTS = ['sourcechange', 'durationchange', 'emptied'] as const;
-const LIVE_EVENTS = ['seeking', 'seeked', 'timeupdate', ...STREAM_TYPE_EVENTS] as const;
+const LIVE_EVENTS = ['seeking', 'seeked', 'timeupdate', 'durationchange', 'emptied'] as const;
 
-export class LiveButton extends StateReceiverMixin(Button, ['player']) {
+export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamType']) {
     static get observedAttributes() {
         return [...Button.observedAttributes, Attribute.STREAM_TYPE, Attribute.LIVE, Attribute.PAUSED];
     }
@@ -38,7 +36,6 @@ export class LiveButton extends StateReceiverMixin(Button, ['player']) {
         this._upgradeProperty('streamType');
         this._upgradeProperty('live');
         this._upgradeProperty('player');
-        this._updateStreamType();
     }
 
     get paused(): boolean {
@@ -59,6 +56,10 @@ export class LiveButton extends StateReceiverMixin(Button, ['player']) {
 
     set streamType(streamType: StreamType) {
         this.setAttribute(Attribute.STREAM_TYPE, streamType);
+    }
+
+    setStreamType(streamType: StreamType): void {
+        this.streamType = streamType;
     }
 
     get live(): boolean {
@@ -83,16 +84,13 @@ export class LiveButton extends StateReceiverMixin(Button, ['player']) {
         }
         if (this._player !== undefined) {
             this._player.removeEventListener(PAUSED_EVENTS, this._updatePaused);
-            this._player.removeEventListener(STREAM_TYPE_EVENTS, this._updateStreamType);
             this._player.removeEventListener(LIVE_EVENTS, this._updateLive);
         }
         this._player = player;
         this._updatePaused();
-        this._updateStreamType();
         this._updateLive();
         if (this._player !== undefined) {
             this._player.addEventListener(PAUSED_EVENTS, this._updatePaused);
-            this._player.addEventListener(STREAM_TYPE_EVENTS, this._updateStreamType);
             this._player.addEventListener(LIVE_EVENTS, this._updateLive);
         }
     }
@@ -103,13 +101,6 @@ export class LiveButton extends StateReceiverMixin(Button, ['player']) {
 
     private readonly _updatePaused = () => {
         this.paused = this._player !== undefined ? this._player.paused : true;
-    };
-    private readonly _updateStreamType = () => {
-        if (this._player !== undefined) {
-            this.streamType = this._player.duration === Infinity ? 'live' : 'vod';
-        } else {
-            this.streamType = 'vod'; // TODO Default stream type
-        }
     };
 
     private readonly _updateLive = () => {
