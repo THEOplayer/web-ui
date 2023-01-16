@@ -16,6 +16,8 @@ export enum Attribute {
     VOLUME_LEVEL = 'volume-level',
     CASTING = 'casting',
     LOADING = 'loading',
+    STREAM_TYPE = 'stream-type',
+    LIVE = 'live',
     REMAINING = 'remaining',
     SHOW_DURATION = 'show-duration',
     MENU = 'menu',

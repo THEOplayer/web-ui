@@ -27,4 +27,5 @@ export * from './LoadingIndicator';
 export * from './GestureReceiver';
 export * from './PreviewTimeDisplay';
 export * from './PreviewThumbnail';
+export * from './LiveButton';
 export { type StateReceiverElement, StateReceiverMixin } from './StateReceiverMixin';
