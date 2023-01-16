@@ -81,8 +81,8 @@ export class TimeRange extends StateReceiverMixin(Range, ['player']) {
             return;
         }
         this._lastUpdateTime = performance.now();
-        this._lastCurrentTime = this._player!.currentTime;
-        this._lastPlaybackRate = this._player!.playbackRate;
+        this._lastCurrentTime = this._player.currentTime;
+        this._lastPlaybackRate = this._player.playbackRate;
         const seekable = this._player.seekable;
         if (seekable.length !== 0) {
             this.min = seekable.start(0);
@@ -90,6 +90,10 @@ export class TimeRange extends StateReceiverMixin(Range, ['player']) {
         } else {
             this.min = 0;
             this.max = this._player.duration;
+        }
+        if (!isFinite(this._lastCurrentTime)) {
+            const isLive = this._player.duration === Infinity;
+            this._lastCurrentTime = isLive ? this.max : this.min;
         }
         this._rangeEl.valueAsNumber = this._lastCurrentTime;
         this.update();
