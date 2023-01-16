@@ -13,7 +13,11 @@
     </div>
     <div part="bottom-chrome">
         <theoplayer-control-bar>
-            <theoplayer-time-range></theoplayer-time-range>
+            <theoplayer-time-range>
+                <theoplayer-preview-thumbnail slot="preview"></theoplayer-preview-thumbnail>
+                <theoplayer-preview-time-display slot="preview" live-hidden></theoplayer-preview-time-display>
+                <theoplayer-preview-time-display slot="preview" live-only remaining></theoplayer-preview-time-display>
+            </theoplayer-time-range>
         </theoplayer-control-bar>
         <theoplayer-control-bar>
             <theoplayer-play-button mobile-hidden></theoplayer-play-button>
