@@ -1,9 +1,6 @@
 :host {
     display: inline-block;
     box-sizing: border-box;
-    padding: var(--theoplayer-preview-thumbnail-padding, 2px);
-    border-radius: var(--theoplayer-preview-thumbnail-padding, 2px);
-    background: var(--theoplayer-preview-thumbnail-background, #fff);
 }
 
 :host([hidden]) {
@@ -11,5 +8,8 @@
 }
 
 canvas {
+    padding: var(--theoplayer-preview-thumbnail-padding, 2px);
+    border-radius: var(--theoplayer-preview-thumbnail-padding, 2px);
+    background: var(--theoplayer-preview-thumbnail-background, #fff);
     display: none;
 }
