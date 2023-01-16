@@ -120,6 +120,14 @@ theoplayer-gesture-receiver {
 }
 
 /*
+ * Live-only and live-hidden elements
+ */
+:host([stream-type='live']) [part~='chrome'] ::slotted([live-hidden]),
+:host(:not([stream-type='live'])) [part~='chrome'] ::slotted([live-only]) {
+    display: none !important;
+}
+
+/*
  * Hide cursor when user is idle
  */
 :host([user-idle]:not([paused]):not([casting]):not([menu-opened])) {

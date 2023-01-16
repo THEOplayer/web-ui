@@ -74,6 +74,16 @@ theoplayer-time-range {
     display: none !important;
 }
 
+/*
+ * Live-only and live-hidden elements
+ */
+:host([stream-type='live']) [live-hidden],
+:host([stream-type='live']) theoplayer-control-bar ::slotted([live-hidden]),
+:host(:not([stream-type='live'])) [live-only],
+:host(:not([stream-type='live'])) theoplayer-control-bar ::slotted([live-only]) {
+    display: none !important;
+}
+
 theoplayer-volume-range {
     --theoplayer-range-padding-left: 0;
 }

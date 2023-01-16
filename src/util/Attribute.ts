@@ -18,6 +18,8 @@ export enum Attribute {
     LOADING = 'loading',
     STREAM_TYPE = 'stream-type',
     LIVE = 'live',
+    LIVE_ONLY = 'live-only',
+    LIVE_HIDDEN = 'live-hidden',
     REMAINING = 'remaining',
     SHOW_DURATION = 'show-duration',
     MENU = 'menu',
