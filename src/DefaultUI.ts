@@ -22,11 +22,13 @@ export class DefaultUI extends HTMLElement {
             Attribute.FLUID,
             Attribute.MOBILE,
             Attribute.STREAM_TYPE,
-            Attribute.USER_IDLE_TIMEOUT
+            Attribute.USER_IDLE_TIMEOUT,
+            Attribute.HAS_TITLE
         ];
     }
 
     private readonly _ui: UIContainer;
+    private readonly _titleSlot: HTMLSlotElement;
     private _appliedExtensions: boolean = false;
 
     constructor(configuration: PlayerConfiguration = {}) {
@@ -37,6 +39,9 @@ export class DefaultUI extends HTMLElement {
         this._ui = shadowRoot.querySelector('theoplayer-ui')!;
         this._ui.configuration = configuration;
         this._ui.addEventListener(STREAM_TYPE_CHANGE_EVENT, this._updateStreamType);
+
+        this._titleSlot = shadowRoot.querySelector('slot[name="title"]')!;
+        this._titleSlot.addEventListener('slotchange', this._onTitleSlotChange);
     }
 
     get player(): ChromelessPlayer | undefined {
@@ -101,6 +106,8 @@ export class DefaultUI extends HTMLElement {
             applyExtensions(this);
             shadyCss.styleSubtree(this);
         }
+
+        this._onTitleSlotChange();
     }
 
     private _upgradeProperty(prop: keyof this) {
@@ -144,6 +151,14 @@ export class DefaultUI extends HTMLElement {
 
     private readonly _updateStreamType = () => {
         this.setAttribute(Attribute.STREAM_TYPE, this.streamType);
+    };
+
+    private readonly _onTitleSlotChange = () => {
+        if (this._titleSlot.assignedNodes().length > 0) {
+            this.setAttribute(Attribute.HAS_TITLE, '');
+        } else {
+            this.removeAttribute(Attribute.HAS_TITLE);
+        }
     };
 }
 

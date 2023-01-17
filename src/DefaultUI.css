@@ -21,12 +21,15 @@ theoplayer-ui {
 [part='title'] {
     user-select: none;
     color: var(--theoplayer-text-color, #fff);
-    padding: var(--theoplayer-control-padding, 10px);
     text-shadow: 0 0 4px rgba(0, 0, 0, 0.75);
 
     /* Vertically center any text */
     font-size: var(--theoplayer-text-font-size, 14px);
     line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
+}
+
+:host([has-title]) [part='title'] {
+    padding: var(--theoplayer-control-padding, 10px);
 }
 
 [part='centered-chrome'] * {
