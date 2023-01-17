@@ -89,6 +89,9 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
         if ((attrName === Attribute.REMAINING || attrName === Attribute.SHOW_DURATION) && newValue !== oldValue) {
             this._updateFromPlayer();
         }
+        if (TimeDisplay.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
     }
 }
 

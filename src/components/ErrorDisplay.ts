@@ -23,6 +23,10 @@ export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error', 'ful
     private readonly _messageSlot: HTMLSlotElement;
     private _error: THEOplayerError | undefined;
 
+    static get observedAttributes() {
+        return [Attribute.FULLSCREEN];
+    }
+
     constructor() {
         super();
 
@@ -46,6 +50,12 @@ export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error', 'ful
             this.setAttribute(Attribute.FULLSCREEN, '');
         } else {
             this.removeAttribute(Attribute.FULLSCREEN);
+        }
+    }
+
+    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        if (ErrorDisplay.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
         }
     }
 }

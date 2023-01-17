@@ -310,6 +310,9 @@ export class UIContainer extends HTMLElement {
         } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
             this.userIdleTimeout = newValue;
         }
+        if (UIContainer.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
     }
 
     private readonly _onMutation = (mutations: MutationRecord[]): void => {

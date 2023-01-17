@@ -185,6 +185,9 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
             this._updateOffButton();
             this._updateTracks();
         }
+        if (TrackRadioGroup.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
     }
 }
 

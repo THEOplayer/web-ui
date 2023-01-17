@@ -112,6 +112,9 @@ export abstract class Range extends HTMLElement {
                 this._rangeEl.removeAttribute(attrName);
             }
         }
+        if (Range.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
     }
 
     private readonly _onInput = () => {

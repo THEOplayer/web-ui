@@ -36,6 +36,13 @@ export class RadioButton extends Button {
     protected handleClick(): void {
         this.checked = true;
     }
+
+    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        super.attributeChangedCallback(attrName, oldValue, newValue);
+        if (RadioButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
+    }
 }
 
 customElements.define('theoplayer-radio-button', RadioButton);

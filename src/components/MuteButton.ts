@@ -94,6 +94,13 @@ export class MuteButton extends StateReceiverMixin(Button, ['player']) {
             this._updateFromPlayer();
         }
     }
+
+    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        super.attributeChangedCallback(attrName, oldValue, newValue);
+        if (MuteButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
+    }
 }
 
 customElements.define('theoplayer-mute-button', MuteButton);

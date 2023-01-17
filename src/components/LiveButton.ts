@@ -118,6 +118,13 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
             this._player.play();
         }
     }
+
+    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        super.attributeChangedCallback(attrName, oldValue, newValue);
+        if (LiveButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
+    }
 }
 
 customElements.define('theoplayer-live-button', LiveButton);

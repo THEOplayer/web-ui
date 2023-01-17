@@ -21,7 +21,7 @@ const PLAYER_EVENTS = ['play', 'pause', 'ended', 'emptied'] as const;
 
 export class PlayButton extends StateReceiverMixin(Button, ['player']) {
     static get observedAttributes() {
-        return [...Button.observedAttributes, Attribute.PAUSED];
+        return [...Button.observedAttributes, Attribute.PAUSED, Attribute.ENDED];
     }
 
     private _player: ChromelessPlayer | undefined;
@@ -101,6 +101,13 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
             } else {
                 this._player.pause();
             }
+        }
+    }
+
+    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        super.attributeChangedCallback(attrName, oldValue, newValue);
+        if (PlayButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
         }
     }
 }

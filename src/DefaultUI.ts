@@ -137,6 +137,9 @@ export class DefaultUI extends HTMLElement {
         } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
             this.userIdleTimeout = Number(newValue);
         }
+        if (DefaultUI.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
     }
 
     private readonly _updateStreamType = () => {

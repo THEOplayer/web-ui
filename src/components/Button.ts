@@ -82,6 +82,9 @@ export class Button extends HTMLElement {
                 this.setAttribute('tabindex', '0');
             }
         }
+        if (Button.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
     }
 
     private readonly _onKeyDown = (event: KeyboardEvent) => {

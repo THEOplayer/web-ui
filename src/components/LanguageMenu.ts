@@ -18,6 +18,10 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
     private readonly _contentEl: HTMLElement;
     private _player: ChromelessPlayer | undefined;
 
+    static get observedAttributes() {
+        return [Attribute.HAS_AUDIO, Attribute.HAS_SUBTITLES];
+    }
+
     constructor() {
         super({ template });
 
@@ -68,6 +72,12 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
             this._contentEl.setAttribute(Attribute.HAS_SUBTITLES, '');
         }
     };
+
+    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        if (LanguageMenu.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
+    }
 }
 
 customElements.define('theoplayer-language-menu', LanguageMenu);
