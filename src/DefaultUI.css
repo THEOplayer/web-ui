@@ -29,12 +29,6 @@ theoplayer-ui {
     line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
 }
 
-:host(:not([mobile])) [part='top-chrome'] *,
-:host(:not([mobile])) [part='centered-chrome'] * {
-    --theoplayer-button-icon-shadow: 0 0 4px rgba(0, 0, 0, 0.75);
-    --theoplayer-button-hover-icon-shadow: 0 0 4px rgba(0, 0, 0, 1);
-}
-
 [part='centered-chrome'] * {
     --theoplayer-control-height: 48px;
 }
@@ -46,18 +40,32 @@ theoplayer-ui {
     align-items: stretch;
 }
 
+/*
+ * On mobile, put a backdrop color on the entire player when showing controls.
+ */
 :host([mobile]) theoplayer-ui {
     --theoplayer-control-backdrop-background-color: rgba(0, 0, 0, 0.5);
 }
 
+/*
+ * On desktop, put a soft gradient behind the top and bottom control bars.
+ */
+:host(:not([mobile])) [part='top-chrome']::before,
 :host(:not([mobile])) [part='bottom-chrome']::before {
     content: '';
     display: block;
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(to bottom, transparent, black);
     pointer-events: none;
+}
+
+:host(:not([mobile])) [part='top-chrome']::before {
+    background: linear-gradient(to top, transparent, black);
+}
+
+:host(:not([mobile])) [part='bottom-chrome']::before {
+    background: linear-gradient(to bottom, transparent, black);
 }
 
 .theoplayer-spacer {
