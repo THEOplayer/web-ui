@@ -73,10 +73,11 @@ export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['player
         const duration = this._player ? this._player.duration : NaN;
         const seekable = this._player?.seekable;
         const endTime = isFinite(duration) ? duration : seekable && seekable.length > 0 ? seekable.end(0) : NaN;
-        if (this.hasAttribute(Attribute.REMAINING)) {
+        const remaining = this.hasAttribute(Attribute.REMAINING);
+        if (remaining) {
             previewTime = -((endTime || 0) - previewTime);
         }
-        setTextContent(this._spanEl, formatTime(previewTime));
+        setTextContent(this._spanEl, formatTime(previewTime, endTime, remaining));
     };
 }
 

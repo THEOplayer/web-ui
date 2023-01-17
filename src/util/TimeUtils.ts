@@ -2,9 +2,9 @@ function isValidNumber(x: number): boolean {
     return !isNaN(x) && isFinite(x);
 }
 
-export function formatTime(time: number, guide: number = 0): string {
+export function formatTime(time: number, guide: number = 0, preferNegative?: boolean): string {
     // Handle negative values at the end
-    let negative = time < 0;
+    let negative = time < 0 || (preferNegative && time === 0);
     time = Math.abs(time);
 
     const guideMinutes = Math.floor((guide / 60) % 60);
@@ -44,9 +44,9 @@ export function toTimeUnitPhrase(timeUnitValue: number, unitIndex: 0 | 1 | 2): s
     return `${timeUnitValue} ${unitLabel}`;
 }
 
-export function formatAsTimePhrase(time: number): string {
+export function formatAsTimePhrase(time: number, preferNegative?: boolean): string {
     if (!isValidNumber(time)) return '';
-    const negative = time < 0;
+    const negative = time < 0 || (preferNegative && time === 0);
     time = Math.abs(time);
 
     const seconds = Math.floor(time % 60);
