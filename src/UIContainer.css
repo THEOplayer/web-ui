@@ -77,6 +77,10 @@
     flex-grow: 1;
 }
 
+[part~='vertical-layer'] {
+    background-color: var(--theoplayer-control-backdrop-background-color, transparent);
+}
+
 [part~='menu-layer'] {
     background-color: var(--theoplayer-menu-backdrop-background-color, rgba(0, 0, 0, 0.5));
 }
@@ -140,4 +144,12 @@ theoplayer-gesture-receiver {
 :host([user-idle]:not([paused]):not([casting]):not([menu-opened])) [part~='chrome'] ::slotted(:not([no-auto-hide])) {
     opacity: 0;
     transition: opacity 1s;
+}
+
+/*
+ * Hide control background color when user is idle
+ */
+:host([user-idle]:not([paused]):not([casting]):not([menu-opened])) [part~='vertical-layer'] {
+    background-color: transparent;
+    transition: background-color 1s;
 }

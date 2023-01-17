@@ -46,7 +46,11 @@ theoplayer-ui {
     align-items: stretch;
 }
 
-[part='bottom-chrome']::before {
+:host([mobile]) theoplayer-ui {
+    --theoplayer-control-backdrop-background-color: rgba(0, 0, 0, 0.5);
+}
+
+:host(:not([mobile])) [part='bottom-chrome']::before {
     content: '';
     display: block;
     position: absolute;
