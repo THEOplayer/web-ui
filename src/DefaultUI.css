@@ -29,12 +29,13 @@ theoplayer-ui {
     line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
 }
 
-[part='top-chrome'] * {
+[part='top-chrome'] *,
+[part='centered-chrome'] * {
     --theoplayer-button-icon-shadow: 0 0 4px rgba(0, 0, 0, 0.75);
     --theoplayer-button-hover-icon-shadow: 0 0 4px rgba(0, 0, 0, 1);
 }
 
-[part='centered-chrome'] > * {
+[part='centered-chrome'] * {
     --theoplayer-control-height: 48px;
 }
 
