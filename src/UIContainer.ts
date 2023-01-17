@@ -42,6 +42,7 @@ export class UIContainer extends HTMLElement {
             Attribute.ENDED,
             Attribute.CASTING,
             Attribute.HAS_ERROR,
+            Attribute.HAS_FIRST_PLAY,
             Attribute.STREAM_TYPE,
             Attribute.USER_IDLE,
             Attribute.USER_IDLE_TIMEOUT
@@ -240,6 +241,7 @@ export class UIContainer extends HTMLElement {
         this._player.addEventListener(['error', 'emptied'], this._updateError);
         this._player.addEventListener(['play', 'pause', 'ended', 'emptied'], this._updatePaused);
         this._player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updateStreamType);
+        this._player.addEventListener(['sourcechange'], this._onSourceChange);
         this._player.cast?.addEventListener('castingchange', this._updateCasting);
     }
 
@@ -585,6 +587,7 @@ export class UIContainer extends HTMLElement {
             this.setAttribute(Attribute.PAUSED, '');
         } else {
             this.removeAttribute(Attribute.PAUSED);
+            this.setAttribute(Attribute.HAS_FIRST_PLAY, '');
         }
         if (ended) {
             this.setAttribute(Attribute.ENDED, '');
@@ -610,6 +613,14 @@ export class UIContainer extends HTMLElement {
             this.setAttribute(Attribute.CASTING, '');
         } else {
             this.removeAttribute(Attribute.CASTING);
+        }
+    };
+
+    private readonly _onSourceChange = (): void => {
+        if (this._player !== undefined && !this._player.paused) {
+            this.setAttribute(Attribute.HAS_FIRST_PLAY, '');
+        } else {
+            this.removeAttribute(Attribute.HAS_FIRST_PLAY);
         }
     };
 

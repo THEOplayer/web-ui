@@ -85,6 +85,22 @@ theoplayer-time-range {
     display: none !important;
 }
 
+/*
+ * Hide all controls before first play, except for the center play button
+ */
+theoplayer-ui:not([has-first-play]) theoplayer-control-bar *,
+theoplayer-ui:not([has-first-play]) theoplayer-control-bar ::slotted(*),
+theoplayer-ui:not([has-first-play]) [part='centered-chrome'] :not(theoplayer-play-button) {
+    display: none !important;
+}
+
+/*
+ * Hide center play button on desktop after first play
+ */
+:host(:not([mobile])) theoplayer-ui[has-first-play] [part='centered-chrome'] theoplayer-play-button {
+    display: none !important;
+}
+
 theoplayer-volume-range {
     --theoplayer-range-padding-left: 0;
 }

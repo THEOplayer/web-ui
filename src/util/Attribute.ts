@@ -28,6 +28,7 @@ export enum Attribute {
     HAS_AUDIO = 'has-audio',
     HAS_SUBTITLES = 'has-subtitles',
     HAS_ERROR = 'has-error',
+    HAS_FIRST_PLAY = 'has-first-play',
     CAST_STATE = 'cast-state',
     TRACK_TYPE = 'track-type',
     SHOW_OFF = 'show-off'
