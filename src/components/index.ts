@@ -28,4 +28,5 @@ export * from './GestureReceiver';
 export * from './PreviewTimeDisplay';
 export * from './PreviewThumbnail';
 export * from './LiveButton';
+export * from './ads/index';
 export { type StateReceiverElement, StateReceiverMixin } from './StateReceiverMixin';

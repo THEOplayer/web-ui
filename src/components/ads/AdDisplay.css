@@ -1,0 +1,11 @@
+:host {
+    padding: calc(var(--theoplayer-control-padding, 10px) - var(--theoplayer-ad-display-padding, 5px)) var(--theoplayer-control-padding, 10px);
+}
+
+span {
+    display: inline-block;
+    border-radius: var(--theoplayer-ad-display-border-radius, 2px);
+    padding: var(--theoplayer-ad-display-padding, 5px);
+    color: var(--theoplayer-ad-display-text-color, #000);
+    background: var(--theoplayer-ad-display-background, #ffc50f);
+}
