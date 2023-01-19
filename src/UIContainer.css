@@ -61,6 +61,23 @@
     pointer-events: auto;
 }
 
+/*
+ * Hack: THEOplayer's own linear ad UI is not positioned correctly by default
+ * when using the chromeless player.
+ */
+[part~='media-layer'] .theoplayer-ad-linear {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+}
+
+/*
+ * Hack: hide THEOplayer's own ad countdown, so we can use <theoplayer-ad-countdown> instead.
+ */
+[part~='media-layer'] .theo-ad-remaining-container {
+    display: none !important;
+}
+
 [part~='vertical-layer'],
 [part~='chrome'] {
     flex-flow: column nowrap;

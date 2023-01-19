@@ -104,6 +104,10 @@ theoplayer-time-range {
     --theoplayer-range-track-pointer-background: rgba(255, 255, 255, 0.5);
 }
 
+[part='ad-chrome'] {
+    --theoplayer-control-height: 12px;
+}
+
 /*
  * Mobile-only and mobile-hidden elements
  */
