@@ -8,7 +8,7 @@ import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<slot>Off</slot>`, trackMenuButtonCss);
-shadyCss.prepareTemplate(template, 'theoplayer-text-track-off-menu-button');
+shadyCss.prepareTemplate(template, 'theoplayer-text-track-off-radio-button');
 
 const TRACK_EVENTS = ['change'] as const;
 
@@ -68,4 +68,4 @@ function disableSubtitleTracks(trackList: TextTracksList): void {
     }
 }
 
-customElements.define('theoplayer-text-track-off-menu-button', TextTrackOffRadioButton);
+customElements.define('theoplayer-text-track-off-radio-button', TextTrackOffRadioButton);
