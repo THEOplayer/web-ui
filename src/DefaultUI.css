@@ -106,6 +106,7 @@ theoplayer-time-range {
 
 [part='ad-chrome'] {
     --theoplayer-control-height: 12px;
+    align-items: flex-end;
 }
 
 theoplayer-ad-skip-button {
