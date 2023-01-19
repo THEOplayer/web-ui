@@ -1,0 +1,19 @@
+:host {
+    --theoplayer-control-background: var(--theoplayer-ad-skip-background, #000);
+    --theoplayer-control-hover-background: var(--theoplayer-control-background);
+
+    color: var(--theoplayer-ad-skip-color, #fff);
+    border: var(--theoplayer-ad-skip-border, 1px solid rgba(255, 255, 255, 0.25));
+}
+
+:host(:hover:not([disabled])) {
+    color: var(--theoplayer-ad-skip-hover-color, var(--theoplayer-ad-skip-color, #fff));
+    border: var(--theoplayer-ad-skip-hover-border, 1px solid rgba(255, 255, 255, 0.5));
+}
+
+:host([disabled]) {
+    --theoplayer-control-background: var(--theoplayer-ad-skip-countdown-background, transparent);
+
+    color: var(--theoplayer-ad-skip-countdown-color, var(--theoplayer-ad-skip-color, #fff));
+    border: var(--theoplayer-ad-skip-countdown-border, 1px solid transparent);
+}

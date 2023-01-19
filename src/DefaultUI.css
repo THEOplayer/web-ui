@@ -108,6 +108,10 @@ theoplayer-time-range {
     --theoplayer-control-height: 12px;
 }
 
+theoplayer-ad-skip-button {
+    border-right: 0 !important;
+}
+
 /*
  * Mobile-only and mobile-hidden elements
  */

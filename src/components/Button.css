@@ -38,7 +38,7 @@
     box-shadow: none;
 }
 
-:host(:hover) {
+:host(:hover:not([disabled])) {
     background: var(--theoplayer-control-hover-background, var(--theoplayer-control-background, transparent));
 }
 
