@@ -8,6 +8,7 @@ import { formatAsTimePhrase } from '../util/TimeUtils';
 import { createCustomEvent } from '../util/CustomEvent';
 import type { PreviewTimeChangeEvent } from '../events/PreviewTimeChangeEvent';
 import { PREVIEW_TIME_CHANGE_EVENT } from '../events/PreviewTimeChangeEvent';
+import { Attribute } from '../util/Attribute';
 import './PreviewThumbnail';
 import './PreviewTimeDisplay';
 
@@ -87,9 +88,11 @@ export class TimeRange extends StateReceiverMixin(Range, ['player']) {
         if (seekable.length !== 0) {
             this.min = seekable.start(0);
             this.max = seekable.end(0);
+            this.removeAttribute(Attribute.DISABLED);
         } else {
             this.min = 0;
             this.max = this._player.duration;
+            this.setAttribute(Attribute.DISABLED, '');
         }
         if (!isFinite(this._lastCurrentTime)) {
             const isLive = this._player.duration === Infinity;

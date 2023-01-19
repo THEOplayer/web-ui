@@ -22,7 +22,7 @@
     display: none !important;
 }
 
-:host(:hover) {
+:host(:hover:not([disabled])) {
     background: var(--theoplayer-control-hover-background, var(--theoplayer-control-background, transparent));
 }
 
@@ -49,13 +49,13 @@
 [part='pointer'] {
     background: var(--theoplayer-range-track-pointer-background, transparent);
     border-right: var(--theoplayer-range-track-pointer-border-right, none);
-    transition: visibility .25s, opacity .25s;
+    transition: visibility 0.25s, opacity 0.25s;
     visibility: hidden;
     opacity: 0;
 }
 
-:host(:hover) [part='pointer'] {
-    transition: visibility .5s, opacity .5s;
+:host(:hover:not([disabled])) [part='pointer'] {
+    transition: visibility 0.5s, opacity 0.5s;
     visibility: visible;
     opacity: 1;
 }
@@ -82,7 +82,6 @@ input[type='range'] {
     border-radius: var(--theoplayer-range-thumb-border-radius, 10px);
     background: var(--theoplayer-range-thumb-background, #fff);
     box-shadow: var(--theoplayer-range-thumb-box-shadow, 1px 1px 1px transparent);
-    cursor: pointer;
     transition: var(--theoplayer-range-thumb-transition, none);
     transform: var(--theoplayer-range-thumb-transform, none);
     opacity: var(--theoplayer-range-thumb-opacity, 1);
@@ -106,6 +105,22 @@ input[type='range']::-ms-thumb {
     @mixin thumb-styles;
 }
 
+@define-mixin thumb-styles-enabled {
+    cursor: pointer;
+}
+
+input[type='range']:not([disabled])::-webkit-slider-thumb {
+    @mixin thumb-styles-enabled;
+}
+
+input[type='range']:not([disabled])::-moz-range-thumb {
+    @mixin thumb-styles-enabled;
+}
+
+input[type='range']:not([disabled])::-ms-thumb {
+    @mixin thumb-styles-enabled;
+}
+
 @define-mixin track-styles {
     width: var(--theoplayer-range-track-width, 100%);
     min-width: 40px;
@@ -118,7 +133,6 @@ input[type='range']::-ms-thumb {
     box-shadow: var(--theoplayer-range-track-box-shadow, none);
     transition: var(--theoplayer-range-track-transition, none);
     transform: translate(var(--theoplayer-range-track-translate-x, 0), var(--theoplayer-range-track-translate-y, 0));
-    cursor: pointer;
 }
 
 input[type='range']::-webkit-slider-runnable-track {
@@ -145,6 +159,22 @@ input[type='range']::-ms-fill-lower,
 input[type='range']::-ms-fill-upper,
 input[type='range']::-ms-tooltip {
     display: none;
+}
+
+@define-mixin track-styles-enabled {
+    cursor: pointer;
+}
+
+input[type='range']:not([disabled])::-webkit-slider-runnable-track {
+    @mixin track-styles-enabled;
+}
+
+input[type='range']:not([disabled])::-moz-range-track {
+    @mixin track-styles-enabled;
+}
+
+input[type='range']:not([disabled])::-ms-track {
+    @mixin track-styles-enabled;
 }
 
 input[type='range']:focus {

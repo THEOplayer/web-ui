@@ -23,7 +23,7 @@ input[type='range'] {
     opacity: 0;
 }
 
-:host(:hover) .theoplayer-time-range-preview-rail {
+:host(:hover:not([disabled])) .theoplayer-time-range-preview-rail {
     transition: visibility 0.5s, opacity 0.5s;
     visibility: visible;
     opacity: 1;
