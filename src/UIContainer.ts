@@ -235,11 +235,13 @@ export class UIContainer extends HTMLElement {
 
         this._updateAspectRatio();
         this._updateError();
-        this._updatePaused();
+        this._updatePausedAndEnded();
         this._updateCasting();
         this._player.addEventListener('resize', this._updateAspectRatio);
         this._player.addEventListener(['error', 'emptied'], this._updateError);
-        this._player.addEventListener(['play', 'pause', 'ended', 'emptied'], this._updatePaused);
+        this._player.addEventListener('play', this._onPlay);
+        this._player.addEventListener('pause', this._onPause);
+        this._player.addEventListener(['ended', 'emptied'], this._updatePausedAndEnded);
         this._player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updateStreamType);
         this._player.addEventListener(['sourcechange'], this._onSourceChange);
         this._player.cast?.addEventListener('castingchange', this._updateCasting);
@@ -583,15 +585,29 @@ export class UIContainer extends HTMLElement {
         }
     };
 
-    private readonly _updatePaused = (): void => {
+    private readonly _onPlay = (): void => {
+        this.removeAttribute(Attribute.PAUSED);
+        this.setAttribute(Attribute.HAS_FIRST_PLAY, '');
+        this._updateEnded();
+    };
+
+    private readonly _onPause = (): void => {
+        this.setAttribute(Attribute.PAUSED, '');
+        this._updateEnded();
+    };
+
+    private readonly _updatePausedAndEnded = (): void => {
         const paused = this._player ? this._player.paused : true;
-        const ended = this._player ? this._player.ended : false;
         if (paused) {
             this.setAttribute(Attribute.PAUSED, '');
         } else {
             this.removeAttribute(Attribute.PAUSED);
-            this.setAttribute(Attribute.HAS_FIRST_PLAY, '');
         }
+        this._updateEnded();
+    };
+
+    private readonly _updateEnded = (): void => {
+        const ended = this._player ? this._player.ended : false;
         if (ended) {
             this.setAttribute(Attribute.ENDED, '');
         } else {

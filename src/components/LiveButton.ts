@@ -16,7 +16,7 @@ template.innerHTML = buttonTemplate(
 );
 shadyCss.prepareTemplate(template, 'theoplayer-live-button');
 
-const PAUSED_EVENTS = ['play', 'pause', 'emptied'] as const;
+const PAUSED_EVENTS = ['play', 'pause', 'playing', 'emptied'] as const;
 const LIVE_EVENTS = ['seeking', 'seeked', 'timeupdate', 'durationchange', 'emptied'] as const;
 
 export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamType']) {

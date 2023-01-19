@@ -17,8 +17,6 @@ template.innerHTML = buttonTemplate(
 );
 shadyCss.prepareTemplate(template, 'theoplayer-play-button');
 
-const PLAYER_EVENTS = ['play', 'pause', 'ended', 'emptied'] as const;
-
 export class PlayButton extends StateReceiverMixin(Button, ['player']) {
     static get observedAttributes() {
         return [...Button.observedAttributes, Attribute.PAUSED, Attribute.ENDED];
@@ -71,12 +69,16 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
             return;
         }
         if (this._player !== undefined) {
-            this._player.removeEventListener(PLAYER_EVENTS, this._updateFromPlayer);
+            this._player.removeEventListener('play', this._onPlay);
+            this._player.removeEventListener('pause', this._onPause);
+            this._player.removeEventListener(['ended', 'emptied'], this._updateFromPlayer);
         }
         this._player = player;
         this._updateFromPlayer();
         if (this._player !== undefined) {
-            this._player.addEventListener(PLAYER_EVENTS, this._updateFromPlayer);
+            this._player.addEventListener('play', this._onPlay);
+            this._player.addEventListener('pause', this._onPause);
+            this._player.addEventListener(['ended', 'emptied'], this._updateFromPlayer);
         }
     }
 
@@ -84,15 +86,24 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
         this.player = player;
     }
 
-    private readonly _updateFromPlayer = () => {
-        if (this._player !== undefined) {
-            this.paused = this._player.paused;
-            this.ended = this._player.ended;
-        } else {
-            this.paused = true;
-            this.ended = false;
-        }
+    private readonly _onPlay = (): void => {
+        this.paused = false;
+        this._updateEnded();
     };
+
+    private readonly _onPause = (): void => {
+        this.paused = true;
+        this._updateEnded();
+    };
+
+    private readonly _updateFromPlayer = (): void => {
+        this.paused = this._player?.paused ?? true;
+        this._updateEnded();
+    };
+
+    private _updateEnded(): void {
+        this.ended = this._player?.ended ?? false;
+    }
 
     protected override handleClick() {
         if (this._player !== undefined) {
