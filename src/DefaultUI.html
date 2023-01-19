@@ -1,19 +1,19 @@
 <theoplayer-ui>
     <theoplayer-control-bar slot="top-chrome" part="top-chrome">
-        <div part="title">
+        <div part="title" ad-hidden>
             <slot name="title"></slot>
         </div>
         <span class="theoplayer-spacer"></span>
-        <theoplayer-language-menu-button menu="language-menu" mobile-only></theoplayer-language-menu-button>
-        <theoplayer-settings-menu-button menu="settings-menu" mobile-only></theoplayer-settings-menu-button>
-        <theoplayer-chromecast-button mobile-only></theoplayer-chromecast-button>
+        <theoplayer-language-menu-button menu="language-menu" mobile-only ad-hidden></theoplayer-language-menu-button>
+        <theoplayer-settings-menu-button menu="settings-menu" mobile-only ad-hidden></theoplayer-settings-menu-button>
+        <theoplayer-chromecast-button mobile-only ad-hidden></theoplayer-chromecast-button>
         <slot name="top-control-bar"></slot>
     </theoplayer-control-bar>
     <theoplayer-loading-indicator slot="centered-loading" no-auto-hide></theoplayer-loading-indicator>
     <div slot="centered-chrome" part="centered-chrome">
         <theoplayer-play-button></theoplayer-play-button>
     </div>
-    <theoplayer-control-bar part="ad-chrome">
+    <theoplayer-control-bar part="ad-chrome" ad-only>
         <theoplayer-ad-display></theoplayer-ad-display>
         <theoplayer-ad-countdown></theoplayer-ad-countdown>
     </theoplayer-control-bar>
@@ -29,13 +29,13 @@
             <theoplayer-play-button mobile-hidden></theoplayer-play-button>
             <theoplayer-mute-button></theoplayer-mute-button>
             <theoplayer-volume-range mobile-hidden></theoplayer-volume-range>
-            <theoplayer-live-button></theoplayer-live-button>
+            <theoplayer-live-button ad-hidden></theoplayer-live-button>
             <theoplayer-time-display live-hidden show-duration></theoplayer-time-display>
             <theoplayer-time-display live-only remaining></theoplayer-time-display>
             <span class="theoplayer-spacer"></span>
-            <theoplayer-language-menu-button menu="language-menu" mobile-hidden></theoplayer-language-menu-button>
-            <theoplayer-settings-menu-button menu="settings-menu" mobile-hidden></theoplayer-settings-menu-button>
-            <theoplayer-chromecast-button mobile-hidden></theoplayer-chromecast-button>
+            <theoplayer-language-menu-button menu="language-menu" mobile-hidden ad-hidden></theoplayer-language-menu-button>
+            <theoplayer-settings-menu-button menu="settings-menu" mobile-hidden ad-hidden></theoplayer-settings-menu-button>
+            <theoplayer-chromecast-button mobile-hidden ad-hidden></theoplayer-chromecast-button>
             <slot name="bottom-control-bar"></slot>
             <theoplayer-fullscreen-button></theoplayer-fullscreen-button>
         </theoplayer-control-bar>

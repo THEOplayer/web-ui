@@ -129,6 +129,16 @@ theoplayer-time-range {
 }
 
 /*
+ * Ad-only and ad-hidden elements
+ */
+theoplayer-ui[playing-ad] [ad-hidden],
+theoplayer-ui[playing-ad] theoplayer-control-bar ::slotted([ad-hidden]),
+theoplayer-ui:not([playing-ad]) [ad-only],
+theoplayer-ui:not([playing-ad]) theoplayer-control-bar ::slotted([ad-only]) {
+    display: none !important;
+}
+
+/*
  * Hide all controls before first play, except for the center play button
  */
 theoplayer-ui:not([has-first-play]) theoplayer-control-bar *,

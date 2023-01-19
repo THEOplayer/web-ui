@@ -41,6 +41,7 @@ export class UIContainer extends HTMLElement {
             Attribute.PAUSED,
             Attribute.ENDED,
             Attribute.CASTING,
+            Attribute.PLAYING_AD,
             Attribute.HAS_ERROR,
             Attribute.HAS_FIRST_PLAY,
             Attribute.STREAM_TYPE,
@@ -245,6 +246,7 @@ export class UIContainer extends HTMLElement {
         this._player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updateStreamType);
         this._player.addEventListener(['sourcechange'], this._onSourceChange);
         this._player.cast?.addEventListener('castingchange', this._updateCasting);
+        this._player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend'], this._updatePlayingAd);
     }
 
     disconnectedCallback(): void {
@@ -632,6 +634,15 @@ export class UIContainer extends HTMLElement {
             this.setAttribute(Attribute.CASTING, '');
         } else {
             this.removeAttribute(Attribute.CASTING);
+        }
+    };
+
+    private readonly _updatePlayingAd = (): void => {
+        const playingAd = this._player?.ads?.playing ?? false;
+        if (playingAd) {
+            this.setAttribute(Attribute.PLAYING_AD, '');
+        } else {
+            this.removeAttribute(Attribute.PLAYING_AD);
         }
     };
 

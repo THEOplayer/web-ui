@@ -32,5 +32,6 @@ export enum Attribute {
     HAS_TITLE = 'has-title',
     CAST_STATE = 'cast-state',
     TRACK_TYPE = 'track-type',
-    SHOW_OFF = 'show-off'
+    SHOW_OFF = 'show-off',
+    PLAYING_AD = 'playing-ad'
 }

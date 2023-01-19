@@ -149,6 +149,14 @@ theoplayer-gesture-receiver {
 }
 
 /*
+ * Ad-only and ad-hidden elements
+ */
+:host([playing-ad]) [part~='chrome'] ::slotted([ad-hidden]),
+:host(:not([playing-ad])) [part~='chrome'] ::slotted([ad-only]) {
+    display: none !important;
+}
+
+/*
  * Hide cursor when user is idle
  */
 :host([user-idle]:not([paused]):not([casting]):not([menu-opened])) {
