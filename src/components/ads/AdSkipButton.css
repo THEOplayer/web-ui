@@ -1,19 +1,32 @@
 :host {
-    --theoplayer-control-background: var(--theoplayer-ad-skip-background, #000);
-    --theoplayer-control-hover-background: var(--theoplayer-control-background);
-
+    background: var(--theoplayer-ad-skip-background, rgba(0, 0, 0, 0.7));
     color: var(--theoplayer-ad-skip-color, #fff);
-    border: var(--theoplayer-ad-skip-border, 1px solid rgba(255, 255, 255, 0.25));
+    border: var(--theoplayer-ad-skip-border, 1px solid rgba(255, 255, 255, 0.5));
 }
 
 :host(:hover:not([disabled])) {
+    background: var(--theoplayer-ad-skip-hover-background, rgba(0, 0, 0, 0.9));
     color: var(--theoplayer-ad-skip-hover-color, var(--theoplayer-ad-skip-color, #fff));
-    border: var(--theoplayer-ad-skip-hover-border, 1px solid rgba(255, 255, 255, 0.5));
+    border: var(--theoplayer-ad-skip-hover-border, 1px solid #fff);
 }
 
 :host([disabled]) {
-    --theoplayer-control-background: var(--theoplayer-ad-skip-countdown-background, transparent);
-
+    background: var(--theoplayer-ad-skip-countdown-background, transparent);
     color: var(--theoplayer-ad-skip-countdown-color, var(--theoplayer-ad-skip-color, #fff));
     border: var(--theoplayer-ad-skip-countdown-border, 1px solid transparent);
+}
+
+[part='skip'] {
+    display: flex;
+    align-items: center;
+}
+
+[part='skip-icon'] {
+    padding-left: var(--theoplayer-control-padding, 10px);
+}
+
+[part='skip-icon'] svg,
+[part='skip-icon'] ::slotted(svg) {
+    width: var(--theoplayer-ad-skip-icon-width, var(--theoplayer-control-height, 24px));
+    height: var(--theoplayer-ad-skip-icon-height, var(--theoplayer-control-height, 24px));
 }

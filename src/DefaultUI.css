@@ -113,6 +113,16 @@ theoplayer-ad-skip-button {
     border-right: 0 !important;
 }
 
+theoplayer-ad-skip-button:not([disabled]) {
+    /*
+     * Make "Skip Ads" text bigger.
+     */
+    font-size: calc(1.25 * var(--theoplayer-text-font-size, 14px));
+    line-height: calc(1.25 * var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px)));
+    --theoplayer-ad-skip-icon-width: 24px;
+    --theoplayer-ad-skip-icon-height: 24px;
+}
+
 /*
  * Mobile-only and mobile-hidden elements
  */

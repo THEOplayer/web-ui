@@ -1,6 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Button, buttonTemplate } from '../Button';
 import adSkipButtonCss from './AdSkipButton.css';
+import skipNextIcon from '../../icons/skip-next.svg';
 import { StateReceiverMixin } from '../StateReceiverMixin';
 import { Attribute } from '../../util/Attribute';
 import type { ChromelessPlayer } from 'theoplayer';
@@ -9,7 +10,11 @@ import { isLinearAd } from '../../util/AdUtils';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
-    `<span part="countdown">Skip in 0 seconds</span><span part="skip"><slot name="skip">Skip Ad</slot></span>`,
+    `<span part="countdown">Skip in 0 seconds</span>` +
+        `<span part="skip">` +
+        `<span part="skip-text"><slot name="skip-text">Skip Ad</slot></span> ` +
+        `<span part="skip-icon"><slot name="skip-icon">${skipNextIcon}</slot></span>` +
+        `</span>`,
     adSkipButtonCss
 );
 shadyCss.prepareTemplate(template, 'theoplayer-ad-skip-button');
