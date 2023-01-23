@@ -1,0 +1,91 @@
+import * as shadyCss from '@webcomponents/shadycss';
+import linkButtonCss from './LinkButton.css';
+import { Attribute } from '../util/Attribute';
+import type { ButtonOptions } from './Button';
+import { Button, buttonTemplate } from './Button';
+
+export function linkButtonTemplate(button: string, extraCss: string = ''): string {
+    return buttonTemplate(`<a>${button}</a>`, `${linkButtonCss}\n${extraCss}`);
+}
+
+const defaultTemplate = document.createElement('template');
+defaultTemplate.innerHTML = linkButtonTemplate('<slot></slot>');
+shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-link-button');
+
+export class LinkButton extends HTMLElement {
+    private readonly _linkEl: HTMLAnchorElement;
+
+    static get observedAttributes() {
+        return [Attribute.DISABLED];
+    }
+
+    constructor(options?: ButtonOptions) {
+        super();
+
+        const template = options?.template ?? defaultTemplate;
+        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
+        shadowRoot.appendChild(template.content.cloneNode(true));
+
+        this._linkEl = shadowRoot.querySelector('a')!;
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
+
+        if (!this.hasAttribute('role')) {
+            this.setAttribute('role', 'button');
+        }
+        if (!this.hasAttribute('tabindex')) {
+            this.setAttribute('tabindex', '0');
+        }
+
+        this._upgradeProperty('disabled');
+    }
+
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
+    }
+
+    get disabled() {
+        return this.hasAttribute(Attribute.DISABLED);
+    }
+
+    set disabled(disabled: boolean) {
+        if (disabled) {
+            this.setAttribute(Attribute.DISABLED, '');
+        } else {
+            this.removeAttribute(Attribute.DISABLED);
+        }
+    }
+
+    protected setLink(href: string, target: string): void {
+        this._linkEl.href = href;
+        this._linkEl.target = target;
+    }
+
+    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        if (attrName === Attribute.DISABLED && newValue !== oldValue) {
+            const hasValue = newValue != null;
+            this.setAttribute('aria-disabled', hasValue ? 'true' : 'false');
+            // The `tabindex` attribute does not provide a way to fully remove focusability from an element.
+            // Elements with `tabindex=-1` can still be focused with a mouse or by calling `focus()`.
+            // To make sure an element is disabled and not focusable, remove the `tabindex` attribute.
+            if (hasValue) {
+                this.removeAttribute('tabindex');
+                // If the focus is currently on this element, unfocus it by calling the `HTMLElement.blur()` method.
+                this.blur();
+            } else {
+                this.setAttribute('tabindex', '0');
+            }
+        }
+        if (Button.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
+    }
+}
+
+customElements.define('theoplayer-link-button', LinkButton);

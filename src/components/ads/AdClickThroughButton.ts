@@ -1,5 +1,5 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import { Button, buttonTemplate } from '../Button';
+import { LinkButton, linkButtonTemplate } from '../LinkButton';
 import { StateReceiverMixin } from '../StateReceiverMixin';
 import { Attribute } from '../../util/Attribute';
 import type { ChromelessPlayer } from 'theoplayer';
@@ -7,22 +7,20 @@ import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
 
 const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<a target="_blank"><slot>Visit Advertiser</slot></a>`);
+template.innerHTML = linkButtonTemplate(`<slot>Visit Advertiser</slot>`);
 shadyCss.prepareTemplate(template, 'theoplayer-ad-clickthrough-button');
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
-export class AdClickThroughButton extends StateReceiverMixin(Button, ['player']) {
-    private readonly _linkEl: HTMLAnchorElement;
+export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['player']) {
     private _player: ChromelessPlayer | undefined;
 
     static get observedAttributes() {
-        return [...Button.observedAttributes, Attribute.CLICKTHROUGH];
+        return [...LinkButton.observedAttributes, Attribute.CLICKTHROUGH];
     }
 
     constructor() {
         super({ template });
-        this._linkEl = this.shadowRoot!.querySelector('a')!;
     }
 
     connectedCallback(): void {
@@ -64,16 +62,13 @@ export class AdClickThroughButton extends StateReceiverMixin(Button, ['player'])
         this.player = player;
     }
 
-    protected override handleClick(): void {
-        this._linkEl.click();
-    }
-
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (attrName === Attribute.CLICKTHROUGH && newValue !== oldValue) {
             const hasValue = newValue != null;
-            this._linkEl.href = newValue ? String(newValue).trim() : '#';
-            this.disabled = hasValue;
+            const href = newValue ? String(newValue).trim() : '#';
+            this.setLink(href, '_blank');
+            this.disabled = !hasValue;
             if (hasValue) {
                 this.style.display = '';
             } else {

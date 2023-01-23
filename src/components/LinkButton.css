@@ -1,0 +1,27 @@
+:host {
+    padding: 0;
+}
+
+a {
+    padding: var(--theoplayer-control-padding, 10px);
+    color: #fff;
+    text-decoration: none;
+}
+
+:host(:focus) {
+    box-shadow: none;
+    outline: 0;
+}
+
+a:focus {
+    box-shadow: inset 0 0 0 2px var(--theoplayer-focus-ring-color, rgba(27, 127, 204, 0.9));
+    outline: 0;
+}
+
+a:focus:not(:focus-visible) {
+    box-shadow: none;
+}
+
+:host(:not([disabled])) a:hover {
+    background: var(--theoplayer-control-hover-background, var(--theoplayer-control-background, transparent));
+}

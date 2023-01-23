@@ -1,5 +1,6 @@
 export * from './ControlBar';
 export * from './Button';
+export * from './LinkButton';
 export * from './PlayButton';
 export * from './MuteButton';
 export * from './TimeDisplay';
