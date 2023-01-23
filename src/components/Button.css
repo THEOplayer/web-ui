@@ -76,3 +76,8 @@ svg,
 :host(:hover) ::slotted(svg) {
     filter: drop-shadow(var(--theoplayer-button-hover-icon-shadow, 0 0 4px rgba(255, 255, 255, 0.5)));
 }
+
+a[href] {
+    color: #fff;
+    text-decoration: none;
+}

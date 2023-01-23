@@ -7,12 +7,13 @@ import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
 
 const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<slot>Visit Advertiser</slot>`);
+template.innerHTML = buttonTemplate(`<a target="_blank"><slot>Visit Advertiser</slot></a>`);
 shadyCss.prepareTemplate(template, 'theoplayer-ad-clickthrough-button');
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
 export class AdClickThroughButton extends StateReceiverMixin(Button, ['player']) {
+    private readonly _linkEl: HTMLAnchorElement;
     private _player: ChromelessPlayer | undefined;
 
     static get observedAttributes() {
@@ -21,6 +22,7 @@ export class AdClickThroughButton extends StateReceiverMixin(Button, ['player'])
 
     constructor() {
         super({ template });
+        this._linkEl = this.shadowRoot!.querySelector('a')!;
     }
 
     connectedCallback(): void {
@@ -63,16 +65,14 @@ export class AdClickThroughButton extends StateReceiverMixin(Button, ['player'])
     }
 
     protected override handleClick(): void {
-        const clickThrough = this.clickThrough;
-        if (clickThrough != null) {
-            window.open(clickThrough, '_blank')?.focus();
-        }
+        this._linkEl.click();
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (attrName === Attribute.CLICKTHROUGH && newValue !== oldValue) {
             const hasValue = newValue != null;
+            this._linkEl.href = newValue ? String(newValue).trim() : '#';
             this.disabled = hasValue;
             if (hasValue) {
                 this.style.display = '';
@@ -98,8 +98,8 @@ export class AdClickThroughButton extends StateReceiverMixin(Button, ['player'])
             this.clickThrough = null;
             return;
         }
-        const clickThrough = linearAd.clickThrough?.trim();
-        if (clickThrough === undefined || clickThrough.length === 0) {
+        const clickThrough = linearAd.clickThrough;
+        if (!clickThrough) {
             // Linear ad has no clickthrough URL.
             this.clickThrough = null;
             return;
