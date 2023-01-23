@@ -115,6 +115,11 @@ theoplayer-ad-skip-button {
     flex-shrink: 0;
 }
 
+theoplayer-ad-countdown {
+    justify-content: flex-start;
+    min-width: 0;
+}
+
 theoplayer-ad-skip-button {
     border-right: 0 !important;
 }

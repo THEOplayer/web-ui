@@ -16,3 +16,10 @@
     font-size: var(--theoplayer-text-font-size, 14px);
     line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
 }
+
+:host,
+span {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
