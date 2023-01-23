@@ -110,6 +110,11 @@ theoplayer-time-range {
     pointer-events: none;
 }
 
+theoplayer-ad-display,
+theoplayer-ad-skip-button {
+    flex-shrink: 0;
+}
+
 theoplayer-ad-skip-button {
     border-right: 0 !important;
 }

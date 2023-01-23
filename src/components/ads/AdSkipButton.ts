@@ -108,7 +108,7 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
         if (currentTime < skipOffset) {
             // Show countdown.
             const timeToSkip = Math.ceil(skipOffset - currentTime);
-            setTextContent(this._countdownEl, `Skip in ${timeToSkip} ${timeToSkip === 1 ? 'second' : 'seconds'}`);
+            setTextContent(this._countdownEl, `Skip in ${timeToSkip}s`);
             this._countdownEl.style.display = '';
             this._skipEl.style.display = 'none';
             this.style.display = '';

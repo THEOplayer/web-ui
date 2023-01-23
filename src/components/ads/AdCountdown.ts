@@ -69,7 +69,7 @@ export class AdCountdown extends StateReceiverMixin(HTMLElement, ['player']) {
             return;
         }
         maxRemainingDuration = Math.ceil(maxRemainingDuration);
-        setTextContent(this._spanEl, `Content will resume in ${maxRemainingDuration} ${maxRemainingDuration === 1 ? 'second' : 'seconds'}`);
+        setTextContent(this._spanEl, `Content will resume in ${maxRemainingDuration}s`);
         this.style.display = '';
     };
 }
