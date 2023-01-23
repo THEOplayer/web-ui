@@ -1,7 +1,3 @@
-:host(:not([stream-type='live'])) {
-    display: none !important;
-}
-
 [part='icon'] svg,
 [part='icon'] ::slotted(svg) {
     fill: var(--theoplayer-live-button-color, rgb(140, 140, 140));
