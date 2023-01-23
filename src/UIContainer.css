@@ -72,9 +72,11 @@
 }
 
 /*
- * Hack: hide THEOplayer's own ad countdown, so we can use <theoplayer-ad-countdown> instead.
+ * Hack: hide THEOplayer's own ad countdown and skip button,
+ * so we can use <theoplayer-ad-countdown> and <theoplayer-ad-skip-button> instead.
  */
-[part~='media-layer'] .theo-ad-remaining-container {
+[part~='media-layer'] .theo-ad-remaining-container,
+[part~='media-layer'] .theoplayer-ad-skip {
     display: none !important;
 }
 
