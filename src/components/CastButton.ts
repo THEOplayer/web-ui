@@ -10,7 +10,7 @@ export class CastButton extends Button {
         return [...Button.observedAttributes, Attribute.CAST_STATE];
     }
 
-    connectedCallback() {
+    override connectedCallback() {
         super.connectedCallback();
         this._upgradeProperty('castState');
         this._upgradeProperty('castApi');

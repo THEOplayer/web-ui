@@ -36,7 +36,7 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
         this._skipEl = this.shadowRoot!.querySelector('[part="skip"]')!;
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
         super.connectedCallback();
         this._upgradeProperty('player');
         this._update();

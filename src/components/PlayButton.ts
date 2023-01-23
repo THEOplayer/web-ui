@@ -28,7 +28,7 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
         super({ template });
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
         super.connectedCallback();
         this._upgradeProperty('paused');
         this._upgradeProperty('ended');

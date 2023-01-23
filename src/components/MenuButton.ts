@@ -17,7 +17,7 @@ export class MenuButton extends Button {
         super({ template, ...options });
     }
 
-    connectedCallback() {
+    override connectedCallback() {
         super.connectedCallback();
 
         this._upgradeProperty('menu');

@@ -21,7 +21,7 @@ export class TextTrackRadioButton extends RadioButton {
         this._labelEl = this.shadowRoot!.querySelector('span')!;
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
         super.connectedCallback();
         this._upgradeProperty('track');
     }

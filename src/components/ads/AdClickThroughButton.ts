@@ -23,7 +23,7 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
         super({ template });
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
         super.connectedCallback();
         this._upgradeProperty('clickThrough');
         this._upgradeProperty('player');

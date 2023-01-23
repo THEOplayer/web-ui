@@ -32,7 +32,7 @@ export class MuteButton extends StateReceiverMixin(Button, ['player']) {
         super({ template });
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
         super.connectedCallback();
         this._upgradeProperty('volumeLevel');
         this._upgradeProperty('player');
