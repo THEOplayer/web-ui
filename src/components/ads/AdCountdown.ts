@@ -1,11 +1,12 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import textDisplayCss from '../TextDisplay.css';
+import adCountdownCss from './AdCountdown.css';
 import { StateReceiverMixin } from '../StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer';
 import { setTextContent } from '../../util/CommonUtils';
 
 const template = document.createElement('template');
-template.innerHTML = `<style>${textDisplayCss}</style><span></span>`;
+template.innerHTML = `<style>${textDisplayCss}\n${adCountdownCss}</style><span></span>`;
 shadyCss.prepareTemplate(template, 'theoplayer-ad-countdown');
 
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak'] as const;
