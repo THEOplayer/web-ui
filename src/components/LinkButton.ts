@@ -43,6 +43,7 @@ export class LinkButton extends HTMLElement {
         this._upgradeProperty('disabled');
 
         this._linkEl.addEventListener('keydown', this._onKeyDown);
+        this._linkEl.addEventListener('click', this._onClick);
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -106,6 +107,12 @@ export class LinkButton extends HTMLElement {
                 return;
         }
     };
+
+    private readonly _onClick = () => {
+        this.handleClick();
+    };
+
+    protected handleClick(): void {}
 }
 
 customElements.define('theoplayer-link-button', LinkButton);

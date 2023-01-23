@@ -103,6 +103,10 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
         }
         this.clickThrough = clickThrough;
     };
+
+    protected override handleClick(): void {
+        this._player?.pause();
+    }
 }
 
 customElements.define('theoplayer-ad-clickthrough-button', AdClickThroughButton);
