@@ -3,6 +3,7 @@ import linkButtonCss from './LinkButton.css';
 import { Attribute } from '../util/Attribute';
 import type { ButtonOptions } from './Button';
 import { Button, buttonTemplate } from './Button';
+import { KeyCode } from '../util/KeyCode';
 
 export function linkButtonTemplate(button: string, extraCss: string = ''): string {
     return buttonTemplate(`<a>${button}</a>`, `${linkButtonCss}\n${extraCss}`);
@@ -40,6 +41,8 @@ export class LinkButton extends HTMLElement {
         }
 
         this._upgradeProperty('disabled');
+
+        this._linkEl.addEventListener('keydown', this._onKeyDown);
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -86,6 +89,23 @@ export class LinkButton extends HTMLElement {
             shadyCss.styleSubtree(this);
         }
     }
+
+    private readonly _onKeyDown = (event: KeyboardEvent) => {
+        // Don't handle modifier shortcuts typically used by assistive technology.
+        if (event.altKey) return;
+
+        switch (event.keyCode) {
+            // Enter is already handled by the browser.
+            // case KeyCode.ENTER:
+            case KeyCode.SPACE:
+                event.preventDefault();
+                this._linkEl.click();
+                break;
+            // Any other key press is ignored and passed back to the browser.
+            default:
+                return;
+        }
+    };
 }
 
 customElements.define('theoplayer-link-button', LinkButton);
