@@ -130,10 +130,11 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
 customElements.define('theoplayer-live-button', LiveButton);
 
 function isLive(player: ChromelessPlayer): boolean {
-    const currentTime = player.currentTime;
-    const seekable = player.seekable;
-    if (seekable.length > 0) {
-        return seekable.end(seekable.length - 1) - currentTime < 10;
+    if (player.duration === Infinity) {
+        const seekable = player.seekable;
+        if (seekable.length > 0) {
+            return seekable.end(seekable.length - 1) - player.currentTime < 10;
+        }
     }
     return false;
 }
