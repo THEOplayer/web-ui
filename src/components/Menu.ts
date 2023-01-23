@@ -28,6 +28,14 @@ export class Menu extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
     }
+
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
+    }
 }
 
 customElements.define('theoplayer-menu', Menu);

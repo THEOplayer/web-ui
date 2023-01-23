@@ -16,12 +16,15 @@ export class RadioButton extends Button {
     }
 
     override connectedCallback() {
+        this._upgradeProperty('checked');
+
         if (!this.hasAttribute('role')) {
             this.setAttribute('role', 'radio');
         }
         if (!this.hasAttribute('tabindex')) {
             this.setAttribute('tabindex', '-1');
         }
+
         super.connectedCallback();
     }
 

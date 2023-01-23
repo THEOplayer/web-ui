@@ -44,6 +44,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player']) {
 
     override connectedCallback(): void {
         super.connectedCallback();
+        this._upgradeProperty('player');
         this._toggleAutoAdvance();
     }
 

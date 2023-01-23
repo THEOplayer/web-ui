@@ -35,6 +35,10 @@ export abstract class Range extends HTMLElement {
         shadyCss.styleElement(this);
 
         this._upgradeProperty('disabled');
+        this._upgradeProperty('value');
+        this._upgradeProperty('min');
+        this._upgradeProperty('max');
+        this._upgradeProperty('step');
 
         this._rangeEl.setAttribute('aria-label', this.getAriaLabel());
         this.update();

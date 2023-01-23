@@ -28,6 +28,11 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
         this._contentEl = this.shadowRoot!.querySelector('[part="content"]')!;
     }
 
+    override connectedCallback(): void {
+        super.connectedCallback();
+        this._upgradeProperty('player');
+    }
+
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }

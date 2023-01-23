@@ -39,8 +39,21 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+
+        this._upgradeProperty('trackType');
+        this._upgradeProperty('showOffButton');
+        this._upgradeProperty('player');
+
         this._updateOffButton();
         this._updateTracks();
+    }
+
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
     }
 
     get trackType(): TrackType {

@@ -25,6 +25,8 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
 
     connectedCallback(): void {
         super.connectedCallback();
+        this._upgradeProperty('clickThrough');
+        this._upgradeProperty('player');
         this._updateFromPlayer();
     }
 

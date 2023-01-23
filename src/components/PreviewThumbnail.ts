@@ -34,6 +34,16 @@ export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player',
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+        this._upgradeProperty('previewTime');
+        this._upgradeProperty('player');
+    }
+
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
     }
 
     get player(): ChromelessPlayer | undefined {

@@ -12,6 +12,8 @@ export class CastButton extends Button {
 
     connectedCallback() {
         super.connectedCallback();
+        this._upgradeProperty('castState');
+        this._upgradeProperty('castApi');
         if (!this.hasAttribute(Attribute.CAST_STATE)) {
             this.setAttribute(Attribute.CAST_STATE, 'unavailable');
         }

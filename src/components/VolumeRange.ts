@@ -18,6 +18,11 @@ export class VolumeRange extends StateReceiverMixin(Range, ['player']) {
         super({ template });
     }
 
+    override connectedCallback() {
+        super.connectedCallback();
+        this._upgradeProperty('player');
+    }
+
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }

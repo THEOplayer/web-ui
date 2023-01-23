@@ -30,7 +30,17 @@ export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['player
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+        this._upgradeProperty('previewTime');
+        this._upgradeProperty('player');
         this._update();
+    }
+
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
     }
 
     get previewTime(): number {

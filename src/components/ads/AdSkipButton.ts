@@ -38,6 +38,7 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
 
     connectedCallback(): void {
         super.connectedCallback();
+        this._upgradeProperty('player');
         this._update();
     }
 

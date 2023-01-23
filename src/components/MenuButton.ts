@@ -20,6 +20,8 @@ export class MenuButton extends Button {
     connectedCallback() {
         super.connectedCallback();
 
+        this._upgradeProperty('menu');
+
         if (!this.hasAttribute('aria-haspopup')) {
             this.setAttribute('aria-haspopup', 'true');
         }

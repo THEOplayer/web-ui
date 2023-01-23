@@ -24,7 +24,16 @@ export class DurationDisplay extends StateReceiverMixin(HTMLElement, ['player'])
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+        this._upgradeProperty('player');
         this._updateFromPlayer();
+    }
+
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
     }
 
     get player(): ChromelessPlayer | undefined {
