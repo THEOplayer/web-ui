@@ -1,5 +1,5 @@
 import { Constructor, fromArrayLike, isArray } from '../util/CommonUtils';
-import type { ChromelessPlayer, THEOplayerError } from 'theoplayer';
+import type { ChromelessPlayer, THEOplayerError, VideoQuality } from 'theoplayer';
 import type { StreamType } from '../util/StreamType';
 
 export const StateReceiverProps = 'theoplayerUiObservedProperties' as const;
@@ -9,6 +9,8 @@ export interface StateReceiverPropertyMap {
     fullscreen: boolean;
     streamType: StreamType;
     playbackRate: number;
+    activeVideoQuality: VideoQuality | undefined;
+    targetVideoQualities: VideoQuality[] | undefined;
     error: THEOplayerError | undefined;
     previewTime: number;
 }

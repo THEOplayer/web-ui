@@ -19,6 +19,7 @@ export * from './LanguageMenuButton';
 export * from './PlaybackRateRadioButton';
 export * from './PlaybackRateRadioGroup';
 export * from './PlaybackRateMenuButton';
+export * from './ActiveQualityMenuButton';
 export * from './SettingsMenuButton';
 export * from './FullscreenButton';
 export * from './Range';

@@ -1,5 +1,5 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import { ChromelessPlayer, type PlayerConfiguration, type SourceDescription } from 'theoplayer';
+import { ChromelessPlayer, type MediaTrack, type PlayerConfiguration, type SourceDescription, VideoQuality } from 'theoplayer';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
 import { arrayFind, arrayFindIndex, arrayRemove, arrayRemoveAt, containsComposedNode, isElement, isHTMLElement, noOp } from './util/CommonUtils';
@@ -19,6 +19,7 @@ import type { StreamType } from './util/StreamType';
 import type { StreamTypeChangeEvent } from './events/StreamTypeChangeEvent';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
 import { createCustomEvent } from './util/CustomEvent';
+import { getTargetQualities } from './util/TrackUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -68,6 +69,7 @@ export class UIContainer extends HTMLElement {
     private _userIdleTimeout: number = 2;
     private _userIdleTimer: number = 0;
     private _previewTime: number = NaN;
+    private _activeVideoTrack: MediaTrack | undefined = undefined;
 
     constructor(configuration: PlayerConfiguration = {}) {
         super();
@@ -246,6 +248,7 @@ export class UIContainer extends HTMLElement {
         this._player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updateStreamType);
         this._player.addEventListener(['ratechange'], this._updatePlaybackRate);
         this._player.addEventListener(['sourcechange'], this._onSourceChange);
+        this._player.videoTracks.addEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
         this._player.cast?.addEventListener('castingchange', this._updateCasting);
         this._player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend'], this._updatePlayingAd);
     }
@@ -372,6 +375,12 @@ export class UIContainer extends HTMLElement {
             }
             if (receiverProps.indexOf('error') >= 0) {
                 receiver.setError!(this._player.errorObject);
+            }
+            if (receiverProps.indexOf('activeVideoQuality') >= 0) {
+                receiver.setActiveVideoQuality!(this._activeVideoTrack?.activeQuality as VideoQuality | undefined);
+            }
+            if (receiverProps.indexOf('targetVideoQualities') >= 0) {
+                receiver.setTargetVideoQualities!(getTargetQualities(this._activeVideoTrack) as VideoQuality[] | undefined);
             }
         }
         if (receiverProps.indexOf('previewTime') >= 0) {
@@ -639,6 +648,40 @@ export class UIContainer extends HTMLElement {
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('playbackRate') >= 0) {
                 receiver.setPlaybackRate!(playbackRate);
+            }
+        }
+    };
+
+    private readonly _updateActiveVideoTrack = (): void => {
+        if (this._player === undefined) {
+            return;
+        }
+        const activeVideoTrack = arrayFind(this._player.videoTracks, (track) => track.enabled);
+        if (this._activeVideoTrack !== activeVideoTrack) {
+            this._activeVideoTrack?.removeEventListener('activequalitychanged', this._updateActiveVideoQuality);
+            this._activeVideoTrack?.removeEventListener('targetqualitychanged', this._updateTargetVideoQualities);
+            this._activeVideoTrack = activeVideoTrack;
+            this._updateActiveVideoQuality();
+            this._updateTargetVideoQualities();
+            this._activeVideoTrack?.addEventListener('activequalitychanged', this._updateActiveVideoQuality);
+            this._activeVideoTrack?.addEventListener('targetqualitychanged', this._updateTargetVideoQualities);
+        }
+    };
+
+    private readonly _updateActiveVideoQuality = (): void => {
+        const activeVideoQuality = this._activeVideoTrack?.activeQuality as VideoQuality | undefined;
+        for (const receiver of this._stateReceivers) {
+            if (receiver[StateReceiverProps].indexOf('activeVideoQuality') >= 0) {
+                receiver.setActiveVideoQuality!(activeVideoQuality);
+            }
+        }
+    };
+
+    private readonly _updateTargetVideoQualities = (): void => {
+        const targetVideoQualities = getTargetQualities(this._activeVideoTrack) as VideoQuality[] | undefined;
+        for (const receiver of this._stateReceivers) {
+            if (receiver[StateReceiverProps].indexOf('targetVideoQualities') >= 0) {
+                receiver.setTargetVideoQualities!(targetVideoQualities);
             }
         }
     };
