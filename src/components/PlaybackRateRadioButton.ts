@@ -7,7 +7,7 @@ import { setTextContent } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<span><slot>1x</slot></span>`);
+template.innerHTML = buttonTemplate(`<slot>1x</slot>`);
 shadyCss.prepareTemplate(template, 'theoplayer-playback-rate-radio-button');
 
 export class PlaybackRateRadioButton extends StateReceiverMixin(RadioButton, ['player']) {
