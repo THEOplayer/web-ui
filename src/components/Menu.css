@@ -35,6 +35,7 @@
     max-width: var(--theoplayer-menu-max-width, 100%);
     min-height: 0;
     max-height: 100%;
-    padding: var(--theoplayer-menu-padding, 10px);
+    margin: var(--theoplayer-menu-margin, 10px);
+    overflow-y: auto;
     pointer-events: auto;
 }
