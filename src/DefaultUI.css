@@ -212,3 +212,21 @@ theoplayer-mute-button:focus-within + theoplayer-volume-range,
 theoplayer-mute-button + theoplayer-volume-range:focus-within {
     width: 70px;
 }
+
+/*
+ * Settings menu
+ */
+.theoplayer-settings-menu-content {
+    display: grid;
+    align-items: baseline;
+    grid-template-columns: max-content 10px 1fr;
+}
+
+.theoplayer-settings-menu-label {
+    grid-column: 1;
+    font-size: var(--theoplayer-text-font-size, 14px);
+}
+
+.theoplayer-settings-menu-button {
+    grid-column: 3;
+}

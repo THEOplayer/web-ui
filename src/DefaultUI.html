@@ -46,6 +46,23 @@
     <theoplayer-language-menu id="language-menu" slot="menu" hidden></theoplayer-language-menu>
     <theoplayer-menu id="settings-menu" slot="menu" hidden>
         <span slot="heading">Settings</span>
+        <div class="theoplayer-settings-menu-content">
+            <span class="theoplayer-settings-menu-label">Quality</span>
+            <theoplayer-menu-button menu="quality-menu" class="theoplayer-settings-menu-button">Automatic</theoplayer-menu-button>
+            <span class="theoplayer-settings-menu-label">Playback speed</span>
+            <theoplayer-playback-rate-menu-button
+                menu="playback-rate-menu"
+                class="theoplayer-settings-menu-button"
+            ></theoplayer-playback-rate-menu-button>
+        </div>
+    </theoplayer-menu>
+    <theoplayer-menu id="quality-menu" slot="menu" hidden>
+        <span slot="heading">Quality</span>
+        Nothing here yet...
+    </theoplayer-menu>
+    <theoplayer-menu id="playback-rate-menu" slot="menu" hidden>
+        <span slot="heading">Playback speed</span>
+        <theoplayer-playback-rate-radio-group></theoplayer-playback-rate-radio-group>
     </theoplayer-menu>
     <theoplayer-error-display slot="error"></theoplayer-error-display>
     <slot name="menu" slot="menu"></slot>
