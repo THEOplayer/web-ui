@@ -16,6 +16,8 @@ export * from './TextTrackRadioButton';
 export * from './TextTrackOffRadioButton';
 export * from './LanguageMenu';
 export * from './LanguageMenuButton';
+export * from './PlaybackRateRadioButton';
+export * from './PlaybackRateRadioGroup';
 export * from './SettingsMenuButton';
 export * from './FullscreenButton';
 export * from './Range';

@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import type { RadioGroup } from './RadioGroup';
-import trackRadioGroupCss from './TrackRadioGroup.css';
+import verticalRadioGroupCss from './VerticalRadioGroup.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer';
 import { Attribute } from '../util/Attribute';
@@ -12,7 +12,7 @@ import { fromArrayLike } from '../util/CommonUtils';
 import './RadioGroup';
 
 const template = document.createElement('template');
-template.innerHTML = `<style>${trackRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`;
+template.innerHTML = `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`;
 shadyCss.prepareTemplate(template, 'theoplayer-track-radio-group');
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;

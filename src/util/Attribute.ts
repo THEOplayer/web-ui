@@ -34,5 +34,7 @@ export enum Attribute {
     TRACK_TYPE = 'track-type',
     SHOW_OFF = 'show-off',
     PLAYING_AD = 'playing-ad',
-    CLICKTHROUGH = 'clickthrough'
+    CLICKTHROUGH = 'clickthrough',
+    VALUE = 'value',
+    VALUES = 'values'
 }
