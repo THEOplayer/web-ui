@@ -76,6 +76,7 @@ input[type='range'] {
 }
 
 @define-mixin thumb-styles {
+    cursor: pointer;
     height: var(--thumb-height, auto);
     width: var(--theoplayer-range-thumb-width, 10px);
     border: var(--theoplayer-range-thumb-border, none);
@@ -105,23 +106,24 @@ input[type='range']::-ms-thumb {
     @mixin thumb-styles;
 }
 
-@define-mixin thumb-styles-enabled {
-    cursor: pointer;
+@define-mixin thumb-styles-disabled {
+    cursor: default;
 }
 
-input[type='range']:not([disabled])::-webkit-slider-thumb {
-    @mixin thumb-styles-enabled;
+:host([disabled]) input[type='range']::-webkit-slider-thumb {
+    @mixin thumb-styles-disabled;
 }
 
-input[type='range']:not([disabled])::-moz-range-thumb {
-    @mixin thumb-styles-enabled;
+:host([disabled]) input[type='range']::-moz-range-thumb {
+    @mixin thumb-styles-disabled;
 }
 
-input[type='range']:not([disabled])::-ms-thumb {
-    @mixin thumb-styles-enabled;
+:host([disabled]) input[type='range']::-ms-thumb {
+    @mixin thumb-styles-disabled;
 }
 
 @define-mixin track-styles {
+    cursor: pointer;
     width: var(--theoplayer-range-track-width, 100%);
     min-width: 40px;
     height: var(--track-height);
@@ -161,20 +163,20 @@ input[type='range']::-ms-tooltip {
     display: none;
 }
 
-@define-mixin track-styles-enabled {
-    cursor: pointer;
+@define-mixin track-styles-disabled {
+    cursor: default;
 }
 
-input[type='range']:not([disabled])::-webkit-slider-runnable-track {
-    @mixin track-styles-enabled;
+:host([disabled]) input[type='range']::-webkit-slider-runnable-track {
+    @mixin track-styles-disabled;
 }
 
-input[type='range']:not([disabled])::-moz-range-track {
-    @mixin track-styles-enabled;
+:host([disabled]) input[type='range']::-moz-range-track {
+    @mixin track-styles-disabled;
 }
 
-input[type='range']:not([disabled])::-ms-track {
-    @mixin track-styles-enabled;
+:host([disabled]) input[type='range']::-ms-track {
+    @mixin track-styles-disabled;
 }
 
 input[type='range']:focus {
