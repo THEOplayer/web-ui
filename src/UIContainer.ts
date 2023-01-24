@@ -393,9 +393,6 @@ export class UIContainer extends HTMLElement {
         menuToOpen.removeAttribute('hidden');
         this.setAttribute(Attribute.MENU_OPENED, '');
 
-        if (!this.hasAttribute('tabindex')) {
-            this.setAttribute('tabindex', '-1');
-        }
         this.removeEventListener('keydown', this._onMenuKeyDown);
         this.addEventListener('keydown', this._onMenuKeyDown);
         this._menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
