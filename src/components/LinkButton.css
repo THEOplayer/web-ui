@@ -4,7 +4,7 @@
 
 a {
     padding: var(--theoplayer-control-padding, 10px);
-    color: #fff;
+    color: var(--theoplayer-button-text-color, var(--theoplayer-text-color, #fff));
     text-decoration: none;
 }
 
@@ -22,6 +22,10 @@ a:focus:not(:focus-visible) {
     box-shadow: none;
 }
 
-:host(:not([disabled])) a:hover {
-    background: var(--theoplayer-control-hover-background, var(--theoplayer-control-background, transparent));
+:host([aria-checked='true']) a {
+    color: var(--theoplayer-button-checked-color, #000);
+}
+
+:host([disabled]) a {
+    color: var(--theoplayer-button-disabled-text-color, #ccc);
 }

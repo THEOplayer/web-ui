@@ -4,7 +4,7 @@
     border: var(--theoplayer-ad-skip-border, 1px solid rgba(255, 255, 255, 0.5));
 }
 
-:host(:hover:not([disabled])) {
+:host(:hover) {
     background: var(--theoplayer-ad-skip-hover-background, rgba(0, 0, 0, 0.9));
     color: var(--theoplayer-ad-skip-hover-color, var(--theoplayer-ad-skip-color, #fff));
     border: var(--theoplayer-ad-skip-hover-border, 1px solid #fff);

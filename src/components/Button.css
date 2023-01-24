@@ -8,13 +8,13 @@
     user-select: none;
 
     background: var(--theoplayer-control-background, transparent);
+    color: var(--theoplayer-button-text-color, var(--theoplayer-text-color, #fff));
 
     padding: var(--theoplayer-control-padding, 10px);
 
     /* Vertically center any text */
     font-size: var(--theoplayer-text-font-size, 14px);
     line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
-    color: #fff;
 }
 
 :host([hidden]) {
@@ -41,13 +41,18 @@
     box-shadow: none;
 }
 
-:host(:hover:not([disabled])) {
+:host(:hover) {
     background: var(--theoplayer-control-hover-background, var(--theoplayer-control-background, transparent));
 }
 
 :host([aria-checked='true']) {
     background: var(--theoplayer-button-checked-background, #fff);
     color: var(--theoplayer-button-checked-color, #000);
+}
+
+:host([disabled]) {
+    background: var(--theoplayer-control-background, transparent);
+    color: var(--theoplayer-button-disabled-text-color, #ccc);
 }
 
 svg,
