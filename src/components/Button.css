@@ -45,6 +45,11 @@
     background: var(--theoplayer-control-hover-background, var(--theoplayer-control-background, transparent));
 }
 
+:host([aria-checked='true']) {
+    background: var(--theoplayer-button-checked-background, #fff);
+    color: var(--theoplayer-button-checked-color, #000);
+}
+
 svg,
 img,
 ::slotted(svg),
