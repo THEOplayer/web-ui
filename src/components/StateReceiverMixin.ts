@@ -1,6 +1,6 @@
 import { Constructor, fromArrayLike, isArray } from '../util/CommonUtils';
 import type { ChromelessPlayer, THEOplayerError } from 'theoplayer';
-import type {StreamType} from "../util/StreamType";
+import type { StreamType } from '../util/StreamType';
 
 export const StateReceiverProps = 'theoplayerUiObservedProperties' as const;
 
@@ -8,6 +8,7 @@ export interface StateReceiverPropertyMap {
     player: ChromelessPlayer | undefined;
     fullscreen: boolean;
     streamType: StreamType;
+    playbackRate: number;
     error: THEOplayerError | undefined;
     previewTime: number;
 }

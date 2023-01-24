@@ -244,6 +244,7 @@ export class UIContainer extends HTMLElement {
         this._player.addEventListener('pause', this._onPause);
         this._player.addEventListener(['ended', 'emptied'], this._updatePausedAndEnded);
         this._player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updateStreamType);
+        this._player.addEventListener(['ratechange'], this._updatePlaybackRate);
         this._player.addEventListener(['sourcechange'], this._onSourceChange);
         this._player.cast?.addEventListener('castingchange', this._updateCasting);
         this._player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend'], this._updatePlayingAd);
@@ -365,8 +366,13 @@ export class UIContainer extends HTMLElement {
         if (receiverProps.indexOf('streamType') >= 0) {
             receiver.setStreamType!(this.streamType);
         }
-        if (receiverProps.indexOf('error') >= 0) {
-            receiver.setError!(this._player?.errorObject);
+        if (this._player !== undefined) {
+            if (receiverProps.indexOf('playbackRate') >= 0) {
+                receiver.setPlaybackRate!(this._player.playbackRate);
+            }
+            if (receiverProps.indexOf('error') >= 0) {
+                receiver.setError!(this._player.errorObject);
+            }
         }
         if (receiverProps.indexOf('previewTime') >= 0) {
             receiver.setPreviewTime!(this._previewTime);
@@ -623,6 +629,18 @@ export class UIContainer extends HTMLElement {
             return;
         }
         this.streamType = duration === Infinity ? 'live' : 'vod';
+    };
+
+    private readonly _updatePlaybackRate = (): void => {
+        if (this._player === undefined) {
+            return;
+        }
+        const playbackRate = this._player.playbackRate;
+        for (const receiver of this._stateReceivers) {
+            if (receiver[StateReceiverProps].indexOf('playbackRate') >= 0) {
+                receiver.setPlaybackRate!(playbackRate);
+            }
+        }
     };
 
     private readonly _updateCasting = (): void => {
