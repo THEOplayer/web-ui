@@ -17,6 +17,7 @@ export abstract class Range extends HTMLElement {
 
     protected readonly _rangeEl: HTMLInputElement;
     protected readonly _pointerEl: HTMLElement;
+    private _lastRangeWidth: number = 0;
 
     constructor(options: RangeOptions) {
         super();
@@ -170,6 +171,12 @@ export abstract class Range extends HTMLElement {
         const relativeMax = this.max - this.min;
         const rangePercent = (relativeValue / relativeMax) * 100;
 
+        // Use the last non-zero range width, in case the range is temporarily hidden.
+        const rangeWidth = this._rangeEl.offsetWidth;
+        if (rangeWidth > 0) {
+            this._lastRangeWidth = rangeWidth;
+        }
+
         let thumbPercent = 0;
         // If the range thumb is at min or max don't correct the time range.
         // Ideally the thumb center would go all the way to min and max values
@@ -177,7 +184,7 @@ export abstract class Range extends HTMLElement {
         if (this.min < this.value && this.value < this.max) {
             const thumbWidth = getComputedStyle(this).getPropertyValue('--theoplayer-range-thumb-width') || '10px';
             const thumbOffset = parseInt(thumbWidth) * (0.5 - rangePercent / 100);
-            thumbPercent = (thumbOffset / this._rangeEl.offsetWidth) * 100;
+            thumbPercent = (thumbOffset / this._lastRangeWidth) * 100;
         }
 
         return [
