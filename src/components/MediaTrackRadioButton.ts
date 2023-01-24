@@ -2,22 +2,22 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { RadioButton } from './RadioButton';
 import { buttonTemplate } from './Button';
 import type { MediaTrack } from 'theoplayer';
-import { localizeLanguageName } from '../util/CommonUtils';
+import { localizeLanguageName, setTextContent } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<span></span>`);
+template.innerHTML = buttonTemplate(`<slot></slot>`);
 shadyCss.prepareTemplate(template, 'theoplayer-media-track-radio-button');
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
 export class MediaTrackRadioButton extends RadioButton {
-    private _labelEl: HTMLElement;
+    private _slotEl: HTMLSlotElement;
     private _track: MediaTrack | undefined = undefined;
 
     constructor() {
         super({ template });
-        this._labelEl = this.shadowRoot!.querySelector('span')!;
+        this._slotEl = this.shadowRoot!.querySelector('slot')!;
     }
 
     override connectedCallback(): void {
@@ -41,7 +41,7 @@ export class MediaTrackRadioButton extends RadioButton {
     }
 
     private _updateFromTrack(): void {
-        this._labelEl.textContent = this._track ? getTrackLabel(this._track) : '';
+        setTextContent(this._slotEl, this._track ? getTrackLabel(this._track) : '');
         this.checked = this._track ? this._track.enabled : false;
     }
 
