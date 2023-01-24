@@ -5,13 +5,6 @@ theoplayer-radio-group {
     align-items: stretch;
 }
 
-:host {
-    /*
-     * Show a scroll bar if the list becomes too long.
-     */
-    overflow-y: auto;
-}
-
 :host([hidden]) {
     display: none !important;
 }

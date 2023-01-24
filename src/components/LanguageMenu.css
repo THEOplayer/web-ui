@@ -47,3 +47,10 @@ theoplayer-track-radio-group {
 h2 {
     margin: 0 0 0.5em;
 }
+
+theoplayer-track-radio-group {
+    /*
+     * Show a scroll bar if the list becomes too long.
+     */
+    overflow-y: auto;
+}
