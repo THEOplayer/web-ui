@@ -1,14 +1,24 @@
 // https://github.com/webmodules/custom-event/blob/master/index.js
 
-const NativeCustomEvent = self.CustomEvent;
-
 // Modern browsers
-function supportsNativeCustomEvent() {
+function supportsNativeEvent() {
     try {
-        const p = new NativeCustomEvent('cat', { detail: { foo: 'bar' } });
-        return 'cat' === p.type && 'bar' === p.detail.foo;
+        const event = new Event('change');
+        return 'change' === event.type;
     } catch (e) {}
     return false;
+}
+
+function supportsNativeCustomEvent() {
+    try {
+        const event = new CustomEvent('cat', { detail: { foo: 'bar' } });
+        return 'cat' === event.type && 'bar' === event.detail.foo;
+    } catch (e) {}
+    return false;
+}
+
+function createWithNativeEvent(type: string, eventInitDict?: EventInit): Event {
+    return new Event(type, eventInitDict);
 }
 
 function createWithNativeCustomEvent(type: string, eventInitDict?: CustomEventInit): CustomEvent {
@@ -16,11 +26,19 @@ function createWithNativeCustomEvent(type: string, eventInitDict?: CustomEventIn
 }
 
 // IE >= 9
-function createWithCreateEvent(type: string, eventInitDict?: CustomEventInit): CustomEvent {
+function createEventWithCreateEvent(type: string, eventInitDict?: EventInit): Event {
+    const e = document.createEvent('Event');
+    e.initEvent(type, eventInitDict?.bubbles || false, eventInitDict?.cancelable || false);
+    return e;
+}
+
+function createCustomEventWithCreateEvent(type: string, eventInitDict?: CustomEventInit): CustomEvent {
     const e = document.createEvent('CustomEvent');
     e.initCustomEvent(type, eventInitDict?.bubbles || false, eventInitDict?.cancelable || false, eventInitDict?.detail);
     return e;
 }
+
+export type EventFactory = <TType extends string = string>(type: TType, eventInitDict?: EventInit) => Event & { readonly type: TType };
 
 export type CustomEventFactory = <TType extends string = string, TDetail = any>(
     type: TType,
@@ -28,10 +46,17 @@ export type CustomEventFactory = <TType extends string = string, TDetail = any>(
 ) => CustomEvent<TDetail> & { readonly type: TType };
 
 /**
+ * Cross-browser `Event` constructor.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
+ */
+export const createEvent: EventFactory = (supportsNativeEvent() ? createWithNativeEvent : createEventWithCreateEvent) as EventFactory;
+
+/**
  * Cross-browser `CustomEvent` constructor.
  *
- * https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent.CustomEvent
+ * https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
  */
 export const createCustomEvent: CustomEventFactory = (
-    supportsNativeCustomEvent() ? createWithNativeCustomEvent : createWithCreateEvent
+    supportsNativeCustomEvent() ? createWithNativeCustomEvent : createCustomEventWithCreateEvent
 ) as CustomEventFactory;
