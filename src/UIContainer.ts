@@ -18,7 +18,7 @@ import { PREVIEW_TIME_CHANGE_EVENT, PreviewTimeChangeEvent } from './events/Prev
 import type { StreamType } from './util/StreamType';
 import type { StreamTypeChangeEvent } from './events/StreamTypeChangeEvent';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
-import { createCustomEvent } from './util/CustomEvent';
+import { createCustomEvent } from './util/EventUtils';
 import { getTargetQualities } from './util/TrackUtils';
 
 const template = document.createElement('template');

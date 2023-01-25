@@ -5,7 +5,7 @@ import timeRangeCss from './TimeRange.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer';
 import { formatAsTimePhrase } from '../util/TimeUtils';
-import { createCustomEvent } from '../util/CustomEvent';
+import { createCustomEvent } from '../util/EventUtils';
 import type { PreviewTimeChangeEvent } from '../events/PreviewTimeChangeEvent';
 import { PREVIEW_TIME_CHANGE_EVENT } from '../events/PreviewTimeChangeEvent';
 import { Attribute } from '../util/Attribute';

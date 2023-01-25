@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Button, ButtonOptions, buttonTemplate } from './Button';
-import { createCustomEvent } from '../util/CustomEvent';
+import { createCustomEvent } from '../util/EventUtils';
 import { OPEN_MENU_EVENT, type OpenMenuEvent } from '../events/OpenMenuEvent';
 import { Attribute } from '../util/Attribute';
 

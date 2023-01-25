@@ -4,7 +4,7 @@ import fullscreenButtonCss from './FullscreenButton.css';
 import enterIcon from '../icons/fullscreen-enter.svg';
 import exitIcon from '../icons/fullscreen-exit.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import { createCustomEvent } from '../util/CustomEvent';
+import { createCustomEvent } from '../util/EventUtils';
 import { ENTER_FULLSCREEN_EVENT, EnterFullscreenEvent } from '../events/EnterFullscreenEvent';
 import { EXIT_FULLSCREEN_EVENT, ExitFullscreenEvent } from '../events/ExitFullscreenEvent';
 import { Attribute } from '../util/Attribute';

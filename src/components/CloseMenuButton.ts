@@ -1,7 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Button, buttonTemplate } from './Button';
 import backIcon from '../icons/back.svg';
-import { createCustomEvent } from '../util/CustomEvent';
+import { createCustomEvent } from '../util/EventUtils';
 import { CLOSE_MENU_EVENT, CloseMenuEvent } from '../events/CloseMenuEvent';
 
 const template = document.createElement('template');
