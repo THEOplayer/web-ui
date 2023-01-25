@@ -4,8 +4,8 @@ import verticalRadioGroupCss from './VerticalRadioGroup.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer';
 import { Attribute } from '../util/Attribute';
-import { fromArrayLike } from '../util/CommonUtils';
-import { PlaybackRateRadioButton } from './PlaybackRateRadioButton';
+import { arrayFind, fromArrayLike, setTextContent } from '../util/CommonUtils';
+import { RadioButton } from './RadioButton';
 import './RadioGroup';
 
 const template = document.createElement('template');
@@ -21,6 +21,7 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
 
     private readonly _radioGroup: RadioGroup;
     private _player: ChromelessPlayer | undefined;
+    private _value: number = 1;
     private _values: number[] = [...DEFAULT_PLAYBACK_RATES];
 
     constructor() {
@@ -34,10 +35,16 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
+        this._upgradeProperty('value');
         this._upgradeProperty('values');
         this._upgradeProperty('player');
 
-        this._update();
+        this._updateValues();
+        this.shadowRoot!.addEventListener('change', this._onChange);
+    }
+
+    disconnectedCallback(): void {
+        this.shadowRoot!.removeEventListener('change', this._onChange);
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -46,6 +53,18 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
             delete this[prop];
             this[prop] = value;
         }
+    }
+
+    get value(): number {
+        return this._value;
+    }
+
+    set value(value: number) {
+        this._value = value;
+        if (this._player !== undefined) {
+            this._player.playbackRate = value;
+        }
+        this._updateChecked();
     }
 
     get values(): number[] {
@@ -65,12 +84,12 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
             return;
         }
         if (this._player !== undefined) {
-            this._player.removeEventListener('ratechange', this._update);
+            this._player.removeEventListener('ratechange', this._updateFromPlayer);
         }
         this._player = player;
-        this._update();
+        this._updateFromPlayer();
         if (this._player !== undefined) {
-            this._player.addEventListener('ratechange', this._update);
+            this._player.addEventListener('ratechange', this._updateFromPlayer);
         }
     }
 
@@ -78,12 +97,16 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
         this.player = player;
     }
 
-    private readonly _update = (): void => {
-        const buttons = fromArrayLike(this._radioGroup.children) as PlaybackRateRadioButton[];
-        const values = this._values;
+    private readonly _updateValues = (): void => {
+        const buttons = fromArrayLike(this._radioGroup.children) as RadioButton[];
+        const values = this.values;
         let i = 0;
         while (i < buttons.length && i < values.length) {
-            buttons[i].value = values[i];
+            if (buttons[i].value !== values[i]) {
+                const value = values[i];
+                buttons[i].value = value;
+                setTextContent(buttons[i], value === 1 ? 'Normal' : `${value}x`);
+            }
             i++;
         }
         while (i < buttons.length) {
@@ -91,10 +114,34 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
             i++;
         }
         while (i < values.length) {
-            const newButton = new PlaybackRateRadioButton();
-            newButton.value = values[i];
+            const value = values[i];
+            const newButton = new RadioButton();
+            newButton.value = value;
+            setTextContent(newButton, value === 1 ? 'Normal' : `${value}x`);
             this._radioGroup.appendChild(newButton);
             i++;
+        }
+        this._updateChecked();
+    };
+
+    private readonly _updateChecked = (): void => {
+        const buttons = fromArrayLike(this._radioGroup.children) as RadioButton[];
+        for (const button of buttons) {
+            button.checked = button.value === this.value;
+        }
+    };
+
+    private readonly _onChange = (event: Event): void => {
+        const buttons = fromArrayLike(this._radioGroup.children) as RadioButton[];
+        const button = arrayFind(buttons, (button) => button === event.target);
+        if (button !== undefined && button.checked) {
+            this.value = button.value;
+        }
+    };
+
+    private readonly _updateFromPlayer = (): void => {
+        if (this._player !== undefined) {
+            this.value = this._player.playbackRate;
         }
     };
 
@@ -108,7 +155,7 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
                       .split(',')
                       .map((x) => Number(x))
                 : [...DEFAULT_PLAYBACK_RATES];
-            this._update();
+            this._updateValues();
         }
         if (PlaybackRateRadioGroup.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
