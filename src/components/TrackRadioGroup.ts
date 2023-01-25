@@ -84,15 +84,9 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
         if (this._player === player) {
             return;
         }
-        if (this._player !== undefined) {
-            this._getTracksList()?.removeEventListener(TRACK_EVENTS, this._updateTracks);
-        }
         this._player = player;
         this._updateTracksList();
         this._updateTracks();
-        if (this._player !== undefined) {
-            this._getTracksList()?.addEventListener(TRACK_EVENTS, this._updateTracks);
-        }
     }
 
     setPlayer(player: ChromelessPlayer | undefined): void {
