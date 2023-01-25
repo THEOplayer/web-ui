@@ -53,7 +53,7 @@ export class ActiveQualityMenuButton extends StateReceiverMixin(MenuButton, ['ac
         const targetQuality = hasSingleTargetQuality ? this._targetVideoQualities![0] : undefined;
         // Always show the target quality immediately, even if it's not the active quality yet.
         const selectedQuality = targetQuality ?? this._activeVideoQuality;
-        const qualityLabel = selectedQuality ? formatQualityLabel(selectedQuality) : undefined;
+        const qualityLabel = formatQualityLabel(selectedQuality);
         let label: string;
         if (hasSingleTargetQuality) {
             // Manual quality selection: "720p" or "Unknown"

@@ -30,6 +30,9 @@ export class TextTrackRadioButton extends RadioButton {
     }
 
     set track(track: TextTrack | undefined) {
+        if (this._track === track) {
+            return;
+        }
         if (this._track) {
             this._track.removeEventListener(TRACK_EVENTS, this._onTrackChange);
         }

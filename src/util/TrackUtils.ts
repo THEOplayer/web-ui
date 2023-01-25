@@ -12,7 +12,10 @@ export function getTargetQualities(videoTrack: MediaTrack | undefined): Quality[
     return targetQualities;
 }
 
-export function formatQualityLabel(quality: VideoQuality): string | undefined {
+export function formatQualityLabel(quality: VideoQuality | undefined): string | undefined {
+    if (!quality) {
+        return undefined;
+    }
     if (quality.label && quality.label !== '') {
         return quality.label;
     }
@@ -22,7 +25,7 @@ export function formatQualityLabel(quality: VideoQuality): string | undefined {
     if (quality.bandwidth) {
         return formatBandwidth(quality);
     }
-    return '';
+    return undefined;
 }
 
 function formatBandwidth(quality: VideoQuality): string | undefined {

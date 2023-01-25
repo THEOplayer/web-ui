@@ -30,6 +30,9 @@ export class MediaTrackRadioButton extends RadioButton {
     }
 
     set track(track: MediaTrack | undefined) {
+        if (this._track === track) {
+            return;
+        }
         if (this._track) {
             this._track.removeEventListener(TRACK_EVENTS, this._onTrackChange);
         }
