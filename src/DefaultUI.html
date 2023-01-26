@@ -44,21 +44,13 @@
         </theoplayer-control-bar>
     </div>
     <theoplayer-language-menu id="language-menu" slot="menu" hidden></theoplayer-language-menu>
-    <theoplayer-menu id="settings-menu" slot="menu" hidden>
-        <span slot="heading">Settings</span>
-        <div class="theoplayer-settings-menu-content">
-            <span class="theoplayer-settings-menu-label">Quality</span>
-            <theoplayer-active-quality-menu-button
-                menu="quality-menu"
-                class="theoplayer-settings-menu-button"
-            ></theoplayer-active-quality-menu-button>
-            <span class="theoplayer-settings-menu-label">Playback speed</span>
-            <theoplayer-playback-rate-menu-button
-                menu="playback-rate-menu"
-                class="theoplayer-settings-menu-button"
-            ></theoplayer-playback-rate-menu-button>
-        </div>
-    </theoplayer-menu>
+    <theoplayer-settings-menu
+        id="settings-menu"
+        quality-menu="quality-menu"
+        playback-rate-menu="playback-rate-menu"
+        slot="menu"
+        hidden
+    ></theoplayer-settings-menu>
     <theoplayer-quality-menu id="quality-menu" slot="menu" hidden></theoplayer-quality-menu>
     <theoplayer-playback-rate-menu id="playback-rate-menu" slot="menu" hidden></theoplayer-playback-rate-menu>
     <theoplayer-error-display slot="error"></theoplayer-error-display>

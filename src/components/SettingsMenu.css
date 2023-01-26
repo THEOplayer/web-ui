@@ -1,0 +1,27 @@
+[part='content'] {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    grid-auto-rows: auto;
+}
+
+[part='content'] > * {
+    align-self: center;
+    font-size: var(--theoplayer-text-font-size, 14px);
+    line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
+    padding: var(--theoplayer-control-padding, 10px);
+}
+
+[part='content'] > span {
+    display: block;
+    grid-column: 1;
+}
+
+[part='content'] > theoplayer-active-quality-menu-button,
+[part='content'] > theoplayer-playback-rate-menu-button {
+    grid-column: 2;
+}
+
+[part='content'] > span ~ span,
+[part='content'] > theoplayer-playback-rate-menu-button {
+    grid-row: 2;
+}

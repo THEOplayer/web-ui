@@ -212,34 +212,3 @@ theoplayer-mute-button:focus-within + theoplayer-volume-range,
 theoplayer-mute-button + theoplayer-volume-range:focus-within {
     width: 70px;
 }
-
-/*
- * Settings menu
- */
-.theoplayer-settings-menu-content {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    grid-auto-rows: auto;
-}
-
-.theoplayer-settings-menu-label,
-.theoplayer-settings-menu-button {
-    align-self: center;
-    font-size: var(--theoplayer-text-font-size, 14px);
-    line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
-    padding: var(--theoplayer-control-padding, 10px);
-}
-
-.theoplayer-settings-menu-label {
-    display: block;
-    grid-column: 1;
-}
-
-.theoplayer-settings-menu-button {
-    grid-column: 2;
-}
-
-.theoplayer-settings-menu-label ~ .theoplayer-settings-menu-label,
-.theoplayer-settings-menu-button ~ .theoplayer-settings-menu-button {
-    grid-row: 2;
-}

@@ -23,6 +23,7 @@ export * from './ActiveQualityMenuButton';
 export * from './QualityRadioButton';
 export * from './QualityRadioGroup';
 export * from './QualityMenu';
+export * from './SettingsMenu';
 export * from './SettingsMenuButton';
 export * from './FullscreenButton';
 export * from './Range';
