@@ -85,9 +85,10 @@ export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player'
 
     private readonly _update = (): void => {
         const buttons = fromArrayLike(this._radioGroup.children) as QualityRadioButton[];
-        let qualities: (VideoQuality | undefined)[] = this._track ? [...(this._track.qualities as Quality[] as VideoQuality[])] : [];
-        // Add "Automatic" button
-        qualities.unshift(undefined);
+        const availableQualities: VideoQuality[] = this._track ? (this._track.qualities as Quality[] as VideoQuality[]) : [];
+        // If there is only one available quality, *only* show the "Automatic" option (without the single quality).
+        // Otherwise, add an "Automatic" option at the front.
+        let qualities: (VideoQuality | undefined)[] = availableQualities.length === 1 ? [undefined] : [undefined, ...availableQualities];
         let i = 0;
         // Add buttons for each quality
         while (i < buttons.length && i < qualities.length) {
