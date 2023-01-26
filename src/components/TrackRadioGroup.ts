@@ -10,6 +10,7 @@ import { isSubtitleTrack } from '../util/TrackUtils';
 import { TextTrackOffRadioButton } from './TextTrackOffRadioButton';
 import { fromArrayLike } from '../util/CommonUtils';
 import './RadioGroup';
+import {createEvent} from "../util/EventUtils";
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`;
@@ -46,6 +47,12 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
 
         this._updateOffButton();
         this._updateTracks();
+
+        this.shadowRoot!.addEventListener('change', this._onChange);
+    }
+
+    disconnectedCallback(): void {
+        this.shadowRoot!.removeEventListener('change', this._onChange);
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -180,6 +187,10 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
             this._offButton = undefined;
         }
     }
+
+    private readonly _onChange = () => {
+        this.dispatchEvent(createEvent('change', { bubbles: true }));
+    };
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         if (newValue === oldValue) {

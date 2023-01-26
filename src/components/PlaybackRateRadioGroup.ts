@@ -4,9 +4,10 @@ import verticalRadioGroupCss from './VerticalRadioGroup.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer';
 import { Attribute } from '../util/Attribute';
-import { arrayFind, fromArrayLike, setTextContent } from '../util/CommonUtils';
+import { fromArrayLike, setTextContent } from '../util/CommonUtils';
 import { RadioButton } from './RadioButton';
 import './RadioGroup';
+import { createEvent } from '../util/EventUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`;
@@ -60,11 +61,15 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
     }
 
     set value(value: number) {
+        if (this._value === value) {
+            return;
+        }
         this._value = value;
         if (this._player !== undefined) {
             this._player.playbackRate = value;
         }
         this._updateChecked();
+        this.dispatchEvent(createEvent('change', { bubbles: true }));
     }
 
     get values(): number[] {
@@ -131,10 +136,9 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
         }
     };
 
-    private readonly _onChange = (event: Event): void => {
-        const buttons = fromArrayLike(this._radioGroup.children) as RadioButton[];
-        const button = arrayFind(buttons, (button) => button === event.target);
-        if (button !== undefined && button.checked) {
+    private readonly _onChange = (): void => {
+        const button = this._radioGroup.checkedRadioButton as RadioButton | null;
+        if (button !== null && this.value !== button.value) {
             this.value = button.value;
         }
     };

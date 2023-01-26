@@ -6,6 +6,7 @@ import type { ChromelessPlayer, MediaTrack, Quality, VideoQuality } from 'theopl
 import { arrayFind, fromArrayLike } from '../util/CommonUtils';
 import { QualityRadioButton } from './QualityRadioButton';
 import './RadioGroup';
+import { createEvent } from '../util/EventUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`;
@@ -28,8 +29,15 @@ export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player'
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+
         this._upgradeProperty('player');
         this._updateTrack();
+
+        this.shadowRoot!.addEventListener('change', this._onChange);
+    }
+
+    disconnectedCallback(): void {
+        this.shadowRoot!.removeEventListener('change', this._onChange);
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -61,6 +69,10 @@ export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player'
     setPlayer(player: ChromelessPlayer | undefined): void {
         this.player = player;
     }
+
+    private readonly _onChange = () => {
+        this.dispatchEvent(createEvent('change', { bubbles: true }));
+    };
 
     private readonly _updateTrack = (): void => {
         const track = this._player ? arrayFind(this._player.videoTracks, (track) => track.enabled) : undefined;
