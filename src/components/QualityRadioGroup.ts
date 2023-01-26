@@ -85,39 +85,27 @@ export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player'
 
     private readonly _update = (): void => {
         const buttons = fromArrayLike(this._radioGroup.children) as QualityRadioButton[];
-        const qualities: readonly VideoQuality[] = this._track ? (this._track.qualities as Quality[] as VideoQuality[]) : [];
-        let buttonIndex = 0;
-        let qualityIndex = 0;
+        let qualities: (VideoQuality | undefined)[] = this._track ? [...(this._track.qualities as Quality[] as VideoQuality[])] : [];
         // Add "Automatic" button
-        if (buttonIndex < buttons.length) {
-            const button = buttons[buttonIndex];
-            button.track = this._track;
-            button.quality = undefined;
-        } else {
-            const button = new QualityRadioButton();
-            button.track = this._track;
-            button.quality = undefined;
-            this._radioGroup.appendChild(button);
-        }
-        buttonIndex++;
+        qualities.unshift(undefined);
+        let i = 0;
         // Add buttons for each quality
-        while (buttonIndex < buttons.length && qualityIndex < qualities.length) {
-            const button = buttons[buttonIndex];
+        while (i < buttons.length && i < qualities.length) {
+            const button = buttons[i];
             button.track = this._track;
-            button.quality = qualities[qualityIndex];
-            buttonIndex++;
-            qualityIndex++;
+            button.quality = qualities[i];
+            i++;
         }
-        while (buttonIndex < buttons.length) {
-            this._radioGroup.removeChild(buttons[buttonIndex]);
-            buttonIndex++;
+        while (i < buttons.length) {
+            this._radioGroup.removeChild(buttons[i]);
+            i++;
         }
-        while (qualityIndex < qualities.length) {
+        while (i < qualities.length) {
             const button = new QualityRadioButton();
             button.track = this._track;
-            button.quality = qualities[qualityIndex];
+            button.quality = qualities[i];
             this._radioGroup.appendChild(button);
-            qualityIndex++;
+            i++;
         }
     };
 }
