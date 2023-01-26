@@ -17,15 +17,15 @@ export class QualityMenu extends Menu {
 
     override connectedCallback(): void {
         super.connectedCallback();
-        this._radioGroup.addEventListener('change', this._onChange);
+        this._radioGroup.addEventListener('input', this._onInput);
     }
 
     disconnectedCallback(): void {
-        this._radioGroup.removeEventListener('change', this._onChange);
+        this._radioGroup.removeEventListener('input', this._onInput);
     }
 
-    private readonly _onChange = (): void => {
-        // Close menu when quality selection changes
+    private readonly _onInput = (): void => {
+        // Close menu when clicking a quality radio button
         this.close();
     };
 }

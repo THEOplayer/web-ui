@@ -49,6 +49,7 @@ export class RadioButton extends Button {
 
     protected handleClick(): void {
         this.checked = true;
+        this.dispatchEvent(createEvent('input', { bubbles: true, composed: true }));
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
