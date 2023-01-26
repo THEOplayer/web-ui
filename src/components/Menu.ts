@@ -1,5 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import menuCss from './Menu.css';
+import { CLOSE_MENU_EVENT, CloseMenuEvent } from '../events/CloseMenuEvent';
+import { createCustomEvent } from '../util/EventUtils';
 
 export interface MenuOptions {
     template?: HTMLTemplateElement;
@@ -35,6 +37,14 @@ export class Menu extends HTMLElement {
             delete this[prop];
             this[prop] = value;
         }
+    }
+
+    close(): void {
+        const event: CloseMenuEvent = createCustomEvent(CLOSE_MENU_EVENT, {
+            bubbles: true,
+            composed: true
+        });
+        this.dispatchEvent(event);
     }
 }
 
