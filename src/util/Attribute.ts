@@ -2,6 +2,7 @@ export enum Attribute {
     CONFIGURATION = 'configuration',
     SOURCE = 'source',
     AUTOPLAY = 'autoplay',
+    MUTED = 'muted',
     FULLSCREEN = 'fullscreen',
     FLUID = 'fluid',
     MOBILE = 'mobile',

@@ -18,6 +18,7 @@ export class DefaultUI extends HTMLElement {
         return [
             Attribute.CONFIGURATION,
             Attribute.SOURCE,
+            Attribute.MUTED,
             Attribute.AUTOPLAY,
             Attribute.FLUID,
             Attribute.MOBILE,
@@ -64,6 +65,14 @@ export class DefaultUI extends HTMLElement {
         this._ui.source = value;
     }
 
+    get muted(): boolean {
+        return this._ui.muted;
+    }
+
+    set muted(value: boolean) {
+        this._ui.muted = value;
+    }
+
     get autoplay(): boolean {
         return this._ui.autoplay;
     }
@@ -93,6 +102,7 @@ export class DefaultUI extends HTMLElement {
 
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
+        this._upgradeProperty('muted');
         this._upgradeProperty('autoplay');
         this._upgradeProperty('streamType');
         this._upgradeProperty('userIdleTimeout');
@@ -131,6 +141,8 @@ export class DefaultUI extends HTMLElement {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
         } else if (attrName === Attribute.CONFIGURATION) {
             this.configuration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
+        } else if (attrName === Attribute.MUTED) {
+            this.muted = hasValue;
         } else if (attrName === Attribute.AUTOPLAY) {
             this.autoplay = hasValue;
         } else if (attrName === Attribute.FLUID) {

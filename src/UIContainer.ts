@@ -35,6 +35,7 @@ export class UIContainer extends HTMLElement {
         return [
             Attribute.CONFIGURATION,
             Attribute.SOURCE,
+            Attribute.MUTED,
             Attribute.AUTOPLAY,
             Attribute.FULLSCREEN,
             Attribute.FLUID,
@@ -125,6 +126,18 @@ export class UIContainer extends HTMLElement {
         }
     }
 
+    get muted(): boolean {
+        return this.hasAttribute(Attribute.MUTED);
+    }
+
+    set muted(value: boolean) {
+        if (value) {
+            this.setAttribute(Attribute.MUTED, '');
+        } else {
+            this.removeAttribute(Attribute.MUTED);
+        }
+    }
+
     get autoplay(): boolean {
         return this.hasAttribute(Attribute.AUTOPLAY);
     }
@@ -171,6 +184,7 @@ export class UIContainer extends HTMLElement {
 
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
+        this._upgradeProperty('muted');
         this._upgradeProperty('autoplay');
 
         if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
@@ -228,6 +242,7 @@ export class UIContainer extends HTMLElement {
             this._player.source = this._source;
             this._source = undefined;
         }
+        this._player.muted = this.muted;
         this._player.autoplay = this.autoplay;
 
         for (const receiver of this._stateReceivers) {
@@ -242,6 +257,7 @@ export class UIContainer extends HTMLElement {
         this._updateCasting();
         this._player.addEventListener('resize', this._updateAspectRatio);
         this._player.addEventListener(['error', 'emptied'], this._updateError);
+        this._player.addEventListener('volumechange', this._updateMuted);
         this._player.addEventListener('play', this._onPlay);
         this._player.addEventListener('pause', this._onPause);
         this._player.addEventListener(['ended', 'emptied'], this._updatePausedAndEnded);
@@ -289,6 +305,10 @@ export class UIContainer extends HTMLElement {
             this.tryInitializePlayer_();
         } else if (attrName === Attribute.SOURCE) {
             this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
+        } else if (attrName === Attribute.MUTED) {
+            if (this._player) {
+                this._player.muted = hasValue;
+            }
         } else if (attrName === Attribute.AUTOPLAY) {
             if (this._player) {
                 this._player.autoplay = hasValue;
@@ -650,6 +670,13 @@ export class UIContainer extends HTMLElement {
                 receiver.setPlaybackRate!(playbackRate);
             }
         }
+    };
+
+    private readonly _updateMuted = (): void => {
+        if (this._player === undefined) {
+            return;
+        }
+        this.muted = this._player.muted;
     };
 
     private readonly _updateActiveVideoTrack = (): void => {
