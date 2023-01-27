@@ -262,8 +262,8 @@ export class UIContainer extends HTMLElement {
         this._player.addEventListener('pause', this._onPause);
         this._player.addEventListener(['ended', 'emptied'], this._updatePausedAndEnded);
         this._player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updateStreamType);
-        this._player.addEventListener(['ratechange'], this._updatePlaybackRate);
-        this._player.addEventListener(['sourcechange'], this._onSourceChange);
+        this._player.addEventListener('ratechange', this._updatePlaybackRate);
+        this._player.addEventListener('sourcechange', this._onSourceChange);
         this._player.videoTracks.addEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
         this._player.cast?.addEventListener('castingchange', this._updateCasting);
         this._player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend'], this._updatePlayingAd);
