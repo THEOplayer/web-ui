@@ -151,6 +151,12 @@ export class DefaultUI extends HTMLElement {
             } else {
                 this._ui.removeAttribute(Attribute.FLUID);
             }
+        } else if (attrName === Attribute.MOBILE) {
+            if (hasValue) {
+                this._ui.setAttribute(Attribute.MOBILE, newValue);
+            } else {
+                this._ui.removeAttribute(Attribute.MOBILE);
+            }
         } else if (attrName === Attribute.STREAM_TYPE) {
             this.streamType = newValue;
         } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
