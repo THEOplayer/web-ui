@@ -101,18 +101,38 @@
     background-color: var(--theoplayer-control-backdrop-background-color, transparent);
 }
 
-[part~='menu-layer'] {
+:host(:not([mobile])) [part~='menu-layer'] {
+    left: auto;
+    bottom: 77px; /* FIXME compute this */
+    margin: var(--theoplayer-menu-margin, 10px);
+}
+
+[part='menu'] {
+    display: flex;
+    justify-self: stretch;
     background-color: var(--theoplayer-menu-backdrop-background-color, rgba(0, 0, 0, 0.5));
 }
 
-[part~='menu-layer'] ::slotted(*) {
+[part='menu'] ::slotted(*) {
     align-self: stretch;
     justify-self: stretch;
     flex-grow: 1;
 }
 
+:host(:not([mobile])) [part='menu'] {
+    margin-top: auto; /* align to bottom */
+    max-height: 100%; /* do not exceed container height */
+}
+
+:host([mobile]) [part='menu'] {
+    align-self: stretch;
+    flex-grow: 1;
+    /* Close menu when clicking on empty area of menu */
+    pointer-events: none;
+}
+
 :host(:not([menu-opened])) [part~='menu-layer'],
-:host([menu-opened]) [part~='vertical-layer'] {
+:host([menu-opened][mobile]) [part~='vertical-layer'] {
     display: none !important;
 }
 
