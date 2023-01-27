@@ -14,7 +14,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-settings-menu');
 
 export class SettingsMenu extends Menu {
     static get observedAttributes() {
-        return [Attribute.QUALITY_MENU, Attribute.PLAYBACK_RATE_MENU];
+        return [...Menu.observedAttributes, Attribute.QUALITY_MENU, Attribute.PLAYBACK_RATE_MENU];
     }
 
     private readonly _qualityMenuButton: ActiveQualityMenuButton;
@@ -27,6 +27,7 @@ export class SettingsMenu extends Menu {
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
+        super.attributeChangedCallback(attrName, oldValue, newValue);
         if (newValue === oldValue) {
             return;
         }

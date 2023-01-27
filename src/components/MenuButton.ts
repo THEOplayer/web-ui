@@ -1,7 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Button, ButtonOptions, buttonTemplate } from './Button';
 import { createCustomEvent } from '../util/EventUtils';
-import { OPEN_MENU_EVENT, type OpenMenuEvent } from '../events/OpenMenuEvent';
+import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from '../events/ToggleMenuEvent';
 import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
@@ -51,7 +51,7 @@ export class MenuButton extends Button {
     protected override handleClick() {
         const menu = this.menu;
         if (menu) {
-            const event: OpenMenuEvent = createCustomEvent(OPEN_MENU_EVENT, {
+            const event: ToggleMenuEvent = createCustomEvent(TOGGLE_MENU_EVENT, {
                 bubbles: true,
                 composed: true,
                 detail: { menu }

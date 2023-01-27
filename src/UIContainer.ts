@@ -2,9 +2,9 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type MediaTrack, type PlayerConfiguration, type SourceDescription, VideoQuality } from 'theoplayer';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
-import { arrayFind, arrayFindIndex, arrayRemove, arrayRemoveAt, containsComposedNode, isElement, isHTMLElement, noOp } from './util/CommonUtils';
+import { arrayFind, arrayFindIndex, arrayRemove, containsComposedNode, isElement, isHTMLElement, noOp } from './util/CommonUtils';
 import { forEachStateReceiverElement, StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
-import { OPEN_MENU_EVENT, type OpenMenuEvent } from './events/OpenMenuEvent';
+import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from './events/ToggleMenuEvent';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from './events/CloseMenuEvent';
 import { ENTER_FULLSCREEN_EVENT, EnterFullscreenEvent } from './events/EnterFullscreenEvent';
 import { EXIT_FULLSCREEN_EVENT, ExitFullscreenEvent } from './events/ExitFullscreenEvent';
@@ -90,7 +90,7 @@ export class UIContainer extends HTMLElement {
             this._resizeObserver = new ResizeObserver(this._updateTextTrackMargins);
         }
 
-        shadowRoot.addEventListener(OPEN_MENU_EVENT, this._onOpenMenu);
+        shadowRoot.addEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
         shadowRoot.addEventListener(ENTER_FULLSCREEN_EVENT, this._onEnterFullscreen);
         shadowRoot.addEventListener(EXIT_FULLSCREEN_EVENT, this._onExitFullscreen);
         shadowRoot.addEventListener(PREVIEW_TIME_CHANGE_EVENT, this._onPreviewTimeChange);
@@ -416,11 +416,19 @@ export class UIContainer extends HTMLElement {
     }
 
     private openMenu_(menuToOpen: HTMLElement, opener: HTMLElement | undefined): void {
+        if (menuToOpen.hasAttribute(Attribute.MENU_IS_ROOT)) {
+            // Close all menus before opening a root menu.
+            this.closeMenusFromIndex_(0);
+        }
         const index = arrayFindIndex(this._openMenuStack, (entry) => entry.menu === menuToOpen);
         if (index >= 0) {
-            arrayRemoveAt(this._openMenuStack, index);
+            // Already open.
+            // Close subsequent menus to move menu back to top of the stack.
+            this.closeMenusFromIndex_(index + 1);
+        } else {
+            // Not yet open, add to top of the stack.
+            this._openMenuStack.push({ menu: menuToOpen, opener });
         }
-        this._openMenuStack.push({ menu: menuToOpen, opener });
 
         for (const menu of this._menus) {
             menu.setAttribute('hidden', '');
@@ -443,7 +451,8 @@ export class UIContainer extends HTMLElement {
         let oldEntry: OpenMenuEntry | undefined;
         if (index >= 0) {
             oldEntry = this._openMenuStack[index];
-            arrayRemoveAt(this._openMenuStack, index);
+            // Close this menu and all subsequent menus
+            this.closeMenusFromIndex_(index);
         }
 
         menuToClose.setAttribute('hidden', '');
@@ -468,10 +477,19 @@ export class UIContainer extends HTMLElement {
         oldEntry?.opener?.focus();
     }
 
+    private closeMenusFromIndex_(index: number): void {
+        const menusToClose = this._openMenuStack.length - index;
+        this._openMenuStack.splice(index, menusToClose);
+    }
+
     private closeCurrentMenu_(): void {
         if (this._openMenuStack.length > 0) {
             this.closeMenu_(this._openMenuStack[this._openMenuStack.length - 1].menu);
         }
+    }
+
+    private isMenuOpen_(menu: HTMLElement): boolean {
+        return this._openMenuStack.some((entry) => entry.menu === menu);
     }
 
     private _onMenuSlotChange = () => {
@@ -489,17 +507,21 @@ export class UIContainer extends HTMLElement {
         this._menus = newMenus;
     };
 
-    private readonly _onOpenMenu = (rawEvent: Event): void => {
-        const event = rawEvent as OpenMenuEvent;
+    private readonly _onToggleMenu = (rawEvent: Event): void => {
+        const event = rawEvent as ToggleMenuEvent;
         event.stopPropagation();
         const menuId = event.detail.menu;
-        const menuToOpen = arrayFind(this._menus, (element) => element.id === menuId);
-        if (menuToOpen === undefined) {
+        const menu = arrayFind(this._menus, (element) => element.id === menuId);
+        if (menu === undefined) {
             console.error(`<theoplayer-ui>: cannot find menu with ID "${event.detail.menu}"`);
             return;
         }
         const opener = isHTMLElement(event.target) ? event.target : undefined;
-        this.openMenu_(menuToOpen, opener);
+        if (this.isMenuOpen_(menu)) {
+            this.closeMenu_(menu);
+        } else {
+            this.openMenu_(menu, opener);
+        }
     };
 
     private readonly _onCloseMenu = (rawEvent: Event): void => {

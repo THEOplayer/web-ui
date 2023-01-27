@@ -2,6 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import menuCss from './Menu.css';
 import { CLOSE_MENU_EVENT, CloseMenuEvent } from '../events/CloseMenuEvent';
 import { createCustomEvent } from '../util/EventUtils';
+import { Attribute } from '../util/Attribute';
 
 export interface MenuOptions {
     template?: HTMLTemplateElement;
@@ -20,6 +21,10 @@ defaultTemplate.innerHTML = menuTemplate('<slot name="heading"></slot>', '<slot>
 shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu');
 
 export class Menu extends HTMLElement {
+    static get observedAttributes() {
+        return [Attribute.MENU_IS_ROOT];
+    }
+
     constructor(options?: MenuOptions) {
         super();
         const template = options?.template ?? defaultTemplate;
@@ -39,12 +44,30 @@ export class Menu extends HTMLElement {
         }
     }
 
+    get isRootMenu(): boolean {
+        return this.hasAttribute(Attribute.MENU_IS_ROOT);
+    }
+
+    set isRootMenu(value: boolean) {
+        if (value) {
+            this.setAttribute(Attribute.MENU_IS_ROOT, '');
+        } else {
+            this.removeAttribute(Attribute.MENU_IS_ROOT);
+        }
+    }
+
     close(): void {
         const event: CloseMenuEvent = createCustomEvent(CLOSE_MENU_EVENT, {
             bubbles: true,
             composed: true
         });
         this.dispatchEvent(event);
+    }
+
+    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        if (Menu.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
     }
 }
 
