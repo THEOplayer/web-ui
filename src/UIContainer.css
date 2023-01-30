@@ -122,8 +122,12 @@
 }
 
 :host(:not([mobile])) [part='menu'] {
-    margin-top: auto; /* align to bottom */
-    max-height: 100%; /* do not exceed container height */
+    /* Align to bottom by default */
+    margin-top: auto;
+    /* Do not exceed container height */
+    max-height: 100%;
+    /* Avoid narrow menus */
+    min-width: var(--theoplayer-menu-min-width, 200px);
 }
 
 :host([mobile]) [part='menu'] {
