@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type MediaTrack, type PlayerConfiguration, type SourceDescription, VideoQuality } from 'theoplayer';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
-import { arrayFind, arrayFindIndex, arrayRemove, containsComposedNode, isElement, isHTMLElement, noOp } from './util/CommonUtils';
+import { arrayFind, arrayFindIndex, arrayRemove, containsComposedNode, isElement, isHTMLElement, isHTMLSlotElement, noOp } from './util/CommonUtils';
 import { forEachStateReceiverElement, StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from './events/ToggleMenuEvent';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from './events/CloseMenuEvent';
@@ -509,8 +509,14 @@ export class UIContainer extends HTMLElement {
         return this._openMenuStack.some((entry) => entry.menu === menu);
     }
 
+    /**
+     * Update the list of menus whenever the contents of `<slot name="menu">` changes.
+     * Note: the `slotchange` event bubbles up, so we don't have to manually attach
+     * this listener to each nested `<slot>`.
+     */
     private _onMenuSlotChange = () => {
-        const newMenus = this._menuSlot.assignedNodes().filter(isHTMLElement);
+        const newMenus: HTMLElement[] = [];
+        collectMenus(this._menuSlot, newMenus);
         for (const oldMenu of this._menus) {
             if (newMenus.indexOf(oldMenu) < 0) {
                 oldMenu.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
@@ -881,6 +887,17 @@ export class UIContainer extends HTMLElement {
 }
 
 customElements.define('theoplayer-ui', UIContainer);
+
+function collectMenus(slot: HTMLSlotElement, result: HTMLElement[]): void {
+    const elements = slot.assignedNodes().filter(isHTMLElement);
+    for (const element of elements) {
+        if (isHTMLSlotElement(element)) {
+            collectMenus(element, result);
+        } else {
+            result.push(element);
+        }
+    }
+}
 
 function getVisibleRect(slot: HTMLSlotElement): Rectangle | undefined {
     let result: Rectangle | undefined;
