@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type MediaTrack, type PlayerConfiguration, type SourceDescription, VideoQuality } from 'theoplayer';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
-import { arrayFind, arrayFindIndex, arrayRemove, containsComposedNode, isElement, isHTMLElement, isHTMLSlotElement, noOp } from './util/CommonUtils';
+import { arrayFind, arrayFindIndex, arrayRemove, isElement, isHTMLElement, noOp } from './util/CommonUtils';
 import { forEachStateReceiverElement, StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from './events/ToggleMenuEvent';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from './events/CloseMenuEvent';
@@ -438,22 +438,40 @@ export class UIContainer extends HTMLElement {
         previousEntry?.menu.setAttribute('hidden', '');
         menuToOpen.removeAttribute('hidden');
 
-        // TODO Open menu in a different corner?
         const topChromeRect = Rectangle.fromRect(this._topChromeEl.getBoundingClientRect());
         const bottomChromeRect = Rectangle.fromRect(this._bottomChromeEl.getBoundingClientRect());
-        shadyCss.styleSubtree(this, {
-            '--theoplayer-menu-offset-left': 'auto',
-            '--theoplayer-menu-offset-right': '0',
+        let props: Record<string, string> = {
             '--theoplayer-menu-offset-top': `${Math.round(topChromeRect.height)}px`,
             '--theoplayer-menu-offset-bottom': `${Math.round(bottomChromeRect.height)}px`
-        });
+        };
 
         if (previousEntry === undefined) {
+            // Open menu in same quadrant as its opener
+            // If there's no opener, open in bottom right corner by default
+            let alignBottom: boolean = true;
+            let alignRight: boolean = true;
+            if (opener !== undefined) {
+                const playerRect = Rectangle.fromRect(this.getBoundingClientRect());
+                const openerRect = Rectangle.fromRect(opener.getBoundingClientRect());
+                if (playerRect.width > 0 && playerRect.height > 0) {
+                    alignBottom = openerRect.top >= playerRect.top + playerRect.height / 2;
+                    alignRight = openerRect.left >= playerRect.left + playerRect.width / 2;
+                }
+            }
+            props = {
+                ...props,
+                '--theoplayer-menu-margin-top': alignBottom ? 'auto' : '0',
+                '--theoplayer-menu-margin-bottom': alignBottom ? '0' : 'auto',
+                '--theoplayer-menu-offset-left': alignRight ? 'auto' : '0',
+                '--theoplayer-menu-offset-right': alignRight ? '0' : 'auto'
+            };
+
             this.addEventListener('keydown', this._onMenuKeyDown);
             this._menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
             this._menuEl.addEventListener('click', this._onMenuClick);
             this.setAttribute(Attribute.MENU_OPENED, '');
         }
+        shadyCss.styleSubtree(this, props);
 
         menuToOpen.focus();
     }

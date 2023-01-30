@@ -13,7 +13,7 @@ export function isHTMLElement(node: unknown): node is HTMLElement {
 }
 
 export function isHTMLSlotElement(element: HTMLElement): element is HTMLSlotElement {
-    return element.localName.toLowerCase() === 'slot'
+    return element.localName.toLowerCase() === 'slot';
 }
 
 export const isArray: (arg: unknown) => arg is any[] =
