@@ -56,7 +56,9 @@ export class UIContainer extends HTMLElement {
     private readonly _playerEl: HTMLElement;
     private readonly _menuEl: HTMLElement;
     private readonly _menuSlot: HTMLSlotElement;
+    private readonly _topChromeEl: HTMLElement;
     private readonly _topChromeSlot: HTMLSlotElement;
+    private readonly _bottomChromeEl: HTMLElement;
     private readonly _bottomChromeSlot: HTMLSlotElement;
 
     private _menus: HTMLElement[] = [];
@@ -82,7 +84,9 @@ export class UIContainer extends HTMLElement {
         this._playerEl = shadowRoot.querySelector('[part~="media-layer"]')!;
         this._menuEl = shadowRoot.querySelector('[part~="menu-layer"]')!;
         this._menuSlot = shadowRoot.querySelector('slot[name="menu"]')!;
+        this._topChromeEl = shadowRoot.querySelector('[part~="top"]')!;
         this._topChromeSlot = shadowRoot.querySelector('slot[name="top-chrome"]')!;
+        this._bottomChromeEl = shadowRoot.querySelector('[part~="bottom"]')!;
         this._bottomChromeSlot = shadowRoot.querySelector('slot:not([name])')!;
 
         this._mutationObserver = new MutationObserver(this._onMutation);
@@ -434,6 +438,15 @@ export class UIContainer extends HTMLElement {
             menu.setAttribute('hidden', '');
         }
         menuToOpen.removeAttribute('hidden');
+
+        // TODO Open menu in a different corner?
+        const bottomChromeRect = Rectangle.fromRect(this._bottomChromeEl.getBoundingClientRect());
+        shadyCss.styleSubtree(this, {
+            '--theoplayer-menu-offset-left': 'auto',
+            '--theoplayer-menu-offset-right': '0',
+            '--theoplayer-menu-offset-top': '0',
+            '--theoplayer-menu-offset-bottom': `${Math.round(bottomChromeRect.height)}px`
+        });
         this.setAttribute(Attribute.MENU_OPENED, '');
 
         this.removeEventListener('keydown', this._onMenuKeyDown);

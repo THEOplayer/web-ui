@@ -102,8 +102,10 @@
 }
 
 :host(:not([mobile])) [part~='menu-layer'] {
-    left: auto;
-    bottom: 77px; /* FIXME compute this */
+    left: var(--theoplayer-menu-offset-left, auto);
+    right: var(--theoplayer-menu-offset-right, 0);
+    top: var(--theoplayer-menu-offset-top, 0);
+    bottom: var(--theoplayer-menu-offset-bottom, 0);
     margin: var(--theoplayer-menu-margin, 10px);
 }
 
