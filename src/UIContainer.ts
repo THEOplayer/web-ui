@@ -420,11 +420,11 @@ export class UIContainer extends HTMLElement {
     }
 
     private openMenu_(menuToOpen: HTMLElement, opener: HTMLElement | undefined): void {
-        const previousEntry = this.getCurrentMenu_();
         if (menuToOpen.hasAttribute(Attribute.MENU_IS_ROOT)) {
             // Close all menus before opening a root menu.
             this.closeMenusFromIndex_(0);
         }
+        const previousEntry = this.getCurrentMenu_();
         const index = arrayFindIndex(this._openMenuStack, (entry) => entry.menu === menuToOpen);
         if (index >= 0) {
             // Already open.
