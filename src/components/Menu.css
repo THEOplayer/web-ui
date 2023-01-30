@@ -3,6 +3,7 @@
     flex-direction: column;
     box-sizing: border-box;
     color: var(--theoplayer-menu-color, #fff);
+    font-size: var(--theoplayer-text-font-size, 14px);
     pointer-events: none;
 }
 
@@ -14,7 +15,6 @@
     display: flex;
     align-self: flex-start;
     align-items: center;
-    font-size: var(--theoplayer-text-font-size, 14px);
     pointer-events: auto;
 }
 
