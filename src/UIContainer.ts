@@ -516,8 +516,7 @@ export class UIContainer extends HTMLElement {
      * this listener to each nested `<slot>`.
      */
     private _onMenuSlotChange = () => {
-        const newMenus: HTMLElement[] = [];
-        collectMenus(this._menuSlot, newMenus);
+        const newMenus = this._menuSlot.assignedNodes({ flatten: true }).filter(isHTMLElement);
         for (const oldMenu of this._menus) {
             if (newMenus.indexOf(oldMenu) < 0) {
                 oldMenu.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
@@ -888,17 +887,6 @@ export class UIContainer extends HTMLElement {
 }
 
 customElements.define('theoplayer-ui', UIContainer);
-
-function collectMenus(slot: HTMLSlotElement, result: HTMLElement[]): void {
-    const elements = slot.assignedNodes().filter(isHTMLElement);
-    for (const element of elements) {
-        if (isHTMLSlotElement(element)) {
-            collectMenus(element, result);
-        } else {
-            result.push(element);
-        }
-    }
-}
 
 function getVisibleRect(slot: HTMLSlotElement): Rectangle | undefined {
     let result: Rectangle | undefined;
