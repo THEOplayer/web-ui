@@ -420,6 +420,7 @@ export class UIContainer extends HTMLElement {
     }
 
     private openMenu_(menuToOpen: HTMLElement, opener: HTMLElement | undefined): void {
+        const previousEntry = this.getCurrentMenu_();
         if (menuToOpen.hasAttribute(Attribute.MENU_IS_ROOT)) {
             // Close all menus before opening a root menu.
             this.closeMenusFromIndex_(0);
@@ -434,9 +435,7 @@ export class UIContainer extends HTMLElement {
             this._openMenuStack.push({ menu: menuToOpen, opener });
         }
 
-        for (const menu of this._menus) {
-            menu.setAttribute('hidden', '');
-        }
+        previousEntry?.menu.setAttribute('hidden', '');
         menuToOpen.removeAttribute('hidden');
 
         // TODO Open menu in a different corner?
@@ -468,10 +467,8 @@ export class UIContainer extends HTMLElement {
             this.closeMenusFromIndex_(index);
         }
 
-        menuToClose.setAttribute('hidden', '');
-
-        if (this._openMenuStack.length > 0) {
-            const nextEntry = this._openMenuStack[this._openMenuStack.length - 1];
+        const nextEntry = this.getCurrentMenu_();
+        if (nextEntry !== undefined) {
             nextEntry.menu.removeAttribute('hidden');
             this.setAttribute(Attribute.MENU_OPENED, '');
             if (oldEntry && oldEntry.opener && nextEntry.menu.contains(oldEntry.opener)) {
@@ -492,12 +489,20 @@ export class UIContainer extends HTMLElement {
 
     private closeMenusFromIndex_(index: number): void {
         const menusToClose = this._openMenuStack.length - index;
+        for (let i = index; i < this._openMenuStack.length; i++) {
+            this._openMenuStack[i].menu.setAttribute('hidden', '');
+        }
         this._openMenuStack.splice(index, menusToClose);
     }
 
+    private getCurrentMenu_(): OpenMenuEntry | undefined {
+        return this._openMenuStack.length > 0 ? this._openMenuStack[this._openMenuStack.length - 1] : undefined;
+    }
+
     private closeCurrentMenu_(): void {
-        if (this._openMenuStack.length > 0) {
-            this.closeMenu_(this._openMenuStack[this._openMenuStack.length - 1].menu);
+        const currentMenu = this.getCurrentMenu_();
+        if (currentMenu !== undefined) {
+            this.closeMenu_(currentMenu.menu);
         }
     }
 
@@ -510,10 +515,12 @@ export class UIContainer extends HTMLElement {
         for (const oldMenu of this._menus) {
             if (newMenus.indexOf(oldMenu) < 0) {
                 oldMenu.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
+                this.closeMenu_(oldMenu);
             }
         }
         for (const newMenu of newMenus) {
             if (this._menus.indexOf(newMenu) < 0) {
+                newMenu.setAttribute('hidden', '');
                 newMenu.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
             }
         }
