@@ -439,11 +439,12 @@ export class UIContainer extends HTMLElement {
         menuToOpen.removeAttribute('hidden');
 
         // TODO Open menu in a different corner?
+        const topChromeRect = Rectangle.fromRect(this._topChromeEl.getBoundingClientRect());
         const bottomChromeRect = Rectangle.fromRect(this._bottomChromeEl.getBoundingClientRect());
         shadyCss.styleSubtree(this, {
             '--theoplayer-menu-offset-left': 'auto',
             '--theoplayer-menu-offset-right': '0',
-            '--theoplayer-menu-offset-top': '0',
+            '--theoplayer-menu-offset-top': `${Math.round(topChromeRect.height)}px`,
             '--theoplayer-menu-offset-bottom': `${Math.round(bottomChromeRect.height)}px`
         });
 
