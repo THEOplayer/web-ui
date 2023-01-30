@@ -446,14 +446,13 @@ export class UIContainer extends HTMLElement {
             '--theoplayer-menu-offset-top': '0',
             '--theoplayer-menu-offset-bottom': `${Math.round(bottomChromeRect.height)}px`
         });
-        this.setAttribute(Attribute.MENU_OPENED, '');
 
-        this.removeEventListener('keydown', this._onMenuKeyDown);
-        this.addEventListener('keydown', this._onMenuKeyDown);
-        this._menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
-        this._menuEl.removeEventListener('click', this._onMenuClick);
-        this._menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
-        this._menuEl.addEventListener('click', this._onMenuClick);
+        if (previousEntry === undefined) {
+            this.addEventListener('keydown', this._onMenuKeyDown);
+            this._menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
+            this._menuEl.addEventListener('click', this._onMenuClick);
+            this.setAttribute(Attribute.MENU_OPENED, '');
+        }
 
         menuToOpen.focus();
     }
