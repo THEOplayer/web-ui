@@ -94,16 +94,9 @@ export class MenuContainer extends HTMLElement {
         }
 
         if (previousEntry) {
-            if (previousEntry.menu instanceof MenuContainer) {
-                previousEntry.menu.closeMenu();
-            }
-            previousEntry.menu.setAttribute('hidden', '');
+            this.closeMenuInternal_(previousEntry.menu);
         }
-
-        menuToOpen.removeAttribute('hidden');
-        if (menuToOpen instanceof MenuContainer) {
-            menuToOpen.openMenu();
-        }
+        this.openMenuInternal_(menuToOpen);
 
         this.removeEventListener('keydown', this._onKeyDown);
         this.addEventListener('keydown', this._onKeyDown);
@@ -132,7 +125,7 @@ export class MenuContainer extends HTMLElement {
 
         const nextEntry = this.getCurrentMenu_();
         if (nextEntry !== undefined) {
-            nextEntry.menu.removeAttribute('hidden');
+            this.openMenuInternal_(nextEntry.menu);
             this.setAttribute(Attribute.MENU_OPENED, '');
             if (oldEntry && oldEntry.opener && nextEntry.menu.contains(oldEntry.opener)) {
                 oldEntry.opener.focus();
@@ -149,10 +142,24 @@ export class MenuContainer extends HTMLElement {
         return true;
     }
 
+    private openMenuInternal_(menu: HTMLElement): void {
+        menu.removeAttribute('hidden');
+        if (menu instanceof MenuContainer) {
+            menu.openMenu();
+        }
+    }
+
+    private closeMenuInternal_(menu: HTMLElement): void {
+        menu.setAttribute('hidden', '');
+        if (menu instanceof MenuContainer) {
+            menu.closeMenu();
+        }
+    }
+
     private closeMenusFromIndex_(index: number): void {
         const menusToClose = this._openMenuStack.length - index;
-        for (let i = index; i < this._openMenuStack.length; i++) {
-            this._openMenuStack[i].menu.setAttribute('hidden', '');
+        for (let i = this._openMenuStack.length - 1; i >= index; i--) {
+            this.closeMenuInternal_(this._openMenuStack[i].menu);
         }
         this._openMenuStack.splice(index, menusToClose);
     }
@@ -196,7 +203,7 @@ export class MenuContainer extends HTMLElement {
         }
         for (const newMenu of newMenus) {
             if (this._menus.indexOf(newMenu) < 0) {
-                newMenu.setAttribute('hidden', '');
+                this.closeMenuInternal_(newMenu);
             }
         }
         this._menus = newMenus;
