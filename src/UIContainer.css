@@ -102,11 +102,9 @@
 }
 
 :host(:not([mobile])) [part~='menu-layer'] {
-    left: var(--theoplayer-menu-offset-left, auto);
-    right: var(--theoplayer-menu-offset-right, 0);
     top: var(--theoplayer-menu-offset-top, 0);
     bottom: var(--theoplayer-menu-offset-bottom, 0);
-    margin: var(--theoplayer-menu-margin, 10px);
+    padding: var(--theoplayer-menu-layer-padding, 10px);
 }
 
 [part='menu'] {
@@ -122,9 +120,11 @@
 }
 
 :host(:not([mobile])) [part='menu'] {
-    /* Align to bottom by default */
+    /* Align to bottom right by default */
     margin-top: var(--theoplayer-menu-margin-top, auto);
     margin-bottom: var(--theoplayer-menu-margin-bottom, 0);
+    margin-left: var(--theoplayer-menu-margin-left, auto);
+    margin-right: var(--theoplayer-menu-margin-right, 0);
     /* Do not exceed container height */
     max-height: 100%;
     /* Avoid narrow menus */

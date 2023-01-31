@@ -462,8 +462,8 @@ export class UIContainer extends HTMLElement {
                 ...props,
                 '--theoplayer-menu-margin-top': alignBottom ? 'auto' : '0',
                 '--theoplayer-menu-margin-bottom': alignBottom ? '0' : 'auto',
-                '--theoplayer-menu-offset-left': alignRight ? 'auto' : '0',
-                '--theoplayer-menu-offset-right': alignRight ? '0' : 'auto'
+                '--theoplayer-menu-margin-left': alignRight ? 'auto' : '0',
+                '--theoplayer-menu-margin-right': alignRight ? '0' : 'auto'
             };
 
             this.addEventListener('keydown', this._onMenuKeyDown);
