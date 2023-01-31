@@ -8,6 +8,7 @@ export * from './DurationDisplay';
 export * from './RadioGroup';
 export * from './RadioButton';
 export * from './Menu';
+export * from './MenuContainer';
 export * from './MenuButton';
 export * from './CloseMenuButton';
 export * from './MediaTrackRadioButton';

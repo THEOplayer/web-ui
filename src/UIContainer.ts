@@ -2,15 +2,14 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type MediaTrack, type PlayerConfiguration, type SourceDescription, VideoQuality } from 'theoplayer';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
-import { arrayFind, arrayFindIndex, arrayRemove, isElement, isHTMLElement, noOp } from './util/CommonUtils';
+import { arrayFind, arrayRemove, containsComposedNode, isElement, isHTMLElement, noOp } from './util/CommonUtils';
 import { forEachStateReceiverElement, StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from './events/ToggleMenuEvent';
-import { CLOSE_MENU_EVENT, type CloseMenuEvent } from './events/CloseMenuEvent';
+import { CLOSE_MENU_EVENT } from './events/CloseMenuEvent';
 import { ENTER_FULLSCREEN_EVENT, EnterFullscreenEvent } from './events/EnterFullscreenEvent';
 import { EXIT_FULLSCREEN_EVENT, ExitFullscreenEvent } from './events/ExitFullscreenEvent';
 import { fullscreenAPI } from './util/FullscreenUtils';
 import { Attribute } from './util/Attribute';
-import { KeyCode } from './util/KeyCode';
 import { isMobile } from './util/Environment';
 import { Rectangle } from './util/GeometryUtils';
 import './components/GestureReceiver';
@@ -20,6 +19,8 @@ import type { StreamTypeChangeEvent } from './events/StreamTypeChangeEvent';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
 import { createCustomEvent } from './util/EventUtils';
 import { getTargetQualities } from './util/TrackUtils';
+import type { MenuContainer } from './components';
+import './components/MenuContainer';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -55,14 +56,13 @@ export class UIContainer extends HTMLElement {
     private _configuration: PlayerConfiguration = {};
     private readonly _playerEl: HTMLElement;
     private readonly _menuEl: HTMLElement;
-    private readonly _menuSlot: HTMLSlotElement;
+    private readonly _menuContainer: MenuContainer;
+    private _menuOpener: HTMLElement | undefined;
     private readonly _topChromeEl: HTMLElement;
     private readonly _topChromeSlot: HTMLSlotElement;
     private readonly _bottomChromeEl: HTMLElement;
     private readonly _bottomChromeSlot: HTMLSlotElement;
 
-    private _menus: HTMLElement[] = [];
-    private readonly _openMenuStack: OpenMenuEntry[] = [];
     private _pointerType: string = '';
     private readonly _mutationObserver: MutationObserver;
     private readonly _resizeObserver: ResizeObserver | undefined;
@@ -83,7 +83,7 @@ export class UIContainer extends HTMLElement {
 
         this._playerEl = shadowRoot.querySelector('[part~="media-layer"]')!;
         this._menuEl = shadowRoot.querySelector('[part~="menu-layer"]')!;
-        this._menuSlot = shadowRoot.querySelector('slot[name="menu"]')!;
+        this._menuContainer = shadowRoot.querySelector('theoplayer-menu-container')!;
         this._topChromeEl = shadowRoot.querySelector('[part~="top"]')!;
         this._topChromeSlot = shadowRoot.querySelector('slot[name="top-chrome"]')!;
         this._bottomChromeEl = shadowRoot.querySelector('[part~="bottom"]')!;
@@ -206,8 +206,7 @@ export class UIContainer extends HTMLElement {
         this._resizeObserver?.observe(this);
         this._updateTextTrackMargins();
 
-        this._onMenuSlotChange();
-        this._menuSlot.addEventListener('slotchange', this._onMenuSlotChange);
+        this._menuContainer.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
 
         if (fullscreenAPI !== undefined) {
             document.addEventListener(fullscreenAPI.fullscreenchange_, this._onFullscreenChange);
@@ -280,8 +279,6 @@ export class UIContainer extends HTMLElement {
             this.removeStateFromReceiver_(receiver);
         }
         this._stateReceivers.length = 0;
-
-        this._menuSlot.removeEventListener('slotchange', this._onMenuSlotChange);
 
         if (fullscreenAPI !== undefined) {
             document.removeEventListener(fullscreenAPI.fullscreenchange_, this._onFullscreenChange);
@@ -419,159 +416,73 @@ export class UIContainer extends HTMLElement {
         }
     }
 
-    private openMenu_(menuToOpen: HTMLElement, opener: HTMLElement | undefined): void {
-        if (menuToOpen.hasAttribute(Attribute.MENU_IS_ROOT)) {
-            // Close all menus before opening a root menu.
-            this.closeMenusFromIndex_(0);
-        }
-        const previousEntry = this.getCurrentMenu_();
-        const index = arrayFindIndex(this._openMenuStack, (entry) => entry.menu === menuToOpen);
-        if (index >= 0) {
-            // Already open.
-            // Close subsequent menus to move menu back to top of the stack.
-            this.closeMenusFromIndex_(index + 1);
-        } else {
-            // Not yet open, add to top of the stack.
-            this._openMenuStack.push({ menu: menuToOpen, opener });
-        }
-
-        previousEntry?.menu.setAttribute('hidden', '');
-        menuToOpen.removeAttribute('hidden');
-
+    private openMenu_(menuToOpen: string, opener: HTMLElement | undefined): void {
         const topChromeRect = Rectangle.fromRect(this._topChromeEl.getBoundingClientRect());
         const bottomChromeRect = Rectangle.fromRect(this._bottomChromeEl.getBoundingClientRect());
-        let props: Record<string, string> = {
-            '--theoplayer-menu-offset-top': `${Math.round(topChromeRect.height)}px`,
-            '--theoplayer-menu-offset-bottom': `${Math.round(bottomChromeRect.height)}px`
-        };
 
-        if (previousEntry === undefined) {
-            // Open menu in same quadrant as its opener
-            // If there's no opener, open in bottom right corner by default
-            let alignBottom: boolean = true;
-            let alignRight: boolean = true;
-            if (opener !== undefined) {
-                const playerRect = Rectangle.fromRect(this.getBoundingClientRect());
-                const openerRect = Rectangle.fromRect(opener.getBoundingClientRect());
-                if (playerRect.width > 0 && playerRect.height > 0) {
-                    alignBottom = openerRect.top >= playerRect.top + playerRect.height / 2;
-                    alignRight = openerRect.left >= playerRect.left + playerRect.width / 2;
-                }
+        // Open menu in same quadrant as its opener
+        // If there's no opener, open in bottom right corner by default
+        let alignBottom: boolean = true;
+        let alignRight: boolean = true;
+        if (opener !== undefined) {
+            const playerRect = Rectangle.fromRect(this.getBoundingClientRect());
+            const openerRect = Rectangle.fromRect(opener.getBoundingClientRect());
+            if (playerRect.width > 0 && playerRect.height > 0) {
+                alignBottom = openerRect.top >= playerRect.top + playerRect.height / 2;
+                alignRight = openerRect.left >= playerRect.left + playerRect.width / 2;
             }
-            props = {
-                ...props,
-                '--theoplayer-menu-margin-top': alignBottom ? 'auto' : '0',
-                '--theoplayer-menu-margin-bottom': alignBottom ? '0' : 'auto',
-                '--theoplayer-menu-margin-left': alignRight ? 'auto' : '0',
-                '--theoplayer-menu-margin-right': alignRight ? '0' : 'auto'
-            };
-
-            this.addEventListener('keydown', this._onMenuKeyDown);
-            this._menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
-            this._menuEl.addEventListener('click', this._onMenuClick);
-            this.setAttribute(Attribute.MENU_OPENED, '');
         }
-        shadyCss.styleSubtree(this, props);
 
-        menuToOpen.focus();
+        this._menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
+        this._menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
+        this._menuEl.removeEventListener('click', this._onMenuClick);
+        this._menuEl.addEventListener('click', this._onMenuClick);
+        this.setAttribute(Attribute.MENU_OPENED, '');
+
+        this._menuContainer.openMenu(menuToOpen, opener);
+        this._menuOpener = opener;
+
+        const props = {
+            '--theoplayer-menu-offset-top': `${Math.round(topChromeRect.height)}px`,
+            '--theoplayer-menu-offset-bottom': `${Math.round(bottomChromeRect.height)}px`,
+            '--theoplayer-menu-margin-top': alignBottom ? 'auto' : '0',
+            '--theoplayer-menu-margin-bottom': alignBottom ? '0' : 'auto',
+            '--theoplayer-menu-margin-left': alignRight ? 'auto' : '0',
+            '--theoplayer-menu-margin-right': alignRight ? '0' : 'auto'
+        };
+        shadyCss.styleSubtree(this, props);
     }
 
-    private closeMenu_(menuToClose: HTMLElement): void {
-        const index = arrayFindIndex(this._openMenuStack, (entry) => entry.menu === menuToClose);
-        let oldEntry: OpenMenuEntry | undefined;
-        if (index >= 0) {
-            oldEntry = this._openMenuStack[index];
-            // Close this menu and all subsequent menus
-            this.closeMenusFromIndex_(index);
-        }
-
-        const nextEntry = this.getCurrentMenu_();
-        if (nextEntry !== undefined) {
-            nextEntry.menu.removeAttribute('hidden');
-            this.setAttribute(Attribute.MENU_OPENED, '');
-            if (oldEntry && oldEntry.opener && nextEntry.menu.contains(oldEntry.opener)) {
-                oldEntry.opener.focus();
-            } else {
-                nextEntry.menu.focus();
-            }
-            return;
-        }
-
-        this.removeEventListener('keydown', this._onMenuKeyDown);
+    private closeMenu_(menuId?: string): void {
         this._menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
         this._menuEl.removeEventListener('click', this._onMenuClick);
         this.removeAttribute(Attribute.MENU_OPENED);
 
-        oldEntry?.opener?.focus();
-    }
+        this._menuContainer.closeMenu(menuId);
 
-    private closeMenusFromIndex_(index: number): void {
-        const menusToClose = this._openMenuStack.length - index;
-        for (let i = index; i < this._openMenuStack.length; i++) {
-            this._openMenuStack[i].menu.setAttribute('hidden', '');
-        }
-        this._openMenuStack.splice(index, menusToClose);
+        this._menuOpener?.focus();
+        this._menuOpener = undefined;
     }
-
-    private getCurrentMenu_(): OpenMenuEntry | undefined {
-        return this._openMenuStack.length > 0 ? this._openMenuStack[this._openMenuStack.length - 1] : undefined;
-    }
-
-    private closeCurrentMenu_(): void {
-        const currentMenu = this.getCurrentMenu_();
-        if (currentMenu !== undefined) {
-            this.closeMenu_(currentMenu.menu);
-        }
-    }
-
-    private isMenuOpen_(menu: HTMLElement): boolean {
-        return this._openMenuStack.some((entry) => entry.menu === menu);
-    }
-
-    /**
-     * Update the list of menus whenever the contents of `<slot name="menu">` changes.
-     * Note: the `slotchange` event bubbles up, so we don't have to manually attach
-     * this listener to each nested `<slot>`.
-     */
-    private _onMenuSlotChange = () => {
-        const newMenus = this._menuSlot.assignedNodes({ flatten: true }).filter(isHTMLElement);
-        for (const oldMenu of this._menus) {
-            if (newMenus.indexOf(oldMenu) < 0) {
-                oldMenu.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
-                this.closeMenu_(oldMenu);
-            }
-        }
-        for (const newMenu of newMenus) {
-            if (this._menus.indexOf(newMenu) < 0) {
-                newMenu.setAttribute('hidden', '');
-                newMenu.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
-            }
-        }
-        this._menus = newMenus;
-    };
 
     private readonly _onToggleMenu = (rawEvent: Event): void => {
         const event = rawEvent as ToggleMenuEvent;
         event.stopPropagation();
         const menuId = event.detail.menu;
-        const menu = arrayFind(this._menus, (element) => element.id === menuId);
-        if (menu === undefined) {
-            console.error(`<theoplayer-ui>: cannot find menu with ID "${event.detail.menu}"`);
+        if (!this._menuContainer.getMenuById(menuId)) {
+            console.error(`<theoplayer-ui>: cannot find menu with ID "${menuId}"`);
             return;
         }
         const opener = isHTMLElement(event.target) ? event.target : undefined;
-        if (this.isMenuOpen_(menu)) {
-            this.closeMenu_(menu);
+        if (this._menuContainer.isMenuOpen(menuId)) {
+            this.closeMenu_(menuId);
         } else {
-            this.openMenu_(menu, opener);
+            this.openMenu_(menuId, opener);
         }
     };
 
-    private readonly _onCloseMenu = (rawEvent: Event): void => {
-        const event = rawEvent as CloseMenuEvent;
+    private readonly _onCloseMenu = (event: Event): void => {
         event.stopPropagation();
-        const menuToClose = event.currentTarget as HTMLElement;
-        this.closeMenu_(menuToClose);
+        this.closeMenu_();
     };
 
     private readonly _onMenuPointerDown = (event: PointerEvent) => {
@@ -584,23 +495,9 @@ export class UIContainer extends HTMLElement {
         const pointerType = (event as PointerEvent).pointerType ?? this._pointerType;
         if (event.target === this._menuEl && pointerType === 'mouse') {
             // Close menu when clicking (with mouse) on menu backdrop
-            event.preventDefault();
-            this.closeCurrentMenu_();
-        }
-    };
-
-    private readonly _onMenuKeyDown = (event: KeyboardEvent) => {
-        // Don't handle modifier shortcuts typically used by assistive technology.
-        if (event.altKey) return;
-
-        switch (event.keyCode) {
-            case KeyCode.ESCAPE:
+            if (this._menuContainer.closeCurrentMenu()) {
                 event.preventDefault();
-                this.closeCurrentMenu_();
-                break;
-            // Any other key press is ignored and passed back to the browser.
-            default:
-                return;
+            }
         }
     };
 

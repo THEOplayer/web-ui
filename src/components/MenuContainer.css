@@ -1,0 +1,23 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    pointer-events: none;
+    /*
+     * By default, a flex container cannot be smaller than the size of its content along the main axis.
+     * However, we want to show a scroll bar instead if the container gets too small, so override its min-height.
+     * https://stackoverflow.com/a/36247448/1321716
+     */
+    min-height: 0;
+}
+
+:host([hidden]) {
+    display: none !important;
+}
+
+::slotted(*) {
+    align-self: stretch;
+    justify-self: stretch;
+    flex-grow: 1;
+    min-height: 0;
+}
