@@ -1,4 +1,17 @@
-<span>Quality</span>
-<theoplayer-active-quality-menu-button></theoplayer-active-quality-menu-button>
-<span>Playback speed</span>
-<theoplayer-playback-rate-menu-button></theoplayer-playback-rate-menu-button>
+<theoplayer-menu menu-is-root>
+    <span slot="heading">Settings</span>
+    <div class="theoplayer-settings-menu-content">
+        <span>Quality</span>
+        <theoplayer-active-quality-menu-button menu="quality-menu"></theoplayer-active-quality-menu-button>
+        <span>Playback speed</span>
+        <theoplayer-playback-rate-menu-button menu="playback-rate-menu"></theoplayer-playback-rate-menu-button>
+    </div>
+</theoplayer-menu>
+<theoplayer-menu id="quality-menu" menu-close-on-input hidden>
+    <span slot="heading">Quality</span>
+    <theoplayer-quality-radio-group></theoplayer-quality-radio-group>
+</theoplayer-menu>
+<theoplayer-menu id="playback-rate-menu" menu-close-on-input hidden>
+    <span slot="heading">Playback speed</span>
+    <theoplayer-playback-rate-radio-group></theoplayer-playback-rate-radio-group>
+</theoplayer-menu>

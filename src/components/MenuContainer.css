@@ -15,6 +15,7 @@
     display: none !important;
 }
 
+:host > *,
 ::slotted(*) {
     align-self: stretch;
     justify-self: stretch;

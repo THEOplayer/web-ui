@@ -1,14 +1,22 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import menuContainerCss from './MenuContainer.css';
 import { Attribute } from '../util/Attribute';
-import { arrayFind, arrayFindIndex, isHTMLElement } from '../util/CommonUtils';
+import { arrayFind, arrayFindIndex, fromArrayLike, isHTMLElement } from '../util/CommonUtils';
 import { CLOSE_MENU_EVENT, CloseMenuEvent } from '../events/CloseMenuEvent';
 import { TOGGLE_MENU_EVENT, ToggleMenuEvent } from '../events/ToggleMenuEvent';
 import { KeyCode } from '../util/KeyCode';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${menuContainerCss}</style><slot></slot>`;
-shadyCss.prepareTemplate(template, 'theoplayer-menu-container');
+export interface MenuContainerOptions {
+    template?: HTMLTemplateElement;
+}
+
+export function menuContainerTemplate(content: string, extraCss: string = ''): string {
+    return `<style>${menuContainerCss}${extraCss}</style>${content}`;
+}
+
+const defaultTemplate = document.createElement('template');
+defaultTemplate.innerHTML = menuContainerTemplate(`<slot></slot>`);
+shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu-container');
 
 interface OpenMenuEntry {
     menu: HTMLElement;
@@ -20,32 +28,33 @@ export class MenuContainer extends HTMLElement {
         return [Attribute.MENU_IS_ROOT, Attribute.MENU_OPENED];
     }
 
-    private readonly _menuSlot: HTMLSlotElement;
+    private readonly _menuSlot: HTMLSlotElement | null;
     private _menus: HTMLElement[] = [];
     private readonly _openMenuStack: OpenMenuEntry[] = [];
 
-    constructor() {
+    constructor(options?: MenuContainerOptions) {
         super();
+        const template = options?.template ?? defaultTemplate;
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
         shadowRoot.appendChild(template.content.cloneNode(true));
 
-        this._menuSlot = shadowRoot.querySelector('slot')!;
+        this._menuSlot = shadowRoot.querySelector('slot');
     }
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
-        this._onMenuSlotChange();
+        this._onMenuListChange();
 
         this.shadowRoot!.addEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
         this.shadowRoot!.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
-        this._menuSlot.addEventListener('slotchange', this._onMenuSlotChange);
+        this._menuSlot?.addEventListener('slotchange', this._onMenuListChange);
     }
 
     disconnectedCallback(): void {
         this.shadowRoot!.removeEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
         this.shadowRoot!.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
-        this._menuSlot.removeEventListener('slotchange', this._onMenuSlotChange);
+        this._menuSlot?.removeEventListener('slotchange', this._onMenuListChange);
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -194,8 +203,12 @@ export class MenuContainer extends HTMLElement {
      * Note: the `slotchange` event bubbles up, so we don't have to manually attach
      * this listener to each nested `<slot>`.
      */
-    private _onMenuSlotChange = () => {
-        const newMenus = this._menuSlot.assignedNodes({ flatten: true }).filter(isHTMLElement);
+    private _onMenuListChange = () => {
+        const children: Node[] = [
+            ...fromArrayLike(this.shadowRoot!.children),
+            ...(this._menuSlot ? this._menuSlot.assignedNodes({ flatten: true }) : [])
+        ];
+        const newMenus: HTMLElement[] = children.filter(isMenuElement);
         for (const oldMenu of this._menus) {
             if (newMenus.indexOf(oldMenu) < 0) {
                 this.closeMenu(oldMenu.id);
@@ -252,3 +265,14 @@ export class MenuContainer extends HTMLElement {
 }
 
 customElements.define('theoplayer-menu-container', MenuContainer);
+
+function isMenuElement(element: Node): element is HTMLElement {
+    if (!isHTMLElement(element)) {
+        return false;
+    }
+    const name = element.localName.toLowerCase();
+    if (name === 'style' || name === 'slot') {
+        return false;
+    }
+    return true;
+}
