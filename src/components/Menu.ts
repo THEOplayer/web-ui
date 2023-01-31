@@ -22,18 +22,27 @@ shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu');
 
 export class Menu extends HTMLElement {
     static get observedAttributes() {
-        return [Attribute.MENU_IS_ROOT];
+        return [Attribute.MENU_IS_ROOT, Attribute.MENU_CLOSE_ON_INPUT];
     }
+
+    private readonly _contentEl: HTMLElement;
 
     constructor(options?: MenuOptions) {
         super();
         const template = options?.template ?? defaultTemplate;
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
         shadowRoot.appendChild(template.content.cloneNode(true));
+
+        this._contentEl = shadowRoot.querySelector('[part="content"]')!;
     }
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+        this._contentEl.addEventListener('input', this._onContentInput);
+    }
+
+    disconnectedCallback(): void {
+        this._contentEl.removeEventListener('input', this._onContentInput);
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -69,6 +78,13 @@ export class Menu extends HTMLElement {
             shadyCss.styleSubtree(this);
         }
     }
+
+    private readonly _onContentInput = (): void => {
+        // Close menu when clicking any button
+        if (this.hasAttribute(Attribute.MENU_CLOSE_ON_INPUT)) {
+            this.close();
+        }
+    };
 }
 
 customElements.define('theoplayer-menu', Menu);

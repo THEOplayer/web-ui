@@ -52,8 +52,14 @@
         slot="menu"
         hidden
     ></theoplayer-settings-menu>
-    <theoplayer-quality-menu id="quality-menu" slot="menu" hidden></theoplayer-quality-menu>
-    <theoplayer-playback-rate-menu id="playback-rate-menu" slot="menu" hidden></theoplayer-playback-rate-menu>
+    <theoplayer-menu id="quality-menu" slot="menu" menu-close-on-input hidden>
+        <span slot="heading">Quality</span>
+        <theoplayer-quality-radio-group></theoplayer-quality-radio-group>
+    </theoplayer-menu>
+    <theoplayer-menu id="playback-rate-menu" slot="menu" menu-close-on-input hidden>
+        <span slot="heading">Playback speed</span>
+        <theoplayer-playback-rate-radio-group></theoplayer-playback-rate-radio-group>
+    </theoplayer-menu>
     <theoplayer-error-display slot="error"></theoplayer-error-display>
     <slot name="menu" slot="menu"></slot>
 </theoplayer-ui>
