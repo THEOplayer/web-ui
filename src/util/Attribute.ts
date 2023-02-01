@@ -25,7 +25,6 @@ export enum Attribute {
     SHOW_DURATION = 'show-duration',
     MENU = 'menu',
     MENU_OPENED = 'menu-opened',
-    MENU_IS_ROOT = 'menu-is-root',
     MENU_CLOSE_ON_INPUT = 'menu-close-on-input',
     ARIA_CHECKED = 'aria-checked',
     HAS_AUDIO = 'has-audio',

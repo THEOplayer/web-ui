@@ -28,7 +28,7 @@ interface OpenMenuEntry {
 
 export class MenuContainer extends HTMLElement {
     static get observedAttributes() {
-        return [Attribute.MENU_IS_ROOT, Attribute.MENU_OPENED];
+        return [Attribute.MENU_OPENED];
     }
 
     private readonly _menuSlot: HTMLSlotElement | null;

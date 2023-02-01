@@ -22,7 +22,7 @@ shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu');
 
 export class Menu extends HTMLElement {
     static get observedAttributes() {
-        return [Attribute.MENU_IS_ROOT, Attribute.MENU_CLOSE_ON_INPUT];
+        return [Attribute.MENU_CLOSE_ON_INPUT];
     }
 
     private readonly _contentEl: HTMLElement;
@@ -50,18 +50,6 @@ export class Menu extends HTMLElement {
             let value = this[prop];
             delete this[prop];
             this[prop] = value;
-        }
-    }
-
-    get isRootMenu(): boolean {
-        return this.hasAttribute(Attribute.MENU_IS_ROOT);
-    }
-
-    set isRootMenu(value: boolean) {
-        if (value) {
-            this.setAttribute(Attribute.MENU_IS_ROOT, '');
-        } else {
-            this.removeAttribute(Attribute.MENU_IS_ROOT);
         }
     }
 
