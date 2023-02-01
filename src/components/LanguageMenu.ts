@@ -19,7 +19,7 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
     private _player: ChromelessPlayer | undefined;
 
     static get observedAttributes() {
-        return [Attribute.HAS_AUDIO, Attribute.HAS_SUBTITLES];
+        return [...Menu.observedAttributes, Attribute.HAS_AUDIO, Attribute.HAS_SUBTITLES];
     }
 
     constructor() {
@@ -78,7 +78,8 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
         }
     };
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        super.attributeChangedCallback(attrName, oldValue, newValue);
         if (LanguageMenu.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
         }

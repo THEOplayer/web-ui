@@ -1,6 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import menuCss from './Menu.css';
 import { CLOSE_MENU_EVENT, CloseMenuEvent } from '../events/CloseMenuEvent';
+import { MENU_CHANGE_EVENT, MenuChangeEvent } from '../events/MenuChangeEvent';
 import { createCustomEvent } from '../util/EventUtils';
 import { Attribute } from '../util/Attribute';
 
@@ -22,7 +23,7 @@ shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu');
 
 export class Menu extends HTMLElement {
     static get observedAttributes() {
-        return [Attribute.MENU_CLOSE_ON_INPUT];
+        return [Attribute.MENU_OPENED, Attribute.MENU_CLOSE_ON_INPUT];
     }
 
     private readonly _contentEl: HTMLElement;
@@ -38,6 +39,11 @@ export class Menu extends HTMLElement {
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+
+        if (!this.hasAttribute(Attribute.MENU_OPENED)) {
+            this.setAttribute('hidden', '');
+        }
+
         this._contentEl.addEventListener('input', this._onContentInput);
     }
 
@@ -53,15 +59,28 @@ export class Menu extends HTMLElement {
         }
     }
 
-    close(): void {
-        const event: CloseMenuEvent = createCustomEvent(CLOSE_MENU_EVENT, {
-            bubbles: true,
-            composed: true
-        });
-        this.dispatchEvent(event);
+    openMenu(): void {
+        this.setAttribute(Attribute.MENU_OPENED, '');
+    }
+
+    closeMenu(): void {
+        this.removeAttribute(Attribute.MENU_OPENED);
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        if (newValue === oldValue) {
+            return;
+        }
+        if (attrName === Attribute.MENU_OPENED) {
+            const hasValue = newValue != null;
+            if (hasValue) {
+                this.removeAttribute('hidden');
+            } else {
+                this.setAttribute('hidden', '');
+            }
+            const changeEvent: MenuChangeEvent = createCustomEvent(MENU_CHANGE_EVENT, { bubbles: true });
+            this.dispatchEvent(changeEvent);
+        }
         if (Menu.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
         }
@@ -70,7 +89,11 @@ export class Menu extends HTMLElement {
     private readonly _onContentInput = (): void => {
         // Close menu when clicking any button
         if (this.hasAttribute(Attribute.MENU_CLOSE_ON_INPUT)) {
-            this.close();
+            const event: CloseMenuEvent = createCustomEvent(CLOSE_MENU_EVENT, {
+                bubbles: true,
+                composed: true
+            });
+            this.dispatchEvent(event);
         }
     };
 }

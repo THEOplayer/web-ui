@@ -8,6 +8,7 @@ import { KeyCode } from '../util/KeyCode';
 import { createCustomEvent } from '../util/EventUtils';
 import type { MenuChangeEvent } from '../events/MenuChangeEvent';
 import { MENU_CHANGE_EVENT } from '../events/MenuChangeEvent';
+import { Menu } from './Menu';
 
 export interface MenuContainerOptions {
     template?: HTMLTemplateElement;
@@ -21,8 +22,10 @@ const defaultTemplate = document.createElement('template');
 defaultTemplate.innerHTML = menuContainerTemplate(`<slot></slot>`);
 shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu-container');
 
+type MenuOrMenuContainer = Menu | MenuContainer;
+
 interface OpenMenuEntry {
-    menu: HTMLElement;
+    menu: MenuOrMenuContainer;
     opener: HTMLElement | undefined;
 }
 
@@ -32,7 +35,7 @@ export class MenuContainer extends HTMLElement {
     }
 
     private readonly _menuSlot: HTMLSlotElement | null;
-    private _menus: HTMLElement[] = [];
+    private _menus: MenuOrMenuContainer[] = [];
     private readonly _openMenuStack: OpenMenuEntry[] = [];
 
     constructor(options?: MenuContainerOptions) {
@@ -46,6 +49,10 @@ export class MenuContainer extends HTMLElement {
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+
+        if (!this.hasAttribute(Attribute.MENU_OPENED)) {
+            this.setAttribute('hidden', '');
+        }
 
         this._onMenuListChange();
 
@@ -76,9 +83,13 @@ export class MenuContainer extends HTMLElement {
         }
         if (attrName === Attribute.MENU_OPENED) {
             const hasValue = newValue != null;
-            this.removeEventListener('keydown', this._onKeyDown);
             if (hasValue) {
+                this.removeAttribute('hidden');
+                this.removeEventListener('keydown', this._onKeyDown);
                 this.addEventListener('keydown', this._onKeyDown);
+            } else {
+                this.setAttribute('hidden', '');
+                this.removeEventListener('keydown', this._onKeyDown);
             }
             const changeEvent: MenuChangeEvent = createCustomEvent(MENU_CHANGE_EVENT, { bubbles: true });
             this.dispatchEvent(changeEvent);
@@ -88,7 +99,7 @@ export class MenuContainer extends HTMLElement {
         }
     }
 
-    getMenuById(menuId?: string): HTMLElement | undefined {
+    getMenuById(menuId?: string): MenuOrMenuContainer | undefined {
         if (!menuId || menuId === this.id) {
             return this;
         }
@@ -159,18 +170,12 @@ export class MenuContainer extends HTMLElement {
         return true;
     }
 
-    private openMenuInternal_(menu: HTMLElement): void {
-        menu.removeAttribute('hidden');
-        if (menu instanceof MenuContainer) {
-            menu.openMenu();
-        }
+    private openMenuInternal_(menu: MenuOrMenuContainer): void {
+        menu.openMenu();
     }
 
-    private closeMenuInternal_(menu: HTMLElement): void {
-        menu.setAttribute('hidden', '');
-        if (menu instanceof MenuContainer) {
-            menu.closeMenu();
-        }
+    private closeMenuInternal_(menu: MenuOrMenuContainer): void {
+        menu.closeMenu();
     }
 
     private closeMenusFromIndex_(index: number): void {
@@ -216,7 +221,7 @@ export class MenuContainer extends HTMLElement {
             ...fromArrayLike(this.shadowRoot!.children),
             ...(this._menuSlot ? this._menuSlot.assignedNodes({ flatten: true }) : [])
         ];
-        const newMenus: HTMLElement[] = children.filter(isMenuElement);
+        const newMenus: MenuOrMenuContainer[] = children.filter(isMenuElement);
         for (const oldMenu of this._menus) {
             if (newMenus.indexOf(oldMenu) < 0) {
                 this.closeMenu(oldMenu.id);
@@ -283,13 +288,9 @@ export class MenuContainer extends HTMLElement {
 
 customElements.define('theoplayer-menu-container', MenuContainer);
 
-function isMenuElement(element: Node): element is HTMLElement {
+function isMenuElement(element: Node): element is MenuOrMenuContainer {
     if (!isHTMLElement(element)) {
         return false;
     }
-    const name = element.localName.toLowerCase();
-    if (name === 'style' || name === 'slot') {
-        return false;
-    }
-    return true;
+    return element instanceof Menu || element instanceof MenuContainer;
 }
