@@ -1,5 +1,5 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import menuContainerCss from './MenuContainer.css';
+import menuGroupCss from './MenuGroup.css';
 import { Attribute } from '../util/Attribute';
 import { arrayFind, arrayFindIndex, fromArrayLike, isHTMLElement } from '../util/CommonUtils';
 import { CLOSE_MENU_EVENT, CloseMenuEvent } from '../events/CloseMenuEvent';
@@ -10,35 +10,35 @@ import type { MenuChangeEvent } from '../events/MenuChangeEvent';
 import { MENU_CHANGE_EVENT } from '../events/MenuChangeEvent';
 import { Menu } from './Menu';
 
-export interface MenuContainerOptions {
+export interface MenuGroupOptions {
     template?: HTMLTemplateElement;
 }
 
-export function menuContainerTemplate(content: string, extraCss: string = ''): string {
-    return `<style>${menuContainerCss}${extraCss}</style>${content}`;
+export function menuGroupTemplate(content: string, extraCss: string = ''): string {
+    return `<style>${menuGroupCss}${extraCss}</style>${content}`;
 }
 
 const defaultTemplate = document.createElement('template');
-defaultTemplate.innerHTML = menuContainerTemplate(`<slot></slot>`);
-shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu-container');
+defaultTemplate.innerHTML = menuGroupTemplate(`<slot></slot>`);
+shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu-group');
 
-type MenuOrMenuContainer = Menu | MenuContainer;
+type MenuOrMenuGroup = Menu | MenuGroup;
 
 interface OpenMenuEntry {
-    menu: MenuOrMenuContainer;
+    menu: MenuOrMenuGroup;
     opener: HTMLElement | undefined;
 }
 
-export class MenuContainer extends HTMLElement {
+export class MenuGroup extends HTMLElement {
     static get observedAttributes() {
         return [Attribute.MENU_OPENED];
     }
 
     private readonly _menuSlot: HTMLSlotElement | null;
-    private _menus: MenuOrMenuContainer[] = [];
+    private _menus: MenuOrMenuGroup[] = [];
     private readonly _openMenuStack: OpenMenuEntry[] = [];
 
-    constructor(options?: MenuContainerOptions) {
+    constructor(options?: MenuGroupOptions) {
         super();
         const template = options?.template ?? defaultTemplate;
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
@@ -94,12 +94,12 @@ export class MenuContainer extends HTMLElement {
             const changeEvent: MenuChangeEvent = createCustomEvent(MENU_CHANGE_EVENT, { bubbles: true });
             this.dispatchEvent(changeEvent);
         }
-        if (MenuContainer.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+        if (MenuGroup.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
         }
     }
 
-    getMenuById(menuId?: string): MenuOrMenuContainer | undefined {
+    getMenuById(menuId?: string): MenuOrMenuGroup | undefined {
         if (!menuId || menuId === this.id) {
             return this;
         }
@@ -170,11 +170,11 @@ export class MenuContainer extends HTMLElement {
         return true;
     }
 
-    private openMenuInternal_(menu: MenuOrMenuContainer): void {
+    private openMenuInternal_(menu: MenuOrMenuGroup): void {
         menu.openMenu();
     }
 
-    private closeMenuInternal_(menu: MenuOrMenuContainer): void {
+    private closeMenuInternal_(menu: MenuOrMenuGroup): void {
         menu.closeMenu();
     }
 
@@ -221,7 +221,7 @@ export class MenuContainer extends HTMLElement {
             ...fromArrayLike(this.shadowRoot!.children),
             ...(this._menuSlot ? this._menuSlot.assignedNodes({ flatten: true }) : [])
         ];
-        const newMenus: MenuOrMenuContainer[] = children.filter(isMenuElement);
+        const newMenus: MenuOrMenuGroup[] = children.filter(isMenuElement);
         for (const oldMenu of this._menus) {
             if (newMenus.indexOf(oldMenu) < 0) {
                 this.closeMenu(oldMenu.id);
@@ -263,7 +263,7 @@ export class MenuContainer extends HTMLElement {
         const event = rawEvent as MenuChangeEvent;
         const currentMenu = this.getCurrentMenu_();
         // If the current menu is another menu container which no longer has an open menu, close it
-        if (currentMenu && currentMenu.menu === event.target && currentMenu.menu instanceof MenuContainer && !currentMenu.menu.hasCurrentMenu()) {
+        if (currentMenu && currentMenu.menu === event.target && currentMenu.menu instanceof MenuGroup && !currentMenu.menu.hasCurrentMenu()) {
             this.closeCurrentMenu();
         }
     };
@@ -286,11 +286,11 @@ export class MenuContainer extends HTMLElement {
     };
 }
 
-customElements.define('theoplayer-menu-container', MenuContainer);
+customElements.define('theoplayer-menu-group', MenuGroup);
 
-function isMenuElement(element: Node): element is MenuOrMenuContainer {
+function isMenuElement(element: Node): element is MenuOrMenuGroup {
     if (!isHTMLElement(element)) {
         return false;
     }
-    return element instanceof Menu || element instanceof MenuContainer;
+    return element instanceof Menu || element instanceof MenuGroup;
 }

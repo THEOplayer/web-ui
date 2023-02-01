@@ -1,4 +1,4 @@
-import { MenuContainer, menuContainerTemplate } from './MenuContainer';
+import { MenuGroup, menuGroupTemplate } from './MenuGroup';
 import * as shadyCss from '@webcomponents/shadycss';
 import languageMenuHtml from './LanguageMenu.html';
 import languageMenuCss from './LanguageMenu.css';
@@ -9,16 +9,16 @@ import { Attribute } from '../util/Attribute';
 import './TrackRadioGroup';
 
 const template = document.createElement('template');
-template.innerHTML = menuContainerTemplate(languageMenuHtml, languageMenuCss);
+template.innerHTML = menuGroupTemplate(languageMenuHtml, languageMenuCss);
 shadyCss.prepareTemplate(template, 'theoplayer-language-menu');
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
-export class LanguageMenu extends StateReceiverMixin(MenuContainer, ['player']) {
+export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
     private _player: ChromelessPlayer | undefined;
 
     static get observedAttributes() {
-        return [...MenuContainer.observedAttributes, Attribute.HAS_AUDIO, Attribute.HAS_SUBTITLES];
+        return [...MenuGroup.observedAttributes, Attribute.HAS_AUDIO, Attribute.HAS_SUBTITLES];
     }
 
     constructor() {

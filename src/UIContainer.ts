@@ -19,8 +19,8 @@ import type { StreamTypeChangeEvent } from './events/StreamTypeChangeEvent';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
 import { createCustomEvent } from './util/EventUtils';
 import { getTargetQualities } from './util/TrackUtils';
-import type { MenuContainer } from './components';
-import './components/MenuContainer';
+import type { MenuGroup } from './components';
+import './components/MenuGroup';
 import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
 
 const template = document.createElement('template');
@@ -57,7 +57,7 @@ export class UIContainer extends HTMLElement {
     private _configuration: PlayerConfiguration = {};
     private readonly _playerEl: HTMLElement;
     private readonly _menuEl: HTMLElement;
-    private readonly _menuContainer: MenuContainer;
+    private readonly _menuGroup: MenuGroup;
     private _menuOpener: HTMLElement | undefined;
     private readonly _topChromeEl: HTMLElement;
     private readonly _topChromeSlot: HTMLSlotElement;
@@ -84,7 +84,7 @@ export class UIContainer extends HTMLElement {
 
         this._playerEl = shadowRoot.querySelector('[part~="media-layer"]')!;
         this._menuEl = shadowRoot.querySelector('[part~="menu-layer"]')!;
-        this._menuContainer = shadowRoot.querySelector('theoplayer-menu-container')!;
+        this._menuGroup = shadowRoot.querySelector('theoplayer-menu-group')!;
         this._topChromeEl = shadowRoot.querySelector('[part~="top"]')!;
         this._topChromeSlot = shadowRoot.querySelector('slot[name="top-chrome"]')!;
         this._bottomChromeEl = shadowRoot.querySelector('[part~="bottom"]')!;
@@ -207,8 +207,8 @@ export class UIContainer extends HTMLElement {
         this._resizeObserver?.observe(this);
         this._updateTextTrackMargins();
 
-        this._menuContainer.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
-        this._menuContainer.addEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
+        this._menuGroup.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
+        this._menuGroup.addEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
 
         if (fullscreenAPI !== undefined) {
             document.addEventListener(fullscreenAPI.fullscreenchange_, this._onFullscreenChange);
@@ -282,8 +282,8 @@ export class UIContainer extends HTMLElement {
         }
         this._stateReceivers.length = 0;
 
-        this._menuContainer.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
-        this._menuContainer.removeEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
+        this._menuGroup.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
+        this._menuGroup.removeEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
 
         if (fullscreenAPI !== undefined) {
             document.removeEventListener(fullscreenAPI.fullscreenchange_, this._onFullscreenChange);
@@ -438,7 +438,7 @@ export class UIContainer extends HTMLElement {
             }
         }
 
-        this._menuContainer.openMenu(menuToOpen, opener);
+        this._menuGroup.openMenu(menuToOpen, opener);
         this._menuOpener = opener;
 
         const props = {
@@ -453,7 +453,7 @@ export class UIContainer extends HTMLElement {
     }
 
     private closeMenu_(): void {
-        this._menuContainer.closeMenu();
+        this._menuGroup.closeMenu();
         this._menuOpener?.focus();
         this._menuOpener = undefined;
     }
@@ -462,12 +462,12 @@ export class UIContainer extends HTMLElement {
         const event = rawEvent as ToggleMenuEvent;
         event.stopPropagation();
         const menuId = event.detail.menu;
-        if (!this._menuContainer.getMenuById(menuId)) {
+        if (!this._menuGroup.getMenuById(menuId)) {
             console.error(`<theoplayer-ui>: cannot find menu with ID "${menuId}"`);
             return;
         }
         const opener = isHTMLElement(event.target) ? event.target : undefined;
-        if (this._menuContainer.isMenuOpen(menuId)) {
+        if (this._menuGroup.isMenuOpen(menuId)) {
             this.closeMenu_();
         } else {
             // Always close the previous menu first
@@ -484,7 +484,7 @@ export class UIContainer extends HTMLElement {
     private readonly _onMenuChange = (): void => {
         this._menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
         this._menuEl.removeEventListener('click', this._onMenuClick);
-        if (this._menuContainer.hasCurrentMenu()) {
+        if (this._menuGroup.hasCurrentMenu()) {
             this._menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
             this._menuEl.addEventListener('click', this._onMenuClick);
             this.setAttribute(Attribute.MENU_OPENED, '');
@@ -503,7 +503,7 @@ export class UIContainer extends HTMLElement {
         const pointerType = (event as PointerEvent).pointerType ?? this._pointerType;
         if (event.target === this._menuEl && pointerType === 'mouse') {
             // Close menu when clicking (with mouse) on menu backdrop
-            if (this._menuContainer.closeCurrentMenu()) {
+            if (this._menuGroup.closeCurrentMenu()) {
                 event.preventDefault();
             }
         }
