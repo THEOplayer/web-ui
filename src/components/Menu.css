@@ -29,7 +29,8 @@
 }
 
 [part='content'] {
-    display: block;
+    display: flex;
+    flex-direction: column;
     align-self: center;
     min-width: var(--theoplayer-menu-min-width, 80%);
     max-width: var(--theoplayer-menu-max-width, 100%);

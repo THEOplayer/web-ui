@@ -13,6 +13,7 @@ theoplayer-track-radio-group {
 [part='content'] {
     display: grid;
     grid-template-columns: 1fr;
+    min-height: 0;
 }
 
 :host([has-audio][has-subtitles]) [part='content'] {
