@@ -38,7 +38,5 @@ export enum Attribute {
     PLAYING_AD = 'playing-ad',
     CLICKTHROUGH = 'clickthrough',
     VALUE = 'value',
-    VALUES = 'values',
-    QUALITY_MENU = 'quality-menu',
-    PLAYBACK_RATE_MENU = 'playback-rate-menu'
+    VALUES = 'values'
 }
