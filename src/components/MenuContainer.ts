@@ -75,6 +75,11 @@ export class MenuContainer extends HTMLElement {
             return;
         }
         if (attrName === Attribute.MENU_OPENED) {
+            const hasValue = newValue != null;
+            this.removeEventListener('keydown', this._onKeyDown);
+            if (hasValue) {
+                this.addEventListener('keydown', this._onKeyDown);
+            }
             const changeEvent: MenuChangeEvent = createCustomEvent(MENU_CHANGE_EVENT, { bubbles: true });
             this.dispatchEvent(changeEvent);
         }
@@ -114,9 +119,6 @@ export class MenuContainer extends HTMLElement {
             this.closeMenuInternal_(previousEntry.menu);
         }
         this.openMenuInternal_(menuToOpen);
-
-        this.removeEventListener('keydown', this._onKeyDown);
-        this.addEventListener('keydown', this._onKeyDown);
         this.setAttribute(Attribute.MENU_OPENED, '');
 
         menuToOpen.focus();
@@ -152,9 +154,7 @@ export class MenuContainer extends HTMLElement {
             return true;
         }
 
-        this.removeEventListener('keydown', this._onKeyDown);
         this.removeAttribute(Attribute.MENU_OPENED);
-
         oldEntry?.opener?.focus();
         return true;
     }
@@ -257,6 +257,7 @@ export class MenuContainer extends HTMLElement {
     private readonly _onMenuChange = (rawEvent: Event): void => {
         const event = rawEvent as MenuChangeEvent;
         const currentMenu = this.getCurrentMenu_();
+        // If the current menu is another menu container which no longer has an open menu, close it
         if (currentMenu && currentMenu.menu === event.target && currentMenu.menu instanceof MenuContainer && !currentMenu.menu.hasCurrentMenu()) {
             this.closeCurrentMenu();
         }

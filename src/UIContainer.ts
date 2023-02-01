@@ -452,8 +452,8 @@ export class UIContainer extends HTMLElement {
         shadyCss.styleSubtree(this, props);
     }
 
-    private closeMenu_(menuId?: string): void {
-        this._menuContainer.closeMenu(menuId);
+    private closeMenu_(): void {
+        this._menuContainer.closeMenu();
         this._menuOpener?.focus();
         this._menuOpener = undefined;
     }
@@ -468,8 +468,9 @@ export class UIContainer extends HTMLElement {
         }
         const opener = isHTMLElement(event.target) ? event.target : undefined;
         if (this._menuContainer.isMenuOpen(menuId)) {
-            this.closeMenu_(menuId);
+            this.closeMenu_();
         } else {
+            // Always close the previous menu first
             this.closeMenu_();
             this.openMenu_(menuId, opener);
         }
