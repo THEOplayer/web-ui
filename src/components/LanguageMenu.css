@@ -20,20 +20,20 @@ theoplayer-track-radio-group {
     grid-template-columns: 1fr;
 }
 
-[part='content'][has-audio][has-subtitles] {
+:host([has-audio][has-subtitles]) [part='content'] {
     grid-template-columns: 1fr 10px 1fr;
 }
 
-[part='content'][has-audio][has-subtitles] [part='audio'] {
+:host([has-audio][has-subtitles]) [part='audio'] {
     grid-column: 1;
 }
 
-[part='content'][has-audio][has-subtitles] [part='subtitles'] {
+:host([has-audio][has-subtitles]) [part='subtitles'] {
     grid-column: 3;
 }
 
-[part='content']:not([has-audio]) [part='audio'],
-[part='content']:not([has-subtitles]) [part='subtitles'] {
+:host(:not([has-audio])) [part='audio'],
+:host(:not([has-subtitles])) [part='subtitles'] {
     display: none !important;
 }
 

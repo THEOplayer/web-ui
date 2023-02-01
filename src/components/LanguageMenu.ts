@@ -15,7 +15,6 @@ shadyCss.prepareTemplate(template, 'theoplayer-language-menu');
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
-    private readonly _contentEl: HTMLElement;
     private _player: ChromelessPlayer | undefined;
 
     static get observedAttributes() {
@@ -24,8 +23,6 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
 
     constructor() {
         super({ template });
-
-        this._contentEl = this.shadowRoot!.querySelector('[part="content"]')!;
     }
 
     override connectedCallback(): void {
@@ -62,9 +59,9 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
         const newAudioTracks: readonly MediaTrack[] = this._player?.audioTracks ?? [];
         // Hide audio track selection if there's only one track.
         if (newAudioTracks.length < 2) {
-            this._contentEl.removeAttribute(Attribute.HAS_AUDIO);
+            this.removeAttribute(Attribute.HAS_AUDIO);
         } else {
-            this._contentEl.setAttribute(Attribute.HAS_AUDIO, '');
+            this.setAttribute(Attribute.HAS_AUDIO, '');
         }
     };
 
@@ -72,9 +69,9 @@ export class LanguageMenu extends StateReceiverMixin(Menu, ['player']) {
         const newSubtitleTracks: readonly TextTrack[] = this._player?.textTracks.filter(isSubtitleTrack) ?? [];
         // Hide subtitle track selection if there are no tracks. If there's one, we still show an "off" option.
         if (newSubtitleTracks.length === 0) {
-            this._contentEl.removeAttribute(Attribute.HAS_SUBTITLES);
+            this.removeAttribute(Attribute.HAS_SUBTITLES);
         } else {
-            this._contentEl.setAttribute(Attribute.HAS_SUBTITLES, '');
+            this.setAttribute(Attribute.HAS_SUBTITLES, '');
         }
     };
 
