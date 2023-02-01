@@ -21,6 +21,7 @@ import { createCustomEvent } from './util/EventUtils';
 import { getTargetQualities } from './util/TrackUtils';
 import type { MenuContainer } from './components';
 import './components/MenuContainer';
+import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -207,6 +208,7 @@ export class UIContainer extends HTMLElement {
         this._updateTextTrackMargins();
 
         this._menuContainer.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
+        this._menuContainer.addEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
 
         if (fullscreenAPI !== undefined) {
             document.addEventListener(fullscreenAPI.fullscreenchange_, this._onFullscreenChange);
@@ -279,6 +281,9 @@ export class UIContainer extends HTMLElement {
             this.removeStateFromReceiver_(receiver);
         }
         this._stateReceivers.length = 0;
+
+        this._menuContainer.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
+        this._menuContainer.removeEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
 
         if (fullscreenAPI !== undefined) {
             document.removeEventListener(fullscreenAPI.fullscreenchange_, this._onFullscreenChange);
@@ -433,12 +438,6 @@ export class UIContainer extends HTMLElement {
             }
         }
 
-        this._menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
-        this._menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
-        this._menuEl.removeEventListener('click', this._onMenuClick);
-        this._menuEl.addEventListener('click', this._onMenuClick);
-        this.setAttribute(Attribute.MENU_OPENED, '');
-
         this._menuContainer.openMenu(menuToOpen, opener);
         this._menuOpener = opener;
 
@@ -454,12 +453,7 @@ export class UIContainer extends HTMLElement {
     }
 
     private closeMenu_(menuId?: string): void {
-        this._menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
-        this._menuEl.removeEventListener('click', this._onMenuClick);
-        this.removeAttribute(Attribute.MENU_OPENED);
-
         this._menuContainer.closeMenu(menuId);
-
         this._menuOpener?.focus();
         this._menuOpener = undefined;
     }
@@ -476,6 +470,7 @@ export class UIContainer extends HTMLElement {
         if (this._menuContainer.isMenuOpen(menuId)) {
             this.closeMenu_(menuId);
         } else {
+            this.closeMenu_();
             this.openMenu_(menuId, opener);
         }
     };
@@ -483,6 +478,18 @@ export class UIContainer extends HTMLElement {
     private readonly _onCloseMenu = (event: Event): void => {
         event.stopPropagation();
         this.closeMenu_();
+    };
+
+    private readonly _onMenuChange = (): void => {
+        this._menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
+        this._menuEl.removeEventListener('click', this._onMenuClick);
+        if (this._menuContainer.hasCurrentMenu()) {
+            this._menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
+            this._menuEl.addEventListener('click', this._onMenuClick);
+            this.setAttribute(Attribute.MENU_OPENED, '');
+        } else {
+            this.removeAttribute(Attribute.MENU_OPENED);
+        }
     };
 
     private readonly _onMenuPointerDown = (event: PointerEvent) => {

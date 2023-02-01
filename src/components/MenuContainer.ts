@@ -5,6 +5,9 @@ import { arrayFind, arrayFindIndex, fromArrayLike, isHTMLElement } from '../util
 import { CLOSE_MENU_EVENT, CloseMenuEvent } from '../events/CloseMenuEvent';
 import { TOGGLE_MENU_EVENT, ToggleMenuEvent } from '../events/ToggleMenuEvent';
 import { KeyCode } from '../util/KeyCode';
+import { createCustomEvent } from '../util/EventUtils';
+import type { MenuChangeEvent } from '../events/MenuChangeEvent';
+import { MENU_CHANGE_EVENT } from '../events/MenuChangeEvent';
 
 export interface MenuContainerOptions {
     template?: HTMLTemplateElement;
@@ -48,12 +51,14 @@ export class MenuContainer extends HTMLElement {
 
         this.shadowRoot!.addEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
         this.shadowRoot!.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
+        this.shadowRoot!.addEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
         this._menuSlot?.addEventListener('slotchange', this._onMenuListChange);
     }
 
     disconnectedCallback(): void {
         this.shadowRoot!.removeEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
         this.shadowRoot!.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
+        this.shadowRoot!.removeEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
         this._menuSlot?.removeEventListener('slotchange', this._onMenuListChange);
     }
 
@@ -66,6 +71,13 @@ export class MenuContainer extends HTMLElement {
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        if (newValue === oldValue) {
+            return;
+        }
+        if (attrName === Attribute.MENU_OPENED) {
+            const changeEvent: MenuChangeEvent = createCustomEvent(MENU_CHANGE_EVENT, { bubbles: true });
+            this.dispatchEvent(changeEvent);
+        }
         if (MenuContainer.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
         }
@@ -87,10 +99,6 @@ export class MenuContainer extends HTMLElement {
             return false;
         }
 
-        if (menuToOpen.hasAttribute(Attribute.MENU_IS_ROOT)) {
-            // Close all menus before opening a root menu.
-            this.closeMenusFromIndex_(0);
-        }
         const previousEntry = this.getCurrentMenu_();
         const index = arrayFindIndex(this._openMenuStack, (entry) => entry.menu === menuToOpen);
         if (index >= 0) {
@@ -243,6 +251,14 @@ export class MenuContainer extends HTMLElement {
         if (this.closeCurrentMenu()) {
             event.preventDefault();
             event.stopPropagation();
+        }
+    };
+
+    private readonly _onMenuChange = (rawEvent: Event): void => {
+        const event = rawEvent as MenuChangeEvent;
+        const currentMenu = this.getCurrentMenu_();
+        if (currentMenu && currentMenu.menu === event.target && currentMenu.menu instanceof MenuContainer && !currentMenu.menu.hasCurrentMenu()) {
+            this.closeCurrentMenu();
         }
     };
 
