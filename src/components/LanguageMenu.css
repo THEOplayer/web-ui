@@ -1,4 +1,3 @@
-:host,
 [part='audio'],
 [part='subtitles'],
 theoplayer-track-radio-group {
@@ -9,10 +8,6 @@ theoplayer-track-radio-group {
      * https://stackoverflow.com/a/36247448/1321716
      */
     min-height: 0;
-}
-
-:host {
-    flex-direction: column;
 }
 
 [part='content'] {
