@@ -1,7 +1,7 @@
 import { defineConfig } from 'rollup';
 import { typescriptPaths } from 'rollup-plugin-typescript-resolve';
 import nodeResolve from '@rollup/plugin-node-resolve';
-import swcPlugin from 'rollup-plugin-swc';
+import { minify, swc } from 'rollup-plugin-swc3';
 import { minifyHTML } from './build/minify-html.mjs';
 import postcss from 'rollup-plugin-postcss';
 import postcssPresetEnv from 'postcss-preset-env';
@@ -9,7 +9,6 @@ import postcssMixins from 'postcss-mixins';
 import { readFile } from 'fs/promises';
 import { string } from 'rollup-plugin-string';
 
-const { default: swc } = swcPlugin;
 const { browserslist } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
 const production = process.env.BUILD === 'production';
 
@@ -59,10 +58,9 @@ export default defineConfig({
         }),
         // Transpile TypeScript.
         swc({
-            rollup: {
-                include: './src/**'
-            },
+            include: './src/**',
             sourceMaps: true,
+            tsconfig: false,
             env: {
                 targets: browserslist
             },
@@ -76,11 +74,10 @@ export default defineConfig({
         }),
         // Transpile dependencies for older browsers.
         swc({
-            rollup: {
-                include: './node_modules/**',
-                exclude: './src/**'
-            },
+            include: './node_modules/**',
+            exclude: './src/**',
             sourceMaps: true,
+            tsconfig: false,
             env: {
                 targets: browserslist
             },
@@ -88,6 +85,13 @@ export default defineConfig({
                 loose: true,
                 externalHelpers: true
             }
-        })
+        }),
+        ...(production
+            ? [
+                  minify({
+                      sourceMap: true
+                  })
+              ]
+            : [])
     ]
 });
