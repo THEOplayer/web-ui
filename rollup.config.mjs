@@ -69,8 +69,7 @@ export default defineConfig({
                 loose: true,
                 externalHelpers: true,
                 parser: {
-                    syntax: 'typescript',
-                    decorators: true
+                    syntax: 'typescript'
                 }
             }
         }),
