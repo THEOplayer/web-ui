@@ -94,7 +94,11 @@ export default defineConfig({
         ...(production
             ? [
                   minify({
-                      sourceMap: true
+                      sourceMap: true,
+                      mangle: {
+                          toplevel: true
+                      },
+                      toplevel: true
                   })
               ]
             : [])
