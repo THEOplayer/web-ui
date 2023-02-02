@@ -1,7 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import menuGroupCss from './MenuGroup.css';
 import { Attribute } from '../util/Attribute';
-import { arrayFind, arrayFindIndex, fromArrayLike, isHTMLElement } from '../util/CommonUtils';
+import { arrayFind, arrayFindIndex, fromArrayLike, isElement, isHTMLElement, noOp } from '../util/CommonUtils';
 import { CLOSE_MENU_EVENT, CloseMenuEvent } from '../events/CloseMenuEvent';
 import { TOGGLE_MENU_EVENT, ToggleMenuEvent } from '../events/ToggleMenuEvent';
 import { KeyCode } from '../util/KeyCode';
@@ -216,17 +216,37 @@ export class MenuGroup extends HTMLElement {
      * Note: the `slotchange` event bubbles up, so we don't have to manually attach
      * this listener to each nested `<slot>`.
      */
-    private _onMenuListChange = () => {
-        const children: Node[] = [
+    private readonly _onMenuListChange = () => {
+        const children: Element[] = [
             ...fromArrayLike(this.shadowRoot!.children),
-            ...(this._menuSlot ? this._menuSlot.assignedNodes({ flatten: true }) : [])
+            ...(this._menuSlot ? this._menuSlot.assignedNodes({ flatten: true }).filter(isElement) : [])
         ];
-        const newMenus: MenuOrMenuGroup[] = children.filter(isMenuElement);
+        let newMenus: MenuOrMenuGroup[] = [];
+        for (const child of children) {
+            if (isMenuElement(child)) {
+                newMenus.push(child);
+            } else {
+                // Upgrade custom elements if needed
+                const childName = child.nodeName.toLowerCase();
+                if (childName.indexOf('-') >= 0) {
+                    if (customElements.get(childName)) {
+                        customElements.upgrade(child);
+                        if (isMenuElement(child)) {
+                            newMenus.push(child);
+                        }
+                    } else {
+                        customElements.whenDefined(childName).then(this._onMenuListChange, noOp);
+                    }
+                }
+            }
+        }
+        // Close all removed menus
         for (const oldMenu of this._menus) {
             if (newMenus.indexOf(oldMenu) < 0) {
                 this.closeMenu(oldMenu.id);
             }
         }
+        // Ensure newly added menus start as closed
         for (const newMenu of newMenus) {
             if (this._menus.indexOf(newMenu) < 0) {
                 this.closeMenuInternal_(newMenu);
