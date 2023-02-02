@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup -c",
+    "build:prod": "rollup -c --environment BUILD:production",
     "watch": "rollup -c --watch",
     "start": "serve .",
     "format": "prettier --write .",

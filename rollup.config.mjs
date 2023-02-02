@@ -11,6 +11,7 @@ import { string } from 'rollup-plugin-string';
 
 const { default: swc } = swcPlugin;
 const { browserslist } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
+const production = process.env.BUILD === 'production';
 
 export default defineConfig({
     input: './src/index.ts',
@@ -42,15 +43,15 @@ export default defineConfig({
                 }),
                 postcssMixins()
             ],
-            minimize: true
+            minimize: production
         }),
         // Minify HTML and CSS.
         minifyHTML({
             include: ['./src/**/*.html'],
-            removeComments: true,
+            removeComments: production,
             removeRedundantAttributes: true,
             sortClassName: true,
-            collapseWhitespace: true
+            collapseWhitespace: production
         }),
         // Import HTML and SVG as strings.
         string({
