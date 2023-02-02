@@ -2,7 +2,15 @@
   "name": "theoplayer-web-ui",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/THEOplayerUI.js",
+  "module": "dist/THEOplayerUI.mjs",
+  "exports": {
+    "import": "./dist/THEOplayerUI.mjs",
+    "default": "./dist/THEOplayerUI.js"
+  },
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "build": "rollup -c",
     "build:prod": "rollup -c --environment BUILD:production",
