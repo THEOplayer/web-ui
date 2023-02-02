@@ -37,5 +37,18 @@
         >
             <span slot="title">Elephant's Dream</span>
         </theoplayer-default-ui>
+        <div>
+            <label style="user-select: none"><input type="checkbox" id="mobile-toggle" /> Mobile</label>
+        </div>
+        <script>
+            var ui = document.querySelector('theoplayer-default-ui');
+            document.querySelector('#mobile-toggle').addEventListener('change', function (ev) {
+                if (ev.target.checked) {
+                    ui.setAttribute('mobile', '');
+                } else {
+                    ui.removeAttribute('mobile');
+                }
+            });
+        </script>
     </body>
 </html>
