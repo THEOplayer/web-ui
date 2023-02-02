@@ -55,6 +55,12 @@
     color: var(--theoplayer-button-disabled-text-color, #ccc);
 }
 
+/* icon, play-icon, etc. */
+[part~='icon'],
+[part$='icon'] {
+    font-size: 0; /* fixes weird extra ~1px in height */
+}
+
 svg,
 img,
 ::slotted(svg),
