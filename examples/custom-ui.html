@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>THEOplayer Web UI Demo</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015"></script>
+        <script src="../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+        <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+        <script src="../node_modules/theoplayer/THEOplayer.chromeless.js"></script>
+        <script src="../dist/THEOplayerUI.js"></script>
+        <style>
+            body {
+                font-family: 'Noto Sans', sans-serif;
+                background: #fff;
+            }
+
+            theoplayer-default-ui {
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>THEOplayer Web UI</h1>
+        <theoplayer-default-ui
+            configuration='{"libraryLocation":"../node_modules/theoplayer/"}'
+            source='{"sources":"https://amssamples.streaming.mediaservices.windows.net/7ceb010f-d9a3-467a-915e-5728acced7e3/ElephantsDreamMultiAudio.ism/manifest(format=mpd-time-csf)"}'
+            fluid
+        >
+            <span slot="title">Elephant's Dream</span>
+        </theoplayer-default-ui>
+        <div>
+            <label style="user-select: none"><input type="checkbox" id="mobile-toggle" /> Mobile</label>
+        </div>
+        <script>
+            var ui = document.querySelector('theoplayer-default-ui');
+            document.querySelector('#mobile-toggle').addEventListener('change', function (ev) {
+                if (ev.target.checked) {
+                    ui.setAttribute('mobile', '');
+                } else {
+                    ui.removeAttribute('mobile');
+                }
+            });
+        </script>
+    </body>
+</html>
