@@ -7,17 +7,12 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
-        <script>
-            // ShadyDOM = { force: true };
-            // (self.customElements || (self.customElements = {})).forcePolyfill = true;
-            // ShadyCSS = { shimcssproperties: true };
-        </script>
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015"></script>
-        <script src="node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
-        <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
-        <script src="node_modules/theoplayer/THEOplayer.chromeless.js"></script>
-        <script src="dist/THEOplayerUI.js"></script>
-        <style id="global-styles">
+        <script src="../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+        <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+        <script src="../node_modules/theoplayer/THEOplayer.chromeless.js"></script>
+        <script src="../dist/THEOplayerUI.js"></script>
+        <style>
             body {
                 font-family: 'Noto Sans', sans-serif;
                 background: #fff;
@@ -31,7 +26,7 @@
     <body>
         <h1>THEOplayer Web UI</h1>
         <theoplayer-default-ui
-            configuration='{"libraryLocation":"node_modules/theoplayer/"}'
+            configuration='{"libraryLocation":"../node_modules/theoplayer/"}'
             source='{"sources":"https://amssamples.streaming.mediaservices.windows.net/7ceb010f-d9a3-467a-915e-5728acced7e3/ElephantsDreamMultiAudio.ism/manifest(format=mpd-time-csf)"}'
             fluid
         >
