@@ -14,21 +14,24 @@ const production = process.env.BUILD === 'production';
 
 export default defineConfig({
     input: './src/index.ts',
-    output: [{
-        file: './dist/THEOplayerUI.js',
-        format: 'umd',
-        name: 'THEOplayerUI',
-        sourcemap: true,
-        indent: false,
-        globals: {
-            theoplayer: 'THEOplayer'
+    output: [
+        {
+            file: './dist/THEOplayerUI.js',
+            format: 'umd',
+            name: 'THEOplayerUI',
+            sourcemap: true,
+            indent: false,
+            globals: {
+                theoplayer: 'THEOplayer'
+            }
+        },
+        {
+            file: './dist/THEOplayerUI.mjs',
+            format: 'es',
+            sourcemap: true,
+            indent: false
         }
-    }, {
-        file: './dist/THEOplayerUI.mjs',
-        format: 'es',
-        sourcemap: true,
-        indent: false
-    }],
+    ],
     context: 'self',
     external: ['theoplayer'],
     plugins: [

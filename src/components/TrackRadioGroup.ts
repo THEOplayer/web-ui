@@ -10,7 +10,7 @@ import { isSubtitleTrack } from '../util/TrackUtils';
 import { TextTrackOffRadioButton } from './TextTrackOffRadioButton';
 import { fromArrayLike } from '../util/CommonUtils';
 import './RadioGroup';
-import {createEvent} from "../util/EventUtils";
+import { createEvent } from '../util/EventUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`;
