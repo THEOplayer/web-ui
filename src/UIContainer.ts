@@ -187,14 +187,17 @@ export class UIContainer extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
+        if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
+            this.setAttribute(Attribute.MOBILE, '');
+        }
+        if (!this.hasAttribute(Attribute.PAUSED)) {
+            this.setAttribute(Attribute.PAUSED, '');
+        }
+
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
         this._upgradeProperty('muted');
         this._upgradeProperty('autoplay');
-
-        if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
-            this.setAttribute(Attribute.MOBILE, '');
-        }
 
         this.tryInitializePlayer_();
 
