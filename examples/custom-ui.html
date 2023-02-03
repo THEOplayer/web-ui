@@ -18,25 +18,67 @@
                 background: #fff;
             }
 
-            theoplayer-default-ui {
+            theoplayer-ui {
                 width: 100%;
+            }
+
+            .spacer {
+                flex-grow: 1;
+            }
+
+            .title {
+                user-select: none;
+                color: var(--theoplayer-text-color, #fff);
+                text-shadow: 0 0 4px rgba(0, 0, 0, 0.75);
+                font-size: var(--theoplayer-text-font-size, 14px);
+                line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
+                padding: var(--theoplayer-control-padding, 10px);
+            }
+
+            .bottom-chrome {
+                position: relative;
+                display: flex;
+                flex-flow: column nowrap;
+                align-items: stretch;
             }
         </style>
     </head>
     <body>
         <h1>THEOplayer Web UI</h1>
-        <theoplayer-default-ui
+        <theoplayer-ui
             configuration='{"libraryLocation":"../node_modules/theoplayer/"}'
             source='{"sources":"https://amssamples.streaming.mediaservices.windows.net/7ceb010f-d9a3-467a-915e-5728acced7e3/ElephantsDreamMultiAudio.ism/manifest(format=mpd-time-csf)"}'
             fluid
         >
-            <span slot="title">Elephant's Dream</span>
-        </theoplayer-default-ui>
+            <theoplayer-control-bar slot="top-chrome" class="top-chrome">
+                <span class="title">Elephant's Dream</span>
+            </theoplayer-control-bar>
+            <theoplayer-loading-indicator slot="centered-loading" no-auto-hide></theoplayer-loading-indicator>
+            <div class="bottom-chrome">
+                <theoplayer-control-bar>
+                    <theoplayer-time-range></theoplayer-time-range>
+                </theoplayer-control-bar>
+                <theoplayer-control-bar>
+                    <theoplayer-play-button></theoplayer-play-button>
+                    <theoplayer-mute-button></theoplayer-mute-button>
+                    <theoplayer-volume-range></theoplayer-volume-range>
+                    <theoplayer-time-display show-duration></theoplayer-time-display>
+                    <span class="spacer"></span>
+                    <theoplayer-language-menu-button menu="language-menu"></theoplayer-language-menu-button>
+                    <theoplayer-settings-menu-button menu="settings-menu"></theoplayer-settings-menu-button>
+                    <theoplayer-chromecast-button></theoplayer-chromecast-button>
+                    <theoplayer-fullscreen-button></theoplayer-fullscreen-button>
+                </theoplayer-control-bar>
+            </div>
+            <theoplayer-language-menu id="language-menu" slot="menu" hidden></theoplayer-language-menu>
+            <theoplayer-settings-menu id="settings-menu" slot="menu" hidden></theoplayer-settings-menu>
+            <theoplayer-error-display slot="error"></theoplayer-error-display>
+        </theoplayer-ui>
         <div>
             <label style="user-select: none"><input type="checkbox" id="mobile-toggle" /> Mobile</label>
         </div>
         <script>
-            var ui = document.querySelector('theoplayer-default-ui');
+            var ui = document.querySelector('theoplayer-ui');
             document.querySelector('#mobile-toggle').addEventListener('change', function (ev) {
                 if (ev.target.checked) {
                     ui.setAttribute('mobile', '');
