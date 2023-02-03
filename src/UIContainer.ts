@@ -27,11 +27,6 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
-interface OpenMenuEntry {
-    menu: HTMLElement;
-    opener: HTMLElement | undefined;
-}
-
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {
         return [
