@@ -1,6 +1,6 @@
 import type { DefaultUI } from '../DefaultUI';
 
-export type Extension = (ui: DefaultUI) => HTMLElement | HTMLElement[];
+export type Extension = (ui: DefaultUI) => void;
 
 const extensionRegistry: Extension[] = [];
 
