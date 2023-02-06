@@ -14,6 +14,44 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
 
+/**
+ * A default UI for THEOplayer.
+ *
+ * This default UI provides a great player experience out-of-the-box, that works well on all types of devices
+ * and for all types of streams. It provides all the common playback controls for playing, seeking,
+ * changing languages and qualities. It also supports advertisements and casting.
+ *
+ * ## Usage
+ *
+ * 1. Create a `<theoplayer-default-ui>` element.
+ * 1. Set its `configuration` attribute or property to a valid player configuration.
+ * 1. Set its `source` attribute or property to a valid stream source.
+ * 1. Optionally, customize the player using CSS custom properties and/or extra controls.
+ *
+ * ## Customization
+ *
+ * The styling can be controlled using CSS custom properties (see [`<theoplayer-ui>`]{@link UIContainer}).
+ * Additional controls can be added to the `top-control-bar` and `bottom-control-bar` slots.
+ * For more extensive customizations, we recommend defining your own custom UI using
+ * a [`<theoplayer-ui>`]{@link UIContainer}.
+ *
+ * @attribute configuration - The THEOplayer {@link PlayerConfiguration}, as a JSON string.
+ * @attribute source - The THEOplayer {@link SourceDescription}, as a JSON string.
+ * @attribute fluid - If set, the player automatically adjusts its height to fit the video's aspect ratio.
+ * @attribute muted - If set, the player starts out as muted. Reflects `ui.player.muted`.
+ * @attribute autoplay - If set, the player attempts to automatically start playing (if allowed).
+ * @attribute mobile - Whether to use a mobile-optimized UI layout instead.
+ *   Can be used in CSS to show/hide certain desktop-specific or mobile-specific UI controls.
+ * @attribute stream-type - The stream type, either "live" or "vod".
+ *   If you know in advance that the source will be a livestream, you can set this attribute to avoid a screen flicker
+ *   when the player switches between its VOD-specific and live-only controls.
+ * @attribute user-idle-timeout - The timeout (in seconds) between when the user stops interacting with the UI,
+ *   and when the user is considered to be "idle".
+ *
+ * @slot top-control-bar - A slot for extra UI controls in the top control bar.
+ * @slot bottom-control-bar - A slot for extra UI controls in the bottom control bar.
+ * @slot menu - A slot for extra menus (see [`<theoplayer-menu>`]{@link Menu}).
+ */
 export class DefaultUI extends HTMLElement {
     static get observedAttributes() {
         return [

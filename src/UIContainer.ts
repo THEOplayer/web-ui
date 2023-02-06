@@ -30,6 +30,64 @@ shadyCss.prepareTemplate(template, 'theoplayer-ui');
 const DEFAULT_USER_IDLE_TIMEOUT = 2;
 const DEFAULT_DVR_THRESHOLD = 60;
 
+/**
+ * The container element for a THEOplayer UI.
+ *
+ * This element provides a basic layout structure for a general player UI, and handles the creation and management
+ * of a [THEOplayer player instance]{@link ChromelessPlayer} for this UI.
+ *
+ * ## Usage
+ *
+ * 1. Create a `<theoplayer-ui>` element.
+ * 1. Place your UI elements as children of the `<theoplayer-ui>`.
+ *    Set their `slot` attribute to one of the defined slots (see below) to place them in the layout.
+ * 1. Set its `configuration` attribute or property to a valid player configuration.
+ * 1. Set its `source` attribute or property to a valid stream source.
+ *
+ * ## Customization
+ *
+ * This element does not provide any UI elements by default, you need to add all elements as children of
+ * the `<theoplayer-ui>` element. If you're looking for a simple out-of-the-box player experience instead,
+ * see [`<theoplayer-default-ui>`]{@link DefaultUI}).
+ *
+ * The styling can be controlled using CSS custom properties (see below).
+ *
+ * @attribute configuration - The THEOplayer {@link PlayerConfiguration}, as a JSON string.
+ * @attribute source - The THEOplayer {@link SourceDescription}, as a JSON string.
+ * @attribute fluid - If set, the player automatically adjusts its height to fit the video's aspect ratio.
+ * @attribute muted - If set, the player starts out as muted. Reflects `ui.player.muted`.
+ * @attribute autoplay - If set, the player attempts to automatically start playing (if allowed).
+ * @attribute mobile - Whether to use a mobile-optimized UI layout instead.
+ *   Can be used in CSS to show/hide certain desktop-specific or mobile-specific UI controls.
+ * @attribute stream-type - The stream type, either "live" or "vod".
+ *   If you know in advance that the source will be a livestream, you can set this attribute to avoid a screen flicker
+ *   when the player switches between its VOD-specific and live-only controls.
+ * @attribute user-idle (readonly) - Whether the user is considered to be "idle".
+ *   When the user is idle and the video is playing, all slotted UI elements will be hidden
+ *   (unless they have the `no-auto-hide` attribute).
+ * @attribute user-idle-timeout - The timeout (in seconds) between when the user stops interacting with the UI,
+ *   and when the user is considered to be "idle".
+ * @attribute paused (readonly) - Whether the player is paused. Reflects `ui.player.paused`.
+ * @attribute ended (readonly) - Whether the player is ended. Reflects `ui.player.ended`.
+ * @attribute casting (readonly) - Whether the player is ended. Reflects `ui.player.cast.casting`.
+ * @attribute playing-ad (readonly) - Whether the player is playing a linear ad. Reflects `ui.player.ads.playing`.
+ * @attribute has-error (readonly) - Whether the player has encountered a fatal error.
+ * @attribute has-first-play (readonly) - Whether the player has (previously) started playback for this stream.
+ *   Can be used in CSS to show/hide certain initial controls, such as a poster image or a centered play button.
+ *
+ * @slot (no name, default slot) - A slot for controls at the bottom of the player.
+ *   Can be used for controls such as a play button ([`<theoplayer-play-button>`]{@link PlayButton}) or a seek bar
+ *   ([`<theoplayer-time-range>`]{@link TimeRange}).
+ * @slot top-chrome - A slot for controls at the top of the player.
+ *   Can be used to display the stream's title, or for a cast button ([`<theoplayer-chromecast-button>`]{@link ChromecastButton}).
+ * @slot middle-chrome - A slot for controls in the middle of the player (between the top and bottom chrome).
+ * @slot centered-chrome - A slot for controls centered on the player, on top of other controls.
+ * @slot centered-loading - A slot for a loading indicator centered on the player, on top of other controls
+ *   but behind the centered chrome.
+ * @slot menu - A slot for extra menus (see [`<theoplayer-menu>`]{@link Menu}).
+ * @slot error - A slot for an error display, to show when the player encounters a fatal error
+ *   (see [`<theoplayer-error-display>`]{@link ErrorDisplay}).
+ */
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {
         return [
