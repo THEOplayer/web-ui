@@ -22,6 +22,7 @@ export enum Attribute {
     LIVE_ONLY = 'live-only',
     LIVE_HIDDEN = 'live-hidden',
     REMAINING = 'remaining',
+    REMAINING_WHEN_LIVE = 'remaining-when-live',
     SHOW_DURATION = 'show-duration',
     MENU = 'menu',
     MENU_OPENED = 'menu-opened',

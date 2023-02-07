@@ -5,6 +5,7 @@ import { setTextContent } from '../util/CommonUtils';
 import { formatTime } from '../util/TimeUtils';
 import { Attribute } from '../util/Attribute';
 import type { ChromelessPlayer } from 'theoplayer';
+import type { StreamType } from '../util/StreamType';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${textDisplayCss}</style><span></span>`;
@@ -12,13 +13,13 @@ shadyCss.prepareTemplate(template, 'theoplayer-preview-time-display');
 
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as const;
 
-export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'previewTime']) {
+export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'previewTime', 'streamType']) {
     private readonly _spanEl: HTMLElement;
     private _previewTime: number = NaN;
     private _player: ChromelessPlayer | undefined;
 
     static get observedAttributes() {
-        return [Attribute.REMAINING];
+        return [Attribute.REMAINING, Attribute.REMAINING_WHEN_LIVE, Attribute.STREAM_TYPE];
     }
 
     constructor() {
@@ -56,6 +57,18 @@ export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['player
         this.previewTime = previewTime;
     }
 
+    get streamType(): StreamType {
+        return (this.getAttribute(Attribute.STREAM_TYPE) || 'vod') as StreamType;
+    }
+
+    set streamType(streamType: StreamType) {
+        this.setAttribute(Attribute.STREAM_TYPE, streamType);
+    }
+
+    setStreamType(streamType: StreamType): void {
+        this.streamType = streamType;
+    }
+
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
@@ -83,12 +96,22 @@ export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['player
         const duration = this._player ? this._player.duration : NaN;
         const seekable = this._player?.seekable;
         const endTime = isFinite(duration) ? duration : seekable && seekable.length > 0 ? seekable.end(0) : NaN;
-        const remaining = this.hasAttribute(Attribute.REMAINING);
+        const remaining = this.hasAttribute(Attribute.REMAINING) || (this.hasAttribute(Attribute.REMAINING_WHEN_LIVE) && this.streamType === 'live');
         if (remaining) {
             previewTime = -((endTime || 0) - previewTime);
         }
         setTextContent(this._spanEl, formatTime(previewTime, endTime, remaining));
     };
+
+    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        if (newValue === oldValue) {
+            return;
+        }
+        if (PreviewTimeDisplay.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            this._update();
+            shadyCss.styleSubtree(this);
+        }
+    }
 }
 
 customElements.define('theoplayer-preview-time-display', PreviewTimeDisplay);
