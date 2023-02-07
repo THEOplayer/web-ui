@@ -7,6 +7,7 @@ import { Attribute } from './util/Attribute';
 import { applyExtensions } from './extensions/ExtensionRegistry';
 import { isMobile } from './util/Environment';
 import type { StreamType } from './util/StreamType';
+import type { TimeRange } from './components/TimeRange';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
 
 const template = document.createElement('template');
@@ -30,6 +31,7 @@ export class DefaultUI extends HTMLElement {
 
     private readonly _ui: UIContainer;
     private readonly _titleSlot: HTMLSlotElement;
+    private readonly _timeRange: TimeRange;
     private _appliedExtensions: boolean = false;
 
     constructor(configuration: PlayerConfiguration = {}) {
@@ -43,6 +45,8 @@ export class DefaultUI extends HTMLElement {
 
         this._titleSlot = shadowRoot.querySelector('slot[name="title"]')!;
         this._titleSlot.addEventListener('slotchange', this._onTitleSlotChange);
+
+        this._timeRange = shadowRoot.querySelector('theoplayer-time-range')!;
     }
 
     get player(): ChromelessPlayer | undefined {
@@ -180,6 +184,12 @@ export class DefaultUI extends HTMLElement {
 
     private readonly _updateStreamType = () => {
         this.setAttribute(Attribute.STREAM_TYPE, this.streamType);
+        // Hide seekbar when stream is live with no DVR
+        if (this.streamType === 'live') {
+            this._timeRange.setAttribute(Attribute.HIDDEN, '');
+        } else {
+            this._timeRange.removeAttribute(Attribute.HIDDEN);
+        }
     };
 
     private readonly _onTitleSlotChange = () => {

@@ -222,8 +222,3 @@ theoplayer-live-button + theoplayer-time-display:not([stream-type='vod']) {
 theoplayer-live-button[live] + theoplayer-time-display {
     display: none !important;
 }
-
-/* Hide seekbar when stream is live with no DVR */
-:host([stream-type='live']) theoplayer-time-range {
-    display: none !important;
-}
