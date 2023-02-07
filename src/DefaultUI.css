@@ -218,6 +218,11 @@ theoplayer-live-button + theoplayer-time-display:not([stream-type='vod']) {
     padding-left: 0;
 }
 
+/* Hide remaining time display when playing at live edge */
+theoplayer-live-button[live] + theoplayer-time-display {
+    display: none !important;
+}
+
 /* Hide seekbar when stream is live with no DVR */
 :host([stream-type='live']) theoplayer-time-range {
     display: none !important;
