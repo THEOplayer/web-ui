@@ -173,8 +173,8 @@ theoplayer-gesture-receiver {
 /*
  * Live-only and live-hidden elements
  */
-:host([stream-type='live']) [part~='chrome'] ::slotted([live-hidden]),
-:host(:not([stream-type='live'])) [part~='chrome'] ::slotted([live-only]) {
+:host(:not([stream-type='vod'])) [part~='chrome'] ::slotted([live-hidden]),
+:host([stream-type='vod']) [part~='chrome'] ::slotted([live-only]) {
     display: none !important;
 }
 

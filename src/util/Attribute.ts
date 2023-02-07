@@ -21,6 +21,7 @@ export enum Attribute {
     LIVE = 'live',
     LIVE_ONLY = 'live-only',
     LIVE_HIDDEN = 'live-hidden',
+    DVR_THRESHOLD = 'dvr-threshold',
     REMAINING = 'remaining',
     REMAINING_WHEN_LIVE = 'remaining-when-live',
     SHOW_DURATION = 'show-duration',

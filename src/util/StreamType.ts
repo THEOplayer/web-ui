@@ -1,1 +1,1 @@
-export type StreamType = 'vod' | 'live';
+export type StreamType = 'vod' | 'live' | 'dvr';

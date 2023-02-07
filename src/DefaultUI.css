@@ -153,10 +153,10 @@ theoplayer-ad-skip-button:not([disabled]) {
 /*
  * Live-only and live-hidden elements
  */
-:host([stream-type='live']) [live-hidden],
-:host([stream-type='live']) theoplayer-control-bar ::slotted([live-hidden]),
-:host(:not([stream-type='live'])) [live-only],
-:host(:not([stream-type='live'])) theoplayer-control-bar ::slotted([live-only]) {
+:host(:not([stream-type='vod'])) [live-hidden],
+:host(:not([stream-type='vod'])) theoplayer-control-bar ::slotted([live-hidden]),
+:host([stream-type='vod']) [live-only],
+:host([stream-type='vod']) theoplayer-control-bar ::slotted([live-only]) {
     display: none !important;
 }
 
@@ -214,6 +214,6 @@ theoplayer-mute-button + theoplayer-volume-range:focus-within {
 }
 
 /* Reduce space between live button and remaining time display */
-theoplayer-live-button + theoplayer-time-display[stream-type='live'] {
+theoplayer-live-button + theoplayer-time-display:not([stream-type='vod']) {
     padding-left: 0;
 }
