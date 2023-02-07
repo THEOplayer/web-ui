@@ -12,7 +12,7 @@ export function rangeTemplate(range: string, extraCss: string = ''): string {
 
 export abstract class Range extends HTMLElement {
     static get observedAttributes() {
-        return [Attribute.DISABLED];
+        return [Attribute.DISABLED, Attribute.HIDDEN];
     }
 
     protected readonly _rangeEl: HTMLInputElement;
@@ -108,13 +108,20 @@ export abstract class Range extends HTMLElement {
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (attrName === Attribute.DISABLED && newValue !== oldValue) {
-            const hasValue = newValue != null;
+        if (newValue === oldValue) {
+            return;
+        }
+        const hasValue = newValue != null;
+        if (attrName === Attribute.DISABLED) {
             this.setAttribute('aria-disabled', hasValue ? 'true' : 'false');
             if (hasValue) {
                 this._rangeEl.setAttribute(attrName, newValue);
             } else {
                 this._rangeEl.removeAttribute(attrName);
+            }
+        } else if (attrName === Attribute.HIDDEN) {
+            if (!hasValue) {
+                this.update();
             }
         }
         if (Range.observedAttributes.indexOf(attrName as Attribute) >= 0) {
@@ -131,6 +138,9 @@ export abstract class Range extends HTMLElement {
     }
 
     protected update(): void {
+        if (this.hasAttribute(Attribute.HIDDEN)) {
+            return;
+        }
         this._rangeEl.setAttribute('aria-valuetext', this.getAriaValueText());
         this.updateBar_();
     }
