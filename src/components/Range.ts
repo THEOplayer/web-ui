@@ -204,6 +204,9 @@ export abstract class Range extends HTMLElement {
     }
 
     private readonly _updatePointerBar = (e: PointerEvent): void => {
+        if (this.disabled) {
+            return;
+        }
         // Get mouse position percent
         const rangeRect = this._rangeEl.getBoundingClientRect();
         let mousePercent = (e.clientX - rangeRect.left) / rangeRect.width;
