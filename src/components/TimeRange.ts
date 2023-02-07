@@ -9,6 +9,7 @@ import { createCustomEvent } from '../util/EventUtils';
 import type { PreviewTimeChangeEvent } from '../events/PreviewTimeChangeEvent';
 import { PREVIEW_TIME_CHANGE_EVENT } from '../events/PreviewTimeChangeEvent';
 import { Attribute } from '../util/Attribute';
+import type { StreamType } from '../util/StreamType';
 import './PreviewThumbnail';
 import './PreviewTimeDisplay';
 
@@ -20,7 +21,11 @@ const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 
 const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'readystatechange', 'error'] as const;
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
-export class TimeRange extends StateReceiverMixin(Range, ['player']) {
+export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType']) {
+    static get observedAttributes() {
+        return [...Range.observedAttributes];
+    }
+
     private readonly _previewRailEl: HTMLElement;
     private readonly _previewBoxEl: HTMLElement;
 
@@ -78,6 +83,18 @@ export class TimeRange extends StateReceiverMixin(Range, ['player']) {
         this.player = player;
     }
 
+    get streamType(): StreamType {
+        return (this.getAttribute(Attribute.STREAM_TYPE) || 'vod') as StreamType;
+    }
+
+    set streamType(streamType: StreamType) {
+        this.setAttribute(Attribute.STREAM_TYPE, streamType);
+    }
+
+    setStreamType(streamType: StreamType): void {
+        this.streamType = streamType;
+    }
+
     private readonly _updateFromPlayer = () => {
         if (this._player === undefined) {
             return;
@@ -89,11 +106,9 @@ export class TimeRange extends StateReceiverMixin(Range, ['player']) {
         if (seekable.length !== 0) {
             this.min = seekable.start(0);
             this.max = seekable.end(0);
-            this.removeAttribute(Attribute.DISABLED);
         } else {
             this.min = 0;
             this.max = this._player.duration;
-            this.setAttribute(Attribute.DISABLED, '');
         }
         if (!isFinite(this._lastCurrentTime)) {
             const isLive = this._player.duration === Infinity;
@@ -101,6 +116,15 @@ export class TimeRange extends StateReceiverMixin(Range, ['player']) {
         }
         this._rangeEl.valueAsNumber = this._lastCurrentTime;
         this.update();
+        this._updateDisabled();
+    };
+
+    private readonly _updateDisabled = () => {
+        let disabled = this.streamType === 'live';
+        if (this._player !== undefined) {
+            disabled ||= this._player.seekable.length === 0;
+        }
+        this.disabled = disabled;
     };
 
     protected override getAriaLabel(): string {
@@ -114,6 +138,16 @@ export class TimeRange extends StateReceiverMixin(Range, ['player']) {
             return `${currentTimePhrase} of ${totalTimePhrase}`;
         }
         return DEFAULT_MISSING_TIME_PHRASE;
+    }
+
+    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        super.attributeChangedCallback(attrName, oldValue, newValue);
+        if (attrName === Attribute.STREAM_TYPE) {
+            this._updateDisabled();
+        }
+        if (TimeRange.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            shadyCss.styleSubtree(this);
+        }
     }
 
     protected override handleInput(): void {
