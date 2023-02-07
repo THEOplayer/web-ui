@@ -212,3 +212,8 @@ theoplayer-mute-button:focus-within + theoplayer-volume-range,
 theoplayer-mute-button + theoplayer-volume-range:focus-within {
     width: 70px;
 }
+
+/* Reduce space between live button and remaining time display */
+theoplayer-live-button + theoplayer-time-display[stream-type='live'] {
+    padding-left: 0;
+}
