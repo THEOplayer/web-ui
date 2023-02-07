@@ -97,6 +97,14 @@ export class DefaultUI extends HTMLElement {
         this._ui.userIdleTimeout = value;
     }
 
+    get dvrThreshold(): number {
+        return this._ui.dvrThreshold;
+    }
+
+    set dvrThreshold(value: number) {
+        this._ui.dvrThreshold = value;
+    }
+
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
@@ -106,6 +114,7 @@ export class DefaultUI extends HTMLElement {
         this._upgradeProperty('autoplay');
         this._upgradeProperty('streamType');
         this._upgradeProperty('userIdleTimeout');
+        this._upgradeProperty('dvrThreshold');
 
         if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
             this.setAttribute(Attribute.MOBILE, '');
@@ -161,6 +170,8 @@ export class DefaultUI extends HTMLElement {
             this.streamType = newValue;
         } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
             this.userIdleTimeout = Number(newValue);
+        } else if (attrName === Attribute.DVR_THRESHOLD) {
+            this.dvrThreshold = Number(newValue);
         }
         if (DefaultUI.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
