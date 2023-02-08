@@ -59,7 +59,9 @@ const DEFAULT_DVR_THRESHOLD = 60;
  * @attribute autoplay - If set, the player attempts to automatically start playing (if allowed).
  * @attribute mobile - Whether to use a mobile-optimized UI layout instead.
  *   Can be used in CSS to show/hide certain desktop-specific or mobile-specific UI controls.
- * @attribute stream-type - The stream type, either "live" or "vod".
+ * @attribute stream-type - The stream type, either "vod", "live" or "dvr".
+ *   Can be used to show/hide certain UI controls specific for livestreams, such as
+ *   a [`<theoplayer-live-button>`]{@link LiveButton}.
  *   If you know in advance that the source will be a livestream, you can set this attribute to avoid a screen flicker
  *   when the player switches between its VOD-specific and live-only controls.
  * @attribute user-idle (readonly) - Whether the user is considered to be "idle".
@@ -67,6 +69,8 @@ const DEFAULT_DVR_THRESHOLD = 60;
  *   (unless they have the `no-auto-hide` attribute).
  * @attribute user-idle-timeout - The timeout (in seconds) between when the user stops interacting with the UI,
  *   and when the user is considered to be "idle".
+ * @attribute dvr-threshold - The minimum length (in seconds) of a livestream's sliding window for the stream to be DVR
+ *   and its stream type to be set to "dvr".
  * @attribute paused (readonly) - Whether the player is paused. Reflects `ui.player.paused`.
  * @attribute ended (readonly) - Whether the player is ended. Reflects `ui.player.ended`.
  * @attribute casting (readonly) - Whether the player is ended. Reflects `ui.player.cast.casting`.
@@ -131,6 +135,13 @@ export class UIContainer extends HTMLElement {
     private _previewTime: number = NaN;
     private _activeVideoTrack: MediaTrack | undefined = undefined;
 
+    /**
+     * Creates a new THEOplayer UI container element.
+     *
+     * @param configuration - The player configuration.
+     *   Will be passed to the {@link ChromelessPlayer} constructor to create the underlying THEOplayer instance.
+     *   Can also be set later on through the {@link configuration} property.
+     */
     constructor(configuration: PlayerConfiguration = {}) {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
@@ -162,10 +173,20 @@ export class UIContainer extends HTMLElement {
         this._bottomChromeSlot.addEventListener('transitionend', this._onChromeSlotTransition);
     }
 
+    /**
+     * The underlying THEOplayer player instance.
+     *
+     * This is constructed automatically as soon as a valid {@link configuration} is set.
+     */
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
+    /**
+     * The player configuration.
+     *
+     * Used to create the underlying THEOplayer instance.
+     */
     get configuration(): PlayerConfiguration {
         return this._configuration;
     }
@@ -175,6 +196,9 @@ export class UIContainer extends HTMLElement {
         this.tryInitializePlayer_();
     }
 
+    /**
+     * The player's current source.
+     */
     get source(): SourceDescription | undefined {
         return this._player ? this._player.source : this._source;
     }
@@ -187,6 +211,9 @@ export class UIContainer extends HTMLElement {
         }
     }
 
+    /**
+     * Whether the player's audio is muted.
+     */
     get muted(): boolean {
         return this.hasAttribute(Attribute.MUTED);
     }
@@ -199,6 +226,9 @@ export class UIContainer extends HTMLElement {
         }
     }
 
+    /**
+     * Whether the player should attempt to automatically start playback.
+     */
     get autoplay(): boolean {
         return this.hasAttribute(Attribute.AUTOPLAY);
     }
@@ -211,18 +241,31 @@ export class UIContainer extends HTMLElement {
         }
     }
 
+    /**
+     * Whether the UI is in fullscreen mode.
+     */
     get fullscreen(): boolean {
         return this.hasAttribute(Attribute.FULLSCREEN);
     }
 
+    /**
+     * Whether the player is paused.
+     */
     get paused(): boolean {
         return this.hasAttribute(Attribute.PAUSED);
     }
 
+    /**
+     * Whether the player is ended.
+     */
     get ended(): boolean {
         return this.hasAttribute(Attribute.ENDED);
     }
 
+    /**
+     * The timeout (in seconds) between when the user stops interacting with the UI,
+     * and when the user is considered to be "idle".
+     */
     get userIdleTimeout(): number {
         return Number(this.getAttribute(Attribute.USER_IDLE_TIMEOUT) ?? DEFAULT_USER_IDLE_TIMEOUT);
     }
@@ -232,6 +275,12 @@ export class UIContainer extends HTMLElement {
         this.setAttribute(Attribute.USER_IDLE_TIMEOUT, String(isNaN(value) ? 0 : value));
     }
 
+    /**
+     * The stream type, either "vod", "live" or "dvr".
+     *
+     * If you know in advance that the source will be a livestream, you can set this property to avoid a screen flicker
+     * when the player switches between its VOD-specific and live-only controls.
+     */
     get streamType(): StreamType {
         return (this.getAttribute(Attribute.STREAM_TYPE) as StreamType) || 'vod';
     }
@@ -240,6 +289,10 @@ export class UIContainer extends HTMLElement {
         this.setAttribute(Attribute.STREAM_TYPE, streamType);
     }
 
+    /**
+     * The minimum length (in seconds) of a livestream's sliding window for the stream to be DVR
+     * and its stream type to be set to "dvr".
+     */
     get dvrThreshold(): number {
         return Number(this.getAttribute(Attribute.DVR_THRESHOLD) ?? DEFAULT_DVR_THRESHOLD);
     }
