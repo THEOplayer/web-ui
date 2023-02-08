@@ -67,6 +67,7 @@ export class DefaultUI extends HTMLElement {
             Attribute.MOBILE,
             Attribute.STREAM_TYPE,
             Attribute.USER_IDLE_TIMEOUT,
+            Attribute.DVR_THRESHOLD,
             Attribute.HAS_TITLE
         ];
     }
