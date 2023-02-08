@@ -95,7 +95,7 @@ export class Button extends HTMLElement {
             case KeyCode.SPACE:
             case KeyCode.ENTER:
                 event.preventDefault();
-                this.handleClick();
+                this._onClick();
                 break;
             // Any other key press is ignored and passed back to the browser.
             default:
@@ -104,6 +104,9 @@ export class Button extends HTMLElement {
     };
 
     private readonly _onClick = () => {
+        if (this.disabled) {
+            return;
+        }
         this.handleClick();
     };
 

@@ -109,6 +109,9 @@ export class LinkButton extends HTMLElement {
     };
 
     private readonly _onClick = () => {
+        if (this.disabled) {
+            return;
+        }
         this.handleClick();
     };
 
