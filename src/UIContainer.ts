@@ -305,9 +305,6 @@ export class UIContainer extends HTMLElement {
         if (this._player !== undefined) {
             return;
         }
-        if (this._configuration.libraryLocation === undefined) {
-            return;
-        }
         if (this._configuration.license === undefined && this._configuration.licenseUrl === undefined) {
             return;
         }
