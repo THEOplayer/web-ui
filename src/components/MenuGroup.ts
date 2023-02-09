@@ -127,9 +127,9 @@ export class MenuGroup extends HTMLElement {
         }
 
         if (previousEntry) {
-            this.closeMenuInternal_(previousEntry.menu);
+            previousEntry.menu.closeMenu();
         }
-        this.openMenuInternal_(menuToOpen);
+        menuToOpen.openMenu();
         this.setAttribute(Attribute.MENU_OPENED, '');
 
         menuToOpen.focus();
@@ -155,7 +155,7 @@ export class MenuGroup extends HTMLElement {
 
         const nextEntry = this.getCurrentMenu_();
         if (nextEntry !== undefined) {
-            this.openMenuInternal_(nextEntry.menu);
+            nextEntry.menu.openMenu();
             this.setAttribute(Attribute.MENU_OPENED, '');
             if (oldEntry.opener && nextEntry.menu.contains(oldEntry.opener)) {
                 oldEntry.opener.focus();
@@ -170,18 +170,10 @@ export class MenuGroup extends HTMLElement {
         return true;
     }
 
-    private openMenuInternal_(menu: MenuOrMenuGroup): void {
-        menu.openMenu();
-    }
-
-    private closeMenuInternal_(menu: MenuOrMenuGroup): void {
-        menu.closeMenu();
-    }
-
     private closeMenusFromIndex_(index: number): void {
         const menusToClose = this._openMenuStack.length - index;
         for (let i = this._openMenuStack.length - 1; i >= index; i--) {
-            this.closeMenuInternal_(this._openMenuStack[i].menu);
+            this._openMenuStack[i].menu.closeMenu();
         }
         this._openMenuStack.splice(index, menusToClose);
     }
@@ -249,7 +241,7 @@ export class MenuGroup extends HTMLElement {
         // Ensure newly added menus start as closed
         for (const newMenu of newMenus) {
             if (this._menus.indexOf(newMenu) < 0) {
-                this.closeMenuInternal_(newMenu);
+                newMenu.closeMenu();
             }
         }
         this._menus = newMenus;
