@@ -144,20 +144,20 @@ export class MenuGroup extends HTMLElement {
         if (!menuToClose) {
             return false;
         }
-
         const index = arrayFindIndex(this._openMenuStack, (entry) => entry.menu === menuToClose);
-        let oldEntry: OpenMenuEntry | undefined;
-        if (index >= 0) {
-            oldEntry = this._openMenuStack[index];
-            // Close this menu and all subsequent menus
-            this.closeMenusFromIndex_(index);
+        if (index < 0) {
+            return false;
         }
+
+        const oldEntry = this._openMenuStack[index];
+        // Close this menu and all subsequent menus
+        this.closeMenusFromIndex_(index);
 
         const nextEntry = this.getCurrentMenu_();
         if (nextEntry !== undefined) {
             this.openMenuInternal_(nextEntry.menu);
             this.setAttribute(Attribute.MENU_OPENED, '');
-            if (oldEntry && oldEntry.opener && nextEntry.menu.contains(oldEntry.opener)) {
+            if (oldEntry.opener && nextEntry.menu.contains(oldEntry.opener)) {
                 oldEntry.opener.focus();
             } else {
                 nextEntry.menu.focus();
@@ -166,7 +166,7 @@ export class MenuGroup extends HTMLElement {
         }
 
         this.removeAttribute(Attribute.MENU_OPENED);
-        oldEntry?.opener?.focus();
+        oldEntry.opener?.focus();
         return true;
     }
 
