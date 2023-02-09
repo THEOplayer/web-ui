@@ -16,14 +16,24 @@ defaultTemplate.innerHTML = buttonTemplate('<slot></slot>');
 shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-button');
 
 /**
- * Based on howto-toggle-button
- * https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-toggle-button/howto-toggle-button.js
+ * A basic button.
  */
+// Based on howto-toggle-button
+// https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-toggle-button/howto-toggle-button.js
 export class Button extends HTMLElement {
     static get observedAttributes() {
         return [Attribute.DISABLED];
     }
 
+    /**
+     * Creates a basic button.
+     *
+     * By default, the button renders the contents of its direct children (i.e. it has a single unnamed `<slot>`).
+     * Subclasses can override this by passing a different [template]{@link ButtonOptions.template} in the options,
+     * using {@link buttonTemplate} to correctly style the custom template.
+     *
+     * @param options - The options for this button.
+     */
     constructor(options?: ButtonOptions) {
         super();
         const template = options?.template ?? defaultTemplate;
@@ -55,6 +65,11 @@ export class Button extends HTMLElement {
         }
     }
 
+    /**
+     * Whether the button is disabled.
+     *
+     * When disabled, the button cannot be clicked.
+     */
     get disabled() {
         return this.hasAttribute(Attribute.DISABLED);
     }
@@ -110,6 +125,11 @@ export class Button extends HTMLElement {
         this.handleClick();
     };
 
+    /**
+     * Handle a button click.
+     *
+     * By default, this does nothing. Subclasses can override this method to add behavior to the button.
+     */
     protected handleClick(): void {}
 }
 
