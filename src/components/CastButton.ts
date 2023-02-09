@@ -39,10 +39,6 @@ export class CastButton extends Button {
         return this.getAttribute(Attribute.CAST_STATE) as CastState;
     }
 
-    set castState(castState: CastState) {
-        this.setAttribute(Attribute.CAST_STATE, castState);
-    }
-
     protected override handleClick(): void {
         if (this._castApi) {
             this._updateCastState();
@@ -56,7 +52,8 @@ export class CastButton extends Button {
     }
 
     private readonly _updateCastState = (): void => {
-        this.castState = this._castApi ? this._castApi.state : 'unavailable';
+        const castState = this._castApi ? this._castApi.state : 'unavailable';
+        this.setAttribute(Attribute.CAST_STATE, castState);
     };
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
