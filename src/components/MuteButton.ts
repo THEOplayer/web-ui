@@ -34,21 +34,12 @@ export class MuteButton extends StateReceiverMixin(Button, ['player']) {
 
     override connectedCallback(): void {
         super.connectedCallback();
-        this._upgradeProperty('volumeLevel');
         this._upgradeProperty('player');
         this._updateFromPlayer();
     }
 
     get volumeLevel(): VolumeLevel {
         return (this.getAttribute(Attribute.VOLUME_LEVEL) as VolumeLevel | null) || 'off';
-    }
-
-    set volumeLevel(level: VolumeLevel) {
-        if (level) {
-            this.setAttribute(Attribute.VOLUME_LEVEL, level);
-        } else {
-            this.removeAttribute(Attribute.VOLUME_LEVEL);
-        }
     }
 
     get player(): ChromelessPlayer | undefined {
@@ -74,19 +65,19 @@ export class MuteButton extends StateReceiverMixin(Button, ['player']) {
     }
 
     private readonly _updateFromPlayer = () => {
+        let volumeLevel: VolumeLevel = 'off';
         if (this._player !== undefined) {
             const volume = this._player.volume;
             const muted = this._player.muted;
             if (muted) {
-                this.volumeLevel = 'off';
+                volumeLevel = 'off';
             } else if (volume < 0.5) {
-                this.volumeLevel = 'low';
+                volumeLevel = 'low';
             } else {
-                this.volumeLevel = 'high';
+                volumeLevel = 'high';
             }
-        } else {
-            this.volumeLevel = 'off';
         }
+        this.setAttribute(Attribute.VOLUME_LEVEL, volumeLevel);
     };
 
     protected override handleClick() {
