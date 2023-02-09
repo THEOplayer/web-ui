@@ -3,6 +3,11 @@ import { Attribute } from '../util/Attribute';
 import type { CastState, VendorCast } from 'theoplayer';
 import * as shadyCss from '@webcomponents/shadycss';
 
+/**
+ * A generic button to start and stop casting.
+ *
+ * For a concrete implementation, see {@link ChromecastButton}.
+ */
 export class CastButton extends Button {
     private _castApi: VendorCast | undefined;
 
@@ -20,6 +25,9 @@ export class CastButton extends Button {
         this._updateCastState();
     }
 
+    /**
+     * The cast API for which this cast button.
+     */
     get castApi(): VendorCast | undefined {
         return this._castApi;
     }
@@ -35,6 +43,9 @@ export class CastButton extends Button {
         }
     }
 
+    /**
+     * The current cast state.
+     */
     get castState(): CastState {
         return this.getAttribute(Attribute.CAST_STATE) as CastState;
     }
