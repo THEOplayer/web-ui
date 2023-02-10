@@ -20,6 +20,13 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 export type TrackType = 'audio' | 'video' | 'subtitles';
 
+/**
+ * A radio group that shows a list of media or text tracks, from which the user can choose an active track.
+ *
+ * @attribute track-type - The track type of the available tracks. Can be "audio", "video" or "subtitles".
+ * @attribute show-off - If set, shows an "off" button to disable all tracks.
+ *   Can only be used with the "subtitles" track type.
+ */
 export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
     static get observedAttributes() {
         return [Attribute.TRACK_TYPE, Attribute.SHOW_OFF];
@@ -63,6 +70,9 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
         }
     }
 
+    /**
+     * The track type of the available tracks.
+     */
     get trackType(): TrackType {
         return (this.getAttribute(Attribute.TRACK_TYPE) || 'audio') as TrackType;
     }
@@ -71,6 +81,11 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
         this.setAttribute(Attribute.TRACK_TYPE, value || 'audio');
     }
 
+    /**
+     * If set, shows an "off" button to disable all tracks.
+     *
+     * Can only be used with the `"subtitles"` track type.
+     */
     get showOffButton(): boolean {
         return this.hasAttribute(Attribute.SHOW_OFF);
     }

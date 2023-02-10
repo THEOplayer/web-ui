@@ -29,6 +29,15 @@ interface OpenMenuEntry {
     opener: HTMLElement | undefined;
 }
 
+/**
+ * A group of [menus]{@link Menu}.
+ *
+ * This can contain multiple other menus, which can be opened with {@link MenuGroup.openMenu}.
+ * When a {@link MenuButton} in one menu opens another menu in this group, it is opened as a "submenu".
+ * When a submenu is closed, the menu that originally opened it is shown again.
+ *
+ * @attribute menu-opened (readonly) - Whether any menu in the group is currently open.
+ */
 export class MenuGroup extends HTMLElement {
     static get observedAttributes() {
         return [Attribute.MENU_OPENED];
@@ -99,6 +108,11 @@ export class MenuGroup extends HTMLElement {
         }
     }
 
+    /**
+     * Get the menu with the given ID.
+     *
+     * @param [menuId] - The ID of the menu. If unset, returns this menu group.
+     */
     getMenuById(menuId?: string): MenuOrMenuGroup | undefined {
         if (!menuId || menuId === this.id) {
             return this;
@@ -106,6 +120,18 @@ export class MenuGroup extends HTMLElement {
         return arrayFind(this._menus, (menu) => menu.id === menuId);
     }
 
+    /**
+     * Open the menu with the given ID.
+     *
+     * If no ID is given, the first menu in the group is opened.
+     *
+     * If there's already an open menu, then the new menu is opened as a "submenu".
+     * When it closed, the previous menu is opened.
+     *
+     * @param [menuId] - The ID of the menu to open.
+     * @param [opener] - The control that opened the menu. When the menu is closed, focus is moved back to this control.
+     * @returns True if the given menu was found.
+     */
     openMenu(menuId?: string, opener?: HTMLElement): boolean {
         let menuToOpen = this.getMenuById(menuId);
         if (menuToOpen === this) {
@@ -136,6 +162,17 @@ export class MenuGroup extends HTMLElement {
         return true;
     }
 
+    /**
+     * Closes the menu with the given ID.
+     *
+     * If no ID is given, then the entire menu group is closed.
+     *
+     * If the given menu has opened one or more submenus, then those are also closed.
+     * If the last open menu is closed, then the menu group also becomes closed.
+     *
+     * @param [menuId] - The ID of the menu to close.
+     * @returns True if the given menu was found and closed.
+     */
     closeMenu(menuId?: string): boolean {
         let menuToClose = this.getMenuById(menuId);
         if (menuToClose === this) {
@@ -178,6 +215,9 @@ export class MenuGroup extends HTMLElement {
         this._openMenuStack.splice(index, menusToClose);
     }
 
+    /**
+     * Whether this menu group has a currently open menu.
+     */
     hasCurrentMenu(): boolean {
         return this._openMenuStack.length > 0;
     }
@@ -186,6 +226,9 @@ export class MenuGroup extends HTMLElement {
         return this._openMenuStack.length > 0 ? this._openMenuStack[this._openMenuStack.length - 1] : undefined;
     }
 
+    /**
+     * Close the current menu.
+     */
     closeCurrentMenu(): boolean {
         const currentMenu = this.getCurrentMenu_();
         if (currentMenu !== undefined) {
@@ -195,6 +238,11 @@ export class MenuGroup extends HTMLElement {
         return false;
     }
 
+    /**
+     * Whether the menu with the given ID is currently open.
+     *
+     * @param [menuId] - The ID of the menu.
+     */
     isMenuOpen(menuId?: string): boolean {
         const menu = this.getMenuById(menuId);
         if (!menu) {

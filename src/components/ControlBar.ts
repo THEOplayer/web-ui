@@ -5,6 +5,9 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${controlBarCss}</style><slot></slot>`;
 shadyCss.prepareTemplate(template, 'theoplayer-control-bar');
 
+/**
+ * A horizontal control bar that can contain other controls.
+ */
 export class ControlBar extends HTMLElement {
     constructor() {
         super();

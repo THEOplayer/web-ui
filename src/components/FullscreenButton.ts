@@ -17,6 +17,9 @@ template.innerHTML = buttonTemplate(
 );
 shadyCss.prepareTemplate(template, 'theoplayer-fullscreen-button');
 
+/**
+ * A button that toggles fullscreen.
+ */
 export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen']) {
     static get observedAttributes() {
         return [...Button.observedAttributes, Attribute.FULLSCREEN];

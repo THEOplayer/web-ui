@@ -8,6 +8,11 @@ const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<span part="icon"><slot>${backIcon}</slot></span>`);
 shadyCss.prepareTemplate(template, 'theoplayer-menu-close-button');
 
+/**
+ * A button that closes its parent menu.
+ *
+ * This button must be placed inside a [`<theoplayer-menu>`]{@link Menu}.
+ */
 export class CloseMenuButton extends Button {
     static get observedAttributes() {
         return [...Button.observedAttributes];

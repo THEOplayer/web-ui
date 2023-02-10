@@ -9,6 +9,9 @@ const template = document.createElement('template');
 template.innerHTML = menuGroupTemplate(settingsMenuHtml, settingsMenuCss);
 shadyCss.prepareTemplate(template, 'theoplayer-settings-menu');
 
+/**
+ * A menu to change the settings of the player, such as the active video quality and the playback speed.
+ */
 export class SettingsMenu extends MenuGroup {
     constructor() {
         super({ template });

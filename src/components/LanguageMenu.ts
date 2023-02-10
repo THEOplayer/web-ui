@@ -14,6 +14,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-language-menu');
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
+/**
+ * A menu to change the spoken language and subtitles of the stream.
+ */
 export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
     private _player: ChromelessPlayer | undefined;
 

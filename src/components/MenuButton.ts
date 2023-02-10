@@ -8,6 +8,11 @@ const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<slot></slot>`);
 shadyCss.prepareTemplate(template, 'theoplayer-menu-button');
 
+/**
+ * A menu button that opens a [menu]{@link Menu}.
+ *
+ * @attribute menu - The ID of the menu to open.
+ */
 export class MenuButton extends Button {
     static get observedAttributes() {
         return [...Button.observedAttributes, Attribute.MENU];
@@ -27,6 +32,9 @@ export class MenuButton extends Button {
         }
     }
 
+    /**
+     * The ID of the menu to open.
+     */
     get menu(): string | null {
         return this.getAttribute(Attribute.MENU);
     }

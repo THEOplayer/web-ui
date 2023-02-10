@@ -11,6 +11,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-text-track-off-radio-button');
 
 const TRACK_EVENTS = ['change'] as const;
 
+/**
+ * A radio button that disables the active subtitle track when clicked.
+ */
 export class TextTrackOffRadioButton extends RadioButton {
     private _trackList: TextTracksList | undefined = undefined;
 

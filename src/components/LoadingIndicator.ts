@@ -11,6 +11,11 @@ shadyCss.prepareTemplate(template, 'theoplayer-loading-indicator');
 
 const PLAYER_EVENTS = ['readystatechange', 'play', 'pause', 'playing', 'seeking', 'seeked'] as const;
 
+/**
+ * An indicator that shows whether the player is currently waiting for more data to resume playback.
+ *
+ * @attribute loading (readonly) - Whether the player is waiting for more data. If set, the indicator is shown.
+ */
 export class LoadingIndicator extends StateReceiverMixin(HTMLElement, ['player']) {
     private _player: ChromelessPlayer | undefined;
 
