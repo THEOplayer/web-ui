@@ -27,6 +27,9 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
+const DEFAULT_USER_IDLE_TIMEOUT = 2;
+const DEFAULT_DVR_THRESHOLD = 60;
+
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {
         return [
@@ -44,6 +47,7 @@ export class UIContainer extends HTMLElement {
             Attribute.HAS_ERROR,
             Attribute.HAS_FIRST_PLAY,
             Attribute.STREAM_TYPE,
+            Attribute.DVR_THRESHOLD,
             Attribute.USER_IDLE,
             Attribute.USER_IDLE_TIMEOUT
         ];
@@ -65,7 +69,6 @@ export class UIContainer extends HTMLElement {
     private readonly _stateReceivers: StateReceiverElement[] = [];
     private _player: ChromelessPlayer | undefined = undefined;
     private _source: SourceDescription | undefined = undefined;
-    private _userIdleTimeout: number = 2;
     private _userIdleTimer: number = 0;
     private _previewTime: number = NaN;
     private _activeVideoTrack: MediaTrack | undefined = undefined;
@@ -163,20 +166,29 @@ export class UIContainer extends HTMLElement {
     }
 
     get userIdleTimeout(): number {
-        return this._userIdleTimeout;
+        return Number(this.getAttribute(Attribute.USER_IDLE_TIMEOUT) ?? DEFAULT_USER_IDLE_TIMEOUT);
     }
 
     set userIdleTimeout(value: number) {
         value = Number(value);
-        this._userIdleTimeout = isNaN(value) ? 0 : value;
+        this.setAttribute(Attribute.USER_IDLE_TIMEOUT, String(isNaN(value) ? 0 : value));
     }
 
     get streamType(): StreamType {
-        return this.getAttribute(Attribute.STREAM_TYPE) as StreamType;
+        return (this.getAttribute(Attribute.STREAM_TYPE) as StreamType) || 'vod';
     }
 
     set streamType(streamType: StreamType) {
         this.setAttribute(Attribute.STREAM_TYPE, streamType);
+    }
+
+    get dvrThreshold(): number {
+        return Number(this.getAttribute(Attribute.DVR_THRESHOLD) ?? DEFAULT_DVR_THRESHOLD);
+    }
+
+    set dvrThreshold(value: number) {
+        value = Number(value);
+        this.setAttribute(Attribute.DVR_THRESHOLD, String(isNaN(value) ? 0 : value));
     }
 
     connectedCallback(): void {
@@ -341,8 +353,8 @@ export class UIContainer extends HTMLElement {
             this._updateAspectRatio();
         } else if (attrName === Attribute.USER_IDLE || attrName === Attribute.PAUSED || attrName === Attribute.CASTING) {
             this._updateTextTrackMargins();
-        } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
-            this.userIdleTimeout = newValue;
+        } else if (attrName === Attribute.DVR_THRESHOLD) {
+            this._updateStreamType();
         }
         if (UIContainer.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
@@ -627,7 +639,18 @@ export class UIContainer extends HTMLElement {
         if (isNaN(duration)) {
             return;
         }
-        this.streamType = duration === Infinity ? 'live' : 'vod';
+        let streamType: StreamType;
+        if (duration === Infinity) {
+            streamType = 'live';
+            const dvrThreshold = this.dvrThreshold;
+            const seekable = this._player.seekable;
+            if (dvrThreshold <= 0 || (seekable.length > 0 && seekable.end(seekable.length - 1) - seekable.start(0) >= dvrThreshold)) {
+                streamType = 'dvr';
+            }
+        } else {
+            streamType = 'vod';
+        }
+        this.streamType = streamType;
     };
 
     private readonly _updatePlaybackRate = (): void => {

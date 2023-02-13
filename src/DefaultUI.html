@@ -22,19 +22,14 @@
     </theoplayer-control-bar>
     <div part="bottom-chrome">
         <theoplayer-control-bar>
-            <theoplayer-time-range>
-                <theoplayer-preview-thumbnail slot="preview"></theoplayer-preview-thumbnail>
-                <theoplayer-preview-time-display slot="preview" live-hidden></theoplayer-preview-time-display>
-                <theoplayer-preview-time-display slot="preview" live-only remaining></theoplayer-preview-time-display>
-            </theoplayer-time-range>
+            <theoplayer-time-range></theoplayer-time-range>
         </theoplayer-control-bar>
         <theoplayer-control-bar>
             <theoplayer-play-button mobile-hidden></theoplayer-play-button>
             <theoplayer-mute-button></theoplayer-mute-button>
             <theoplayer-volume-range mobile-hidden></theoplayer-volume-range>
             <theoplayer-live-button live-only ad-hidden></theoplayer-live-button>
-            <theoplayer-time-display live-hidden show-duration></theoplayer-time-display>
-            <theoplayer-time-display live-only remaining></theoplayer-time-display>
+            <theoplayer-time-display show-duration remaining-when-live></theoplayer-time-display>
             <span class="theoplayer-spacer"></span>
             <theoplayer-language-menu-button menu="language-menu" mobile-hidden ad-hidden></theoplayer-language-menu-button>
             <theoplayer-settings-menu-button menu="settings-menu" mobile-hidden ad-hidden></theoplayer-settings-menu-button>

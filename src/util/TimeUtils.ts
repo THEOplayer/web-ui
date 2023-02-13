@@ -56,7 +56,7 @@ export function formatAsTimePhrase(time: number, preferNegative?: boolean): stri
     const timePhrase = [
         hours === 0 ? '' : toTimeUnitPhrase(hours, 0),
         minutes === 0 ? '' : toTimeUnitPhrase(minutes, 1),
-        seconds === 0 ? '' : toTimeUnitPhrase(seconds, 2)
+        seconds === 0 && (hours > 0 || minutes > 0) ? '' : toTimeUnitPhrase(seconds, 2)
     ]
         .filter((part) => part !== '')
         .join(', ');

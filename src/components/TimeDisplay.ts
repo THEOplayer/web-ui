@@ -5,6 +5,7 @@ import type { ChromelessPlayer } from 'theoplayer';
 import { setTextContent } from '../util/CommonUtils';
 import { formatAsTimePhrase, formatTime } from '../util/TimeUtils';
 import { Attribute } from '../util/Attribute';
+import type { StreamType } from '../util/StreamType';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${textDisplayCss}</style><span></span>`;
@@ -14,12 +15,12 @@ const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as c
 
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
-export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
+export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'streamType']) {
     private readonly _spanEl: HTMLElement;
     private _player: ChromelessPlayer | undefined;
 
     static get observedAttributes() {
-        return [Attribute.REMAINING, Attribute.SHOW_DURATION];
+        return [Attribute.REMAINING, Attribute.REMAINING_WHEN_LIVE, Attribute.SHOW_DURATION, Attribute.STREAM_TYPE];
     }
 
     constructor() {
@@ -65,19 +66,31 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
         this.player = player;
     }
 
+    get streamType(): StreamType {
+        return (this.getAttribute(Attribute.STREAM_TYPE) || 'vod') as StreamType;
+    }
+
+    set streamType(streamType: StreamType) {
+        this.setAttribute(Attribute.STREAM_TYPE, streamType);
+    }
+
+    setStreamType(streamType: StreamType): void {
+        this.streamType = streamType;
+    }
+
     private readonly _updateFromPlayer = () => {
         const currentTime = this._player ? this._player.currentTime : 0;
         const duration = this._player ? this._player.duration : NaN;
         const seekable = this._player?.seekable;
         const endTime = isFinite(duration) ? duration : seekable && seekable.length > 0 ? seekable.end(0) : NaN;
-        const remaining = this.hasAttribute(Attribute.REMAINING);
+        const remaining = this.hasAttribute(Attribute.REMAINING) || (this.hasAttribute(Attribute.REMAINING_WHEN_LIVE) && this.streamType !== 'vod');
         let time = currentTime;
         if (remaining) {
             time = -((endTime || 0) - currentTime);
         }
         const showDuration = this.hasAttribute(Attribute.SHOW_DURATION);
         let text: string;
-        if (showDuration) {
+        if (showDuration && !remaining) {
             text = `${formatTime(time, endTime, remaining)} / ${formatTime(endTime)}`;
         } else {
             text = formatTime(time, endTime, remaining);
@@ -95,10 +108,11 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
     };
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if ((attrName === Attribute.REMAINING || attrName === Attribute.SHOW_DURATION) && newValue !== oldValue) {
-            this._updateFromPlayer();
+        if (newValue === oldValue) {
+            return;
         }
         if (TimeDisplay.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            this._updateFromPlayer();
             shadyCss.styleSubtree(this);
         }
     }
