@@ -17,6 +17,8 @@ let chromecastButtonId = 0;
  * A button to start and stop casting using Chromecast.
  */
 export class ChromecastButton extends StateReceiverMixin(CastButton, ['player']) {
+    private _player: ChromelessPlayer | undefined;
+
     constructor() {
         super({ template });
 
@@ -29,7 +31,17 @@ export class ChromecastButton extends StateReceiverMixin(CastButton, ['player'])
         rings.setAttribute('clip-path', uniqueMaskId);
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
+    connectedCallback() {
+        super.connectedCallback();
+        this._upgradeProperty('player');
+    }
+
+    get player() {
+        return this._player;
+    }
+
+    set player(player: ChromelessPlayer | undefined) {
+        this._player = player;
         this.castApi = player?.cast?.chromecast;
     }
 }

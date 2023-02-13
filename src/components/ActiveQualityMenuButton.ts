@@ -29,10 +29,6 @@ export class ActiveQualityMenuButton extends StateReceiverMixin(MenuButton, ['ac
         this.update_();
     }
 
-    setActiveVideoQuality(quality: VideoQuality | undefined): void {
-        this.activeVideoQuality = quality;
-    }
-
     get targetVideoQualities(): VideoQuality[] | undefined {
         return this._targetVideoQualities;
     }
@@ -40,10 +36,6 @@ export class ActiveQualityMenuButton extends StateReceiverMixin(MenuButton, ['ac
     set targetVideoQualities(qualities: VideoQuality[] | undefined) {
         this._targetVideoQualities = qualities;
         this.update_();
-    }
-
-    setTargetVideoQualities(quality: VideoQuality[] | undefined): void {
-        this.targetVideoQualities = quality;
     }
 
     private update_(): void {

@@ -61,10 +61,6 @@ export class LoadingIndicator extends StateReceiverMixin(HTMLElement, ['player']
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     private readonly _updateFromPlayer = () => {
         const loading = this._player !== undefined && !this._player.paused && (this._player.seeking || this._player.readyState < 3);
         if (loading) {

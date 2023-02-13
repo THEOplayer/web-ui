@@ -109,10 +109,6 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     private readonly _updateValues = (): void => {
         const buttons = fromArrayLike(this._radioGroup.children) as RadioButton[];
         const values = this.values;

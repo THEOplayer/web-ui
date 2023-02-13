@@ -61,10 +61,6 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     protected override handleClick(): void {
         this._player?.ads?.skip();
     }

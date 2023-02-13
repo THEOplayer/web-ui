@@ -31,10 +31,6 @@ export class PlaybackRateMenuButton extends StateReceiverMixin(MenuButton, ['pla
         this._playbackRate = value;
         setTextContent(this._slotEl, value === 1 ? 'Normal' : `${value}x`);
     }
-
-    setPlaybackRate(value: number): void {
-        this.playbackRate = value;
-    }
 }
 
 customElements.define('theoplayer-playback-rate-menu-button', PlaybackRateMenuButton);

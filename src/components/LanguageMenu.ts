@@ -54,10 +54,6 @@ export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     private readonly _updateAudioTracks = (): void => {
         const newAudioTracks: readonly MediaTrack[] = this._player?.audioTracks ?? [];
         // Hide audio track selection if there's only one track.

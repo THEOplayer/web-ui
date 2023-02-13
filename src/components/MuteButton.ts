@@ -69,10 +69,6 @@ export class MuteButton extends StateReceiverMixin(Button, ['player']) {
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     private readonly _updateFromPlayer = () => {
         let volumeLevel: VolumeLevel = 'off';
         if (this._player !== undefined) {

@@ -46,10 +46,6 @@ export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen'])
         }
     }
 
-    setFullscreen(fullscreen: boolean): void {
-        this.fullscreen = fullscreen;
-    }
-
     protected override handleClick(): void {
         if (!this.fullscreen) {
             const event: EnterFullscreenEvent = createCustomEvent(ENTER_FULLSCREEN_EVENT, {

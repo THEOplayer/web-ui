@@ -60,20 +60,12 @@ export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['player
         this._update();
     }
 
-    setPreviewTime(previewTime: number): void {
-        this.previewTime = previewTime;
-    }
-
     get streamType(): StreamType {
         return (this.getAttribute(Attribute.STREAM_TYPE) || 'vod') as StreamType;
     }
 
     set streamType(streamType: StreamType) {
         this.setAttribute(Attribute.STREAM_TYPE, streamType);
-    }
-
-    setStreamType(streamType: StreamType): void {
-        this.streamType = streamType;
     }
 
     get player(): ChromelessPlayer | undefined {
@@ -92,10 +84,6 @@ export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['player
         if (this._player !== undefined) {
             this._player.addEventListener(PLAYER_EVENTS, this._update);
         }
-    }
-
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
     }
 
     private readonly _update = (): void => {

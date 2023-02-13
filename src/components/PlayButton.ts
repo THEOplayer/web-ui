@@ -88,10 +88,6 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     private readonly _onPlay = (): void => {
         this.paused = false;
         this._updateEnded();

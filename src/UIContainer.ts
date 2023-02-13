@@ -372,7 +372,7 @@ export class UIContainer extends HTMLElement {
 
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('player') >= 0) {
-                receiver.setPlayer!(this._player);
+                receiver.player = this._player;
             }
         }
 
@@ -442,13 +442,13 @@ export class UIContainer extends HTMLElement {
         } else if (attrName === Attribute.FULLSCREEN) {
             for (const receiver of this._stateReceivers) {
                 if (receiver[StateReceiverProps].indexOf('fullscreen') >= 0) {
-                    receiver.setFullscreen!(hasValue);
+                    receiver.fullscreen = hasValue;
                 }
             }
         } else if (attrName === Attribute.STREAM_TYPE) {
             for (const receiver of this._stateReceivers) {
                 if (receiver[StateReceiverProps].indexOf('streamType') >= 0) {
-                    receiver.setStreamType!(newValue);
+                    receiver.streamType = newValue;
                 }
             }
             const streamTypeChangeEvent: StreamTypeChangeEvent = createCustomEvent(STREAM_TYPE_CHANGE_EVENT, {
@@ -507,37 +507,37 @@ export class UIContainer extends HTMLElement {
     private propagateStateToReceiver_(receiver: StateReceiverElement): void {
         const receiverProps = receiver[StateReceiverProps];
         if (receiverProps.indexOf('player') >= 0) {
-            receiver.setPlayer!(this._player);
+            receiver.player = this._player;
         }
         if (receiverProps.indexOf('fullscreen') >= 0) {
-            receiver.setFullscreen!(this.fullscreen);
+            receiver.fullscreen = this.fullscreen;
         }
         if (receiverProps.indexOf('streamType') >= 0) {
-            receiver.setStreamType!(this.streamType);
+            receiver.streamType = this.streamType;
         }
         if (this._player !== undefined) {
             if (receiverProps.indexOf('playbackRate') >= 0) {
-                receiver.setPlaybackRate!(this._player.playbackRate);
+                receiver.playbackRate = this._player.playbackRate;
             }
             if (receiverProps.indexOf('error') >= 0) {
-                receiver.setError!(this._player.errorObject);
+                receiver.error = this._player.errorObject;
             }
             if (receiverProps.indexOf('activeVideoQuality') >= 0) {
-                receiver.setActiveVideoQuality!(this._activeVideoTrack?.activeQuality as VideoQuality | undefined);
+                receiver.activeVideoQuality = this._activeVideoTrack?.activeQuality as VideoQuality | undefined;
             }
             if (receiverProps.indexOf('targetVideoQualities') >= 0) {
-                receiver.setTargetVideoQualities!(getTargetQualities(this._activeVideoTrack) as VideoQuality[] | undefined);
+                receiver.targetVideoQualities = getTargetQualities(this._activeVideoTrack) as VideoQuality[] | undefined;
             }
         }
         if (receiverProps.indexOf('previewTime') >= 0) {
-            receiver.setPreviewTime!(this._previewTime);
+            receiver.previewTime = this._previewTime;
         }
     }
 
     private removeStateFromReceiver_(receiver: StateReceiverElement): void {
         const receiverProps = receiver[StateReceiverProps];
         if (receiverProps.indexOf('player') >= 0) {
-            receiver.setPlayer!(undefined);
+            receiver.player = undefined;
         }
     }
 
@@ -704,7 +704,7 @@ export class UIContainer extends HTMLElement {
         }
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('error') >= 0) {
-                receiver.setError!(error);
+                receiver.error = error;
             }
         }
     };
@@ -768,7 +768,7 @@ export class UIContainer extends HTMLElement {
         const playbackRate = this._player.playbackRate;
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('playbackRate') >= 0) {
-                receiver.setPlaybackRate!(playbackRate);
+                receiver.playbackRate = playbackRate;
             }
         }
     };
@@ -800,7 +800,7 @@ export class UIContainer extends HTMLElement {
         const activeVideoQuality = this._activeVideoTrack?.activeQuality as VideoQuality | undefined;
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('activeVideoQuality') >= 0) {
-                receiver.setActiveVideoQuality!(activeVideoQuality);
+                receiver.activeVideoQuality = activeVideoQuality;
             }
         }
     };
@@ -809,7 +809,7 @@ export class UIContainer extends HTMLElement {
         const targetVideoQualities = getTargetQualities(this._activeVideoTrack) as VideoQuality[] | undefined;
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('targetVideoQualities') >= 0) {
-                receiver.setTargetVideoQualities!(targetVideoQualities);
+                receiver.targetVideoQualities = targetVideoQualities;
             }
         }
     };
@@ -934,7 +934,7 @@ export class UIContainer extends HTMLElement {
 
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('previewTime') >= 0) {
-                receiver.setPreviewTime!(this._previewTime);
+                receiver.previewTime = this._previewTime;
             }
         }
     };
