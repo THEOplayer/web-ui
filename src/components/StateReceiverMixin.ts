@@ -49,7 +49,10 @@ export function isStateReceiverElement(element: Element): element is StateReceiv
  * @returns A class constructor that extends `base` and implements {@link StateReceiverElement}.
  * @see {@link StateReceiverElement}
  */
-export function StateReceiverMixin<T extends Constructor<Element>>(base: T, props: Array<keyof StateReceiverPropertyMap>) {
+export function StateReceiverMixin<T extends Constructor<Element>>(
+    base: T,
+    props: Array<keyof StateReceiverPropertyMap>
+): T & Constructor<StateReceiverElement> {
     abstract class StateReceiver extends base implements StateReceiverElement {
         get [StateReceiverProps](): Array<keyof StateReceiverPropertyMap> {
             return props;
