@@ -23,8 +23,8 @@
     "check": "tsc --project . --noEmit"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "THEO Technologies",
+  "license": "MIT",
   "peerDependencies": {
     "theoplayer": "^4"
   },
