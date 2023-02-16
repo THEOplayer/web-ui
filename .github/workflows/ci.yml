@@ -6,6 +6,7 @@ on:
     paths-ignore:
       - '**.md'
   pull_request:
+    types: [opened, reopened, synchronize]
     paths-ignore:
       - '**.md'
 jobs:
