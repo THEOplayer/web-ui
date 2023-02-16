@@ -12,7 +12,8 @@ import { string } from 'rollup-plugin-string';
 const { browserslist } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
 const production = process.env.BUILD === 'production';
 
-export default defineConfig({
+export default defineConfig([
+{
     input: './src/index.ts',
     output: [
         {
@@ -106,4 +107,5 @@ export default defineConfig({
               ]
             : [])
     ]
-});
+}
+]);
