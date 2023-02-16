@@ -8,6 +8,10 @@ import postcssPresetEnv from 'postcss-preset-env';
 import postcssMixins from 'postcss-mixins';
 import { readFile } from 'fs/promises';
 import { string } from 'rollup-plugin-string';
+import dts from 'rollup-plugin-dts';
+
+const fileName = 'THEOplayerUI';
+const umdName = 'THEOplayerUI';
 
 const { browserslist } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
 const production = process.env.BUILD === 'production';
@@ -17,9 +21,9 @@ export default defineConfig([
         input: './src/index.ts',
         output: [
             {
-                file: './dist/THEOplayerUI.js',
+                file: `./dist/${fileName}.js`,
                 format: 'umd',
-                name: 'THEOplayerUI',
+                name: umdName,
                 sourcemap: true,
                 indent: false,
                 globals: {
@@ -27,7 +31,7 @@ export default defineConfig([
                 }
             },
             {
-                file: './dist/THEOplayerUI.mjs',
+                file: `./dist/${fileName}.mjs`,
                 format: 'es',
                 sourcemap: true,
                 indent: false
@@ -107,5 +111,18 @@ export default defineConfig([
                   ]
                 : [])
         ]
+    },
+    {
+        input: './src/index.ts',
+        output: [
+            {
+                file: `./dist/${fileName}.d.ts`,
+                format: 'es',
+                indent: false,
+                footer: `export as namespace ${umdName};`
+            }
+        ],
+        external: ['theoplayer'],
+        plugins: [dts()]
     }
 ]);
