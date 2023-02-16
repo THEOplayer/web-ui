@@ -59,6 +59,11 @@ export class Button extends HTMLElement {
         this.addEventListener('click', this._onClick);
     }
 
+    disconnectedCallback(): void {
+        this.removeEventListener('keydown', this._onKeyDown);
+        this.removeEventListener('click', this._onClick);
+    }
+
     protected _upgradeProperty(prop: keyof this) {
         if (this.hasOwnProperty(prop)) {
             let value = this[prop];
