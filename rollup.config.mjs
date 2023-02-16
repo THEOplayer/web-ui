@@ -13,8 +13,13 @@ import dts from 'rollup-plugin-dts';
 const fileName = 'THEOplayerUI';
 const umdName = 'THEOplayerUI';
 
-const { browserslist } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
+const { browserslist, version, license } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
 const production = process.env.BUILD === 'production';
+
+const banner = `/*!
+ * THEOplayer Web UI v${version}
+ * License: ${license}
+ */`;
 
 export default defineConfig([
     {
@@ -26,6 +31,7 @@ export default defineConfig([
                 name: umdName,
                 sourcemap: true,
                 indent: false,
+                banner,
                 globals: {
                     theoplayer: 'THEOplayer'
                 }
@@ -119,6 +125,7 @@ export default defineConfig([
                 file: `./dist/${fileName}.d.ts`,
                 format: 'es',
                 indent: false,
+                banner,
                 footer: `export as namespace ${umdName};`
             }
         ],
