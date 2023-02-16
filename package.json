@@ -17,7 +17,9 @@
     "watch": "rollup -c --watch",
     "start": "serve .",
     "format": "prettier --write .",
-    "check": "tsc --project . --noEmit"
+    "test": "npm run test:format && npm run test:typecheck",
+    "test:format": "prettier --check .",
+    "test:typecheck": "tsc --project . --noEmit"
   },
   "keywords": [],
   "author": "",
