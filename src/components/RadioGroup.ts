@@ -1,8 +1,9 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { KeyCode } from '../util/KeyCode';
 import { Attribute } from '../util/Attribute';
-import type { RadioButton } from './RadioButton';
+import { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
+import { arrayFind } from '../util/CommonUtils';
 
 const radioGroupTemplate = document.createElement('template');
 radioGroupTemplate.innerHTML = `<slot></slot>`;
@@ -90,15 +91,15 @@ export class RadioGroup extends HTMLElement {
     };
 
     get focusedRadioButton(): RadioButton | null {
-        return this.querySelector('[role="radio"][tabindex="0"]');
+        return arrayFind(this.allRadioButtons(), (button) => button.tabIndex === 0) ?? null;
     }
 
     get checkedRadioButton(): RadioButton | null {
-        return this.querySelector(`[role="radio"][${Attribute.ARIA_CHECKED}="true"]`);
+        return arrayFind(this.allRadioButtons(), (button) => button.checked) ?? null;
     }
 
     get firstRadioButton(): RadioButton | null {
-        return this.querySelector('[role="radio"]');
+        return this.allRadioButtons()[0];
     }
 
     get lastRadioButton(): RadioButton | null {
@@ -106,28 +107,28 @@ export class RadioGroup extends HTMLElement {
         return radioButtons.length > 0 ? radioButtons[radioButtons.length - 1] : null;
     }
 
-    allRadioButtons(): NodeListOf<RadioButton> {
-        return this.querySelectorAll('[role="radio"]');
+    allRadioButtons(): RadioButton[] {
+        return this._slot.assignedNodes({ flatten: true }).filter(isRadioButton);
     }
 
     private _prevRadioButton(node: RadioButton): RadioButton | null {
-        let prev = node.previousElementSibling as RadioButton | null;
+        let prev = node.previousElementSibling;
         while (prev) {
             if (isRadioButton(prev)) {
                 return prev;
             }
-            prev = prev.previousElementSibling as RadioButton | null;
+            prev = prev.previousElementSibling;
         }
         return null;
     }
 
     private _nextRadioButton(node: RadioButton): RadioButton | null {
-        let next = node.nextElementSibling as RadioButton | null;
+        let next = node.nextElementSibling;
         while (next) {
             if (isRadioButton(next)) {
                 return next;
             }
-            next = next.nextElementSibling as RadioButton | null;
+            next = next.nextElementSibling;
         }
         return null;
     }
@@ -191,6 +192,6 @@ export class RadioGroup extends HTMLElement {
 
 customElements.define('theoplayer-radio-group', RadioGroup);
 
-function isRadioButton(node: Element): boolean {
-    return node.getAttribute('role') === 'radio';
+function isRadioButton(node: Node): node is RadioButton {
+    return node instanceof RadioButton;
 }
