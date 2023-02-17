@@ -1,4 +1,4 @@
-import { Constructor, fromArrayLike, isArray } from '../util/CommonUtils';
+import { Constructor, fromArrayLike, isArray, isElement, isHTMLSlotElement } from '../util/CommonUtils';
 import type { ChromelessPlayer, THEOplayerError, VideoQuality } from 'theoplayer';
 import type { StreamType } from '../util/StreamType';
 
@@ -86,7 +86,11 @@ export async function forEachStateReceiverElement(
         callback(element);
     }
     // Check all its children
-    const children: Element[] = [...fromArrayLike(element.children ?? []), ...fromArrayLike(element.shadowRoot?.children ?? [])];
+    const children: Element[] = [
+        ...fromArrayLike(element.children),
+        ...(element.shadowRoot ? fromArrayLike(element.shadowRoot.children) : []),
+        ...(isHTMLSlotElement(element) ? element.assignedNodes().filter(isElement) : [])
+    ];
     if (children.length > 0) {
         await Promise.all(children.map((child) => forEachStateReceiverElement(child, playerElement, callback)));
     }

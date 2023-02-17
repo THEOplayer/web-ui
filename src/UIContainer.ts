@@ -334,6 +334,7 @@ export class UIContainer extends HTMLElement {
         }
         void forEachStateReceiverElement(this, this._playerEl, this.registerStateReceiver_);
         this._mutationObserver.observe(this, { childList: true, subtree: true });
+        this.shadowRoot!.addEventListener('slotchange', this._onSlotChange);
 
         this._resizeObserver?.observe(this);
         this._updateTextTrackMargins();
@@ -405,6 +406,7 @@ export class UIContainer extends HTMLElement {
     disconnectedCallback(): void {
         this._resizeObserver?.disconnect();
         this._mutationObserver.disconnect();
+        this.shadowRoot!.removeEventListener('slotchange', this._onSlotChange);
         for (const receiver of this._stateReceivers) {
             this.removeStateFromReceiver_(receiver);
         }
@@ -496,6 +498,10 @@ export class UIContainer extends HTMLElement {
                 }
             }
         }
+    };
+
+    private readonly _onSlotChange = (): void => {
+        void forEachStateReceiverElement(this, this._playerEl, this.registerStateReceiver_);
     };
 
     private readonly registerStateReceiver_ = (receiver: StateReceiverElement): void => {
