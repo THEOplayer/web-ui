@@ -41,10 +41,64 @@ Then add `theoplayer-web-ui` to your app:
 -   Option 1: in your HTML.
     ```html
     <script src="/path/to/node_modules/theoplayer-web-ui/dist/THEOplayerUI.js"></script>
-    <theoplayer-default-ui></theoplayer-default-ui>
     ```
 -   Option 2: in your JavaScript.
     ```js
     import * as THEOplayerUI from 'theoplayer-web-ui';
-    const ui = new THEOplayerUI.DefaultUI();
     ```
+
+## Usage
+
+### Default UI
+
+`<theoplayer-default-ui>` provides a fully-featured video player experience with minimal setup, and allows for small customizations such as changing colors or fonts.
+
+-   Option 1: in your HTML.
+    ```html
+    <theoplayer-default-ui
+        configuration='{"libraryLocation":"/path/to/node_modules/theoplayer/","license":"your_theoplayer_license_goes_here"}'
+        source='{"sources":{"src":"https://example.com/stream.m3u8"}}'
+    ></theoplayer-default-ui>
+    ```
+-   Option 2: in your JavaScript.
+    ```js
+    import { DefaultUI } from 'theoplayer-web-ui';
+    const ui = new DefaultUI({
+        configuration: {
+            libraryLocation: '/path/to/node_modules/theoplayer/',
+            license: 'your_theoplayer_license_goes_here'
+        }
+    });
+    ui.source = {
+        sources: {
+            src: 'https://example.com/stream.m3u8'
+        }
+    };
+    ```
+
+See [examples/default-ui.html](https://github.com/THEOplayer/web-ui/blob/main/examples/default-ui.html) for a complete
+example.
+
+### Custom UI
+
+If you want to fully customize your video player layout, you can use a `<theoplayer-ui>` instead.
+
+```html
+<theoplayer-ui
+    configuration='{"libraryLocation":"/path/to/node_modules/theoplayer/","license":"your_theoplayer_license_goes_here"}'
+    source='{"sources":{"src":"https://example.com/stream.m3u8"}}'
+>
+    <!-- Choose your own layout using the provided components (or your own!) -->
+    <theoplayer-control-bar>
+        <theoplayer-time-range></theoplayer-time-range>
+    </theoplayer-control-bar>
+    <theoplayer-control-bar>
+        <theoplayer-play-button></theoplayer-play-button>
+        <theoplayer-mute-button></theoplayer-mute-button>
+        <theoplayer-volume-range></theoplayer-volume-range>
+    </theoplayer-control-bar>
+</theoplayer-ui>
+```
+
+See [examples/custom-ui.html](https://github.com/THEOplayer/web-ui/blob/main/examples/custom-ui.html) for a complete
+example.
