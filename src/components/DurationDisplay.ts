@@ -11,6 +11,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-duration-display');
 
 const PLAYER_EVENTS = ['durationchange'] as const;
 
+/**
+ * A control that displays the duration of the stream.
+ */
 export class DurationDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
     private readonly _spanEl: HTMLElement;
     private _player: ChromelessPlayer | undefined;

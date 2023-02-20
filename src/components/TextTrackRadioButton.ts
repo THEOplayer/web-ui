@@ -11,6 +11,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-text-track-radio-button');
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
+/**
+ * A radio button that shows the label of a given text track, and switches to that track when clicked.
+ */
 export class TextTrackRadioButton extends RadioButton {
     private _slotEl: HTMLSlotElement;
     private _track: TextTrack | undefined = undefined;
@@ -25,6 +28,9 @@ export class TextTrackRadioButton extends RadioButton {
         this._upgradeProperty('track');
     }
 
+    /**
+     * The text track that is controlled by this radio button.
+     */
     get track(): TextTrack | undefined {
         return this._track;
     }

@@ -10,6 +10,12 @@ export function rangeTemplate(range: string, extraCss: string = ''): string {
     return `<style>${rangeCss}\n${extraCss}</style><div part="container"><div part="background"></div><div part="pointer"></div>${range}</div>`;
 }
 
+/**
+ * A slider to select a value from a range.
+ *
+ * @attribute disabled - Whether the range is disabled.
+ *   When disabled, the slider value cannot be changed, and the slider thumb is hidden.
+ */
 export abstract class Range extends HTMLElement {
     static get observedAttributes() {
         return [Attribute.DISABLED, Attribute.HIDDEN];
@@ -59,6 +65,11 @@ export abstract class Range extends HTMLElement {
         }
     }
 
+    /**
+     * Whether the range is disabled.
+     *
+     * When disabled, the slider value cannot be changed, and the slider thumb is hidden.
+     */
     get disabled() {
         return this.hasAttribute(Attribute.DISABLED);
     }
@@ -71,6 +82,9 @@ export abstract class Range extends HTMLElement {
         }
     }
 
+    /**
+     * The current value.
+     */
     get value(): number {
         return this._rangeEl.valueAsNumber;
     }
@@ -80,6 +94,9 @@ export abstract class Range extends HTMLElement {
         this.handleInput();
     }
 
+    /**
+     * The minimum allowed value.
+     */
     get min(): number {
         return Number(this._rangeEl.min);
     }
@@ -89,6 +106,9 @@ export abstract class Range extends HTMLElement {
         this.update();
     }
 
+    /**
+     * The maximum allowed value.
+     */
     get max(): number {
         return Number(this._rangeEl.max);
     }
@@ -98,6 +118,11 @@ export abstract class Range extends HTMLElement {
         this.update();
     }
 
+    /**
+     * The granularity at which the value can change.
+     *
+     * If set to `"any"`, the value can change with arbitrary precision.
+     */
     get step(): number | 'any' {
         const raw = this._rangeEl.step;
         return raw === 'any' ? raw : Number(raw);
@@ -145,8 +170,14 @@ export abstract class Range extends HTMLElement {
         this.updateBar_();
     }
 
+    /**
+     * The value for the `aria-label` attribute of the `<input type="range">` element.
+     */
     protected abstract getAriaLabel(): string;
 
+    /**
+     * The value for the `aria-valuetext` attribute of the `<input type="range">` element.
+     */
     protected abstract getAriaValueText(): string;
 
     /**

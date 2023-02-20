@@ -13,6 +13,10 @@ shadyCss.prepareTemplate(template, 'theoplayer-quality-radio-button');
 const TRACK_EVENTS = ['activequalitychanged', 'targetqualitychanged'] as const;
 const QUALITY_EVENTS = ['update'] as const;
 
+/**
+ * A radio button that shows the label of a given video quality, and switches the video track's
+ * [target quality]{@link MediaTrack.targetQuality} to that quality when clicked.
+ */
 export class QualityRadioButton extends RadioButton {
     private _slotEl: HTMLSlotElement;
     private _track: MediaTrack | undefined = undefined;
@@ -30,6 +34,9 @@ export class QualityRadioButton extends RadioButton {
         this._upgradeProperty('quality');
     }
 
+    /**
+     * The video track containing the quality being controlled.
+     */
     get track(): MediaTrack | undefined {
         return this._track;
     }
@@ -48,6 +55,9 @@ export class QualityRadioButton extends RadioButton {
         }
     }
 
+    /**
+     * The video quality being controlled.
+     */
     get quality(): VideoQuality | undefined {
         return this._quality;
     }

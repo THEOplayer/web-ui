@@ -14,6 +14,48 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
 
+/**
+ * A default UI for THEOplayer.
+ *
+ * This default UI provides a great player experience out-of-the-box, that works well on all types of devices
+ * and for all types of streams. It provides all the common playback controls for playing, seeking,
+ * changing languages and qualities. It also supports advertisements and casting.
+ *
+ * ## Usage
+ *
+ * 1. Create a `<theoplayer-default-ui>` element.
+ * 1. Set its `configuration` attribute or property to a valid player configuration.
+ * 1. Set its `source` attribute or property to a valid stream source.
+ * 1. Optionally, customize the player using CSS custom properties and/or extra controls.
+ *
+ * ## Customization
+ *
+ * The styling can be controlled using CSS custom properties (see [`<theoplayer-ui>`]{@link UIContainer}).
+ * Additional controls can be added to the `top-control-bar` and `bottom-control-bar` slots.
+ * For more extensive customizations, we recommend defining your own custom UI using
+ * a [`<theoplayer-ui>`]{@link UIContainer}.
+ *
+ * @attribute configuration - The THEOplayer {@link PlayerConfiguration}, as a JSON string.
+ * @attribute source - The THEOplayer {@link SourceDescription}, as a JSON string.
+ * @attribute fluid - If set, the player automatically adjusts its height to fit the video's aspect ratio.
+ * @attribute muted - If set, the player starts out as muted. Reflects `ui.player.muted`.
+ * @attribute autoplay - If set, the player attempts to automatically start playing (if allowed).
+ * @attribute mobile - Whether to use a mobile-optimized UI layout instead.
+ *   Can be used in CSS to show/hide certain desktop-specific or mobile-specific UI controls.
+ * @attribute stream-type - The stream type, either "vod", "live" or "dvr".
+ *   Can be used to show/hide certain UI controls specific for livestreams, such as
+ *   a [`<theoplayer-live-button>`]{@link LiveButton}.
+ *   If you know in advance that the source will be a livestream, you can set this attribute to avoid a screen flicker
+ *   when the player switches between its VOD-specific and live-only controls.
+ * @attribute user-idle-timeout - The timeout (in seconds) between when the user stops interacting with the UI,
+ *   and when the user is considered to be "idle".
+ * @attribute dvr-threshold - The minimum length (in seconds) of a livestream's sliding window for the stream to be DVR
+ *   and its stream type to be set to "dvr".
+ *
+ * @slot top-control-bar - A slot for extra UI controls in the top control bar.
+ * @slot bottom-control-bar - A slot for extra UI controls in the bottom control bar.
+ * @slot menu - A slot for extra menus (see [`<theoplayer-menu>`]{@link Menu}).
+ */
 export class DefaultUI extends HTMLElement {
     static get observedAttributes() {
         return [
@@ -25,6 +67,7 @@ export class DefaultUI extends HTMLElement {
             Attribute.MOBILE,
             Attribute.STREAM_TYPE,
             Attribute.USER_IDLE_TIMEOUT,
+            Attribute.DVR_THRESHOLD,
             Attribute.HAS_TITLE
         ];
     }
@@ -34,6 +77,13 @@ export class DefaultUI extends HTMLElement {
     private readonly _timeRange: TimeRange;
     private _appliedExtensions: boolean = false;
 
+    /**
+     * Creates a new THEOplayer default UI.
+     *
+     * @param configuration - The player configuration.
+     *   Will be passed to the {@link ChromelessPlayer} constructor to create the underlying THEOplayer instance.
+     *   Can also be set later on through the {@link configuration} property.
+     */
     constructor(configuration: PlayerConfiguration = {}) {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
@@ -49,10 +99,20 @@ export class DefaultUI extends HTMLElement {
         this._timeRange = shadowRoot.querySelector('theoplayer-time-range')!;
     }
 
+    /**
+     * The underlying THEOplayer player instance.
+     *
+     * This is constructed automatically as soon as a valid {@link configuration} is set.
+     */
     get player(): ChromelessPlayer | undefined {
         return this._ui.player;
     }
 
+    /**
+     * The player configuration.
+     *
+     * Used to create the underlying THEOplayer instance.
+     */
     get configuration(): PlayerConfiguration {
         return this._ui.configuration;
     }
@@ -61,6 +121,9 @@ export class DefaultUI extends HTMLElement {
         this._ui.configuration = configuration;
     }
 
+    /**
+     * The player's current source.
+     */
     get source(): SourceDescription | undefined {
         return this._ui.source;
     }
@@ -69,6 +132,9 @@ export class DefaultUI extends HTMLElement {
         this._ui.source = value;
     }
 
+    /**
+     * Whether the player's audio is muted.
+     */
     get muted(): boolean {
         return this._ui.muted;
     }
@@ -77,6 +143,9 @@ export class DefaultUI extends HTMLElement {
         this._ui.muted = value;
     }
 
+    /**
+     * Whether the player should attempt to automatically start playback.
+     */
     get autoplay(): boolean {
         return this._ui.autoplay;
     }
@@ -85,6 +154,12 @@ export class DefaultUI extends HTMLElement {
         this._ui.autoplay = value;
     }
 
+    /**
+     * The stream type, either "vod", "live" or "dvr".
+     *
+     * If you know in advance that the source will be a livestream, you can set this property to avoid a screen flicker
+     * when the player switches between its VOD-specific and live-only controls.
+     */
     get streamType(): StreamType {
         return this._ui.streamType;
     }
@@ -93,6 +168,10 @@ export class DefaultUI extends HTMLElement {
         this._ui.streamType = value;
     }
 
+    /**
+     * The timeout (in seconds) between when the user stops interacting with the UI,
+     * and when the user is considered to be "idle".
+     */
     get userIdleTimeout(): number {
         return this._ui.userIdleTimeout;
     }
@@ -101,6 +180,10 @@ export class DefaultUI extends HTMLElement {
         this._ui.userIdleTimeout = value;
     }
 
+    /**
+     * The minimum length (in seconds) of a livestream's sliding window for the stream to be DVR
+     * and its stream type to be set to "dvr".
+     */
     get dvrThreshold(): number {
         return this._ui.dvrThreshold;
     }

@@ -11,6 +11,9 @@ function formatAsPercentString(value: number, max: number) {
     return `${Math.round((value / max) * 100)}%`;
 }
 
+/**
+ * A volume slider, showing the current audio volume of the player, and which changes the volume when clicked or dragged.
+ */
 export class VolumeRange extends StateReceiverMixin(Range, ['player']) {
     private _player: ChromelessPlayer | undefined;
 

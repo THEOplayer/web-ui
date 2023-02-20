@@ -11,6 +11,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-media-track-radio-button');
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
+/**
+ * A radio button that shows the label of a given media track, and switches to that track when clicked.
+ */
 export class MediaTrackRadioButton extends RadioButton {
     private _slotEl: HTMLSlotElement;
     private _track: MediaTrack | undefined = undefined;
@@ -25,6 +28,9 @@ export class MediaTrackRadioButton extends RadioButton {
         this._upgradeProperty('track');
     }
 
+    /**
+     * The media track that is controlled by this radio button.
+     */
     get track(): MediaTrack | undefined {
         return this._track;
     }

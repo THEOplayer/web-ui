@@ -5,8 +5,11 @@
   "main": "dist/THEOplayerUI.js",
   "module": "dist/THEOplayerUI.mjs",
   "exports": {
-    "import": "./dist/THEOplayerUI.mjs",
-    "default": "./dist/THEOplayerUI.js"
+    ".": {
+      "import": "./dist/THEOplayerUI.mjs",
+      "default": "./dist/THEOplayerUI.js"
+    },
+    "./dist/*": "./dist/*"
   },
   "files": [
     "dist/"
@@ -22,8 +25,8 @@
     "test:typecheck": "tsc --project . --noEmit"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "THEO Technologies",
+  "license": "MIT",
   "peerDependencies": {
     "theoplayer": "^4"
   },

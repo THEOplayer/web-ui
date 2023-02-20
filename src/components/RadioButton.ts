@@ -2,11 +2,17 @@ import { Button, ButtonOptions, buttonTemplate } from './Button';
 import { Attribute } from '../util/Attribute';
 import * as shadyCss from '@webcomponents/shadycss';
 import { createEvent } from '../util/EventUtils';
+import type { RadioGroup } from './RadioGroup';
 
 const defaultTemplate = document.createElement('template');
 defaultTemplate.innerHTML = buttonTemplate('<slot></slot>');
 shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-radio-button');
 
+/**
+ * A button that can be checked.
+ *
+ * When part of a [radio group]{@link RadioGroup}, at most one button in the group can be checked.
+ */
 export class RadioButton extends Button {
     static get observedAttributes() {
         return [...Button.observedAttributes, Attribute.ARIA_CHECKED];
@@ -31,6 +37,9 @@ export class RadioButton extends Button {
         super.connectedCallback();
     }
 
+    /**
+     * Whether this radio button is checked.
+     */
     get checked(): boolean {
         return this.getAttribute(Attribute.ARIA_CHECKED) === 'true';
     }
@@ -39,6 +48,9 @@ export class RadioButton extends Button {
         this.setAttribute(Attribute.ARIA_CHECKED, checked ? 'true' : 'false');
     }
 
+    /**
+     * The value associated with this radio button.
+     */
     get value(): any {
         return this._value;
     }

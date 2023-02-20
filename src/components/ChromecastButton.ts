@@ -13,6 +13,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-chromecast-button');
 const maskId = 'theoplayer-chromecast-rings-mask';
 let chromecastButtonId = 0;
 
+/**
+ * A button to start and stop casting using Chromecast.
+ */
 export class ChromecastButton extends StateReceiverMixin(CastButton, ['player']) {
     constructor() {
         super({ template });

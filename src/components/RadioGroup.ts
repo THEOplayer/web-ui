@@ -9,17 +9,18 @@ radioGroupTemplate.innerHTML = `<slot></slot>`;
 shadyCss.prepareTemplate(radioGroupTemplate, 'theoplayer-radio-group');
 
 /**
- * A radio group with roving tabindex.
- * - Tab moves focus in or out of the radio group.
- * - Up/Left arrow moves focus to the previous radio button.
- * - Down/Right arrow moves focus to the next radio button.
- * - Home moves focus to the first radio button.
- * - End moves focus to the last radio button.
- * See: https://www.w3.org/WAI/ARIA/apg/example-index/radio/radio.html
+ * A group of [radio buttons]{@link RadioButton}. At most one button in the group can be checked.
  *
- * Based on howto-radio-group
- * https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-radio-group/howto-radio-group.js
+ * ## Behavior
+ * This radio group implements the [roving tabindex]{@link https://www.w3.org/WAI/ARIA/apg/example-index/radio/radio.html} pattern.
+ *  - `Tab` moves focus in or out of the radio group.
+ *  - `Up`/`Left` arrow moves focus to the previous radio button.
+ *  - `Down`/`Right` arrow moves focus to the next radio button.
+ *  - `Home` moves focus to the first radio button.
+ *  - `End` moves focus to the last radio button.
  */
+// Based on howto-radio-group
+// https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-radio-group/howto-radio-group.js
 export class RadioGroup extends HTMLElement {
     private _slot: HTMLSlotElement;
     private _lastCheckedRadioButton: RadioButton | null = null;

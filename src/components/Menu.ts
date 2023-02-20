@@ -21,6 +21,15 @@ const defaultTemplate = document.createElement('template');
 defaultTemplate.innerHTML = menuTemplate('<slot name="heading"></slot>', '<slot></slot>');
 shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu');
 
+/**
+ * A menu that can be opened on top of the player.
+ *
+ * The menu has a heading at the top, with a [close button]{@link CloseMenuButton} and a heading text.
+ *
+ * @attribute menu-close-on-input - Whether to automatically close the menu whenever one of its controls
+ *   receives an input (e.g. when a radio button is clicked).
+ * @attribute menu-opened (readonly) - Whether the menu is currently open.
+ */
 export class Menu extends HTMLElement {
     static get observedAttributes() {
         return [Attribute.MENU_OPENED, Attribute.MENU_CLOSE_ON_INPUT];
@@ -28,6 +37,15 @@ export class Menu extends HTMLElement {
 
     private readonly _contentEl: HTMLElement;
 
+    /**
+     * Creates a menu.
+     *
+     * By default, the button has an unnamed `<slot>` for its contents, and a named `"heading"` `<slot>` for its heading text.
+     * Subclasses can override this by passing a different [template]{@link MenuOptions.template} in the options,
+     * using {@link menuTemplate} to correctly style the custom template.
+     *
+     * @param options - The options for this menu.
+     */
     constructor(options?: MenuOptions) {
         super();
         const template = options?.template ?? defaultTemplate;
@@ -59,10 +77,16 @@ export class Menu extends HTMLElement {
         }
     }
 
+    /**
+     * Open the menu.
+     */
     openMenu(): void {
         this.setAttribute(Attribute.MENU_OPENED, '');
     }
 
+    /**
+     * Close the menu.
+     */
     closeMenu(): void {
         this.removeAttribute(Attribute.MENU_OPENED);
     }

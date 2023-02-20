@@ -14,6 +14,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-quality-radio-group');
 
 const TRACK_EVENTS = ['addtrack', 'removetrack', 'change'] as const;
 
+/**
+ * A radio group that shows a list of available video qualities, from which the user can choose a desired target quality.
+ */
 export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
     private readonly _radioGroup: RadioGroup;
     private _player: ChromelessPlayer | undefined;

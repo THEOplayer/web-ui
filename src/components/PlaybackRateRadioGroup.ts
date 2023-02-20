@@ -15,6 +15,11 @@ shadyCss.prepareTemplate(template, 'theoplayer-playback-rate-radio-group');
 
 const DEFAULT_PLAYBACK_RATES: readonly number[] = [0.25, 0.5, 1, 1.25, 1.5, 2];
 
+/**
+ * A radio group that shows a list of playback rates, from which the user can choose a desired playback rate.
+ *
+ * @attribute values - A comma separated list of playback rates, for example: `0.5,1,2,4`
+ */
 export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
     static get observedAttributes() {
         return [Attribute.VALUES];
@@ -56,6 +61,9 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
         }
     }
 
+    /**
+     * The currently chosen playback rate.
+     */
     get value(): number {
         return this._value;
     }
@@ -72,6 +80,9 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
         this.dispatchEvent(createEvent('change', { bubbles: true }));
     }
 
+    /**
+     * The list of playback rate values from which the user can choose.
+     */
     get values(): number[] {
         return this._values;
     }
