@@ -7,6 +7,17 @@ the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 -   Built using [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), so works great with (or without) any app framework.
 -   Easy to customize: use HTML to lay out your controls, and CSS to style them.
 
+## Motivation
+
+The current THEOplayer Web SDK comes with a built-in UI based on [video.js](https://github.com/videojs/video.js) through [the `Player` constructor](https://docs.theoplayer.com/api-reference/web/theoplayer.player.md). This new UI aims to solve some limitations from the old approach:
+
+-   Designed with customization in mind. With the old UI, customizing anything beyond changing some text and icon colors was difficult, and could break in unpredictable ways when updating to a new THEOplayer version. With the new UI, all components can be customized in a variety of ways with well-documented attributes and CSS custom properties.
+-   Built for the modern web. The old UI was built at a time when Internet Explorer was still a major browser, so it couldn't use newer web technologies. The new UI breaks with the past and takes full advantage of Web Components, so it works well in modern web apps.
+-   Developed in the open. Although the old UI is based on the open-source video.js library, any custom components bundled with THEOplayer remained closed-source. With the new UI, the source code of all components is publicly available. Advanced users can learn about the inner workings of each component, modify them, and even contribute their changes back to THEOplayer Web UI.
+
+> **Note**
+> THEOplayer Web UI currently exists separately from the old THEOplayer UI. In the future, we hope to deprecate and remove the old UI, and ship this new UI as default UI for the THEOplayer Web SDK.
+
 ## Installation
 
 This project requires the THEOplayer Web SDK to be installed.
