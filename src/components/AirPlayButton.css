@@ -1,0 +1,14 @@
+/* Unavailable: hide button */
+:host([cast-state='unavailable']) {
+    display: none !important;
+}
+
+/* Connected: fill screen */
+.theoplayer-airplay-inner {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+:host([cast-state='connected']) .theoplayer-airplay-inner {
+    opacity: 1;
+}
