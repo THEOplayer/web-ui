@@ -86,20 +86,12 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     get streamType(): StreamType {
         return (this.getAttribute(Attribute.STREAM_TYPE) || 'vod') as StreamType;
     }
 
     set streamType(streamType: StreamType) {
         this.setAttribute(Attribute.STREAM_TYPE, streamType);
-    }
-
-    setStreamType(streamType: StreamType): void {
-        this.streamType = streamType;
     }
 
     private readonly _updateFromPlayer = () => {

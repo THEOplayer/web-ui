@@ -57,10 +57,6 @@ export class DurationDisplay extends StateReceiverMixin(HTMLElement, ['player'])
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     private readonly _updateFromPlayer = () => {
         const duration = this._player ? this._player.duration : NaN;
         const text = formatTime(duration);

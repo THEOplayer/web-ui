@@ -64,11 +64,11 @@ export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error', 'ful
         setTextContent(this._messageSlot, error ? error.message : '');
     }
 
-    setError(error: THEOplayerError | undefined): void {
-        this.error = error;
+    get fullscreen(): boolean {
+        return this.hasAttribute(Attribute.FULLSCREEN);
     }
 
-    setFullscreen(fullscreen: boolean): void {
+    set fullscreen(fullscreen: boolean) {
         if (fullscreen) {
             this.setAttribute(Attribute.FULLSCREEN, '');
         } else {

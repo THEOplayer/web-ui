@@ -16,10 +16,6 @@ export interface StateReceiverPropertyMap {
     previewTime: number;
 }
 
-export type StateReceiverMethods = {
-    [T in keyof StateReceiverPropertyMap as `set${Capitalize<T>}`]?: (value: StateReceiverPropertyMap[T]) => void;
-};
-
 /**
  * A custom element that automatically receives selected state updates
  * from an ancestor [`<theoplayer-ui>`]{@link UIContainer} element.
@@ -28,7 +24,7 @@ export type StateReceiverMethods = {
  *
  * @see {@link StateReceiverMixin}
  */
-export interface StateReceiverElement extends StateReceiverMethods, Element {
+export interface StateReceiverElement extends Partial<StateReceiverPropertyMap>, Element {
     /**
      * The names of the properties this element will receive.
      */
@@ -44,16 +40,19 @@ export function isStateReceiverElement(element: Element): element is StateReceiv
  * A [mixin class](https://www.typescriptlang.org/docs/handbook/mixins.html) to apply on the superclass of a custom element,
  * such that it will automatically receive selected state updates from an ancestor [`<theoplayer-ui>`]{@link UIContainer} element.
  *
- * For each property name in `props`, the custom element *MUST* implement a corresponding setter method.
- * For example, if `props` equals `["player", "fullscreen"]`, then the element must have a `setPlayer(player)`
- * and `setFullscreen(fullscreen)` method.
+ * For each property name in `props`, the custom element *MUST* implement a corresponding property with a setter.
+ * For example, if `props` equals `["player", "fullscreen"]`, then the element must have writable `player` and `fullscreen`
+ * properties.
  *
  * @param base - The superclass for the new element class.
  * @param props - The names of the properties this element will receive.
  * @returns A class constructor that extends `base` and implements {@link StateReceiverElement}.
  * @see {@link StateReceiverElement}
  */
-export function StateReceiverMixin<T extends Constructor<Element>>(base: T, props: Array<keyof StateReceiverPropertyMap>) {
+export function StateReceiverMixin<T extends Constructor<Element>>(
+    base: T,
+    props: Array<keyof StateReceiverPropertyMap>
+): T & Constructor<StateReceiverElement> {
     abstract class StateReceiver extends base implements StateReceiverElement {
         get [StateReceiverProps](): Array<keyof StateReceiverPropertyMap> {
             return props;

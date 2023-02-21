@@ -74,10 +74,6 @@ export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player',
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     get previewTime(): number {
         return this._previewTime;
     }
@@ -85,10 +81,6 @@ export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player',
     set previewTime(previewTime: number) {
         this._previewTime = previewTime;
         this.updateThumbnail_();
-    }
-
-    setPreviewTime(previewTime: number): void {
-        this.previewTime = previewTime;
     }
 
     private readonly _updateThumbnailTextTrack = (): void => {

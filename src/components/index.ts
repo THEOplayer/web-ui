@@ -37,4 +37,4 @@ export * from './PreviewTimeDisplay';
 export * from './PreviewThumbnail';
 export * from './LiveButton';
 export * from './ads/index';
-export { type StateReceiverElement, type StateReceiverPropertyMap, type StateReceiverMethods, StateReceiverMixin } from './StateReceiverMixin';
+export { type StateReceiverElement, type StateReceiverPropertyMap, StateReceiverMixin } from './StateReceiverMixin';

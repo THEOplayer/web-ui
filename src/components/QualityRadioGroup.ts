@@ -69,10 +69,6 @@ export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player'
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     private readonly _onChange = () => {
         this.dispatchEvent(createEvent('change', { bubbles: true }));
     };

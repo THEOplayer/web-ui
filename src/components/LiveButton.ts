@@ -68,10 +68,6 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
         this.setAttribute(Attribute.STREAM_TYPE, streamType);
     }
 
-    setStreamType(streamType: StreamType): void {
-        this.streamType = streamType;
-    }
-
     get liveThreshold(): number {
         return Number(this.getAttribute(Attribute.LIVE_THRESHOLD) ?? DEFAULT_LIVE_THRESHOLD);
     }
@@ -112,10 +108,6 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
             this._player.addEventListener(PAUSED_EVENTS, this._updatePaused);
             this._player.addEventListener(LIVE_EVENTS, this._updateLive);
         }
-    }
-
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
     }
 
     private readonly _updatePaused = () => {

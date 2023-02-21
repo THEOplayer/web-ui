@@ -55,10 +55,6 @@ export class AdCountdown extends StateReceiverMixin(HTMLElement, ['player']) {
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     private readonly _onAdChange = () => {
         if (this._player?.ads?.playing) {
             this._player.removeEventListener('timeupdate', this._update);

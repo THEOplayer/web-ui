@@ -44,10 +44,6 @@ export class VolumeRange extends StateReceiverMixin(Range, ['player']) {
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     private readonly _updateFromPlayer = () => {
         if (this._player !== undefined) {
             this.value = this._player.volume;

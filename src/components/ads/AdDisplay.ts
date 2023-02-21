@@ -55,10 +55,6 @@ export class AdDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     private readonly _updateFromPlayer = () => {
         const ads = this._player?.ads;
         const linearAds = (ads?.currentAdBreak?.ads ?? []).filter(isLinearAd);

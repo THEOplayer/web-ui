@@ -59,10 +59,6 @@ export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player'])
         }
     }
 
-    setPlayer(player: ChromelessPlayer | undefined): void {
-        this.player = player;
-    }
-
     private readonly _onPointerDown = (event: PointerEvent) => {
         this._pointerType = event.pointerType;
     };
