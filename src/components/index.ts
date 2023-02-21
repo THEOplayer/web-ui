@@ -31,6 +31,7 @@ export * from './VolumeRange';
 export * from './ErrorDisplay';
 export * from './CastButton';
 export * from './ChromecastButton';
+export * from './ChromecastDisplay';
 export * from './AirPlayButton';
 export * from './LoadingIndicator';
 export * from './GestureReceiver';
