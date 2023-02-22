@@ -41,5 +41,6 @@ export enum Attribute {
     SHOW_OFF = 'show-off',
     PLAYING_AD = 'playing-ad',
     CLICKTHROUGH = 'clickthrough',
+    PROPERTY = 'property',
     VALUE = 'value'
 }

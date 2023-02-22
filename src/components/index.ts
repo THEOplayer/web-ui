@@ -22,6 +22,7 @@ export * from './PlaybackRateMenuButton';
 export * from './ActiveQualityMenuButton';
 export * from './QualityRadioButton';
 export * from './QualityRadioGroup';
+export * from './TextTrackStyleRadioGroup';
 export * from './SettingsMenu';
 export * from './SettingsMenuButton';
 export * from './FullscreenButton';
