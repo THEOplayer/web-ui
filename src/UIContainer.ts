@@ -193,6 +193,11 @@ export class UIContainer extends HTMLElement {
     }
 
     set configuration(playerConfiguration: PlayerConfiguration) {
+        this.removeAttribute(Attribute.CONFIGURATION);
+        this._setConfiguration(playerConfiguration);
+    }
+
+    private _setConfiguration(playerConfiguration: PlayerConfiguration): void {
         this._configuration = playerConfiguration ?? {};
         this.tryInitializePlayer_();
     }
@@ -205,6 +210,11 @@ export class UIContainer extends HTMLElement {
     }
 
     set source(value: SourceDescription | undefined) {
+        this.removeAttribute(Attribute.SOURCE);
+        this._setSource(value);
+    }
+
+    private _setSource(value: SourceDescription | undefined): void {
         if (this._player) {
             this._player.source = value;
         } else {
@@ -438,10 +448,9 @@ export class UIContainer extends HTMLElement {
         }
         const hasValue = newValue != null;
         if (attrName === Attribute.CONFIGURATION) {
-            this.configuration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
-            this.tryInitializePlayer_();
+            this._setConfiguration(newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {});
         } else if (attrName === Attribute.SOURCE) {
-            this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
+            this._setSource(newValue ? (JSON.parse(newValue) as SourceDescription) : undefined);
         } else if (attrName === Attribute.MUTED) {
             if (this._player) {
                 this._player.muted = hasValue;

@@ -118,6 +118,7 @@ export class DefaultUI extends HTMLElement {
     }
 
     set configuration(configuration: PlayerConfiguration) {
+        this.removeAttribute(Attribute.CONFIGURATION);
         this._ui.configuration = configuration;
     }
 
@@ -129,6 +130,7 @@ export class DefaultUI extends HTMLElement {
     }
 
     set source(value: SourceDescription | undefined) {
+        this.removeAttribute(Attribute.SOURCE);
         this._ui.source = value;
     }
 
@@ -234,9 +236,9 @@ export class DefaultUI extends HTMLElement {
         }
         const hasValue = newValue != null;
         if (attrName === Attribute.SOURCE) {
-            this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
+            this._ui.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
         } else if (attrName === Attribute.CONFIGURATION) {
-            this.configuration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
+            this._ui.configuration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
         } else if (attrName === Attribute.MUTED) {
             this.muted = hasValue;
         } else if (attrName === Attribute.AUTOPLAY) {
