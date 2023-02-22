@@ -7,6 +7,7 @@ import type { ChromelessPlayer, MediaTrack, TextTrack } from 'theoplayer';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import './TrackRadioGroup';
+import './TextTrackStyleMenu';
 
 const template = document.createElement('template');
 template.innerHTML = menuGroupTemplate(languageMenuHtml, languageMenuCss);
