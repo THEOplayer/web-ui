@@ -19,10 +19,6 @@ export class TextTrackOffRadioButton extends RadioButton {
 
     constructor() {
         super({ template });
-    }
-
-    override connectedCallback() {
-        super.connectedCallback();
         this._upgradeProperty('trackList');
     }
 

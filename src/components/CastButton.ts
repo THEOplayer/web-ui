@@ -1,4 +1,4 @@
-import { Button } from './Button';
+import { Button, type ButtonOptions } from './Button';
 import { Attribute } from '../util/Attribute';
 import type { CastState, VendorCast } from 'theoplayer';
 import * as shadyCss from '@webcomponents/shadycss';
@@ -15,10 +15,14 @@ export class CastButton extends Button {
         return [...Button.observedAttributes, Attribute.CAST_STATE];
     }
 
-    override connectedCallback() {
-        super.connectedCallback();
+    constructor(options?: ButtonOptions) {
+        super(options);
         this._upgradeProperty('castState');
         this._upgradeProperty('castApi');
+    }
+
+    override connectedCallback() {
+        super.connectedCallback();
         if (!this.hasAttribute(Attribute.CAST_STATE)) {
             this.setAttribute(Attribute.CAST_STATE, 'unavailable');
         }

@@ -28,19 +28,8 @@ export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player'
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._radioGroup = shadowRoot.querySelector('theoplayer-radio-group')!;
-    }
-
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
 
         this._upgradeProperty('player');
-        this._updateTrack();
-
-        this.shadowRoot!.addEventListener('change', this._onChange);
-    }
-
-    disconnectedCallback(): void {
-        this.shadowRoot!.removeEventListener('change', this._onChange);
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -49,6 +38,16 @@ export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player'
             delete this[prop];
             this[prop] = value;
         }
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
+        this._updateTrack();
+        this.shadowRoot!.addEventListener('change', this._onChange);
+    }
+
+    disconnectedCallback(): void {
+        this.shadowRoot!.removeEventListener('change', this._onChange);
     }
 
     get player(): ChromelessPlayer | undefined {

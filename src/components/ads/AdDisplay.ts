@@ -21,12 +21,8 @@ export class AdDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
         this._spanEl = shadowRoot.querySelector('span')!;
-    }
 
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
         this._upgradeProperty('player');
-        this._updateFromPlayer();
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -35,6 +31,11 @@ export class AdDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
             delete this[prop];
             this[prop] = value;
         }
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
+        this._updateFromPlayer();
     }
 
     get player(): ChromelessPlayer | undefined {

@@ -21,10 +21,6 @@ export class TextTrackRadioButton extends RadioButton {
     constructor() {
         super({ template });
         this._slotEl = this.shadowRoot!.querySelector('slot')!;
-    }
-
-    override connectedCallback(): void {
-        super.connectedCallback();
         this._upgradeProperty('track');
     }
 

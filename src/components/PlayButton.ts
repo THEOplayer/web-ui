@@ -32,13 +32,13 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
 
     constructor() {
         super({ template });
+        this._upgradeProperty('paused');
+        this._upgradeProperty('ended');
+        this._upgradeProperty('player');
     }
 
     override connectedCallback(): void {
         super.connectedCallback();
-        this._upgradeProperty('paused');
-        this._upgradeProperty('ended');
-        this._upgradeProperty('player');
         this._updateFromPlayer();
     }
 

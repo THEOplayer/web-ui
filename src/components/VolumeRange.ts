@@ -19,10 +19,6 @@ export class VolumeRange extends StateReceiverMixin(Range, ['player']) {
 
     constructor() {
         super({ template });
-    }
-
-    override connectedCallback() {
-        super.connectedCallback();
         this._upgradeProperty('player');
     }
 

@@ -56,6 +56,14 @@ export class MenuGroup extends HTMLElement {
         this._menuSlot = shadowRoot.querySelector('slot');
     }
 
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
+    }
+
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
@@ -76,14 +84,6 @@ export class MenuGroup extends HTMLElement {
         this.shadowRoot!.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
         this.shadowRoot!.removeEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
         this._menuSlot?.removeEventListener('slotchange', this._onMenuListChange);
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {

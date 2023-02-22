@@ -36,16 +36,24 @@ export abstract class Range extends HTMLElement {
         this._rangeEl.addEventListener('change', this._onInput);
 
         this._pointerEl = shadowRoot.querySelector('[part="pointer"]')!;
-    }
-
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
 
         this._upgradeProperty('disabled');
         this._upgradeProperty('value');
         this._upgradeProperty('min');
         this._upgradeProperty('max');
         this._upgradeProperty('step');
+    }
+
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
 
         this._rangeEl.setAttribute('aria-label', this.getAriaLabel());
         this.update();
@@ -55,14 +63,6 @@ export abstract class Range extends HTMLElement {
 
     disconnectedCallback(): void {
         this.removeEventListener('pointermove', this._updatePointerBar);
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
     }
 
     /**

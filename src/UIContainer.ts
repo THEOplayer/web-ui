@@ -172,6 +172,21 @@ export class UIContainer extends HTMLElement {
         this._topChromeSlot.addEventListener('transitionend', this._onChromeSlotTransition);
         this._bottomChromeSlot.addEventListener('transitionstart', this._onChromeSlotTransition);
         this._bottomChromeSlot.addEventListener('transitionend', this._onChromeSlotTransition);
+
+        this._upgradeProperty('configuration');
+        this._upgradeProperty('source');
+        this._upgradeProperty('muted');
+        this._upgradeProperty('autoplay');
+        this._upgradeProperty('userIdleTimeout');
+        this._upgradeProperty('streamType');
+    }
+
+    private _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
     }
 
     /**
@@ -330,13 +345,6 @@ export class UIContainer extends HTMLElement {
             this.setAttribute(Attribute.PAUSED, '');
         }
 
-        this._upgradeProperty('configuration');
-        this._upgradeProperty('source');
-        this._upgradeProperty('muted');
-        this._upgradeProperty('autoplay');
-        this._upgradeProperty('userIdleTimeout');
-        this._upgradeProperty('streamType');
-
         this.tryInitializePlayer_();
 
         for (const receiver of this._stateReceivers) {
@@ -363,14 +371,6 @@ export class UIContainer extends HTMLElement {
         this.addEventListener('pointerup', this._onPointerUp);
         this.addEventListener('pointermove', this._onPointerMove);
         this.addEventListener('mouseleave', this._onMouseLeave);
-    }
-
-    private _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
     }
 
     private tryInitializePlayer_(): void {

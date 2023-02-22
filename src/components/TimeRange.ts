@@ -52,11 +52,12 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
 
         this._rangeEl.addEventListener('mousedown', this._pauseOnScrubStart);
         this._rangeEl.addEventListener('touchstart', this._pauseOnScrubStart);
+
+        this._upgradeProperty('player');
     }
 
     override connectedCallback(): void {
         super.connectedCallback();
-        this._upgradeProperty('player');
         this._toggleAutoAdvance();
     }
 

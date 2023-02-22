@@ -25,14 +25,11 @@ export class LoadingIndicator extends StateReceiverMixin(HTMLElement, ['player']
 
     constructor() {
         super();
+
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
-    }
 
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
         this._upgradeProperty('player');
-        this._updateFromPlayer();
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -41,6 +38,11 @@ export class LoadingIndicator extends StateReceiverMixin(HTMLElement, ['player']
             delete this[prop];
             this[prop] = value;
         }
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
+        this._updateFromPlayer();
     }
 
     get player(): ChromelessPlayer | undefined {

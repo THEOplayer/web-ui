@@ -21,15 +21,8 @@ export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player'])
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
-    }
-
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
 
         this._upgradeProperty('player');
-
-        this.setAttribute('tabindex', '-1');
-        this.setAttribute('aria-hidden', 'true');
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -38,6 +31,13 @@ export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player'])
             delete this[prop];
             this[prop] = value;
         }
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
+
+        this.setAttribute('tabindex', '-1');
+        this.setAttribute('aria-hidden', 'true');
     }
 
     get player(): ChromelessPlayer | undefined {

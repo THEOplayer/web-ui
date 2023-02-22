@@ -29,10 +29,7 @@ export class ChromecastButton extends StateReceiverMixin(CastButton, ['player'])
         const uniqueMaskId = `${maskId}-${id}`;
         mask.setAttribute('id', uniqueMaskId);
         rings.setAttribute('clip-path', uniqueMaskId);
-    }
 
-    connectedCallback() {
-        super.connectedCallback();
         this._upgradeProperty('player');
     }
 

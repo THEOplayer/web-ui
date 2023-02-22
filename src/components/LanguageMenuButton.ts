@@ -24,10 +24,6 @@ export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player'
 
     constructor() {
         super({ template });
-    }
-
-    override connectedCallback() {
-        super.connectedCallback();
         this._upgradeProperty('player');
     }
 

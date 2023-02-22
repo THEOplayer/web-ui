@@ -36,21 +36,10 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._radioGroup = shadowRoot.querySelector('theoplayer-radio-group')!;
-    }
-
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
 
         this._upgradeProperty('value');
         this._upgradeProperty('values');
         this._upgradeProperty('player');
-
-        this._updateValues();
-        this.shadowRoot!.addEventListener('change', this._onChange);
-    }
-
-    disconnectedCallback(): void {
-        this.shadowRoot!.removeEventListener('change', this._onChange);
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -59,6 +48,17 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
             delete this[prop];
             this[prop] = value;
         }
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
+
+        this._updateValues();
+        this.shadowRoot!.addEventListener('change', this._onChange);
+    }
+
+    disconnectedCallback(): void {
+        this.shadowRoot!.removeEventListener('change', this._onChange);
     }
 
     /**
