@@ -2,7 +2,8 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { KeyCode } from '../util/KeyCode';
 import { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
-import { arrayFind } from '../util/CommonUtils';
+import { arrayFind, isElement, noOp } from '../util/CommonUtils';
+import './RadioButton';
 
 const radioGroupTemplate = document.createElement('template');
 radioGroupTemplate.innerHTML = `<slot></slot>`;
@@ -53,7 +54,21 @@ export class RadioGroup extends HTMLElement {
     }
 
     private readonly _onSlotChange = () => {
-        this._radioButtons = this._slot.assignedNodes({ flatten: true }).filter(isRadioButton);
+        const children = this._slot.assignedNodes({ flatten: true }).filter(isElement);
+        for (const child of children) {
+            if (!isRadioButton(child)) {
+                // Upgrade custom elements if needed
+                const childName = child.nodeName.toLowerCase();
+                if (childName.indexOf('-') >= 0) {
+                    if (customElements.get(childName)) {
+                        customElements.upgrade(child);
+                    } else {
+                        customElements.whenDefined(childName).then(this._onSlotChange, noOp);
+                    }
+                }
+            }
+        }
+        this._radioButtons = children.filter(isRadioButton);
 
         let firstFocusedButton = this.focusedRadioButton;
         if (!firstFocusedButton) {
