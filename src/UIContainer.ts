@@ -126,6 +126,7 @@ export class UIContainer extends HTMLElement {
     private readonly _bottomChromeSlot: HTMLSlotElement;
 
     private _pointerType: string = '';
+    private _lastPointerUpTime: number = 0;
     private readonly _mutationObserver: MutationObserver;
     private readonly _resizeObserver: ResizeObserver | undefined;
     private readonly _stateReceivers: StateReceiverElement[] = [];
@@ -192,6 +193,11 @@ export class UIContainer extends HTMLElement {
     }
 
     set configuration(playerConfiguration: PlayerConfiguration) {
+        this.removeAttribute(Attribute.CONFIGURATION);
+        this._setConfiguration(playerConfiguration);
+    }
+
+    private _setConfiguration(playerConfiguration: PlayerConfiguration): void {
         this._configuration = playerConfiguration ?? {};
         this.tryInitializePlayer_();
     }
@@ -204,6 +210,11 @@ export class UIContainer extends HTMLElement {
     }
 
     set source(value: SourceDescription | undefined) {
+        this.removeAttribute(Attribute.SOURCE);
+        this._setSource(value);
+    }
+
+    private _setSource(value: SourceDescription | undefined): void {
         if (this._player) {
             this._player.source = value;
         } else {
@@ -260,6 +271,13 @@ export class UIContainer extends HTMLElement {
      */
     get ended(): boolean {
         return this.hasAttribute(Attribute.ENDED);
+    }
+
+    /**
+     * Whether the player is casting to a remote receiver.
+     */
+    get casting(): boolean {
+        return this.hasAttribute(Attribute.CASTING);
     }
 
     /**
@@ -326,6 +344,7 @@ export class UIContainer extends HTMLElement {
         }
         void forEachStateReceiverElement(this, this._playerEl, this.registerStateReceiver_);
         this._mutationObserver.observe(this, { childList: true, subtree: true });
+        this.shadowRoot!.addEventListener('slotchange', this._onSlotChange);
 
         this._resizeObserver?.observe(this);
         this._updateTextTrackMargins();
@@ -397,6 +416,7 @@ export class UIContainer extends HTMLElement {
     disconnectedCallback(): void {
         this._resizeObserver?.disconnect();
         this._mutationObserver.disconnect();
+        this.shadowRoot!.removeEventListener('slotchange', this._onSlotChange);
         for (const receiver of this._stateReceivers) {
             this.removeStateFromReceiver_(receiver);
         }
@@ -412,6 +432,7 @@ export class UIContainer extends HTMLElement {
 
         this.removeEventListener('keyup', this._onKeyUp);
         this.removeEventListener('pointerup', this._onPointerUp);
+        this.removeEventListener('click', this._onClickAfterPointerUp, true);
         this.removeEventListener('pointermove', this._onPointerMove);
         this.removeEventListener('mouseleave', this._onMouseLeave);
 
@@ -427,10 +448,9 @@ export class UIContainer extends HTMLElement {
         }
         const hasValue = newValue != null;
         if (attrName === Attribute.CONFIGURATION) {
-            this.configuration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
-            this.tryInitializePlayer_();
+            this._setConfiguration(newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {});
         } else if (attrName === Attribute.SOURCE) {
-            this.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
+            this._setSource(newValue ? (JSON.parse(newValue) as SourceDescription) : undefined);
         } else if (attrName === Attribute.MUTED) {
             if (this._player) {
                 this._player.muted = hasValue;
@@ -487,6 +507,10 @@ export class UIContainer extends HTMLElement {
                 }
             }
         }
+    };
+
+    private readonly _onSlotChange = (): void => {
+        void forEachStateReceiverElement(this, this._playerEl, this.registerStateReceiver_);
     };
 
     private readonly registerStateReceiver_ = (receiver: StateReceiverElement): void => {
@@ -840,6 +864,11 @@ export class UIContainer extends HTMLElement {
         }
     };
 
+    private isUserIdle_(): boolean {
+        // Must match the auto-hide rule from the CSS
+        return this.hasAttribute(Attribute.USER_IDLE) && !this.paused && !this.casting && !this._menuGroup.hasCurrentMenu();
+    }
+
     private setUserActive_(): void {
         clearTimeout(this._userIdleTimer);
         this.removeAttribute(Attribute.USER_IDLE);
@@ -886,8 +915,22 @@ export class UIContainer extends HTMLElement {
             if (this.isPlayerOrMedia_(event.target! as Node) && !this.hasAttribute(Attribute.USER_IDLE)) {
                 this.setUserIdle_();
             } else {
+                if (this.isUserIdle_()) {
+                    // Ignore the next "click" event, to prevent accidental button clicks
+                    // when the user only intended to show the controls.
+                    this._lastPointerUpTime = performance.now();
+                    this.addEventListener('click', this._onClickAfterPointerUp, true);
+                }
                 this.scheduleUserIdle_();
             }
+        }
+    };
+
+    private readonly _onClickAfterPointerUp = (event: MouseEvent): void => {
+        this.removeEventListener('click', this._onClickAfterPointerUp, true);
+        if (performance.now() - this._lastPointerUpTime < 10) {
+            event.preventDefault();
+            event.stopPropagation();
         }
     };
 

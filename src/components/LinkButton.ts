@@ -51,6 +51,11 @@ export class LinkButton extends HTMLElement {
         this._linkEl.addEventListener('click', this._onClick);
     }
 
+    disconnectedCallback(): void {
+        this._linkEl.removeEventListener('keydown', this._onKeyDown);
+        this._linkEl.removeEventListener('click', this._onClick);
+    }
+
     protected _upgradeProperty(prop: keyof this) {
         if (this.hasOwnProperty(prop)) {
             let value = this[prop];
