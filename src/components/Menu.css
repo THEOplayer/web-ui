@@ -13,12 +13,13 @@
 
 [part='heading'] {
     display: flex;
-    align-self: flex-start;
+    align-self: stretch;
     align-items: center;
     pointer-events: auto;
 }
 
-[part='heading'] > span {
+[part='heading'] > span,
+[part='heading'] ::slotted(span) {
     padding: var(--theoplayer-control-padding, 10px);
     padding-left: 0;
     user-select: none;

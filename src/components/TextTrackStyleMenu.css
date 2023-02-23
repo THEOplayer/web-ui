@@ -1,0 +1,7 @@
+.theoplayer-text-track-style-menu span {
+    flex-grow: 1;
+}
+
+.theoplayer-text-track-style-menu theoplayer-text-track-style-reset-button {
+    align-self: flex-end;
+}
