@@ -93,7 +93,6 @@
 }
 
 [part~='middle'] {
-    display: inline;
     flex-grow: 1;
 }
 

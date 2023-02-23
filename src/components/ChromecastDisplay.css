@@ -1,0 +1,49 @@
+:host {
+    display: flex;
+    box-sizing: border-box;
+    padding: var(--theoplayer-control-padding, 10px);
+    gap: var(--theoplayer-chromecast-display-icon-gap, 10px);
+    pointer-events: none;
+    align-items: center;
+}
+
+:host([hidden]) {
+    display: none !important;
+}
+
+[part~='icon'] {
+    flex: 0 0 auto;
+    font-size: 0; /* fixes weird extra ~1px in height */
+}
+
+svg,
+img,
+::slotted(svg),
+::slotted(img) {
+    width: var(--theoplayer-chromecast-display-icon-width, 48px);
+    height: var(--theoplayer-chromecast-display-icon-height, 48px);
+    fill: var(--theoplayer-chromecast-display-icon-color, var(--theoplayer-icon-color, #fff));
+    vertical-align: middle;
+    max-width: 100%;
+    max-height: 100%;
+    min-width: 100%;
+}
+
+[part='text'] {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+[part='heading'] {
+    margin: var(--theoplayer-chromecast-display-heading-margin, 0);
+    padding: 0;
+    color: var(--theoplayer-chromecast-display-heading-color, #fff);
+    font-size: var(--theoplayer-chromecast-display-heading-font-size, var(--theoplayer-text-font-size, 14px));
+}
+
+[part='receiver'] {
+    margin: var(--theoplayer-chromecast-display-receiver-margin, 0);
+    padding: 0;
+    color: var(--theoplayer-chromecast-display-receiver-color, #fff);
+    font-size: var(--theoplayer-chromecast-display-receiver-font-size, calc(1.25 * var(--theoplayer-text-font-size, 14px)));
+}

@@ -37,6 +37,16 @@ theoplayer-ui {
     --theoplayer-control-height: 48px;
 }
 
+[part='middle-chrome'] {
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    /* Align to bottom for Chromecast display */
+    justify-content: flex-end;
+    flex-grow: 1;
+    pointer-events: none;
+}
+
 [part='bottom-chrome'] {
     position: relative;
     display: flex;
