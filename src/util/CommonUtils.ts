@@ -69,6 +69,12 @@ export function arrayRemoveAt<T>(array: T[], index: number): void {
     array.splice(index, 1);
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
+export const stringStartsWith: (string: string, search: string) => boolean =
+    typeof String.prototype.startsWith === 'function'
+        ? (string, search) => string.startsWith(search)
+        : (string, search) => string.substring(0, search.length) === search;
+
 export const localizeLanguageName: (languageCode: string) => string | undefined =
     typeof Intl !== 'undefined' && Intl.DisplayNames
         ? (languageCode) => {

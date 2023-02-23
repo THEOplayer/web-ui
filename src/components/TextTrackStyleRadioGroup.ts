@@ -7,6 +7,7 @@ import type { RadioButton } from './RadioButton';
 import './RadioGroup';
 import { createEvent } from '../util/EventUtils';
 import { Attribute } from '../util/Attribute';
+import { COLOR_BLACK, COLOR_WHITE, colorWithAlpha, parseColor, RgbaColor, rgbEquals, toRgb, toRgba } from '../util/ColorUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group><slot></slot></theoplayer-radio-group>`;
@@ -15,9 +16,12 @@ shadyCss.prepareTemplate(template, 'theoplayer-text-track-style-radio-group');
 export interface TextTrackStyleMap {
     fontFamily: string | undefined;
     fontColor: string | undefined;
+    fontOpacity: number | undefined;
     fontSize: string | undefined;
     backgroundColor: string | undefined;
+    backgroundOpacity: number | undefined;
     windowColor: string | undefined;
+    windowOpacity: number | undefined;
     edgeStyle: EdgeStyle | undefined;
 }
 
@@ -90,13 +94,13 @@ export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['
     }
 
     /**
-     * The currently chosen playback rate.
+     * The currently chosen value for the text track style option.
      */
-    get value(): TextTrackStyleMap[TextTrackStyleOption] {
+    get value(): string {
         return this._value;
     }
 
-    set value(value: TextTrackStyleMap[TextTrackStyleOption]) {
+    set value(value: string) {
         if (this._value === value) {
             return;
         }
@@ -139,14 +143,80 @@ export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['
     };
 
     private readonly _updateFromPlayer = (): void => {
-        if (this._player !== undefined) {
-            this.value = this._player.textTrackStyle[this.property];
+        if (this._player === undefined) {
+            return;
+        }
+        switch (this.property) {
+            case 'fontColor': {
+                const color = this._player.textTrackStyle.fontColor;
+                this.value = color ? toRgb(parseColor(color) ?? COLOR_WHITE) : '';
+                break;
+            }
+            case 'backgroundColor': {
+                const color = this._player.textTrackStyle.backgroundColor;
+                this.value = color ? toRgb(parseColor(color) ?? COLOR_BLACK) : '';
+                break;
+            }
+            case 'windowColor': {
+                const color = this._player.textTrackStyle.windowColor;
+                this.value = color ? toRgb(parseColor(color) ?? COLOR_BLACK) : '';
+                break;
+            }
+            case 'fontOpacity': {
+                const color = this._player.textTrackStyle.fontColor;
+                this.value = color ? String((parseColor(color)?.a_ ?? 1) * 100) : '';
+                break;
+            }
+            case 'backgroundOpacity': {
+                const color = this._player.textTrackStyle.backgroundColor;
+                this.value = color ? String((parseColor(color)?.a_ ?? 1) * 100) : '';
+                break;
+            }
+            case 'windowOpacity': {
+                const color = this._player.textTrackStyle.windowColor;
+                this.value = color ? String((parseColor(color)?.a_ ?? 1) * 100) : '';
+                break;
+            }
+            default: {
+                this.value = this._player.textTrackStyle[this.property] ?? '';
+                break;
+            }
         }
     };
 
     private _updateToPlayer(): void {
-        if (this._player !== undefined) {
-            this._player.textTrackStyle[this.property] = this.value as any;
+        if (this._player === undefined) {
+            return;
+        }
+        switch (this.property) {
+            case 'fontColor': {
+                this._player.textTrackStyle.fontColor = updateColor(this.value, this._player.textTrackStyle.fontColor, COLOR_WHITE);
+                break;
+            }
+            case 'backgroundColor': {
+                this._player.textTrackStyle.backgroundColor = updateColor(this.value, this._player.textTrackStyle.backgroundColor, COLOR_BLACK);
+                break;
+            }
+            case 'windowColor': {
+                this._player.textTrackStyle.windowColor = updateColor(this.value, this._player.textTrackStyle.windowColor, COLOR_BLACK);
+                break;
+            }
+            case 'fontOpacity': {
+                this._player.textTrackStyle.fontColor = updateOpacity(this.value, this._player.textTrackStyle.fontColor, COLOR_WHITE);
+                break;
+            }
+            case 'backgroundOpacity': {
+                this._player.textTrackStyle.backgroundColor = updateOpacity(this.value, this._player.textTrackStyle.backgroundColor, COLOR_BLACK);
+                break;
+            }
+            case 'windowOpacity': {
+                this._player.textTrackStyle.windowColor = updateOpacity(this.value, this._player.textTrackStyle.windowColor, COLOR_BLACK);
+                break;
+            }
+            default: {
+                this._player.textTrackStyle[this.property] = this.value as any;
+                break;
+            }
         }
     }
 
@@ -160,6 +230,26 @@ export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['
         if (TextTrackStyleRadioGroup.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
         }
+    }
+}
+
+function updateColor(colorValue: string, previousColor: string | undefined, defaultColor: RgbaColor): string | undefined {
+    const alpha = parseColor(previousColor)?.a_ ?? 1;
+    if (colorValue === '' && alpha === 1) {
+        return undefined;
+    } else {
+        const color = parseColor(colorValue) ?? defaultColor;
+        return toRgba(colorWithAlpha(color, alpha));
+    }
+}
+
+function updateOpacity(opacityValue: string, colorValue: string | undefined, defaultColor: RgbaColor): string | undefined {
+    const color = parseColor(colorValue) ?? defaultColor;
+    if (opacityValue === '' && rgbEquals(color, defaultColor)) {
+        return undefined;
+    } else {
+        const alpha = opacityValue == '' ? 1 : Number(opacityValue) / 100;
+        return toRgba(colorWithAlpha(color, alpha));
     }
 }
 
