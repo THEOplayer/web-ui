@@ -30,16 +30,8 @@ export class ChromecastDisplay extends StateReceiverMixin(HTMLElement, ['player'
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
         this._receiverNameEl = shadowRoot.querySelector('[part="receiver"]')!;
-    }
 
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
         this._upgradeProperty('player');
-
-        if (!this.hasAttribute(Attribute.HIDDEN)) {
-            this.setAttribute(Attribute.HIDDEN, '');
-        }
-        this._updateFromPlayer();
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -48,6 +40,14 @@ export class ChromecastDisplay extends StateReceiverMixin(HTMLElement, ['player'
             delete this[prop];
             this[prop] = value;
         }
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
+        if (!this.hasAttribute(Attribute.HIDDEN)) {
+            this.setAttribute(Attribute.HIDDEN, '');
+        }
+        this._updateFromPlayer();
     }
 
     get player(): ChromelessPlayer | undefined {

@@ -37,10 +37,7 @@ export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error', 'ful
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._messageSlot = shadowRoot.querySelector('slot[name="message"]')!;
-    }
 
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
         this._upgradeProperty('error');
     }
 
@@ -50,6 +47,10 @@ export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error', 'ful
             delete this[prop];
             this[prop] = value;
         }
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
     }
 
     /**

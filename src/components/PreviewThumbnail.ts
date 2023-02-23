@@ -40,10 +40,7 @@ export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player',
 
         this._thumbnailImageSource = document.createElement('img');
         this._thumbnailImageSource.decoding = 'async';
-    }
 
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
         this._upgradeProperty('previewTime');
         this._upgradeProperty('player');
     }
@@ -54,6 +51,10 @@ export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player',
             delete this[prop];
             this[prop] = value;
         }
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
     }
 
     get player(): ChromelessPlayer | undefined {

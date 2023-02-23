@@ -97,6 +97,22 @@ export class DefaultUI extends HTMLElement {
         this._titleSlot.addEventListener('slotchange', this._onTitleSlotChange);
 
         this._timeRange = shadowRoot.querySelector('theoplayer-time-range')!;
+
+        this._upgradeProperty('configuration');
+        this._upgradeProperty('source');
+        this._upgradeProperty('muted');
+        this._upgradeProperty('autoplay');
+        this._upgradeProperty('streamType');
+        this._upgradeProperty('userIdleTimeout');
+        this._upgradeProperty('dvrThreshold');
+    }
+
+    private _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
     }
 
     /**
@@ -197,14 +213,6 @@ export class DefaultUI extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
-        this._upgradeProperty('configuration');
-        this._upgradeProperty('source');
-        this._upgradeProperty('muted');
-        this._upgradeProperty('autoplay');
-        this._upgradeProperty('streamType');
-        this._upgradeProperty('userIdleTimeout');
-        this._upgradeProperty('dvrThreshold');
-
         if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
             this.setAttribute(Attribute.MOBILE, '');
         }
@@ -216,14 +224,6 @@ export class DefaultUI extends HTMLElement {
         }
 
         this._onTitleSlotChange();
-    }
-
-    private _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
     }
 
     disconnectedCallback(): void {

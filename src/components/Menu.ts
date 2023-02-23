@@ -55,6 +55,14 @@ export class Menu extends HTMLElement {
         this._contentEl = shadowRoot.querySelector('[part="content"]')!;
     }
 
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
+    }
+
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
@@ -67,14 +75,6 @@ export class Menu extends HTMLElement {
 
     disconnectedCallback(): void {
         this._contentEl.removeEventListener('input', this._onContentInput);
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
     }
 
     /**

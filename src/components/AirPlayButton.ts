@@ -18,10 +18,6 @@ export class AirPlayButton extends StateReceiverMixin(CastButton, ['player']) {
 
     constructor() {
         super({ template });
-    }
-
-    connectedCallback() {
-        super.connectedCallback();
         this._upgradeProperty('player');
     }
 

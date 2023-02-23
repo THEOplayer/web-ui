@@ -27,10 +27,6 @@ export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen'])
 
     constructor() {
         super({ template });
-    }
-
-    connectedCallback(): void {
-        super.connectedCallback();
         this._upgradeProperty('fullscreen');
     }
 

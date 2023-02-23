@@ -34,11 +34,12 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
         super({ template });
         this._countdownEl = this.shadowRoot!.querySelector('[part="countdown"]')!;
         this._skipEl = this.shadowRoot!.querySelector('[part="skip"]')!;
+
+        this._upgradeProperty('player');
     }
 
     override connectedCallback(): void {
         super.connectedCallback();
-        this._upgradeProperty('player');
         this._update();
     }
 

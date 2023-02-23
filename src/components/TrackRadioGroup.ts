@@ -43,14 +43,22 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._radioGroup = shadowRoot.querySelector('theoplayer-radio-group')!;
-    }
-
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
 
         this._upgradeProperty('trackType');
         this._upgradeProperty('showOffButton');
         this._upgradeProperty('player');
+    }
+
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
 
         this._updateOffButton();
         this._updateTracks();
@@ -60,14 +68,6 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
 
     disconnectedCallback(): void {
         this.shadowRoot!.removeEventListener('change', this._onChange);
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
     }
 
     /**

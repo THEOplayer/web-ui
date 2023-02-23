@@ -25,10 +25,6 @@ export class QualityRadioButton extends RadioButton {
     constructor() {
         super({ template });
         this._slotEl = this.shadowRoot!.querySelector('slot')!;
-    }
-
-    override connectedCallback(): void {
-        super.connectedCallback();
 
         this._upgradeProperty('track');
         this._upgradeProperty('quality');

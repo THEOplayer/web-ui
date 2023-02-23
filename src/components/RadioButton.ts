@@ -22,11 +22,10 @@ export class RadioButton extends Button {
 
     constructor(options?: ButtonOptions) {
         super({ template: defaultTemplate, ...options });
+        this._upgradeProperty('checked');
     }
 
     override connectedCallback() {
-        this._upgradeProperty('checked');
-
         if (!this.hasAttribute('role')) {
             this.setAttribute('role', 'radio');
         }

@@ -20,12 +20,8 @@ export class AdCountdown extends StateReceiverMixin(HTMLElement, ['player']) {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
         this._spanEl = shadowRoot.querySelector('span')!;
-    }
 
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
         this._upgradeProperty('player');
-        this._update();
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -34,6 +30,11 @@ export class AdCountdown extends StateReceiverMixin(HTMLElement, ['player']) {
             delete this[prop];
             this[prop] = value;
         }
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
+        this._update();
     }
 
     get player(): ChromelessPlayer | undefined {

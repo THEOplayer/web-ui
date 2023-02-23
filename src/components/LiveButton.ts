@@ -37,10 +37,7 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
 
     constructor() {
         super({ template });
-    }
 
-    override connectedCallback(): void {
-        super.connectedCallback();
         this._upgradeProperty('paused');
         this._upgradeProperty('streamType');
         this._upgradeProperty('liveThreshold');

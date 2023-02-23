@@ -20,12 +20,12 @@ export class MenuButton extends Button {
 
     constructor(options?: Partial<ButtonOptions>) {
         super({ template, ...options });
+
+        this._upgradeProperty('menu');
     }
 
     override connectedCallback() {
         super.connectedCallback();
-
-        this._upgradeProperty('menu');
 
         if (!this.hasAttribute('aria-haspopup')) {
             this.setAttribute('aria-haspopup', 'true');

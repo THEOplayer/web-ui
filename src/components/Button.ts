@@ -41,6 +41,16 @@ export class Button extends HTMLElement {
         const template = options?.template ?? defaultTemplate;
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
+
+        this._upgradeProperty('disabled');
+    }
+
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
     }
 
     connectedCallback(): void {
@@ -53,8 +63,6 @@ export class Button extends HTMLElement {
             this.setAttribute('tabindex', '0');
         }
 
-        this._upgradeProperty('disabled');
-
         this.addEventListener('keydown', this._onKeyDown);
         this.addEventListener('click', this._onClick);
     }
@@ -62,14 +70,6 @@ export class Button extends HTMLElement {
     disconnectedCallback(): void {
         this.removeEventListener('keydown', this._onKeyDown);
         this.removeEventListener('click', this._onClick);
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
     }
 
     /**
