@@ -214,7 +214,7 @@ export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['
                 break;
             }
             default: {
-                this._player.textTrackStyle[this.property] = this.value as any;
+                this._player.textTrackStyle[this.property] = this.value == '' ? undefined : (this.value as any);
                 break;
             }
         }
