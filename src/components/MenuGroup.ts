@@ -261,25 +261,20 @@ export class MenuGroup extends HTMLElement {
             ...fromArrayLike(this.shadowRoot!.children),
             ...(this._menuSlot ? this._menuSlot.assignedNodes({ flatten: true }).filter(isElement) : [])
         ];
-        let newMenus: MenuOrMenuGroup[] = [];
         for (const child of children) {
-            if (isMenuElement(child)) {
-                newMenus.push(child);
-            } else {
+            if (!isMenuElement(child)) {
                 // Upgrade custom elements if needed
                 const childName = child.nodeName.toLowerCase();
                 if (childName.indexOf('-') >= 0) {
                     if (customElements.get(childName)) {
                         customElements.upgrade(child);
-                        if (isMenuElement(child)) {
-                            newMenus.push(child);
-                        }
                     } else {
                         customElements.whenDefined(childName).then(this._onMenuListChange, noOp);
                     }
                 }
             }
         }
+        const newMenus: MenuOrMenuGroup[] = children.filter(isMenuElement);
         // Close all removed menus
         for (const oldMenu of this._menus) {
             if (newMenus.indexOf(oldMenu) < 0) {

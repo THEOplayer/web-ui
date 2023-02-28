@@ -15,7 +15,7 @@ shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-radio-button');
  */
 export class RadioButton extends Button {
     static get observedAttributes() {
-        return [...Button.observedAttributes, Attribute.ARIA_CHECKED];
+        return [...Button.observedAttributes, Attribute.ARIA_CHECKED, Attribute.VALUE];
     }
 
     private _value: any = undefined;
@@ -65,8 +65,13 @@ export class RadioButton extends Button {
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (attrName === Attribute.ARIA_CHECKED && oldValue !== newValue) {
+        if (newValue === oldValue) {
+            return;
+        }
+        if (attrName === Attribute.ARIA_CHECKED) {
             this.dispatchEvent(createEvent('change', { bubbles: true }));
+        } else if (attrName === Attribute.VALUE) {
+            this.value = newValue;
         }
         if (RadioButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);

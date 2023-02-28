@@ -1,8 +1,9 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { KeyCode } from '../util/KeyCode';
-import { Attribute } from '../util/Attribute';
-import type { RadioButton } from './RadioButton';
+import { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
+import { arrayFind, isElement, noOp } from '../util/CommonUtils';
+import './RadioButton';
 
 const radioGroupTemplate = document.createElement('template');
 radioGroupTemplate.innerHTML = `<slot></slot>`;
@@ -23,7 +24,7 @@ shadyCss.prepareTemplate(radioGroupTemplate, 'theoplayer-radio-group');
 // https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-radio-group/howto-radio-group.js
 export class RadioGroup extends HTMLElement {
     private _slot: HTMLSlotElement;
-    private _lastCheckedRadioButton: RadioButton | null = null;
+    private _radioButtons: RadioButton[] = [];
 
     constructor() {
         super();
@@ -53,6 +54,22 @@ export class RadioGroup extends HTMLElement {
     }
 
     private readonly _onSlotChange = () => {
+        const children = this._slot.assignedNodes({ flatten: true }).filter(isElement);
+        for (const child of children) {
+            if (!isRadioButton(child)) {
+                // Upgrade custom elements if needed
+                const childName = child.nodeName.toLowerCase();
+                if (childName.indexOf('-') >= 0) {
+                    if (customElements.get(childName)) {
+                        customElements.upgrade(child);
+                    } else {
+                        customElements.whenDefined(childName).then(this._onSlotChange, noOp);
+                    }
+                }
+            }
+        }
+        this._radioButtons = children.filter(isRadioButton);
+
         let firstFocusedButton = this.focusedRadioButton;
         if (!firstFocusedButton) {
             this.firstRadioButton?.setAttribute('tabindex', '0');
@@ -90,44 +107,38 @@ export class RadioGroup extends HTMLElement {
     };
 
     get focusedRadioButton(): RadioButton | null {
-        return this.querySelector('[role="radio"][tabindex="0"]');
+        return arrayFind(this._radioButtons, (button) => button.tabIndex === 0) ?? null;
     }
 
     get checkedRadioButton(): RadioButton | null {
-        return this.querySelector(`[role="radio"][${Attribute.ARIA_CHECKED}="true"]`);
+        return arrayFind(this._radioButtons, (button) => button.checked) ?? null;
     }
 
     get firstRadioButton(): RadioButton | null {
-        return this.querySelector('[role="radio"]');
+        return this._radioButtons[0] ?? null;
     }
 
     get lastRadioButton(): RadioButton | null {
-        const radioButtons = this.allRadioButtons();
+        const radioButtons = this._radioButtons;
         return radioButtons.length > 0 ? radioButtons[radioButtons.length - 1] : null;
     }
 
-    allRadioButtons(): NodeListOf<RadioButton> {
-        return this.querySelectorAll('[role="radio"]');
+    allRadioButtons(): readonly RadioButton[] {
+        return this._radioButtons;
     }
 
     private _prevRadioButton(node: RadioButton): RadioButton | null {
-        let prev = node.previousElementSibling as RadioButton | null;
-        while (prev) {
-            if (isRadioButton(prev)) {
-                return prev;
-            }
-            prev = prev.previousElementSibling as RadioButton | null;
+        const index = this._radioButtons.indexOf(node);
+        if (index > 0) {
+            return this._radioButtons[index - 1];
         }
         return null;
     }
 
     private _nextRadioButton(node: RadioButton): RadioButton | null {
-        let next = node.nextElementSibling as RadioButton | null;
-        while (next) {
-            if (isRadioButton(next)) {
-                return next;
-            }
-            next = next.nextElementSibling as RadioButton | null;
+        const index = this._radioButtons.indexOf(node);
+        if (index >= 0 && index < this._radioButtons.length - 1) {
+            return this._radioButtons[index + 1];
         }
         return null;
     }
@@ -165,17 +176,13 @@ export class RadioGroup extends HTMLElement {
     }
 
     private _unfocusAll(): void {
-        const radioButtons = this.allRadioButtons();
-        for (let i = 0; i < radioButtons.length; i++) {
-            const btn = radioButtons[i];
-            btn.tabIndex = -1;
+        for (const button of this.allRadioButtons()) {
+            button.tabIndex = -1;
         }
     }
 
     setCheckedRadioButton(checkedButton: RadioButton | null): void {
-        const radioButtons = this.allRadioButtons();
-        for (let i = 0; i < radioButtons.length; i++) {
-            const button = radioButtons[i];
+        for (const button of this.allRadioButtons()) {
             button.checked = button === checkedButton;
         }
         this.dispatchEvent(createEvent('change', { bubbles: true }));
@@ -191,6 +198,6 @@ export class RadioGroup extends HTMLElement {
 
 customElements.define('theoplayer-radio-group', RadioGroup);
 
-function isRadioButton(node: Element): boolean {
-    return node.getAttribute('role') === 'radio';
+function isRadioButton(node: Node): node is RadioButton {
+    return node instanceof RadioButton;
 }
