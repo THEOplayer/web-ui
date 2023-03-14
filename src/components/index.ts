@@ -24,6 +24,7 @@ export * from './QualityRadioButton';
 export * from './QualityRadioGroup';
 export * from './TextTrackStyleRadioGroup';
 export * from './TextTrackStyleResetButton';
+export * from './TextTrackStyleDisplay';
 export * from './TextTrackStyleMenu';
 export * from './SettingsMenu';
 export * from './SettingsMenuButton';

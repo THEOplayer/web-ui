@@ -4,6 +4,7 @@ import textTrackStyleMenuHtml from './TextTrackStyleMenu.html';
 import textTrackStyleMenuCss from './TextTrackStyleMenu.css';
 import menuTableCss from './MenuTable.css';
 import type { TextTrackStyle } from 'theoplayer';
+import './TextTrackStyleDisplay';
 import './TextTrackStyleRadioGroup';
 
 const template = document.createElement('template');
