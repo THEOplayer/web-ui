@@ -3,6 +3,7 @@ export * from './Button';
 export * from './LinkButton';
 export * from './PlayButton';
 export * from './MuteButton';
+export * from './SeekButton';
 export * from './TimeDisplay';
 export * from './DurationDisplay';
 export * from './RadioGroup';

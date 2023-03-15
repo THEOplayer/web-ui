@@ -1,0 +1,18 @@
+:host {
+    position: relative;
+}
+
+/* Flip icon when seek offset is negative */
+:host([seek-offset^='-']) [part='icon'] {
+    transform: scaleX(-1);
+}
+
+/* Position seek offset in the center of the icon */
+[part='offset'] {
+    position: absolute;
+    left: 50%;
+    top: 52.5%;
+    transform: translate(-50%, -50%);
+    font-size: var(--theoplayer-seek-button-font-size, calc(0.3 * var(--theoplayer-button-icon-height, var(--theoplayer-control-height, 24px))));
+    color: var(--theoplayer-icon-color, #fff);
+}

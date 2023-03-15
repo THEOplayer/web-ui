@@ -27,6 +27,7 @@ export enum Attribute {
     REMAINING = 'remaining',
     REMAINING_WHEN_LIVE = 'remaining-when-live',
     SHOW_DURATION = 'show-duration',
+    SEEK_OFFSET = 'seek-offset',
     MENU = 'menu',
     MENU_OPENED = 'menu-opened',
     MENU_CLOSE_ON_INPUT = 'menu-close-on-input',
