@@ -1,10 +1,9 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import type { RadioGroup } from './RadioGroup';
+import { RadioGroup } from './RadioGroup';
 import verticalRadioGroupCss from './VerticalRadioGroup.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer';
 import type { RadioButton } from './RadioButton';
-import './RadioGroup';
 import { createEvent } from '../util/EventUtils';
 
 const template = document.createElement('template');
@@ -46,6 +45,10 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+
+        if (!(this._radioGroup instanceof RadioGroup)) {
+            customElements.upgrade(this._radioGroup);
+        }
 
         this._updateChecked();
         this.shadowRoot!.addEventListener('change', this._onChange);

@@ -1,5 +1,5 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import type { RadioGroup } from './RadioGroup';
+import { RadioGroup } from './RadioGroup';
 import verticalRadioGroupCss from './VerticalRadioGroup.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer';
@@ -9,7 +9,6 @@ import { TextTrackRadioButton } from './TextTrackRadioButton';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { TextTrackOffRadioButton } from './TextTrackOffRadioButton';
 import { fromArrayLike } from '../util/CommonUtils';
-import './RadioGroup';
 import { createEvent } from '../util/EventUtils';
 
 const template = document.createElement('template');
@@ -59,6 +58,10 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+
+        if (!(this._radioGroup instanceof RadioGroup)) {
+            customElements.upgrade(this._radioGroup);
+        }
 
         this._updateOffButton();
         this._updateTracks();
