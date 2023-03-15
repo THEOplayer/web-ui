@@ -12,7 +12,7 @@ export interface MenuOptions {
 export function menuTemplate(heading: string, content: string, extraCss: string = ''): string {
     return (
         `<style>${menuCss}${extraCss}</style>` +
-        `<div part="heading"><theoplayer-menu-close-button></theoplayer-menu-close-button><span>${heading}</span></div>` +
+        `<div part="heading"><theoplayer-menu-close-button></theoplayer-menu-close-button>${heading}</div>` +
         `<div part="content">${content}</div>`
     );
 }

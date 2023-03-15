@@ -1,0 +1,17 @@
+/* autoprefixer grid: autoplace */
+.theoplayer-menu-table {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    grid-template-rows: auto auto;
+}
+
+.theoplayer-menu-table > * {
+    align-self: center;
+    font-size: var(--theoplayer-text-font-size, 14px);
+    line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
+    padding: var(--theoplayer-control-padding, 10px);
+}
+
+.theoplayer-menu-table > span {
+    display: block;
+}

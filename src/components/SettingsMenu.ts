@@ -1,12 +1,12 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { MenuGroup, menuGroupTemplate } from './MenuGroup';
 import settingsMenuHtml from './SettingsMenu.html';
-import settingsMenuCss from './SettingsMenu.css';
+import menuTableCss from './MenuTable.css';
 import './ActiveQualityMenuButton';
 import './PlaybackRateMenuButton';
 
 const template = document.createElement('template');
-template.innerHTML = menuGroupTemplate(settingsMenuHtml, settingsMenuCss);
+template.innerHTML = menuGroupTemplate(settingsMenuHtml, menuTableCss);
 shadyCss.prepareTemplate(template, 'theoplayer-settings-menu');
 
 /**

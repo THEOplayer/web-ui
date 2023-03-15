@@ -511,6 +511,7 @@ export class UIContainer extends HTMLElement {
 
     private readonly _onSlotChange = (): void => {
         void forEachStateReceiverElement(this, this._playerEl, this.registerStateReceiver_);
+        this._updateTextTrackMargins();
     };
 
     private readonly registerStateReceiver_ = (receiver: StateReceiverElement): void => {
@@ -734,8 +735,8 @@ export class UIContainer extends HTMLElement {
     };
 
     private readonly _onPlay = (): void => {
-        this.removeAttribute(Attribute.PAUSED);
         this.setAttribute(Attribute.HAS_FIRST_PLAY, '');
+        this.removeAttribute(Attribute.PAUSED);
         this._updateEnded();
     };
 
