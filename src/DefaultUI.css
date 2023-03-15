@@ -58,7 +58,7 @@ theoplayer-ui {
  * On mobile, put a backdrop color on the entire player when showing controls.
  */
 :host([mobile]) theoplayer-ui {
-    --theoplayer-control-backdrop-background-color: rgba(0, 0, 0, 0.5);
+    --theoplayer-control-backdrop-background: rgba(0, 0, 0, 0.5);
 }
 
 /*
