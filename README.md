@@ -10,6 +10,10 @@ the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 > **Warning**
 > This project is experimental, and breaking changes can happen frequently. As such, it is not yet recommended for use in production. We are aiming for a first stable release soon, so feedback is welcome!
 
+| ![Screenshot on desktop](./docs/assets/screenshot-desktop.png) | ![Screenshot on mobile](./docs/assets/screenshot-mobile.png) |
+|:--------------------------------------------------------------:|:------------------------------------------------------------:|
+|                            Desktop                             |                            Mobile                            |
+
 ## Motivation
 
 The current THEOplayer Web SDK comes with a built-in UI based on [video.js](https://github.com/videojs/video.js) through [the `Player` constructor](https://docs.theoplayer.com/api-reference/web/theoplayer.player.md). This new UI aims to solve some limitations from the old approach:
