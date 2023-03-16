@@ -17,6 +17,8 @@ template.innerHTML = buttonTemplate(
 );
 shadyCss.prepareTemplate(template, 'theoplayer-play-button');
 
+const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied'] as const;
+
 /**
  * A button that toggles whether the player is playing or paused.
  *
@@ -77,14 +79,14 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
         if (this._player !== undefined) {
             this._player.removeEventListener('play', this._onPlay);
             this._player.removeEventListener('pause', this._onPause);
-            this._player.removeEventListener(['ended', 'emptied'], this._updateFromPlayer);
+            this._player.removeEventListener(PLAYER_EVENTS, this._updateFromPlayer);
         }
         this._player = player;
         this._updateFromPlayer();
         if (this._player !== undefined) {
             this._player.addEventListener('play', this._onPlay);
             this._player.addEventListener('pause', this._onPause);
-            this._player.addEventListener(['ended', 'emptied'], this._updateFromPlayer);
+            this._player.addEventListener(PLAYER_EVENTS, this._updateFromPlayer);
         }
     }
 
