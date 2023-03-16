@@ -1,11 +1,10 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import type { RadioGroup } from './RadioGroup';
+import { RadioGroup } from './RadioGroup';
 import verticalRadioGroupCss from './VerticalRadioGroup.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, Quality, VideoQuality } from 'theoplayer';
 import { arrayFind, fromArrayLike } from '../util/CommonUtils';
 import { QualityRadioButton } from './QualityRadioButton';
-import './RadioGroup';
 import { createEvent } from '../util/EventUtils';
 
 const template = document.createElement('template');
@@ -42,6 +41,11 @@ export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player'
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+
+        if (!(this._radioGroup instanceof RadioGroup)) {
+            customElements.upgrade(this._radioGroup);
+        }
+
         this._updateTrack();
         this.shadowRoot!.addEventListener('change', this._onChange);
     }

@@ -1,10 +1,9 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import type { RadioGroup } from './RadioGroup';
+import { RadioGroup } from './RadioGroup';
 import verticalRadioGroupCss from './VerticalRadioGroup.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, EdgeStyle } from 'theoplayer';
 import type { RadioButton } from './RadioButton';
-import './RadioGroup';
 import { createEvent } from '../util/EventUtils';
 import { Attribute } from '../util/Attribute';
 import { COLOR_BLACK, COLOR_WHITE, colorWithAlpha, parseColor, RgbaColor, rgbEquals, toRgb, toRgba } from '../util/ColorUtils';
@@ -55,6 +54,10 @@ export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+
+        if (!(this._radioGroup instanceof RadioGroup)) {
+            customElements.upgrade(this._radioGroup);
+        }
 
         this._upgradeProperty('property');
         this._upgradeProperty('value');

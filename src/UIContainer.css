@@ -5,7 +5,7 @@
     min-width: 300px;
     height: 0;
     padding-bottom: 56.25%;
-    background-color: var(--theoplayer-background-color, #000);
+    background: var(--theoplayer-background, #000);
 }
 
 :host([hidden]) {
@@ -96,8 +96,12 @@
     flex-grow: 1;
 }
 
-[part~='vertical-layer'] {
-    background-color: var(--theoplayer-control-backdrop-background-color, transparent);
+[part~='vertical-layer']::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--theoplayer-control-backdrop-background, transparent);
+    pointer-events: none;
 }
 
 :host(:not([mobile])) [part~='menu-layer'] {
@@ -109,7 +113,7 @@
 [part='menu'] {
     display: flex;
     justify-self: stretch;
-    background-color: var(--theoplayer-menu-backdrop-background-color, rgba(0, 0, 0, 0.5));
+    background: var(--theoplayer-menu-backdrop-background, rgba(0, 0, 0, 0.5));
 }
 
 [part='menu'] ::slotted(*) {
@@ -145,7 +149,7 @@
 [part~='error-layer'] {
     align-items: center;
     justify-content: center;
-    background-color: var(--theoplayer-error-background-color, rgba(0, 0, 0, 0.5));
+    background: var(--theoplayer-error-background, rgba(0, 0, 0, 0.5));
 }
 
 :host(:not([has-error])) [part~='error-layer'],
@@ -201,9 +205,9 @@ theoplayer-gesture-receiver {
 }
 
 /*
- * Hide control background color when user is idle
+ * Hide control background when user is idle
  */
-:host([user-idle]:not([paused]):not([casting]):not([menu-opened])) [part~='vertical-layer'] {
-    background-color: transparent;
-    transition: background-color 1s;
+:host([user-idle]:not([paused]):not([casting]):not([menu-opened])) [part~='vertical-layer']::before {
+    opacity: 0;
+    transition: opacity 1s;
 }
