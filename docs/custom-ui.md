@@ -2,7 +2,7 @@
 
 Although the default UI was designed to support a variety of usage scenarios, you may still run into a case that it doesn't handle very well. Perhaps you want to move some buttons around, or add like and dislike buttons to the control bar, or perhaps integrate a text chat component inside your player. In these situations, you may want to build a custom player UI to create a truly unique experience for your viewers.
 
-In this guide, you will build a custom player from scratch, starting from a basic player and gradually adding more features. Finally, we will look at some more complete examples of custom players, which you can use as reference for your own UI.  
+In this guide, you will build a custom player from scratch, starting from a basic player and gradually adding more features. Finally, we will look at some more complete examples of custom players, which you can use as reference for your own UI.
 
 ## A basic player
 
@@ -104,7 +104,7 @@ theoplayer-ui:not([mobile]) [mobile-only] {
 > Due to limitations of the `::slotted()` CSS selector, `<theoplayer-ui>`'s own CSS rules can only affect _directly_ slotted elements. Descendant elements of a slotted element, such as a `<theoplayer-play-button mobile-hidden>` inside of a slotted `<theoplayer-control-bar>` cannot be targeted by such selectors.
 
 | ![Screenshot on desktop](./assets/custom-ui-desktop.png) | ![Screenshot on mobile](./assets/custom-ui-mobile.png) |
-|:--------------------------------------------------------:|:------------------------------------------------------:|
+| :------------------------------------------------------: | :----------------------------------------------------: |
 |                         Desktop                          |                         Mobile                         |
 
 ## More examples
