@@ -17,14 +17,16 @@
     "dist/"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "npm run build:prod",
+    "build:debug": "rollup -c",
     "build:prod": "rollup -c --environment BUILD:production",
     "watch": "rollup -c --watch",
     "start": "serve .",
     "format": "prettier --write .",
     "test": "npm run test:format && npm run test:typecheck",
     "test:format": "prettier --check .",
-    "test:typecheck": "tsc --project . --noEmit"
+    "test:typecheck": "tsc --project . --noEmit",
+    "prepare": "npm run build:prod"
   },
   "keywords": [],
   "author": "THEO Technologies",
