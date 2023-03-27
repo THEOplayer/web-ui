@@ -11,7 +11,7 @@ the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 > This project is experimental, and breaking changes can happen frequently. As such, it is not yet recommended for use in production. We are aiming for a first stable release soon, so feedback is welcome!
 
 | ![Screenshot on desktop](./docs/assets/screenshot-desktop.png) | ![Screenshot on mobile](./docs/assets/screenshot-mobile.png) |
-|:--------------------------------------------------------------:|:------------------------------------------------------------:|
+| :------------------------------------------------------------: | :----------------------------------------------------------: |
 |                            Desktop                             |                            Mobile                            |
 
 ## Motivation
