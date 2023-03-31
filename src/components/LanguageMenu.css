@@ -1,3 +1,11 @@
+.theoplayer-menu-heading {
+    flex-grow: 1;
+}
+
+.theoplayer-menu-heading-button {
+    align-self: flex-end;
+}
+
 [part='audio'],
 [part='subtitles'],
 theoplayer-track-radio-group {
