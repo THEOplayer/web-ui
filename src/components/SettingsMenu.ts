@@ -4,6 +4,7 @@ import settingsMenuHtml from './SettingsMenu.html';
 import menuTableCss from './MenuTable.css';
 import './ActiveQualityMenuButton';
 import './PlaybackRateMenuButton';
+import './PlaybackRateMenu';
 
 const template = document.createElement('template');
 template.innerHTML = menuGroupTemplate(settingsMenuHtml, menuTableCss);

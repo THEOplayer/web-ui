@@ -20,6 +20,7 @@ export * from './LanguageMenu';
 export * from './LanguageMenuButton';
 export * from './PlaybackRateRadioGroup';
 export * from './PlaybackRateMenuButton';
+export * from './PlaybackRateMenu';
 export * from './ActiveQualityMenuButton';
 export * from './QualityRadioButton';
 export * from './QualityRadioGroup';
