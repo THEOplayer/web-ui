@@ -22,7 +22,7 @@ const defaultTemplate = document.createElement('template');
 defaultTemplate.innerHTML = menuGroupTemplate(`<slot></slot>`);
 shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu-group');
 
-type MenuOrMenuGroup = Menu | MenuGroup;
+export type MenuOrMenuGroup = Menu | MenuGroup;
 
 interface OpenMenuEntry {
     menu: MenuOrMenuGroup;
