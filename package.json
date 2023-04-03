@@ -26,7 +26,7 @@
     "test": "npm run test:format && npm run test:typecheck",
     "test:format": "prettier --check .",
     "test:typecheck": "tsc --project . --noEmit",
-    "docs": "typedoc",
+    "docs": "typedoc --treatWarningsAsErrors",
     "prepare": "npm run build:prod"
   },
   "keywords": [],
