@@ -21,8 +21,8 @@
 title: THEOplayer Web UI
 description: >- # this means to ignore newlines until "baseurl:"
   UI component library for the THEOplayer Web SDK
-baseurl: '' # the subpath of your site, e.g. /blog
-url: '' # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: /web-ui # the subpath of your site, e.g. /blog
+url: https://theoplayer.github.io # the base hostname & protocol for your site, e.g. http://example.com
 github_username: THEOplayer
 
 # Build settings
