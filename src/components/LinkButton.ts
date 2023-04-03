@@ -16,7 +16,7 @@ shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-link-button');
 /**
  * A {@link Button | button} that opens a hyperlink.
  *
- * @attribute disabled - Whether the button is disabled. When disabled, the button cannot be clicked.
+ * @attribute `disabled` - Whether the button is disabled. When disabled, the button cannot be clicked.
  */
 export class LinkButton extends HTMLElement {
     private readonly _linkEl: HTMLAnchorElement;

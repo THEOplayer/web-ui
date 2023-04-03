@@ -11,7 +11,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-menu-button');
 /**
  * A menu button that opens a {@link Menu}.
  *
- * @attribute menu - The ID of the menu to open.
+ * @attribute `menu` - The ID of the menu to open.
  */
 export class MenuButton extends Button {
     static get observedAttributes() {

@@ -10,7 +10,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-settings-menu-button');
 /**
  * A menu button that opens a {@link SettingsMenu}.
  *
- * @attribute menu - The ID of the settings menu.
+ * @attribute `menu` - The ID of the settings menu.
  */
 export class SettingsMenuButton extends MenuButton {
     constructor() {

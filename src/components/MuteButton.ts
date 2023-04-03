@@ -24,7 +24,7 @@ const PLAYER_EVENTS = ['volumechange'] as const;
 /**
  * A button that toggles whether audio is muted or not.
  *
- * @attribute volume-level (readonly) - The volume level of the player.
+ * @attribute `volume-level` (readonly) - The volume level of the player.
  *   Can be "off" (muted), "low" (volume < 50%) or "high" (volume >= 50%).
  */
 export class MuteButton extends StateReceiverMixin(Button, ['player']) {

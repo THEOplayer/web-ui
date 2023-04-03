@@ -36,7 +36,7 @@ interface OpenMenuEntry {
  * When a {@link MenuButton} in one menu opens another menu in this group, it is opened as a "submenu".
  * When a submenu is closed, the menu that originally opened it is shown again.
  *
- * @attribute menu-opened (readonly) - Whether any menu in the group is currently open.
+ * @attribute `menu-opened` (readonly) - Whether any menu in the group is currently open.
  */
 export class MenuGroup extends HTMLElement {
     static get observedAttributes() {

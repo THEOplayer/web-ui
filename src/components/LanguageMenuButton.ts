@@ -17,7 +17,7 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  *
  * When there are no alternative audio languages or subtitles, this button automatically hides itself.
  *
- * @attribute menu - The ID of the language menu.
+ * @attribute `menu` - The ID of the language menu.
  */
 export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player']) {
     private _player: ChromelessPlayer | undefined;
