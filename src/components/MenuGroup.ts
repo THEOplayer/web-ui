@@ -22,10 +22,8 @@ const defaultTemplate = document.createElement('template');
 defaultTemplate.innerHTML = menuGroupTemplate(`<slot></slot>`);
 shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu-group');
 
-export type MenuOrMenuGroup = Menu | MenuGroup;
-
 interface OpenMenuEntry {
-    menu: MenuOrMenuGroup;
+    menu: Menu | MenuGroup;
     opener: HTMLElement | undefined;
 }
 
@@ -45,7 +43,7 @@ export class MenuGroup extends HTMLElement {
     }
 
     private readonly _menuSlot: HTMLSlotElement | null;
-    private _menus: MenuOrMenuGroup[] = [];
+    private _menus: Array<Menu | MenuGroup> = [];
     private readonly _openMenuStack: OpenMenuEntry[] = [];
 
     constructor(options?: MenuGroupOptions) {
@@ -114,7 +112,7 @@ export class MenuGroup extends HTMLElement {
      *
      * @param [menuId] - The ID of the menu. If unset, returns this menu group.
      */
-    getMenuById(menuId?: string): MenuOrMenuGroup | undefined {
+    getMenuById(menuId?: string): Menu | MenuGroup | undefined {
         if (!menuId || menuId === this.id) {
             return this;
         }
@@ -275,7 +273,7 @@ export class MenuGroup extends HTMLElement {
                 }
             }
         }
-        const newMenus: MenuOrMenuGroup[] = children.filter(isMenuElement);
+        const newMenus = children.filter(isMenuElement);
         // Close all removed menus
         for (const oldMenu of this._menus) {
             if (newMenus.indexOf(oldMenu) < 0) {
@@ -344,7 +342,7 @@ export class MenuGroup extends HTMLElement {
 
 customElements.define('theoplayer-menu-group', MenuGroup);
 
-function isMenuElement(element: Node): element is MenuOrMenuGroup {
+function isMenuElement(element: Node): element is Menu | MenuGroup {
     if (!isHTMLElement(element)) {
         return false;
     }
