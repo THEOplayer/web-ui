@@ -24,6 +24,7 @@ description: >- # this means to ignore newlines until "baseurl:"
 baseurl: /web-ui # the subpath of your site, e.g. /blog
 url: https://theoplayer.github.io # the base hostname & protocol for your site, e.g. http://example.com
 github_username: THEOplayer
+github_url: https://github.com/THEOplayer/web-ui
 
 # Build settings
 theme: minima

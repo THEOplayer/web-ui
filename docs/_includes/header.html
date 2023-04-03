@@ -23,6 +23,9 @@
                 <a class="page-link" href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a>
                 {%- endif -%}
                 {%- endfor -%}
+                {%- if site.github_url -%}
+                <a class="page-link" href="{{ site.github_url | absolute_url }}">GitHub</a>
+                {%- endif -%}
             </div>
         </nav>
         {%- endif -%}
