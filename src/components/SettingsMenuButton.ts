@@ -8,9 +8,10 @@ template.innerHTML = buttonTemplate(`<span part="icon"><slot>${settingsIcon}</sl
 shadyCss.prepareTemplate(template, 'theoplayer-settings-menu-button');
 
 /**
- * A menu button that opens a [settings menu]{@link SettingsMenu}.
+ * A menu button that opens a {@link SettingsMenu}.
  *
- * @attribute menu - The ID of the settings menu.
+ * @attribute `menu` - The ID of the settings menu.
+ * @group Components
  */
 export class SettingsMenuButton extends MenuButton {
     constructor() {

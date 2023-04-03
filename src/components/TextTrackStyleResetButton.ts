@@ -9,6 +9,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-text-track-style-reset-button');
 
 /**
  * A button that resets the text track style.
+ *
+ * @group Components
  */
 export class TextTrackStyleResetButton extends StateReceiverMixin(Button, ['player']) {
     static get observedAttributes() {

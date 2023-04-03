@@ -11,14 +11,15 @@ shadyCss.prepareTemplate(template, 'theoplayer-preview-thumbnail');
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 /**
- * A display that shows the thumbnail image at the current preview time of a [`<theoplayer-time-range>`]{@link TimeRange}.
+ * A display that shows the thumbnail image at the current preview time of a {@link TimeRange | `<theoplayer-time-range>`}.
  *
  * The first `metadata` text track whose label equals `"thumbnails"` is used as source for the thumbnails.
  * This track is expected to contain cues whose content is the URL for the thumbnail image.
- * If the thumbnail image URL ends with a [spatial fragment]{@link https://www.w3.org/TR/media-frags/#naming-space}
+ * If the thumbnail image URL ends with a [spatial fragment](https://www.w3.org/TR/media-frags/#naming-space)
  * (e.g. `#xywh=180,80,60,40`), then the thumbnail is clipped to the rectangle defined by that fragment.
  *
  * If the stream does not contain thumbnails, then this display shows nothing.
+ * @group Components
  */
 export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player', 'previewTime']) {
     private readonly _canvasEl: HTMLCanvasElement;

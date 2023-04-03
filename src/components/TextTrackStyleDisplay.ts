@@ -10,7 +10,8 @@ import { knownColors, knownEdgeStyles, knownFontFamilies } from '../util/TextTra
 /**
  * Displays the value of a single text track style option in a human-readable format.
  *
- * @attribute property - The property name of the text track style option. One of {@link TextTrackStyleOption}.
+ * @attribute `property` - The property name of the text track style option. One of {@link TextTrackStyleOption}.
+ * @group Components
  */
 export class TextTrackStyleDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
     static get observedAttributes() {

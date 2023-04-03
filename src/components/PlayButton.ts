@@ -22,8 +22,9 @@ const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied'] as const;
 /**
  * A button that toggles whether the player is playing or paused.
  *
- * @attribute paused (readonly) - Whether the player is paused. Reflects `ui.player.paused`.
- * @attribute ended (readonly) - Whether the player is ended. Reflects `ui.player.ended`.
+ * @attribute `paused` (readonly) - Whether the player is paused. Reflects `ui.player.paused`.
+ * @attribute `ended` (readonly) - Whether the player is ended. Reflects `ui.player.ended`.
+ * @group Components
  */
 export class PlayButton extends StateReceiverMixin(Button, ['player']) {
     static get observedAttributes() {

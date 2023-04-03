@@ -13,6 +13,8 @@ const PLAYER_EVENTS = ['durationchange'] as const;
 
 /**
  * A control that displays the duration of the stream.
+ *
+ * @group Components
  */
 export class DurationDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
     private readonly _spanEl: HTMLElement;

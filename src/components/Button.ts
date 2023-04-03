@@ -18,7 +18,8 @@ shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-button');
 /**
  * A basic button.
  *
- * @attribute disabled - Whether the button is disabled. When disabled, the button cannot be clicked.
+ * @attribute `disabled` - Whether the button is disabled. When disabled, the button cannot be clicked.
+ * @group Components
  */
 // Based on howto-toggle-button
 // https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-toggle-button/howto-toggle-button.js
@@ -31,7 +32,7 @@ export class Button extends HTMLElement {
      * Creates a basic button.
      *
      * By default, the button renders the contents of its direct children (i.e. it has a single unnamed `<slot>`).
-     * Subclasses can override this by passing a different [template]{@link ButtonOptions.template} in the options,
+     * Subclasses can override this by passing a different {@link ButtonOptions.template} in the options,
      * using {@link buttonTemplate} to correctly style the custom template.
      *
      * @param options - The options for this button.

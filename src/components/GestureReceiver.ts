@@ -12,6 +12,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-gesture-receiver');
  *
  * On desktop devices, this plays or pauses the player whenever it is clicked.
  * On mobile devices, this currently does nothing.
+ *
+ * @group Components
  */
 export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player']) {
     private _player: ChromelessPlayer | undefined;

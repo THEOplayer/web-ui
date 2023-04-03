@@ -15,6 +15,8 @@ let chromecastButtonId = 0;
 
 /**
  * A button to start and stop casting using Chromecast.
+ *
+ * @group Components
  */
 export class ChromecastButton extends StateReceiverMixin(CastButton, ['player']) {
     private _player: ChromelessPlayer | undefined;

@@ -12,6 +12,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-ad-clickthrough-button');
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
+/**
+ * @group Components
+ */
 export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['player']) {
     private _player: ChromelessPlayer | undefined;
 

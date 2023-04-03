@@ -22,21 +22,20 @@ const defaultTemplate = document.createElement('template');
 defaultTemplate.innerHTML = menuGroupTemplate(`<slot></slot>`);
 shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu-group');
 
-type MenuOrMenuGroup = Menu | MenuGroup;
-
 interface OpenMenuEntry {
-    menu: MenuOrMenuGroup;
+    menu: Menu | MenuGroup;
     opener: HTMLElement | undefined;
 }
 
 /**
- * A group of [menus]{@link Menu}.
+ * A group of {@link Menu}s.
  *
  * This can contain multiple other menus, which can be opened with {@link MenuGroup.openMenu}.
  * When a {@link MenuButton} in one menu opens another menu in this group, it is opened as a "submenu".
  * When a submenu is closed, the menu that originally opened it is shown again.
  *
- * @attribute menu-opened (readonly) - Whether any menu in the group is currently open.
+ * @attribute `menu-opened` (readonly) - Whether any menu in the group is currently open.
+ * @group Components
  */
 export class MenuGroup extends HTMLElement {
     static get observedAttributes() {
@@ -44,7 +43,7 @@ export class MenuGroup extends HTMLElement {
     }
 
     private readonly _menuSlot: HTMLSlotElement | null;
-    private _menus: MenuOrMenuGroup[] = [];
+    private _menus: Array<Menu | MenuGroup> = [];
     private readonly _openMenuStack: OpenMenuEntry[] = [];
 
     constructor(options?: MenuGroupOptions) {
@@ -113,7 +112,7 @@ export class MenuGroup extends HTMLElement {
      *
      * @param [menuId] - The ID of the menu. If unset, returns this menu group.
      */
-    getMenuById(menuId?: string): MenuOrMenuGroup | undefined {
+    getMenuById(menuId?: string): Menu | MenuGroup | undefined {
         if (!menuId || menuId === this.id) {
             return this;
         }
@@ -274,7 +273,7 @@ export class MenuGroup extends HTMLElement {
                 }
             }
         }
-        const newMenus: MenuOrMenuGroup[] = children.filter(isMenuElement);
+        const newMenus = children.filter(isMenuElement);
         // Close all removed menus
         for (const oldMenu of this._menus) {
             if (newMenus.indexOf(oldMenu) < 0) {
@@ -343,7 +342,7 @@ export class MenuGroup extends HTMLElement {
 
 customElements.define('theoplayer-menu-group', MenuGroup);
 
-function isMenuElement(element: Node): element is MenuOrMenuGroup {
+function isMenuElement(element: Node): element is Menu | MenuGroup {
     if (!isHTMLElement(element)) {
         return false;
     }

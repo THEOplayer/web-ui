@@ -1,0 +1,21 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/index.ts"],
+  "out": "docs/api",
+  "readme": "none",
+  "navigationLinks": {
+    "GitHub": "https://github.com/THEOplayer/web-ui"
+  },
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "excludeExternals": true,
+  "externalSymbolLinkMappings": {
+    "theoplayer": {
+      "ChromelessPlayer": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md",
+      "PlayerConfiguration": "https://docs.theoplayer.com/api-reference/web/theoplayer.playerconfiguration.md",
+      "SourceDescription": "https://docs.theoplayer.com/api-reference/web/theoplayer.sourcedescription.md",
+      "MediaTrack.targetQuality": "https://docs.theoplayer.com/api-reference/web/theoplayer.mediatrack.md#targetquality",
+      "TextTrackStyle": "https://docs.theoplayer.com/api-reference/web/theoplayer.texttrackstyle.md"
+    }
+  }
+}

@@ -11,7 +11,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-menu-close-button');
 /**
  * A button that closes its parent menu.
  *
- * This button must be placed inside a [`<theoplayer-menu>`]{@link Menu}.
+ * This button must be placed inside a {@link Menu | `<theoplayer-menu>`}.
+ *
+ * @group Components
  */
 export class CloseMenuButton extends Button {
     static get observedAttributes() {

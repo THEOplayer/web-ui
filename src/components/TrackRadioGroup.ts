@@ -22,9 +22,10 @@ export type TrackType = 'audio' | 'video' | 'subtitles';
 /**
  * A radio group that shows a list of media or text tracks, from which the user can choose an active track.
  *
- * @attribute track-type - The track type of the available tracks. Can be "audio", "video" or "subtitles".
- * @attribute show-off - If set, shows an "off" button to disable all tracks.
+ * @attribute `track-type` - The track type of the available tracks. Can be "audio", "video" or "subtitles".
+ * @attribute `show-off` - If set, shows an "off" button to disable all tracks.
  *   Can only be used with the "subtitles" track type.
+ * @group Components
  */
 export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
     static get observedAttributes() {

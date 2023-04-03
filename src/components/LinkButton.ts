@@ -14,9 +14,10 @@ defaultTemplate.innerHTML = linkButtonTemplate('<slot></slot>');
 shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-link-button');
 
 /**
- * A [button]{@link Button} that opens a hyperlink.
+ * A {@link Button | button} that opens a hyperlink.
  *
- * @attribute disabled - Whether the button is disabled. When disabled, the button cannot be clicked.
+ * @attribute `disabled` - Whether the button is disabled. When disabled, the button cannot be clicked.
+ * @group Components
  */
 export class LinkButton extends HTMLElement {
     private readonly _linkEl: HTMLAnchorElement;

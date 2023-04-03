@@ -13,8 +13,10 @@ export function rangeTemplate(range: string, extraCss: string = ''): string {
 /**
  * A slider to select a value from a range.
  *
- * @attribute disabled - Whether the range is disabled.
+ * @attribute `disabled` - Whether the range is disabled.
  *   When disabled, the slider value cannot be changed, and the slider thumb is hidden.
+ *
+ * @group Components
  */
 export abstract class Range extends HTMLElement {
     static get observedAttributes() {

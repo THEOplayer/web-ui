@@ -20,6 +20,8 @@ const CAST_EVENTS = ['statechange'] as const;
 
 /**
  * A control that displays the casting status while using Chromecast.
+ *
+ * @group Components
  */
 export class ChromecastDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
     private readonly _receiverNameEl: HTMLElement;

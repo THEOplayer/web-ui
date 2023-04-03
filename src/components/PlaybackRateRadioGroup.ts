@@ -16,6 +16,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-playback-rate-radio-group');
  * @slot {@link RadioButton} - The possible options for the playback rate.
  *   The value of each radio button must be a valid number.
  *   For example: `<theoplayer-radio-button value="2">2x</theoplayer-radio-button>`
+ * @group Components
  */
 export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
     private readonly _radioGroup: RadioGroup;

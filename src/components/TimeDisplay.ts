@@ -18,10 +18,11 @@ const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 /**
  * A control that displays the current time of the stream.
  *
- * @attribute show-duration - If set, also shows the duration of the stream.
- * @attribute remaining - If set, shows the remaining time of the stream. Not compatible with `show-duration`.
- * @attribute remaining-when-live - If set, and the stream is a livestream, shows the remaining time
+ * @attribute `show-duration` - If set, also shows the duration of the stream.
+ * @attribute `remaining` - If set, shows the remaining time of the stream. Not compatible with `show-duration`.
+ * @attribute `remaining-when-live` - If set, and the stream is a livestream, shows the remaining time
  *   (until the live point) of the stream.
+ * @group Components
  */
 export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'streamType']) {
     private readonly _spanEl: HTMLElement;

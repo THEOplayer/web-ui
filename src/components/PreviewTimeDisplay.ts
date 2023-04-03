@@ -14,11 +14,12 @@ shadyCss.prepareTemplate(template, 'theoplayer-preview-time-display');
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as const;
 
 /**
- * A display that shows the current preview time of a [`<theoplayer-time-range>`]{@link TimeRange}.
+ * A display that shows the current preview time of a {@link TimeRange | `<theoplayer-time-range>`}.
  *
- * @attribute remaining - If set, shows the remaining time of the stream.
- * @attribute remaining-when-live - If set, and the stream is a livestream, shows the remaining time
+ * @attribute `remaining` - If set, shows the remaining time of the stream.
+ * @attribute `remaining-when-live` - If set, and the stream is a livestream, shows the remaining time
  *   (until the live point) of the stream.
+ * @group Components
  */
 export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'previewTime', 'streamType']) {
     private readonly _spanEl: HTMLElement;

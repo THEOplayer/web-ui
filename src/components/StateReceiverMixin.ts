@@ -18,7 +18,7 @@ export interface StateReceiverPropertyMap {
 
 /**
  * A custom element that automatically receives selected state updates
- * from an ancestor [`<theoplayer-ui>`]{@link UIContainer} element.
+ * from an ancestor {@link UIContainer | `<theoplayer-ui>`} element.
  *
  * Do not implement this interface directly, instead use {@link StateReceiverMixin}.
  *
@@ -38,7 +38,7 @@ export function isStateReceiverElement(element: Element): element is StateReceiv
 
 /**
  * A [mixin class](https://www.typescriptlang.org/docs/handbook/mixins.html) to apply on the superclass of a custom element,
- * such that it will automatically receive selected state updates from an ancestor [`<theoplayer-ui>`]{@link UIContainer} element.
+ * such that it will automatically receive selected state updates from an ancestor {@link UIContainer | `<theoplayer-ui>`} element.
  *
  * For each property name in `props`, the custom element *MUST* implement a corresponding property with a setter.
  * For example, if `props` equals `["player", "fullscreen"]`, then the element must have writable `player` and `fullscreen`

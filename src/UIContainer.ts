@@ -34,7 +34,7 @@ const DEFAULT_DVR_THRESHOLD = 60;
  * The container element for a THEOplayer UI.
  *
  * This element provides a basic layout structure for a general player UI, and handles the creation and management
- * of a [THEOplayer player instance]{@link ChromelessPlayer} for this UI.
+ * of a {@link theoplayer!ChromelessPlayer | THEOplayer player instance} for this UI.
  *
  * ## Usage
  *
@@ -48,49 +48,50 @@ const DEFAULT_DVR_THRESHOLD = 60;
  *
  * This element does not provide any UI elements by default, you need to add all elements as children of
  * the `<theoplayer-ui>` element. If you're looking for a simple out-of-the-box player experience instead,
- * see [`<theoplayer-default-ui>`]{@link DefaultUI}).
+ * see {@link DefaultUI | `<theoplayer-default-ui>`}.
  *
  * The styling can be controlled using CSS custom properties (see below).
  *
- * @attribute configuration - The THEOplayer {@link PlayerConfiguration}, as a JSON string.
- * @attribute source - The THEOplayer {@link SourceDescription}, as a JSON string.
- * @attribute fluid - If set, the player automatically adjusts its height to fit the video's aspect ratio.
- * @attribute muted - If set, the player starts out as muted. Reflects `ui.player.muted`.
- * @attribute autoplay - If set, the player attempts to automatically start playing (if allowed).
- * @attribute mobile - Whether to use a mobile-optimized UI layout instead.
+ * @attribute `configuration` - The THEOplayer {@link theoplayer!PlayerConfiguration | PlayerConfiguration}, as a JSON string.
+ * @attribute `source` - The THEOplayer {@link theoplayer!SourceDescription | SourceDescription}, as a JSON string.
+ * @attribute `fluid` - If set, the player automatically adjusts its height to fit the video's aspect ratio.
+ * @attribute `muted` - If set, the player starts out as muted. Reflects `ui.player.muted`.
+ * @attribute `autoplay` - If set, the player attempts to automatically start playing (if allowed).
+ * @attribute `mobile` - Whether to use a mobile-optimized UI layout instead.
  *   Can be used in CSS to show/hide certain desktop-specific or mobile-specific UI controls.
- * @attribute stream-type - The stream type, either "vod", "live" or "dvr".
+ * @attribute `stream-type` - The stream type, either "vod", "live" or "dvr".
  *   Can be used to show/hide certain UI controls specific for livestreams, such as
- *   a [`<theoplayer-live-button>`]{@link LiveButton}.
+ *   a {@link LiveButton | `<theoplayer-live-button>`}.
  *   If you know in advance that the source will be a livestream, you can set this attribute to avoid a screen flicker
  *   when the player switches between its VOD-specific and live-only controls.
- * @attribute user-idle (readonly) - Whether the user is considered to be "idle".
+ * @attribute `user-idle` (readonly) - Whether the user is considered to be "idle".
  *   When the user is idle and the video is playing, all slotted UI elements will be hidden
  *   (unless they have the `no-auto-hide` attribute).
- * @attribute user-idle-timeout - The timeout (in seconds) between when the user stops interacting with the UI,
+ * @attribute `user-idle-timeout` - The timeout (in seconds) between when the user stops interacting with the UI,
  *   and when the user is considered to be "idle".
- * @attribute dvr-threshold - The minimum length (in seconds) of a livestream's sliding window for the stream to be DVR
+ * @attribute `dvr-threshold` - The minimum length (in seconds) of a livestream's sliding window for the stream to be DVR
  *   and its stream type to be set to "dvr".
- * @attribute paused (readonly) - Whether the player is paused. Reflects `ui.player.paused`.
- * @attribute ended (readonly) - Whether the player is ended. Reflects `ui.player.ended`.
- * @attribute casting (readonly) - Whether the player is ended. Reflects `ui.player.cast.casting`.
- * @attribute playing-ad (readonly) - Whether the player is playing a linear ad. Reflects `ui.player.ads.playing`.
- * @attribute has-error (readonly) - Whether the player has encountered a fatal error.
- * @attribute has-first-play (readonly) - Whether the player has (previously) started playback for this stream.
+ * @attribute `paused` (readonly) - Whether the player is paused. Reflects `ui.player.paused`.
+ * @attribute `ended` (readonly) - Whether the player is ended. Reflects `ui.player.ended`.
+ * @attribute `casting` (readonly) - Whether the player is ended. Reflects `ui.player.cast.casting`.
+ * @attribute `playing-ad` (readonly) - Whether the player is playing a linear ad. Reflects `ui.player.ads.playing`.
+ * @attribute `has-error` (readonly) - Whether the player has encountered a fatal error.
+ * @attribute `has-first-play` (readonly) - Whether the player has (previously) started playback for this stream.
  *   Can be used in CSS to show/hide certain initial controls, such as a poster image or a centered play button.
  *
- * @slot (no name, default slot) - A slot for controls at the bottom of the player.
- *   Can be used for controls such as a play button ([`<theoplayer-play-button>`]{@link PlayButton}) or a seek bar
- *   ([`<theoplayer-time-range>`]{@link TimeRange}).
- * @slot top-chrome - A slot for controls at the top of the player.
- *   Can be used to display the stream's title, or for a cast button ([`<theoplayer-chromecast-button>`]{@link ChromecastButton}).
- * @slot middle-chrome - A slot for controls in the middle of the player (between the top and bottom chrome).
- * @slot centered-chrome - A slot for controls centered on the player, on top of other controls.
- * @slot centered-loading - A slot for a loading indicator centered on the player, on top of other controls
+ * @slot `(no` name, default slot) - A slot for controls at the bottom of the player.
+ *   Can be used for controls such as a play button ({@link PlayButton | `<theoplayer-play-button>`}) or a seek bar
+ *   ({@link TimeRange | `<theoplayer-time-range>`}).
+ * @slot `top-chrome` - A slot for controls at the top of the player.
+ *   Can be used to display the stream's title, or for a cast button ({@link ChromecastButton | `<theoplayer-chromecast-button>`}).
+ * @slot `middle-chrome` - A slot for controls in the middle of the player (between the top and bottom chrome).
+ * @slot `centered-chrome` - A slot for controls centered on the player, on top of other controls.
+ * @slot `centered-loading` - A slot for a loading indicator centered on the player, on top of other controls
  *   but behind the centered chrome.
- * @slot menu - A slot for extra menus (see [`<theoplayer-menu>`]{@link Menu}).
- * @slot error - A slot for an error display, to show when the player encounters a fatal error
- *   (see [`<theoplayer-error-display>`]{@link ErrorDisplay}).
+ * @slot `menu` - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
+ * @slot `error` - A slot for an error display, to show when the player encounters a fatal error
+ *   (see {@link ErrorDisplay | `<theoplayer-error-display>`}).
+ * @group Components
  */
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {
@@ -140,7 +141,8 @@ export class UIContainer extends HTMLElement {
      * Creates a new THEOplayer UI container element.
      *
      * @param configuration - The player configuration.
-     *   Will be passed to the {@link ChromelessPlayer} constructor to create the underlying THEOplayer instance.
+     *   Will be passed to the {@link theoplayer!ChromelessPlayer | ChromelessPlayer} constructor to create
+     *   the underlying THEOplayer instance.
      *   Can also be set later on through the {@link configuration} property.
      */
     constructor(configuration: PlayerConfiguration = {}) {

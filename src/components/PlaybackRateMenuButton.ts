@@ -10,6 +10,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-playback-rate-menu-button');
 
 /**
  * A menu button that shows the current playback rate, and is intended to open a playback rate menu.
+ *
+ * @group Components
  */
 export class PlaybackRateMenuButton extends StateReceiverMixin(MenuButton, ['playbackRate']) {
     private readonly _slotEl: HTMLSlotElement;
