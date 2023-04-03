@@ -4,6 +4,9 @@
     "src/index.ts"
   ],
   "out": "docs/api",
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "excludeExternals": true,
   "externalSymbolLinkMappings": {
     "theoplayer": {
       "ChromelessPlayer": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md",
