@@ -8,11 +8,3 @@ the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 | ![Screenshot on desktop](./assets/screenshot-desktop.png) | ![Screenshot on mobile](./assets/screenshot-mobile.png) |
 | :-------------------------------------------------------: | :-----------------------------------------------------: |
 |                          Desktop                          |                         Mobile                          |
-
-## Documentation
-
--   [API documentation](./api)
-
-## Guides
-
--   [Making a custom UI](./custom-ui.md)

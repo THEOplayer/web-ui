@@ -25,7 +25,7 @@ The `<theoplayer-ui>` element is the main container of our custom UI. It handles
 
 It also provides a skeleton layout for plugging in our playback controls, using [slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots#adding_flexibility_with_slots) such as `"top-chrome"` or `"centered-chrome"`. We place a `<theoplayer-play-button>` in the `"centered-chrome"` slot, so it will appear in the center of our player.
 
-![Screenshot](./assets/custom-ui-basic.png)
+![Screenshot](../assets/custom-ui-basic.png)
 
 Note that by default, the UI hides its controls when the user becomes inactive (i.e. does not interact with the player). If we want the play button to always remain visible, we can add a `no-auto-hide` attribute to it:
 
@@ -59,7 +59,7 @@ We can add more components so the user can mute or seek the player, or go fullsc
 -   `<theoplayer-fullscreen-button>` is a button to make the player take up the entire screen.
 -   The `<span>` with `flex-grow: 1` acts as a "spacer": it will stretch to fill the remaining space left by the other controls inside the `<theoplayer-control-bar>`. This works because `<theoplayer-control-bar>` is a flexbox container, i.e. it has `display: inline-flex`. The result is that the `<theoplayer-fullscreen-button>` will be aligned to the right side of the player.
 
-![Screenshot](./assets/custom-ui-seekbar.png)
+![Screenshot](../assets/custom-ui-seekbar.png)
 
 ## A mobile-ready player
 
@@ -107,9 +107,9 @@ theoplayer-ui:not([mobile]) [mobile-only] {
 >
 > Due to limitations of the `::slotted()` CSS selector, `<theoplayer-ui>`'s own CSS rules can only affect _directly_ slotted elements. Descendant elements of a slotted element, such as a `<theoplayer-play-button mobile-hidden>` inside of a slotted `<theoplayer-control-bar>` cannot be targeted by such selectors.
 
-| ![Screenshot on desktop](./assets/custom-ui-desktop.png) | ![Screenshot on mobile](./assets/custom-ui-mobile.png) |
-| :------------------------------------------------------: | :----------------------------------------------------: |
-|                         Desktop                          |                         Mobile                         |
+| ![Screenshot on desktop](../assets/custom-ui-desktop.png) | ![Screenshot on mobile](../assets/custom-ui-mobile.png) |
+| :-------------------------------------------------------: | :-----------------------------------------------------: |
+|                          Desktop                          |                         Mobile                          |
 
 ## More examples
 
@@ -119,12 +119,12 @@ It may sound odd to mention the default UI when we're talking about custom UIs. 
 
 The default UI comes with all the bells and whistles that you'd expect from a fully-featured player: buttons to play or mute the video, a seek bar to seek through the video, menus to change the audio language and subtitles, and support for casting to Chromecast and AirPlay. It also has an adaptive layout that changes when used on desktop or on mobile, to provide the best experience for that device type.
 
-Have a look at [`DefaultUI.html`](../src/DefaultUI.html) and [`DefaultUI.css`](../src/DefaultUI.css) to learn how the default layout is implemented, and perhaps copy some ideas for your own UI.
+Have a look at [`DefaultUI.html`](../../src/DefaultUI.html) and [`DefaultUI.css`](../../src/DefaultUI.css) to learn how the default layout is implemented, and perhaps copy some ideas for your own UI.
 
 ### Nitflex theme
 
 The "Nitflex" theme shows an example of a fully customized player UI, inspired by a popular streaming platform. It has a custom layout for its playback controls, custom colors to match the brand's style, and even custom icons for its buttons.
 
-Have a look at its [HTML](../examples/nitflex.html) and [CSS](../examples/nitflex.css) to see how it's done.
+Have a look at its [HTML](../../examples/nitflex.html) and [CSS](../../examples/nitflex.css) to see how it's done.
 
-![Screenshot](./assets/nitflex-theme.png)
+![Screenshot](../assets/nitflex-theme.png)
