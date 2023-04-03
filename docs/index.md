@@ -12,7 +12,3 @@ the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 ## Documentation
 
 -   [API documentation](./api)
-
-## Guides
-
--   [Making a custom UI](./custom-ui.md)
