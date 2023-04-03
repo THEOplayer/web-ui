@@ -26,25 +26,25 @@ The current THEOplayer Web SDK comes with a built-in UI based on [video.js](http
 This project requires the THEOplayer Web SDK to be installed.
 
 ```sh
-npm install theoplayer theoplayer-web-ui
+npm install theoplayer @theoplayer/web-ui
 ```
 
 You can also install a different variant of the THEOplayer npm package if you don't need all features, as long as it's aliased as `theoplayer`.
 
 ```sh
 npm install theoplayer@npm:@theoplayer/basic-hls
-npm install theoplayer-web-ui
+npm install @theoplayer/web-ui
 ```
 
-Then add `theoplayer-web-ui` to your app:
+Then add `@theoplayer/web-ui` to your app:
 
 -   Option 1: in your HTML.
     ```html
-    <script src="/path/to/node_modules/theoplayer-web-ui/dist/THEOplayerUI.js"></script>
+    <script src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.js"></script>
     ```
 -   Option 2: in your JavaScript.
     ```js
-    import * as THEOplayerUI from 'theoplayer-web-ui';
+    import * as THEOplayerUI from '@theoplayer/web-ui';
     ```
 
 ## Usage
@@ -62,7 +62,7 @@ Then add `theoplayer-web-ui` to your app:
     ```
 -   Option 2: in your JavaScript.
     ```js
-    import { DefaultUI } from 'theoplayer-web-ui';
+    import { DefaultUI } from '@theoplayer/web-ui';
     const ui = new DefaultUI({
         configuration: {
             libraryLocation: '/path/to/node_modules/theoplayer/',
