@@ -30,7 +30,7 @@ interface OpenMenuEntry {
 }
 
 /**
- * A group of [menus]{@link Menu}.
+ * A group of {@link Menu}s.
  *
  * This can contain multiple other menus, which can be opened with {@link MenuGroup.openMenu}.
  * When a {@link MenuButton} in one menu opens another menu in this group, it is opened as a "submenu".

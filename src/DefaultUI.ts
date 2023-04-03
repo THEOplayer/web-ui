@@ -30,13 +30,13 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
  *
  * ## Customization
  *
- * The styling can be controlled using CSS custom properties (see [`<theoplayer-ui>`]{@link UIContainer}).
+ * The styling can be controlled using CSS custom properties (see {@link UIContainer | `<theoplayer-ui>`}).
  * Additional controls can be added to the `top-control-bar` and `bottom-control-bar` slots.
  * For more extensive customizations, we recommend defining your own custom UI using
- * a [`<theoplayer-ui>`]{@link UIContainer}.
+ * a {@link UIContainer | `<theoplayer-ui>`}.
  *
- * @attribute configuration - The THEOplayer {@link PlayerConfiguration}, as a JSON string.
- * @attribute source - The THEOplayer {@link SourceDescription}, as a JSON string.
+ * @attribute configuration - The THEOplayer {@link theoplayer!PlayerConfiguration | PlayerConfiguration}, as a JSON string.
+ * @attribute source - The THEOplayer {@link theoplayer!SourceDescription | SourceDescription}, as a JSON string.
  * @attribute fluid - If set, the player automatically adjusts its height to fit the video's aspect ratio.
  * @attribute muted - If set, the player starts out as muted. Reflects `ui.player.muted`.
  * @attribute autoplay - If set, the player attempts to automatically start playing (if allowed).
@@ -44,7 +44,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
  *   Can be used in CSS to show/hide certain desktop-specific or mobile-specific UI controls.
  * @attribute stream-type - The stream type, either "vod", "live" or "dvr".
  *   Can be used to show/hide certain UI controls specific for livestreams, such as
- *   a [`<theoplayer-live-button>`]{@link LiveButton}.
+ *   a {@link LiveButton | `<theoplayer-live-button>`}.
  *   If you know in advance that the source will be a livestream, you can set this attribute to avoid a screen flicker
  *   when the player switches between its VOD-specific and live-only controls.
  * @attribute user-idle-timeout - The timeout (in seconds) between when the user stops interacting with the UI,
@@ -54,7 +54,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
  *
  * @slot top-control-bar - A slot for extra UI controls in the top control bar.
  * @slot bottom-control-bar - A slot for extra UI controls in the bottom control bar.
- * @slot menu - A slot for extra menus (see [`<theoplayer-menu>`]{@link Menu}).
+ * @slot menu - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
  */
 export class DefaultUI extends HTMLElement {
     static get observedAttributes() {
@@ -81,7 +81,8 @@ export class DefaultUI extends HTMLElement {
      * Creates a new THEOplayer default UI.
      *
      * @param configuration - The player configuration.
-     *   Will be passed to the {@link ChromelessPlayer} constructor to create the underlying THEOplayer instance.
+     *   Will be passed to the {@link theoplayer!ChromelessPlayer | ChromelessPlayer} constructor to create
+     *   the underlying THEOplayer instance.
      *   Can also be set later on through the {@link configuration} property.
      */
     constructor(configuration: PlayerConfiguration = {}) {

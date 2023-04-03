@@ -12,7 +12,7 @@ template.innerHTML = menuGroupTemplate(textTrackStyleMenuHtml, `${menuTableCss}\
 shadyCss.prepareTemplate(template, 'theoplayer-text-track-style-menu');
 
 /**
- * A menu to change the [text track style]{@link TextTrackStyle} of the player.
+ * A menu to change the {@link theoplayer!TextTrackStyle | text track style} of the player.
  */
 export class TextTrackStyleMenu extends MenuGroup {
     constructor() {

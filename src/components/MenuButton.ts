@@ -9,7 +9,7 @@ template.innerHTML = buttonTemplate(`<slot></slot>`);
 shadyCss.prepareTemplate(template, 'theoplayer-menu-button');
 
 /**
- * A menu button that opens a [menu]{@link Menu}.
+ * A menu button that opens a {@link Menu}.
  *
  * @attribute menu - The ID of the menu to open.
  */

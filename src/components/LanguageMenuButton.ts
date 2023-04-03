@@ -13,7 +13,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-language-menu-button');
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 /**
- * A menu button that opens a [language menu]{@link LanguageMenu}.
+ * A menu button that opens a {@link LanguageMenu}.
  *
  * When there are no alternative audio languages or subtitles, this button automatically hides itself.
  *

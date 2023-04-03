@@ -24,7 +24,7 @@ shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu');
 /**
  * A menu that can be opened on top of the player.
  *
- * The menu has a heading at the top, with a [close button]{@link CloseMenuButton} and a heading text.
+ * The menu has a heading at the top, with a {@link CloseMenuButton | close button} and a heading text.
  *
  * @attribute menu-close-on-input - Whether to automatically close the menu whenever one of its controls
  *   receives an input (e.g. when a radio button is clicked).
@@ -41,7 +41,7 @@ export class Menu extends HTMLElement {
      * Creates a menu.
      *
      * By default, the button has an unnamed `<slot>` for its contents, and a named `"heading"` `<slot>` for its heading text.
-     * Subclasses can override this by passing a different [template]{@link MenuOptions.template} in the options,
+     * Subclasses can override this by passing a different {@link MenuOptions.template} in the options,
      * using {@link menuTemplate} to correctly style the custom template.
      *
      * @param options - The options for this menu.

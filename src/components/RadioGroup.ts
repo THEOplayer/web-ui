@@ -10,10 +10,10 @@ radioGroupTemplate.innerHTML = `<slot></slot>`;
 shadyCss.prepareTemplate(radioGroupTemplate, 'theoplayer-radio-group');
 
 /**
- * A group of [radio buttons]{@link RadioButton}. At most one button in the group can be checked.
+ * A group of {@link RadioButton}s. At most one button in the group can be checked.
  *
  * ## Behavior
- * This radio group implements the [roving tabindex]{@link https://www.w3.org/WAI/ARIA/apg/example-index/radio/radio.html} pattern.
+ * This radio group implements the [roving tabindex](https://www.w3.org/WAI/ARIA/apg/example-index/radio/radio.html) pattern.
  *  - `Tab` moves focus in or out of the radio group.
  *  - `Up`/`Left` arrow moves focus to the previous radio button.
  *  - `Down`/`Right` arrow moves focus to the next radio button.

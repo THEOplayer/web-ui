@@ -15,7 +15,7 @@ const QUALITY_EVENTS = ['update'] as const;
 
 /**
  * A radio button that shows the label of a given video quality, and switches the video track's
- * [target quality]{@link MediaTrack.targetQuality} to that quality when clicked.
+ * {@link theoplayer!MediaTrack.targetQuality | target quality} to that quality when clicked.
  */
 export class QualityRadioButton extends RadioButton {
     private _slotEl: HTMLSlotElement;
