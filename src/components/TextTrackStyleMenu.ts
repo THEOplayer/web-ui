@@ -13,6 +13,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-text-track-style-menu');
 
 /**
  * A menu to change the {@link theoplayer!TextTrackStyle | text track style} of the player.
+ *
+ * @group Components
  */
 export class TextTrackStyleMenu extends MenuGroup {
     constructor() {

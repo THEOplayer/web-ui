@@ -12,6 +12,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-airplay-button');
 
 /**
  * A button to start and stop casting using AirPlay.
+ *
+ * @group Components
  */
 export class AirPlayButton extends StateReceiverMixin(CastButton, ['player']) {
     private _player: ChromelessPlayer | undefined;

@@ -32,6 +32,7 @@ export type TextTrackStyleOption = keyof TextTrackStyleMap;
  * @attribute `property` - The property name of the text track style option. One of {@link TextTrackStyleOption}.
  * @slot {@link RadioButton} - The possible options for the text track style option.
  *   For example: `<theoplayer-radio-button value="#ff0000">Red</theoplayer-radio-button>`
+ * @group Components
  */
 export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
     static get observedAttributes() {

@@ -15,6 +15,8 @@ export function rangeTemplate(range: string, extraCss: string = ''): string {
  *
  * @attribute `disabled` - Whether the range is disabled.
  *   When disabled, the slider value cannot be changed, and the slider thumb is hidden.
+ *
+ * @group Components
  */
 export abstract class Range extends HTMLElement {
     static get observedAttributes() {

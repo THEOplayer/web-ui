@@ -12,6 +12,8 @@ shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-radio-button');
  * A button that can be checked.
  *
  * When part of a {@link RadioGroup}, at most one button in the group can be checked.
+ *
+ * @group Components
  */
 export class RadioButton extends Button {
     static get observedAttributes() {

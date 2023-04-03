@@ -10,6 +10,9 @@ const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<slot>Automatic</slot>`);
 shadyCss.prepareTemplate(template, 'theoplayer-active-quality-menu-button');
 
+/**
+ * @group Components
+ */
 export class ActiveQualityMenuButton extends StateReceiverMixin(MenuButton, ['activeVideoQuality', 'targetVideoQualities']) {
     private readonly _slotEl: HTMLSlotElement;
     private _activeVideoQuality: VideoQuality | undefined = undefined;

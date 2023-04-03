@@ -12,6 +12,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-ad-display');
 
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'addad', 'updatead'] as const;
 
+/**
+ * @group Components
+ */
 export class AdDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
     private readonly _spanEl: HTMLElement;
     private _player: ChromelessPlayer | undefined;

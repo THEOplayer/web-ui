@@ -11,6 +11,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-ad-countdown');
 
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak'] as const;
 
+/**
+ * @group Components
+ */
 export class AdCountdown extends StateReceiverMixin(HTMLElement, ['player']) {
     private readonly _spanEl: HTMLElement;
     private _player: ChromelessPlayer | undefined;

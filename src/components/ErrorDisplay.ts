@@ -21,6 +21,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-error-display');
 
 /**
  * A screen that shows the details of a fatal player error.
+ *
+ * @group Components
  */
 export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error', 'fullscreen']) {
     private readonly _messageSlot: HTMLSlotElement;

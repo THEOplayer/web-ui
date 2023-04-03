@@ -19,6 +19,7 @@ shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-button');
  * A basic button.
  *
  * @attribute `disabled` - Whether the button is disabled. When disabled, the button cannot be clicked.
+ * @group Components
  */
 // Based on howto-toggle-button
 // https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-toggle-button/howto-toggle-button.js

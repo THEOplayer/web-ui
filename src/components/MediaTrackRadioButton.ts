@@ -13,6 +13,7 @@ const TRACK_EVENTS = ['change', 'update'] as const;
 
 /**
  * A radio button that shows the label of a given media track, and switches to that track when clicked.
+ * @group Components
  */
 export class MediaTrackRadioButton extends RadioButton {
     private _slotEl: HTMLSlotElement;

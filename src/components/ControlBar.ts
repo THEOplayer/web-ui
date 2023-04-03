@@ -7,6 +7,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-control-bar');
 
 /**
  * A horizontal control bar that can contain other controls.
+ *
+ * @group Components
  */
 export class ControlBar extends HTMLElement {
     constructor() {

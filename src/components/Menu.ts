@@ -29,6 +29,7 @@ shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu');
  * @attribute `menu-close-on-input` - Whether to automatically close the menu whenever one of its controls
  *   receives an input (e.g. when a radio button is clicked).
  * @attribute `menu-opened` (readonly) - Whether the menu is currently open.
+ * @group Components
  */
 export class Menu extends HTMLElement {
     static get observedAttributes() {

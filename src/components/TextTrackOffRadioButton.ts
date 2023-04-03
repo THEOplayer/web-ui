@@ -13,6 +13,8 @@ const TRACK_EVENTS = ['change'] as const;
 
 /**
  * A radio button that disables the active subtitle track when clicked.
+ *
+ * @group Components
  */
 export class TextTrackOffRadioButton extends RadioButton {
     private _trackList: TextTracksList | undefined = undefined;

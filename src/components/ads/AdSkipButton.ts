@@ -21,6 +21,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-ad-skip-button');
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
+/**
+ * @group Components
+ */
 export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
     private readonly _countdownEl: HTMLElement;
     private readonly _skipEl: HTMLElement;

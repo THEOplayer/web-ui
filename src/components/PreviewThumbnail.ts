@@ -19,6 +19,7 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  * (e.g. `#xywh=180,80,60,40`), then the thumbnail is clipped to the rectangle defined by that fragment.
  *
  * If the stream does not contain thumbnails, then this display shows nothing.
+ * @group Components
  */
 export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player', 'previewTime']) {
     private readonly _canvasEl: HTMLCanvasElement;

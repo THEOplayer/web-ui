@@ -55,6 +55,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
  * @slot `top-control-bar` - A slot for extra UI controls in the top control bar.
  * @slot `bottom-control-bar` - A slot for extra UI controls in the bottom control bar.
  * @slot `menu` - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
+ * @group Components
  */
 export class DefaultUI extends HTMLElement {
     static get observedAttributes() {

@@ -91,6 +91,7 @@ const DEFAULT_DVR_THRESHOLD = 60;
  * @slot `menu` - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
  * @slot `error` - A slot for an error display, to show when the player encounters a fatal error
  *   (see {@link ErrorDisplay | `<theoplayer-error-display>`}).
+ * @group Components
  */
 export class UIContainer extends HTMLElement {
     static get observedAttributes() {

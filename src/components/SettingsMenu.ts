@@ -11,6 +11,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-settings-menu');
 
 /**
  * A menu to change the settings of the player, such as the active video quality and the playback speed.
+ *
+ * @group Components
  */
 export class SettingsMenu extends MenuGroup {
     constructor() {
