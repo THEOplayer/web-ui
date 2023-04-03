@@ -10,6 +10,10 @@ the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 > **Warning**
 > This project is experimental, and breaking changes can happen frequently. As such, it is not yet recommended for use in production. We are aiming for a first stable release soon, so feedback is welcome!
 
+| ![Screenshot on desktop](./docs/assets/screenshot-desktop.png) | ![Screenshot on mobile](./docs/assets/screenshot-mobile.png) |
+| :------------------------------------------------------------: | :----------------------------------------------------------: |
+|                            Desktop                             |                            Mobile                            |
+
 ## Motivation
 
 The current THEOplayer Web SDK comes with a built-in UI based on [video.js](https://github.com/videojs/video.js) through [the `Player` constructor](https://docs.theoplayer.com/api-reference/web/theoplayer.player.md). This new UI aims to solve some limitations from the old approach:
@@ -46,6 +50,9 @@ Then add `@theoplayer/web-ui` to your app:
     ```js
     import * as THEOplayerUI from '@theoplayer/web-ui';
     ```
+
+> **Warning**
+> THEOplayer Web SDK currently only supports being loaded through a regular `<script>` tag or as a [UMD module](https://github.com/umdjs/umd), and does not support being `import`ed as a native JavaScript module. If you use `import` with THEOplayer Web UI, make sure to use a JavaScript bundler such as Webpack or Rollup to include THEOplayer in your app. We're hoping to fix this incompatibility soon.
 
 ## Usage
 
