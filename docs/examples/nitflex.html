@@ -3,13 +3,13 @@ layout: example
 title: Nitflex theme
 permalink: /examples/nitflex
 ---
-<link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
-<link href="nitflex.css" rel="stylesheet"/>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link href="nitflex.css" rel="stylesheet" />
 <theoplayer-ui
-        configuration='{"libraryLocation":"https://unpkg.com/theoplayer@4/","license":"{{ site.theoplayer_license }}"}'
-        source='{"sources":"https://amssamples.streaming.mediaservices.windows.net/7ceb010f-d9a3-467a-915e-5728acced7e3/ElephantsDreamMultiAudio.ism/manifest(format=mpd-time-csf)"}'
-        fluid
+    configuration='{"libraryLocation":"https://unpkg.com/theoplayer@4/","license":"{{ site.theoplayer_license }}"}'
+    source='{"sources":"https://amssamples.streaming.mediaservices.windows.net/7ceb010f-d9a3-467a-915e-5728acced7e3/ElephantsDreamMultiAudio.ism/manifest(format=mpd-time-csf)"}'
+    fluid
 >
     <theoplayer-control-bar slot="top-chrome" class="top-chrome">
         <span class="title">Elephant's Dream</span>
@@ -20,8 +20,7 @@ permalink: /examples/nitflex
             <span slot="icon"><span class="material-symbols-sharp">forward_media</span></span>
         </theoplayer-seek-button>
         <theoplayer-play-button>
-            <span slot="play-icon"><span
-                    class="material-symbols-sharp material-symbols-sharp-fill">play_arrow</span></span>
+            <span slot="play-icon"><span class="material-symbols-sharp material-symbols-sharp-fill">play_arrow</span></span>
             <span slot="pause-icon"><span class="material-symbols-sharp material-symbols-sharp-fill">pause</span></span>
             <span slot="replay-icon"><span class="material-symbols-sharp material-symbols-sharp-fill">replay</span></span>
         </theoplayer-play-button>
@@ -34,15 +33,11 @@ permalink: /examples/nitflex
         <theoplayer-time-display remaining></theoplayer-time-display>
     </theoplayer-control-bar>
     <theoplayer-control-bar class="bottom-chrome">
-        <theoplayer-menu-button menu="playback-speed-menu">
-            <span class="material-symbols-sharp">speed</span>&nbsp;Speed
-        </theoplayer-menu-button>
+        <theoplayer-menu-button menu="playback-speed-menu"><span class="material-symbols-sharp">speed</span>&nbsp;Speed</theoplayer-menu-button>
         <theoplayer-menu-button menu="language-menu">
             <span class="material-symbols-sharp material-symbols-sharp-fill">subtitles</span>&nbsp;Audio and subtitles
         </theoplayer-menu-button>
-        <theoplayer-button>
-            <span class="material-symbols-sharp material-symbols-sharp-fill">skip_next</span> Next episode
-        </theoplayer-button>
+        <theoplayer-button><span class="material-symbols-sharp material-symbols-sharp-fill">skip_next</span> Next episode</theoplayer-button>
     </theoplayer-control-bar>
     <theoplayer-menu id="playback-speed-menu" slot="menu" menu-close-on-input hidden>
         <span slot="heading">Playback speed</span>

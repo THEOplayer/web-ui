@@ -12,14 +12,14 @@ permalink: /examples/default-ui
 </style>
 
 <theoplayer-default-ui
-        configuration='{"libraryLocation":"https://unpkg.com/theoplayer@4/","license":"{{ site.theoplayer_license }}"}'
-        source='{"sources":"https://amssamples.streaming.mediaservices.windows.net/7ceb010f-d9a3-467a-915e-5728acced7e3/ElephantsDreamMultiAudio.ism/manifest(format=mpd-time-csf)"}'
-        fluid
+    configuration='{"libraryLocation":"https://unpkg.com/theoplayer@4/","license":"{{ site.theoplayer_license }}"}'
+    source='{"sources":"https://amssamples.streaming.mediaservices.windows.net/7ceb010f-d9a3-467a-915e-5728acced7e3/ElephantsDreamMultiAudio.ism/manifest(format=mpd-time-csf)"}'
+    fluid
 >
     <span slot="title">Elephant's Dream</span>
 </theoplayer-default-ui>
 <div>
-    <label style="user-select: none"><input type="checkbox" id="mobile-toggle"/> Mobile</label>
+    <label style="user-select: none"><input type="checkbox" id="mobile-toggle" /> Mobile</label>
 </div>
 <script>
     var ui = document.querySelector('theoplayer-default-ui');
