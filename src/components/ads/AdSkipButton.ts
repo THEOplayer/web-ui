@@ -114,12 +114,14 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
             this._skipEl.style.display = 'none';
             this.style.display = '';
             this.setAttribute(Attribute.DISABLED, '');
+            this.setAttribute(Attribute.ARIA_LIVE, 'off');
         } else {
             // Show skip button.
             this._countdownEl.style.display = 'none';
             this._skipEl.style.display = '';
             this.style.display = '';
             this.removeAttribute(Attribute.DISABLED);
+            this.setAttribute(Attribute.ARIA_LIVE, 'polite');
         }
     };
 }

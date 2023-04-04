@@ -51,6 +51,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         this._previewRailEl = this.shadowRoot!.querySelector('.theoplayer-time-range-preview-rail')!;
         this._previewBoxEl = this._previewRailEl.querySelector('[part~="preview-box"]')!;
 
+        this._rangeEl.setAttribute(Attribute.ARIA_LIVE, 'off');
         this._rangeEl.addEventListener('mousedown', this._pauseOnScrubStart);
         this._rangeEl.addEventListener('touchstart', this._pauseOnScrubStart);
 

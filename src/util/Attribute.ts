@@ -32,6 +32,7 @@ export enum Attribute {
     MENU_OPENED = 'menu-opened',
     MENU_CLOSE_ON_INPUT = 'menu-close-on-input',
     ARIA_LABEL = 'aria-label',
+    ARIA_LIVE = 'aria-live',
     ARIA_CHECKED = 'aria-checked',
     HAS_AUDIO = 'has-audio',
     HAS_SUBTITLES = 'has-subtitles',
