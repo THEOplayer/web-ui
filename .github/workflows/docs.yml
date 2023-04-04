@@ -36,10 +36,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - name: npm run docs
-        run: |
-          npm ci
-          npm run docs
+      - run: npm ci
+      - run: npm run docs
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
