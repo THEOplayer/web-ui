@@ -38,6 +38,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run docs
+      - run: cp -r dist/ docs/
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
