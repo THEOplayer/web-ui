@@ -1,26 +1,37 @@
-import * as shadyCss from '@webcomponents/shadycss';
-import { buttonTemplate } from './Button';
-import { MenuButton } from './MenuButton';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { setTextContent } from '../util/CommonUtils';
 import type { VideoQuality } from 'theoplayer';
 import { formatQualityLabel } from '../util/TrackUtils';
-
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<slot>Automatic</slot>`);
-shadyCss.prepareTemplate(template, 'theoplayer-active-quality-menu-button');
+import * as shadyCss from '@webcomponents/shadycss';
 
 /**
  * @group Components
  */
-export class ActiveQualityMenuButton extends StateReceiverMixin(MenuButton, ['activeVideoQuality', 'targetVideoQualities']) {
-    private readonly _slotEl: HTMLSlotElement;
+export class ActiveQualityDisplay extends StateReceiverMixin(HTMLElement, ['activeVideoQuality', 'targetVideoQualities']) {
+    private readonly _spanEl: HTMLSpanElement;
     private _activeVideoQuality: VideoQuality | undefined = undefined;
     private _targetVideoQualities: VideoQuality[] | undefined = undefined;
 
     constructor() {
-        super({ template });
-        this._slotEl = this.shadowRoot!.querySelector('slot')!;
+        super();
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        this._spanEl = document.createElement('span');
+        shadowRoot.appendChild(this._spanEl);
+
+        this._upgradeProperty('activeVideoQuality');
+        this._upgradeProperty('targetVideoQualities');
+    }
+
+    connectedCallback(): void {
+        shadyCss.styleElement(this);
+    }
+
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
     }
 
     get activeVideoQuality(): VideoQuality | undefined {
@@ -57,8 +68,8 @@ export class ActiveQualityMenuButton extends StateReceiverMixin(MenuButton, ['ac
             // Automatic quality selection: "Automatic" or "Automatic (720p)"
             label = `Automatic${qualityLabel ? ` (${qualityLabel})` : ''}`;
         }
-        setTextContent(this._slotEl, label);
+        setTextContent(this._spanEl, label);
     }
 }
 
-customElements.define('theoplayer-active-quality-menu-button', ActiveQualityMenuButton);
+customElements.define('theoplayer-active-quality-display', ActiveQualityDisplay);

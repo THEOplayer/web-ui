@@ -26,13 +26,13 @@ export class TextTrackStyleDisplay extends StateReceiverMixin(HTMLElement, ['pla
         const shadowRoot = this.attachShadow({ mode: 'open' });
         this._spanEl = document.createElement('span');
         shadowRoot.appendChild(this._spanEl);
+
+        this._upgradeProperty('property');
+        this._upgradeProperty('player');
     }
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
-
-        this._upgradeProperty('property');
-        this._upgradeProperty('player');
 
         if (!this.hasAttribute(Attribute.PROPERTY)) {
             this.property = 'fontColor';

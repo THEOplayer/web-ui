@@ -2,8 +2,9 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { MenuGroup, menuGroupTemplate } from './MenuGroup';
 import settingsMenuHtml from './SettingsMenu.html';
 import menuTableCss from './MenuTable.css';
-import './ActiveQualityMenuButton';
-import './PlaybackRateMenuButton';
+import './ActiveQualityDisplay';
+import './PlaybackRateDisplay';
+import './PlaybackRateMenu';
 
 const template = document.createElement('template');
 template.innerHTML = menuGroupTemplate(settingsMenuHtml, menuTableCss);

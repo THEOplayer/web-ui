@@ -1,5 +1,10 @@
 <theoplayer-menu>
-    <span slot="heading"><slot name="heading">Language</slot></span>
+    <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">Language</slot></span>
+    <theoplayer-settings-menu-button
+        class="theoplayer-menu-heading-button"
+        menu="subtitle-options-menu"
+        slot="heading"
+    ></theoplayer-settings-menu-button>
     <div part="content">
         <div part="audio">
             <h2>Audio</h2>
@@ -11,3 +16,4 @@
         </div>
     </div>
 </theoplayer-menu>
+<theoplayer-text-track-style-menu id="subtitle-options-menu"></theoplayer-text-track-style-menu>
