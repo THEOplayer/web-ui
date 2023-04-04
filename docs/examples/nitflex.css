@@ -22,12 +22,8 @@
     font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
 
-body {
-    font-family: 'Netflix Sans', sans-serif;
-    background: #fff;
-}
-
 theoplayer-ui {
+    font-family: 'Netflix Sans', sans-serif;
     width: 100%;
 
     --nitflex-primary-color: rgb(229, 9, 20);
