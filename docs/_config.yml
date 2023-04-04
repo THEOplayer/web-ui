@@ -29,6 +29,14 @@ github_url: https://github.com/THEOplayer/web-ui
 
 # Build settings
 theme: minima
+plugins:
+  - jekyll-copyr
+
+jekyll-copyr:
+  enabled: true
+  tasks:
+    - from: '../dist/.'
+      to: './_site/dist/'
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
