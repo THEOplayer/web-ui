@@ -65,7 +65,7 @@ export class RadioButton extends Button {
         this.dispatchEvent(createEvent('input', { bubbles: true, composed: true }));
     }
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (newValue === oldValue) {
             return;

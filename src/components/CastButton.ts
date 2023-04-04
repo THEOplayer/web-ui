@@ -72,7 +72,7 @@ export class CastButton extends Button {
         this.setAttribute(Attribute.CAST_STATE, castState);
     };
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (CastButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);

@@ -37,6 +37,11 @@ export class SeekButton extends StateReceiverMixin(Button, ['player']) {
         this._upgradeProperty('seekOffset');
     }
 
+    override connectedCallback() {
+        super.connectedCallback();
+        this._updateAriaLabel();
+    }
+
     /**
      * The offset (in seconds) by which to seek forward (if positive) or backward (if negative).
      */
@@ -67,7 +72,7 @@ export class SeekButton extends StateReceiverMixin(Button, ['player']) {
         this._player.currentTime = Math.max(0, Math.min(duration, this._player.currentTime + this.seekOffset));
     }
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (newValue === oldValue) {
             return;
@@ -77,7 +82,14 @@ export class SeekButton extends StateReceiverMixin(Button, ['player']) {
         }
         if (SeekButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
+            this._updateAriaLabel();
         }
+    }
+
+    private _updateAriaLabel(): void {
+        const seekOffset = this.seekOffset;
+        const label = seekOffset >= 0 ? `seek forward by ${seekOffset} seconds` : `seek backward by ${-seekOffset} seconds`;
+        this.setAttribute(Attribute.ARIA_LABEL, label);
     }
 }
 

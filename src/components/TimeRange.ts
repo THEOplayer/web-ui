@@ -141,7 +141,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         return DEFAULT_MISSING_TIME_PHRASE;
     }
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (attrName === Attribute.STREAM_TYPE) {
             this._updateDisabled();

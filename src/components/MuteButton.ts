@@ -43,6 +43,7 @@ export class MuteButton extends StateReceiverMixin(Button, ['player']) {
     override connectedCallback(): void {
         super.connectedCallback();
         this._updateFromPlayer();
+        this._updateAriaLabel();
     }
 
     /**
@@ -93,11 +94,17 @@ export class MuteButton extends StateReceiverMixin(Button, ['player']) {
         }
     }
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (MuteButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
+            this._updateAriaLabel();
         }
+    }
+
+    private _updateAriaLabel(): void {
+        const label = this.getAttribute(Attribute.VOLUME_LEVEL) === 'off' ? 'unmute' : 'mute';
+        this.setAttribute(Attribute.ARIA_LABEL, label);
     }
 }
 

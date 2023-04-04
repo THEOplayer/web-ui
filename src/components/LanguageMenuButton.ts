@@ -5,6 +5,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer';
 import { isSubtitleTrack } from '../util/TrackUtils';
+import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<span part="icon"><slot>${languageIcon}</slot></span>`);
@@ -26,6 +27,14 @@ export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player'
     constructor() {
         super({ template });
         this._upgradeProperty('player');
+    }
+
+    override connectedCallback() {
+        super.connectedCallback();
+
+        if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
+            this.setAttribute(Attribute.ARIA_LABEL, 'open language menu');
+        }
     }
 
     get player(): ChromelessPlayer | undefined {

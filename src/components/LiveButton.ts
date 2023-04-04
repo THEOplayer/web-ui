@@ -46,6 +46,14 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
         this._upgradeProperty('player');
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+
+        if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
+            this.setAttribute(Attribute.ARIA_LABEL, 'seek to live');
+        }
+    }
+
     get paused(): boolean {
         return this.hasAttribute(Attribute.PAUSED);
     }
@@ -128,7 +136,7 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
         }
     }
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (newValue === oldValue) {
             return;

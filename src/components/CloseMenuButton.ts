@@ -3,6 +3,7 @@ import { Button, buttonTemplate } from './Button';
 import backIcon from '../icons/back.svg';
 import { createCustomEvent } from '../util/EventUtils';
 import { CLOSE_MENU_EVENT, CloseMenuEvent } from '../events/CloseMenuEvent';
+import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<span part="icon"><slot>${backIcon}</slot></span>`);
@@ -22,6 +23,14 @@ export class CloseMenuButton extends Button {
 
     constructor() {
         super({ template });
+    }
+
+    override connectedCallback() {
+        super.connectedCallback();
+
+        if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
+            this.setAttribute(Attribute.ARIA_LABEL, 'close menu');
+        }
     }
 
     protected override handleClick() {
