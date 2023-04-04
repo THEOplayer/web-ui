@@ -119,12 +119,12 @@ It may sound odd to mention the default UI when we're talking about custom UIs. 
 
 The default UI comes with all the bells and whistles that you'd expect from a fully-featured player: buttons to play or mute the video, a seek bar to seek through the video, menus to change the audio language and subtitles, and support for casting to Chromecast and AirPlay. It also has an adaptive layout that changes when used on desktop or on mobile, to provide the best experience for that device type.
 
-Have a look at [`DefaultUI.html`](../../src/DefaultUI.html) and [`DefaultUI.css`](../../src/DefaultUI.css) to learn how the default layout is implemented, and perhaps copy some ideas for your own UI.
+Have a look at [`DefaultUI.html`](https://github.com/THEOplayer/web-ui/blob/main/src/DefaultUI.html) and [`DefaultUI.css`](https://github.com/THEOplayer/web-ui/blob/main/src/DefaultUI.css) to learn how the default layout is implemented, and perhaps copy some ideas for your own UI.
 
 ### Nitflex theme
 
 The "Nitflex" theme shows an example of a fully customized player UI, inspired by a popular streaming platform. It has a custom layout for its playback controls, custom colors to match the brand's style, and even custom icons for its buttons.
 
-Have a look at its [HTML](../../examples/nitflex.html) and [CSS](../../examples/nitflex.css) to see how it's done.
+Have a look at its [HTML](https://github.com/THEOplayer/web-ui/blob/main/examples/nitflex.html) and [CSS](https://github.com/THEOplayer/web-ui/blob/main/examples/nitflex.css) to see how it's done.
 
 ![Screenshot](../assets/nitflex-theme.png)
