@@ -34,7 +34,7 @@
   "author": "THEO Technologies",
   "license": "MIT",
   "peerDependencies": {
-    "theoplayer": "^4"
+    "theoplayer": "^4 || ^5"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.1",
@@ -57,7 +57,7 @@
     "rollup-plugin-swc3": "^0.8.0",
     "rollup-plugin-typescript-resolve": "^1.0.1",
     "serve": "^14.1.2",
-    "theoplayer": "^4.6.0",
+    "theoplayer": "^5.0.0",
     "tslib": "^2.4.1",
     "typedoc": "^0.23.28",
     "typescript": "^4.9.3"
