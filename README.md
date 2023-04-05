@@ -10,9 +10,9 @@ the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 > **Note**
 > This project is under active development. While we believe it's ready for use in production, not all features are available in this first release. If you find a problem or have an idea for a new feature, don't hesitate to [open an issue](https://github.com/THEOplayer/web-ui/issues)!
 
-| ![Screenshot on desktop](./docs/assets/screenshot-desktop.png) | ![Screenshot on mobile](./docs/assets/screenshot-mobile.png) |
-| :------------------------------------------------------------: | :----------------------------------------------------------: |
-|                            Desktop                             |                            Mobile                            |
+| ![Screenshot on desktop](https://raw.githubusercontent.com/THEOplayer/web-ui/v1.0.0/docs/assets/screenshot-desktop.png) | ![Screenshot on mobile](https://raw.githubusercontent.com/THEOplayer/web-ui/v1.0.0/docs/assets/screenshot-mobile.png) |
+| :---------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: |
+|                                                         Desktop                                                         |                                                        Mobile                                                         |
 
 ## Motivation
 
