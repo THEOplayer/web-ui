@@ -6,6 +6,7 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
+import { toggleAttribute } from '../util/CommonUtils';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<span part="icon"><slot>${languageIcon}</slot></span>`);
@@ -59,11 +60,7 @@ export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player'
 
     private readonly _updateTracks = (): void => {
         const hasTracks = this._player !== undefined && (this._player.audioTracks.length >= 2 || this._player.textTracks.some(isSubtitleTrack));
-        if (hasTracks) {
-            this.removeAttribute('hidden');
-        } else {
-            this.setAttribute('hidden', '');
-        }
+        toggleAttribute(this, Attribute.HIDDEN, !hasTracks);
     };
 }
 

@@ -2,6 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import rangeCss from './Range.css';
 import { Attribute } from '../util/Attribute';
 import { ColorStops } from '../util/ColorStops';
+import { toggleAttribute } from '../util/CommonUtils';
 
 export interface RangeOptions {
     template: HTMLTemplateElement;
@@ -78,11 +79,7 @@ export abstract class Range extends HTMLElement {
     }
 
     set disabled(disabled: boolean) {
-        if (disabled) {
-            this.setAttribute(Attribute.DISABLED, '');
-        } else {
-            this.removeAttribute(Attribute.DISABLED);
-        }
+        toggleAttribute(this, Attribute.DISABLED, disabled);
     }
 
     /**
@@ -142,11 +139,7 @@ export abstract class Range extends HTMLElement {
         const hasValue = newValue != null;
         if (attrName === Attribute.DISABLED) {
             this.setAttribute('aria-disabled', hasValue ? 'true' : 'false');
-            if (hasValue) {
-                this._rangeEl.setAttribute(attrName, newValue);
-            } else {
-                this._rangeEl.removeAttribute(attrName);
-            }
+            toggleAttribute(this._rangeEl, Attribute.DISABLED, hasValue);
         } else if (attrName === Attribute.HIDDEN) {
             if (!hasValue) {
                 this.update();

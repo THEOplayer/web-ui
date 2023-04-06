@@ -4,6 +4,7 @@ import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent'
 import { MENU_CHANGE_EVENT, type MenuChangeEvent } from '../events/MenuChangeEvent';
 import { createCustomEvent } from '../util/EventUtils';
 import { Attribute } from '../util/Attribute';
+import { toggleAttribute } from '../util/CommonUtils';
 
 export interface MenuOptions {
     template?: HTMLTemplateElement;
@@ -97,12 +98,7 @@ export class Menu extends HTMLElement {
             return;
         }
         if (attrName === Attribute.MENU_OPENED) {
-            const hasValue = newValue != null;
-            if (hasValue) {
-                this.removeAttribute('hidden');
-            } else {
-                this.setAttribute('hidden', '');
-            }
+            toggleAttribute(this, Attribute.HIDDEN, newValue == null);
             const changeEvent: MenuChangeEvent = createCustomEvent(MENU_CHANGE_EVENT, { bubbles: true });
             this.dispatchEvent(changeEvent);
         }

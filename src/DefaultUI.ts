@@ -9,6 +9,7 @@ import { isMobile } from './util/Environment';
 import type { StreamType } from './util/StreamType';
 import type { TimeRange } from './components/TimeRange';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
+import { toggleAttribute } from './util/CommonUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
@@ -258,17 +259,9 @@ export class DefaultUI extends HTMLElement {
         } else if (attrName === Attribute.AUTOPLAY) {
             this.autoplay = hasValue;
         } else if (attrName === Attribute.FLUID) {
-            if (hasValue) {
-                this._ui.setAttribute(Attribute.FLUID, newValue);
-            } else {
-                this._ui.removeAttribute(Attribute.FLUID);
-            }
+            toggleAttribute(this._ui, Attribute.FLUID, hasValue);
         } else if (attrName === Attribute.MOBILE) {
-            if (hasValue) {
-                this._ui.setAttribute(Attribute.MOBILE, newValue);
-            } else {
-                this._ui.removeAttribute(Attribute.MOBILE);
-            }
+            toggleAttribute(this._ui, Attribute.MOBILE, hasValue);
         } else if (attrName === Attribute.STREAM_TYPE) {
             this.streamType = newValue;
         } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
@@ -284,19 +277,11 @@ export class DefaultUI extends HTMLElement {
     private readonly _updateStreamType = () => {
         this.setAttribute(Attribute.STREAM_TYPE, this.streamType);
         // Hide seekbar when stream is live with no DVR
-        if (this.streamType === 'live') {
-            this._timeRange.setAttribute(Attribute.HIDDEN, '');
-        } else {
-            this._timeRange.removeAttribute(Attribute.HIDDEN);
-        }
+        toggleAttribute(this._timeRange, Attribute.HIDDEN, this.streamType === 'live');
     };
 
     private readonly _onTitleSlotChange = () => {
-        if (this._titleSlot.assignedNodes().length > 0) {
-            this.setAttribute(Attribute.HAS_TITLE, '');
-        } else {
-            this.removeAttribute(Attribute.HAS_TITLE);
-        }
+        toggleAttribute(this, Attribute.HAS_TITLE, this._titleSlot.assignedNodes().length > 0);
     };
 }
 

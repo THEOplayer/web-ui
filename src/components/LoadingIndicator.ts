@@ -4,6 +4,7 @@ import loadingIndicatorHtml from './LoadingIndicator.html';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
+import { toggleAttribute } from '../util/CommonUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${loadingIndicatorCss}</style>${loadingIndicatorHtml}`;
@@ -66,11 +67,7 @@ export class LoadingIndicator extends StateReceiverMixin(HTMLElement, ['player']
 
     private readonly _updateFromPlayer = () => {
         const loading = this._player !== undefined && !this._player.paused && (this._player.seeking || this._player.readyState < 3);
-        if (loading) {
-            this.setAttribute(Attribute.LOADING, '');
-        } else {
-            this.removeAttribute(Attribute.LOADING);
-        }
+        toggleAttribute(this, Attribute.LOADING, loading);
     };
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {

@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type MediaTrack, type PlayerConfiguration, type SourceDescription, type VideoQuality } from 'theoplayer/chromeless';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
-import { arrayFind, arrayRemove, containsComposedNode, isElement, isHTMLElement, noOp } from './util/CommonUtils';
+import { arrayFind, arrayRemove, containsComposedNode, isElement, isHTMLElement, noOp, toggleAttribute } from './util/CommonUtils';
 import { forEachStateReceiverElement, type StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from './events/ToggleMenuEvent';
 import { CLOSE_MENU_EVENT } from './events/CloseMenuEvent';
@@ -249,11 +249,7 @@ export class UIContainer extends HTMLElement {
     }
 
     set muted(value: boolean) {
-        if (value) {
-            this.setAttribute(Attribute.MUTED, '');
-        } else {
-            this.removeAttribute(Attribute.MUTED);
-        }
+        toggleAttribute(this, Attribute.MUTED, value);
     }
 
     /**
@@ -264,11 +260,7 @@ export class UIContainer extends HTMLElement {
     }
 
     set autoplay(value: boolean) {
-        if (value) {
-            this.setAttribute(Attribute.AUTOPLAY, '');
-        } else {
-            this.removeAttribute(Attribute.AUTOPLAY);
-        }
+        toggleAttribute(this, Attribute.AUTOPLAY, value);
     }
 
     /**
@@ -700,11 +692,7 @@ export class UIContainer extends HTMLElement {
         if (!isFullscreen && this._player !== undefined && this._player.presentation.currentMode === 'fullscreen') {
             isFullscreen = true;
         }
-        if (isFullscreen) {
-            this.setAttribute(Attribute.FULLSCREEN, '');
-        } else {
-            this.removeAttribute(Attribute.FULLSCREEN);
-        }
+        toggleAttribute(this, Attribute.FULLSCREEN, isFullscreen);
     };
 
     private readonly _updateAspectRatio = (): void => {
@@ -727,11 +715,7 @@ export class UIContainer extends HTMLElement {
 
     private readonly _updateError = (): void => {
         const error = this._player?.errorObject;
-        if (error) {
-            this.setAttribute(Attribute.HAS_ERROR, '');
-        } else {
-            this.removeAttribute(Attribute.HAS_ERROR);
-        }
+        toggleAttribute(this, Attribute.HAS_ERROR, error !== undefined);
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('error') >= 0) {
                 receiver.error = error;
@@ -752,21 +736,13 @@ export class UIContainer extends HTMLElement {
 
     private readonly _updatePausedAndEnded = (): void => {
         const paused = this._player ? this._player.paused : true;
-        if (paused) {
-            this.setAttribute(Attribute.PAUSED, '');
-        } else {
-            this.removeAttribute(Attribute.PAUSED);
-        }
+        toggleAttribute(this, Attribute.PAUSED, paused);
         this._updateEnded();
     };
 
     private readonly _updateEnded = (): void => {
         const ended = this._player ? this._player.ended : false;
-        if (ended) {
-            this.setAttribute(Attribute.ENDED, '');
-        } else {
-            this.removeAttribute(Attribute.ENDED);
-        }
+        toggleAttribute(this, Attribute.ENDED, ended);
     };
 
     private readonly _updateStreamType = (): void => {
@@ -846,29 +822,18 @@ export class UIContainer extends HTMLElement {
 
     private readonly _updateCasting = (): void => {
         const casting = this._player?.cast?.casting ?? false;
-        if (casting) {
-            this.setAttribute(Attribute.CASTING, '');
-        } else {
-            this.removeAttribute(Attribute.CASTING);
-        }
+        toggleAttribute(this, Attribute.CASTING, casting);
     };
 
     private readonly _updatePlayingAd = (): void => {
         const playingAd = this._player?.ads?.playing ?? false;
-        if (playingAd) {
-            this.setAttribute(Attribute.PLAYING_AD, '');
-        } else {
-            this.removeAttribute(Attribute.PLAYING_AD);
-        }
+        toggleAttribute(this, Attribute.PLAYING_AD, playingAd);
     };
 
     private readonly _onSourceChange = (): void => {
         this.closeMenu_();
-        if (this._player !== undefined && !this._player.paused) {
-            this.setAttribute(Attribute.HAS_FIRST_PLAY, '');
-        } else {
-            this.removeAttribute(Attribute.HAS_FIRST_PLAY);
-        }
+        const isPlaying = this._player !== undefined && !this._player.paused;
+        toggleAttribute(this, Attribute.HAS_FIRST_PLAY, isPlaying);
     };
 
     private isUserIdle_(): boolean {

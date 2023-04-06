@@ -6,6 +6,7 @@ import liveIcon from '../icons/live.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
+import { toggleAttribute } from '../util/CommonUtils';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -59,11 +60,7 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
     }
 
     set paused(paused: boolean) {
-        if (paused) {
-            this.setAttribute(Attribute.PAUSED, '');
-        } else {
-            this.removeAttribute(Attribute.PAUSED);
-        }
+        toggleAttribute(this, Attribute.PAUSED, paused);
     }
 
     get streamType(): StreamType {
@@ -88,11 +85,7 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
     }
 
     set live(live: boolean) {
-        if (live) {
-            this.setAttribute(Attribute.LIVE, '');
-        } else {
-            this.removeAttribute(Attribute.LIVE);
-        }
+        toggleAttribute(this, Attribute.LIVE, live);
     }
 
     get player(): ChromelessPlayer | undefined {

@@ -8,7 +8,7 @@ import { MediaTrackRadioButton } from './MediaTrackRadioButton';
 import { TextTrackRadioButton } from './TextTrackRadioButton';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { TextTrackOffRadioButton } from './TextTrackOffRadioButton';
-import { fromArrayLike } from '../util/CommonUtils';
+import { fromArrayLike, toggleAttribute } from '../util/CommonUtils';
 import { createEvent } from '../util/EventUtils';
 
 const template = document.createElement('template');
@@ -95,11 +95,7 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
     }
 
     set showOffButton(value: boolean) {
-        if (value) {
-            this.setAttribute(Attribute.SHOW_OFF, '');
-        } else {
-            this.removeAttribute(Attribute.SHOW_OFF);
-        }
+        toggleAttribute(this, Attribute.SHOW_OFF, value);
     }
 
     get player(): ChromelessPlayer | undefined {

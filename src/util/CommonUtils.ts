@@ -107,3 +107,11 @@ export function containsComposedNode(rootNode: Node, childNode: Node): boolean {
     }
     return false;
 }
+
+export function toggleAttribute(element: Element, attribute: string, enabled: boolean): void {
+    if (enabled) {
+        element.setAttribute(attribute, '');
+    } else {
+        element.removeAttribute(attribute);
+    }
+}

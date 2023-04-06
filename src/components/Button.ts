@@ -2,6 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import buttonCss from './Button.css';
 import { KeyCode } from '../util/KeyCode';
 import { Attribute } from '../util/Attribute';
+import { toggleAttribute } from '../util/CommonUtils';
 
 export interface ButtonOptions {
     template: HTMLTemplateElement;
@@ -87,11 +88,7 @@ export class Button extends HTMLElement {
     }
 
     set disabled(disabled: boolean) {
-        if (disabled) {
-            this.setAttribute(Attribute.DISABLED, '');
-        } else {
-            this.removeAttribute(Attribute.DISABLED);
-        }
+        toggleAttribute(this, Attribute.DISABLED, disabled);
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
