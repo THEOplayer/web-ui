@@ -24,10 +24,6 @@ permalink: /examples/default-ui
 <script>
     var ui = document.querySelector('theoplayer-default-ui');
     document.querySelector('#mobile-toggle').addEventListener('change', function (ev) {
-        if (ev.target.checked) {
-            ui.setAttribute('mobile', '');
-        } else {
-            ui.removeAttribute('mobile');
-        }
+        ui.setAttribute('device-type', ev.target.checked ? 'mobile' : 'desktop');
     });
 </script>

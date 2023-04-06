@@ -22,6 +22,7 @@ import { getTargetQualities } from './util/TrackUtils';
 import type { MenuGroup } from './components';
 import './components/MenuGroup';
 import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
+import type { DeviceType } from './util/DeviceType';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -57,8 +58,9 @@ const DEFAULT_DVR_THRESHOLD = 60;
  * @attribute `fluid` - If set, the player automatically adjusts its height to fit the video's aspect ratio.
  * @attribute `muted` - If set, the player starts out as muted. Reflects `ui.player.muted`.
  * @attribute `autoplay` - If set, the player attempts to automatically start playing (if allowed).
- * @attribute `mobile` - Whether to use a mobile-optimized UI layout instead.
- *   Can be used in CSS to show/hide certain desktop-specific or mobile-specific UI controls.
+ * @attribute `device-type` - The device type, either "desktop" or "mobile".
+ *   Can be used in CSS to show/hide certain device-specific UI controls.
+ * @attribute `mobile` - Whether the user is on a mobile device. Equivalent to `device-type == "mobile"`.
  * @attribute `stream-type` - The stream type, either "vod", "live" or "dvr".
  *   Can be used to show/hide certain UI controls specific for livestreams, such as
  *   a {@link LiveButton | `<theoplayer-live-button>`}.
@@ -102,7 +104,7 @@ export class UIContainer extends HTMLElement {
             Attribute.AUTOPLAY,
             Attribute.FULLSCREEN,
             Attribute.FLUID,
-            Attribute.MOBILE,
+            Attribute.DEVICE_TYPE,
             Attribute.PAUSED,
             Attribute.ENDED,
             Attribute.CASTING,
@@ -334,8 +336,9 @@ export class UIContainer extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
-        if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
-            this.setAttribute(Attribute.MOBILE, '');
+        if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {
+            const deviceType: DeviceType = isMobile() ? 'mobile' : 'desktop';
+            this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
         }
         if (!this.hasAttribute(Attribute.PAUSED)) {
             this.setAttribute(Attribute.PAUSED, '');
@@ -462,6 +465,8 @@ export class UIContainer extends HTMLElement {
                     receiver.fullscreen = hasValue;
                 }
             }
+        } else if (attrName === Attribute.DEVICE_TYPE) {
+            toggleAttribute(this, Attribute.MOBILE, newValue === 'mobile');
         } else if (attrName === Attribute.STREAM_TYPE) {
             for (const receiver of this._stateReceivers) {
                 if (receiver[StateReceiverProps].indexOf('streamType') >= 0) {

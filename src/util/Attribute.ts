@@ -5,6 +5,7 @@ export enum Attribute {
     MUTED = 'muted',
     FULLSCREEN = 'fullscreen',
     FLUID = 'fluid',
+    DEVICE_TYPE = 'device-type',
     MOBILE = 'mobile',
     MOBILE_ONLY = 'mobile-only',
     MOBILE_HIDDEN = 'mobile-hidden',

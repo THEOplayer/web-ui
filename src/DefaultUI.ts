@@ -41,8 +41,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
  * @attribute `fluid` - If set, the player automatically adjusts its height to fit the video's aspect ratio.
  * @attribute `muted` - If set, the player starts out as muted. Reflects `ui.player.muted`.
  * @attribute `autoplay` - If set, the player attempts to automatically start playing (if allowed).
- * @attribute `mobile` - Whether to use a mobile-optimized UI layout instead.
- *   Can be used in CSS to show/hide certain desktop-specific or mobile-specific UI controls.
+ * @attribute `device-type` - The device type, either "desktop" or "mobile".
+ *   Can be used in CSS to show/hide certain device-specific UI controls.
+ * @attribute `mobile` - Whether the user is on a mobile device. Equivalent to `device-type == "mobile"`.
  * @attribute `stream-type` - The stream type, either "vod", "live" or "dvr".
  *   Can be used to show/hide certain UI controls specific for livestreams, such as
  *   a {@link LiveButton | `<theoplayer-live-button>`}.
@@ -66,7 +67,7 @@ export class DefaultUI extends HTMLElement {
             Attribute.MUTED,
             Attribute.AUTOPLAY,
             Attribute.FLUID,
-            Attribute.MOBILE,
+            Attribute.DEVICE_TYPE,
             Attribute.STREAM_TYPE,
             Attribute.USER_IDLE_TIMEOUT,
             Attribute.DVR_THRESHOLD,
@@ -260,8 +261,9 @@ export class DefaultUI extends HTMLElement {
             this.autoplay = hasValue;
         } else if (attrName === Attribute.FLUID) {
             toggleAttribute(this._ui, Attribute.FLUID, hasValue);
-        } else if (attrName === Attribute.MOBILE) {
-            toggleAttribute(this._ui, Attribute.MOBILE, hasValue);
+        } else if (attrName === Attribute.DEVICE_TYPE) {
+            toggleAttribute(this, Attribute.MOBILE, newValue === 'mobile');
+            this._ui.setAttribute(Attribute.DEVICE_TYPE, newValue);
         } else if (attrName === Attribute.STREAM_TYPE) {
             this.streamType = newValue;
         } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
