@@ -6,6 +6,9 @@
     height: 0;
     padding-bottom: 56.25%;
     background: var(--theoplayer-background, #000);
+
+    container-name: theoplayer-ui-container;
+    container-type: size;
 }
 
 :host([hidden]) {
@@ -134,16 +137,42 @@
     min-width: var(--theoplayer-menu-min-width, 200px);
 }
 
-:host([mobile]) [part='menu'] {
+@define-mixin menu-fill-styles {
+    /* Reset styles from desktop */
+    margin: 0;
+    min-width: auto;
+    /* Fill entire player */
     align-self: stretch;
     flex-grow: 1;
     /* Close menu when clicking on empty area of menu */
     pointer-events: none;
 }
 
+/* On mobile, make menu fill entire player */
+:host([mobile]) [part='menu'] {
+    @mixin menu-fill-styles;
+}
+
 :host(:not([menu-opened])) [part~='menu-layer'],
 :host([menu-opened][mobile]) [part~='vertical-layer'] {
     display: none !important;
+}
+
+/* When player is small, make menu fill entire player */
+@container theoplayer-ui-container (max-width: 500px) {
+    :host(:not([mobile])) [part~='menu-layer'] {
+        /* Reset styles from desktop */
+        inset: 0;
+        padding: 0;
+    }
+
+    :host(:not([mobile])) [part='menu'] {
+        @mixin menu-fill-styles;
+    }
+
+    :host([menu-opened]) [part~='vertical-layer'] {
+        display: none !important;
+    }
 }
 
 [part~='error-layer'] {
