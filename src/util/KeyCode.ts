@@ -1,11 +1,11 @@
 export enum KeyCode {
-    DOWN = 40,
-    LEFT = 37,
-    RIGHT = 39,
-    SPACE = 32,
     ENTER = 13,
-    UP = 38,
-    HOME = 36,
+    ESCAPE = 27,
+    SPACE = 32,
     END = 35,
-    ESCAPE = 27
+    HOME = 36,
+    LEFT = 37,
+    UP = 38,
+    RIGHT = 39,
+    DOWN = 40
 }
