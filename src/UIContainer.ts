@@ -308,6 +308,13 @@ export class UIContainer extends HTMLElement {
     }
 
     /**
+     * The device type, either "desktop", "mobile" or "tv".
+     */
+    get deviceType(): DeviceType {
+        return (this.getAttribute(Attribute.DEVICE_TYPE) as DeviceType) || 'desktop';
+    }
+
+    /**
      * The stream type, either "vod", "live" or "dvr".
      *
      * If you know in advance that the source will be a livestream, you can set this property to avoid a screen flicker
@@ -469,6 +476,11 @@ export class UIContainer extends HTMLElement {
         } else if (attrName === Attribute.DEVICE_TYPE) {
             toggleAttribute(this, Attribute.MOBILE, newValue === 'mobile');
             toggleAttribute(this, Attribute.TV, newValue === 'tv');
+            for (const receiver of this._stateReceivers) {
+                if (receiver[StateReceiverProps].indexOf('deviceType') >= 0) {
+                    receiver.deviceType = newValue;
+                }
+            }
         } else if (attrName === Attribute.STREAM_TYPE) {
             for (const receiver of this._stateReceivers) {
                 if (receiver[StateReceiverProps].indexOf('streamType') >= 0) {
@@ -540,6 +552,9 @@ export class UIContainer extends HTMLElement {
         }
         if (receiverProps.indexOf('fullscreen') >= 0) {
             receiver.fullscreen = this.fullscreen;
+        }
+        if (receiverProps.indexOf('deviceType') >= 0) {
+            receiver.deviceType = this.deviceType;
         }
         if (receiverProps.indexOf('streamType') >= 0) {
             receiver.streamType = this.streamType;
