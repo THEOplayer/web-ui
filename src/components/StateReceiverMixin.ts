@@ -1,4 +1,4 @@
-import { type Constructor, fromArrayLike, isArray, isElement, isHTMLElement, isHTMLSlotElement } from '../util/CommonUtils';
+import { type Constructor, fromArrayLike, getChildren, isArray } from '../util/CommonUtils';
 import type { ChromelessPlayer, THEOplayerError, VideoQuality } from 'theoplayer/chromeless';
 import type { DeviceType } from '../util/DeviceType';
 import type { StreamType } from '../util/StreamType';
@@ -88,14 +88,8 @@ export async function forEachStateReceiverElement(
         callback(element);
     }
     // Check all its children
-    const children: Element[] = [
-        // Element.children does not exist for SVG elements in Internet Explorer.
-        // Assume those won't contain any state receivers.
-        ...(isHTMLElement(element) ? fromArrayLike(element.children) : []),
-        ...(element.shadowRoot ? fromArrayLike(element.shadowRoot.children) : []),
-        ...(isHTMLSlotElement(element) ? element.assignedNodes().filter(isElement) : [])
-    ];
+    const children = getChildren(element);
     if (children.length > 0) {
-        await Promise.all(children.map((child) => forEachStateReceiverElement(child, playerElement, callback)));
+        await Promise.all(fromArrayLike(children).map((child) => forEachStateReceiverElement(child, playerElement, callback)));
     }
 }

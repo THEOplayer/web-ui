@@ -115,3 +115,17 @@ export function toggleAttribute(element: Element, attribute: string, enabled: bo
         element.removeAttribute(attribute);
     }
 }
+
+export function getChildren(element: Element): ArrayLike<Element> {
+    if (element.shadowRoot) {
+        return element.shadowRoot.children;
+    } else if (isHTMLSlotElement(element)) {
+        return element.assignedNodes().filter(isElement);
+    } else if (isHTMLElement(element)) {
+        // Element.children does not exist for SVG elements in Internet Explorer.
+        // Assume those won't contain any state receivers.
+        return element.children;
+    } else {
+        return [];
+    }
+}
