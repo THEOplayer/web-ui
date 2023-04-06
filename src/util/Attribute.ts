@@ -7,6 +7,7 @@ export enum Attribute {
     FLUID = 'fluid',
     DEVICE_TYPE = 'device-type',
     MOBILE = 'mobile',
+    TV = 'tv',
     MOBILE_ONLY = 'mobile-only',
     MOBILE_HIDDEN = 'mobile-hidden',
     USER_IDLE = 'user-idle',

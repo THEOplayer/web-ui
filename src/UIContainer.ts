@@ -10,7 +10,7 @@ import { ENTER_FULLSCREEN_EVENT, type EnterFullscreenEvent } from './events/Ente
 import { EXIT_FULLSCREEN_EVENT, type ExitFullscreenEvent } from './events/ExitFullscreenEvent';
 import { fullscreenAPI } from './util/FullscreenUtils';
 import { Attribute } from './util/Attribute';
-import { isMobile } from './util/Environment';
+import { isMobile, isTv } from './util/Environment';
 import { Rectangle } from './util/GeometryUtils';
 import './components/GestureReceiver';
 import { PREVIEW_TIME_CHANGE_EVENT, type PreviewTimeChangeEvent } from './events/PreviewTimeChangeEvent';
@@ -58,9 +58,10 @@ const DEFAULT_DVR_THRESHOLD = 60;
  * @attribute `fluid` - If set, the player automatically adjusts its height to fit the video's aspect ratio.
  * @attribute `muted` - If set, the player starts out as muted. Reflects `ui.player.muted`.
  * @attribute `autoplay` - If set, the player attempts to automatically start playing (if allowed).
- * @attribute `device-type` - The device type, either "desktop" or "mobile".
+ * @attribute `device-type` - The device type, either "desktop", "mobile" or "tv".
  *   Can be used in CSS to show/hide certain device-specific UI controls.
  * @attribute `mobile` - Whether the user is on a mobile device. Equivalent to `device-type == "mobile"`.
+ * @attribute `tv` - Whether the user is on a TV device. Equivalent to `device-type == "tv"`.
  * @attribute `stream-type` - The stream type, either "vod", "live" or "dvr".
  *   Can be used to show/hide certain UI controls specific for livestreams, such as
  *   a {@link LiveButton | `<theoplayer-live-button>`}.
@@ -337,7 +338,7 @@ export class UIContainer extends HTMLElement {
         shadyCss.styleElement(this);
 
         if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {
-            const deviceType: DeviceType = isMobile() ? 'mobile' : 'desktop';
+            const deviceType: DeviceType = isMobile() ? 'mobile' : isTv() ? 'tv' : 'desktop';
             this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
         }
         if (!this.hasAttribute(Attribute.PAUSED)) {
@@ -467,6 +468,7 @@ export class UIContainer extends HTMLElement {
             }
         } else if (attrName === Attribute.DEVICE_TYPE) {
             toggleAttribute(this, Attribute.MOBILE, newValue === 'mobile');
+            toggleAttribute(this, Attribute.TV, newValue === 'tv');
         } else if (attrName === Attribute.STREAM_TYPE) {
             for (const receiver of this._stateReceivers) {
                 if (receiver[StateReceiverProps].indexOf('streamType') >= 0) {

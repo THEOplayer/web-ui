@@ -23,3 +23,14 @@ export function isMobile(): boolean {
     }
     return /Android|iPhone|iPad|iPod|Mobile Safari|Windows Phone/i.test(userAgent);
 }
+
+export function isTv(): boolean {
+    if (typeof navigator !== 'object') {
+        return false;
+    }
+    const userAgent = navigator.userAgent;
+    if (!userAgent) {
+        return false;
+    }
+    return /\b(tv|smart-tv|smarttv|appletv|crkey|googletv|hbbtv|pov_tv|roku|viera|nettv|philipstv)\b/i.test(userAgent);
+}
