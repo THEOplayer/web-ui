@@ -51,6 +51,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         this._previewRailEl = this.shadowRoot!.querySelector('.theoplayer-time-range-preview-rail')!;
         this._previewBoxEl = this._previewRailEl.querySelector('[part~="preview-box"]')!;
 
+        this._rangeEl.setAttribute(Attribute.ARIA_LIVE, 'off');
         this._rangeEl.addEventListener('mousedown', this._pauseOnScrubStart);
         this._rangeEl.addEventListener('touchstart', this._pauseOnScrubStart);
 
@@ -141,7 +142,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         return DEFAULT_MISSING_TIME_PHRASE;
     }
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (attrName === Attribute.STREAM_TYPE) {
             this._updateDisabled();

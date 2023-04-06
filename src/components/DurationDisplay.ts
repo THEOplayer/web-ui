@@ -4,6 +4,7 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer';
 import { setTextContent } from '../util/CommonUtils';
 import { formatTime } from '../util/TimeUtils';
+import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${textDisplayCss}</style><span></span>`;
@@ -39,6 +40,12 @@ export class DurationDisplay extends StateReceiverMixin(HTMLElement, ['player'])
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+
+        if (!this.hasAttribute(Attribute.ARIA_LIVE)) {
+            // Tell screen readers not to automatically read the duration as it changes
+            this.setAttribute(Attribute.ARIA_LIVE, 'off');
+        }
+
         this._updateFromPlayer();
     }
 

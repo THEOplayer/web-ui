@@ -57,7 +57,7 @@ export abstract class Range extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
-        this._rangeEl.setAttribute('aria-label', this.getAriaLabel());
+        this._rangeEl.setAttribute(Attribute.ARIA_LABEL, this.getAriaLabel());
         this.update();
 
         this.addEventListener('pointermove', this._updatePointerBar);

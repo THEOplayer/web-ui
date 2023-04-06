@@ -48,7 +48,7 @@ export class MenuButton extends Button {
         }
     }
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (attrName === Attribute.MENU) {
             if (!this.hasAttribute('aria-controls') || this.getAttribute('aria-controls') === oldValue) {

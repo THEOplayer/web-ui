@@ -55,6 +55,10 @@ export class LinkButton extends HTMLElement {
         if (!this.hasAttribute('tabindex')) {
             this.setAttribute('tabindex', '0');
         }
+        if (!this.hasAttribute(Attribute.ARIA_LIVE)) {
+            // Let the screen reader user know that the text of the button may change
+            this.setAttribute(Attribute.ARIA_LIVE, 'polite');
+        }
 
         this._linkEl.addEventListener('keydown', this._onKeyDown);
         this._linkEl.addEventListener('click', this._onClick);

@@ -63,6 +63,10 @@ export class Button extends HTMLElement {
         if (!this.hasAttribute('tabindex')) {
             this.setAttribute('tabindex', '0');
         }
+        if (!this.hasAttribute(Attribute.ARIA_LIVE)) {
+            // Let the screen reader user know that the text of the button may change
+            this.setAttribute(Attribute.ARIA_LIVE, 'polite');
+        }
 
         this.addEventListener('keydown', this._onKeyDown);
         this.addEventListener('click', this._onClick);

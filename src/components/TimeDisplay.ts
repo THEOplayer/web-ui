@@ -52,6 +52,12 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'str
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+
+        if (!this.hasAttribute(Attribute.ARIA_LIVE)) {
+            // Tell screen readers not to automatically read the time as it changes
+            this.setAttribute(Attribute.ARIA_LIVE, 'off');
+        }
+
         this._updateFromPlayer();
     }
 

@@ -5,6 +5,7 @@ import { CastButton } from './CastButton';
 import chromecastButtonHtml from './ChromecastButton.html';
 import chromecastButtonCss from './ChromecastButton.css';
 import { buttonTemplate } from './Button';
+import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(chromecastButtonHtml, chromecastButtonCss);
@@ -35,6 +36,11 @@ export class ChromecastButton extends StateReceiverMixin(CastButton, ['player'])
         this._upgradeProperty('player');
     }
 
+    override connectedCallback() {
+        super.connectedCallback();
+        this._updateAriaLabel();
+    }
+
     get player() {
         return this._player;
     }
@@ -42,6 +48,19 @@ export class ChromecastButton extends StateReceiverMixin(CastButton, ['player'])
     set player(player: ChromelessPlayer | undefined) {
         this._player = player;
         this.castApi = player?.cast?.chromecast;
+    }
+
+    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+        super.attributeChangedCallback(attrName, oldValue, newValue);
+        if (ChromecastButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
+            this._updateAriaLabel();
+        }
+    }
+
+    private _updateAriaLabel(): void {
+        const label =
+            this.castState === 'connecting' || this.castState === 'connected' ? 'stop casting to Chromecast' : 'start casting to Chromecast';
+        this.setAttribute(Attribute.ARIA_LABEL, label);
     }
 }
 

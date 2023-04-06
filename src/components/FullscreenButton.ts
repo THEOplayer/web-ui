@@ -32,6 +32,11 @@ export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen'])
         this._upgradeProperty('fullscreen');
     }
 
+    override connectedCallback() {
+        super.connectedCallback();
+        this._updateAriaLabel();
+    }
+
     get fullscreen(): boolean {
         return this.hasAttribute(Attribute.FULLSCREEN);
     }
@@ -60,11 +65,17 @@ export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen'])
         }
     }
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
+    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (FullscreenButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
+            this._updateAriaLabel();
         }
+    }
+
+    private _updateAriaLabel(): void {
+        const label = this.fullscreen ? 'exit fullscreen' : 'enter fullscreen';
+        this.setAttribute(Attribute.ARIA_LABEL, label);
     }
 }
 
