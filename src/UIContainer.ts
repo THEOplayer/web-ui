@@ -2,7 +2,16 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type MediaTrack, type PlayerConfiguration, type SourceDescription, type VideoQuality } from 'theoplayer/chromeless';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
-import { arrayFind, arrayRemove, containsComposedNode, isElement, isHTMLElement, noOp, toggleAttribute } from './util/CommonUtils';
+import {
+    arrayFind,
+    arrayRemove,
+    containsComposedNode,
+    getFocusableChildren,
+    isElement,
+    isHTMLElement,
+    noOp,
+    toggleAttribute
+} from './util/CommonUtils';
 import { forEachStateReceiverElement, type StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from './events/ToggleMenuEvent';
 import { CLOSE_MENU_EVENT } from './events/CloseMenuEvent';
@@ -376,6 +385,7 @@ export class UIContainer extends HTMLElement {
         }
 
         this.setUserIdle_();
+        this.addEventListener('keydown', this._onKeyDown);
         this.addEventListener('keyup', this._onKeyUp);
         this.addEventListener('pointerup', this._onPointerUp);
         this.addEventListener('pointermove', this._onPointerMove);
@@ -440,6 +450,7 @@ export class UIContainer extends HTMLElement {
             document.removeEventListener(fullscreenAPI.fullscreenerror_, this._onFullscreenChange);
         }
 
+        this.removeEventListener('keydown', this._onKeyDown);
         this.removeEventListener('keyup', this._onKeyUp);
         this.removeEventListener('pointerup', this._onPointerUp);
         this.removeEventListener('click', this._onClickAfterPointerUp, true);
@@ -899,13 +910,16 @@ export class UIContainer extends HTMLElement {
         return node === this || this._playerEl.contains(node);
     }
 
-    private readonly _onKeyUp = (event: KeyboardEvent): void => {
-        // Show the controls while navigating with the keyboard.
-        this.scheduleUserIdle_();
-        if (this.deviceType === 'tv' && isArrowKey(event.keyCode) && navigateByArrowKey(this, event.keyCode)) {
+    private readonly _onKeyDown = (event: KeyboardEvent): void => {
+        if (this.deviceType === 'tv' && isArrowKey(event.keyCode) && navigateByArrowKey(this, getFocusableChildren(this), event.keyCode)) {
             event.preventDefault();
             event.stopPropagation();
         }
+    };
+
+    private readonly _onKeyUp = (): void => {
+        // Show the controls while navigating with the keyboard.
+        this.scheduleUserIdle_();
     };
 
     private readonly _onPointerUp = (event: PointerEvent): void => {

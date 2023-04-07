@@ -1,9 +1,8 @@
 import { type ArrowKeyCode, KeyCode } from './KeyCode';
-import { arrayMinByKey, getActiveElement, getFocusableChildren } from './CommonUtils';
+import { arrayMinByKey, getActiveElement } from './CommonUtils';
 import { Rectangle } from './GeometryUtils';
 
-export function navigateByArrowKey(container: HTMLElement, key: ArrowKeyCode): boolean {
-    const children = getFocusableChildren(container);
+export function navigateByArrowKey(container: HTMLElement, children: HTMLElement[], key: ArrowKeyCode): boolean {
     const focusedChild = getActiveElement();
     if (!focusedChild || children.indexOf(focusedChild as HTMLElement) < 0) {
         // TODO Default focus?
