@@ -13,13 +13,13 @@ export function navigateByArrowKey(container: HTMLElement, key: ArrowKeyCode): b
         }
         return false;
     }
-    const containerRect = Rectangle.fromRect(container.getBoundingClientRect());
-    const focusedRect = Rectangle.fromRect(focusedChild.getBoundingClientRect());
+    const containerRect = Rectangle.fromRect(container.getBoundingClientRect()).snapToPixels();
+    const focusedRect = Rectangle.fromRect(focusedChild.getBoundingClientRect()).snapToPixels();
     const childrenWithRects = children
         .map(
             (child): ChildWithRect => ({
                 child,
-                rect: child.getBoundingClientRect()
+                rect: Rectangle.fromRect(child.getBoundingClientRect()).snapToPixels()
             })
         )
         .filter((x) => x.rect.width > 0 && x.rect.height > 0);
