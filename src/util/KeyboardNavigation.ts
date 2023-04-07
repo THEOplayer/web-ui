@@ -33,11 +33,11 @@ export function navigateByArrowKey(container: HTMLElement, children: HTMLElement
             bounds.left = focusedRect.right;
             bounds.width = containerRect.right - focusedRect.right;
         }
-        candidates = childrenWithRects.filter((x) => bounds.contains(x.rect));
+        candidates = childrenWithRects.filter((x) => bounds.overlaps(x.rect));
         if (candidates.length === 0) {
             bounds.top = containerRect.top;
             bounds.height = containerRect.height;
-            candidates = childrenWithRects.filter((x) => bounds.contains(x.rect));
+            candidates = childrenWithRects.filter((x) => bounds.overlaps(x.rect));
         }
     } else {
         const bounds = focusedRect.clone();
@@ -48,11 +48,11 @@ export function navigateByArrowKey(container: HTMLElement, children: HTMLElement
             bounds.top = focusedRect.bottom;
             bounds.height = containerRect.bottom - focusedRect.bottom;
         }
-        candidates = childrenWithRects.filter((x) => bounds.contains(x.rect));
+        candidates = childrenWithRects.filter((x) => bounds.overlaps(x.rect));
         if (candidates.length === 0) {
             bounds.left = containerRect.left;
             bounds.width = containerRect.width;
-            candidates = childrenWithRects.filter((x) => bounds.contains(x.rect));
+            candidates = childrenWithRects.filter((x) => bounds.overlaps(x.rect));
         }
     }
     // Find the candidate closest to the currently focused child
