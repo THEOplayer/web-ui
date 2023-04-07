@@ -4,7 +4,7 @@ import { Rectangle } from './GeometryUtils';
 
 export function navigateByArrowKey(container: HTMLElement, children: HTMLElement[], key: ArrowKeyCode): boolean {
     const focusedChild = getActiveElement();
-    if (!focusedChild || children.indexOf(focusedChild as HTMLElement) < 0) {
+    if (!focusedChild) {
         // TODO Default focus?
         if (children.length > 0) {
             children[0].focus();
