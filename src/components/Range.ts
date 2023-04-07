@@ -3,6 +3,9 @@ import rangeCss from './Range.css';
 import { Attribute } from '../util/Attribute';
 import { ColorStops } from '../util/ColorStops';
 import { toggleAttribute } from '../util/CommonUtils';
+import { StateReceiverMixin } from './StateReceiverMixin';
+import type { DeviceType } from '../util/DeviceType';
+import { isArrowKey, KeyCode } from '../util/KeyCode';
 
 export interface RangeOptions {
     template: HTMLTemplateElement;
@@ -20,7 +23,7 @@ export function rangeTemplate(range: string, extraCss: string = ''): string {
  *
  * @group Components
  */
-export abstract class Range extends HTMLElement {
+export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType']) {
     static get observedAttributes() {
         return [Attribute.DISABLED, Attribute.HIDDEN];
     }
@@ -38,6 +41,7 @@ export abstract class Range extends HTMLElement {
         this._rangeEl.addEventListener('input', this._onInput);
         // Internet Explorer does not fire 'input' events for <input> elements... use 'change' instead.
         this._rangeEl.addEventListener('change', this._onInput);
+        this._rangeEl.addEventListener('keydown', this._onKeyDown);
 
         this._pointerEl = shadowRoot.querySelector('[part="pointer"]')!;
 
@@ -46,6 +50,7 @@ export abstract class Range extends HTMLElement {
         this._upgradeProperty('min');
         this._upgradeProperty('max');
         this._upgradeProperty('step');
+        this._upgradeProperty('deviceType');
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -130,6 +135,14 @@ export abstract class Range extends HTMLElement {
 
     set step(step: number | 'any') {
         this._rangeEl.step = String(step);
+    }
+
+    get deviceType(): DeviceType {
+        return (this.getAttribute(Attribute.DEVICE_TYPE) || 'desktop') as DeviceType;
+    }
+
+    set deviceType(deviceType: DeviceType) {
+        this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
@@ -237,4 +250,18 @@ export abstract class Range extends HTMLElement {
     protected updatePointer_(mousePercent: number, rangeRect: DOMRectReadOnly): void {
         this._pointerEl.style.width = `${mousePercent * rangeRect.width}px`;
     }
+
+    private readonly _onKeyDown = (e: KeyboardEvent): void => {
+        if (this.deviceType === 'tv' && isArrowKey(e.keyCode)) {
+            // On TV devices, only allow left/right arrow keys to move the slider.
+            if (e.keyCode === KeyCode.LEFT || e.keyCode === KeyCode.RIGHT) {
+                // Stop propagation, to prevent <theoplayer-ui> from navigating to a different control
+                // while we're moving the slider.
+                e.stopPropagation();
+            } else if (e.keyCode === KeyCode.UP || e.keyCode === KeyCode.DOWN) {
+                // Prevent default, to stop the browser from moving the slider.
+                e.preventDefault();
+            }
+        }
+    };
 }

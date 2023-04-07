@@ -37,7 +37,7 @@ const AD_MARKER_WIDTH = 1;
  *   the {@link PreviewThumbnail | preview thumbnail}.
  * @group Components
  */
-export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType']) {
+export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType', 'deviceType']) {
     static get observedAttributes() {
         return [...Range.observedAttributes, Attribute.SHOW_AD_MARKERS];
     }
