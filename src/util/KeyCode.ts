@@ -9,3 +9,9 @@ export enum KeyCode {
     RIGHT = 39,
     DOWN = 40
 }
+
+export type ArrowKeyCode = KeyCode.LEFT | KeyCode.UP | KeyCode.RIGHT | KeyCode.DOWN;
+
+export function isArrowKey(keyCode: number): keyCode is ArrowKeyCode {
+    return KeyCode.LEFT <= keyCode && keyCode <= KeyCode.DOWN;
+}

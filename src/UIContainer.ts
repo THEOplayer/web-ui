@@ -23,6 +23,8 @@ import type { MenuGroup } from './components';
 import './components/MenuGroup';
 import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
 import type { DeviceType } from './util/DeviceType';
+import { isArrowKey } from './util/KeyCode';
+import { navigateByArrowKey } from './util/KeyboardNavigation';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -897,9 +899,13 @@ export class UIContainer extends HTMLElement {
         return node === this || this._playerEl.contains(node);
     }
 
-    private readonly _onKeyUp = (): void => {
+    private readonly _onKeyUp = (event: KeyboardEvent): void => {
         // Show the controls while navigating with the keyboard.
         this.scheduleUserIdle_();
+        if (this.deviceType === 'tv' && isArrowKey(event.keyCode) && navigateByArrowKey(this, event.keyCode)) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
     };
 
     private readonly _onPointerUp = (event: PointerEvent): void => {
