@@ -141,15 +141,19 @@ export function toggleAttribute(element: Element, attribute: string, enabled: bo
 export function getChildren(element: Element): ArrayLike<Element> {
     if (element.shadowRoot) {
         return element.shadowRoot.children;
-    } else if (isHTMLSlotElement(element)) {
-        return element.assignedNodes().filter(isElement);
-    } else if (isHTMLElement(element)) {
+    }
+    if (isHTMLSlotElement(element)) {
+        const assignedNodes = element.assignedNodes();
+        if (assignedNodes.length > 0) {
+            return assignedNodes.filter(isElement);
+        }
+    }
+    if (isHTMLElement(element)) {
         // Element.children does not exist for SVG elements in Internet Explorer.
         // Assume those won't contain any state receivers.
         return element.children;
-    } else {
-        return [];
     }
+    return [];
 }
 
 export function getFocusableChildren(element: HTMLElement): HTMLElement[] {
