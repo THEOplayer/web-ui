@@ -111,3 +111,29 @@ If you want to fully customize your video player layout, you can use a `<theopla
 ```
 
 See [docs/examples/custom-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/custom-ui.html) for a complete example.
+
+# Legacy browser support
+
+By default, THEOplayer Web UI targets modern browsers that support modern JavaScript syntax (such as [async/await](https://caniuse.com/async-functions)) and native [Custom Elements](https://caniuse.com/custom-elementsv1). This keeps the download size small, so your viewers can spend less time waiting for your page to load and start watching their video faster.
+
+On older browsers (such as Internet Explorer 11 and older smart TVs), you need to load a different version of the THEOplayer Web UI that uses older JavaScript syntax. You also need to load additional polyfills for missing features such as Promises or Custom Elements. We recommend [Polyfill.io](https://polyfill.io/) and [Web Components Polyfills](https://github.com/webcomponents/polyfills) for these.
+
+-   Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`, while legacy browsers will load the legacy build (with `nomodule`).
+
+    ```html
+    <!-- Load polyfills -->
+    <script nomodule src="https://polyfill.io/v3/polyfill.min.js?features=es2015"></script>
+    <script nomodule src="https://unpkg.com/@webcomponents/webcomponentsjs@2.8.0/custom-elements-es5-adapter.js"></script>
+    <script nomodule src="https://unpkg.com/@webcomponents/webcomponentsjs@2.8.0/webcomponents-bundle.js"></script>
+    <!-- Load modern or legacy build -->
+    <script type="module" src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.js"></script>
+    <script nomodule src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.es5.js"></script>
+    ```
+
+-   Option 2: in your JavaScript. This will load the legacy build on both modern and legacy browsers, which is suboptimal. Instead, we recommend configuring your bundler to produce a modern and legacy build of your entire web app, and to import the appropriate version of THEOplayer Web UI for each build flavor.
+
+    ```js
+    import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js';
+    import '@webcomponents/webcomponentsjs/webcomponents-bundle.js';
+    import { DefaultUI } from '@theoplayer/web-ui/es5'; // note the "/es5" suffix
+    ```
