@@ -64,6 +64,11 @@ The current THEOplayer Web SDK comes with a built-in UI based on [video.js](http
         configuration='{"libraryLocation":"/path/to/node_modules/theoplayer/","license":"your_theoplayer_license_goes_here"}'
         source='{"sources":{"src":"https://example.com/stream.m3u8"}}'
     ></theoplayer-default-ui>
+    <script>
+        // Optionally, access the underlying THEOplayer player instance
+        const ui = document.querySelector('theoplayer-default-ui');
+        ui.player.addEventListener('playing', () => console.log('THEOplayer is now playing'));
+    </script>
     ```
 -   Option 2: in your JavaScript.
     ```js
@@ -72,11 +77,14 @@ The current THEOplayer Web SDK comes with a built-in UI based on [video.js](http
         libraryLocation: '/path/to/node_modules/theoplayer/',
         license: 'your_theoplayer_license_goes_here'
     });
+    // Set a source for the player to play
     ui.source = {
         sources: {
             src: 'https://example.com/stream.m3u8'
         }
     };
+    // Optionally, access the underlying THEOplayer player instance
+    ui.player.addEventListener('playing', () => console.log('THEOplayer is now playing'));
     ```
 
 See [docs/examples/default-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/default-ui.html) for a complete example.
