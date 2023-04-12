@@ -48,7 +48,7 @@ Then add `@theoplayer/web-ui` to your app:
     ```
 -   Option 2: in your JavaScript.
     ```js
-    import * as THEOplayerUI from '@theoplayer/web-ui';
+    import { DefaultUI } from '@theoplayer/web-ui';
     ```
 
 > **Warning**
