@@ -45,78 +45,7 @@ export default defineConfig([
         ],
         context: 'self',
         external: ['theoplayer'],
-        plugins: [
-            // Use TypeScript's module resolution for source files, and Node's for dependencies.
-            typescriptPaths(),
-            nodeResolve(),
-            // Run PostCSS on .css files.
-            postcss({
-                include: './src/**/*.css',
-                inject: false,
-                plugins: [
-                    postcssPresetEnv({
-                        browsers: browserslist,
-                        autoprefixer: { grid: 'no-autoplace' },
-                        enableClientSidePolyfills: false
-                    }),
-                    postcssMixins()
-                ],
-                minimize: production
-            }),
-            // Minify HTML and CSS.
-            minifyHTML({
-                include: ['./src/**/*.html'],
-                removeComments: production,
-                removeRedundantAttributes: true,
-                sortClassName: true,
-                collapseWhitespace: production
-            }),
-            // Import HTML and SVG as strings.
-            string({
-                include: ['./src/**/*.html', './src/**/*.svg']
-            }),
-            // Transpile TypeScript.
-            swc({
-                include: './src/**',
-                sourceMaps: true,
-                tsconfig: false,
-                env: {
-                    targets: browserslist
-                },
-                jsc: {
-                    loose: true,
-                    externalHelpers: true,
-                    parser: {
-                        syntax: 'typescript'
-                    }
-                }
-            }),
-            // Transpile dependencies for older browsers.
-            swc({
-                include: './node_modules/**',
-                exclude: './src/**',
-                sourceMaps: true,
-                tsconfig: false,
-                env: {
-                    targets: browserslist
-                },
-                jsc: {
-                    loose: true,
-                    externalHelpers: true
-                }
-            }),
-            ...(production
-                ? [
-                      minify({
-                          sourceMap: true,
-                          mangle: {
-                              toplevel: true
-                          },
-                          toplevel: true
-                      })
-                  ]
-                : [])
-        ]
+        plugins: jsPlugins({ production })
     },
     {
         input: './src/index.ts',
@@ -133,3 +62,78 @@ export default defineConfig([
         plugins: [dts()]
     }
 ]);
+
+function jsPlugins({ production = false }) {
+    return [
+        // Use TypeScript's module resolution for source files, and Node's for dependencies.
+        typescriptPaths(),
+        nodeResolve(),
+        // Run PostCSS on .css files.
+        postcss({
+            include: './src/**/*.css',
+            inject: false,
+            plugins: [
+                postcssPresetEnv({
+                    browsers: browserslist,
+                    autoprefixer: { grid: 'no-autoplace' },
+                    enableClientSidePolyfills: false
+                }),
+                postcssMixins()
+            ],
+            minimize: production
+        }),
+        // Minify HTML and CSS.
+        minifyHTML({
+            include: ['./src/**/*.html'],
+            removeComments: production,
+            removeRedundantAttributes: true,
+            sortClassName: true,
+            collapseWhitespace: production
+        }),
+        // Import HTML and SVG as strings.
+        string({
+            include: ['./src/**/*.html', './src/**/*.svg']
+        }),
+        // Transpile TypeScript.
+        swc({
+            include: './src/**',
+            sourceMaps: true,
+            tsconfig: false,
+            env: {
+                targets: browserslist
+            },
+            jsc: {
+                loose: true,
+                externalHelpers: true,
+                parser: {
+                    syntax: 'typescript'
+                }
+            }
+        }),
+        // Transpile dependencies for older browsers.
+        swc({
+            include: './node_modules/**',
+            exclude: './src/**',
+            sourceMaps: true,
+            tsconfig: false,
+            env: {
+                targets: browserslist
+            },
+            jsc: {
+                loose: true,
+                externalHelpers: true
+            }
+        }),
+        ...(production
+            ? [
+                  minify({
+                      sourceMap: true,
+                      mangle: {
+                          toplevel: true
+                      },
+                      toplevel: true
+                  })
+              ]
+            : [])
+    ];
+}
