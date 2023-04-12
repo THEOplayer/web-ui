@@ -11,6 +11,11 @@
       "import": "./dist/THEOplayerUI.mjs",
       "default": "./dist/THEOplayerUI.js"
     },
+    "./es5": {
+      "types": "./dist/THEOplayerUI.d.ts",
+      "import": "./dist/THEOplayerUI.es5.mjs",
+      "default": "./dist/THEOplayerUI.es5.js"
+    },
     "./dist/*": "./dist/*"
   },
   "files": [
