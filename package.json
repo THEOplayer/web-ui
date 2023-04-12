@@ -63,7 +63,8 @@
   },
   "browserslist": [
     "last 2 versions",
-    "chrome >= 47",
-    "ie >= 11"
+    "not dead",
+    "chrome >= 67",
+    "firefox esr"
   ]
 }

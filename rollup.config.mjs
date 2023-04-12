@@ -13,7 +13,8 @@ import dts from 'rollup-plugin-dts';
 const fileName = 'THEOplayerUI';
 const umdName = 'THEOplayerUI';
 
-const { browserslist, version, license } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
+const { browserslist: browserslistModern, version, license } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
+const browserslistLegacy = ['last 2 versions', 'ie >= 11'];
 const production = process.env.BUILD === 'production';
 
 const banner = `/*!
@@ -45,7 +46,32 @@ export default defineConfig([
         ],
         context: 'self',
         external: ['theoplayer'],
-        plugins: jsPlugins({ production })
+        plugins: jsPlugins({ es5: false, production })
+    },
+    {
+        input: './src/index.ts',
+        output: [
+            {
+                file: `./dist/${fileName}.es5.js`,
+                format: 'umd',
+                name: umdName,
+                sourcemap: true,
+                indent: false,
+                banner,
+                globals: {
+                    theoplayer: 'THEOplayer'
+                }
+            },
+            {
+                file: `./dist/${fileName}.es5.mjs`,
+                format: 'es',
+                sourcemap: true,
+                indent: false
+            }
+        ],
+        context: 'self',
+        external: ['theoplayer'],
+        plugins: jsPlugins({ es5: true, production })
     },
     {
         input: './src/index.ts',
@@ -63,7 +89,8 @@ export default defineConfig([
     }
 ]);
 
-function jsPlugins({ production = false }) {
+function jsPlugins({ es5 = false, production = false }) {
+    const browserslist = es5 ? browserslistLegacy : browserslistModern;
     return [
         // Use TypeScript's module resolution for source files, and Node's for dependencies.
         typescriptPaths(),
@@ -131,7 +158,8 @@ function jsPlugins({ production = false }) {
                       mangle: {
                           toplevel: true
                       },
-                      toplevel: true
+                      toplevel: true,
+                      ecma: es5 ? 5 : 2017
                   })
               ]
             : [])
