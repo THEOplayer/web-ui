@@ -46,7 +46,7 @@ export default defineConfig([
         ],
         context: 'self',
         external: ['theoplayer'],
-        plugins: jsPlugins({ es5: false, production })
+        plugins: jsPlugins({ es5: false, production, sourcemap: true })
     },
     {
         input: './src/index.ts',
@@ -55,7 +55,7 @@ export default defineConfig([
                 file: `./dist/${fileName}.es5.js`,
                 format: 'umd',
                 name: umdName,
-                sourcemap: true,
+                sourcemap: false,
                 indent: false,
                 banner,
                 globals: {
@@ -65,13 +65,13 @@ export default defineConfig([
             {
                 file: `./dist/${fileName}.es5.mjs`,
                 format: 'es',
-                sourcemap: true,
+                sourcemap: false,
                 indent: false
             }
         ],
         context: 'self',
         external: ['theoplayer'],
-        plugins: jsPlugins({ es5: true, production })
+        plugins: jsPlugins({ es5: true, production, sourcemap: false })
     },
     {
         input: './src/index.ts',
@@ -89,7 +89,7 @@ export default defineConfig([
     }
 ]);
 
-function jsPlugins({ es5 = false, production = false }) {
+function jsPlugins({ es5 = false, production = false, sourcemap = false }) {
     const browserslist = es5 ? browserslistLegacy : browserslistModern;
     return [
         // Use TypeScript's module resolution for source files, and Node's for dependencies.
@@ -124,7 +124,7 @@ function jsPlugins({ es5 = false, production = false }) {
         // Transpile TypeScript.
         swc({
             include: './src/**',
-            sourceMaps: true,
+            sourceMaps: sourcemap,
             tsconfig: false,
             env: {
                 targets: browserslist
@@ -141,7 +141,7 @@ function jsPlugins({ es5 = false, production = false }) {
         swc({
             include: './node_modules/**',
             exclude: './src/**',
-            sourceMaps: true,
+            sourceMaps: sourcemap,
             tsconfig: false,
             env: {
                 targets: browserslist
@@ -154,7 +154,7 @@ function jsPlugins({ es5 = false, production = false }) {
         ...(production
             ? [
                   minify({
-                      sourceMap: true,
+                      sourceMap: sourcemap,
                       mangle: {
                           toplevel: true
                       },
