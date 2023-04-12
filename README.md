@@ -71,10 +71,8 @@ Then add `@theoplayer/web-ui` to your app:
     ```js
     import { DefaultUI } from '@theoplayer/web-ui';
     const ui = new DefaultUI({
-        configuration: {
-            libraryLocation: '/path/to/node_modules/theoplayer/',
-            license: 'your_theoplayer_license_goes_here'
-        }
+        libraryLocation: '/path/to/node_modules/theoplayer/',
+        license: 'your_theoplayer_license_goes_here'
     });
     ui.source = {
         sources: {
