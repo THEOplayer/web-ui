@@ -181,6 +181,8 @@ export class UIContainer extends HTMLElement {
         this._upgradeProperty('autoplay');
         this._upgradeProperty('userIdleTimeout');
         this._upgradeProperty('streamType');
+
+        this.tryInitializePlayer_();
     }
 
     private _upgradeProperty(prop: keyof this) {
