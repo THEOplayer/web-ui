@@ -27,29 +27,27 @@ The current THEOplayer Web SDK comes with a built-in UI based on [video.js](http
 
 ## Installation
 
-This project requires the THEOplayer Web SDK to be installed.
-
-```sh
-npm install theoplayer @theoplayer/web-ui
-```
-
-You can also install a different variant of the THEOplayer npm package if you don't need all features, as long as it's aliased as `theoplayer`.
-
-```sh
-npm install theoplayer@npm:@theoplayer/basic-hls
-npm install @theoplayer/web-ui
-```
-
-Then add `@theoplayer/web-ui` to your app:
-
--   Option 1: in your HTML.
-    ```html
-    <script src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.js"></script>
+1. This project requires the THEOplayer Web SDK to be installed.
+    ```sh
+    npm install theoplayer
     ```
--   Option 2: in your JavaScript.
-    ```js
-    import * as THEOplayerUI from '@theoplayer/web-ui';
+    You can also install a different variant of the THEOplayer npm package if you don't need all features, as long as it's aliased as `theoplayer`.
+    ```sh
+    npm install theoplayer@npm:@theoplayer/basic-hls
     ```
+2. Install the THEOplayer Web UI.
+    ```sh
+    npm install @theoplayer/web-ui
+    ```
+3. Add `@theoplayer/web-ui` to your app:
+    - Option 1: in your HTML.
+        ```html
+        <script src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.js"></script>
+        ```
+    - Option 2: in your JavaScript.
+        ```js
+        import { DefaultUI } from '@theoplayer/web-ui';
+        ```
 
 > **Warning**
 > THEOplayer Web SDK currently only supports being loaded through a regular `<script>` tag or as a [UMD module](https://github.com/umdjs/umd), and does not support being `import`ed as a native JavaScript module. If you use `import` with THEOplayer Web UI, make sure to use a JavaScript bundler such as Webpack or Rollup to include THEOplayer in your app. We're hoping to fix this incompatibility soon.
@@ -66,25 +64,30 @@ Then add `@theoplayer/web-ui` to your app:
         configuration='{"libraryLocation":"/path/to/node_modules/theoplayer/","license":"your_theoplayer_license_goes_here"}'
         source='{"sources":{"src":"https://example.com/stream.m3u8"}}'
     ></theoplayer-default-ui>
+    <script>
+        // Optionally, access the underlying THEOplayer player instance
+        const ui = document.querySelector('theoplayer-default-ui');
+        ui.player.addEventListener('playing', () => console.log('THEOplayer is now playing'));
+    </script>
     ```
 -   Option 2: in your JavaScript.
     ```js
     import { DefaultUI } from '@theoplayer/web-ui';
     const ui = new DefaultUI({
-        configuration: {
-            libraryLocation: '/path/to/node_modules/theoplayer/',
-            license: 'your_theoplayer_license_goes_here'
-        }
+        libraryLocation: '/path/to/node_modules/theoplayer/',
+        license: 'your_theoplayer_license_goes_here'
     });
+    // Set a source for the player to play
     ui.source = {
         sources: {
             src: 'https://example.com/stream.m3u8'
         }
     };
+    // Optionally, access the underlying THEOplayer player instance
+    ui.player.addEventListener('playing', () => console.log('THEOplayer is now playing'));
     ```
 
-See [docs/examples/default-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/default-ui.html) for a complete
-example.
+See [docs/examples/default-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/default-ui.html) for a complete example.
 
 ### Custom UI
 
@@ -107,5 +110,4 @@ If you want to fully customize your video player layout, you can use a `<theopla
 </theoplayer-ui>
 ```
 
-See [docs/examples/custom-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/custom-ui.html) for a complete
-example.
+See [docs/examples/custom-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/custom-ui.html) for a complete example.
