@@ -81,8 +81,7 @@ Then add `@theoplayer/web-ui` to your app:
     };
     ```
 
-See [docs/examples/default-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/default-ui.html) for a complete
-example.
+See [docs/examples/default-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/default-ui.html) for a complete example.
 
 ### Custom UI
 
@@ -105,5 +104,4 @@ If you want to fully customize your video player layout, you can use a `<theopla
 </theoplayer-ui>
 ```
 
-See [docs/examples/custom-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/custom-ui.html) for a complete
-example.
+See [docs/examples/custom-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/custom-ui.html) for a complete example.
