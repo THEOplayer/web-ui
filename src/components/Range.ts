@@ -203,7 +203,10 @@ export abstract class Range extends HTMLElement {
     protected getBarColors(): ColorStops {
         const relativeValue = this.value - this.min;
         const relativeMax = this.max - this.min;
-        const rangePercent = (relativeValue / relativeMax) * 100;
+        let rangePercent = (relativeValue / relativeMax) * 100;
+        if (isNaN(rangePercent)) {
+            rangePercent = 0;
+        }
 
         // Use the last non-zero range width, in case the range is temporarily hidden.
         const rangeWidth = this._rangeEl.offsetWidth;

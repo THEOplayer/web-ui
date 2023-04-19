@@ -12,6 +12,8 @@ import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
 import './PreviewThumbnail';
 import './PreviewTimeDisplay';
+import { isLinearAd } from '../util/AdUtils';
+import type { ColorStops } from '../util/ColorStops';
 
 const template = document.createElement('template');
 template.innerHTML = rangeTemplate(timeRangeHtml, timeRangeCss);
@@ -19,7 +21,13 @@ shadyCss.prepareTemplate(template, 'theoplayer-time-range');
 
 const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 'seeked'] as const;
 const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'readystatechange', 'error'] as const;
+const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'addad', 'updatead'] as const;
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
+
+/**
+ * Width of an ad marker on the progress bar, in percent of the total bar width.
+ */
+const AD_MARKER_WIDTH = 1;
 
 /**
  * A seek bar, showing the current time of the player, and which seeks the player when clicked or dragged.
@@ -31,7 +39,7 @@ const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
  */
 export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType']) {
     static get observedAttributes() {
-        return [...Range.observedAttributes];
+        return [...Range.observedAttributes, Attribute.SHOW_AD_MARKERS];
     }
 
     private readonly _previewRailEl: HTMLElement;
@@ -79,6 +87,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         if (this._player !== undefined) {
             this._player.removeEventListener(UPDATE_EVENTS, this._updateFromPlayer);
             this._player.removeEventListener(AUTO_ADVANCE_EVENTS, this._toggleAutoAdvance);
+            this._player.ads?.removeEventListener(AD_EVENTS, this._onAdChange);
         }
         this._player = player;
         this._updateFromPlayer();
@@ -86,6 +95,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         if (this._player !== undefined) {
             this._player.addEventListener(UPDATE_EVENTS, this._updateFromPlayer);
             this._player.addEventListener(AUTO_ADVANCE_EVENTS, this._toggleAutoAdvance);
+            this._player.ads?.addEventListener(AD_EVENTS, this._onAdChange);
         }
     }
 
@@ -144,8 +154,13 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
 
     override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
+        if (newValue === oldValue) {
+            return;
+        }
         if (attrName === Attribute.STREAM_TYPE) {
             this._updateDisabled();
+        } else if (attrName === Attribute.SHOW_AD_MARKERS) {
+            this.update();
         }
         if (TimeRange.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
@@ -250,6 +265,47 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         });
         this.dispatchEvent(previewTimeChangeEvent);
     }
+
+    protected override getBarColors(): ColorStops {
+        const colorStops = super.getBarColors();
+        if (!this.hasAttribute(Attribute.SHOW_AD_MARKERS) || !this._player || !this._player.ads) {
+            return colorStops;
+        }
+        if (this._player.ads.playing) {
+            // Currently playing a linear ad
+            return colorStops;
+        }
+        const { min, max } = this;
+        for (const adBreak of this._player.ads.scheduledAdBreaks) {
+            if (adBreak.ads !== undefined && adBreak.ads.length > 0 && !adBreak.ads.some(isLinearAd)) {
+                // Ad break definitely does not contain any linear ads
+                continue;
+            }
+            let adBreakTime = adBreak.timeOffset;
+            if (adBreakTime < 0) {
+                // Post-rolls have timeOffset == -1
+                adBreakTime = this._player.duration;
+            }
+            if (min <= adBreakTime && adBreakTime <= max) {
+                const adBreakPercent = ((adBreakTime - min) / (max - min)) * 100;
+                let adBreakFrom: number;
+                let adBreakTo: number;
+                if (adBreakPercent + AD_MARKER_WIDTH < 100) {
+                    adBreakFrom = adBreakPercent;
+                    adBreakTo = adBreakPercent + AD_MARKER_WIDTH;
+                } else {
+                    adBreakFrom = 100 - AD_MARKER_WIDTH;
+                    adBreakTo = 100;
+                }
+                colorStops.add('var(--theoplayer-time-range-ad-marker-color, #ffc50f)', adBreakFrom, adBreakTo);
+            }
+        }
+        return colorStops;
+    }
+
+    private readonly _onAdChange = () => {
+        this.update();
+    };
 }
 
 customElements.define('theoplayer-time-range', TimeRange);
