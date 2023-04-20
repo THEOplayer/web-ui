@@ -92,8 +92,8 @@ export class DefaultUI extends HTMLElement {
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._ui = shadowRoot.querySelector('theoplayer-ui')!;
-        this._ui.configuration = configuration;
         this._ui.addEventListener(STREAM_TYPE_CHANGE_EVENT, this._updateStreamType);
+        this.setConfiguration_(configuration);
 
         this._titleSlot = shadowRoot.querySelector('slot[name="title"]')!;
         this._titleSlot.addEventListener('slotchange', this._onTitleSlotChange);
@@ -137,7 +137,19 @@ export class DefaultUI extends HTMLElement {
 
     set configuration(configuration: PlayerConfiguration) {
         this.removeAttribute(Attribute.CONFIGURATION);
-        this._ui.configuration = configuration;
+        this.setConfiguration_(configuration);
+    }
+
+    private setConfiguration_(configuration: PlayerConfiguration) {
+        this._ui.configuration = {
+            ...configuration,
+            ads: {
+                ...(configuration.ads ?? {}),
+                // Always disable Google IMA's own ad countdown,
+                // since we show our own countdown in the default UI.
+                showCountdown: false
+            }
+        };
     }
 
     /**
@@ -240,7 +252,7 @@ export class DefaultUI extends HTMLElement {
         if (attrName === Attribute.SOURCE) {
             this._ui.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
         } else if (attrName === Attribute.CONFIGURATION) {
-            this._ui.configuration = newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {};
+            this.setConfiguration_(newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {});
         } else if (attrName === Attribute.MUTED) {
             this.muted = hasValue;
         } else if (attrName === Attribute.AUTOPLAY) {
