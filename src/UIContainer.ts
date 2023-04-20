@@ -862,6 +862,7 @@ export class UIContainer extends HTMLElement {
     };
 
     private readonly _onSourceChange = (): void => {
+        this.closeMenu_();
         if (this._player !== undefined && !this._player.paused) {
             this.setAttribute(Attribute.HAS_FIRST_PLAY, '');
         } else {

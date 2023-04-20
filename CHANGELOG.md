@@ -10,6 +10,10 @@
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🐛 When the player changes sources, any open menu is now automatically closed
+
 ## v1.1.0 (2023-04-12)
 
 -   💥 **Breaking Change**: This project now targets modern browsers, so `dist/THEOplayerUI.js` and `dist/THEOplayerUI.mjs` now use ES2017 syntax (such as `class` and `async`/`await`). See "Legacy browser support" in the [README](./README.md) for more information about targeting older browsers. ([#26](https://github.com/THEOplayer/web-ui/issues/26), [#27](https://github.com/THEOplayer/web-ui/pull/27))
