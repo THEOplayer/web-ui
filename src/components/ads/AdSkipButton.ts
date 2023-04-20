@@ -95,7 +95,12 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
         }
         const linearAd = arrayFind(ads.currentAds ?? [], isLinearAd);
         if (linearAd === undefined) {
-            // No linear ad
+            // No linear ad.
+            this.style.display = 'none';
+            return;
+        }
+        if (linearAd.integration === 'google-ima') {
+            // Google IMA always shows their own skip button.
             this.style.display = 'none';
             return;
         }
