@@ -24,6 +24,10 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
 
     constructor() {
         super({ template });
+
+        this.disabled = true;
+        this.style.display = 'none';
+
         this._upgradeProperty('clickThrough');
         this._upgradeProperty('player');
     }
