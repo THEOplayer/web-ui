@@ -52,6 +52,7 @@ theoplayer-ui {
     display: flex;
     flex-flow: column nowrap;
     align-items: stretch;
+    pointer-events: none;
 }
 
 /*
