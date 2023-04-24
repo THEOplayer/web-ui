@@ -21,7 +21,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-time-range');
 
 const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 'seeked'] as const;
 const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'readystatechange', 'error'] as const;
-const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'addad', 'updatead'] as const;
+const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'adskip', 'addad', 'updatead'] as const;
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
 /**
