@@ -94,6 +94,11 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
             this.clickThrough = null;
             return;
         }
+        if (linearAd.integration === 'google-ima') {
+            // Google IMA always shows their own clickthrough button.
+            this.clickThrough = null;
+            return;
+        }
         const clickThrough = linearAd.clickThrough;
         if (!clickThrough) {
             // Linear ad has no clickthrough URL.
