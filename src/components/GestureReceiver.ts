@@ -83,6 +83,10 @@ export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player'])
     handleMouseClick(_event: MouseEvent): void {
         // Toggle play/pause.
         if (this._player !== undefined) {
+            if (this._player?.ads?.playing) {
+                // Clicking during a linear ad should open the ad's clickthrough URL instead.
+                return;
+            }
             if (this._player.paused) {
                 this._player.play();
             } else {
