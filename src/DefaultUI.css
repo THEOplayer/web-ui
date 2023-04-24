@@ -133,7 +133,6 @@ theoplayer-ad-skip-button[disabled] {
 }
 
 theoplayer-ad-countdown {
-    justify-content: flex-start;
     min-width: 0;
 }
 
