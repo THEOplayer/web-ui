@@ -232,3 +232,8 @@ theoplayer-live-button + theoplayer-time-display:not([stream-type='vod']) {
 theoplayer-live-button[live] + theoplayer-time-display {
     display: none !important;
 }
+
+/* Use smaller playback controls while playing an ad */
+theoplayer-ui[playing-ad] .theoplayer-ad-control {
+    --theoplayer-control-height: 16px;
+}
