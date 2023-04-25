@@ -12,6 +12,10 @@
 
 ## Unreleased
 
+-   🚀 Improved support for advertisements ([#28](https://github.com/THEOplayer/web-ui/pull/28))
+    -   Reworked the ad control bar in `<theoplayer-default-ui>`.
+    -   Added a `show-ad-markers` attribute to `<theoplayer-time-range>`, to show markers on the progress bar indicating when the content will be interrupted by an advertisement.
+    -   `<theoplayer-ad-skip-button>` and `<theoplayer-ad-clickthrough-button>` are automatically hidden while playing a Google IMA ad. (This is unfortunately necessary, because Google IMA doesn't provide a way to modify or replace its own buttons.)
 -   🐛 When the player changes sources, any open menu is now automatically closed
 
 ## v1.1.0 (2023-04-12)
