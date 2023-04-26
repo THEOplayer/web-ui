@@ -1,6 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import rangeCss from './Range.css';
 import { Attribute } from '../util/Attribute';
+import { ColorStops } from '../util/ColorStops';
 
 export interface RangeOptions {
     template: HTMLTemplateElement;
@@ -189,19 +190,9 @@ export abstract class Range extends HTMLElement {
      * by using a background gradient that moves with the range value.
      */
     private updateBar_() {
-        const colorArray = this.getBarColors();
-
-        const gradientStops: string[] = [];
-        let prevPercent = 0;
-        for (const [color, percent] of colorArray) {
-            if (percent < prevPercent) continue;
-            gradientStops.push(`${color} ${prevPercent}%`);
-            gradientStops.push(`${color} ${percent}%`);
-            prevPercent = percent;
-        }
-
+        const gradientStops = this.getBarColors().toGradientStops();
         shadyCss.styleSubtree(this, {
-            '--theoplayer-range-track-progress-internal': `linear-gradient(to right, ${gradientStops.join(', ')})`
+            '--theoplayer-range-track-progress-internal': `linear-gradient(to right, ${gradientStops})`
         });
     }
 
@@ -209,10 +200,13 @@ export abstract class Range extends HTMLElement {
      * Build the color gradient for the range bar.
      * Creating an array so progress-bar can insert the buffered bar.
      */
-    protected getBarColors(): Array<[string, number]> {
+    protected getBarColors(): ColorStops {
         const relativeValue = this.value - this.min;
         const relativeMax = this.max - this.min;
-        const rangePercent = (relativeValue / relativeMax) * 100;
+        let rangePercent = (relativeValue / relativeMax) * 100;
+        if (isNaN(rangePercent)) {
+            rangePercent = 0;
+        }
 
         // Use the last non-zero range width, in case the range is temporarily hidden.
         const rangeWidth = this._rangeEl.offsetWidth;
@@ -230,10 +224,9 @@ export abstract class Range extends HTMLElement {
             thumbPercent = (thumbOffset / this._lastRangeWidth) * 100;
         }
 
-        return [
-            ['var(--theoplayer-range-bar-color, #fff)', rangePercent + thumbPercent],
-            ['transparent', 100]
-        ];
+        const stops = new ColorStops();
+        stops.add('var(--theoplayer-range-bar-color, #fff)', 0, rangePercent + thumbPercent);
+        return stops;
     }
 
     private readonly _updatePointerBar = (e: PointerEvent): void => {

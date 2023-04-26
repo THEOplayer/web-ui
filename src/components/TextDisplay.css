@@ -1,9 +1,6 @@
 :host {
-    display: inline-flex;
+    display: inline-block;
     box-sizing: border-box;
-    align-items: center;
-    justify-content: center;
-    vertical-align: middle;
     pointer-events: auto;
     user-select: none;
     padding: var(--theoplayer-control-padding, 10px);
@@ -12,14 +9,11 @@
     color: var(--theoplayer-text-color, #fff);
     background: var(--theoplayer-control-background, transparent);
 
-    /* Vertically center any text */
-    font-size: var(--theoplayer-text-font-size, 14px);
-    line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
-}
-
-:host,
-span {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+
+    /* Vertically center any text */
+    font-size: var(--theoplayer-text-font-size, 14px);
+    line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
 }

@@ -52,6 +52,7 @@ theoplayer-ui {
     display: flex;
     flex-flow: column nowrap;
     align-items: stretch;
+    pointer-events: none;
 }
 
 /*
@@ -132,7 +133,6 @@ theoplayer-ad-skip-button[disabled] {
 }
 
 theoplayer-ad-countdown {
-    justify-content: flex-start;
     min-width: 0;
 }
 
@@ -231,4 +231,9 @@ theoplayer-live-button + theoplayer-time-display:not([stream-type='vod']) {
 /* Hide remaining time display when playing at live edge */
 theoplayer-live-button[live] + theoplayer-time-display {
     display: none !important;
+}
+
+/* Use smaller playback controls while playing an ad */
+theoplayer-ui[playing-ad] .theoplayer-ad-control {
+    --theoplayer-control-height: 16px;
 }

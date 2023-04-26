@@ -1,0 +1,51 @@
+---
+layout: example
+title: Advertisements
+permalink: /examples/ads
+---
+
+<style>
+    theoplayer-default-ui {
+        font-family: 'Noto Sans', sans-serif;
+        width: 100%;
+    }
+</style>
+
+<theoplayer-default-ui configuration='{"libraryLocation":"https://unpkg.com/theoplayer@5/","license":"{{ site.theoplayer_license }}"}' fluid>
+    <span slot="title">Elephant's Dream</span>
+</theoplayer-default-ui>
+<p>
+    <label style="user-select: none"><input type="checkbox" id="mobile-toggle" /> Mobile</label>
+</p>
+
+<p>The default UI has full support for advertisements.</p>
+
+<p>During playback, it shows yellow ad markers on the seek bar to indicate the times when the content will be interrupted by an ad.</p>
+
+<p>
+    While playing an ad, the UI shows ad-specific controls such as a skip button and a countdown. These controls are also mobile-aware, for example a
+    dedicated clickthrough button replaces the regular clickthrough behavior on desktop.
+</p>
+
+<script>
+    var ui = document.querySelector('theoplayer-default-ui');
+    ui.source = {
+        sources:
+            'https://amssamples.streaming.mediaservices.windows.net/7ceb010f-d9a3-467a-915e-5728acced7e3/ElephantsDreamMultiAudio.ism/manifest(format=mpd-time-csf)',
+        ads: [
+            {
+                sources: {
+                    src: 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpremidpostpod&ciu_szs=300x250&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&impl=s&cmsid=496&vid=short_onecue&correlator=',
+                    type: 'vmap'
+                }
+            }
+        ]
+    };
+    document.querySelector('#mobile-toggle').addEventListener('change', function (ev) {
+        if (ev.target.checked) {
+            ui.setAttribute('mobile', '');
+        } else {
+            ui.removeAttribute('mobile');
+        }
+    });
+</script>

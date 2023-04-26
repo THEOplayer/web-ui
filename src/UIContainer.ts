@@ -414,7 +414,8 @@ export class UIContainer extends HTMLElement {
         this._player.addEventListener('sourcechange', this._onSourceChange);
         this._player.videoTracks.addEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
         this._player.cast?.addEventListener('castingchange', this._updateCasting);
-        this._player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend'], this._updatePlayingAd);
+        this._player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updatePlayingAd);
+        this._player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
     }
 
     disconnectedCallback(): void {

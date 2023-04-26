@@ -24,6 +24,10 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
 
     constructor() {
         super({ template });
+
+        this.disabled = true;
+        this.style.display = 'none';
+
         this._upgradeProperty('clickThrough');
         this._upgradeProperty('player');
     }
@@ -91,6 +95,11 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
         const linearAd = arrayFind(ads.currentAds ?? [], isLinearAd);
         if (linearAd === undefined) {
             // No linear ad
+            this.clickThrough = null;
+            return;
+        }
+        if (linearAd.integration === 'google-ima') {
+            // Google IMA always shows their own clickthrough button.
             this.clickThrough = null;
             return;
         }

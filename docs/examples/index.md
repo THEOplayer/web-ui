@@ -6,5 +6,6 @@ show_in_nav: true
 ---
 
 -   [Default UI](./default-ui.html)
+    -   [Advertisements](./ads.html)
 -   [Custom UI](./custom-ui.html)
 -   [Nitflex theme](./nitflex.html)

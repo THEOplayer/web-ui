@@ -10,7 +10,7 @@ const template = document.createElement('template');
 template.innerHTML = `<style>${textDisplayCss}\n${adDisplayCss}</style><span></span>`;
 shadyCss.prepareTemplate(template, 'theoplayer-ad-display');
 
-const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'addad', 'updatead'] as const;
+const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'adskip', 'addad', 'updatead'] as const;
 
 /**
  * @group Components
