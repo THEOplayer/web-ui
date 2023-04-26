@@ -5,3 +5,4 @@ export * from './DefaultUI';
 export { Attribute } from './util/Attribute';
 export { type StreamType } from './util/StreamType';
 export { type Constructor } from './util/CommonUtils';
+export { ColorStops } from './util/ColorStops';
