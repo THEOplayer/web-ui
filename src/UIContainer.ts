@@ -404,7 +404,7 @@ export class UIContainer extends HTMLElement {
         this._updatePausedAndEnded();
         this._updateCasting();
         this._player.addEventListener('resize', this._updateAspectRatio);
-        this._player.addEventListener(['error', 'emptied'], this._updateError);
+        this._player.addEventListener(['error', 'sourcechange', 'emptied'], this._updateError);
         this._player.addEventListener('volumechange', this._updateMuted);
         this._player.addEventListener('play', this._onPlay);
         this._player.addEventListener('pause', this._onPause);
