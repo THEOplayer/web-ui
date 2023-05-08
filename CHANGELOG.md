@@ -10,6 +10,10 @@
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🐛 Fix `has-error` attribute not cleared on source change ([#29](https://github.com/THEOplayer/web-ui/pull/29))
+
 ## v1.2.0 (2023-04-26)
 
 -   🚀 Improved support for advertisements ([#28](https://github.com/THEOplayer/web-ui/pull/28))
