@@ -45,7 +45,7 @@
     "url": "https://github.com/THEOplayer/web-ui.git"
   },
   "peerDependencies": {
-    "theoplayer": "^4 || ^5"
+    "theoplayer": "^5.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.2",
