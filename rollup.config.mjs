@@ -88,6 +88,9 @@ export default defineConfig([
     }
 ]);
 
+/**
+ * @return {import("rollup").Plugin[]}
+ */
 function jsPlugins({ es5 = false, production = false, sourcemap = false }) {
     const browserslist = es5 ? browserslistLegacy : browserslistModern;
     return [
@@ -124,6 +127,7 @@ function jsPlugins({ es5 = false, production = false, sourcemap = false }) {
             sourceMaps: sourcemap,
             tsconfig: false,
             env: {
+                loose: true,
                 targets: browserslist
             },
             jsc: {
@@ -141,6 +145,7 @@ function jsPlugins({ es5 = false, production = false, sourcemap = false }) {
             sourceMaps: sourcemap,
             tsconfig: false,
             env: {
+                loose: true,
                 targets: browserslist
             },
             jsc: {
