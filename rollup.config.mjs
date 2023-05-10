@@ -1,5 +1,4 @@
 import { defineConfig } from 'rollup';
-import { typescriptPaths } from 'rollup-plugin-typescript-resolve';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import { minify, swc } from 'rollup-plugin-swc3';
 import { minifyHTML } from './build/minify-html.mjs';
@@ -89,11 +88,12 @@ export default defineConfig([
     }
 ]);
 
+/**
+ * @return {import("rollup").Plugin[]}
+ */
 function jsPlugins({ es5 = false, production = false, sourcemap = false }) {
     const browserslist = es5 ? browserslistLegacy : browserslistModern;
     return [
-        // Use TypeScript's module resolution for source files, and Node's for dependencies.
-        typescriptPaths(),
         nodeResolve(),
         // Run PostCSS on .css files.
         postcss({
@@ -127,6 +127,7 @@ function jsPlugins({ es5 = false, production = false, sourcemap = false }) {
             sourceMaps: sourcemap,
             tsconfig: false,
             env: {
+                loose: true,
                 targets: browserslist
             },
             jsc: {
@@ -144,6 +145,7 @@ function jsPlugins({ es5 = false, production = false, sourcemap = false }) {
             sourceMaps: sourcemap,
             tsconfig: false,
             env: {
+                loose: true,
                 targets: browserslist
             },
             jsc: {

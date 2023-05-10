@@ -1,5 +1,5 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import { Button, ButtonOptions, buttonTemplate } from './Button';
+import { Button, type ButtonOptions, buttonTemplate } from './Button';
 import { createCustomEvent } from '../util/EventUtils';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from '../events/ToggleMenuEvent';
 import { Attribute } from '../util/Attribute';

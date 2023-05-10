@@ -1,4 +1,4 @@
-import { Constructor, fromArrayLike, isArray, isElement, isHTMLElement, isHTMLSlotElement } from '../util/CommonUtils';
+import { type Constructor, fromArrayLike, isArray, isElement, isHTMLElement, isHTMLSlotElement } from '../util/CommonUtils';
 import type { ChromelessPlayer, THEOplayerError, VideoQuality } from 'theoplayer';
 import type { StreamType } from '../util/StreamType';
 

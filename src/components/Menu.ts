@@ -1,7 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import menuCss from './Menu.css';
-import { CLOSE_MENU_EVENT, CloseMenuEvent } from '../events/CloseMenuEvent';
-import { MENU_CHANGE_EVENT, MenuChangeEvent } from '../events/MenuChangeEvent';
+import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
+import { MENU_CHANGE_EVENT, type MenuChangeEvent } from '../events/MenuChangeEvent';
 import { createCustomEvent } from '../util/EventUtils';
 import { Attribute } from '../util/Attribute';
 

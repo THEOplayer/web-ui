@@ -6,7 +6,7 @@ import type { ChromelessPlayer, EdgeStyle } from 'theoplayer';
 import type { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
 import { Attribute } from '../util/Attribute';
-import { COLOR_BLACK, COLOR_WHITE, colorWithAlpha, parseColor, RgbaColor, rgbEquals, toRgb, toRgba } from '../util/ColorUtils';
+import { COLOR_BLACK, COLOR_WHITE, colorWithAlpha, parseColor, type RgbaColor, rgbEquals, toRgb, toRgba } from '../util/ColorUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group><slot></slot></theoplayer-radio-group>`;
