@@ -1,4 +1,4 @@
-import { Button, ButtonOptions, buttonTemplate } from './Button';
+import { Button, type ButtonOptions, buttonTemplate } from './Button';
 import { Attribute } from '../util/Attribute';
 import * as shadyCss from '@webcomponents/shadycss';
 import { createEvent } from '../util/EventUtils';

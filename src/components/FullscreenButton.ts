@@ -5,8 +5,8 @@ import enterIcon from '../icons/fullscreen-enter.svg';
 import exitIcon from '../icons/fullscreen-exit.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { createCustomEvent } from '../util/EventUtils';
-import { ENTER_FULLSCREEN_EVENT, EnterFullscreenEvent } from '../events/EnterFullscreenEvent';
-import { EXIT_FULLSCREEN_EVENT, ExitFullscreenEvent } from '../events/ExitFullscreenEvent';
+import { ENTER_FULLSCREEN_EVENT, type EnterFullscreenEvent } from '../events/EnterFullscreenEvent';
+import { EXIT_FULLSCREEN_EVENT, type ExitFullscreenEvent } from '../events/ExitFullscreenEvent';
 import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');

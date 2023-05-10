@@ -3,7 +3,6 @@ import { MenuGroup, menuGroupTemplate } from './MenuGroup';
 import textTrackStyleMenuHtml from './TextTrackStyleMenu.html';
 import textTrackStyleMenuCss from './TextTrackStyleMenu.css';
 import menuTableCss from './MenuTable.css';
-import type { TextTrackStyle } from 'theoplayer';
 import './TextTrackStyleDisplay';
 import './TextTrackStyleRadioGroup';
 
