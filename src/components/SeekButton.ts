@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Button, buttonTemplate } from './Button';
-import type { ChromelessPlayer } from 'theoplayer';
+import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
 import seekButtonCss from './SeekButton.css';
 import seekForwardIcon from '../icons/seek-forward.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';

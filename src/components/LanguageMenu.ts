@@ -3,7 +3,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import languageMenuHtml from './LanguageMenu.html';
 import languageMenuCss from './LanguageMenu.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer, MediaTrack, TextTrack } from 'theoplayer';
+import type { ChromelessPlayer, MediaTrack, TextTrack } from 'theoplayer/THEOplayer.chromeless';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import './TrackRadioGroup';

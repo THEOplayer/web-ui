@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { LinkButton, linkButtonTemplate } from '../LinkButton';
 import { StateReceiverMixin } from '../StateReceiverMixin';
 import { Attribute } from '../../util/Attribute';
-import type { ChromelessPlayer } from 'theoplayer';
+import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
 import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
 

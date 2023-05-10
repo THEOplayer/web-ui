@@ -3,7 +3,7 @@ import { buttonTemplate } from './Button';
 import languageIcon from '../icons/language.svg';
 import * as shadyCss from '@webcomponents/shadycss';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer } from 'theoplayer';
+import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 

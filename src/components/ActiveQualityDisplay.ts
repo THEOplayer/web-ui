@@ -1,6 +1,6 @@
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { setTextContent } from '../util/CommonUtils';
-import type { VideoQuality } from 'theoplayer';
+import type { VideoQuality } from 'theoplayer/THEOplayer.chromeless';
 import { formatQualityLabel } from '../util/TrackUtils';
 import * as shadyCss from '@webcomponents/shadycss';
 

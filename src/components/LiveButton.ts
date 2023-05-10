@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Button, buttonTemplate } from './Button';
-import type { ChromelessPlayer } from 'theoplayer';
+import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
 import liveButtonCss from './LiveButton.css';
 import liveIcon from '../icons/live.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
