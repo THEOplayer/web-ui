@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import loadingIndicatorCss from './LoadingIndicator.css';
 import loadingIndicatorHtml from './LoadingIndicator.html';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer } from 'theoplayer';
+import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
 import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');

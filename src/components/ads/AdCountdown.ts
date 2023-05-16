@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import textDisplayCss from '../TextDisplay.css';
 import adCountdownCss from './AdCountdown.css';
 import { StateReceiverMixin } from '../StateReceiverMixin';
-import type { ChromelessPlayer } from 'theoplayer';
+import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
 import { setTextContent } from '../../util/CommonUtils';
 
 const template = document.createElement('template');

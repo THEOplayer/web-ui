@@ -20,6 +20,7 @@ const banner = `/*!
  * THEOplayer Web UI v${version}
  * License: ${license}
  */`;
+const theoplayerModule = 'theoplayer/THEOplayer.chromeless';
 
 export default defineConfig([
     {
@@ -33,7 +34,7 @@ export default defineConfig([
                 indent: false,
                 banner,
                 globals: {
-                    theoplayer: 'THEOplayer'
+                    [theoplayerModule]: 'THEOplayer'
                 }
             },
             {
@@ -44,7 +45,7 @@ export default defineConfig([
             }
         ],
         context: 'self',
-        external: ['theoplayer'],
+        external: [theoplayerModule],
         plugins: jsPlugins({ es5: false, production, sourcemap: true })
     },
     {
@@ -58,7 +59,7 @@ export default defineConfig([
                 indent: false,
                 banner,
                 globals: {
-                    theoplayer: 'THEOplayer'
+                    [theoplayerModule]: 'THEOplayer'
                 }
             },
             {
@@ -69,7 +70,7 @@ export default defineConfig([
             }
         ],
         context: 'self',
-        external: ['theoplayer'],
+        external: [theoplayerModule],
         plugins: jsPlugins({ es5: true, production, sourcemap: false })
     },
     {
@@ -83,7 +84,7 @@ export default defineConfig([
                 footer: `export as namespace ${umdName};`
             }
         ],
-        external: ['theoplayer'],
+        external: [theoplayerModule],
         plugins: [dts()]
     }
 ]);

@@ -1,4 +1,4 @@
-import type { MediaTrack, Quality, TextTrack, VideoQuality } from 'theoplayer';
+import type { MediaTrack, Quality, TextTrack, VideoQuality } from 'theoplayer/THEOplayer.chromeless';
 
 export function isSubtitleTrack(track: TextTrack): boolean {
     return track.kind === 'subtitles' || track.kind === 'captions';

@@ -1,5 +1,11 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import { ChromelessPlayer, type MediaTrack, type PlayerConfiguration, type SourceDescription, type VideoQuality } from 'theoplayer';
+import {
+    ChromelessPlayer,
+    type MediaTrack,
+    type PlayerConfiguration,
+    type SourceDescription,
+    type VideoQuality
+} from 'theoplayer/THEOplayer.chromeless';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
 import { arrayFind, arrayRemove, containsComposedNode, isElement, isHTMLElement, noOp } from './util/CommonUtils';

@@ -1,5 +1,5 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import type { ChromelessPlayer } from 'theoplayer';
+import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { CastButton } from './CastButton';
 import airPlayButtonHtml from './AirPlayButton.html';

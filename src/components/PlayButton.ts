@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Button, buttonTemplate } from './Button';
-import type { ChromelessPlayer } from 'theoplayer';
+import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
 import playButtonCss from './PlayButton.css';
 import playIcon from '../icons/play.svg';
 import pauseIcon from '../icons/pause.svg';
