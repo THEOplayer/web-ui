@@ -12,6 +12,8 @@
 
 ## Unreleased
 
+-   💥 **Breaking Change**: This project now requires THEOplayer version 5.1.0 or higher.
+-   🏠 This project now depends on the chromeless version of THEOplayer, rather than the full version which includes the old video.js-based UI. ([#31](https://github.com/THEOplayer/web-ui/pull/31))
 -   🐛 Fix `has-error` attribute not cleared on source change ([#29](https://github.com/THEOplayer/web-ui/pull/29))
 
 ## v1.2.0 (2023-04-26)
