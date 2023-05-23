@@ -12,7 +12,6 @@ import dts from 'rollup-plugin-dts';
 
 const fileName = 'THEOplayerUI';
 const umdName = 'THEOplayerUI';
-const outputDir = './dist';
 
 const { browserslist: browserslistModern, version, license } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
 const browserslistLegacy = ['last 2 versions', 'ie >= 11'];
@@ -24,7 +23,13 @@ const banner = `/*!
  */`;
 const theoplayerModule = 'theoplayer/THEOplayer.chromeless';
 
-export default defineConfig([
+/**
+* @param {{configOutputDir?: string}} cliArgs
+* @return {import("rollup").RollupOptions[]}
+*/
+export default (cliArgs) => {
+const outputDir = cliArgs.configOutputDir || './dist';
+return defineConfig([
     {
         input: './src/index.ts',
         output: [
@@ -90,6 +95,7 @@ export default defineConfig([
         plugins: [dts()]
     }
 ]);
+};
 
 /**
  * @return {import("rollup").Plugin[]}
