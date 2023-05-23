@@ -5,12 +5,14 @@ import { minifyHTML } from './build/minify-html.mjs';
 import postcss from 'rollup-plugin-postcss';
 import postcssPresetEnv from 'postcss-preset-env';
 import postcssMixins from 'postcss-mixins';
-import { readFile } from 'fs/promises';
+import * as path from 'node:path';
+import { readFile } from 'node:fs/promises';
 import { string } from 'rollup-plugin-string';
 import dts from 'rollup-plugin-dts';
 
 const fileName = 'THEOplayerUI';
 const umdName = 'THEOplayerUI';
+const outputDir = './dist';
 
 const { browserslist: browserslistModern, version, license } = JSON.parse(await readFile('./package.json', { encoding: 'utf8' }));
 const browserslistLegacy = ['last 2 versions', 'ie >= 11'];
@@ -27,7 +29,7 @@ export default defineConfig([
         input: './src/index.ts',
         output: [
             {
-                file: `./dist/${fileName}.js`,
+                file: path.join(outputDir, `${fileName}.js`),
                 format: 'umd',
                 name: umdName,
                 sourcemap: true,
@@ -38,7 +40,7 @@ export default defineConfig([
                 }
             },
             {
-                file: `./dist/${fileName}.mjs`,
+                file: path.join(outputDir, `${fileName}.mjs`),
                 format: 'es',
                 sourcemap: true,
                 indent: false
@@ -52,7 +54,7 @@ export default defineConfig([
         input: './src/index.ts',
         output: [
             {
-                file: `./dist/${fileName}.es5.js`,
+                file: path.join(outputDir, `${fileName}.es5.js`),
                 format: 'umd',
                 name: umdName,
                 sourcemap: false,
@@ -63,7 +65,7 @@ export default defineConfig([
                 }
             },
             {
-                file: `./dist/${fileName}.es5.mjs`,
+                file: path.join(outputDir, `${fileName}.es5.mjs`),
                 format: 'es',
                 sourcemap: false,
                 indent: false
@@ -77,7 +79,7 @@ export default defineConfig([
         input: './src/index.ts',
         output: [
             {
-                file: `./dist/${fileName}.d.ts`,
+                file: path.join(outputDir, `${fileName}.d.ts`),
                 format: 'es',
                 indent: false,
                 banner,
