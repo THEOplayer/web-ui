@@ -5,7 +5,8 @@ import { minifyHTML } from './build/minify-html.mjs';
 import postcss from 'rollup-plugin-postcss';
 import postcssPresetEnv from 'postcss-preset-env';
 import postcssMixins from 'postcss-mixins';
-import { readFile } from 'fs/promises';
+import * as path from 'node:path';
+import { readFile } from 'node:fs/promises';
 import { string } from 'rollup-plugin-string';
 import dts from 'rollup-plugin-dts';
 
@@ -22,72 +23,79 @@ const banner = `/*!
  */`;
 const theoplayerModule = 'theoplayer/THEOplayer.chromeless';
 
-export default defineConfig([
-    {
-        input: './src/index.ts',
-        output: [
-            {
-                file: `./dist/${fileName}.js`,
-                format: 'umd',
-                name: umdName,
-                sourcemap: true,
-                indent: false,
-                banner,
-                globals: {
-                    [theoplayerModule]: 'THEOplayer'
+/**
+ * @param {{configOutputDir?: string}} cliArgs
+ * @return {import("rollup").RollupOptions[]}
+ */
+export default (cliArgs) => {
+    const outputDir = cliArgs.configOutputDir || './dist';
+    return defineConfig([
+        {
+            input: './src/index.ts',
+            output: [
+                {
+                    file: path.join(outputDir, `${fileName}.js`),
+                    format: 'umd',
+                    name: umdName,
+                    sourcemap: true,
+                    indent: false,
+                    banner,
+                    globals: {
+                        [theoplayerModule]: 'THEOplayer'
+                    }
+                },
+                {
+                    file: path.join(outputDir, `${fileName}.mjs`),
+                    format: 'es',
+                    sourcemap: true,
+                    indent: false
                 }
-            },
-            {
-                file: `./dist/${fileName}.mjs`,
-                format: 'es',
-                sourcemap: true,
-                indent: false
-            }
-        ],
-        context: 'self',
-        external: [theoplayerModule],
-        plugins: jsPlugins({ es5: false, production, sourcemap: true })
-    },
-    {
-        input: './src/index.ts',
-        output: [
-            {
-                file: `./dist/${fileName}.es5.js`,
-                format: 'umd',
-                name: umdName,
-                sourcemap: false,
-                indent: false,
-                banner,
-                globals: {
-                    [theoplayerModule]: 'THEOplayer'
+            ],
+            context: 'self',
+            external: [theoplayerModule],
+            plugins: jsPlugins({ es5: false, production, sourcemap: true })
+        },
+        {
+            input: './src/index.ts',
+            output: [
+                {
+                    file: path.join(outputDir, `${fileName}.es5.js`),
+                    format: 'umd',
+                    name: umdName,
+                    sourcemap: false,
+                    indent: false,
+                    banner,
+                    globals: {
+                        [theoplayerModule]: 'THEOplayer'
+                    }
+                },
+                {
+                    file: path.join(outputDir, `${fileName}.es5.mjs`),
+                    format: 'es',
+                    sourcemap: false,
+                    indent: false
                 }
-            },
-            {
-                file: `./dist/${fileName}.es5.mjs`,
-                format: 'es',
-                sourcemap: false,
-                indent: false
-            }
-        ],
-        context: 'self',
-        external: [theoplayerModule],
-        plugins: jsPlugins({ es5: true, production, sourcemap: false })
-    },
-    {
-        input: './src/index.ts',
-        output: [
-            {
-                file: `./dist/${fileName}.d.ts`,
-                format: 'es',
-                indent: false,
-                banner,
-                footer: `export as namespace ${umdName};`
-            }
-        ],
-        external: [theoplayerModule],
-        plugins: [dts()]
-    }
-]);
+            ],
+            context: 'self',
+            external: [theoplayerModule],
+            plugins: jsPlugins({ es5: true, production, sourcemap: false })
+        },
+        {
+            input: './src/index.ts',
+            output: [
+                {
+                    file: path.join(outputDir, `${fileName}.d.ts`),
+                    format: 'es',
+                    indent: false,
+                    banner,
+                    footer: `export as namespace ${umdName};`
+                }
+            ],
+            external: [theoplayerModule],
+            plugins: [dts()]
+        }
+    ]);
+};
 
 /**
  * @return {import("rollup").Plugin[]}
