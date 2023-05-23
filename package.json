@@ -27,7 +27,7 @@
     "build:prod": "rollup -c --environment BUILD:production",
     "watch": "rollup -c --watch",
     "watch:docs": "npm run watch -- --configOutputDir ./docs/_site/dist",
-    "start": "cd docs && bundle exec jekyll serve",
+    "start": "cd docs && bundle exec jekyll serve --force_polling",
     "format": "prettier --write .",
     "test": "npm run test:format && npm run test:typecheck",
     "test:format": "prettier --check .",
