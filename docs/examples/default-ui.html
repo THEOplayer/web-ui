@@ -19,11 +19,22 @@ permalink: /examples/default-ui
     <span slot="title">Elephant's Dream</span>
 </theoplayer-default-ui>
 <p>
-    <label style="user-select: none"><input type="checkbox" id="mobile-toggle" /> Mobile</label>
+    <label style="user-select: none">
+        Override device type
+        <select id="device-type-select">
+            <option value=""></option>
+            <option value="desktop">Desktop</option>
+            <option value="mobile">Mobile</option>
+            <option value="tv">TV</option>
+        </select>
+    </label>
 </p>
 <script>
     var ui = document.querySelector('theoplayer-default-ui');
-    document.querySelector('#mobile-toggle').addEventListener('change', function (ev) {
-        ui.setAttribute('device-type', ev.target.checked ? 'mobile' : 'desktop');
+    document.querySelector('#device-type-select').addEventListener('change', function (ev) {
+        var selectedDeviceType = ev.target.value;
+        if (selectedDeviceType) {
+            ui.setAttribute('device-type', selectedDeviceType);
+        }
     });
 </script>
