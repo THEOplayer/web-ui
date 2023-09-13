@@ -132,12 +132,20 @@ On older browsers (such as Internet Explorer 11 and older smart TVs), you need t
 -   Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`, while legacy browsers will load the legacy build (with `nomodule`).
 
     ```html
-    <!-- Load polyfills -->
+    <!-- Modern browsers -->
+    <script type="importmap">
+    {
+      "imports": {
+        "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js"
+      }
+    }
+    </script>
+    <script type="module" src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.mjs"></script>
+    <!-- Legacy browsers -->
     <script nomodule src="https://polyfill.io/v3/polyfill.min.js?features=es2015"></script>
     <script nomodule src="https://unpkg.com/@webcomponents/webcomponentsjs@2.8.0/custom-elements-es5-adapter.js"></script>
     <script nomodule src="https://unpkg.com/@webcomponents/webcomponentsjs@2.8.0/webcomponents-bundle.js"></script>
-    <!-- Load modern or legacy build -->
-    <script type="module" src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.js"></script>
+    <script nomodule src="/path/to/node_modules/theoplayer/THEOplayer.chromeless.js"></script>
     <script nomodule src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.es5.js"></script>
     ```
 
