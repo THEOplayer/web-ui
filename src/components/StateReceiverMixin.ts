@@ -1,5 +1,5 @@
 import { type Constructor, fromArrayLike, isArray, isElement, isHTMLElement, isHTMLSlotElement } from '../util/CommonUtils';
-import type { ChromelessPlayer, THEOplayerError, VideoQuality } from 'theoplayer/THEOplayer.chromeless';
+import type { ChromelessPlayer, THEOplayerError, VideoQuality } from 'theoplayer/chromeless';
 import type { StreamType } from '../util/StreamType';
 
 /** @internal */

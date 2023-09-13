@@ -4,7 +4,7 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import { setTextContent } from '../util/CommonUtils';
 import { formatTime } from '../util/TimeUtils';
 import { Attribute } from '../util/Attribute';
-import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
+import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import type { StreamType } from '../util/StreamType';
 
 const template = document.createElement('template');

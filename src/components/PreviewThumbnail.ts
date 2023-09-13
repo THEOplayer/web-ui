@@ -1,7 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import previewThumbnailCss from './PreviewThumbnail.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer, TextTrack, TextTrackCue, TextTrackCueList } from 'theoplayer/THEOplayer.chromeless';
+import type { ChromelessPlayer, TextTrack, TextTrackCue, TextTrackCueList } from 'theoplayer/chromeless';
 import { arrayFind, noOp } from '../util/CommonUtils';
 
 const template = document.createElement('template');

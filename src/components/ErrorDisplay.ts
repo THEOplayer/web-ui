@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import errorDisplayCss from './ErrorDisplay.css';
 import errorIcon from '../icons/error.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { THEOplayerError } from 'theoplayer/THEOplayer.chromeless';
+import type { THEOplayerError } from 'theoplayer/chromeless';
 import { setTextContent } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
 

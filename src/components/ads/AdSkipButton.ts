@@ -4,7 +4,7 @@ import adSkipButtonCss from './AdSkipButton.css';
 import skipNextIcon from '../../icons/skip-next.svg';
 import { StateReceiverMixin } from '../StateReceiverMixin';
 import { Attribute } from '../../util/Attribute';
-import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
+import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind, setTextContent } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
 

@@ -1,6 +1,6 @@
 import { Button, type ButtonOptions } from './Button';
 import { Attribute } from '../util/Attribute';
-import type { CastState, VendorCast } from 'theoplayer/THEOplayer.chromeless';
+import type { CastState, VendorCast } from 'theoplayer/chromeless';
 import * as shadyCss from '@webcomponents/shadycss';
 
 /**

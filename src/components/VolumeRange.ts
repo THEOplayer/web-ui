@@ -1,7 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Range, rangeTemplate } from './Range';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
+import type { ChromelessPlayer } from 'theoplayer/chromeless';
 
 const template = document.createElement('template');
 template.innerHTML = rangeTemplate(`<input type="range" min="0" max="1" step="any" value="0">`);

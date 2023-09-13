@@ -1,4 +1,4 @@
-import type { Ad } from 'theoplayer/THEOplayer.chromeless';
+import type { Ad } from 'theoplayer/chromeless';
 
 export function isLinearAd(ad: Ad): boolean {
     return ad.type === 'linear';
