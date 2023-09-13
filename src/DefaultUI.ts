@@ -5,7 +5,7 @@ import defaultUiCss from './DefaultUI.css';
 import defaultUiHtml from './DefaultUI.html';
 import { Attribute } from './util/Attribute';
 import { applyExtensions } from './extensions/ExtensionRegistry';
-import { isMobile } from './util/Environment';
+import { isMobile, isTv } from './util/Environment';
 import type { StreamType } from './util/StreamType';
 import type { TimeRange } from './components/TimeRange';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
@@ -232,6 +232,8 @@ export class DefaultUI extends HTMLElement {
 
         if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
             this.setAttribute(Attribute.MOBILE, '');
+        } else if (!this.hasAttribute(Attribute.TV) && isTv()) {
+            this.setAttribute(Attribute.TV, '');
         }
 
         if (!this._appliedExtensions) {
