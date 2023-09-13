@@ -49,16 +49,16 @@ The current THEOplayer Web SDK comes with a built-in UI based on [video.js](http
         ```js
         import { DefaultUI } from '@theoplayer/web-ui';
         ```
-      The Web UI will import THEOplayer from `theoplayer/chromeless`.
-      If you're using a bundler such as Webpack or Rollup, this dependency should automatically get bundled with your web app.
-      Alternatively, you can use an [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) to let the browser resolve it:
+        The Web UI will import THEOplayer from `theoplayer/chromeless`.
+        If you're using a bundler such as Webpack or Rollup, this dependency should automatically get bundled with your web app.
+        Alternatively, you can use an [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) to let the browser resolve it:
         ```html
         <script type="importmap">
-        {
-          "imports": {
-            "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js"
-          }
-        }
+            {
+                "imports": {
+                    "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js"
+                }
+            }
         </script>
         <script type="module" src="/path/to/my_app.js"></script>
         ```
@@ -134,11 +134,11 @@ On older browsers (such as Internet Explorer 11 and older smart TVs), you need t
     ```html
     <!-- Modern browsers -->
     <script type="importmap">
-    {
-      "imports": {
-        "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js"
-      }
-    }
+        {
+            "imports": {
+                "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js"
+            }
+        }
     </script>
     <script type="module" src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.mjs"></script>
     <!-- Legacy browsers -->
