@@ -14,6 +14,7 @@ import './PreviewThumbnail';
 import './PreviewTimeDisplay';
 import { isLinearAd } from '../util/AdUtils';
 import type { ColorStops } from '../util/ColorStops';
+import { KeyCode } from '../util/KeyCode';
 
 const template = document.createElement('template');
 template.innerHTML = rangeTemplate(timeRangeHtml, timeRangeCss);
@@ -306,6 +307,19 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
     private readonly _onAdChange = () => {
         this.update();
     };
+
+    protected override handleKeyDown_(e: KeyboardEvent) {
+        super.handleKeyDown_(e);
+        if (this.deviceType === 'tv' && e.keyCode === KeyCode.ENTER) {
+            if (this._player !== undefined) {
+                if (this._player.paused) {
+                    this._player.play();
+                } else {
+                    this._player.pause();
+                }
+            }
+        }
+    }
 }
 
 customElements.define('theoplayer-time-range', TimeRange);

@@ -252,6 +252,10 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
     }
 
     private readonly _onKeyDown = (e: KeyboardEvent): void => {
+        this.handleKeyDown_(e);
+    };
+
+    protected handleKeyDown_(e: KeyboardEvent) {
         if (this.deviceType === 'tv' && isArrowKey(e.keyCode)) {
             // On TV devices, only allow left/right arrow keys to move the slider.
             if (e.keyCode === KeyCode.LEFT || e.keyCode === KeyCode.RIGHT) {
@@ -263,5 +267,5 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
                 e.preventDefault();
             }
         }
-    };
+    }
 }
