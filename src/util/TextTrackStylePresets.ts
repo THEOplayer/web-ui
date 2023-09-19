@@ -1,4 +1,4 @@
-import type { EdgeStyle } from 'theoplayer/THEOplayer.chromeless';
+import type { EdgeStyle } from 'theoplayer/chromeless';
 
 export const knownColors: ReadonlyArray<[string, string]> = [
     ['White', 'rgb(255,255,255)'],

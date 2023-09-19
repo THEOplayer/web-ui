@@ -1,7 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { RadioButton } from './RadioButton';
 import { buttonTemplate } from './Button';
-import type { MediaTrack, VideoQuality } from 'theoplayer/THEOplayer.chromeless';
+import type { MediaTrack, VideoQuality } from 'theoplayer/chromeless';
 import { setTextContent } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
 import { formatQualityLabel } from '../util/TrackUtils';

@@ -42,15 +42,26 @@ The current THEOplayer Web SDK comes with a built-in UI based on [video.js](http
 3. Add `@theoplayer/web-ui` to your app:
     - Option 1: in your HTML.
         ```html
+        <script src="/path/to/node_modules/theoplayer/THEOplayer.chromeless.js"></script>
         <script src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.js"></script>
         ```
     - Option 2: in your JavaScript.
         ```js
         import { DefaultUI } from '@theoplayer/web-ui';
         ```
-
-> **Warning**
-> THEOplayer Web SDK currently only supports being loaded through a regular `<script>` tag or as a [UMD module](https://github.com/umdjs/umd), and does not support being `import`ed as a native JavaScript module. If you use `import` with THEOplayer Web UI, make sure to use a JavaScript bundler such as Webpack or Rollup to include THEOplayer in your app. We're hoping to fix this incompatibility soon.
+        The Web UI will import THEOplayer from `theoplayer/chromeless`.
+        If you're using a bundler such as Webpack or Rollup, this dependency should automatically get bundled with your web app.
+        Alternatively, you can use an [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) to let the browser resolve it:
+        ```html
+        <script type="importmap">
+            {
+                "imports": {
+                    "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js"
+                }
+            }
+        </script>
+        <script type="module" src="/path/to/my_app.js"></script>
+        ```
 
 ## Usage
 
@@ -121,12 +132,20 @@ On older browsers (such as Internet Explorer 11 and older smart TVs), you need t
 -   Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`, while legacy browsers will load the legacy build (with `nomodule`).
 
     ```html
-    <!-- Load polyfills -->
+    <!-- Modern browsers -->
+    <script type="importmap">
+        {
+            "imports": {
+                "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js"
+            }
+        }
+    </script>
+    <script type="module" src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.mjs"></script>
+    <!-- Legacy browsers -->
     <script nomodule src="https://polyfill.io/v3/polyfill.min.js?features=es2015"></script>
     <script nomodule src="https://unpkg.com/@webcomponents/webcomponentsjs@2.8.0/custom-elements-es5-adapter.js"></script>
     <script nomodule src="https://unpkg.com/@webcomponents/webcomponentsjs@2.8.0/webcomponents-bundle.js"></script>
-    <!-- Load modern or legacy build -->
-    <script type="module" src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.js"></script>
+    <script nomodule src="/path/to/node_modules/theoplayer/THEOplayer.chromeless.js"></script>
     <script nomodule src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.es5.js"></script>
     ```
 

@@ -21,7 +21,7 @@ const banner = `/*!
  * THEOplayer Web UI v${version}
  * License: ${license}
  */`;
-const theoplayerModule = 'theoplayer/THEOplayer.chromeless';
+const theoplayerModule = 'theoplayer/chromeless';
 
 /**
  * @param {{configOutputDir?: string}} cliArgs

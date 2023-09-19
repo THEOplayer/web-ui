@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { RadioGroup } from './RadioGroup';
 import verticalRadioGroupCss from './VerticalRadioGroup.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer, EdgeStyle } from 'theoplayer/THEOplayer.chromeless';
+import type { ChromelessPlayer, EdgeStyle } from 'theoplayer/chromeless';
 import type { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
 import { Attribute } from '../util/Attribute';

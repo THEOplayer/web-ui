@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer, EdgeStyle } from 'theoplayer/THEOplayer.chromeless';
+import type { ChromelessPlayer, EdgeStyle } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
 import { parseColor, toRgb } from '../util/ColorUtils';
 import type { TextTrackStyleOption } from './TextTrackStyleRadioGroup';

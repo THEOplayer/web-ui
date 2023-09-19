@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import chromecastDisplayCss from './ChromecastDisplay.css';
 import chromecastIcon from '../icons/chromecast-48px.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
+import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { setTextContent } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
 

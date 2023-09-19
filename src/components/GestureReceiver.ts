@@ -1,7 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import gestureReceiverCss from './GestureReceiver.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer } from 'theoplayer/THEOplayer.chromeless';
+import type { ChromelessPlayer } from 'theoplayer/chromeless';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${gestureReceiverCss}</style>`;
