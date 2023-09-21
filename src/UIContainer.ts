@@ -385,7 +385,7 @@ export class UIContainer extends HTMLElement {
         }
 
         this.setUserIdle_();
-        this.addEventListener('keydown', this._onKeyDown);
+        window.addEventListener('keydown', this._onKeyDown);
         this.addEventListener('keyup', this._onKeyUp);
         this.addEventListener('pointerup', this._onPointerUp);
         this.addEventListener('pointermove', this._onPointerMove);
@@ -450,7 +450,7 @@ export class UIContainer extends HTMLElement {
             document.removeEventListener(fullscreenAPI.fullscreenerror_, this._onFullscreenChange);
         }
 
-        this.removeEventListener('keydown', this._onKeyDown);
+        window.removeEventListener('keydown', this._onKeyDown);
         this.removeEventListener('keyup', this._onKeyUp);
         this.removeEventListener('pointerup', this._onPointerUp);
         this.removeEventListener('click', this._onClickAfterPointerUp, true);
