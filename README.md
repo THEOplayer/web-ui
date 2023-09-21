@@ -129,7 +129,7 @@ By default, THEOplayer Web UI targets modern browsers that support modern JavaSc
 
 On older browsers (such as Internet Explorer 11 and older smart TVs), you need to load a different version of the THEOplayer Web UI that uses older JavaScript syntax. You also need to load additional polyfills for missing features such as Promises or Custom Elements. We recommend [Polyfill.io](https://polyfill.io/) and [Web Components Polyfills](https://github.com/webcomponents/polyfills) for these.
 
--   Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`, while legacy browsers will load the legacy build (with `nomodule`).
+-   Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`), while legacy browsers will load the legacy build (with `nomodule`).
 
     ```html
     <!-- Modern browsers -->
