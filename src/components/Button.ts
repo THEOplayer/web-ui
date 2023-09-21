@@ -119,6 +119,7 @@ export class Button extends HTMLElement {
             case KeyCode.SPACE:
             case KeyCode.ENTER:
                 event.preventDefault();
+                event.stopPropagation();
                 this._onClick();
                 break;
             // Any other key press is ignored and passed back to the browser.
