@@ -30,56 +30,8 @@ const theoplayerModule = 'theoplayer/chromeless';
 export default (cliArgs) => {
     const outputDir = cliArgs.configOutputDir || './dist';
     return defineConfig([
-        {
-            input: './src/index.ts',
-            output: [
-                {
-                    file: path.join(outputDir, `${fileName}.js`),
-                    format: 'umd',
-                    name: umdName,
-                    sourcemap: true,
-                    indent: false,
-                    banner,
-                    globals: {
-                        [theoplayerModule]: 'THEOplayer'
-                    }
-                },
-                {
-                    file: path.join(outputDir, `${fileName}.mjs`),
-                    format: 'es',
-                    sourcemap: true,
-                    indent: false
-                }
-            ],
-            context: 'self',
-            external: [theoplayerModule],
-            plugins: jsPlugins({ es5: false, production, sourcemap: true })
-        },
-        {
-            input: './src/index.ts',
-            output: [
-                {
-                    file: path.join(outputDir, `${fileName}.es5.js`),
-                    format: 'umd',
-                    name: umdName,
-                    sourcemap: false,
-                    indent: false,
-                    banner,
-                    globals: {
-                        [theoplayerModule]: 'THEOplayer'
-                    }
-                },
-                {
-                    file: path.join(outputDir, `${fileName}.es5.mjs`),
-                    format: 'es',
-                    sourcemap: false,
-                    indent: false
-                }
-            ],
-            context: 'self',
-            external: [theoplayerModule],
-            plugins: jsPlugins({ es5: true, production, sourcemap: false })
-        },
+        ...jsConfig(outputDir, { es5: false, production, sourcemap: true }),
+        ...jsConfig(outputDir, { es5: true, production, sourcemap: false }),
         {
             input: './src/index.ts',
             output: [
@@ -98,9 +50,50 @@ export default (cliArgs) => {
 };
 
 /**
+ * @return {import("rollup").RollupOptions[]}
+ */
+function jsConfig(outputDir, { es5 = false, production = false, sourcemap = false }) {
+    return defineConfig([
+        {
+            input: './src/index.ts',
+            output: [
+                {
+                    file: path.join(outputDir, `${fileName}${es5 ? '.es5' : ''}.js`),
+                    format: 'umd',
+                    name: umdName,
+                    sourcemap,
+                    indent: false,
+                    banner,
+                    globals: {
+                        [theoplayerModule]: 'THEOplayer'
+                    }
+                }
+            ],
+            context: 'self',
+            external: [theoplayerModule],
+            plugins: jsPlugins({ es5, module: false, production, sourcemap })
+        },
+        {
+            input: './src/index.ts',
+            output: [
+                {
+                    file: path.join(outputDir, `${fileName}${es5 ? '.es5' : ''}.mjs`),
+                    format: 'es',
+                    sourcemap,
+                    indent: false
+                }
+            ],
+            context: 'self',
+            external: [theoplayerModule],
+            plugins: jsPlugins({ es5, module: true, production, sourcemap })
+        }
+    ]);
+}
+
+/**
  * @return {import("rollup").Plugin[]}
  */
-function jsPlugins({ es5 = false, production = false, sourcemap = false }) {
+function jsPlugins({ es5 = false, module = false, production = false, sourcemap = false }) {
     const browserslist = es5 ? browserslistLegacy : browserslistModern;
     return [
         nodeResolve(),
@@ -170,6 +163,7 @@ function jsPlugins({ es5 = false, production = false, sourcemap = false }) {
                           toplevel: true
                       },
                       toplevel: true,
+                      module,
                       ecma: es5 ? 5 : 2017
                   })
               ]
