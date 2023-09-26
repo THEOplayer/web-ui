@@ -34,15 +34,13 @@ export default (cliArgs) => {
         ...jsConfig(outputDir, { es5: true, production, sourcemap: false }),
         {
             input: './src/index.ts',
-            output: [
-                {
-                    file: path.join(outputDir, `${fileName}.d.ts`),
-                    format: 'es',
-                    indent: false,
-                    banner,
-                    footer: `export as namespace ${umdName};`
-                }
-            ],
+            output: {
+                file: path.join(outputDir, `${fileName}.d.ts`),
+                format: 'es',
+                indent: false,
+                banner,
+                footer: `export as namespace ${umdName};`
+            },
             external: [theoplayerModule],
             plugins: [dts()]
         }
@@ -56,33 +54,29 @@ function jsConfig(outputDir, { es5 = false, production = false, sourcemap = fals
     return defineConfig([
         {
             input: './src/index.ts',
-            output: [
-                {
-                    file: path.join(outputDir, `${fileName}${es5 ? '.es5' : ''}.js`),
-                    format: 'umd',
-                    name: umdName,
-                    sourcemap,
-                    indent: false,
-                    banner,
-                    globals: {
-                        [theoplayerModule]: 'THEOplayer'
-                    }
+            output: {
+                file: path.join(outputDir, `${fileName}${es5 ? '.es5' : ''}.js`),
+                format: 'umd',
+                name: umdName,
+                sourcemap,
+                indent: false,
+                banner,
+                globals: {
+                    [theoplayerModule]: 'THEOplayer'
                 }
-            ],
+            },
             context: 'self',
             external: [theoplayerModule],
             plugins: jsPlugins({ es5, module: false, production, sourcemap })
         },
         {
             input: './src/index.ts',
-            output: [
-                {
-                    file: path.join(outputDir, `${fileName}${es5 ? '.es5' : ''}.mjs`),
-                    format: 'es',
-                    sourcemap,
-                    indent: false
-                }
-            ],
+            output: {
+                file: path.join(outputDir, `${fileName}${es5 ? '.es5' : ''}.mjs`),
+                format: 'es',
+                sourcemap,
+                indent: false
+            },
             context: 'self',
             external: [theoplayerModule],
             plugins: jsPlugins({ es5, module: true, production, sourcemap })
