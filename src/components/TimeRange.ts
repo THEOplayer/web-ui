@@ -137,7 +137,9 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         if (this._player !== undefined) {
             disabled ||= this._player.seekable.length === 0;
         }
-        this.disabled = disabled;
+        if (this.disabled !== disabled) {
+            this.disabled = disabled;
+        }
     };
 
     protected override getAriaLabel(): string {

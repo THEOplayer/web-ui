@@ -114,7 +114,10 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
     };
 
     private readonly _updateLive = () => {
-        this.live = this._player !== undefined ? isLive(this._player, this.liveThreshold) : false;
+        const live = this._player !== undefined ? isLive(this._player, this.liveThreshold) : false;
+        if (this.live !== live) {
+            this.live = live;
+        }
     };
 
     protected override handleClick() {
