@@ -166,6 +166,9 @@ function collectFocusableChildren(element: Element, result: HTMLElement[]) {
     if (!isHTMLElement(element)) {
         return;
     }
+    if (getComputedStyle(element).display === 'none') {
+        return;
+    }
     if (element.hasAttribute('tabindex') && Number(element.getAttribute('tabindex')) >= 0) {
         result.push(element);
         return;
