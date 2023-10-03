@@ -32,7 +32,7 @@ import type { MenuGroup } from './components';
 import './components/MenuGroup';
 import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
 import type { DeviceType } from './util/DeviceType';
-import { isArrowKey } from './util/KeyCode';
+import { isArrowKey, KeyCode } from './util/KeyCode';
 import { navigateByArrowKey } from './util/KeyboardNavigation';
 
 const template = document.createElement('template');
@@ -911,15 +911,21 @@ export class UIContainer extends HTMLElement {
     }
 
     private readonly _onKeyDown = (event: KeyboardEvent): void => {
-        if (this.deviceType === 'tv' && isArrowKey(event.keyCode) && navigateByArrowKey(this, getFocusableChildren(this), event.keyCode)) {
-            event.preventDefault();
-            event.stopPropagation();
+        if (this.deviceType === 'tv') {
+            if (isArrowKey(event.keyCode) && navigateByArrowKey(this, getFocusableChildren(this), event.keyCode)) {
+                event.preventDefault();
+                event.stopPropagation();
+            } else if (event.keyCode === KeyCode.BACK) {
+                this.setUserIdle_();
+            }
         }
     };
 
-    private readonly _onKeyUp = (): void => {
+    private readonly _onKeyUp = (event: KeyboardEvent): void => {
         // Show the controls while navigating with the keyboard.
-        this.scheduleUserIdle_();
+        if (event.keyCode !== KeyCode.BACK) {
+            this.scheduleUserIdle_();
+        }
     };
 
     private readonly _onPointerUp = (event: PointerEvent): void => {
