@@ -40,6 +40,7 @@ template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
 const DEFAULT_USER_IDLE_TIMEOUT = 2;
+const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
 const DEFAULT_DVR_THRESHOLD = 60;
 
 /**
@@ -310,7 +311,8 @@ export class UIContainer extends HTMLElement {
      * and when the user is considered to be "idle".
      */
     get userIdleTimeout(): number {
-        return Number(this.getAttribute(Attribute.USER_IDLE_TIMEOUT) ?? DEFAULT_USER_IDLE_TIMEOUT);
+        const defaultTimeout = this.deviceType === 'tv' ? DEFAULT_TV_USER_IDLE_TIMEOUT : DEFAULT_USER_IDLE_TIMEOUT;
+        return Number(this.getAttribute(Attribute.USER_IDLE_TIMEOUT) ?? defaultTimeout);
     }
 
     set userIdleTimeout(value: number) {
