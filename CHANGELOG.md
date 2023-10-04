@@ -10,7 +10,7 @@
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.4.0 (2023-10-04)
 
 -   💥 **Breaking Change**: This project now requires THEOplayer version 6.0.0 or higher.
 -   🚀 THEOplayer Web UI now imports THEOplayer as a JavaScript module using `import from 'theoplayer/chromeless'`.
