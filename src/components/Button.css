@@ -86,12 +86,12 @@ svg,
     filter: drop-shadow(var(--theoplayer-button-icon-shadow, none));
 }
 
-:host(:hover) img,
-:host(:hover) ::slotted(img) {
+:host(:hover:not([disabled])) img,
+:host(:hover:not([disabled])) ::slotted(img) {
     box-shadow: var(--theoplayer-button-hover-icon-shadow, 0 0 4px rgba(255, 255, 255, 0.5));
 }
 
-:host(:hover) svg,
-:host(:hover) ::slotted(svg) {
+:host(:hover:not([disabled])) svg,
+:host(:hover:not([disabled])) ::slotted(svg) {
     filter: drop-shadow(var(--theoplayer-button-hover-icon-shadow, 0 0 4px rgba(255, 255, 255, 0.5)));
 }

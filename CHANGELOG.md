@@ -15,6 +15,7 @@
 -   💥 **Breaking Change**: This project now requires THEOplayer version 6.0.0 or higher.
 -   🚀 THEOplayer Web UI now imports THEOplayer as a JavaScript module using `import from 'theoplayer/chromeless'`.
     See the [README](./README.md#installation) for updated installation instructions.
+-   🐛 When the player's source is empty, the UI will no longer attempt to play when clicked. ([#37](https://github.com/THEOplayer/web-ui/pull/37))
 
 ## v1.3.0 (2023-05-16)
 
