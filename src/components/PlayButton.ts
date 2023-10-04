@@ -113,6 +113,10 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
 
     protected override handleClick() {
         if (this._player !== undefined) {
+            if (this._player.source === undefined) {
+                // Do nothing if the player has no source.
+                return;
+            }
             if (this._player.paused) {
                 this._player.play();
             } else {
