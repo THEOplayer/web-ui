@@ -2,13 +2,21 @@ import { type ArrowKeyCode, KeyCode } from './KeyCode';
 import { arrayMinByKey, getActiveElement } from './CommonUtils';
 import { Rectangle } from './GeometryUtils';
 
-export function navigateByArrowKey(container: HTMLElement, children: HTMLElement[], key: ArrowKeyCode): boolean {
+export function getFocusedChild(children: HTMLElement[]): Element | null {
     const focusedChild = getActiveElement();
     if (!focusedChild || focusedChild === document.body) {
         if (children.length > 0) {
             children[0].focus();
-            return true;
+            return children[0];
         }
+        return null;
+    }
+    return focusedChild;
+}
+
+export function navigateByArrowKey(container: HTMLElement, children: HTMLElement[], key: ArrowKeyCode): boolean {
+    const focusedChild = getFocusedChild(children);
+    if (focusedChild === null) {
         return false;
     }
     const containerRect = Rectangle.fromRect(container.getBoundingClientRect()).snapToPixels();
