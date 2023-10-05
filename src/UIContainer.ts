@@ -33,8 +33,8 @@ import type { MenuGroup } from './components';
 import './components/MenuGroup';
 import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
 import type { DeviceType } from './util/DeviceType';
-import { isArrowKey, KeyCode } from './util/KeyCode';
 import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
+import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -930,7 +930,7 @@ export class UIContainer extends HTMLElement {
             } else if (isArrowKey(event.keyCode) && navigateByArrowKey(this, getFocusableChildren(this), event.keyCode)) {
                 event.preventDefault();
                 event.stopPropagation();
-            } else if (event.keyCode === KeyCode.BACK) {
+            } else if (isBackKey(event.keyCode)) {
                 this.setUserIdle_();
             }
         }
@@ -938,7 +938,7 @@ export class UIContainer extends HTMLElement {
 
     private readonly _onKeyUp = (event: KeyboardEvent): void => {
         // Show the controls while navigating with the keyboard.
-        if (event.keyCode !== KeyCode.BACK) {
+        if (!isBackKey(event.keyCode)) {
             this.scheduleUserIdle_();
         }
     };
