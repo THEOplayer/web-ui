@@ -6,6 +6,7 @@ import {
     arrayFind,
     arrayRemove,
     containsComposedNode,
+    getActiveElement,
     getFocusableChildren,
     isElement,
     isHTMLElement,
@@ -33,7 +34,7 @@ import './components/MenuGroup';
 import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
 import type { DeviceType } from './util/DeviceType';
 import { isArrowKey, KeyCode } from './util/KeyCode';
-import { navigateByArrowKey } from './util/KeyboardNavigation';
+import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -914,7 +915,19 @@ export class UIContainer extends HTMLElement {
 
     private readonly _onKeyDown = (event: KeyboardEvent): void => {
         if (this.deviceType === 'tv') {
-            if (isArrowKey(event.keyCode) && navigateByArrowKey(this, getFocusableChildren(this), event.keyCode)) {
+            if (this.isUserIdle_()) {
+                // First button press should only make the UI visible
+                getFocusedChild(getFocusableChildren(this));
+                return;
+            }
+            if (event.keyCode === KeyCode.ENTER) {
+                if (this._player !== undefined) {
+                    const focusedChild = getActiveElement();
+                    if (isHTMLElement(focusedChild)) {
+                        focusedChild.click();
+                    }
+                }
+            } else if (isArrowKey(event.keyCode) && navigateByArrowKey(this, getFocusableChildren(this), event.keyCode)) {
                 event.preventDefault();
                 event.stopPropagation();
             } else if (event.keyCode === KeyCode.BACK) {

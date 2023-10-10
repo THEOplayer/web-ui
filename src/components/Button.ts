@@ -69,12 +69,10 @@ export class Button extends HTMLElement {
             this.setAttribute(Attribute.ARIA_LIVE, 'polite');
         }
 
-        this.addEventListener('keydown', this._onKeyDown);
         this.addEventListener('click', this._onClick);
     }
 
     disconnectedCallback(): void {
-        this.removeEventListener('keydown', this._onKeyDown);
         this.removeEventListener('click', this._onClick);
     }
 
@@ -110,23 +108,6 @@ export class Button extends HTMLElement {
             shadyCss.styleSubtree(this);
         }
     }
-
-    private readonly _onKeyDown = (event: KeyboardEvent) => {
-        // Don't handle modifier shortcuts typically used by assistive technology.
-        if (event.altKey) return;
-
-        switch (event.keyCode) {
-            case KeyCode.SPACE:
-            case KeyCode.ENTER:
-                event.preventDefault();
-                event.stopPropagation();
-                this._onClick();
-                break;
-            // Any other key press is ignored and passed back to the browser.
-            default:
-                return;
-        }
-    };
 
     private readonly _onClick = () => {
         if (this.disabled) {
