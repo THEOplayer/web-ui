@@ -915,14 +915,13 @@ export class UIContainer extends HTMLElement {
 
     private readonly _onKeyDown = (event: KeyboardEvent): void => {
         if (this.deviceType === 'tv') {
+            const focusedChild = getFocusedChild(getFocusableChildren(this));
             if (this.isUserIdle_()) {
                 // First button press should only make the UI visible
-                getFocusedChild(getFocusableChildren(this));
                 return;
             }
             if (event.keyCode === KeyCode.ENTER) {
                 if (this._player !== undefined) {
-                    const focusedChild = getActiveElement();
                     if (isHTMLElement(focusedChild)) {
                         focusedChild.click();
                     }
