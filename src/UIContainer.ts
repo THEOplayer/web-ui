@@ -920,6 +920,11 @@ export class UIContainer extends HTMLElement {
 
     private readonly _onKeyDown = (event: KeyboardEvent): void => {
         if (this.deviceType === 'tv') {
+            if (isBackKey(event.keyCode)) {
+                this.setUserIdle_();
+                return;
+            }
+
             const focusedChild = getFocusedChild(getFocusableChildren(this));
             if (this.isUserIdle_()) {
                 // First button press should only make the UI visible
@@ -932,8 +937,6 @@ export class UIContainer extends HTMLElement {
             } else if (isArrowKey(event.keyCode) && navigateByArrowKey(this, getFocusableChildren(this), event.keyCode)) {
                 event.preventDefault();
                 event.stopPropagation();
-            } else if (isBackKey(event.keyCode)) {
-                this.setUserIdle_();
             }
         }
     };
