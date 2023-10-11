@@ -1,10 +1,10 @@
 import { type ArrowKeyCode, KeyCode } from './KeyCode';
-import { arrayMinByKey, getActiveElement } from './CommonUtils';
+import { arrayMinByKey, getActiveElement, isHTMLElement } from './CommonUtils';
 import { Rectangle } from './GeometryUtils';
 
-export function getFocusedChild(children: HTMLElement[]): Element | null {
+export function getFocusedChild(children: HTMLElement[]): HTMLElement | null {
     const focusedChild = getActiveElement();
-    if (!focusedChild || focusedChild === document.body) {
+    if (!focusedChild || focusedChild === document.body || !isHTMLElement(focusedChild)) {
         if (children.length > 0) {
             children[0].focus();
             return children[0];
