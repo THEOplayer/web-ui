@@ -891,8 +891,13 @@ export class UIContainer extends HTMLElement {
         if (this.userIdleTimeout < 0) {
             return;
         }
-
         this.setAttribute(Attribute.USER_IDLE, '');
+
+        // Blur active element so that first key press on TV doesn't result in an action.
+        const focusedChild = getFocusedChild(getFocusableChildren(this));
+        if (this.deviceType === 'tv' && focusedChild !== null && this.isUserIdle_()) {
+            focusedChild.blur();
+        }
     };
 
     private readonly scheduleUserIdle_ = (): void => {
