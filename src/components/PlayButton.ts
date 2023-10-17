@@ -7,6 +7,7 @@ import pauseIcon from '../icons/pause.svg';
 import replayIcon from '../icons/replay.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
+import { msg } from '../util/Localization';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -139,7 +140,7 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
     }
 
     private _updateAriaLabel(): void {
-        const label = this.ended ? 'replay' : this.paused ? 'play' : 'pause';
+        const label = this.ended ? msg('replay') : this.paused ? msg('play') : msg('pause');
         this.setAttribute(Attribute.ARIA_LABEL, label);
     }
 }
