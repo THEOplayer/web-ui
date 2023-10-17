@@ -158,13 +158,18 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
         string({
             include: ['./src/**/*.html', './src/**/*.svg']
         }),
-        // Replace `globalThis` in lit-html.
         es5 &&
             replace({
                 preventAssignment: true,
-                delimiters: ['\\b', '\\b'],
+                delimiters: ['', ''],
                 values: {
-                    globalThis: 'self'
+                    // Replace `globalThis` in lit-html.
+                    globalThis: 'self',
+                    // HACK: Fix lit-html for IE11.
+                    // d.createTreeWalker(d, 129 /* NodeFilter.SHOW_{ELEMENT|COMMENT} */)
+                    // ^ This needs additional arguments in IE11.
+                    [`129 /* NodeFilter.SHOW_{ELEMENT|COMMENT} */);`]: `129 /* NodeFilter.SHOW_{ELEMENT|COMMENT} */, null, false);`,
+                    [`129);`]: `129,null,false);`
                 }
             }),
         // Transpile TypeScript.
