@@ -929,7 +929,8 @@ export class UIContainer extends HTMLElement {
             this.setUserIdle_();
             return;
         }
-        const focusedChild = getFocusedChild(getFocusableChildren(this));
+        const focusableChildren = getFocusableChildren(this);
+        const focusedChild = getFocusedChild(focusableChildren);
         if (this.isUserIdle_()) {
             // First button press should only make the UI visible
             return;
@@ -938,7 +939,7 @@ export class UIContainer extends HTMLElement {
             if (this._player !== undefined && focusedChild !== null) {
                 focusedChild.click();
             }
-        } else if (isArrowKey(event.keyCode) && navigateByArrowKey(this, getFocusableChildren(this), event.keyCode)) {
+        } else if (isArrowKey(event.keyCode) && navigateByArrowKey(this, focusableChildren, event.keyCode)) {
             event.preventDefault();
             event.stopPropagation();
         }
