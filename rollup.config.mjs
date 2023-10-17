@@ -9,6 +9,7 @@ import postcssMixins from 'postcss-mixins';
 import * as path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { string } from 'rollup-plugin-string';
+import replace from '@rollup/plugin-replace';
 import dts from 'rollup-plugin-dts';
 import inject from '@rollup/plugin-inject';
 import virtual from '@rollup/plugin-virtual';
@@ -171,6 +172,15 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
         string({
             include: ['./src/**/*.html', './src/**/*.svg']
         }),
+        // Replace `globalThis` in lit-html.
+        es5 &&
+            replace({
+                preventAssignment: true,
+                delimiters: ['\\b', '\\b'],
+                values: {
+                    globalThis: 'self'
+                }
+            }),
         // Transpile TypeScript.
         swc({
             include: './src/**',
