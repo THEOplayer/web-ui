@@ -129,12 +129,9 @@ See [docs/examples/custom-ui.html](https://github.com/THEOplayer/web-ui/blob/mai
 
 By default, THEOplayer Web UI targets modern browsers that support modern JavaScript syntax (such as [async/await](https://caniuse.com/async-functions)) and native [Custom Elements](https://caniuse.com/custom-elementsv1). This keeps the download size small, so your viewers can spend less time waiting for your page to load and start watching their video faster.
 
-On older browsers (such as Internet Explorer 11 and older smart TVs), you need to load a different version of the THEOplayer Web UI that uses older JavaScript syntax. You also need to load additional polyfills for missing features such as Promises or Custom Elements:
+On older browsers (such as Internet Explorer 11 and older smart TVs), you need to load a different version of the THEOplayer Web UI that uses older JavaScript syntax. You also need to load additional polyfills for missing features such as Promises or Custom Elements. These are provided by our polyfill bundle in `@theoplayer/web-ui/polyfills`. Alternatively, you can use [Polyfill.io](https://polyfill.io/) and [Web Components Polyfills](https://github.com/webcomponents/polyfills).
 
--   For Promises, we recommend [Polyfill.io](https://polyfill.io/).
--   For Custom Elements, we recommend loading our polyfill bundle from `@theoplayer/web-ui/polyfills`. Alternatively, you can load the [Web Components Polyfills](https://github.com/webcomponents/polyfills).
-
-*   Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`), while legacy browsers will load the legacy build (with `nomodule`).
+-   Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`), while legacy browsers will load the legacy build (with `nomodule`).
 
     ```html
     <!-- Modern browsers -->
@@ -149,13 +146,12 @@ On older browsers (such as Internet Explorer 11 and older smart TVs), you need t
     <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js" crossorigin="anonymous"></script>
     <script type="module" src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.mjs"></script>
     <!-- Legacy browsers -->
-    <script nomodule src="https://polyfill.io/v3/polyfill.min.js?features=es2015"></script>
     <script nomodule src="/path/to/node_modules/theoplayer/THEOplayer.chromeless.js"></script>
     <script nomodule src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.polyfills.js"></script>
     <script nomodule src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.es5.js"></script>
     ```
 
-*   Option 2: in your JavaScript. This will load the legacy build on both modern and legacy browsers, which is suboptimal. Instead, we recommend configuring your bundler to produce a modern and legacy build of your entire web app, and to import the appropriate version of THEOplayer Web UI for each build flavor.
+-   Option 2: in your JavaScript. This will load the legacy build on both modern and legacy browsers, which is suboptimal. Instead, we recommend configuring your bundler to produce a modern and legacy build of your entire web app, and to import the appropriate version of THEOplayer Web UI for each build flavor.
 
     ```js
     import '@theoplayer/web-ui/polyfills';
