@@ -4,12 +4,15 @@
 <body>
 <trans-unit id="s93e4cd644f65cef2">
   <source>replay</source>
+  <target>opnieuw afspelen</target>
 </trans-unit>
 <trans-unit id="sa5e8570db713b763">
   <source>play</source>
+  <target>afspelen</target>
 </trans-unit>
 <trans-unit id="s49c3daa7c502684d">
   <source>pause</source>
+  <target>pauzeren</target>
 </trans-unit>
 </body>
 </file>
