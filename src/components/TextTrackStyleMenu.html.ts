@@ -1,3 +1,6 @@
+import { html } from 'lit-html';
+
+export default html`
 <theoplayer-menu class="theoplayer-text-track-style-menu">
     <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">Subtitle options</slot></span>
     <theoplayer-text-track-style-reset-button class="theoplayer-menu-heading-button" slot="heading"></theoplayer-text-track-style-reset-button>
@@ -148,3 +151,4 @@
         <theoplayer-radio-button value="uniform">Uniform</theoplayer-radio-button>
     </theoplayer-text-track-style-radio-group>
 </theoplayer-menu>
+`;

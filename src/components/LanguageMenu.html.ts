@@ -1,4 +1,7 @@
-export default `<theoplayer-menu>
+import { html } from 'lit-html';
+
+export default html`
+<theoplayer-menu>
     <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">Language</slot></span>
     <theoplayer-settings-menu-button
         class="theoplayer-menu-heading-button"
@@ -16,4 +19,5 @@ export default `<theoplayer-menu>
         </div>
     </div>
 </theoplayer-menu>
-<theoplayer-text-track-style-menu id="subtitle-options-menu"></theoplayer-text-track-style-menu>`;
+<theoplayer-text-track-style-menu id="subtitle-options-menu"></theoplayer-text-track-style-menu>
+`;
