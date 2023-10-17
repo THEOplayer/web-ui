@@ -41,5 +41,19 @@
             configuration='{"libraryLocation":"../node_modules/theoplayer/","license":""}'
             source='{"sources":{"src":"https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8"},"metadata":{"title":"Big Buck Bunny"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/video/big_buck_bunny/thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
         ></theoplayer-default-ui>
+        <div>
+            <label style="user-select: none">
+                Language:
+                <select id="locale-select">
+                    <option value="en" selected>English</option>
+                    <option value="nl">Nederlands (Dutch)</option>
+                </select>
+            </label>
+        </div>
+        <script>
+            document.querySelector('#locale-select').addEventListener('change', (e) => {
+                THEOplayerUI.setLocale(e.target.value);
+            });
+        </script>
     </body>
 </html>
