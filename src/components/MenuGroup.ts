@@ -1,16 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import menuGroupCss from './MenuGroup.css';
 import { Attribute } from '../util/Attribute';
-import {
-    arrayFind,
-    arrayFindIndex,
-    fromArrayLike,
-    getSlottedElements,
-    isElement,
-    isHTMLElement,
-    noOp,
-    upgradeCustomElementIfNeeded
-} from '../util/CommonUtils';
+import { arrayFind, arrayFindIndex, fromArrayLike, getSlottedElements, isHTMLElement, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from '../events/ToggleMenuEvent';
 import { isBackKey } from '../util/KeyCode';
@@ -18,17 +9,23 @@ import { createCustomEvent } from '../util/EventUtils';
 import type { MenuChangeEvent } from '../events/MenuChangeEvent';
 import { MENU_CHANGE_EVENT } from '../events/MenuChangeEvent';
 import { Menu } from './Menu';
-import { createTemplate } from '../util/TemplateUtils';
+import { html, render, type TemplateResult } from 'lit-html';
 
 export interface MenuGroupOptions {
-    template?: HTMLTemplateElement;
+    template?: TemplateResult;
 }
 
-export function menuGroupTemplate(content: string, extraCss: string = ''): string {
-    return `<style>${menuGroupCss}${extraCss}</style>${content}`;
+export function menuGroupTemplate(content: TemplateResult, extraCss: string | TemplateResult = ''): TemplateResult {
+    return html`
+        <style>
+            ${menuGroupCss}
+            ${extraCss}
+        </style>
+        ${content}
+    `;
 }
 
-const defaultTemplate = createTemplate('theoplayer-menu-group', menuGroupTemplate(`<slot></slot>`));
+const defaultTemplate = menuGroupTemplate(html`<slot></slot>`);
 
 interface OpenMenuEntry {
     menu: Menu | MenuGroup;
@@ -56,9 +53,9 @@ export class MenuGroup extends HTMLElement {
 
     constructor(options?: MenuGroupOptions) {
         super();
-        const template = options?.template ?? defaultTemplate();
+        const template = options?.template ?? defaultTemplate;
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        render(template, shadowRoot);
 
         this._menuSlot = shadowRoot.querySelector('slot');
     }
