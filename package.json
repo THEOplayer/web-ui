@@ -46,10 +46,14 @@
     "type": "git",
     "url": "git+https://github.com/THEOplayer/web-ui.git"
   },
+  "dependencies": {
+    "@lit/localize": "^0.12.0"
+  },
   "peerDependencies": {
     "theoplayer": "^6"
   },
   "devDependencies": {
+    "@lit/localize-tools": "^0.7.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/pluginutils": "^5.0.4",
     "@swc/cli": "^0.1.62",
