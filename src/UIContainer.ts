@@ -925,23 +925,23 @@ export class UIContainer extends HTMLElement {
     }
 
     private readonly _onTvKeyDown = (event: KeyboardEvent): void => {
-            if (isBackKey(event.keyCode)) {
-                this.setUserIdle_();
-                return;
+        if (isBackKey(event.keyCode)) {
+            this.setUserIdle_();
+            return;
+        }
+        const focusedChild = getFocusedChild(getFocusableChildren(this));
+        if (this.isUserIdle_()) {
+            // First button press should only make the UI visible
+            return;
+        }
+        if (event.keyCode === KeyCode.ENTER) {
+            if (this._player !== undefined && focusedChild !== null) {
+                focusedChild.click();
             }
-            const focusedChild = getFocusedChild(getFocusableChildren(this));
-            if (this.isUserIdle_()) {
-                // First button press should only make the UI visible
-                return;
-            }
-            if (event.keyCode === KeyCode.ENTER) {
-                if (this._player !== undefined && focusedChild !== null) {
-                    focusedChild.click();
-                }
-            } else if (isArrowKey(event.keyCode) && navigateByArrowKey(this, getFocusableChildren(this), event.keyCode)) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+        } else if (isArrowKey(event.keyCode) && navigateByArrowKey(this, getFocusableChildren(this), event.keyCode)) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
     };
 
     private readonly _onKeyUp = (event: KeyboardEvent): void => {
