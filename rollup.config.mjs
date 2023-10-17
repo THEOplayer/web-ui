@@ -71,7 +71,8 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
             },
             context: 'self',
             external: [theoplayerModule],
-            plugins: jsPlugins({ es5, module: false, production, sourcemap })
+            plugins: jsPlugins({ es5, module: false, production, sourcemap }),
+            onwarn
         },
         {
             input: './src/index.ts',
@@ -84,7 +85,8 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
             },
             context: 'self',
             external: [theoplayerModule],
-            plugins: jsPlugins({ es5, module: true, production, sourcemap })
+            plugins: jsPlugins({ es5, module: true, production, sourcemap }),
+            onwarn
         },
         node && {
             input: './src/index.ts',
@@ -97,7 +99,8 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
             },
             context: 'globalThis',
             external: [domShimModule],
-            plugins: jsPlugins({ es5, node, module: true, production, sourcemap })
+            plugins: jsPlugins({ es5, node, module: true, production, sourcemap }),
+            onwarn
         }
     ]).filter(Boolean);
 }
@@ -199,4 +202,14 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
                 ecma: es5 ? 5 : 2017
             })
     ].filter(Boolean);
+}
+
+/**
+ * @type {import("rollup").WarningHandlerWithDefault}
+ */
+function onwarn(warning, handler) {
+    if (warning.code === 'CIRCULAR_DEPENDENCY') {
+        return; // Ignore circular dependency warnings
+    }
+    handler(warning);
 }
