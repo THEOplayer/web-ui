@@ -9,18 +9,23 @@ import { createCustomEvent } from '../util/EventUtils';
 import type { MenuChangeEvent } from '../events/MenuChangeEvent';
 import { MENU_CHANGE_EVENT } from '../events/MenuChangeEvent';
 import { Menu } from './Menu';
+import { html, render, type TemplateResult } from 'lit-html';
 
 export interface MenuGroupOptions {
-    template?: HTMLTemplateElement;
+    template?: TemplateResult;
 }
 
-export function menuGroupTemplate(content: string, extraCss: string = ''): string {
-    return `<style>${menuGroupCss}${extraCss}</style>${content}`;
+export function menuGroupTemplate(content: TemplateResult, extraCss: string | TemplateResult = ''): TemplateResult {
+    return html`
+        <style>
+            ${menuGroupCss}
+            ${extraCss}
+        </style>
+        ${content}
+    `;
 }
 
-const defaultTemplate = document.createElement('template');
-defaultTemplate.innerHTML = menuGroupTemplate(`<slot></slot>`);
-shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu-group');
+const defaultTemplate = menuGroupTemplate(html`<slot></slot>`);
 
 interface OpenMenuEntry {
     menu: Menu | MenuGroup;
@@ -50,7 +55,7 @@ export class MenuGroup extends HTMLElement {
         super();
         const template = options?.template ?? defaultTemplate;
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        render(template, shadowRoot);
 
         this._menuSlot = shadowRoot.querySelector('slot');
     }

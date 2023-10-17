@@ -9,9 +9,7 @@ import { Attribute } from '../util/Attribute';
 import './TrackRadioGroup';
 import './TextTrackStyleMenu';
 
-const template = document.createElement('template');
-template.innerHTML = menuGroupTemplate(languageMenuHtml, languageMenuCss);
-shadyCss.prepareTemplate(template, 'theoplayer-language-menu');
+const template = menuGroupTemplate(languageMenuHtml, languageMenuCss);
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 

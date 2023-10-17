@@ -1,4 +1,3 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import { MenuGroup, menuGroupTemplate } from './MenuGroup';
 import settingsMenuHtml from './SettingsMenu.html';
 import menuTableCss from './MenuTable.css';
@@ -6,9 +5,7 @@ import './ActiveQualityDisplay';
 import './PlaybackRateDisplay';
 import './PlaybackRateMenu';
 
-const template = document.createElement('template');
-template.innerHTML = menuGroupTemplate(settingsMenuHtml, menuTableCss);
-shadyCss.prepareTemplate(template, 'theoplayer-settings-menu');
+const template = menuGroupTemplate(settingsMenuHtml, menuTableCss);
 
 /**
  * A menu to change the settings of the player, such as the active video quality and the playback speed.
