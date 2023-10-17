@@ -388,7 +388,9 @@ export class UIContainer extends HTMLElement {
         }
 
         this.setUserIdle_();
-        window.addEventListener('keydown', this._onKeyDown);
+        if (this.deviceType === 'tv') {
+            window.addEventListener('keydown', this._onTvKeyDown);
+        }
         this.addEventListener('keyup', this._onKeyUp);
         this.addEventListener('pointerup', this._onPointerUp);
         this.addEventListener('pointermove', this._onPointerMove);
@@ -453,7 +455,7 @@ export class UIContainer extends HTMLElement {
             document.removeEventListener(fullscreenAPI.fullscreenerror_, this._onFullscreenChange);
         }
 
-        window.removeEventListener('keydown', this._onKeyDown);
+        window.removeEventListener('keydown', this._onTvKeyDown);
         this.removeEventListener('keyup', this._onKeyUp);
         this.removeEventListener('pointerup', this._onPointerUp);
         this.removeEventListener('click', this._onClickAfterPointerUp, true);
@@ -492,6 +494,10 @@ export class UIContainer extends HTMLElement {
         } else if (attrName === Attribute.DEVICE_TYPE) {
             toggleAttribute(this, Attribute.MOBILE, newValue === 'mobile');
             toggleAttribute(this, Attribute.TV, newValue === 'tv');
+            window.removeEventListener('keydown', this._onTvKeyDown);
+            if (newValue === 'tv') {
+                window.addEventListener('keydown', this._onTvKeyDown);
+            }
             for (const receiver of this._stateReceivers) {
                 if (receiver[StateReceiverProps].indexOf('deviceType') >= 0) {
                     receiver.deviceType = newValue;
@@ -918,7 +924,7 @@ export class UIContainer extends HTMLElement {
         return node === this || this._playerEl.contains(node);
     }
 
-    private readonly _onKeyDown = (event: KeyboardEvent): void => {
+    private readonly _onTvKeyDown = (event: KeyboardEvent): void => {
         if (this.deviceType === 'tv') {
             if (isBackKey(event.keyCode)) {
                 this.setUserIdle_();
