@@ -899,10 +899,12 @@ export class UIContainer extends HTMLElement {
         }
         this.setAttribute(Attribute.USER_IDLE, '');
 
-        // Blur active element so that first key press on TV doesn't result in an action.
-        const focusedChild = getFocusedChild(getFocusableChildren(this));
-        if (this.deviceType === 'tv' && focusedChild !== null && this.isUserIdle_()) {
-            focusedChild.blur();
+        if (this.deviceType == 'tv' && this.isUserIdle_()) {
+            // Blur active element so that first key press on TV doesn't result in an action.
+            const focusedChild = getFocusedChild(getFocusableChildren(this));
+            if (focusedChild !== null) {
+                focusedChild.blur();
+            }
         }
     };
 
