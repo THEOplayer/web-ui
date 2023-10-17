@@ -73,6 +73,7 @@
     "@rollup/plugin-inject": "^5.0.5",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-replace": "^5.0.4",
     "@rollup/plugin-virtual": "^3.0.2",
     "@rollup/pluginutils": "^5.1.4",
     "@swc/cli": "^0.6.0",
