@@ -1,3 +1,6 @@
+import { html } from 'lit-html';
+
+export default html`
 <theoplayer-menu>
     <span slot="heading"><slot name="heading">Settings</slot></span>
     <table class="theoplayer-menu-table">
@@ -26,3 +29,4 @@
 <theoplayer-playback-rate-menu id="playback-rate-menu" menu-close-on-input hidden>
     <span slot="heading">Playback speed</span>
 </theoplayer-playback-rate-menu>
+`;
