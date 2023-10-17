@@ -200,8 +200,12 @@ function collectFocusableChildren(element: Element, result: HTMLElement[]) {
 
 export function getActiveElement(): Element | null {
     let activeElement = document.activeElement;
-    while (activeElement?.shadowRoot?.activeElement) {
-        activeElement = activeElement.shadowRoot.activeElement;
+    if (activeElement == null) {
+        return null;
+    }
+    let nextActiveElement: Element | null | undefined;
+    while ((nextActiveElement = activeElement.shadowRoot?.activeElement) != null) {
+        activeElement = nextActiveElement;
     }
     return activeElement;
 }
