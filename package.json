@@ -34,6 +34,8 @@
     "test:typecheck": "tsc --project . --noEmit",
     "docs": "typedoc --treatWarningsAsErrors",
     "docs:watch": "typedoc --watch",
+    "localize:extract": "lit-localize extract",
+    "localize:build": "lit-localize build",
     "prepare": "npm run build:prod",
     "version": "node bump-changelog.mjs && git add CHANGELOG.md"
   },
