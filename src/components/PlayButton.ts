@@ -7,7 +7,7 @@ import pauseIcon from '../icons/pause.svg';
 import replayIcon from '../icons/replay.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
-import { msg } from '../util/Localization';
+import { addLocaleChangeListener, isLocaleChangeEvent, type LocaleStatusEvent, msg, removeLocaleChangeListener } from '../util/Localization';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -45,6 +45,12 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
         super.connectedCallback();
         this._updateFromPlayer();
         this._updateAriaLabel();
+        addLocaleChangeListener(this._updateLocale);
+    }
+
+    override disconnectedCallback() {
+        super.disconnectedCallback();
+        removeLocaleChangeListener(this._updateLocale);
     }
 
     get paused(): boolean {
@@ -143,6 +149,13 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
         const label = this.ended ? msg('replay') : this.paused ? msg('play') : msg('pause');
         this.setAttribute(Attribute.ARIA_LABEL, label);
     }
+
+    private readonly _updateLocale = (event: LocaleStatusEvent) => {
+        if (!isLocaleChangeEvent(event)) {
+            return;
+        }
+        this._updateAriaLabel();
+    };
 }
 
 customElements.define('theoplayer-play-button', PlayButton);
