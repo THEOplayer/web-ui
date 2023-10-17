@@ -41,6 +41,8 @@
     "test:unit": "node --test test/ssr.test.mjs",
     "docs": "cross-env NODE_OPTIONS=\"--experimental-require-module\" typedoc --treatWarningsAsErrors",
     "docs:watch": "cross-env NODE_OPTIONS=\"--experimental-require-module\" typedoc --watch",
+    "localize:extract": "lit-localize extract",
+    "localize:build": "lit-localize build",
     "version": "npm run version:changelog && npm run version:deps && npm run version:react",
     "version:changelog": "node scripts/bump-changelog.mjs web-ui CHANGELOG.md && git add CHANGELOG.md",
     "version:deps": "cross-env-shell \"npm install $npm_package_name@$npm_package_version --workspace react && git add react/package.json\"",
