@@ -8,6 +8,8 @@
  * Supported message formats for `event.data`:
  * - `{ type: "deviceType", deviceType: "" | "desktop" | "mobile" | "tv" }`
  *   Overrides the player's device type.
+ * - `{ type: "locale", locale: string }`
+ *   Overrides the player's locale.
  * - `{ type: "source", source: SourceDescription }`
  *   Changes the player's source.
  * - `{ type: "style", style: string }`
@@ -21,6 +23,10 @@ window.addEventListener('message', (event) => {
         case 'deviceType': {
             const ui = document.querySelector('theoplayer-default-ui, theoplayer-ui');
             ui?.setAttribute('device-type', data.deviceType);
+            break;
+        }
+        case 'locale': {
+            THEOplayerUI.setLocale(data.locale);
             break;
         }
         case 'source': {
