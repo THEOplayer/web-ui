@@ -1,14 +1,13 @@
 import { MenuGroup, menuGroupTemplate } from './MenuGroup';
 import settingsMenuHtml from './SettingsMenu.html';
 import menuTableCss from './MenuTable.css';
-import { createTemplate } from '../util/TemplateUtils';
 
 // Load components used in template
 import './ActiveQualityDisplay';
 import './PlaybackRateDisplay';
 import './PlaybackRateMenu';
 
-const template = createTemplate('theoplayer-settings-menu', menuGroupTemplate(settingsMenuHtml, menuTableCss));
+const template = menuGroupTemplate(settingsMenuHtml, menuTableCss);
 
 /**
  * `<theoplayer-settings-menu>` - A menu to change the settings of the player,
@@ -20,7 +19,7 @@ const template = createTemplate('theoplayer-settings-menu', menuGroupTemplate(se
  */
 export class SettingsMenu extends MenuGroup {
     constructor() {
-        super({ template: template() });
+        super({ template });
     }
 }
 
