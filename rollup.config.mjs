@@ -37,6 +37,18 @@ export default (cliArgs) => {
         ...jsConfig(outputDir, { es5: false, node: true, production, sourcemap: true }),
         ...jsConfig(outputDir, { es5: true, production, sourcemap: false }),
         {
+            input: './src/polyfills.ts',
+            output: {
+                file: path.join(outputDir, `${fileName}.polyfills.js`),
+                format: 'iife',
+                sourcemap: false,
+                indent: false,
+                banner
+            },
+            context: 'self',
+            plugins: jsPlugins({ es5: true, module: false, production: true, sourcemap: false })
+        },
+        {
             input: './src/index.ts',
             output: {
                 file: path.join(outputDir, `${fileName}.d.ts`),
