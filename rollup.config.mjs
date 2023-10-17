@@ -8,6 +8,7 @@ import postcssMixins from 'postcss-mixins';
 import * as path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { string } from 'rollup-plugin-string';
+import replace from '@rollup/plugin-replace';
 import dts from 'rollup-plugin-dts';
 
 const fileName = 'THEOplayerUI';
@@ -129,6 +130,16 @@ function jsPlugins({ es5 = false, module = false, production = false, sourcemap 
         string({
             include: ['./src/**/*.html', './src/**/*.svg']
         }),
+        // Replace `globalThis` in lit-html.
+        es5
+            ? replace({
+                  preventAssignment: true,
+                  delimiters: ['\\b', '\\b'],
+                  values: {
+                      globalThis: 'self'
+                  }
+              })
+            : undefined,
         // Transpile TypeScript.
         swc({
             include: './src/**',
