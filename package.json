@@ -16,6 +16,7 @@
       "import": "./dist/THEOplayerUI.es5.mjs",
       "default": "./dist/THEOplayerUI.es5.js"
     },
+    "./polyfills": "./dist/THEOplayerUI-polyfills.js",
     "./dist/*": "./dist/*"
   },
   "files": [
@@ -46,6 +47,10 @@
     "type": "git",
     "url": "git+https://github.com/THEOplayer/web-ui.git"
   },
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.8.0",
+    "lit-html": "^3.0.0"
+  },
   "peerDependencies": {
     "theoplayer": "^6"
   },
@@ -57,7 +62,6 @@
     "@swc/helpers": "^0.5.2",
     "@types/html-minifier": "^4.0.3",
     "@webcomponents/shadycss": "^1.11.2",
-    "@webcomponents/webcomponentsjs": "^2.8.0",
     "html-minifier": "^4.0.0",
     "postcss": "^8.4.30",
     "postcss-mixins": "^9.0.4",
