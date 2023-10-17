@@ -2,6 +2,7 @@ import { defineConfig } from 'rollup';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import { minify, swc } from 'rollup-plugin-swc3';
 import { minifyHTML } from './scripts/minify-html.mjs';
+import minifyHtmlLiterals from 'rollup-plugin-minify-html-literals-v3';
 import postcss from 'rollup-plugin-postcss';
 import postcssPresetEnv from 'postcss-preset-env';
 import postcssMixins from 'postcss-mixins';
@@ -121,6 +122,12 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
 function jsPlugins({ es5 = false, node = false, module = false, production = false, sourcemap = false }) {
     const browserslist = es5 ? browserslistLegacy : browserslistModern;
     const ecmaVersion = es5 ? 5 : 2017;
+    const minifyHtmlOptions = {
+        removeComments: production,
+        removeRedundantAttributes: true,
+        sortClassName: true,
+        collapseWhitespace: production
+    };
     return [
         nodeResolve({
             exportConditions: [
@@ -156,10 +163,13 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
         // Minify HTML and CSS.
         minifyHTML({
             include: ['./src/**/*.html'],
-            removeComments: production,
-            removeRedundantAttributes: true,
-            sortClassName: true,
-            collapseWhitespace: production
+            minifyOptions: minifyHtmlOptions
+        }),
+        minifyHtmlLiterals({
+            include: ['./src/**/*.ts'],
+            options: {
+                minifyOptions: minifyHtmlOptions
+            }
         }),
         // Import HTML and SVG as strings.
         string({
