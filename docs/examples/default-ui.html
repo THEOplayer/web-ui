@@ -21,6 +21,15 @@ permalink: /examples/default-ui
 <p>
     <label style="user-select: none"><input type="checkbox" id="mobile-toggle" /> Mobile</label>
 </p>
+<p>
+    <label style="user-select: none">
+        Language:
+        <select id="language-select">
+            <option value="en" selected>English</option>
+            <option value="nl">Dutch</option>
+        </select>
+    </label>
+</p>
 <script>
     var ui = document.querySelector('theoplayer-default-ui');
     document.querySelector('#mobile-toggle').addEventListener('change', function (ev) {
@@ -29,5 +38,8 @@ permalink: /examples/default-ui
         } else {
             ui.removeAttribute('mobile');
         }
+    });
+    document.querySelector('#language-select').addEventListener('change', function (ev) {
+        THEOplayerUI.setLocale(ev.target.value);
     });
 </script>
