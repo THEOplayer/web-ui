@@ -8,6 +8,7 @@ export enum Attribute {
     DEVICE_TYPE = 'device-type',
     MOBILE = 'mobile',
     TV = 'tv',
+    TV_FOCUS = 'tv-focus',
     MOBILE_ONLY = 'mobile-only',
     MOBILE_HIDDEN = 'mobile-hidden',
     USER_IDLE = 'user-idle',

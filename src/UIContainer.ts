@@ -7,6 +7,7 @@ import {
     arrayRemove,
     containsComposedNode,
     getActiveElement,
+    getTvFocusChildren,
     getFocusableChildren,
     isElement,
     isHTMLElement,
@@ -931,12 +932,14 @@ export class UIContainer extends HTMLElement {
             this.setUserIdle_();
             return;
         }
+        const tvFocusChildren = getTvFocusChildren(this);
         const focusableChildren = getFocusableChildren(this);
         let focusedChild = getFocusedChild();
         if (!focusedChild) {
-            if (focusableChildren.length > 0) {
-                focusableChildren[0].focus();
-                focusedChild = focusableChildren[0];
+            const children = tvFocusChildren ?? focusableChildren;
+            if (children.length > 0) {
+                children[0].focus();
+                focusedChild = children[0];
             }
         }
 

@@ -1,3 +1,5 @@
+import { Attribute } from './Attribute';
+
 export type Constructor<T> = abstract new (...args: any[]) => T;
 
 export function noOp(): void {
@@ -154,6 +156,26 @@ export function getChildren(element: Element): ArrayLike<Element> {
         return element.children;
     }
     return [];
+}
+
+export function getTvFocusChildren(element: Element): HTMLElement[] | undefined {
+    if (!isHTMLElement(element)) {
+        return;
+    }
+    if (getComputedStyle(element).display === 'none') {
+        return;
+    }
+    if (element.getAttribute(Attribute.TV_FOCUS) !== null) {
+        return getFocusableChildren(element);
+    }
+
+    const children = getChildren(element);
+    for (let i = 0; i < children.length; i++) {
+        const result = getTvFocusChildren(children[i]);
+        if (result) {
+            return result;
+        }
+    }
 }
 
 export function getFocusableChildren(element: HTMLElement): HTMLElement[] {
