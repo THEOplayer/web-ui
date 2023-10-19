@@ -901,7 +901,7 @@ export class UIContainer extends HTMLElement {
 
         if (this.deviceType == 'tv' && this.isUserIdle_()) {
             // Blur active element so that first key press on TV doesn't result in an action.
-            const focusedChild = getFocusedChild(getFocusableChildren(this));
+            const focusedChild = getFocusedChild();
             if (focusedChild !== null) {
                 focusedChild.blur();
             }
@@ -932,7 +932,14 @@ export class UIContainer extends HTMLElement {
             return;
         }
         const focusableChildren = getFocusableChildren(this);
-        const focusedChild = getFocusedChild(focusableChildren);
+        let focusedChild = getFocusedChild();
+        if (!focusedChild) {
+            if (focusableChildren.length > 0) {
+                focusableChildren[0].focus();
+                focusedChild = focusableChildren[0];
+            }
+        }
+
         if (this.isUserIdle_()) {
             // First button press should only make the UI visible
             return;
