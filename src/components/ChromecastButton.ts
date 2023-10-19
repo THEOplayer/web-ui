@@ -27,7 +27,7 @@ export class ChromecastButton extends StateReceiverMixin(CastButton, ['player'])
 
         // Make ID attributes unique
         const id = ++chromecastButtonId;
-        const mask = this.shadowRoot!.querySelector<SVGClipPathElement>(`svg clipPath#${maskId}`)!;
+        const mask = this.shadowRoot!.querySelector<SVGClipPathElement>(`svg clipPath#${maskId}`);
         const rings = this.shadowRoot!.querySelector<SVGGElement>(`svg .theoplayer-chromecast-rings`)!;
         const uniqueMaskId = `${maskId}-${id}`;
         mask?.setAttribute('id', uniqueMaskId);
