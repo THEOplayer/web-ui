@@ -10,6 +10,15 @@
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🚀 Added support for smart TVs. ([#40](https://github.com/THEOplayer/web-ui/pull/40))
+    -   Updated `<theoplayer-default-ui>` to automatically switch to an optimized layout when running on a smart TV.
+        For custom UIs using `<theoplayer-ui>`, you can use the `tv-only` and `tv-hidden` attributes to show or hide specific UI elements on smart TVs.
+    -   Added support for navigating the UI using a TV remote control.
+    -   Added a `tv-focus` attribute to specify which UI element should receive the initial focus when showing the controls on a TV.
+        In the default UI, initial focus is on the seek bar.
+
 ## v1.4.0 (2023-10-04)
 
 -   💥 **Breaking Change**: This project now requires THEOplayer version 6.0.0 or higher.
