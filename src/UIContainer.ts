@@ -2,7 +2,17 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type MediaTrack, type PlayerConfiguration, type SourceDescription, type VideoQuality } from 'theoplayer/chromeless';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
-import { arrayFind, arrayRemove, containsComposedNode, isElement, isHTMLElement, noOp } from './util/CommonUtils';
+import {
+    arrayFind,
+    arrayRemove,
+    containsComposedNode,
+    getFocusableChildren,
+    getTvFocusChildren,
+    isElement,
+    isHTMLElement,
+    noOp,
+    toggleAttribute
+} from './util/CommonUtils';
 import { forEachStateReceiverElement, type StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from './events/ToggleMenuEvent';
 import { CLOSE_MENU_EVENT } from './events/CloseMenuEvent';
@@ -10,7 +20,7 @@ import { ENTER_FULLSCREEN_EVENT, type EnterFullscreenEvent } from './events/Ente
 import { EXIT_FULLSCREEN_EVENT, type ExitFullscreenEvent } from './events/ExitFullscreenEvent';
 import { fullscreenAPI } from './util/FullscreenUtils';
 import { Attribute } from './util/Attribute';
-import { isMobile } from './util/Environment';
+import { isMobile, isTv } from './util/Environment';
 import { Rectangle } from './util/GeometryUtils';
 import './components/GestureReceiver';
 import { PREVIEW_TIME_CHANGE_EVENT, type PreviewTimeChangeEvent } from './events/PreviewTimeChangeEvent';
@@ -22,12 +32,16 @@ import { getTargetQualities } from './util/TrackUtils';
 import type { MenuGroup } from './components';
 import './components/MenuGroup';
 import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
+import type { DeviceType } from './util/DeviceType';
+import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
+import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
 shadyCss.prepareTemplate(template, 'theoplayer-ui');
 
 const DEFAULT_USER_IDLE_TIMEOUT = 2;
+const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
 const DEFAULT_DVR_THRESHOLD = 60;
 
 /**
@@ -57,8 +71,10 @@ const DEFAULT_DVR_THRESHOLD = 60;
  * @attribute `fluid` - If set, the player automatically adjusts its height to fit the video's aspect ratio.
  * @attribute `muted` - If set, the player starts out as muted. Reflects `ui.player.muted`.
  * @attribute `autoplay` - If set, the player attempts to automatically start playing (if allowed).
- * @attribute `mobile` - Whether to use a mobile-optimized UI layout instead.
- *   Can be used in CSS to show/hide certain desktop-specific or mobile-specific UI controls.
+ * @attribute `device-type` - The device type, either "desktop", "mobile" or "tv".
+ *   Can be used in CSS to show/hide certain device-specific UI controls.
+ * @attribute `mobile` - Whether the user is on a mobile device. Equivalent to `device-type == "mobile"`.
+ * @attribute `tv` - Whether the user is on a TV device. Equivalent to `device-type == "tv"`.
  * @attribute `stream-type` - The stream type, either "vod", "live" or "dvr".
  *   Can be used to show/hide certain UI controls specific for livestreams, such as
  *   a {@link LiveButton | `<theoplayer-live-button>`}.
@@ -102,7 +118,7 @@ export class UIContainer extends HTMLElement {
             Attribute.AUTOPLAY,
             Attribute.FULLSCREEN,
             Attribute.FLUID,
-            Attribute.MOBILE,
+            Attribute.DEVICE_TYPE,
             Attribute.PAUSED,
             Attribute.ENDED,
             Attribute.CASTING,
@@ -249,11 +265,7 @@ export class UIContainer extends HTMLElement {
     }
 
     set muted(value: boolean) {
-        if (value) {
-            this.setAttribute(Attribute.MUTED, '');
-        } else {
-            this.removeAttribute(Attribute.MUTED);
-        }
+        toggleAttribute(this, Attribute.MUTED, value);
     }
 
     /**
@@ -264,11 +276,7 @@ export class UIContainer extends HTMLElement {
     }
 
     set autoplay(value: boolean) {
-        if (value) {
-            this.setAttribute(Attribute.AUTOPLAY, '');
-        } else {
-            this.removeAttribute(Attribute.AUTOPLAY);
-        }
+        toggleAttribute(this, Attribute.AUTOPLAY, value);
     }
 
     /**
@@ -304,12 +312,20 @@ export class UIContainer extends HTMLElement {
      * and when the user is considered to be "idle".
      */
     get userIdleTimeout(): number {
-        return Number(this.getAttribute(Attribute.USER_IDLE_TIMEOUT) ?? DEFAULT_USER_IDLE_TIMEOUT);
+        const defaultTimeout = this.deviceType === 'tv' ? DEFAULT_TV_USER_IDLE_TIMEOUT : DEFAULT_USER_IDLE_TIMEOUT;
+        return Number(this.getAttribute(Attribute.USER_IDLE_TIMEOUT) ?? defaultTimeout);
     }
 
     set userIdleTimeout(value: number) {
         value = Number(value);
         this.setAttribute(Attribute.USER_IDLE_TIMEOUT, String(isNaN(value) ? 0 : value));
+    }
+
+    /**
+     * The device type, either "desktop", "mobile" or "tv".
+     */
+    get deviceType(): DeviceType {
+        return (this.getAttribute(Attribute.DEVICE_TYPE) as DeviceType) || 'desktop';
     }
 
     /**
@@ -342,8 +358,9 @@ export class UIContainer extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
-        if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
-            this.setAttribute(Attribute.MOBILE, '');
+        if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {
+            const deviceType: DeviceType = isMobile() ? 'mobile' : isTv() ? 'tv' : 'desktop';
+            this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
         }
         if (!this.hasAttribute(Attribute.PAUSED)) {
             this.setAttribute(Attribute.PAUSED, '');
@@ -371,6 +388,9 @@ export class UIContainer extends HTMLElement {
         }
 
         this.setUserIdle_();
+        if (this.deviceType === 'tv') {
+            window.addEventListener('keydown', this._onTvKeyDown);
+        }
         this.addEventListener('keyup', this._onKeyUp);
         this.addEventListener('pointerup', this._onPointerUp);
         this.addEventListener('pointermove', this._onPointerMove);
@@ -435,6 +455,7 @@ export class UIContainer extends HTMLElement {
             document.removeEventListener(fullscreenAPI.fullscreenerror_, this._onFullscreenChange);
         }
 
+        window.removeEventListener('keydown', this._onTvKeyDown);
         this.removeEventListener('keyup', this._onKeyUp);
         this.removeEventListener('pointerup', this._onPointerUp);
         this.removeEventListener('click', this._onClickAfterPointerUp, true);
@@ -468,6 +489,18 @@ export class UIContainer extends HTMLElement {
             for (const receiver of this._stateReceivers) {
                 if (receiver[StateReceiverProps].indexOf('fullscreen') >= 0) {
                     receiver.fullscreen = hasValue;
+                }
+            }
+        } else if (attrName === Attribute.DEVICE_TYPE) {
+            toggleAttribute(this, Attribute.MOBILE, newValue === 'mobile');
+            toggleAttribute(this, Attribute.TV, newValue === 'tv');
+            window.removeEventListener('keydown', this._onTvKeyDown);
+            if (newValue === 'tv') {
+                window.addEventListener('keydown', this._onTvKeyDown);
+            }
+            for (const receiver of this._stateReceivers) {
+                if (receiver[StateReceiverProps].indexOf('deviceType') >= 0) {
+                    receiver.deviceType = newValue;
                 }
             }
         } else if (attrName === Attribute.STREAM_TYPE) {
@@ -541,6 +574,9 @@ export class UIContainer extends HTMLElement {
         }
         if (receiverProps.indexOf('fullscreen') >= 0) {
             receiver.fullscreen = this.fullscreen;
+        }
+        if (receiverProps.indexOf('deviceType') >= 0) {
+            receiver.deviceType = this.deviceType;
         }
         if (receiverProps.indexOf('streamType') >= 0) {
             receiver.streamType = this.streamType;
@@ -700,11 +736,7 @@ export class UIContainer extends HTMLElement {
         if (!isFullscreen && this._player !== undefined && this._player.presentation.currentMode === 'fullscreen') {
             isFullscreen = true;
         }
-        if (isFullscreen) {
-            this.setAttribute(Attribute.FULLSCREEN, '');
-        } else {
-            this.removeAttribute(Attribute.FULLSCREEN);
-        }
+        toggleAttribute(this, Attribute.FULLSCREEN, isFullscreen);
     };
 
     private readonly _updateAspectRatio = (): void => {
@@ -727,11 +759,7 @@ export class UIContainer extends HTMLElement {
 
     private readonly _updateError = (): void => {
         const error = this._player?.errorObject;
-        if (error) {
-            this.setAttribute(Attribute.HAS_ERROR, '');
-        } else {
-            this.removeAttribute(Attribute.HAS_ERROR);
-        }
+        toggleAttribute(this, Attribute.HAS_ERROR, error !== undefined);
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('error') >= 0) {
                 receiver.error = error;
@@ -752,21 +780,13 @@ export class UIContainer extends HTMLElement {
 
     private readonly _updatePausedAndEnded = (): void => {
         const paused = this._player ? this._player.paused : true;
-        if (paused) {
-            this.setAttribute(Attribute.PAUSED, '');
-        } else {
-            this.removeAttribute(Attribute.PAUSED);
-        }
+        toggleAttribute(this, Attribute.PAUSED, paused);
         this._updateEnded();
     };
 
     private readonly _updateEnded = (): void => {
         const ended = this._player ? this._player.ended : false;
-        if (ended) {
-            this.setAttribute(Attribute.ENDED, '');
-        } else {
-            this.removeAttribute(Attribute.ENDED);
-        }
+        toggleAttribute(this, Attribute.ENDED, ended);
     };
 
     private readonly _updateStreamType = (): void => {
@@ -846,29 +866,18 @@ export class UIContainer extends HTMLElement {
 
     private readonly _updateCasting = (): void => {
         const casting = this._player?.cast?.casting ?? false;
-        if (casting) {
-            this.setAttribute(Attribute.CASTING, '');
-        } else {
-            this.removeAttribute(Attribute.CASTING);
-        }
+        toggleAttribute(this, Attribute.CASTING, casting);
     };
 
     private readonly _updatePlayingAd = (): void => {
         const playingAd = this._player?.ads?.playing ?? false;
-        if (playingAd) {
-            this.setAttribute(Attribute.PLAYING_AD, '');
-        } else {
-            this.removeAttribute(Attribute.PLAYING_AD);
-        }
+        toggleAttribute(this, Attribute.PLAYING_AD, playingAd);
     };
 
     private readonly _onSourceChange = (): void => {
         this.closeMenu_();
-        if (this._player !== undefined && !this._player.paused) {
-            this.setAttribute(Attribute.HAS_FIRST_PLAY, '');
-        } else {
-            this.removeAttribute(Attribute.HAS_FIRST_PLAY);
-        }
+        const isPlaying = this._player !== undefined && !this._player.paused;
+        toggleAttribute(this, Attribute.HAS_FIRST_PLAY, isPlaying);
     };
 
     private isUserIdle_(): boolean {
@@ -888,8 +897,15 @@ export class UIContainer extends HTMLElement {
         if (this.userIdleTimeout < 0) {
             return;
         }
-
         this.setAttribute(Attribute.USER_IDLE, '');
+
+        if (this.deviceType == 'tv' && this.isUserIdle_()) {
+            // Blur active element so that first key press on TV doesn't result in an action.
+            const focusedChild = getFocusedChild();
+            if (focusedChild !== null) {
+                focusedChild.blur();
+            }
+        }
     };
 
     private readonly scheduleUserIdle_ = (): void => {
@@ -910,9 +926,41 @@ export class UIContainer extends HTMLElement {
         return node === this || this._playerEl.contains(node);
     }
 
-    private readonly _onKeyUp = (): void => {
+    private readonly _onTvKeyDown = (event: KeyboardEvent): void => {
+        if (isBackKey(event.keyCode)) {
+            this.setUserIdle_();
+            return;
+        }
+        const tvFocusChildren = getTvFocusChildren(this);
+        const focusableChildren = getFocusableChildren(this);
+        let focusedChild = getFocusedChild();
+        if (!focusedChild) {
+            const children = tvFocusChildren ?? focusableChildren;
+            if (children.length > 0) {
+                children[0].focus();
+                focusedChild = children[0];
+            }
+        }
+
+        if (this.isUserIdle_()) {
+            // First button press should only make the UI visible
+            return;
+        }
+        if (event.keyCode === KeyCode.ENTER) {
+            if (this._player !== undefined && focusedChild !== null) {
+                focusedChild.click();
+            }
+        } else if (isArrowKey(event.keyCode) && navigateByArrowKey(this, focusableChildren, event.keyCode)) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    };
+
+    private readonly _onKeyUp = (event: KeyboardEvent): void => {
         // Show the controls while navigating with the keyboard.
-        this.scheduleUserIdle_();
+        if (!isBackKey(event.keyCode)) {
+            this.scheduleUserIdle_();
+        }
     };
 
     private readonly _onPointerUp = (event: PointerEvent): void => {

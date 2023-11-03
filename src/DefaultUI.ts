@@ -5,10 +5,12 @@ import defaultUiCss from './DefaultUI.css';
 import defaultUiHtml from './DefaultUI.html';
 import { Attribute } from './util/Attribute';
 import { applyExtensions } from './extensions/ExtensionRegistry';
-import { isMobile } from './util/Environment';
+import { isMobile, isTv } from './util/Environment';
+import type { DeviceType } from './util/DeviceType';
 import type { StreamType } from './util/StreamType';
 import type { TimeRange } from './components/TimeRange';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
+import { toggleAttribute } from './util/CommonUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
@@ -40,8 +42,10 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
  * @attribute `fluid` - If set, the player automatically adjusts its height to fit the video's aspect ratio.
  * @attribute `muted` - If set, the player starts out as muted. Reflects `ui.player.muted`.
  * @attribute `autoplay` - If set, the player attempts to automatically start playing (if allowed).
- * @attribute `mobile` - Whether to use a mobile-optimized UI layout instead.
- *   Can be used in CSS to show/hide certain desktop-specific or mobile-specific UI controls.
+ * @attribute `device-type` - The device type, either "desktop", "mobile" or "tv".
+ *   Can be used in CSS to show/hide certain device-specific UI controls.
+ * @attribute `mobile` - Whether the user is on a mobile device. Equivalent to `device-type == "mobile"`.
+ * @attribute `tv` - Whether the user is on a TV device. Equivalent to `device-type == "tv"`.
  * @attribute `stream-type` - The stream type, either "vod", "live" or "dvr".
  *   Can be used to show/hide certain UI controls specific for livestreams, such as
  *   a {@link LiveButton | `<theoplayer-live-button>`}.
@@ -65,7 +69,7 @@ export class DefaultUI extends HTMLElement {
             Attribute.MUTED,
             Attribute.AUTOPLAY,
             Attribute.FLUID,
-            Attribute.MOBILE,
+            Attribute.DEVICE_TYPE,
             Attribute.STREAM_TYPE,
             Attribute.USER_IDLE_TIMEOUT,
             Attribute.DVR_THRESHOLD,
@@ -227,8 +231,9 @@ export class DefaultUI extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
-        if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
-            this.setAttribute(Attribute.MOBILE, '');
+        if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {
+            const deviceType: DeviceType = isMobile() ? 'mobile' : isTv() ? 'tv' : 'desktop';
+            this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
         }
 
         if (!this._appliedExtensions) {
@@ -258,17 +263,11 @@ export class DefaultUI extends HTMLElement {
         } else if (attrName === Attribute.AUTOPLAY) {
             this.autoplay = hasValue;
         } else if (attrName === Attribute.FLUID) {
-            if (hasValue) {
-                this._ui.setAttribute(Attribute.FLUID, newValue);
-            } else {
-                this._ui.removeAttribute(Attribute.FLUID);
-            }
-        } else if (attrName === Attribute.MOBILE) {
-            if (hasValue) {
-                this._ui.setAttribute(Attribute.MOBILE, newValue);
-            } else {
-                this._ui.removeAttribute(Attribute.MOBILE);
-            }
+            toggleAttribute(this._ui, Attribute.FLUID, hasValue);
+        } else if (attrName === Attribute.DEVICE_TYPE) {
+            toggleAttribute(this, Attribute.MOBILE, newValue === 'mobile');
+            toggleAttribute(this, Attribute.TV, newValue === 'tv');
+            this._ui.setAttribute(Attribute.DEVICE_TYPE, newValue);
         } else if (attrName === Attribute.STREAM_TYPE) {
             this.streamType = newValue;
         } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
@@ -284,19 +283,11 @@ export class DefaultUI extends HTMLElement {
     private readonly _updateStreamType = () => {
         this.setAttribute(Attribute.STREAM_TYPE, this.streamType);
         // Hide seekbar when stream is live with no DVR
-        if (this.streamType === 'live') {
-            this._timeRange.setAttribute(Attribute.HIDDEN, '');
-        } else {
-            this._timeRange.removeAttribute(Attribute.HIDDEN);
-        }
+        toggleAttribute(this._timeRange, Attribute.HIDDEN, this.streamType === 'live');
     };
 
     private readonly _onTitleSlotChange = () => {
-        if (this._titleSlot.assignedNodes().length > 0) {
-            this.setAttribute(Attribute.HAS_TITLE, '');
-        } else {
-            this.removeAttribute(Attribute.HAS_TITLE);
-        }
+        toggleAttribute(this, Attribute.HAS_TITLE, this._titleSlot.assignedNodes().length > 0);
     };
 }
 

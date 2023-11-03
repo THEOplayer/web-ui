@@ -64,6 +64,10 @@ export class Rectangle implements DOMRect {
         return new Rectangle(x, y, width, height);
     }
 
+    snapToPixels(): Rectangle {
+        return new Rectangle(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
+    }
+
     clone(): Rectangle {
         return new Rectangle(this.x, this.y, this.width, this.height);
     }

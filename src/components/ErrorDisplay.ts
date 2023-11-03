@@ -3,7 +3,7 @@ import errorDisplayCss from './ErrorDisplay.css';
 import errorIcon from '../icons/error.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { THEOplayerError } from 'theoplayer/chromeless';
-import { setTextContent } from '../util/CommonUtils';
+import { setTextContent, toggleAttribute } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
 
 const template = document.createElement('template');
@@ -72,11 +72,7 @@ export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error', 'ful
     }
 
     set fullscreen(fullscreen: boolean) {
-        if (fullscreen) {
-            this.setAttribute(Attribute.FULLSCREEN, '');
-        } else {
-            this.removeAttribute(Attribute.FULLSCREEN);
-        }
+        toggleAttribute(this, Attribute.FULLSCREEN, fullscreen);
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {

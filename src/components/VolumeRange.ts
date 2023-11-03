@@ -16,7 +16,7 @@ function formatAsPercentString(value: number, max: number) {
  *
  * @group Components
  */
-export class VolumeRange extends StateReceiverMixin(Range, ['player']) {
+export class VolumeRange extends StateReceiverMixin(Range, ['player', 'deviceType']) {
     private _player: ChromelessPlayer | undefined;
 
     constructor() {

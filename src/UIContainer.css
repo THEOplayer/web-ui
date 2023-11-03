@@ -107,7 +107,7 @@
     pointer-events: none;
 }
 
-:host(:not([mobile])) [part~='menu-layer'] {
+:host(:not([mobile]):not([tv])) [part~='menu-layer'] {
     top: var(--theoplayer-menu-offset-top, 0);
     bottom: var(--theoplayer-menu-offset-bottom, 0);
     padding: var(--theoplayer-menu-layer-padding, 10px);
@@ -153,7 +153,16 @@
     @mixin menu-fill-styles;
 }
 
+:host([tv]) [part~='menu-layer'] {
+    left: auto;
+}
+
+:host([tv]) [part='menu'] {
+    @mixin menu-fill-styles;
+}
+
 :host(:not([menu-opened])) [part~='menu-layer'],
+:host([menu-opened][tv]) [part~='vertical-layer'],
 :host([menu-opened][mobile]) [part~='vertical-layer'] {
     display: none !important;
 }
@@ -199,6 +208,14 @@ theoplayer-gesture-receiver {
  */
 :host([mobile]) [part~='chrome'] ::slotted([mobile-hidden]),
 :host(:not([mobile])) [part~='chrome'] ::slotted([mobile-only]) {
+    display: none !important;
+}
+
+/*
+ * TV-only and TV-hidden elements
+ */
+:host([tv]) [part~='chrome'] ::slotted([tv-hidden]),
+:host(:not([tv])) [part~='chrome'] ::slotted([tv-only]) {
     display: none !important;
 }
 

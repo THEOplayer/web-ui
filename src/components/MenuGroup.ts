@@ -4,7 +4,7 @@ import { Attribute } from '../util/Attribute';
 import { arrayFind, arrayFindIndex, fromArrayLike, isElement, isHTMLElement, noOp } from '../util/CommonUtils';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from '../events/ToggleMenuEvent';
-import { KeyCode } from '../util/KeyCode';
+import { isBackKey, KeyCode } from '../util/KeyCode';
 import { createCustomEvent } from '../util/EventUtils';
 import type { MenuChangeEvent } from '../events/MenuChangeEvent';
 import { MENU_CHANGE_EVENT } from '../events/MenuChangeEvent';
@@ -326,16 +326,11 @@ export class MenuGroup extends HTMLElement {
         // Don't handle modifier shortcuts typically used by assistive technology.
         if (event.altKey) return;
 
-        switch (event.keyCode) {
-            case KeyCode.ESCAPE:
-                if (this.closeCurrentMenu()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                break;
-            // Any other key press is ignored and passed back to the browser.
-            default:
-                return;
+        if (isBackKey(event.keyCode)) {
+            if (this.closeCurrentMenu()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
         }
     };
 }

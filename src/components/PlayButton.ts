@@ -7,6 +7,7 @@ import pauseIcon from '../icons/pause.svg';
 import replayIcon from '../icons/replay.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
+import { toggleAttribute } from '../util/CommonUtils';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -51,11 +52,7 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
     }
 
     set paused(paused: boolean) {
-        if (paused) {
-            this.setAttribute(Attribute.PAUSED, '');
-        } else {
-            this.removeAttribute(Attribute.PAUSED);
-        }
+        toggleAttribute(this, Attribute.PAUSED, paused);
     }
 
     get ended(): boolean {
@@ -63,11 +60,7 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
     }
 
     set ended(ended: boolean) {
-        if (ended) {
-            this.setAttribute(Attribute.ENDED, '');
-        } else {
-            this.removeAttribute(Attribute.ENDED);
-        }
+        toggleAttribute(this, Attribute.ENDED, ended);
     }
 
     get player(): ChromelessPlayer | undefined {

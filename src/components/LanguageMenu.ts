@@ -8,6 +8,7 @@ import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import './TrackRadioGroup';
 import './TextTrackStyleMenu';
+import { toggleAttribute } from '../util/CommonUtils';
 
 const template = document.createElement('template');
 template.innerHTML = menuGroupTemplate(languageMenuHtml, languageMenuCss);
@@ -56,21 +57,13 @@ export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
     private readonly _updateAudioTracks = (): void => {
         const newAudioTracks: readonly MediaTrack[] = this._player?.audioTracks ?? [];
         // Hide audio track selection if there's only one track.
-        if (newAudioTracks.length < 2) {
-            this.removeAttribute(Attribute.HAS_AUDIO);
-        } else {
-            this.setAttribute(Attribute.HAS_AUDIO, '');
-        }
+        toggleAttribute(this, Attribute.HAS_AUDIO, newAudioTracks.length > 1);
     };
 
     private readonly _updateTextTracks = (): void => {
         const newSubtitleTracks: readonly TextTrack[] = this._player?.textTracks.filter(isSubtitleTrack) ?? [];
         // Hide subtitle track selection if there are no tracks. If there's one, we still show an "off" option.
-        if (newSubtitleTracks.length === 0) {
-            this.removeAttribute(Attribute.HAS_SUBTITLES);
-        } else {
-            this.setAttribute(Attribute.HAS_SUBTITLES, '');
-        }
+        toggleAttribute(this, Attribute.HAS_SUBTITLES, newSubtitleTracks.length > 0);
     };
 
     override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {

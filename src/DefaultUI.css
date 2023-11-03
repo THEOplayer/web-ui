@@ -161,6 +161,16 @@ theoplayer-ad-skip-button:not([disabled]) {
 }
 
 /*
+ * TV-only and TV-hidden elements
+ */
+:host([tv]) [tv-hidden],
+:host([tv]) theoplayer-control-bar ::slotted([tv-hidden]),
+:host(:not([tv])) [tv-only],
+:host(:not([tv])) theoplayer-control-bar ::slotted([tv-only]) {
+    display: none !important;
+}
+
+/*
  * Live-only and live-hidden elements
  */
 :host(:not([stream-type='vod'])) [live-hidden],

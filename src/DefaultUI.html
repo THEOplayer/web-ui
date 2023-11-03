@@ -29,20 +29,20 @@
         <theoplayer-control-bar>
             <theoplayer-play-button mobile-hidden ad-only class="theoplayer-ad-control"></theoplayer-play-button>
             <theoplayer-mute-button ad-only class="theoplayer-ad-control"></theoplayer-mute-button>
-            <theoplayer-time-range show-ad-markers class="theoplayer-ad-control"></theoplayer-time-range>
+            <theoplayer-time-range show-ad-markers tv-focus class="theoplayer-ad-control"></theoplayer-time-range>
         </theoplayer-control-bar>
         <theoplayer-control-bar ad-hidden>
             <theoplayer-play-button mobile-hidden></theoplayer-play-button>
-            <theoplayer-mute-button></theoplayer-mute-button>
-            <theoplayer-volume-range mobile-hidden></theoplayer-volume-range>
+            <theoplayer-mute-button tv-hidden></theoplayer-mute-button>
+            <theoplayer-volume-range mobile-hidden tv-hidden></theoplayer-volume-range>
             <theoplayer-live-button live-only ad-hidden></theoplayer-live-button>
             <theoplayer-time-display show-duration remaining-when-live></theoplayer-time-display>
             <span class="theoplayer-spacer" style="pointer-events: auto"></span>
             <theoplayer-language-menu-button menu="language-menu" mobile-hidden ad-hidden></theoplayer-language-menu-button>
-            <theoplayer-airplay-button mobile-hidden ad-hidden></theoplayer-airplay-button>
-            <theoplayer-chromecast-button mobile-hidden ad-hidden></theoplayer-chromecast-button>
+            <theoplayer-airplay-button tv-hidden mobile-hidden ad-hidden></theoplayer-airplay-button>
+            <theoplayer-chromecast-button tv-hidden mobile-hidden ad-hidden></theoplayer-chromecast-button>
             <slot name="bottom-control-bar"></slot>
-            <theoplayer-fullscreen-button></theoplayer-fullscreen-button>
+            <theoplayer-fullscreen-button tv-hidden></theoplayer-fullscreen-button>
         </theoplayer-control-bar>
     </div>
     <theoplayer-language-menu id="language-menu" slot="menu" hidden></theoplayer-language-menu>

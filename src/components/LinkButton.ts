@@ -4,6 +4,7 @@ import { Attribute } from '../util/Attribute';
 import type { ButtonOptions } from './Button';
 import { Button, buttonTemplate } from './Button';
 import { KeyCode } from '../util/KeyCode';
+import { toggleAttribute } from '../util/CommonUtils';
 
 export function linkButtonTemplate(button: string, extraCss: string = ''): string {
     return buttonTemplate(`<a>${button}</a>`, `${linkButtonCss}\n${extraCss}`);
@@ -79,11 +80,7 @@ export class LinkButton extends HTMLElement {
     }
 
     set disabled(disabled: boolean) {
-        if (disabled) {
-            this.setAttribute(Attribute.DISABLED, '');
-        } else {
-            this.removeAttribute(Attribute.DISABLED);
-        }
+        toggleAttribute(this, Attribute.DISABLED, disabled);
     }
 
     protected setLink(href: string, target: string): void {

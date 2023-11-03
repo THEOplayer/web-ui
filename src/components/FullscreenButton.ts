@@ -8,6 +8,7 @@ import { createCustomEvent } from '../util/EventUtils';
 import { ENTER_FULLSCREEN_EVENT, type EnterFullscreenEvent } from '../events/EnterFullscreenEvent';
 import { EXIT_FULLSCREEN_EVENT, type ExitFullscreenEvent } from '../events/ExitFullscreenEvent';
 import { Attribute } from '../util/Attribute';
+import { toggleAttribute } from '../util/CommonUtils';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(
@@ -42,11 +43,7 @@ export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen'])
     }
 
     set fullscreen(fullscreen: boolean) {
-        if (fullscreen) {
-            this.setAttribute(Attribute.FULLSCREEN, '');
-        } else {
-            this.removeAttribute(Attribute.FULLSCREEN);
-        }
+        toggleAttribute(this, Attribute.FULLSCREEN, fullscreen);
     }
 
     protected override handleClick(): void {

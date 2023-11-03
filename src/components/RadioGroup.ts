@@ -1,9 +1,13 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import { KeyCode } from '../util/KeyCode';
+import { isArrowKey, KeyCode } from '../util/KeyCode';
 import { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
 import { arrayFind, isElement, noOp } from '../util/CommonUtils';
 import './RadioButton';
+import { StateReceiverMixin } from './StateReceiverMixin';
+import { Attribute } from '../util/Attribute';
+import type { DeviceType } from '../util/DeviceType';
+import { navigateByArrowKey } from '../util/KeyboardNavigation';
 
 const radioGroupTemplate = document.createElement('template');
 radioGroupTemplate.innerHTML = `<slot></slot>`;
@@ -24,7 +28,7 @@ shadyCss.prepareTemplate(radioGroupTemplate, 'theoplayer-radio-group');
  */
 // Based on howto-radio-group
 // https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-radio-group/howto-radio-group.js
-export class RadioGroup extends HTMLElement {
+export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) {
     private _slot: HTMLSlotElement;
     private _radioButtons: RadioButton[] = [];
 
@@ -34,6 +38,15 @@ export class RadioGroup extends HTMLElement {
         shadowRoot.appendChild(radioGroupTemplate.content.cloneNode(true));
 
         this._slot = shadowRoot.querySelector('slot')!;
+        this._upgradeProperty('deviceType');
+    }
+
+    protected _upgradeProperty(prop: keyof this) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
     }
 
     connectedCallback(): void {
@@ -53,6 +66,14 @@ export class RadioGroup extends HTMLElement {
         this.removeEventListener('keydown', this._onKeyDown);
         this.shadowRoot!.removeEventListener('change', this._onButtonChange);
         this._slot.removeEventListener('slotchange', this._onSlotChange);
+    }
+
+    get deviceType(): DeviceType {
+        return (this.getAttribute(Attribute.DEVICE_TYPE) || 'desktop') as DeviceType;
+    }
+
+    set deviceType(deviceType: DeviceType) {
+        this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
     }
 
     private readonly _onSlotChange = () => {
@@ -78,27 +99,36 @@ export class RadioGroup extends HTMLElement {
         }
     };
 
-    private readonly _onKeyDown = (e: KeyboardEvent) => {
-        switch (e.keyCode) {
+    private readonly _onKeyDown = (event: KeyboardEvent) => {
+        if (this.deviceType === 'tv' && isArrowKey(event.keyCode)) {
+            if (navigateByArrowKey(this, this._radioButtons, event.keyCode)) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            return;
+        }
+        switch (event.keyCode) {
             case KeyCode.UP:
             case KeyCode.LEFT: {
-                e.preventDefault();
-                this._focusPrevButton();
+                if (this._focusPrevButton()) {
+                    event.preventDefault();
+                }
                 break;
             }
             case KeyCode.DOWN:
             case KeyCode.RIGHT: {
-                e.preventDefault();
-                this._focusNextButton();
+                if (this._focusNextButton()) {
+                    event.preventDefault();
+                }
                 break;
             }
             case KeyCode.HOME: {
-                e.preventDefault();
+                event.preventDefault();
                 this.setFocusedRadioButton(this.firstRadioButton);
                 break;
             }
             case KeyCode.END: {
-                e.preventDefault();
+                event.preventDefault();
                 this.setFocusedRadioButton(this.lastRadioButton);
                 break;
             }
@@ -145,28 +175,30 @@ export class RadioGroup extends HTMLElement {
         return null;
     }
 
-    private _focusPrevButton(): void {
+    private _focusPrevButton(): boolean {
         let focusedButton = this.focusedRadioButton || this.firstRadioButton;
         if (!focusedButton) {
-            return;
+            return false;
         }
         if (focusedButton === this.firstRadioButton) {
             this.setFocusedRadioButton(this.lastRadioButton);
         } else {
             this.setFocusedRadioButton(this._prevRadioButton(focusedButton));
         }
+        return true;
     }
 
-    private _focusNextButton(): void {
+    private _focusNextButton(): boolean {
         let focusedButton = this.focusedRadioButton || this.firstRadioButton;
         if (!focusedButton) {
-            return;
+            return false;
         }
         if (focusedButton === this.lastRadioButton) {
             this.setFocusedRadioButton(this.firstRadioButton);
         } else {
             this.setFocusedRadioButton(this._nextRadioButton(focusedButton));
         }
+        return true;
     }
 
     setFocusedRadioButton(button: RadioButton | null): void {
