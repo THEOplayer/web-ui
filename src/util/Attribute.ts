@@ -11,6 +11,8 @@ export enum Attribute {
     TV_FOCUS = 'tv-focus',
     MOBILE_ONLY = 'mobile-only',
     MOBILE_HIDDEN = 'mobile-hidden',
+    TV_ONLY = 'tv-only',
+    TV_HIDDEN = 'tv-hidden',
     USER_IDLE = 'user-idle',
     USER_IDLE_TIMEOUT = 'user-idle-timeout',
     NO_AUTO_HIDE = 'no-auto-hide',

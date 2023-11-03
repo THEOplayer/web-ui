@@ -161,10 +161,12 @@ theoplayer-ad-skip-button:not([disabled]) {
 }
 
 /*
- * Tv-hidden elements
+ * TV-only and TV-hidden elements
  */
-theoplayer-ui[tv] [tv-hidden],
-theoplayer-ui[tv] theoplayer-control-bar ::slotted([tv-hidden]) {
+:host([tv]) [tv-hidden],
+:host([tv]) theoplayer-control-bar ::slotted([tv-hidden]),
+:host(:not([tv])) [tv-only],
+:host(:not([tv])) theoplayer-control-bar ::slotted([tv-only]) {
     display: none !important;
 }
 

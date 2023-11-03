@@ -212,6 +212,14 @@ theoplayer-gesture-receiver {
 }
 
 /*
+ * TV-only and TV-hidden elements
+ */
+:host([tv]) [part~='chrome'] ::slotted([tv-hidden]),
+:host(:not([tv])) [part~='chrome'] ::slotted([tv-only]) {
+    display: none !important;
+}
+
+/*
  * Live-only and live-hidden elements
  */
 :host(:not([stream-type='vod'])) [part~='chrome'] ::slotted([live-hidden]),
