@@ -6,6 +6,7 @@ import defaultUiHtml from './DefaultUI.html';
 import { Attribute } from './util/Attribute';
 import { applyExtensions } from './extensions/ExtensionRegistry';
 import { isMobile, isTv } from './util/Environment';
+import type { DeviceType } from './util/DeviceType';
 import type { StreamType } from './util/StreamType';
 import type { TimeRange } from './components/TimeRange';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
@@ -230,10 +231,9 @@ export class DefaultUI extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
-        if (!this.hasAttribute(Attribute.MOBILE) && isMobile()) {
-            this.setAttribute(Attribute.MOBILE, '');
-        } else if (!this.hasAttribute(Attribute.TV) && isTv()) {
-            this.setAttribute(Attribute.TV, '');
+        if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {
+            const deviceType: DeviceType = isMobile() ? 'mobile' : isTv() ? 'tv' : 'desktop';
+            this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
         }
 
         if (!this._appliedExtensions) {
