@@ -8,6 +8,7 @@ import postcssMixins from 'postcss-mixins';
 import * as path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { string } from 'rollup-plugin-string';
+import replace from '@rollup/plugin-replace';
 import dts from 'rollup-plugin-dts';
 
 const fileName = 'THEOplayerUI';
@@ -32,6 +33,18 @@ export default (cliArgs) => {
     return defineConfig([
         ...jsConfig(outputDir, { es5: false, production, sourcemap: true }),
         ...jsConfig(outputDir, { es5: true, production, sourcemap: false }),
+        {
+            input: './src/polyfills.ts',
+            output: {
+                file: path.join(outputDir, `${fileName}.polyfills.js`),
+                format: 'iife',
+                sourcemap: false,
+                indent: false,
+                banner
+            },
+            context: 'self',
+            plugins: jsPlugins({ es5: true, module: false, production: true, sourcemap: false })
+        },
         {
             input: './src/index.ts',
             output: {
@@ -117,6 +130,16 @@ function jsPlugins({ es5 = false, module = false, production = false, sourcemap 
         string({
             include: ['./src/**/*.html', './src/**/*.svg']
         }),
+        // Replace `globalThis` in lit-html.
+        es5
+            ? replace({
+                  preventAssignment: true,
+                  delimiters: ['\\b', '\\b'],
+                  values: {
+                      globalThis: 'self'
+                  }
+              })
+            : undefined,
         // Transpile TypeScript.
         swc({
             include: './src/**',
@@ -149,18 +172,16 @@ function jsPlugins({ es5 = false, module = false, production = false, sourcemap 
                 externalHelpers: true
             }
         }),
-        ...(production
-            ? [
-                  minify({
-                      sourceMap: sourcemap,
-                      mangle: {
-                          toplevel: true
-                      },
-                      toplevel: true,
-                      module,
-                      ecma: es5 ? 5 : 2017
-                  })
-              ]
-            : [])
-    ];
+        production
+            ? minify({
+                  sourceMap: sourcemap,
+                  mangle: {
+                      toplevel: true
+                  },
+                  toplevel: true,
+                  module,
+                  ecma: es5 ? 5 : 2017
+              })
+            : undefined
+    ].filter((plugin) => plugin !== undefined);
 }

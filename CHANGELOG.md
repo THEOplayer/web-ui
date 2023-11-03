@@ -18,6 +18,7 @@
     -   Added support for navigating the UI using a TV remote control.
     -   Added a `tv-focus` attribute to specify which UI element should receive the initial focus when showing the controls on a TV.
         In the default UI, initial focus is on the seek bar.
+-   🚀 Added a polyfill bundle in `@theoplayer/web-ui/polyfills`. This contains all the polyfills needed to use THEOplayer Web UI in legacy browsers, such as ES2015 `Promise` and Custom Elements. ([#41](https://github.com/THEOplayer/web-ui/pull/41))
 
 ## v1.4.0 (2023-10-04)
 
