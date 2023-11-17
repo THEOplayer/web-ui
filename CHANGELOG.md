@@ -18,6 +18,7 @@
     -   Added support for navigating the UI using a TV remote control.
     -   Added a `tv-focus` attribute to specify which UI element should receive the initial focus when showing the controls on a TV.
         In the default UI, initial focus is on the seek bar.
+-   🚀 Allow overriding more CSS properties of `<theoplayer-default-ui>`. ([#42](https://github.com/THEOplayer/web-ui/pull/42))
 
 ## v1.4.0 (2023-10-04)
 

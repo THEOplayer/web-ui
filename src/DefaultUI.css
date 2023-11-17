@@ -34,7 +34,7 @@ theoplayer-ui {
 }
 
 [part='centered-chrome'] * {
-    --theoplayer-control-height: 48px;
+    --theoplayer-control-height: var(--theoplayer-centered-chrome-control-height, 48px);
 }
 
 [part='middle-chrome'] {
@@ -59,7 +59,7 @@ theoplayer-ui {
  * On mobile, put a backdrop color on the entire player when showing controls.
  */
 :host([mobile]) theoplayer-ui {
-    --theoplayer-control-backdrop-background: rgba(0, 0, 0, 0.5);
+    --theoplayer-control-backdrop-background: var(--theoplayer-mobile-control-backdrop-background, rgba(0, 0, 0, 0.5));
 }
 
 /*
@@ -112,12 +112,12 @@ theoplayer-ui {
 }
 
 theoplayer-time-range {
-    --theoplayer-control-height: 12px;
-    --theoplayer-range-track-pointer-background: rgba(255, 255, 255, 0.5);
+    --theoplayer-control-height: var(--theoplayer-time-range-control-height, 12px);
+    --theoplayer-range-track-pointer-background: var(--theoplayer-time-range-track-pointer-background, rgba(255, 255, 255, 0.5));
 }
 
 [part='ad-chrome'] {
-    --theoplayer-control-height: 12px;
+    --theoplayer-control-height: var(--theoplayer-ad-chrome-control-height, 12px);
     align-items: flex-end;
     pointer-events: none;
 }
@@ -144,8 +144,8 @@ theoplayer-ad-skip-button:not([disabled]) {
     /*
      * Make "Skip Ads" text bigger.
      */
-    font-size: calc(1.25 * var(--theoplayer-text-font-size, 14px));
-    line-height: calc(1.25 * var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px)));
+    font-size: var(--theoplayer-ad-skip-font-size, calc(1.25 * var(--theoplayer-text-font-size, 14px)));
+    line-height: var(--theoplayer-ad-skip-line-height, calc(1.25 * var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px))));
     --theoplayer-ad-skip-icon-width: 24px;
     --theoplayer-ad-skip-icon-height: 24px;
 }
@@ -215,7 +215,7 @@ theoplayer-mute-button + theoplayer-volume-range {
     --theoplayer-range-padding-right: 0;
 
     /* Set the internal width so it reveals, not grows */
-    --theoplayer-range-track-width: 70px;
+    --theoplayer-range-track-width: var(--theoplayer-volume-range-track-width, 70px);
     transition: width 0.2s ease-in;
 }
 
@@ -245,5 +245,5 @@ theoplayer-live-button[live] + theoplayer-time-display {
 
 /* Use smaller playback controls while playing an ad */
 theoplayer-ui[playing-ad] .theoplayer-ad-control {
-    --theoplayer-control-height: 16px;
+    --theoplayer-control-height: var(--theoplayer-ad-control-height, 16px);
 }
