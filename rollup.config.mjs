@@ -18,7 +18,7 @@ const browserslistLegacy = ['last 2 versions', 'ie >= 11'];
 const production = process.env.BUILD === 'production';
 
 const banner = `/*!
- * THEOplayer Web UI v${version}
+ * THEOplayer Open Video UI for Web (v${version})
  * License: ${license}
  */`;
 const theoplayerModule = 'theoplayer/chromeless';
