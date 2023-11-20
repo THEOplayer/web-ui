@@ -19,11 +19,12 @@
     -   Added a `tv-focus` attribute to specify which UI element should receive the initial focus when showing the controls on a TV.
         In the default UI, initial focus is on the seek bar.
 -   🚀 Allow overriding more CSS properties of `<theoplayer-default-ui>`. ([#42](https://github.com/THEOplayer/web-ui/pull/42))
+-   💅 Renamed project to "THEOplayer Open Video UI for Web". ([#43](https://github.com/THEOplayer/web-ui/pull/43))
 
 ## v1.4.0 (2023-10-04)
 
 -   💥 **Breaking Change**: This project now requires THEOplayer version 6.0.0 or higher.
--   🚀 THEOplayer Web UI now imports THEOplayer as a JavaScript module using `import from 'theoplayer/chromeless'`.
+-   🚀 Open Video UI now imports THEOplayer as a JavaScript module using `import from 'theoplayer/chromeless'`.
     See the [README](./README.md#installation) for updated installation instructions.
 -   🐛 When the player's source is empty, the UI will no longer attempt to play when clicked. ([#37](https://github.com/THEOplayer/web-ui/pull/37))
 
