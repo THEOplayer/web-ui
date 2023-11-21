@@ -1,0 +1,33 @@
+---
+layout: example
+title: Styling the default UI
+permalink: /examples/styling
+---
+
+<h2>Christmas theme</h2>
+<style>
+    .theme-christmas {
+        font-family: 'Comic Sans MS', sans-serif;
+        width: 100%;
+        --theoplayer-icon-color: red;
+        --theoplayer-text-color: white;
+        --theoplayer-range-bar-color: red;
+        --theoplayer-range-thumb-background: linear-gradient(to bottom right, red 0% 25%, white 25% 40%, red 40% 60%, white 60% 75%, red 75% 100%);
+        --theoplayer-range-thumb-box-shadow: 1px 1px 5px red;
+        --theoplayer-range-thumb-height: 19px;
+        --theoplayer-range-thumb-width: 19px;
+        --theoplayer-range-track-height: 6px;
+        --theoplayer-time-range-track-pointer-background: rgb(255 0 0 / 25%);
+        --theoplayer-control-background-gradient-stops: transparent 0%, rgb(0 100 0) 100%;
+        --theoplayer-menu-backdrop-background: rgb(0 100 0 / 75%);
+        --theoplayer-mobile-control-backdrop-background: rgb(0 100 0 / 75%);
+    }
+</style>
+<theoplayer-default-ui
+    class="theme-christmas"
+    configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","license":"{{ site.theoplayer_license }}","allowNativeFullscreen":true}'
+    source='{"sources":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"}'
+    fluid
+>
+    <span slot="title">Elephant's Dream</span>
+</theoplayer-default-ui>
