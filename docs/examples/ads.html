@@ -15,7 +15,7 @@ permalink: /examples/ads
     configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","license":"{{ site.theoplayer_license }}","allowNativeFullscreen":true}'
     fluid
 >
-    <span slot="title">Elephant's Dream</span>
+    <span slot="title">Big Buck Bunny</span>
 </theoplayer-default-ui>
 <p>
     <label style="user-select: none"><input type="checkbox" id="mobile-toggle" /> Mobile</label>
@@ -33,7 +33,7 @@ permalink: /examples/ads
 <script>
     var ui = document.querySelector('theoplayer-default-ui');
     ui.source = {
-        sources: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8',
+        sources: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8',
         ads: [
             {
                 sources: {

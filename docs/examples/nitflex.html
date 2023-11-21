@@ -8,11 +8,11 @@ permalink: /examples/nitflex
 <link href="nitflex.css" rel="stylesheet" />
 <theoplayer-ui
     configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","license":"{{ site.theoplayer_license }}","allowNativeFullscreen":true}'
-    source='{"sources":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"}'
+    source='{"sources":{"src":"https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/dash/theoplayer/thumbnails/big_buck_bunny_thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
     fluid
 >
     <theoplayer-control-bar slot="top-chrome" class="top-chrome">
-        <span class="title">Elephant's Dream</span>
+        <span class="title">Big Buck Bunny</span>
     </theoplayer-control-bar>
     <theoplayer-loading-indicator slot="centered-loading" no-auto-hide></theoplayer-loading-indicator>
     <div slot="centered-chrome" class="centered-chrome">
