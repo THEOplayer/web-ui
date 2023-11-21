@@ -4,8 +4,44 @@ title: Styling the default UI
 permalink: /examples/styling
 ---
 
-<h2>Christmas theme</h2>
+<!-- Code editor with syntax highlighting -->
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-okaidia.min.css"
+    integrity="sha256-zzHVEO0xOoVm0I6bT9v5SgpRs1cYNyvEvHXW/1yCgqU="
+    crossorigin="anonymous"
+/>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@webcoder49/code-input@2.1.0/code-input.css"
+    integrity="sha256-0VDrjDoa3aXYHOkSpeiqeGcppbnd4olMIXPGczo1kSo="
+    crossorigin="anonymous"
+/>
+<script
+    src="https://cdn.jsdelivr.net/npm/@webcoder49/code-input@2.1.0/code-input.min.js"
+    integrity="sha256-CYkF4fPOX4Gmb5JQeRPUIXq2t1jD0ncDLzms9eBUdZk="
+    crossorigin="anonymous"
+></script>
+<script
+    src="https://cdn.jsdelivr.net/npm/@webcoder49/code-input@2.1.0/plugins/indent.min.js"
+    integrity="sha256-6AwttBAZ7n4hlHQF8GTy+g1oDIJoWStxvfzzrCEpS4o="
+    crossorigin="anonymous"
+></script>
 <style>
+    code-input {
+        height: 30em;
+        resize: vertical;
+        overflow: hidden;
+    }
+</style>
+<script>
+    codeInput.registerTemplate('syntax-highlighted', codeInput.templates.prism(Prism, [new codeInput.plugins.Indent(true, 4)]));
+</script>
+
+<h2>Christmas theme</h2>
+<style id="theme-style">
+    /* A festive theme for the holidays. Try editing me! */
     .theme-christmas {
         font-family: 'Comic Sans MS', sans-serif;
         width: 100%;
@@ -31,3 +67,13 @@ permalink: /examples/styling
 >
     <span slot="title">Elephant's Dream</span>
 </theoplayer-default-ui>
+
+<code-input id="theme-code" lang="CSS" template="syntax-highlighted"></code-input>
+<script>
+    var themeStyle = document.querySelector('#theme-style');
+    var themeCode = document.querySelector('#theme-code');
+    themeCode.value = themeStyle.textContent.replace(/\n {4}/g, '\n').trim();
+    themeCode.addEventListener('input', function () {
+        themeStyle.textContent = themeCode.value;
+    });
+</script>
