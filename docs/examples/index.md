@@ -9,4 +9,5 @@ show_in_nav: true
     -   [Advertisements](./ads.html)
     -   [Styling](./styling.html)
 -   [Custom UI](./custom-ui.html)
--   [Nitflex theme](./nitflex.html)
+    -   [Portrait](./portrait.html)
+    -   [Nitflex theme](./nitflex.html)
