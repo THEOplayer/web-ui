@@ -64,6 +64,11 @@
     pointer-events: auto;
 }
 
+[part~='media-layer'] video {
+    border-radius: var(--theoplayer-video-border-radius);
+    object-fit: var(--theoplayer-video-object-fit);
+}
+
 /*
  * Hack: THEOplayer's own linear ad UI is not positioned correctly by default
  * when using the chromeless player.
