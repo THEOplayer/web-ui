@@ -1,0 +1,45 @@
+---
+layout: example
+title: Portrait UI
+permalink: /examples/portrait-ui
+---
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link href="portrait.css" rel="stylesheet" />
+<div class="container">
+    <div class="phone">
+        <theoplayer-ui
+            configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","license":"{{ site.theoplayer_license }}","allowNativeFullscreen":true}'
+            source='{"sources":"https://cdn.theoplayer.com/video/skating-portrait.mp4"}'
+            device-type="mobile"
+        >
+            <theoplayer-control-bar slot="top-chrome" class="top-chrome">
+                <theoplayer-settings-menu-button menu="settings-menu" mobile-only></theoplayer-settings-menu-button>
+            </theoplayer-control-bar>
+            <theoplayer-loading-indicator slot="centered-loading" no-auto-hide></theoplayer-loading-indicator>
+            <div slot="centered-chrome" class="centered-chrome">
+                <theoplayer-play-button></theoplayer-play-button>
+            </div>
+            <div slot="middle-chrome" class="side-chrome">
+                <theoplayer-mute-button></theoplayer-mute-button>
+                <theoplayer-button><span class="material-symbols-rounded">thumb_up</span></theoplayer-button>
+                <theoplayer-button><span class="material-symbols-rounded">comment</span>️</theoplayer-button>
+                <theoplayer-button>️<span class="material-symbols-rounded">share</span></theoplayer-button>
+            </div>
+            <div class="bottom-chrome">
+                <theoplayer-control-bar>
+                    <theoplayer-time-display></theoplayer-time-display>
+                    <span class="spacer"></span>
+                    <theoplayer-time-display remaining></theoplayer-time-display>
+                </theoplayer-control-bar>
+                <theoplayer-control-bar>
+                    <theoplayer-time-range></theoplayer-time-range>
+                </theoplayer-control-bar>
+            </div>
+            <theoplayer-settings-menu id="settings-menu" slot="menu" hidden></theoplayer-settings-menu>
+            <theoplayer-error-display slot="error"></theoplayer-error-display>
+        </theoplayer-ui>
+    </div>
+</div>
+
+<p style="margin-top: 2em">Video by <a href="https://www.pexels.com/video/the-art-of-skateboarding-2791956/">cottonbro studio</a>.</p>
