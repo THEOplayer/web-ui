@@ -69,6 +69,13 @@ theoplayer-time-range {
     --theoplayer-range-padding: 5px;
 }
 
+/**
+ * Our custom buttons use an icon font, so apply a text shadow (instead of an SVG filter) for their hover glow.
+ */
+theoplayer-button:hover {
+    text-shadow: var(--theoplayer-button-hover-icon-shadow, 0 0 4px rgba(255, 255, 255, 0.5));
+}
+
 /*
  * Hide all controls before first play, except for the center play button
  */
