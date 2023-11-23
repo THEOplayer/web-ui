@@ -1,0 +1,13 @@
+{
+  "label": "Guides",
+  "collapsed": false,
+  "collapsible": false,
+  "link": {
+    "type": "generated-index",
+    "title": "Guides",
+    "slug": "/guides",
+    "keywords": [
+      "guides"
+    ]
+  }
+}
