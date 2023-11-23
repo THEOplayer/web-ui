@@ -6,7 +6,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 /**
  * A generic button to start and stop casting.
  *
- * For a concrete implementation, see {@link ChromecastButton}.
+ * For a concrete implementation, see {@link ChromecastButton} and {@link AirPlayButton}.
  * @group Components
  */
 export class CastButton extends Button {

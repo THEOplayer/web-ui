@@ -12,7 +12,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-media-track-radio-button');
 const TRACK_EVENTS = ['change', 'update'] as const;
 
 /**
- * A radio button that shows the label of a given media track, and switches to that track when clicked.
+ * `<theoplayer-media-track-radio-button>` - A radio button that shows the label of a given media track,
+ * and switches to that track when clicked.
+ *
  * @group Components
  */
 export class MediaTrackRadioButton extends RadioButton {

@@ -13,7 +13,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-duration-display');
 const PLAYER_EVENTS = ['durationchange'] as const;
 
 /**
- * A control that displays the duration of the stream.
+ * `<theoplayer-duration-display>` - A control that displays the duration of the stream.
  *
  * @group Components
  */

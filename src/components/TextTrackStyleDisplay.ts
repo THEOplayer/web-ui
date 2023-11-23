@@ -8,7 +8,8 @@ import { arrayFind, setTextContent } from '../util/CommonUtils';
 import { knownColors, knownEdgeStyles, knownFontFamilies } from '../util/TextTrackStylePresets';
 
 /**
- * Displays the value of a single text track style option in a human-readable format.
+ * `<theoplayer-text-track-style-display>` - A control that displays the value of a single text track style option
+ * in a human-readable format.
  *
  * @attribute `property` - The property name of the text track style option. One of {@link TextTrackStyleOption}.
  * @group Components

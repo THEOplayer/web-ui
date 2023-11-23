@@ -9,7 +9,7 @@ template.innerHTML = buttonTemplate(`<span part="icon"><slot>${speedIcon}</slot>
 shadyCss.prepareTemplate(template, 'theoplayer-playback-rate-button');
 
 /**
- * A menu button that opens a [playback rate menu]{@link PlaybackRateMenu}.
+ * `<theoplayer-playback-rate-menu-button>` - A menu button that opens a [playback rate menu]{@link PlaybackRateMenu}.
  *
  * @attribute menu - The ID of the playback rate menu.
  * @group Components

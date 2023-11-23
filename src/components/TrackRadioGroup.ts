@@ -20,7 +20,8 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 export type TrackType = 'audio' | 'video' | 'subtitles';
 
 /**
- * A radio group that shows a list of media or text tracks, from which the user can choose an active track.
+ * `<theoplayer-track-radio-group>` - A radio group that shows a list of media or text tracks,
+ * from which the user can choose an active track.
  *
  * @attribute `track-type` - The track type of the available tracks. Can be "audio", "video" or "subtitles".
  * @attribute `show-off` - If set, shows an "off" button to disable all tracks.

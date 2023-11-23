@@ -8,7 +8,7 @@ template.innerHTML = menuTemplate(`<span slot="heading"><slot name="heading">Pla
 shadyCss.prepareTemplate(template, 'theoplayer-playback-rate-menu');
 
 /**
- * A menu to change the playback rate of the player.
+ * `<theoplayer-playback-rate-menu>` - A menu to change the playback rate of the player.
  *
  * @group Components
  */

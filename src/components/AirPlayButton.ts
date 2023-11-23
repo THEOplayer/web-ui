@@ -12,7 +12,7 @@ template.innerHTML = buttonTemplate(airPlayButtonHtml, airPlayButtonCss);
 shadyCss.prepareTemplate(template, 'theoplayer-airplay-button');
 
 /**
- * A button to start and stop casting using AirPlay.
+ * `<theoplayer-airplay-button>` - A button to start and stop casting using AirPlay.
  *
  * @group Components
  */

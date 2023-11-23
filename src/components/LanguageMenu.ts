@@ -17,7 +17,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-language-menu');
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 /**
- * A menu to change the spoken language and subtitles of the stream.
+ * `<theoplayer-language-menu>` - A menu to change the spoken language and subtitles of the stream.
  *
  * @group Components
  */

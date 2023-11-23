@@ -19,7 +19,7 @@ template.innerHTML = buttonTemplate(
 shadyCss.prepareTemplate(template, 'theoplayer-fullscreen-button');
 
 /**
- * A button that toggles fullscreen.
+ * `<theoplayer-fullscreen-button>` - A button that toggles fullscreen.
  *
  * @group Components
  */
