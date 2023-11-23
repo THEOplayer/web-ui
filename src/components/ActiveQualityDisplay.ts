@@ -5,6 +5,8 @@ import { formatQualityLabel } from '../util/TrackUtils';
 import * as shadyCss from '@webcomponents/shadycss';
 
 /**
+ * A control that displays the name of the active video quality.
+ *
  * @group Components
  */
 export class ActiveQualityDisplay extends StateReceiverMixin(HTMLElement, ['activeVideoQuality', 'targetVideoQualities']) {

@@ -3,6 +3,8 @@ import { setTextContent } from '../util/CommonUtils';
 import * as shadyCss from '@webcomponents/shadycss';
 
 /**
+ * A control that displays the current playback rate of the player.
+ *
  * @group Components
  */
 export class PlaybackRateDisplay extends StateReceiverMixin(HTMLElement, ['playbackRate']) {
