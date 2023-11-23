@@ -42,7 +42,7 @@ const config = {
                 docs: {
                     routeBasePath: '/',
                     sidebarPath: './sidebars.js',
-                    editUrl: 'https://github.com/THEOplayer/web-ui/tree/main/docs/'
+                    editUrl: 'https://github.com/THEOplayer/web-ui/tree/main/'
                 },
                 blog: false,
                 theme: {
