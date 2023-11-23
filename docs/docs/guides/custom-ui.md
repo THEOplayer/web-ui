@@ -1,7 +1,5 @@
 ---
-layout: page
 title: Making a custom UI
-permalink: /guides/custom-ui
 ---
 
 Although the default UI was designed to support a variety of usage scenarios, you may still run into a case that it doesn't handle very well. Perhaps you want to move some buttons around, or add like and dislike buttons to the control bar, or perhaps integrate a text chat component inside your player. In these situations, you may want to build a custom player UI to create a truly unique experience for your viewers.
@@ -25,7 +23,7 @@ The `<theoplayer-ui>` element is the main container of our custom UI. It handles
 
 It also provides a skeleton layout for plugging in our playback controls, using [slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots#adding_flexibility_with_slots) such as `"top-chrome"` or `"centered-chrome"`. We place a `<theoplayer-play-button>` in the `"centered-chrome"` slot, so it will appear in the center of our player.
 
-![Screenshot](../assets/custom-ui-basic.png)
+![Screenshot](../../static/img/custom-ui-basic.png)
 
 Note that by default, the UI hides its controls when the user becomes inactive (i.e. does not interact with the player). If we want the play button to always remain visible, we can add a `no-auto-hide` attribute to it:
 
@@ -59,7 +57,7 @@ We can add more components so the user can mute or seek the player, or go fullsc
 -   `<theoplayer-fullscreen-button>` is a button to make the player take up the entire screen.
 -   The `<span>` with `flex-grow: 1` acts as a "spacer": it will stretch to fill the remaining space left by the other controls inside the `<theoplayer-control-bar>`. This works because `<theoplayer-control-bar>` is a flexbox container, i.e. it has `display: inline-flex`. The result is that the `<theoplayer-fullscreen-button>` will be aligned to the right side of the player.
 
-![Screenshot](../assets/custom-ui-seekbar.png)
+![Screenshot](../../static/img/custom-ui-seekbar.png)
 
 ## A mobile-ready player
 
@@ -107,9 +105,9 @@ theoplayer-ui:not([mobile]) [mobile-only] {
 >
 > Due to limitations of the `::slotted()` CSS selector, `<theoplayer-ui>`'s own CSS rules can only affect _directly_ slotted elements. Descendant elements of a slotted element, such as a `<theoplayer-play-button mobile-hidden>` inside of a slotted `<theoplayer-control-bar>` cannot be targeted by such selectors.
 
-| ![Screenshot on desktop](../assets/custom-ui-desktop.png) | ![Screenshot on mobile](../assets/custom-ui-mobile.png) |
-| :-------------------------------------------------------: | :-----------------------------------------------------: |
-|                          Desktop                          |                         Mobile                          |
+| ![Screenshot on desktop](../../static/img/custom-ui-desktop.png) | ![Screenshot on mobile](../../static/img/custom-ui-mobile.png) |
+| :--------------------------------------------------------------: | :------------------------------------------------------------: |
+|                             Desktop                              |                             Mobile                             |
 
 ## More examples
 
@@ -127,4 +125,4 @@ The "Nitflex" theme shows an example of a fully customized player UI, inspired b
 
 Have a look at its [HTML](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/nitflex.html) and [CSS](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/nitflex.css) to see how it's done.
 
-![Screenshot](../assets/nitflex-theme.png)
+![Screenshot](../../static/img/nitflex-theme.png)

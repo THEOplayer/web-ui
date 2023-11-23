@@ -64,9 +64,9 @@ const config = {
                 items: [
                     {
                         type: 'docSidebar',
-                        sidebarId: 'tutorialSidebar',
+                        sidebarId: 'guidesSidebar',
                         position: 'left',
-                        label: 'Tutorial'
+                        label: 'Guides'
                     },
                     {
                         href: 'https://github.com/THEOplayer/web-ui',
@@ -82,8 +82,8 @@ const config = {
                         title: 'Docs',
                         items: [
                             {
-                                label: 'Tutorial',
-                                to: '/docs/intro'
+                                label: 'Guides',
+                                to: '/docs/guides/'
                             }
                         ]
                     },
