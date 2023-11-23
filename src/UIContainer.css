@@ -65,8 +65,8 @@
 }
 
 [part~='media-layer'] video {
-    border-radius: var(--theoplayer-video-border-radius);
-    object-fit: var(--theoplayer-video-object-fit);
+    border-radius: var(--theoplayer-video-border-radius, 0);
+    object-fit: var(--theoplayer-video-object-fit, contain);
 }
 
 /*
