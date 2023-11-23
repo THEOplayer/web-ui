@@ -14,7 +14,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-quality-radio-group');
 const TRACK_EVENTS = ['addtrack', 'removetrack', 'change'] as const;
 
 /**
- * A radio group that shows a list of available video qualities, from which the user can choose a desired target quality.
+ * `<theoplayer-quality-radio-group>` - A radio group that shows a list of available video qualities,
+ * from which the user can choose a desired target quality.
  *
  * @group Components
  */

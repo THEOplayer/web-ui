@@ -9,7 +9,7 @@ defaultTemplate.innerHTML = buttonTemplate('<slot></slot>');
 shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-radio-button');
 
 /**
- * A button that can be checked.
+ * `<theoplayer-radio-button>` - A button that can be checked.
  *
  * When part of a {@link RadioGroup}, at most one button in the group can be checked.
  *

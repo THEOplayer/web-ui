@@ -8,7 +8,7 @@ template.innerHTML = `<style>${gestureReceiverCss}</style>`;
 shadyCss.prepareTemplate(template, 'theoplayer-gesture-receiver');
 
 /**
- * An overlay that receives and handles gestures on the player.
+ * `<theoplayer-gesture-receiver>` - An overlay that receives and handles gestures on the player.
  *
  * On desktop devices, this plays or pauses the player whenever it is clicked.
  * On mobile devices, this currently does nothing.

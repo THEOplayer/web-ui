@@ -17,7 +17,7 @@ defaultTemplate.innerHTML = buttonTemplate('<slot></slot>');
 shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-button');
 
 /**
- * A basic button.
+ * `<theoplayer-button>` - A basic button.
  *
  * @attribute `disabled` - Whether the button is disabled. When disabled, the button cannot be clicked.
  * @group Components

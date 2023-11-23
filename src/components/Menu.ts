@@ -23,7 +23,7 @@ defaultTemplate.innerHTML = menuTemplate('<slot name="heading"></slot>', '<slot>
 shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu');
 
 /**
- * A menu that can be opened on top of the player.
+ * `<theoplayer-menu>` - A menu that can be opened on top of the player.
  *
  * The menu has a heading at the top, with a {@link CloseMenuButton | close button} and a heading text.
  *

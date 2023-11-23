@@ -8,7 +8,7 @@ template.innerHTML = buttonTemplate(`<slot>Reset</slot>`);
 shadyCss.prepareTemplate(template, 'theoplayer-text-track-style-reset-button');
 
 /**
- * A button that resets the text track style.
+ * `<theoplayer-text-track-style-reset-button>` - A button that resets the text track style.
  *
  * @group Components
  */

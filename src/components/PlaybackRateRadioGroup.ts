@@ -11,7 +11,8 @@ template.innerHTML = `<style>${verticalRadioGroupCss}</style><theoplayer-radio-g
 shadyCss.prepareTemplate(template, 'theoplayer-playback-rate-radio-group');
 
 /**
- * A radio group that shows a list of playback rates, from which the user can choose a desired playback rate.
+ * `<theoplayer-playback-rate-radio-group>` - A radio group that shows a list of playback rates,
+ * from which the user can choose a desired playback rate.
  *
  * @slot {@link RadioButton} - The possible options for the playback rate.
  *   The value of each radio button must be a valid number.

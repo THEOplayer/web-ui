@@ -15,7 +15,7 @@ const maskId = 'theoplayer-chromecast-rings-mask';
 let chromecastButtonId = 0;
 
 /**
- * A button to start and stop casting using Chromecast.
+ * `<theoplayer-chromecast-button>` - A button to start and stop casting using Chromecast.
  *
  * @group Components
  */

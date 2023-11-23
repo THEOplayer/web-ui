@@ -14,7 +14,7 @@ radioGroupTemplate.innerHTML = `<slot></slot>`;
 shadyCss.prepareTemplate(radioGroupTemplate, 'theoplayer-radio-group');
 
 /**
- * A group of {@link RadioButton}s. At most one button in the group can be checked.
+ * `<theoplayer-radio-group>` - A group of {@link RadioButton}s. At most one button in the group can be checked.
  *
  * ## Behavior
  * This radio group implements the [roving tabindex](https://www.w3.org/WAI/ARIA/apg/example-index/radio/radio.html) pattern.

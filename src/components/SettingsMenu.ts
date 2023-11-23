@@ -11,7 +11,8 @@ template.innerHTML = menuGroupTemplate(settingsMenuHtml, menuTableCss);
 shadyCss.prepareTemplate(template, 'theoplayer-settings-menu');
 
 /**
- * A menu to change the settings of the player, such as the active video quality and the playback speed.
+ * `<theoplayer-settings-menu>` - A menu to change the settings of the player,
+ * such as the active video quality and the playback speed.
  *
  * @group Components
  */

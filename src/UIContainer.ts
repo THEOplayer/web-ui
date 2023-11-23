@@ -45,7 +45,7 @@ const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
 const DEFAULT_DVR_THRESHOLD = 60;
 
 /**
- * The container element for a THEOplayer UI.
+ * `<theoplayer-ui>` - The container element for a THEOplayer UI.
  *
  * This element provides a basic layout structure for a general player UI, and handles the creation and management
  * of a {@link theoplayer!ChromelessPlayer | THEOplayer player instance} for this UI.

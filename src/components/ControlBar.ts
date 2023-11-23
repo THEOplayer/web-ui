@@ -6,7 +6,7 @@ template.innerHTML = `<style>${controlBarCss}</style><slot></slot>`;
 shadyCss.prepareTemplate(template, 'theoplayer-control-bar');
 
 /**
- * A horizontal control bar that can contain other controls.
+ * `<theoplayer-control-bar>` - A horizontal control bar that can contain other controls.
  *
  * @group Components
  */

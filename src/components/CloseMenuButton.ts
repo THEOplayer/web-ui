@@ -10,7 +10,7 @@ template.innerHTML = buttonTemplate(`<span part="icon"><slot>${backIcon}</slot><
 shadyCss.prepareTemplate(template, 'theoplayer-menu-close-button');
 
 /**
- * A button that closes its parent menu.
+ * `<theoplayer-menu-close-button>` - A button that closes its parent menu.
  *
  * This button must be placed inside a {@link Menu | `<theoplayer-menu>`}.
  *

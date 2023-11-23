@@ -20,7 +20,7 @@ template.innerHTML =
 shadyCss.prepareTemplate(template, 'theoplayer-error-display');
 
 /**
- * A screen that shows the details of a fatal player error.
+ * `<theoplayer-error-display>` - A screen that shows the details of a fatal player error.
  *
  * @group Components
  */

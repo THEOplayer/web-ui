@@ -5,7 +5,7 @@ import { formatQualityLabel } from '../util/TrackUtils';
 import * as shadyCss from '@webcomponents/shadycss';
 
 /**
- * A control that displays the name of the active video quality.
+ * `<theoplayer-active-quality-display>` - A control that displays the name of the active video quality.
  *
  * @group Components
  */
