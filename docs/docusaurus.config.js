@@ -40,9 +40,11 @@ const config = {
             /** @type {import('@docusaurus/preset-classic').Options} */
             ({
                 docs: {
+                    routeBasePath: '/',
                     sidebarPath: './sidebars.js',
                     editUrl: 'https://github.com/THEOplayer/web-ui/tree/main/docs/'
                 },
+                blog: false,
                 theme: {
                     customCss: './src/css/custom.css'
                 }
@@ -83,7 +85,7 @@ const config = {
                         items: [
                             {
                                 label: 'Guides',
-                                to: '/docs/guides/'
+                                to: '/guides/'
                             }
                         ]
                     },
