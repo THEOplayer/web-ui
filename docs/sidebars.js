@@ -17,6 +17,8 @@ const sidebars = {
         {
             type: 'category',
             label: 'Guides',
+            collapsed: false,
+            collapsible: false,
             link: {
                 type: 'generated-index',
                 title: 'Guides',
