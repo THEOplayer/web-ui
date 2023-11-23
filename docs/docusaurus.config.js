@@ -43,10 +43,6 @@ const config = {
           sidebarPath: './sidebars.js',
           editUrl: 'https://github.com/THEOplayer/web-ui/tree/main/docs/'
         },
-        blog: {
-          showReadingTime: true,
-          editUrl: 'https://github.com/THEOplayer/web-ui/tree/main/docs/'
-        },
         theme: {
           customCss: './src/css/custom.css'
         }
@@ -72,7 +68,6 @@ const config = {
             position: 'left',
             label: 'Tutorial'
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
           {
             href: 'https://github.com/THEOplayer/web-ui',
             label: 'GitHub',
