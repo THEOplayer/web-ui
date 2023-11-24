@@ -2,6 +2,7 @@ import React from 'react';
 import Head from '@docusaurus/Head';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import type { PlayerConfiguration, SourceDescription } from 'theoplayer';
 
 const Scripts = () => {
     const { siteConfig } = useDocusaurusContext();
@@ -28,19 +29,37 @@ const Scripts = () => {
     );
 };
 
-const InnerTHEOplayerDefaultUI = ({ children = [], ...props }) => {
+type CommonTHEOplayerUIProps = React.PropsWithChildren<{
+    license?: string;
+    libraryLocation?: string;
+    fluid?: boolean;
+}>;
+
+interface InnerTHEOplayerUIProps extends CommonTHEOplayerUIProps {
+    configuration: string;
+    source: string;
+    license?: string;
+    libraryLocation?: string;
+}
+
+const InnerTHEOplayerDefaultUI = ({ children = [], ...props }: InnerTHEOplayerUIProps) => {
     return React.createElement('theoplayer-default-ui', props, children);
 };
 
-const InnerTHEOplayerUI = ({ children = [], ...props }) => {
+const InnerTHEOplayerUI = ({ children = [], ...props }: InnerTHEOplayerUIProps) => {
     return React.createElement('theoplayer-ui', props, children);
 };
 
-export const THEOplayerDefaultUI = ({ configuration, source, ...props }) => {
+interface THEOplayerUIProps extends CommonTHEOplayerUIProps {
+    configuration: PlayerConfiguration;
+    source: SourceDescription;
+}
+
+export const THEOplayerDefaultUI = ({ configuration, source, ...props }: THEOplayerUIProps) => {
     const { siteConfig } = useDocusaurusContext();
     configuration = {
-        license: siteConfig.customFields.theoplayerLicense,
-        libraryLocation: siteConfig.customFields.theoplayerLibraryLocation,
+        license: siteConfig.customFields.theoplayerLicense as string,
+        libraryLocation: siteConfig.customFields.theoplayerLibraryLocation as string,
         ...configuration
     };
     return (
@@ -51,11 +70,11 @@ export const THEOplayerDefaultUI = ({ configuration, source, ...props }) => {
     );
 };
 
-export const THEOplayerUI = ({ configuration, source, ...props }) => {
+export const THEOplayerUI = ({ configuration, source, ...props }: THEOplayerUIProps) => {
     const { siteConfig } = useDocusaurusContext();
     configuration = {
-        license: siteConfig.customFields.theoplayerLicense,
-        libraryLocation: siteConfig.customFields.theoplayerLibraryLocation,
+        license: siteConfig.customFields.theoplayerLicense as string,
+        libraryLocation: siteConfig.customFields.theoplayerLibraryLocation as string,
         ...configuration
     };
     return (
