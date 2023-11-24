@@ -28,3 +28,12 @@
     --ifm-color-primary-lightest: #4fddbf;
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+theoplayer-ui:not(:defined),
+theoplayer-default-ui:not(:defined) {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+}

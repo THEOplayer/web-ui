@@ -1,0 +1,48 @@
+---
+description: A great video experience straight out-of-the-box.
+---
+
+import { THEOplayerDefaultUI } from '../../src/components/THEOplayerUI';
+
+# Default UI
+
+<THEOplayerDefaultUI
+    configuration={{
+        allowNativeFullscreen: true
+    }}
+    source={{
+        sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
+        textTracks: [
+            {
+                default: true,
+                src: 'https://cdn.theoplayer.com/dash/theoplayer/thumbnails/big_buck_bunny_thumbnails.vtt',
+                label: 'thumbnails',
+                kind: 'metadata'
+            }
+        ]
+    }}
+    style={{
+        fontFamily: "'Noto Sans', sans-serif",
+        width: '100%'
+    }}
+    fluid
+>
+    <span slot="title">Big Buck Bunny</span>
+</THEOplayerDefaultUI>
+
+<label style={{ userSelect: 'none' }}>
+    <span>Override device type:&nbsp;</span>
+    <select
+        onChange={(ev) => {
+            const selectedDeviceType = ev.target.value;
+            if (selectedDeviceType) {
+                document.querySelector('theoplayer-default-ui').setAttribute('device-type', selectedDeviceType);
+            }
+        }}
+    >
+        <option value=""></option>
+        <option value="desktop">Desktop</option>
+        <option value="mobile">Mobile</option>
+        <option value="tv">TV</option>
+    </select>
+</label>
