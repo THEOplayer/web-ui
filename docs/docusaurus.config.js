@@ -71,6 +71,12 @@ const config = {
                         label: 'Guides'
                     },
                     {
+                        type: 'docSidebar',
+                        sidebarId: 'examplesSidebar',
+                        position: 'left',
+                        label: 'Examples'
+                    },
+                    {
                         href: 'https://github.com/THEOplayer/web-ui',
                         label: 'GitHub',
                         position: 'right'
