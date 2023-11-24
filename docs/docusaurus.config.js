@@ -111,6 +111,8 @@ const config = {
             }
         }),
 
+    staticDirectories: ['static', 'node_modules/@theoplayer/web-ui/dist'],
+
     customFields: {
         theoplayerLibraryLocation: 'https://cdn.theoplayer.com/dash/theoplayer/',
         theoplayerLicense:
