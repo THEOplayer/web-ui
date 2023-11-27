@@ -13,7 +13,7 @@ permalink: /examples/default-ui
 
 <theoplayer-default-ui
     configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","license":"{{ site.theoplayer_license }}","allowNativeFullscreen":true}'
-    source='{"sources":{"src":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"}}'
+    source='{"sources":{"src":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
     fluid
 >
     <span slot="title">Elephant's Dream</span>
