@@ -13,10 +13,10 @@ permalink: /examples/default-ui
 
 <theoplayer-default-ui
     configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","license":"{{ site.theoplayer_license }}","allowNativeFullscreen":true}'
-    source='{"sources":{"src":"https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/dash/theoplayer/thumbnails/big_buck_bunny_thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
+    source='{"sources":{"src":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"}}'
     fluid
 >
-    <span slot="title">Big Buck Bunny</span>
+    <span slot="title">Elephant's Dream</span>
 </theoplayer-default-ui>
 <p>
     <label style="user-select: none">
@@ -37,19 +37,4 @@ permalink: /examples/default-ui
             ui.setAttribute('device-type', selectedDeviceType);
         }
     });
-
-    var json = {
-        sources: {
-            type: 'application/x-mpegurl',
-            src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8'
-        },
-        textTracks: [
-            {
-                default: true,
-                src: 'https://cdn.theoplayer.com/dash/theoplayer/thumbnails/big_buck_bunny_thumbnails.vtt',
-                label: 'thumbnails',
-                kind: 'metadata'
-            }
-        ]
-    };
 </script>
