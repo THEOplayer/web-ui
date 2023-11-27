@@ -10,7 +10,7 @@
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.5.0 (2023-11-27)
 
 -   🚀 Added support for smart TVs. ([#40](https://github.com/THEOplayer/web-ui/pull/40))
     -   Updated `<theoplayer-default-ui>` to automatically switch to an optimized layout when running on a smart TV.
