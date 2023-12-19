@@ -138,14 +138,16 @@ theoplayer-ad-countdown {
 
 theoplayer-ad-skip-button {
     border-right: 0 !important;
-}
-
-theoplayer-ad-skip-button:not([disabled]) {
+    /**
+     * Align skip countdown to the bottom right.
+     */
+    align-items: end;
+    justify-items: end;
     /*
      * Make "Skip Ads" text bigger.
      */
-    font-size: var(--theoplayer-ad-skip-font-size, calc(1.25 * var(--theoplayer-text-font-size, 14px)));
-    line-height: var(--theoplayer-ad-skip-line-height, calc(1.25 * var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px))));
+    --theoplayer-ad-skip-font-size: calc(1.25 * var(--theoplayer-text-font-size, 14px));
+    --theoplayer-ad-skip-line-height: calc(1.25 * var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px)));
     --theoplayer-ad-skip-icon-width: 24px;
     --theoplayer-ad-skip-icon-height: 24px;
 }
