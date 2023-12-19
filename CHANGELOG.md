@@ -10,6 +10,10 @@
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🚀 Added support for advertisements while casting to Chromecast. This requires THEOplayer version 6.8.0 or higher.
+
 ## v1.5.0 (2023-11-27)
 
 -   🚀 Added support for smart TVs. ([#40](https://github.com/THEOplayer/web-ui/pull/40))
