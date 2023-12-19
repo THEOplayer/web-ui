@@ -89,7 +89,7 @@ const DEFAULT_DVR_THRESHOLD = 60;
  *   and its stream type to be set to "dvr".
  * @attribute `paused` (readonly) - Whether the player is paused. Reflects `ui.player.paused`.
  * @attribute `ended` (readonly) - Whether the player is ended. Reflects `ui.player.ended`.
- * @attribute `casting` (readonly) - Whether the player is ended. Reflects `ui.player.cast.casting`.
+ * @attribute `casting` (readonly) - Whether the player is casting. Reflects `ui.player.cast.casting`.
  * @attribute `playing-ad` (readonly) - Whether the player is playing a linear ad. Reflects `ui.player.ads.playing`.
  * @attribute `has-error` (readonly) - Whether the player has encountered a fatal error.
  * @attribute `has-first-play` (readonly) - Whether the player has (previously) started playback for this stream.

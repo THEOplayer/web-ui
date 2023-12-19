@@ -207,6 +207,13 @@ theoplayer-ui:not([has-first-play]) [part='centered-chrome'] :not(theoplayer-pla
     display: none !important;
 }
 
+/*
+ * Hide ad clickthrough button on desktop, unless we're casting
+ */
+theoplayer-ui:not([mobile]):not([casting]) theoplayer-ad-clickthrough-button {
+    display: none !important;
+}
+
 theoplayer-volume-range {
     --theoplayer-range-padding-left: 0;
 }
