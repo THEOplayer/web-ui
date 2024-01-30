@@ -23,6 +23,11 @@
 [part='skip'] {
     display: flex;
     align-items: center;
+    /*
+     * Overlay countdown text and skip button, so they'll both contribute to the size of the parent grid.
+     * This avoids a layout shift when the countdown ends and switches to the skip button.
+     * https://dev.to/nhuynh1/overlaying-elements-with-css-grid-is-so-much-cleaner-than-with-position-4hcm
+     */
     grid-row: 1;
     grid-column: 1;
 }
