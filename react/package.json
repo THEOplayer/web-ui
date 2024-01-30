@@ -2,6 +2,35 @@
   "name": "@theoplayer/react-ui",
   "version": "1.5.0",
   "description": "React component library for the THEOplayer Web SDK",
+  "main": "dist/THEOplayerReactUI.js",
+  "module": "dist/THEOplayerReactUI.mjs",
+  "types": "dist/THEOplayerReactUI.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/THEOplayerReactUI.d.ts",
+      "import": "./dist/THEOplayerReactUI.mjs",
+      "default": "./dist/THEOplayerReactUI.js"
+    },
+    "./es5": {
+      "types": "./dist/THEOplayerReactUI.d.ts",
+      "import": "./dist/THEOplayerReactUI.es5.mjs",
+      "default": "./dist/THEOplayerReactUI.es5.js"
+    },
+    "./dist/*": "./dist/*"
+  },
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "npm run build:prod",
+    "build:debug": "rollup -c",
+    "build:prod": "rollup -c --environment BUILD:production",
+    "watch": "rollup -c --watch",
+    "test": "npm run test:typecheck",
+    "test:format": "prettier --check .",
+    "test:typecheck": "tsc --project . --noEmit",
+    "prepare": "npm run build:prod"
+  },
   "keywords": [],
   "author": "THEO Technologies",
   "license": "MIT",
@@ -13,5 +42,35 @@
     "type": "git",
     "url": "git+https://github.com/THEOplayer/web-ui.git",
     "directory": "react"
-  }
+  },
+  "dependencies": {
+    "@lit/react": "^1.0.2",
+    "@theoplayer/web-ui": "^1.5.0"
+  },
+  "peerDependencies": {
+    "@types/react": "^16.3.0 || ^17 || ^18",
+    "react": "^16.3.0 || ^17 || ^18",
+    "theoplayer": "^6"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.1",
+    "@swc/cli": "^0.1.62",
+    "@swc/core": "^1.3.89",
+    "@swc/helpers": "^0.5.2",
+    "@types/react": "^18.2.48",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rollup": "^3.29.3",
+    "rollup-plugin-dts": "^5.3.1",
+    "rollup-plugin-swc3": "^0.8.2",
+    "theoplayer": "^6.0.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.1.6"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not dead",
+    "chrome >= 67",
+    "firefox esr"
+  ]
 }
