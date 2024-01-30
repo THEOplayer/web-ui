@@ -18,25 +18,24 @@ permalink: /examples/react
     import { createRoot } from 'react-dom/client';
     import { DefaultUI } from '@theoplayer/react-ui';
 
+    const configuration = {
+        libraryLocation: 'https://cdn.theoplayer.com/dash/theoplayer/',
+        license: '{{ site.theoplayer_license }}',
+        allowNativeFullscreen: true
+    };
+
+    const source = {
+        sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
+        textTracks: [
+            {
+                default: true,
+                src: 'https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt',
+                label: 'thumbnails',
+                kind: 'metadata'
+            }
+        ]
+    };
+
     const root = createRoot(document.getElementById('app'));
-    root.render(
-        <DefaultUI
-            configuration={{
-                libraryLocation: 'https://cdn.theoplayer.com/dash/theoplayer/',
-                license: '{{ site.theoplayer_license }}',
-                allowNativeFullscreen: true
-            }}
-            source={{
-                sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
-                textTracks: [
-                    {
-                        default: true,
-                        src: 'https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt',
-                        label: 'thumbnails',
-                        kind: 'metadata'
-                    }
-                ]
-            }}
-        />
-    );
+    root.render(<DefaultUI configuration={configuration} source={source} />);
 </script>
