@@ -1,0 +1,30 @@
+import * as React from 'react';
+import { forwardRef } from 'react';
+import { UIContainer as UIContainerElement } from '@theoplayer/web-ui';
+import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import { createComponent, type WebComponentProps } from '@lit/react';
+import { usePlayer } from './util';
+import { PlayerContext } from './context';
+
+const RawUIContainer = createComponent({
+    tagName: 'theoplayer-ui',
+    displayName: 'UIContainer',
+    elementClass: UIContainerElement,
+    react: React,
+    events: {
+        onReady: 'theoplayerready' as const
+    }
+});
+
+export interface UIContainerProps extends WebComponentProps<UIContainerElement> {
+    onReady?: (player: ChromelessPlayer) => void;
+}
+
+export const UIContainer = forwardRef<UIContainerElement, UIContainerProps>(({ children, onReady, ...props }, ref) => {
+    const { player, onReadyEvent } = usePlayer(onReady);
+    return (
+        <RawUIContainer {...props} ref={ref} onReady={onReadyEvent}>
+            <PlayerContext.Provider value={player}>{children}</PlayerContext.Provider>
+        </RawUIContainer>
+    );
+});
