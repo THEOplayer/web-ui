@@ -12,8 +12,8 @@ const RawDefaultUI = createComponent({
     elementClass: DefaultUIElement,
     react: React,
     events: {
-        onReady: 'theoplayerready' as const
-    }
+        onReady: 'theoplayerready'
+    } as const
 });
 
 export interface DefaultUIProps extends PropsWithoutRef<WebComponentProps<DefaultUIElement>> {
