@@ -1,0 +1,43 @@
+---
+layout: example-react
+title: React
+permalink: /examples/react
+---
+
+<style>
+    theoplayer-default-ui {
+        font-family: 'Noto Sans', sans-serif;
+        width: 100%;
+    }
+</style>
+
+<div id="app"></div>
+
+<script type="module">
+    import * as React from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { DefaultUI } from '@theoplayer/react-ui';
+
+    // Render your React component instead
+    const root = createRoot(document.getElementById('app'));
+    root.render(
+        React.createElement(DefaultUI, {
+            configuration: {
+                libraryLocation: 'https://cdn.theoplayer.com/dash/theoplayer/',
+                license: '{{ site.theoplayer_license }}',
+                allowNativeFullscreen: true
+            },
+            source: {
+                sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
+                textTracks: [
+                    {
+                        default: true,
+                        src: 'https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt',
+                        label: 'thumbnails',
+                        kind: 'metadata'
+                    }
+                ]
+            }
+        })
+    );
+</script>
