@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { forwardRef } from 'react';
+import { type PropsWithoutRef } from 'react';
 import { DefaultUI as DefaultUIElement } from '@theoplayer/web-ui';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { createComponent, type WebComponentProps } from '@lit/react';
@@ -16,15 +16,15 @@ const RawDefaultUI = createComponent({
     }
 });
 
-export interface DefaultUIProps extends WebComponentProps<DefaultUIElement> {
+export interface DefaultUIProps extends PropsWithoutRef<WebComponentProps<DefaultUIElement>> {
     onReady?: (player: ChromelessPlayer) => void;
 }
 
-export const DefaultUI = forwardRef<DefaultUIElement, DefaultUIProps>(({ children, onReady, ...props }, ref) => {
+export const DefaultUI = ({ children, onReady, ...props }: DefaultUIProps) => {
     const { player, setUi, onReadyHandler } = usePlayer(onReady);
     return (
         <RawDefaultUI {...props} ref={setUi} onReady={onReadyHandler}>
             <PlayerContext.Provider value={player}>{children}</PlayerContext.Provider>
         </RawDefaultUI>
     );
-});
+};
