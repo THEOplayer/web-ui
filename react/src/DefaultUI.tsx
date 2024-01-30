@@ -21,9 +21,9 @@ export interface DefaultUIProps extends WebComponentProps<DefaultUIElement> {
 }
 
 export const DefaultUI = forwardRef<DefaultUIElement, DefaultUIProps>(({ children, onReady, ...props }, ref) => {
-    const { player, onReadyEvent } = usePlayer(onReady);
+    const { player, setUi, onReadyHandler } = usePlayer(onReady);
     return (
-        <RawDefaultUI {...props} ref={ref} onReady={onReadyEvent}>
+        <RawDefaultUI {...props} ref={setUi} onReady={onReadyHandler}>
             <PlayerContext.Provider value={player}>{children}</PlayerContext.Provider>
         </RawDefaultUI>
     );

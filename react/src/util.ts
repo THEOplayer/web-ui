@@ -1,20 +1,24 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
-import type { DefaultUI, UIContainer } from '@theoplayer/web-ui';
+import type { DefaultUI as DefaultUIElement, UIContainer as UIContainerElement } from '@theoplayer/web-ui';
 
 export function usePlayer(onReady?: (player: ChromelessPlayer) => void): {
     player: ChromelessPlayer | undefined;
-    onReadyEvent: (event: Event) => void;
+    setUi: (ui: DefaultUIElement | UIContainerElement | null) => void;
+    onReadyHandler: (event: Event) => void;
 } {
+    const [ui, setUi] = useState<DefaultUIElement | UIContainerElement | null>(null);
     const [player, setPlayer] = useState<ChromelessPlayer | undefined>(undefined);
 
-    // Store player once 'theoplayerready' event fires.
-    const onReadyEvent = useCallback(
-        (event: Event) => {
-            const target = event.target as DefaultUI | UIContainer;
-            setPlayer(target.player);
+    // Update player when UI is created, or when 'theoplayerready' event fires.
+    useEffect(() => {
+        setPlayer(ui?.player);
+    }, [ui]);
+    const onReadyHandler = useCallback(
+        (_event: Event) => {
+            setPlayer(ui?.player);
         },
-        [setPlayer]
+        [ui]
     );
 
     // Call onReady once player is available.
@@ -23,5 +27,5 @@ export function usePlayer(onReady?: (player: ChromelessPlayer) => void): {
         onReady?.(player);
     }, [player, onReady]);
 
-    return { player, onReadyEvent };
+    return { player, setUi, onReadyHandler };
 }
