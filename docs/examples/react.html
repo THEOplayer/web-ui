@@ -16,7 +16,7 @@ permalink: /examples/react
 <script type="text/babel" data-type="module">
     import * as React from 'react';
     import { createRoot } from 'react-dom/client';
-    import { DefaultUI } from '@theoplayer/react-ui';
+    import { DefaultUI, PlayButton, UIContainer } from '@theoplayer/react-ui';
 
     const configuration = {
         libraryLocation: 'https://cdn.theoplayer.com/dash/theoplayer/',
@@ -37,5 +37,19 @@ permalink: /examples/react
     };
 
     const root = createRoot(document.getElementById('app'));
-    root.render(<DefaultUI configuration={configuration} source={source} />);
+    root.render(
+        <>
+            <h2>Default UI</h2>
+            <DefaultUI configuration={configuration} source={source} />
+            <h2>Custom UI</h2>
+            <UIContainer
+                configuration={configuration}
+                source={source}
+                onReady={(player) => {
+                    console.log('THEOplayer is ready!', player);
+                }}
+                centeredChrome={<PlayButton />}
+            />
+        </>
+    );
 </script>
