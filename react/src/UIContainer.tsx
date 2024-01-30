@@ -12,8 +12,8 @@ const RawUIContainer = createComponent({
     elementClass: UIContainerElement,
     react: React,
     events: {
-        onReady: 'theoplayerready' as const
-    }
+        onReady: 'theoplayerready'
+    } as const
 });
 
 export interface UIContainerProps extends PropsWithoutRef<WebComponentProps<UIContainerElement>> {
