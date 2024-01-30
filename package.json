@@ -78,5 +78,8 @@
     "not dead",
     "chrome >= 67",
     "firefox esr"
+  ],
+  "workspaces": [
+    "react"
   ]
 }

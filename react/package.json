@@ -1,0 +1,17 @@
+{
+  "name": "@theoplayer/react-ui",
+  "version": "1.5.0",
+  "description": "React component library for the THEOplayer Web SDK",
+  "keywords": [],
+  "author": "THEO Technologies",
+  "license": "MIT",
+  "homepage": "https://github.com/THEOplayer/web-ui/tree/main/react#readme",
+  "bugs": {
+    "url": "https://github.com/THEOplayer/web-ui/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/THEOplayer/web-ui.git",
+    "directory": "react"
+  }
+}
