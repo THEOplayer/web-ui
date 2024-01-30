@@ -21,9 +21,9 @@ export interface UIContainerProps extends WebComponentProps<UIContainerElement> 
 }
 
 export const UIContainer = forwardRef<UIContainerElement, UIContainerProps>(({ children, onReady, ...props }, ref) => {
-    const { player, onReadyEvent } = usePlayer(onReady);
+    const { player, setUi, onReadyHandler } = usePlayer(onReady);
     return (
-        <RawUIContainer {...props} ref={ref} onReady={onReadyEvent}>
+        <RawUIContainer {...props} ref={setUi} onReady={onReadyHandler}>
             <PlayerContext.Provider value={player}>{children}</PlayerContext.Provider>
         </RawUIContainer>
     );
