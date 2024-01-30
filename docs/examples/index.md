@@ -11,3 +11,4 @@ show_in_nav: true
 -   [Custom UI](./custom-ui.html)
     -   [Portrait](./portrait.html)
     -   [Nitflex theme](./nitflex.html)
+-   [React](./react.html)

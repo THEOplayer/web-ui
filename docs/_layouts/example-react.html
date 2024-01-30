@@ -1,0 +1,30 @@
+---
+layout: page
+---
+
+<style>
+    theoplayer-ui:not(:defined),
+    theoplayer-default-ui:not(:defined) {
+        display: inline-block;
+        box-sizing: border-box;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        background: #000;
+    }
+</style>
+<!-- Modern browsers -->
+<script type="importmap">
+    {
+        "imports": {
+            "@theoplayer/web-ui": "../dist/THEOplayerUI.mjs",
+            "@theoplayer/react-ui": "../dist/THEOplayerReactUI.mjs",
+            "theoplayer/chromeless": "https://cdn.theoplayer.com/dash/theoplayer/THEOplayer.chromeless.esm.js",
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom/": "https://esm.sh/react-dom@18.2.0/"
+        }
+    }
+</script>
+<!-- Import maps polyfill for browsers without import maps support (e.g. Safari 16.3) -->
+<script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js" crossorigin="anonymous"></script>
+
+{{ content }}
