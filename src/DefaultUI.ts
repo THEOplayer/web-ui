@@ -10,7 +10,9 @@ import type { DeviceType } from './util/DeviceType';
 import type { StreamType } from './util/StreamType';
 import type { TimeRange } from './components/TimeRange';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
+import { READY_EVENT } from './events/ReadyEvent';
 import { toggleAttribute } from './util/CommonUtils';
+import { createCustomEvent } from './util/EventUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
@@ -62,6 +64,13 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
  * @group Components
  */
 export class DefaultUI extends HTMLElement {
+    /**
+     * Fired when the backing player is created, and the {@link DefaultUI.player} property is set.
+     *
+     * @group Events
+     */
+    static READY_EVENT: typeof READY_EVENT = READY_EVENT;
+
     static get observedAttributes() {
         return [
             Attribute.CONFIGURATION,
@@ -96,6 +105,7 @@ export class DefaultUI extends HTMLElement {
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._ui = shadowRoot.querySelector('theoplayer-ui')!;
+        this._ui.addEventListener(READY_EVENT, this._dispatchReadyEvent);
         this._ui.addEventListener(STREAM_TYPE_CHANGE_EVENT, this._updateStreamType);
         this.setConfiguration_(configuration);
 
@@ -284,6 +294,10 @@ export class DefaultUI extends HTMLElement {
         this.setAttribute(Attribute.STREAM_TYPE, this.streamType);
         // Hide seekbar when stream is live with no DVR
         toggleAttribute(this._timeRange, Attribute.HIDDEN, this.streamType === 'live');
+    };
+
+    private readonly _dispatchReadyEvent = () => {
+        this.dispatchEvent(createCustomEvent(READY_EVENT));
     };
 
     private readonly _onTitleSlotChange = () => {
