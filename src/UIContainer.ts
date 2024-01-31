@@ -201,6 +201,7 @@ export class UIContainer extends HTMLElement {
 
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
+        this._upgradeProperty('fluid');
         this._upgradeProperty('muted');
         this._upgradeProperty('autoplay');
         this._upgradeProperty('userIdleTimeout');
@@ -263,6 +264,17 @@ export class UIContainer extends HTMLElement {
         } else {
             this._source = value;
         }
+    }
+
+    /**
+     * Whether to automatically adjusts the player's height to fit the video's aspect ratio.
+     */
+    get fluid(): boolean {
+        return this.hasAttribute(Attribute.FLUID);
+    }
+
+    set fluid(value: boolean) {
+        toggleAttribute(this, Attribute.FLUID, value);
     }
 
     /**
