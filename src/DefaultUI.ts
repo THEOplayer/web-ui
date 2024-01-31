@@ -117,6 +117,7 @@ export class DefaultUI extends HTMLElement {
 
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
+        this._upgradeProperty('fluid');
         this._upgradeProperty('muted');
         this._upgradeProperty('autoplay');
         this._upgradeProperty('streamType');
@@ -177,6 +178,17 @@ export class DefaultUI extends HTMLElement {
     set source(value: SourceDescription | undefined) {
         this.removeAttribute(Attribute.SOURCE);
         this._ui.source = value;
+    }
+
+    /**
+     * Whether to automatically adjusts the player's height to fit the video's aspect ratio.
+     */
+    get fluid(): boolean {
+        return this._ui.fluid;
+    }
+
+    set fluid(value: boolean) {
+        this._ui.fluid = value;
     }
 
     /**
@@ -274,7 +286,7 @@ export class DefaultUI extends HTMLElement {
         } else if (attrName === Attribute.AUTOPLAY) {
             this.autoplay = hasValue;
         } else if (attrName === Attribute.FLUID) {
-            toggleAttribute(this._ui, Attribute.FLUID, hasValue);
+            this.fluid = hasValue;
         } else if (attrName === Attribute.DEVICE_TYPE) {
             toggleAttribute(this, Attribute.MOBILE, newValue === 'mobile');
             toggleAttribute(this, Attribute.TV, newValue === 'tv');
