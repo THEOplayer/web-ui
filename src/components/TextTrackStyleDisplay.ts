@@ -132,6 +132,12 @@ export class TextTrackStyleDisplay extends StateReceiverMixin(HTMLElement, ['pla
 
 customElements.define('theoplayer-text-track-style-display', TextTrackStyleDisplay);
 
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-text-track-style-display': TextTrackStyleDisplay;
+    }
+}
+
 function getFontFamilyLabel(fontFamily: string | null | undefined): string {
     if (!fontFamily) {
         return 'Default';

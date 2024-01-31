@@ -167,6 +167,12 @@ export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player',
 
 customElements.define('theoplayer-preview-thumbnail', PreviewThumbnail);
 
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-preview-thumbnail': PreviewThumbnail;
+    }
+}
+
 function isThumbnailTextTrack(track: TextTrack): boolean {
     return track.kind === 'metadata' && track.label === 'thumbnails';
 }

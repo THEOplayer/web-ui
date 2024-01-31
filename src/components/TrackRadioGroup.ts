@@ -223,6 +223,12 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
 
 customElements.define('theoplayer-track-radio-group', TrackRadioGroup);
 
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-track-radio-group': TrackRadioGroup;
+    }
+}
+
 function hasButtonForTrack(buttons: readonly (MediaTrackRadioButton | TextTrackRadioButton)[], track: MediaTrack | TextTrack): boolean {
     for (let i = 0; i < buttons.length; i++) {
         if (buttons[i].track === track) {

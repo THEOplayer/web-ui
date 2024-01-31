@@ -65,3 +65,9 @@ export class ChromecastButton extends StateReceiverMixin(CastButton, ['player'])
 }
 
 customElements.define('theoplayer-chromecast-button', ChromecastButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-chromecast-button': ChromecastButton;
+    }
+}

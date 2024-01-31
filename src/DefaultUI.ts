@@ -306,3 +306,9 @@ export class DefaultUI extends HTMLElement {
 }
 
 customElements.define('theoplayer-default-ui', DefaultUI);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-default-ui': DefaultUI;
+    }
+}

@@ -82,3 +82,9 @@ export class RadioButton extends Button {
 }
 
 customElements.define('theoplayer-radio-button', RadioButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-radio-button': RadioButton;
+    }
+}

@@ -83,3 +83,9 @@ export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error', 'ful
 }
 
 customElements.define('theoplayer-error-display', ErrorDisplay);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-error-display': ErrorDisplay;
+    }
+}

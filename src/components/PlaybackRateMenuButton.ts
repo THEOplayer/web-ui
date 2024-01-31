@@ -29,3 +29,9 @@ export class PlaybackRateMenuButton extends MenuButton {
 }
 
 customElements.define('theoplayer-playback-rate-menu-button', PlaybackRateMenuButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-playback-rate-menu-button': PlaybackRateMenuButton;
+    }
+}

@@ -85,3 +85,9 @@ export class AdDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
 }
 
 customElements.define('theoplayer-ad-display', AdDisplay);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-ad-display': AdDisplay;
+    }
+}

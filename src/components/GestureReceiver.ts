@@ -101,3 +101,9 @@ export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player'])
 }
 
 customElements.define('theoplayer-gesture-receiver', GestureReceiver);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-gesture-receiver': GestureReceiver;
+    }
+}

@@ -122,3 +122,9 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
 }
 
 customElements.define('theoplayer-playback-rate-radio-group', PlaybackRateRadioGroup);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-playback-rate-radio-group': PlaybackRateRadioGroup;
+    }
+}

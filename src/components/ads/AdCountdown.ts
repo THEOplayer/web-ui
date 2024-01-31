@@ -84,3 +84,9 @@ export class AdCountdown extends StateReceiverMixin(HTMLElement, ['player']) {
 }
 
 customElements.define('theoplayer-ad-countdown', AdCountdown);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-ad-countdown': AdCountdown;
+    }
+}

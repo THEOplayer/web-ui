@@ -138,3 +138,9 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
 }
 
 customElements.define('theoplayer-play-button', PlayButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-play-button': PlayButton;
+    }
+}

@@ -75,3 +75,9 @@ export class ActiveQualityDisplay extends StateReceiverMixin(HTMLElement, ['acti
 }
 
 customElements.define('theoplayer-active-quality-display', ActiveQualityDisplay);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-active-quality-display': ActiveQualityDisplay;
+    }
+}

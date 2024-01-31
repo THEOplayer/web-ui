@@ -136,3 +136,9 @@ export class LinkButton extends HTMLElement {
 }
 
 customElements.define('theoplayer-link-button', LinkButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-link-button': LinkButton;
+    }
+}

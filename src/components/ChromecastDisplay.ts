@@ -78,3 +78,9 @@ export class ChromecastDisplay extends StateReceiverMixin(HTMLElement, ['player'
 }
 
 customElements.define('theoplayer-chromecast-display', ChromecastDisplay);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-chromecast-display': ChromecastDisplay;
+    }
+}

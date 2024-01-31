@@ -259,3 +259,9 @@ function updateOpacity(opacityValue: string, colorValue: string | undefined, def
 }
 
 customElements.define('theoplayer-text-track-style-radio-group', TextTrackStyleRadioGroup);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-text-track-style-radio-group': TextTrackStyleRadioGroup;
+    }
+}

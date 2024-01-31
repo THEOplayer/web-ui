@@ -22,3 +22,9 @@ export class TextTrackStyleMenu extends MenuGroup {
 }
 
 customElements.define('theoplayer-text-track-style-menu', TextTrackStyleMenu);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-text-track-style-menu': TextTrackStyleMenu;
+    }
+}

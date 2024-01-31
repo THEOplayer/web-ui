@@ -75,3 +75,9 @@ export class DurationDisplay extends StateReceiverMixin(HTMLElement, ['player'])
 }
 
 customElements.define('theoplayer-duration-display', DurationDisplay);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-duration-display': DurationDisplay;
+    }
+}

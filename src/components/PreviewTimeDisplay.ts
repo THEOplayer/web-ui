@@ -112,3 +112,9 @@ export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['player
 }
 
 customElements.define('theoplayer-preview-time-display', PreviewTimeDisplay);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-preview-time-display': PreviewTimeDisplay;
+    }
+}

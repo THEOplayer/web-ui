@@ -77,3 +77,9 @@ export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen'])
 }
 
 customElements.define('theoplayer-fullscreen-button', FullscreenButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-fullscreen-button': FullscreenButton;
+    }
+}
