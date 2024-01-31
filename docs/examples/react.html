@@ -130,25 +130,25 @@ permalink: /examples/react
                 onReady={(player) => {
                     console.log('THEOplayer is ready!', player);
                 }}
-                topChrome={(props) => (
+                topChrome={
                     <ShowOnFirstPlay>
-                        <THEOplayerUI.ControlBar {...props}>
+                        <THEOplayerUI.ControlBar>
                             <span className="my-title">{title}</span>
                         </THEOplayerUI.ControlBar>
                     </ShowOnFirstPlay>
-                )}
-                centeredChrome={(props) => <THEOplayerUI.PlayButton {...props} />}
-                centeredLoading={(props) => (
+                }
+                centeredChrome={<THEOplayerUI.PlayButton />}
+                centeredLoading={
                     <ShowOnFirstPlay>
-                        <THEOplayerUI.LoadingIndicator {...props} />
+                        <THEOplayerUI.LoadingIndicator />
                     </ShowOnFirstPlay>
-                )}
-                bottomChrome={(props) => (
+                }
+                bottomChrome={
                     <ShowOnFirstPlay>
-                        <THEOplayerUI.ControlBar {...props}>
+                        <THEOplayerUI.ControlBar>
                             <THEOplayerUI.TimeRange />
                         </THEOplayerUI.ControlBar>
-                        <THEOplayerUI.ControlBar {...props}>
+                        <THEOplayerUI.ControlBar>
                             <THEOplayerUI.MuteButton />
                             <THEOplayerUI.VolumeRange />
                             <MyTimeDisplay />
@@ -158,14 +158,14 @@ permalink: /examples/react
                             <THEOplayerUI.FullscreenButton />
                         </THEOplayerUI.ControlBar>
                     </ShowOnFirstPlay>
-                )}
-                menu={(props) => (
+                }
+                menu={
                     <>
-                        <THEOplayerUI.LanguageMenu id="language-menu" {...props} />
-                        <THEOplayerUI.SettingsMenu id="settings-menu" {...props} />
+                        <THEOplayerUI.LanguageMenu id="language-menu" />
+                        <THEOplayerUI.SettingsMenu id="settings-menu" />
                     </>
-                )}
-                error={(props) => <THEOplayerUI.ErrorDisplay {...props} />}
+                }
+                error={<THEOplayerUI.ErrorDisplay />}
             />
         );
     };
@@ -192,7 +192,7 @@ permalink: /examples/react
                     </label>
                 </p>
                 <h2>Default UI</h2>
-                <THEOplayerUI.DefaultUI configuration={configuration} source={source} title={(props) => <span {...props}>{title}</span>} />
+                <THEOplayerUI.DefaultUI configuration={configuration} source={source} title={<span>{title}</span>} />
                 <h2>Custom UI</h2>
                 <MyCustomUI configuration={configuration} source={source} title={title} />
             </>
