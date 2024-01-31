@@ -10,6 +10,12 @@
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🚀 Introduced [Open Video UI for React](https://www.npmjs.com/package/@theoplayer/react-ui). ([#48](https://github.com/THEOplayer/web-ui/pull/48))
+    -   Idiomatic React components make the Open Video UI feel right at home in your existing React web app.
+-   🚀 Added `theoplayerready` event to `<theoplayer-default-ui>` and `<theoplayer-ui>`, which is fired once the backing THEOplayer instance is created. ([#48](https://github.com/THEOplayer/web-ui/pull/48)).
+
 ## v1.5.0 (2023-11-27)
 
 -   🚀 Added support for smart TVs. ([#40](https://github.com/THEOplayer/web-ui/pull/40))
