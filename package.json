@@ -35,7 +35,7 @@
     "docs": "typedoc --treatWarningsAsErrors",
     "docs:watch": "typedoc --watch",
     "prepare": "npm run build:prod",
-    "version": "node scripts/bump-changelog.mjs && git add CHANGELOG.md"
+    "version": "node scripts/bump-changelog.mjs CHANGELOG.md && git add CHANGELOG.md"
   },
   "keywords": [],
   "author": "THEO Technologies",

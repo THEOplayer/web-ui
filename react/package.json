@@ -29,7 +29,8 @@
     "test": "npm run test:typecheck",
     "test:format": "prettier --check .",
     "test:typecheck": "tsc --project . --noEmit",
-    "prepare": "npm run build:prod"
+    "prepare": "npm run build:prod",
+    "version": "node ../scripts/bump-changelog.mjs CHANGELOG.md && git add CHANGELOG.md"
   },
   "keywords": [],
   "author": "THEO Technologies",
