@@ -51,6 +51,37 @@ export interface DefaultUIProps extends PropsWithoutRef<Omit<WebComponentProps<D
     onReady?: (player: ChromelessPlayer) => void;
 }
 
+/**
+ * A default UI for THEOplayer.
+ *
+ * This default UI provides a great player experience out-of-the-box, that works well on all types of devices
+ * and for all types of streams. It provides all the common playback controls for playing, seeking,
+ * changing languages and qualities. It also supports advertisements and casting.
+ *
+ * ## Usage
+ *
+ * 1. Create a <DefaultUI> component, passing a valid player configuration as its `configuration` property
+ *    and a valid stream source as its `source` property.
+ *    ```jsx
+ *    <DefaultUI
+ *        configuration={{
+ *            license: 'your_license_goes_here',
+ *            libraryLocation: '/path/to/node_modules/theoplayer/'
+ *        }}
+ *        source={{
+ *            sources: [{ src: 'https://example.com/my_stream.m3u8', type: 'application/x-mpegurl' }]
+ *        }}
+ *    />
+ *    ```
+ * 2. Optionally, customize the player using CSS custom properties and/or extra controls.
+ *
+ * ## Customization
+ *
+ * The styling can be controlled using CSS custom properties (see {@link UIContainer}).
+ * Additional controls can be added to the {@link DefaultUIProps.topControlBar}
+ * and {@link DefaultUIProps.bottomControlBar} slots.
+ * For more extensive customizations, we recommend defining your own custom UI using a {@link UIContainer}.
+ */
 export const DefaultUI = ({ title, topControlBar, bottomControlBar, menu, onReady, ...props }: DefaultUIProps) => {
     const { player, setUi, onReadyHandler } = usePlayer(onReady);
     return (

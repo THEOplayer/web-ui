@@ -70,6 +70,59 @@ export interface UIContainerProps extends PropsWithoutRef<WebComponentProps<UICo
     onReady?: (player: ChromelessPlayer) => void;
 }
 
+/**
+ * The container component for a THEOplayer UI.
+ *
+ * This component provides a basic layout structure for a general player UI, and handles the creation and management
+ * of a {@link ChromelessPlayer | THEOplayer player instance} for this UI.
+ *
+ * ## Usage
+ *
+ * 1. Create a `<UIContainer>` component, passing a valid player configuration as its `configuration` property
+ *    and a valid stream source as its `source` property.
+ *    Additionally, place your UI components into one of the slots of the `<UIContainer>`, such as
+ *    ```jsx
+ *    <UIContainer
+ *        configuration={{
+ *            license: 'your_license_goes_here',
+ *            libraryLocation: '/path/to/node_modules/theoplayer/'
+ *        }}
+ *        source={{
+ *            sources: [{ src: 'https://example.com/my_stream.m3u8', type: 'application/x-mpegurl' }]
+ *        }}
+ *        // ...
+ *    />
+ *    ```
+ * 2. Place your UI components into one of the slots of the `<UIContainer>`, such as {@link UIContainerProps.bottomChrome}
+ *    or {@link UIContainerProps.centeredChrome}. You can use the provided THEOplayer UI components
+ *    (such as {@link PlayButton} or {@link TimeRange}), or use any of your own components.
+ *    ```jsx
+ *    <UIContainer
+ *        // ...
+ *        topChrome={<span class="title">My awesome video</span>}
+ *        centeredChrome={<PlayButton />}
+ *        bottomChrome={
+ *            <>
+ *                <ControlBar>
+ *                    <TimeRange />
+ *                </ControlBar>
+ *                <ControlBar>
+ *                    <PlayButton />
+ *                    <MuteButton />
+ *                    <TimeDisplay />
+ *                    <FullscreenButton />
+ *                </ControlBar>
+ *            </>
+ *        }
+ *    />
+ *    ```
+ *
+ * ## Customization
+ *
+ * This component does not provide any UI components by default, you need to add all components as children of
+ * one of the `<UIContainer>` slots. If you're looking for a simple out-of-the-box player experience instead,
+ * see {@link DefaultUI}.
+ */
 export const UIContainer = ({
     topChrome,
     middleChrome,
