@@ -18,6 +18,23 @@ permalink: /examples/react
         font-size: 14px;
         line-height: 24px;
     }
+
+    .my-menu-table {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        grid-template-rows: auto auto;
+    }
+
+    .my-menu-table > * {
+        align-self: center;
+        font-size: 14px;
+        line-height: 24px;
+        padding: 10px;
+    }
+
+    .my-menu-table > span {
+        display: block;
+    }
 </style>
 
 <div id="app"></div>
@@ -169,7 +186,24 @@ permalink: /examples/react
                 menu={
                     <>
                         <THEOplayerReactUI.LanguageMenu id="language-menu" />
-                        <THEOplayerReactUI.SettingsMenu id="settings-menu" />
+                        <THEOplayerReactUI.MenuGroup id="settings-menu">
+                            <THEOplayerReactUI.Menu heading="My custom settings">
+                                <div className="my-menu-table">
+                                    <span>Quality</span>
+                                    <THEOplayerReactUI.MenuButton menu="quality-menu">
+                                        <THEOplayerReactUI.ActiveQualityDisplay />
+                                    </THEOplayerReactUI.MenuButton>
+                                    <span>Playback speed</span>
+                                    <THEOplayerReactUI.MenuButton menu="playback-rate-menu">
+                                        <THEOplayerReactUI.PlaybackRateDisplay />
+                                    </THEOplayerReactUI.MenuButton>
+                                </div>
+                            </THEOplayerReactUI.Menu>
+                            <THEOplayerReactUI.Menu id="quality-menu" closeOnInput hidden heading="Quality">
+                                <THEOplayerReactUI.QualityRadioGroup />
+                            </THEOplayerReactUI.Menu>
+                            <THEOplayerReactUI.PlaybackRateMenu id="playback-rate-menu" closeOnInput hidden heading="Playback speed" />
+                        </THEOplayerReactUI.MenuGroup>
                     </>
                 }
                 error={<THEOplayerReactUI.ErrorDisplay />}
