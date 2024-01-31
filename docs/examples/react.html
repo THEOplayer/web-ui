@@ -87,12 +87,12 @@ permalink: /examples/react
         return firstPlay;
     };
 
-    const ShowOnFirstPlay = ({ children, ...props }) => {
+    const ShowOnFirstPlay = ({ children }) => {
         const firstPlay = useFirstPlay();
         if (!firstPlay) {
             return null;
         }
-        return React.Children.map(children, (child) => React.cloneElement(child, props));
+        return children;
     };
 
     // A custom React component using THEOplayer.
@@ -115,25 +115,25 @@ permalink: /examples/react
                 onReady={(player) => {
                     console.log('THEOplayer is ready!', player);
                 }}
-                topChrome={
+                topChrome={(props) => (
                     <ShowOnFirstPlay>
-                        <THEOplayerUI.ControlBar>
+                        <THEOplayerUI.ControlBar {...props}>
                             <span className="my-title">{title}</span>
                         </THEOplayerUI.ControlBar>
                     </ShowOnFirstPlay>
-                }
-                centeredChrome={<THEOplayerUI.PlayButton />}
-                centeredLoading={
+                )}
+                centeredChrome={(props) => <THEOplayerUI.PlayButton {...props} />}
+                centeredLoading={(props) => (
                     <ShowOnFirstPlay>
-                        <THEOplayerUI.LoadingIndicator />
+                        <THEOplayerUI.LoadingIndicator {...props} />
                     </ShowOnFirstPlay>
-                }
-                bottomChrome={
+                )}
+                bottomChrome={(props) => (
                     <ShowOnFirstPlay>
-                        <THEOplayerUI.ControlBar>
+                        <THEOplayerUI.ControlBar {...props}>
                             <THEOplayerUI.TimeRange />
                         </THEOplayerUI.ControlBar>
-                        <THEOplayerUI.ControlBar>
+                        <THEOplayerUI.ControlBar {...props}>
                             <THEOplayerUI.MuteButton />
                             <THEOplayerUI.VolumeRange />
                             <MyTimeDisplay />
@@ -143,14 +143,14 @@ permalink: /examples/react
                             <THEOplayerUI.FullscreenButton />
                         </THEOplayerUI.ControlBar>
                     </ShowOnFirstPlay>
-                }
-                menu={
+                )}
+                menu={(props) => (
                     <>
-                        <THEOplayerUI.LanguageMenu id="language-menu" />
-                        <THEOplayerUI.SettingsMenu id="settings-menu" />
+                        <THEOplayerUI.LanguageMenu id="language-menu" {...props} />
+                        <THEOplayerUI.SettingsMenu id="settings-menu" {...props} />
                     </>
-                }
-                error={<THEOplayerUI.ErrorDisplay />}
+                )}
+                error={(props) => <THEOplayerUI.ErrorDisplay {...props} />}
             />
         );
     };

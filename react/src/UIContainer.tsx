@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { type PropsWithoutRef, type ReactNode } from 'react';
+import { type PropsWithoutRef } from 'react';
 import { UIContainer as UIContainerElement } from '@theoplayer/web-ui';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { createComponent, type WebComponentProps } from '@lit/react';
-import { childrenWithSlot, usePlayer } from './util';
+import { usePlayer } from './util';
 import { PlayerContext } from './context';
+import type { SlottedChildren } from './slotted';
 
 const RawUIContainer = createComponent({
     tagName: 'theoplayer-ui',
@@ -22,33 +23,33 @@ export interface UIContainerProps extends PropsWithoutRef<WebComponentProps<UICo
      *
      * Can be used to display the stream's title, or for a cast button ({@link ChromecastButton}).
      */
-    topChrome?: ReactNode;
+    topChrome?: SlottedChildren;
     /**
      * A slot for controls in the middle of the player (between the top and bottom chrome).
      */
-    middleChrome?: ReactNode;
+    middleChrome?: SlottedChildren;
     /**
      * A slot for controls at the bottom of the player.
      *
      * Can be used for controls such as a play button ({@link PlayButton}) or a seek bar ({@link TimeRange}).
      */
-    bottomChrome?: ReactNode;
+    bottomChrome?: SlottedChildren;
     /**
      * A slot for controls centered on the player, on top of other controls.
      */
-    centeredChrome?: ReactNode;
+    centeredChrome?: SlottedChildren;
     /**
      * A slot for a loading indicator centered on the player, on top of other controls but behind the centered chrome.
      */
-    centeredLoading?: ReactNode;
+    centeredLoading?: SlottedChildren;
     /**
      * A slot for extra menus (see {@link Menu}).
      */
-    menu?: ReactNode;
+    menu?: SlottedChildren;
     /**
      * A slot for an error display, to show when the player encounters a fatal error (see {@link ErrorDisplay}).
      */
-    error?: ReactNode;
+    error?: SlottedChildren;
     /**
      * Use a named slot instead, such as:
      *  - {@link topChrome}
@@ -83,13 +84,13 @@ export const UIContainer = ({
     return (
         <RawUIContainer {...props} ref={setUi} onReady={onReadyHandler}>
             <PlayerContext.Provider value={player}>
-                {childrenWithSlot(topChrome, 'top-chrome')}
-                {childrenWithSlot(middleChrome, 'middle-chrome')}
-                {childrenWithSlot(centeredChrome, 'centered-chrome')}
-                {childrenWithSlot(centeredLoading, 'centered-loading')}
-                {bottomChrome}
-                {childrenWithSlot(menu, 'menu')}
-                {childrenWithSlot(error, 'error')}
+                {topChrome?.({ slot: 'top-chrome' })}
+                {middleChrome?.({ slot: 'middle-chrome' })}
+                {centeredChrome?.({ slot: 'centered-chrome' })}
+                {centeredLoading?.({ slot: 'centered-loading' })}
+                {bottomChrome?.()}
+                {menu?.({ slot: 'menu' })}
+                {error?.({ slot: 'error' })}
             </PlayerContext.Provider>
         </RawUIContainer>
     );
