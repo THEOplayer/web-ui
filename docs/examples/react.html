@@ -104,10 +104,12 @@ permalink: /examples/react
 
     const ShowOnFirstPlay = ({ children }) => {
         const firstPlay = useFirstPlay();
-        if (!firstPlay) {
-            return null;
-        }
-        return children;
+        return firstPlay ? children : null;
+    };
+
+    const HideOnFirstPlay = ({ children }) => {
+        const firstPlay = useFirstPlay();
+        return firstPlay ? null : children;
     };
 
     // A custom React component using THEOplayer.
@@ -137,7 +139,11 @@ permalink: /examples/react
                         </THEOplayerUI.ControlBar>
                     </ShowOnFirstPlay>
                 }
-                centeredChrome={<THEOplayerUI.PlayButton />}
+                centeredChrome={
+                    <HideOnFirstPlay>
+                        <THEOplayerUI.PlayButton />
+                    </HideOnFirstPlay>
+                }
                 centeredLoading={
                     <ShowOnFirstPlay>
                         <THEOplayerUI.LoadingIndicator />
@@ -149,6 +155,7 @@ permalink: /examples/react
                             <THEOplayerUI.TimeRange />
                         </THEOplayerUI.ControlBar>
                         <THEOplayerUI.ControlBar>
+                            <THEOplayerUI.PlayButton />
                             <THEOplayerUI.MuteButton />
                             <THEOplayerUI.VolumeRange />
                             <MyTimeDisplay />
