@@ -10,6 +10,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-playback-rate-menu');
 /**
  * `<theoplayer-playback-rate-menu>` - A menu to change the playback rate of the player.
  *
+ * @slot `heading` - A slot for the menu's heading.
+ *
  * @group Components
  */
 export class PlaybackRateMenu extends Menu {
