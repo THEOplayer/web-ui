@@ -7,7 +7,7 @@ the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 -   Idiomatic React components make the UI feel right at home in your existing React web app.
 -   Easy to customize: use JSX to lay out your controls, and CSS to style them.
 
-> **Note**
+> [!NOTE]  
 > This project is under active development. While we believe it's ready for use in production, not all features are available in this first release. If you find a problem or have an idea for a new feature, don't hesitate to [open an issue](https://github.com/THEOplayer/web-ui/issues)!
 
 ## Installation
