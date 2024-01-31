@@ -35,7 +35,7 @@
     "docs": "typedoc --treatWarningsAsErrors",
     "docs:watch": "typedoc --watch",
     "prepare": "npm run build:prod",
-    "version": "node scripts/bump-changelog.mjs CHANGELOG.md && git add CHANGELOG.md"
+    "version": "cross-env-shell \"node scripts/bump-changelog.mjs CHANGELOG.md && git add CHANGELOG.md && npm version $npm_package_version --workspace react --no-git-tag-version && git add react/package.json\""
   },
   "keywords": [],
   "author": "THEO Technologies",
@@ -58,6 +58,7 @@
     "@types/html-minifier": "^4.0.3",
     "@webcomponents/shadycss": "^1.11.2",
     "@webcomponents/webcomponentsjs": "^2.8.0",
+    "cross-env": "^7.0.3",
     "html-minifier": "^4.0.0",
     "postcss": "^8.4.30",
     "postcss-mixins": "^9.0.4",
