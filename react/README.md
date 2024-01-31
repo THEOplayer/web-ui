@@ -69,9 +69,7 @@ See [docs/examples/react.html](https://github.com/THEOplayer/web-ui/blob/main/do
 If you want to fully customize your video player layout, you can use a `<UIContainer>` instead.
 
 ```tsx
-import { DefaultUI, ControlBar, PlayButton, TimeRange } from '@theoplayer/react-ui';
-import type { ChromelessPlayer } from 'theoplayer/chromeless';
-import { MuteButton, VolumeRange } from '@theoplayer/react-ui/src';
+import { ControlBar, MuteButton, PlayButton, TimeRange, VolumeRange } from '@theoplayer/react-ui';
 
 const App = () => {
     const configuration = {
@@ -110,7 +108,7 @@ See [docs/examples/react.html](https://github.com/THEOplayer/web-ui/blob/main/do
 
 # Legacy browser support
 
-By default, Open Video UI for Web targets modern browsers that support modern JavaScript syntax (such as [async/await](https://caniuse.com/async-functions)) and native [Custom Elements](https://caniuse.com/custom-elementsv1). This keeps the download size small, so your viewers can spend less time waiting for your page to load and start watching their video faster.
+By default, Open Video UI for React targets modern browsers that support modern JavaScript syntax (such as [async/await](https://caniuse.com/async-functions)) and native [Custom Elements](https://caniuse.com/custom-elementsv1). This keeps the download size small, so your viewers can spend less time waiting for your page to load and start watching their video faster.
 
 On older browsers (such as Internet Explorer 11 and older smart TVs), you need to load a different version of the Open Video UI that uses older JavaScript syntax. You also need to load additional polyfills for missing features such as Promises or Custom Elements. We recommend [Polyfill.io](https://polyfill.io/) and [Web Components Polyfills](https://github.com/webcomponents/polyfills) for these.
 
