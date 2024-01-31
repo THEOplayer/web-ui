@@ -6,6 +6,7 @@ import { createComponent, type WebComponentProps } from '@lit/react';
 import { usePlayer } from './util';
 import { PlayerContext } from './context';
 import { Slotted } from './slotted';
+import type { Menu } from './components';
 
 const RawDefaultUI = createComponent({
     tagName: 'theoplayer-default-ui',
