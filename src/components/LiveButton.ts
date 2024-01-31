@@ -149,6 +149,12 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
 
 customElements.define('theoplayer-live-button', LiveButton);
 
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-live-button': LiveButton;
+    }
+}
+
 function isLive(player: ChromelessPlayer, threshold: number): boolean {
     if (player.duration === Infinity) {
         const seekable = player.seekable;

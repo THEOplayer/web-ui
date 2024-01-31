@@ -232,6 +232,12 @@ export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) 
 
 customElements.define('theoplayer-radio-group', RadioGroup);
 
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-radio-group': RadioGroup;
+    }
+}
+
 function isRadioButton(node: Node): node is RadioButton {
     return node instanceof RadioButton;
 }

@@ -117,3 +117,9 @@ export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player'
 }
 
 customElements.define('theoplayer-quality-radio-group', QualityRadioGroup);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-quality-radio-group': QualityRadioGroup;
+    }
+}

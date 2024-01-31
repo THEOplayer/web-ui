@@ -46,3 +46,9 @@ export class TextTrackStyleResetButton extends StateReceiverMixin(Button, ['play
 }
 
 customElements.define('theoplayer-text-track-style-reset-button', TextTrackStyleResetButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-text-track-style-reset-button': TextTrackStyleResetButton;
+    }
+}

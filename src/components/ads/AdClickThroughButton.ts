@@ -118,3 +118,9 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
 }
 
 customElements.define('theoplayer-ad-clickthrough-button', AdClickThroughButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-ad-clickthrough-button': AdClickThroughButton;
+    }
+}

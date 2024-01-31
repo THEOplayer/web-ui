@@ -326,3 +326,9 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
 }
 
 customElements.define('theoplayer-time-range', TimeRange);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-time-range': TimeRange;
+    }
+}

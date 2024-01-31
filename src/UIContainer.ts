@@ -1050,6 +1050,12 @@ export class UIContainer extends HTMLElement {
 
 customElements.define('theoplayer-ui', UIContainer);
 
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-ui': UIContainer;
+    }
+}
+
 function getVisibleRect(slot: HTMLSlotElement): Rectangle | undefined {
     let result: Rectangle | undefined;
     const children = slot.assignedNodes().filter(isHTMLElement);

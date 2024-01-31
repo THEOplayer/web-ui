@@ -78,3 +78,9 @@ export class LoadingIndicator extends StateReceiverMixin(HTMLElement, ['player']
 }
 
 customElements.define('theoplayer-loading-indicator', LoadingIndicator);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-loading-indicator': LoadingIndicator;
+    }
+}

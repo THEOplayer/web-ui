@@ -134,3 +134,9 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
 }
 
 customElements.define('theoplayer-ad-skip-button', AdSkipButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-ad-skip-button': AdSkipButton;
+    }
+}

@@ -71,3 +71,9 @@ export class MenuButton extends Button {
 }
 
 customElements.define('theoplayer-menu-button', MenuButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-menu-button': MenuButton;
+    }
+}

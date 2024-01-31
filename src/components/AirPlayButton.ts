@@ -52,3 +52,9 @@ export class AirPlayButton extends StateReceiverMixin(CastButton, ['player']) {
 }
 
 customElements.define('theoplayer-airplay-button', AirPlayButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-airplay-button': AirPlayButton;
+    }
+}

@@ -337,6 +337,12 @@ export class MenuGroup extends HTMLElement {
 
 customElements.define('theoplayer-menu-group', MenuGroup);
 
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-menu-group': MenuGroup;
+    }
+}
+
 function isMenuElement(element: Node): element is Menu | MenuGroup {
     if (!isHTMLElement(element)) {
         return false;

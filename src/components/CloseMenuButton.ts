@@ -43,3 +43,9 @@ export class CloseMenuButton extends Button {
 }
 
 customElements.define('theoplayer-menu-close-button', CloseMenuButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-menu-close-button': CloseMenuButton;
+    }
+}

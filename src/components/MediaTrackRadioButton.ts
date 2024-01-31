@@ -85,3 +85,9 @@ function getTrackLabel(track: MediaTrack): string {
 }
 
 customElements.define('theoplayer-media-track-radio-button', MediaTrackRadioButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-media-track-radio-button': MediaTrackRadioButton;
+    }
+}

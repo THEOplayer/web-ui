@@ -94,3 +94,9 @@ export class SeekButton extends StateReceiverMixin(Button, ['player']) {
 }
 
 customElements.define('theoplayer-seek-button', SeekButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-seek-button': SeekButton;
+    }
+}

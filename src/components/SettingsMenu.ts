@@ -23,3 +23,9 @@ export class SettingsMenu extends MenuGroup {
 }
 
 customElements.define('theoplayer-settings-menu', SettingsMenu);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-settings-menu': SettingsMenu;
+    }
+}

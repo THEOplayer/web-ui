@@ -120,3 +120,9 @@ export class Menu extends HTMLElement {
 }
 
 customElements.define('theoplayer-menu', Menu);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-menu': Menu;
+    }
+}

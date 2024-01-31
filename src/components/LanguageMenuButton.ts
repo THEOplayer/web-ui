@@ -65,3 +65,9 @@ export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player'
 }
 
 customElements.define('theoplayer-language-menu-button', LanguageMenuButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-language-menu-button': LanguageMenuButton;
+    }
+}
