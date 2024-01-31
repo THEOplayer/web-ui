@@ -58,6 +58,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
  * @attribute `dvr-threshold` - The minimum length (in seconds) of a livestream's sliding window for the stream to be DVR
  *   and its stream type to be set to "dvr".
  *
+ * @slot `title` - A slot for the stream's title in the top control bar.
  * @slot `top-control-bar` - A slot for extra UI controls in the top control bar.
  * @slot `bottom-control-bar` - A slot for extra UI controls in the bottom control bar.
  * @slot `menu` - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
