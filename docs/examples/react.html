@@ -65,6 +65,36 @@ permalink: /examples/react
         return time;
     };
 
+    // Returns whether the player has (previously) started playback for this stream.
+    // Can be used to show/hide certain initial controls, such as a poster image or a centered play button.
+    const useFirstPlay = () => {
+        const player = useContext(THEOplayerUI.PlayerContext);
+        const [firstPlay, setFirstPlay] = useState(false);
+        useEffect(() => {
+            const onPlay = () => {
+                setFirstPlay(true);
+            };
+            const onSourceChange = () => {
+                setFirstPlay(!player.paused);
+            };
+            player?.addEventListener('play', onPlay);
+            player?.addEventListener('sourcechange', onSourceChange);
+            return () => {
+                player?.removeEventListener('play', onPlay);
+                player?.removeEventListener('sourcechange', onSourceChange);
+            };
+        }, [player]);
+        return firstPlay;
+    };
+
+    const ShowOnFirstPlay = ({ children, ...props }) => {
+        const firstPlay = useFirstPlay();
+        if (!firstPlay) {
+            return null;
+        }
+        return React.Children.map(children, (child) => React.cloneElement(child, props));
+    };
+
     // A custom React component using THEOplayer.
     const MyTimeDisplay = () => {
         const time = useCurrentTime();
@@ -86,14 +116,20 @@ permalink: /examples/react
                     console.log('THEOplayer is ready!', player);
                 }}
                 topChrome={
-                    <THEOplayerUI.ControlBar>
-                        <span className="my-title">{title}</span>
-                    </THEOplayerUI.ControlBar>
+                    <ShowOnFirstPlay>
+                        <THEOplayerUI.ControlBar>
+                            <span className="my-title">{title}</span>
+                        </THEOplayerUI.ControlBar>
+                    </ShowOnFirstPlay>
                 }
                 centeredChrome={<THEOplayerUI.PlayButton />}
-                centeredLoading={<THEOplayerUI.LoadingIndicator />}
+                centeredLoading={
+                    <ShowOnFirstPlay>
+                        <THEOplayerUI.LoadingIndicator />
+                    </ShowOnFirstPlay>
+                }
                 bottomChrome={
-                    <>
+                    <ShowOnFirstPlay>
                         <THEOplayerUI.ControlBar>
                             <THEOplayerUI.TimeRange />
                         </THEOplayerUI.ControlBar>
@@ -106,7 +142,7 @@ permalink: /examples/react
                             <THEOplayerUI.SettingsMenuButton menu="settings-menu" />
                             <THEOplayerUI.FullscreenButton />
                         </THEOplayerUI.ControlBar>
-                    </>
+                    </ShowOnFirstPlay>
                 }
                 menu={
                     <>
