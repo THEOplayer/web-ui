@@ -5,7 +5,7 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { createComponent, type WebComponentProps } from '@lit/react';
 import { usePlayer } from './util';
 import { PlayerContext } from './context';
-import { Slotted } from './slotted';
+import { Slotted, SlottedInPlace } from './slotted';
 import type { ChromecastButton, ErrorDisplay, Menu, PlayButton, TimeRange } from './components';
 
 const RawUIContainer = createComponent({
@@ -90,7 +90,7 @@ export const UIContainer = ({
                 <Slotted slot="centered-chrome">{centeredChrome}</Slotted>
                 <Slotted slot="centered-loading">{centeredLoading}</Slotted>
                 {bottomChrome}
-                <Slotted slot="menu">{menu}</Slotted>
+                <SlottedInPlace slot="menu">{menu}</SlottedInPlace>
                 <Slotted slot="error">{error}</Slotted>
             </PlayerContext.Provider>
         </RawUIContainer>
