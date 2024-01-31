@@ -1,8 +1,9 @@
 import { createComponent, type WebComponentProps } from '@lit/react';
 import { TextTrackStyleMenu as TextTrackStyleMenuElement } from '@theoplayer/web-ui';
-import type { PropsWithoutRef, ReactNode } from 'react';
+import type { PropsWithoutRef } from 'react';
 import * as React from 'react';
 import { Slotted } from '../slotted';
+import type { CommonMenuProps } from './Menu';
 
 const RawTextTrackStyleMenu = createComponent({
     tagName: 'theoplayer-text-track-style-menu',
@@ -11,12 +12,7 @@ const RawTextTrackStyleMenu = createComponent({
     react: React
 });
 
-export interface TextTrackStyleMenuProps extends PropsWithoutRef<WebComponentProps<TextTrackStyleMenuElement>> {
-    /**
-     * A slot for the menu's heading.
-     */
-    heading?: ReactNode;
-}
+export interface TextTrackStyleMenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<TextTrackStyleMenuElement>> {}
 
 export const TextTrackStyleMenu = ({ heading, children, ...props }: TextTrackStyleMenuProps) => {
     return (

@@ -1,8 +1,9 @@
 import { createComponent, type WebComponentProps } from '@lit/react';
 import { PlaybackRateMenu as PlaybackRateMenuElement } from '@theoplayer/web-ui';
-import type { PropsWithoutRef, ReactNode } from 'react';
+import type { PropsWithoutRef } from 'react';
 import * as React from 'react';
 import { Slotted } from '../slotted';
+import type { CommonMenuProps } from './Menu';
 
 const RawPlaybackRateMenu = createComponent({
     tagName: 'theoplayer-playback-rate-menu',
@@ -11,12 +12,7 @@ const RawPlaybackRateMenu = createComponent({
     react: React
 });
 
-export interface PlaybackRateMenuProps extends PropsWithoutRef<WebComponentProps<PlaybackRateMenuElement>> {
-    /**
-     * A slot for the menu's heading.
-     */
-    heading?: ReactNode;
-}
+export interface PlaybackRateMenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<PlaybackRateMenuElement>> {}
 
 export const PlaybackRateMenu = ({ heading, children, ...props }: PlaybackRateMenuProps) => {
     return (

@@ -1,8 +1,9 @@
 import { createComponent, type WebComponentProps } from '@lit/react';
 import { LanguageMenu as LanguageMenuElement } from '@theoplayer/web-ui';
-import type { PropsWithoutRef, ReactNode } from 'react';
+import type { PropsWithoutRef } from 'react';
 import * as React from 'react';
 import { Slotted } from '../slotted';
+import type { CommonMenuProps } from './Menu';
 
 const RawLanguageMenu = createComponent({
     tagName: 'theoplayer-language-menu',
@@ -11,12 +12,7 @@ const RawLanguageMenu = createComponent({
     react: React
 });
 
-export interface LanguageMenuProps extends PropsWithoutRef<WebComponentProps<LanguageMenuElement>> {
-    /**
-     * A slot for the menu's heading.
-     */
-    heading?: ReactNode;
-}
+export interface LanguageMenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<LanguageMenuElement>> {}
 
 export const LanguageMenu = ({ heading, children, ...props }: LanguageMenuProps) => {
     return (

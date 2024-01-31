@@ -11,12 +11,18 @@ const RawMenu = createComponent({
     react: React
 });
 
-export interface MenuProps extends PropsWithoutRef<WebComponentProps<MenuElement>> {
+export interface CommonMenuProps {
     /**
      * A slot for the menu's heading.
      */
     heading?: ReactNode;
+    /**
+     * The menu's contents.
+     */
+    children?: ReactNode;
 }
+
+export interface MenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<MenuElement>> {}
 
 export const Menu = ({ heading, children, ...props }: MenuProps) => {
     return (
