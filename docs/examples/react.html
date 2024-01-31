@@ -176,6 +176,7 @@ permalink: /examples/react
             setSourceName(e.target.value);
         };
         const source = sources[sourceName];
+        const title = source.metadata.title;
         return (
             <>
                 <p>
@@ -191,9 +192,9 @@ permalink: /examples/react
                     </label>
                 </p>
                 <h2>Default UI</h2>
-                <THEOplayerUI.DefaultUI configuration={configuration} source={source} />
+                <THEOplayerUI.DefaultUI configuration={configuration} source={source} title={(props) => <span {...props}>{title}</span>} />
                 <h2>Custom UI</h2>
-                <MyCustomUI configuration={configuration} source={source} title={source.metadata.title} />
+                <MyCustomUI configuration={configuration} source={source} title={title} />
             </>
         );
     };
