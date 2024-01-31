@@ -26,7 +26,7 @@ permalink: /examples/react
     import * as React from 'react';
     import { useContext, useEffect, useState } from 'react';
     import { createRoot } from 'react-dom/client';
-    import * as THEOplayerUI from '@theoplayer/react-ui';
+    import * as THEOplayerReactUI from '@theoplayer/react-ui';
 
     const configuration = {
         libraryLocation: 'https://cdn.theoplayer.com/dash/theoplayer/',
@@ -67,7 +67,7 @@ permalink: /examples/react
         // Retrieve the THEOplayer instance.
         // This will become available as soon as this component is mounted
         // inside a THEOplayer <DefauLtUI> <UIContainer>.
-        const player = useContext(THEOplayerUI.PlayerContext);
+        const player = useContext(THEOplayerReactUI.PlayerContext);
         // Keep track of the player's current time.
         const [time, setTime] = useState(0);
         useEffect(() => {
@@ -83,7 +83,7 @@ permalink: /examples/react
     // Returns whether the player has (previously) started playback for this stream.
     // Can be used to show/hide certain initial controls, such as a poster image or a centered play button.
     const useFirstPlay = () => {
-        const player = useContext(THEOplayerUI.PlayerContext);
+        const player = useContext(THEOplayerReactUI.PlayerContext);
         const [firstPlay, setFirstPlay] = useState(false);
         useEffect(() => {
             const onPlay = () => {
@@ -126,7 +126,7 @@ permalink: /examples/react
     // A custom player UI.
     const MyCustomUI = ({ configuration, source, title }) => {
         return (
-            <THEOplayerUI.UIContainer
+            <THEOplayerReactUI.UIContainer
                 configuration={configuration}
                 source={source}
                 onReady={(player) => {
@@ -134,45 +134,45 @@ permalink: /examples/react
                 }}
                 topChrome={
                     <ShowOnFirstPlay>
-                        <THEOplayerUI.ControlBar>
+                        <THEOplayerReactUI.ControlBar>
                             <span className="my-title">{title}</span>
-                        </THEOplayerUI.ControlBar>
+                        </THEOplayerReactUI.ControlBar>
                     </ShowOnFirstPlay>
                 }
                 centeredChrome={
                     <HideOnFirstPlay>
-                        <THEOplayerUI.PlayButton />
+                        <THEOplayerReactUI.PlayButton />
                     </HideOnFirstPlay>
                 }
                 centeredLoading={
                     <ShowOnFirstPlay>
-                        <THEOplayerUI.LoadingIndicator />
+                        <THEOplayerReactUI.LoadingIndicator />
                     </ShowOnFirstPlay>
                 }
                 bottomChrome={
                     <ShowOnFirstPlay>
-                        <THEOplayerUI.ControlBar>
-                            <THEOplayerUI.TimeRange />
-                        </THEOplayerUI.ControlBar>
-                        <THEOplayerUI.ControlBar>
-                            <THEOplayerUI.PlayButton />
-                            <THEOplayerUI.MuteButton />
-                            <THEOplayerUI.VolumeRange />
+                        <THEOplayerReactUI.ControlBar>
+                            <THEOplayerReactUI.TimeRange />
+                        </THEOplayerReactUI.ControlBar>
+                        <THEOplayerReactUI.ControlBar>
+                            <THEOplayerReactUI.PlayButton />
+                            <THEOplayerReactUI.MuteButton />
+                            <THEOplayerReactUI.VolumeRange />
                             <MyTimeDisplay />
                             <Spacer />
-                            <THEOplayerUI.LanguageMenuButton menu="language-menu" />
-                            <THEOplayerUI.SettingsMenuButton menu="settings-menu" />
-                            <THEOplayerUI.FullscreenButton />
-                        </THEOplayerUI.ControlBar>
+                            <THEOplayerReactUI.LanguageMenuButton menu="language-menu" />
+                            <THEOplayerReactUI.SettingsMenuButton menu="settings-menu" />
+                            <THEOplayerReactUI.FullscreenButton />
+                        </THEOplayerReactUI.ControlBar>
                     </ShowOnFirstPlay>
                 }
                 menu={
                     <>
-                        <THEOplayerUI.LanguageMenu id="language-menu" />
-                        <THEOplayerUI.SettingsMenu id="settings-menu" />
+                        <THEOplayerReactUI.LanguageMenu id="language-menu" />
+                        <THEOplayerReactUI.SettingsMenu id="settings-menu" />
                     </>
                 }
-                error={<THEOplayerUI.ErrorDisplay />}
+                error={<THEOplayerReactUI.ErrorDisplay />}
             />
         );
     };
@@ -199,7 +199,7 @@ permalink: /examples/react
                     </label>
                 </p>
                 <h2>Default UI</h2>
-                <THEOplayerUI.DefaultUI configuration={configuration} source={source} title={<span>{title}</span>} />
+                <THEOplayerReactUI.DefaultUI configuration={configuration} source={source} title={<span>{title}</span>} />
                 <h2>Custom UI</h2>
                 <MyCustomUI configuration={configuration} source={source} title={title} />
             </>
