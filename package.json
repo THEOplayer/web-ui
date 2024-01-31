@@ -34,7 +34,6 @@
     "test:typecheck": "tsc --project . --noEmit",
     "docs": "typedoc --treatWarningsAsErrors",
     "docs:watch": "typedoc --watch",
-    "prepare": "npm run build:prod",
     "version": "npm run version:changelog && npm run version:deps && npm run version:react",
     "version:changelog": "node scripts/bump-changelog.mjs CHANGELOG.md && git add CHANGELOG.md",
     "version:deps": "cross-env-shell \"npm install $npm_package_name@$npm_package_version --workspace react && git add react/package.json\"",
