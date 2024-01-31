@@ -9,6 +9,7 @@
       <excludeFolder url="file://$MODULE_DIR$/docs/_site" />
       <excludeFolder url="file://$MODULE_DIR$/docs/api" />
       <excludeFolder url="file://$MODULE_DIR$/docs/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/react/dist" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
