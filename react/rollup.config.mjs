@@ -87,20 +87,17 @@ function jsConfig(outputDir, { es5 = false, production = false, sourcemap = fals
 function jsPlugins({ es5 = false, module = false, production = false, sourcemap = false }) {
     const browserslist = es5 ? browserslistLegacy : browserslistModern;
     return [
-        ...(es5
-            ? [
-                  replace({
-                      include: './src/**',
-                      sourceMap: sourcemap,
-                      preventAssignment: true,
-                      delimiters: ['', ''],
-                      values: {
-                          // react-ui's ES5 version depends on web-ui's ES5 version
-                          "'@theoplayer/web-ui'": "'@theoplayer/web-ui/es5'"
-                      }
-                  })
-              ]
-            : []),
+        es5 &&
+            replace({
+                include: './src/**',
+                sourceMap: sourcemap,
+                preventAssignment: true,
+                delimiters: ['', ''],
+                values: {
+                    // react-ui's ES5 version depends on web-ui's ES5 version
+                    "'@theoplayer/web-ui'": "'@theoplayer/web-ui/es5'"
+                }
+            }),
         nodeResolve(),
         // Transpile TypeScript.
         swc({
@@ -140,18 +137,15 @@ function jsPlugins({ es5 = false, module = false, production = false, sourcemap 
                 externalHelpers: true
             }
         }),
-        ...(production
-            ? [
-                  minify({
-                      sourceMap: sourcemap,
-                      mangle: {
-                          toplevel: true
-                      },
-                      toplevel: true,
-                      module,
-                      ecma: es5 ? 5 : 2017
-                  })
-              ]
-            : [])
-    ];
+        production &&
+            minify({
+                sourceMap: sourcemap,
+                mangle: {
+                    toplevel: true
+                },
+                toplevel: true,
+                module,
+                ecma: es5 ? 5 : 2017
+            })
+    ].filter(Boolean);
 }

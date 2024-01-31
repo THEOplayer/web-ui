@@ -149,18 +149,15 @@ function jsPlugins({ es5 = false, module = false, production = false, sourcemap 
                 externalHelpers: true
             }
         }),
-        ...(production
-            ? [
-                  minify({
-                      sourceMap: sourcemap,
-                      mangle: {
-                          toplevel: true
-                      },
-                      toplevel: true,
-                      module,
-                      ecma: es5 ? 5 : 2017
-                  })
-              ]
-            : [])
-    ];
+        production &&
+            minify({
+                sourceMap: sourcemap,
+                mangle: {
+                    toplevel: true
+                },
+                toplevel: true,
+                module,
+                ecma: es5 ? 5 : 2017
+            })
+    ].filter(Boolean);
 }
