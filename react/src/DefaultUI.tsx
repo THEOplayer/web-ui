@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { type PropsWithoutRef } from 'react';
+import { type PropsWithoutRef, type ReactNode } from 'react';
 import { DefaultUI as DefaultUIElement } from '@theoplayer/web-ui';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { createComponent, type WebComponentProps } from '@lit/react';
 import { usePlayer } from './util';
 import { PlayerContext } from './context';
-import type { SlottedChildren } from './slotted';
+import { Slotted } from './slotted';
 
 const RawDefaultUI = createComponent({
     tagName: 'theoplayer-default-ui',
@@ -21,19 +21,19 @@ export interface DefaultUIProps extends PropsWithoutRef<Omit<WebComponentProps<D
     /**
      * A slot for the stream's title in the top control bar.
      */
-    title?: SlottedChildren;
+    title?: ReactNode;
     /**
      * A slot for extra UI controls in the top control bar.
      */
-    topControlBar?: SlottedChildren;
+    topControlBar?: ReactNode;
     /**
      * A slot for extra UI controls in the bottom control bar.
      */
-    bottomControlBar?: SlottedChildren;
+    bottomControlBar?: ReactNode;
     /**
      * A slot for extra menus (see {@link Menu}).
      */
-    menu?: SlottedChildren;
+    menu?: ReactNode;
     /**
      * Use a named slot instead, such as:
      *  - {@link title}
@@ -55,10 +55,10 @@ export const DefaultUI = ({ title, topControlBar, bottomControlBar, menu, onRead
     return (
         <RawDefaultUI {...props} ref={setUi} onReady={onReadyHandler}>
             <PlayerContext.Provider value={player}>
-                {title?.({ slot: 'title' })}
-                {topControlBar?.({ slot: 'top-control-bar' })}
-                {bottomControlBar?.({ slot: 'bottom-control-bar' })}
-                {menu?.({ slot: 'menu' })}
+                <Slotted slot="title">{title}</Slotted>
+                <Slotted slot="top-control-bar">{topControlBar}</Slotted>
+                <Slotted slot="bottom-control-bar">{bottomControlBar}</Slotted>
+                <Slotted slot="menu">{menu}</Slotted>
             </PlayerContext.Provider>
         </RawDefaultUI>
     );
