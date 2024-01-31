@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import type { DefaultUI as DefaultUIElement, UIContainer as UIContainerElement } from '@theoplayer/web-ui';
