@@ -1,5 +1,6 @@
 import { defineConfig } from 'rollup';
 import nodeResolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 import { minify, swc } from 'rollup-plugin-swc3';
 import * as path from 'node:path';
 import { readFile } from 'node:fs/promises';
@@ -16,8 +17,11 @@ const banner = `/*!
  * THEOplayer Open Video UI for React (v${version})
  * License: ${license}
  */`;
-const reactModule = 'react';
-const webUiModule = '@theoplayer/web-ui';
+const externals = {
+    react: 'React',
+    '@theoplayer/web-ui': 'THEOplayerUI',
+    '@theoplayer/web-ui/es5': 'THEOplayerUI'
+};
 
 /**
  * @param {{configOutputDir?: string}} cliArgs
@@ -56,13 +60,10 @@ function jsConfig(outputDir, { es5 = false, production = false, sourcemap = fals
                 sourcemap,
                 indent: false,
                 banner,
-                globals: {
-                    [reactModule]: 'React',
-                    [webUiModule]: 'THEOplayerUI'
-                }
+                globals: externals
             },
             context: 'self',
-            external: [reactModule, webUiModule],
+            external: Object.keys(externals),
             plugins: jsPlugins({ es5, module: false, production, sourcemap })
         },
         {
@@ -74,7 +75,7 @@ function jsConfig(outputDir, { es5 = false, production = false, sourcemap = fals
                 indent: false
             },
             context: 'self',
-            external: [reactModule, webUiModule],
+            external: Object.keys(externals),
             plugins: jsPlugins({ es5, module: true, production, sourcemap })
         }
     ]);
@@ -86,6 +87,20 @@ function jsConfig(outputDir, { es5 = false, production = false, sourcemap = fals
 function jsPlugins({ es5 = false, module = false, production = false, sourcemap = false }) {
     const browserslist = es5 ? browserslistLegacy : browserslistModern;
     return [
+        ...(es5
+            ? [
+                  replace({
+                      include: './src/**',
+                      sourceMap: sourcemap,
+                      preventAssignment: true,
+                      delimiters: ['', ''],
+                      values: {
+                          // react-ui's ES5 version depends on web-ui's ES5 version
+                          "'@theoplayer/web-ui'": "'@theoplayer/web-ui/es5'"
+                      }
+                  })
+              ]
+            : []),
         nodeResolve(),
         // Transpile TypeScript.
         swc({
