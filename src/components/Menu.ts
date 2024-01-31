@@ -83,6 +83,18 @@ export class Menu extends HTMLElement {
     }
 
     /**
+     * Whether to automatically close the menu whenever one of its controls
+     * receives an input (e.g. when a radio button is clicked).
+     */
+    get closeOnInput(): boolean {
+        return this.hasAttribute(Attribute.MENU_CLOSE_ON_INPUT);
+    }
+
+    set closeOnInput(value: boolean) {
+        toggleAttribute(this, Attribute.MENU_CLOSE_ON_INPUT, value);
+    }
+
+    /**
      * Open the menu.
      */
     openMenu(): void {
