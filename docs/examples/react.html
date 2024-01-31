@@ -34,17 +34,32 @@ permalink: /examples/react
         allowNativeFullscreen: true
     };
 
-    const source = {
-        sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
-        textTracks: [
-            {
-                default: true,
-                src: 'https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt',
-                label: 'thumbnails',
-                kind: 'metadata'
+    const sources = {
+        hls: {
+            sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
+            metadata: {
+                title: "Elephant's Dream"
+            },
+            textTracks: [
+                {
+                    default: true,
+                    src: 'https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt',
+                    label: 'thumbnails',
+                    kind: 'metadata'
+                }
+            ]
+        },
+        dash: {
+            sources: {
+                src: 'https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd',
+                type: 'application/dash+xml'
+            },
+            metadata: {
+                title: 'Big Buck Bunny'
             }
-        ]
+        }
     };
+    const firstSourceName = Object.keys(sources)[0];
 
     // A custom React hook using THEOplayer.
     // This hook returns the player's current time, automatically updating whenever it changes.
@@ -155,13 +170,34 @@ permalink: /examples/react
         );
     };
 
+    const App = () => {
+        const [sourceName, setSourceName] = useState(firstSourceName);
+        const onSourceChange = (e) => {
+            setSourceName(e.target.value);
+        };
+        const source = sources[sourceName];
+        return (
+            <>
+                <p>
+                    <label>
+                        Source:&nbsp;
+                        <select value={sourceName} onChange={onSourceChange}>
+                            {Object.entries(sources).map(([key, value]) => (
+                                <option key={key} value={key}>
+                                    {value.metadata.title}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                </p>
+                <h2>Default UI</h2>
+                <THEOplayerUI.DefaultUI configuration={configuration} source={source} />
+                <h2>Custom UI</h2>
+                <MyCustomUI configuration={configuration} source={source} title={source.metadata.title} />
+            </>
+        );
+    };
+
     const root = createRoot(document.getElementById('app'));
-    root.render(
-        <>
-            <h2>Default UI</h2>
-            <THEOplayerUI.DefaultUI configuration={configuration} source={source} />
-            <h2>Custom UI</h2>
-            <MyCustomUI configuration={configuration} source={source} title="Elephant's Dream" />
-        </>
-    );
+    root.render(<App />);
 </script>
