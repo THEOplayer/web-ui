@@ -28,8 +28,7 @@
     "build:prod": "rollup -c --environment BUILD:production && npm run build:types",
     "build:types": "tsc --project . --emitDeclarationOnly",
     "watch": "rollup -c --watch",
-    "watch:docs": "npm run watch -- --configOutputDir ./docs/_site/dist",
-    "start": "cd docs && bundle exec jekyll serve --host localhost --force_polling",
+    "watch:docs": "npm run watch -- --configOutputDir ../../docs/_site/dist",
     "test": "npm run test:typecheck",
     "test:typecheck": "tsc --project . --noEmit",
     "version": "node ../../scripts/bump-changelog.mjs CHANGELOG.md && git add CHANGELOG.md"
