@@ -12,9 +12,6 @@ the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 -   Built using [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), so works great with (or without) any app framework.
 -   Easy to customize: use HTML to lay out your controls, and CSS to style them.
 
-> [!NOTE]  
-> This project is under active development. While we believe it's ready for use in production, not all features are available in this first release. If you find a problem or have an idea for a new feature, don't hesitate to [open an issue](https://github.com/THEOplayer/web-ui/issues)!
-
 | ![Screenshot on desktop](https://raw.githubusercontent.com/THEOplayer/web-ui/v1.0.0/docs/assets/screenshot-desktop.png) | ![Screenshot on mobile](https://raw.githubusercontent.com/THEOplayer/web-ui/v1.0.0/docs/assets/screenshot-mobile.png) |
 | :---------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: |
 |                                                         Desktop                                                         |                                                        Mobile                                                         |
