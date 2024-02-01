@@ -1,0 +1,16 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "extends": ["../typedoc.json"],
+  "entryPoints": ["src/index.ts"],
+  "out": "../docs/react-api",
+  "readme": "none",
+  "navigationLinks": {
+    "GitHub": "https://github.com/THEOplayer/web-ui/tree/main/react"
+  },
+  "externalSymbolLinkMappings": {
+    "@theoplayer/web-ui": {
+      "DefaultUI": "https://theoplayer.github.io/web-ui/api/classes/DefaultUI.html",
+      "UIContainer": "https://theoplayer.github.io/web-ui/api/classes/UIContainer.html"
+    }
+  }
+}

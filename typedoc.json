@@ -6,6 +6,7 @@
   "navigationLinks": {
     "GitHub": "https://github.com/THEOplayer/web-ui"
   },
+  "githubPages": true,
   "excludePrivate": true,
   "excludeInternal": true,
   "excludeExternals": true,
