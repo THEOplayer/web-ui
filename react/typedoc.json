@@ -8,9 +8,23 @@
     "GitHub": "https://github.com/THEOplayer/web-ui/tree/main/react"
   },
   "externalSymbolLinkMappings": {
+    "theoplayer": {
+      "ChromelessPlayer": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md",
+      "PlayerConfiguration": "https://docs.theoplayer.com/api-reference/web/theoplayer.playerconfiguration.md",
+      "SourceDescription": "https://docs.theoplayer.com/api-reference/web/theoplayer.sourcedescription.md",
+      "THEOplayerError": "https://docs.theoplayer.com/api-reference/web/theoplayer.theoplayererror.md",
+      "VideoQuality": "https://docs.theoplayer.com/api-reference/web/theoplayer.videoquality.md",
+      "*": "https://docs.theoplayer.com/api-reference/web/theoplayer.md"
+    },
+    "theoplayer/chromeless": {
+      "*": "https://docs.theoplayer.com/api-reference/web/theoplayer.md"
+    },
     "@theoplayer/web-ui": {
       "DefaultUI": "https://theoplayer.github.io/web-ui/api/classes/DefaultUI.html",
       "UIContainer": "https://theoplayer.github.io/web-ui/api/classes/UIContainer.html"
+    },
+    "react": {
+      "*": "https://react.dev/reference/react"
     }
   }
 }
