@@ -3,6 +3,9 @@ import { PlaybackRateRadioGroup as PlaybackRateRadioGroupElement } from '@theopl
 import * as React from 'react';
 import { RadioGroupEvents } from './RadioGroup';
 
+/**
+ * @group Components
+ */
 export const PlaybackRateRadioGroup = createComponent({
     tagName: 'theoplayer-playback-rate-radio-group',
     displayName: 'PlaybackRateRadioGroup',

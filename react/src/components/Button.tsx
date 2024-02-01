@@ -6,6 +6,9 @@ export const ButtonEvents = {
     onClick: 'click'
 } as const;
 
+/**
+ * @group Components
+ */
 export const Button = createComponent({
     tagName: 'theoplayer-button',
     displayName: 'Button',

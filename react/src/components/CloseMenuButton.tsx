@@ -3,6 +3,9 @@ import { CloseMenuButton as CloseMenuButtonElement } from '@theoplayer/web-ui';
 import * as React from 'react';
 import { ButtonEvents } from './Button';
 
+/**
+ * @group Components
+ */
 export const CloseMenuButton = createComponent({
     tagName: 'theoplayer-close-menu-button',
     displayName: 'CloseMenuButton',

@@ -6,6 +6,9 @@ export const RadioGroupEvents = {
     onChange: 'change'
 } as const;
 
+/**
+ * @group Components
+ */
 export const RadioGroup = createComponent({
     tagName: 'theoplayer-radio-group',
     displayName: 'RadioGroup',

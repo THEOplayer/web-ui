@@ -14,6 +14,9 @@ const RawPlaybackRateMenu = createComponent({
 
 export interface PlaybackRateMenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<PlaybackRateMenuElement>> {}
 
+/**
+ * @group Components
+ */
 export const PlaybackRateMenu = ({ heading, children, ...props }: PlaybackRateMenuProps) => {
     return (
         <RawPlaybackRateMenu {...props}>

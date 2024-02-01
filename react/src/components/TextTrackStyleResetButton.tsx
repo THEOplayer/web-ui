@@ -3,6 +3,9 @@ import { TextTrackStyleResetButton as TextTrackStyleResetButtonElement } from '@
 import * as React from 'react';
 import { ButtonEvents } from './Button';
 
+/**
+ * @group Components
+ */
 export const TextTrackStyleResetButton = createComponent({
     tagName: 'theoplayer-text-track-style-reset-button',
     displayName: 'TextTrackStyleResetButton',

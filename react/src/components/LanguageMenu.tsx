@@ -14,6 +14,9 @@ const RawLanguageMenu = createComponent({
 
 export interface LanguageMenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<LanguageMenuElement>> {}
 
+/**
+ * @group Components
+ */
 export const LanguageMenu = ({ heading, children, ...props }: LanguageMenuProps) => {
     return (
         <RawLanguageMenu {...props}>

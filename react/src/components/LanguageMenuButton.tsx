@@ -3,6 +3,9 @@ import { LanguageMenuButton as LanguageMenuButtonElement } from '@theoplayer/web
 import * as React from 'react';
 import { ButtonEvents } from './Button';
 
+/**
+ * @group Components
+ */
 export const LanguageMenuButton = createComponent({
     tagName: 'theoplayer-language-menu-button',
     displayName: 'LanguageMenuButton',

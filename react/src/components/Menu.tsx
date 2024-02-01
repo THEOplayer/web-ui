@@ -24,6 +24,9 @@ export interface CommonMenuProps {
 
 export interface MenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<MenuElement>> {}
 
+/**
+ * @group Components
+ */
 export const Menu = ({ heading, children, ...props }: MenuProps) => {
     return (
         <RawMenu {...props}>

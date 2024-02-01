@@ -3,6 +3,9 @@ import { SettingsMenuButton as SettingsMenuButtonElement } from '@theoplayer/web
 import * as React from 'react';
 import { ButtonEvents } from './Button';
 
+/**
+ * @group Components
+ */
 export const SettingsMenuButton = createComponent({
     tagName: 'theoplayer-settings-menu-button',
     displayName: 'SettingsMenuButton',

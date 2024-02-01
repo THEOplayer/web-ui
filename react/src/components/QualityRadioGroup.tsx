@@ -3,6 +3,9 @@ import { QualityRadioGroup as QualityRadioGroupElement } from '@theoplayer/web-u
 import * as React from 'react';
 import { RadioGroupEvents } from './RadioGroup';
 
+/**
+ * @group Components
+ */
 export const QualityRadioGroup = createComponent({
     tagName: 'theoplayer-quality-radio-group',
     displayName: 'QualityRadioGroup',

@@ -14,6 +14,9 @@ const RawTextTrackStyleMenu = createComponent({
 
 export interface TextTrackStyleMenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<TextTrackStyleMenuElement>> {}
 
+/**
+ * @group Components
+ */
 export const TextTrackStyleMenu = ({ heading, children, ...props }: TextTrackStyleMenuProps) => {
     return (
         <RawTextTrackStyleMenu {...props}>

@@ -3,6 +3,9 @@ import { MediaTrackRadioButton as MediaTrackRadioButtonElement } from '@theoplay
 import * as React from 'react';
 import { RadioButtonEvents } from './RadioButton';
 
+/**
+ * @group Components
+ */
 export const MediaTrackRadioButton = createComponent({
     tagName: 'theoplayer-media-track-radio-button',
     displayName: 'MediaTrackRadioButton',

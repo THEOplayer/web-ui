@@ -3,6 +3,9 @@ import { MenuButton as MenuButtonElement } from '@theoplayer/web-ui';
 import * as React from 'react';
 import { ButtonEvents } from './Button';
 
+/**
+ * @group Components
+ */
 export const MenuButton = createComponent({
     tagName: 'theoplayer-menu-button',
     displayName: 'MenuButton',
