@@ -5,6 +5,8 @@ import { ButtonEvents } from './Button';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!FullscreenButton}
+ *
+ * @group Components
  */
 export const FullscreenButton = createComponent({
     tagName: 'theoplayer-fullscreen-button',

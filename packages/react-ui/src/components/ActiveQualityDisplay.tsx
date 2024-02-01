@@ -4,6 +4,8 @@ import * as React from 'react';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!ActiveQualityDisplay}
+ *
+ * @group Components
  */
 export const ActiveQualityDisplay = createComponent({
     tagName: 'theoplayer-active-quality-display',

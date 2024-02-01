@@ -4,6 +4,8 @@ import * as React from 'react';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!AdCountdown}
+ *
+ * @group Components
  */
 export const AdCountdown = createComponent({
     tagName: 'theoplayer-ad-countdown',

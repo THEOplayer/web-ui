@@ -5,6 +5,8 @@ import { ButtonEvents } from './Button';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!CloseMenuButton}
+ *
+ * @group Components
  */
 export const CloseMenuButton = createComponent({
     tagName: 'theoplayer-close-menu-button',

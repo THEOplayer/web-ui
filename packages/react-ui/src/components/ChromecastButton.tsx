@@ -5,6 +5,8 @@ import { ButtonEvents } from './Button';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!ChromecastButton}
+ *
+ * @group Components
  */
 export const ChromecastButton = createComponent({
     tagName: 'theoplayer-chromecast-button',

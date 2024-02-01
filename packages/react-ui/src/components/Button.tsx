@@ -8,6 +8,8 @@ export const ButtonEvents = {
 
 /**
  * {@inheritDoc @theoplayer/web-ui!Button}
+ *
+ * @group Components
  */
 export const Button = createComponent({
     tagName: 'theoplayer-button',

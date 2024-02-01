@@ -5,6 +5,8 @@ import { RangeEvents } from './Range';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!VolumeRange}
+ *
+ * @group Components
  */
 export const VolumeRange = createComponent({
     tagName: 'theoplayer-volume-range',

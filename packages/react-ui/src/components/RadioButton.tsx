@@ -11,6 +11,8 @@ export const RadioButtonEvents = {
 
 /**
  * {@inheritDoc @theoplayer/web-ui!RadioButton}
+ *
+ * @group Components
  */
 export const RadioButton = createComponent({
     tagName: 'theoplayer-radio-button',

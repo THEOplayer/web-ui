@@ -5,6 +5,8 @@ import { RadioGroupEvents } from './RadioGroup';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!TrackRadioGroup}
+ *
+ * @group Components
  */
 export const TrackRadioGroup = createComponent({
     tagName: 'theoplayer-track-radio-group',

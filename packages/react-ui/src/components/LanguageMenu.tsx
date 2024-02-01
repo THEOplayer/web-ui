@@ -16,6 +16,8 @@ export interface LanguageMenuProps extends CommonMenuProps, PropsWithoutRef<WebC
 
 /**
  * {@inheritDoc @theoplayer/web-ui!LanguageMenu}
+ *
+ * @group Components
  */
 export const LanguageMenu = ({ heading, children, ...props }: LanguageMenuProps) => {
     return (

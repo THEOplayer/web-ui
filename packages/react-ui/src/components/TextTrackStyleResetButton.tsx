@@ -5,6 +5,8 @@ import { ButtonEvents } from './Button';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!TextTrackStyleResetButton}
+ *
+ * @group Components
  */
 export const TextTrackStyleResetButton = createComponent({
     tagName: 'theoplayer-text-track-style-reset-button',

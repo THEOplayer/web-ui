@@ -81,6 +81,8 @@ export interface DefaultUIProps extends PropsWithoutRef<Omit<WebComponentProps<D
  * Additional controls can be added to the {@link DefaultUIProps.topControlBar}
  * and {@link DefaultUIProps.bottomControlBar} slots.
  * For more extensive customizations, we recommend defining your own custom UI using a {@link UIContainer}.
+ *
+ * @group Components
  */
 export const DefaultUI = ({ title, topControlBar, bottomControlBar, menu, onReady, ...props }: DefaultUIProps) => {
     const { player, setUi, onReadyHandler } = usePlayer(onReady);

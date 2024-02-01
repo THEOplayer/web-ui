@@ -5,6 +5,8 @@ import { ButtonEvents } from './Button';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!PlayButton}
+ *
+ * @group Components
  */
 export const PlayButton = createComponent({
     tagName: 'theoplayer-play-button',

@@ -4,6 +4,8 @@ import * as React from 'react';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!MenuGroup}
+ *
+ * @group Components
  */
 export const MenuGroup = createComponent({
     tagName: 'theoplayer-menu-group',

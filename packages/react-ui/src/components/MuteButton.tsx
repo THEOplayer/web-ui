@@ -5,6 +5,8 @@ import { ButtonEvents } from './Button';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!MuteButton}
+ *
+ * @group Components
  */
 export const MuteButton = createComponent({
     tagName: 'theoplayer-mute-button',

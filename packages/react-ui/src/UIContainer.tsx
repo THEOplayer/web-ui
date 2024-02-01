@@ -122,6 +122,8 @@ export interface UIContainerProps extends PropsWithoutRef<WebComponentProps<UICo
  * This component does not provide any UI components by default, you need to add all components as children of
  * one of the `<UIContainer>` slots. If you're looking for a simple out-of-the-box player experience instead,
  * see {@link DefaultUI}.
+ *
+ * @group Components
  */
 export const UIContainer = ({
     topChrome,

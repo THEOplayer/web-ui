@@ -5,6 +5,8 @@ import { RadioButtonEvents } from './RadioButton';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!QualityRadioButton}
+ *
+ * @group Components
  */
 export const QualityRadioButton = createComponent({
     tagName: 'theoplayer-quality-radio-button',

@@ -5,6 +5,8 @@ import { RadioButtonEvents } from './RadioButton';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!TextTrackRadioButton}
+ *
+ * @group Components
  */
 export const TextTrackRadioButton = createComponent({
     tagName: 'theoplayer-text-track-radio-button',

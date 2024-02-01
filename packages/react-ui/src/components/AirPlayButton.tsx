@@ -5,6 +5,8 @@ import { ButtonEvents } from './Button';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!AirPlayButton}
+ *
+ * @group Components
  */
 export const AirPlayButton = createComponent({
     tagName: 'theoplayer-airplay-button',

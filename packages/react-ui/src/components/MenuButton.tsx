@@ -5,6 +5,8 @@ import { ButtonEvents } from './Button';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!MenuButton}
+ *
+ * @group Components
  */
 export const MenuButton = createComponent({
     tagName: 'theoplayer-menu-button',

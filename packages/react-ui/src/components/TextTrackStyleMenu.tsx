@@ -16,6 +16,8 @@ export interface TextTrackStyleMenuProps extends CommonMenuProps, PropsWithoutRe
 
 /**
  * {@inheritDoc @theoplayer/web-ui!TextTrackStyleMenu}
+ *
+ * @group Components
  */
 export const TextTrackStyleMenu = ({ heading, children, ...props }: TextTrackStyleMenuProps) => {
     return (

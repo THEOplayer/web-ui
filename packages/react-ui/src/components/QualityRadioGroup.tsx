@@ -5,6 +5,8 @@ import { RadioGroupEvents } from './RadioGroup';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!QualityRadioGroup}
+ *
+ * @group Components
  */
 export const QualityRadioGroup = createComponent({
     tagName: 'theoplayer-quality-radio-group',

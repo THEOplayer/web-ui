@@ -4,6 +4,8 @@ import * as React from 'react';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!PreviewThumbnail}
+ *
+ * @group Components
  */
 export const PreviewThumbnail = createComponent({
     tagName: 'theoplayer-preview-thumbnail',

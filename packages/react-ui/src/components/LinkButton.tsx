@@ -5,6 +5,8 @@ import { ButtonEvents } from './Button';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!LinkButton}
+ *
+ * @group Components
  */
 export const LinkButton = createComponent({
     tagName: 'theoplayer-link-button',

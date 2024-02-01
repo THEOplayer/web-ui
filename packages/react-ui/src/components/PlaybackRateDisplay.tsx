@@ -4,6 +4,8 @@ import * as React from 'react';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!PlaybackRateDisplay}
+ *
+ * @group Components
  */
 export const PlaybackRateDisplay = createComponent({
     tagName: 'theoplayer-playback-rate-display',

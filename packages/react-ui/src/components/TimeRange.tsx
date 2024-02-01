@@ -5,6 +5,8 @@ import { RangeEvents } from './Range';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!TimeRange}
+ *
+ * @group Components
  */
 export const TimeRange = createComponent({
     tagName: 'theoplayer-time-range',

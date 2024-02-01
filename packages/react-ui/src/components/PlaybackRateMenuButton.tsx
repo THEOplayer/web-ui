@@ -5,6 +5,8 @@ import { ButtonEvents } from './Button';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!PlaybackRateMenuButton}
+ *
+ * @group Components
  */
 export const PlaybackRateMenuButton = createComponent({
     tagName: 'theoplayer-playback-rate-menu-button',

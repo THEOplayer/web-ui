@@ -4,6 +4,8 @@ import * as React from 'react';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!LoadingIndicator}
+ *
+ * @group Components
  */
 export const LoadingIndicator = createComponent({
     tagName: 'theoplayer-loading-indicator',

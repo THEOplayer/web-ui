@@ -4,6 +4,8 @@ import * as React from 'react';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!ControlBar}
+ *
+ * @group Components
  */
 export const ControlBar = createComponent({
     tagName: 'theoplayer-control-bar',

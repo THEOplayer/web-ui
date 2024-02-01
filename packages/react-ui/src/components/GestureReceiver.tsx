@@ -4,6 +4,8 @@ import * as React from 'react';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!GestureReceiver}
+ *
+ * @group Components
  */
 export const GestureReceiver = createComponent({
     tagName: 'theoplayer-gesture-receiver',

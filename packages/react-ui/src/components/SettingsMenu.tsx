@@ -16,6 +16,8 @@ export interface SettingsMenuProps extends CommonMenuProps, PropsWithoutRef<WebC
 
 /**
  * {@inheritDoc @theoplayer/web-ui!SettingsMenu}
+ *
+ * @group Components
  */
 export const SettingsMenu = ({ heading, children, ...props }: SettingsMenuProps) => {
     return (

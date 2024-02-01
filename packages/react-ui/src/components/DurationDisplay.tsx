@@ -4,6 +4,8 @@ import * as React from 'react';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!DurationDisplay}
+ *
+ * @group Components
  */
 export const DurationDisplay = createComponent({
     tagName: 'theoplayer-duration-display',

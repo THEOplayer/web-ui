@@ -8,6 +8,8 @@ export const RadioGroupEvents = {
 
 /**
  * {@inheritDoc @theoplayer/web-ui!RadioGroup}
+ *
+ * @group Components
  */
 export const RadioGroup = createComponent({
     tagName: 'theoplayer-radio-group',

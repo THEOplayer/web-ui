@@ -4,6 +4,8 @@ import * as React from 'react';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!PreviewTimeDisplay}
+ *
+ * @group Components
  */
 export const PreviewTimeDisplay = createComponent({
     tagName: 'theoplayer-preview-time-display',

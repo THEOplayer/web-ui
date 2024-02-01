@@ -16,6 +16,8 @@ export interface PlaybackRateMenuProps extends CommonMenuProps, PropsWithoutRef<
 
 /**
  * {@inheritDoc @theoplayer/web-ui!PlaybackRateMenu}
+ *
+ * @group Components
  */
 export const PlaybackRateMenu = ({ heading, children, ...props }: PlaybackRateMenuProps) => {
     return (

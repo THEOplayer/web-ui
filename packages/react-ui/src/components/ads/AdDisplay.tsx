@@ -4,6 +4,8 @@ import * as React from 'react';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!AdDisplay}
+ *
+ * @group Components
  */
 export const AdDisplay = createComponent({
     tagName: 'theoplayer-ad-display',

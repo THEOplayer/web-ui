@@ -4,6 +4,8 @@ import * as React from 'react';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!ErrorDisplay}
+ *
+ * @group Components
  */
 export const ErrorDisplay = createComponent({
     tagName: 'theoplayer-error-display',

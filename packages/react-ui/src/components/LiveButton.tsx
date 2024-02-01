@@ -5,6 +5,8 @@ import { ButtonEvents } from './Button';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!LiveButton}
+ *
+ * @group Components
  */
 export const LiveButton = createComponent({
     tagName: 'theoplayer-live-button',

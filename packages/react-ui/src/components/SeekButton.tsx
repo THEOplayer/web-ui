@@ -5,6 +5,8 @@ import { ButtonEvents } from './Button';
 
 /**
  * {@inheritDoc @theoplayer/web-ui!SeekButton}
+ *
+ * @group Components
  */
 export const SeekButton = createComponent({
     tagName: 'theoplayer-seek-button',
