@@ -190,6 +190,5 @@ dist
 .pnp.*
 
 ### Project
-dist/
 docs/api/
 docs/react-api/

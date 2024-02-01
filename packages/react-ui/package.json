@@ -27,10 +27,7 @@
     "build:prod": "rollup -c --environment BUILD:production",
     "watch": "rollup -c --watch",
     "test": "npm run test:typecheck",
-    "test:format": "prettier --check .",
     "test:typecheck": "tsc --project . --noEmit",
-    "docs": "typedoc --treatWarningsAsErrors",
-    "docs:watch": "typedoc --watch",
     "version": "node ../scripts/bump-changelog.mjs CHANGELOG.md && git add CHANGELOG.md"
   },
   "keywords": [],
@@ -43,7 +40,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/THEOplayer/web-ui.git",
-    "directory": "react"
+    "directory": "packages/react-ui"
   },
   "dependencies": {
     "@lit/react": "^1.0.2",

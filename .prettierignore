@@ -1,6 +1,4 @@
 node_modules/
-dist/
 docs/_includes/
 docs/_site/
 docs/api/
-vendor/

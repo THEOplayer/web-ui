@@ -41,9 +41,9 @@ plugins:
 jekyll-copyr:
   enabled: true
   tasks:
-    - from: '../dist/.'
+    - from: '../packages/web-ui/dist/.'
       to: './_site/dist/'
-    - from: '../react/dist/.'
+    - from: '../packages/react-ui/dist/.'
       to: './_site/dist/'
 # Exclude from processing.
 # The following items will not be processed, by default.

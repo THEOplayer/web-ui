@@ -28,12 +28,8 @@
     "watch": "rollup -c --watch",
     "watch:docs": "npm run watch -- --configOutputDir ./docs/_site/dist",
     "start": "cd docs && bundle exec jekyll serve --host localhost --force_polling",
-    "format": "prettier --write .",
-    "test": "npm run test:format && npm run test:typecheck",
-    "test:format": "prettier --check .",
+    "test": "npm run test:typecheck",
     "test:typecheck": "tsc --project . --noEmit",
-    "docs": "typedoc --treatWarningsAsErrors",
-    "docs:watch": "typedoc --watch",
     "version": "npm run version:changelog && npm run version:deps && npm run version:react",
     "version:changelog": "node scripts/bump-changelog.mjs CHANGELOG.md && git add CHANGELOG.md",
     "version:deps": "cross-env-shell \"npm install $npm_package_name@$npm_package_version --workspace packages/react-ui && git add packages/react-ui/package.json\"",
@@ -46,7 +42,8 @@
   "bugs": "https://github.com/THEOplayer/web-ui/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/THEOplayer/web-ui.git"
+    "url": "git+https://github.com/THEOplayer/web-ui.git",
+    "directory": "packages/web-ui"
   },
   "peerDependencies": {
     "theoplayer": "^6"
@@ -81,9 +78,5 @@
     "not dead",
     "chrome >= 67",
     "firefox esr"
-  ],
-  "workspaces": [
-    ".",
-    "packages/react"
   ]
 }
