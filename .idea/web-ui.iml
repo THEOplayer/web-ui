@@ -10,6 +10,8 @@
       <excludeFolder url="file://$MODULE_DIR$/docs/dist" />
       <excludeFolder url="file://$MODULE_DIR$/packages/react-ui/dist" />
       <excludeFolder url="file://$MODULE_DIR$/packages/web-ui/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/react-ui/types" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/web-ui/types" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
