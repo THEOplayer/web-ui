@@ -4,7 +4,6 @@
   "entryPointStrategy": "packages",
   "name": "Open Video UI for Web",
   "out": "docs/api",
-  "readme": "none",
   "navigationLinks": {
     "GitHub": "https://github.com/THEOplayer/web-ui"
   },
