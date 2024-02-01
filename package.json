@@ -10,10 +10,7 @@
     "test:format": "prettier --check .",
     "docs": "typedoc --treatWarningsAsErrors",
     "docs:watch": "typedoc --watch",
-    "version": "npm run version:changelog && npm run version:deps && npm run version:react",
-    "version:changelog": "node scripts/bump-changelog.mjs CHANGELOG.md && git add CHANGELOG.md",
-    "version:deps": "cross-env-shell \"npm install $npm_package_name@$npm_package_version --workspace packages/react-ui && git add packages/react-ui/package.json\"",
-    "version:react": "cross-env-shell \"npm version $npm_package_version --workspace packages/react-ui --no-git-tag-version && git add packages/react-ui/package.json\""
+    "version": "cross-env-shell \"npm version $npm_package_version --workspaces --no-git-tag-version && git add packages/*/package.json\""
   },
   "keywords": [],
   "author": "THEO Technologies",

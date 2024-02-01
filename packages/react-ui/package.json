@@ -28,7 +28,9 @@
     "watch": "rollup -c --watch",
     "test": "npm run test:typecheck",
     "test:typecheck": "tsc --project . --noEmit",
-    "version": "node ../scripts/bump-changelog.mjs CHANGELOG.md && git add CHANGELOG.md"
+    "version": "npm run version:changelog && npm run version:deps",
+    "version:changelog": "node ../../scripts/bump-changelog.mjs CHANGELOG.md && git add CHANGELOG.md",
+    "version:deps": "cross-env-shell web_ui=\"@theoplayer/web-ui\" \"npm install ${web_ui}@${npm_package_version}\" && git add package.json"
   },
   "keywords": [],
   "author": "THEO Technologies",
