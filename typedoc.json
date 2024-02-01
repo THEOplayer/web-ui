@@ -2,7 +2,8 @@
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": ["packages/web-ui", "packages/react-ui"],
   "entryPointStrategy": "packages",
-  "name": "Open Video UI for Web",
+  "name": "THEOplayer Open Video UI",
+  "readme": "README.typedoc.md",
   "out": "docs/api",
   "navigationLinks": {
     "GitHub": "https://github.com/THEOplayer/web-ui"
