@@ -3,6 +3,9 @@ import { CastButton as CastButtonElement } from '@theoplayer/web-ui';
 import * as React from 'react';
 import { ButtonEvents } from './Button';
 
+/**
+ * {@inheritDoc @theoplayer/web-ui!CastButton}
+ */
 export const CastButton = createComponent({
     tagName: 'theoplayer-cast-button',
     displayName: 'CastButton',

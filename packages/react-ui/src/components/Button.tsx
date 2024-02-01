@@ -6,6 +6,9 @@ export const ButtonEvents = {
     onClick: 'click'
 } as const;
 
+/**
+ * {@inheritDoc @theoplayer/web-ui!Button}
+ */
 export const Button = createComponent({
     tagName: 'theoplayer-button',
     displayName: 'Button',

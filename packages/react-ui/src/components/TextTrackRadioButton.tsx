@@ -3,6 +3,9 @@ import { TextTrackRadioButton as TextTrackRadioButtonElement } from '@theoplayer
 import * as React from 'react';
 import { RadioButtonEvents } from './RadioButton';
 
+/**
+ * {@inheritDoc @theoplayer/web-ui!TextTrackRadioButton}
+ */
 export const TextTrackRadioButton = createComponent({
     tagName: 'theoplayer-text-track-radio-button',
     displayName: 'TextTrackRadioButton',

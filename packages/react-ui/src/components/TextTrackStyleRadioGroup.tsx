@@ -3,6 +3,9 @@ import { TextTrackStyleRadioGroup as TextTrackStyleRadioGroupElement } from '@th
 import * as React from 'react';
 import { RadioGroupEvents } from './RadioGroup';
 
+/**
+ * {@inheritDoc @theoplayer/web-ui!TextTrackStyleRadioGroup}
+ */
 export const TextTrackStyleRadioGroup = createComponent({
     tagName: 'theoplayer-text-track-style-radio-group',
     displayName: 'TextTrackStyleRadioGroup',

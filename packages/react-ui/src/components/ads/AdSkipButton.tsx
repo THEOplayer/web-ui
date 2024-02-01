@@ -3,6 +3,9 @@ import { AdSkipButton as AdSkipButtonElement } from '@theoplayer/web-ui';
 import * as React from 'react';
 import { ButtonEvents } from '../Button';
 
+/**
+ * {@inheritDoc @theoplayer/web-ui!AdSkipButton}
+ */
 export const AdSkipButton = createComponent({
     tagName: 'theoplayer-ad-skip-button',
     displayName: 'AdSkipButton',

@@ -3,6 +3,9 @@ import { PlaybackRateMenuButton as PlaybackRateMenuButtonElement } from '@theopl
 import * as React from 'react';
 import { ButtonEvents } from './Button';
 
+/**
+ * {@inheritDoc @theoplayer/web-ui!PlaybackRateMenuButton}
+ */
 export const PlaybackRateMenuButton = createComponent({
     tagName: 'theoplayer-playback-rate-menu-button',
     displayName: 'PlaybackRateMenuButton',

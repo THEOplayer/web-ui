@@ -9,6 +9,9 @@ export const RadioButtonEvents = {
     onInput: 'input'
 } as const;
 
+/**
+ * {@inheritDoc @theoplayer/web-ui!RadioButton}
+ */
 export const RadioButton = createComponent({
     tagName: 'theoplayer-radio-button',
     displayName: 'RadioButton',

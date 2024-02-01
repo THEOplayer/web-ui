@@ -14,6 +14,9 @@ const RawSettingsMenu = createComponent({
 
 export interface SettingsMenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<SettingsMenuElement>> {}
 
+/**
+ * {@inheritDoc @theoplayer/web-ui!SettingsMenu}
+ */
 export const SettingsMenu = ({ heading, children, ...props }: SettingsMenuProps) => {
     return (
         <RawSettingsMenu {...props}>

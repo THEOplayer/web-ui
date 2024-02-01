@@ -3,6 +3,9 @@ import { AdClickThroughButton as AdClickThroughButtonElement } from '@theoplayer
 import * as React from 'react';
 import { ButtonEvents } from '../Button';
 
+/**
+ * {@inheritDoc @theoplayer/web-ui!AdClickThroughButton}
+ */
 export const AdClickThroughButton = createComponent({
     tagName: 'theoplayer-ad-clickthrough-button',
     displayName: 'AdClickThroughButton',

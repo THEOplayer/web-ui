@@ -3,6 +3,9 @@ import { QualityRadioButton as QualityRadioButtonElement } from '@theoplayer/web
 import * as React from 'react';
 import { RadioButtonEvents } from './RadioButton';
 
+/**
+ * {@inheritDoc @theoplayer/web-ui!QualityRadioButton}
+ */
 export const QualityRadioButton = createComponent({
     tagName: 'theoplayer-quality-radio-button',
     displayName: 'QualityRadioButton',

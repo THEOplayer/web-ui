@@ -3,6 +3,9 @@ import { MuteButton as MuteButtonElement } from '@theoplayer/web-ui';
 import * as React from 'react';
 import { ButtonEvents } from './Button';
 
+/**
+ * {@inheritDoc @theoplayer/web-ui!MuteButton}
+ */
 export const MuteButton = createComponent({
     tagName: 'theoplayer-mute-button',
     displayName: 'MuteButton',

@@ -3,6 +3,9 @@ import { TextTrackOffRadioButton as TextTrackOffRadioButtonElement } from '@theo
 import * as React from 'react';
 import { RadioButtonEvents } from './RadioButton';
 
+/**
+ * {@inheritDoc @theoplayer/web-ui!TextTrackOffRadioButton}
+ */
 export const TextTrackOffRadioButton = createComponent({
     tagName: 'theoplayer-text-track-off-radio-button',
     displayName: 'TextTrackOffRadioButton',
