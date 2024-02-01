@@ -19,9 +19,10 @@ export interface SettingsMenuProps extends CommonMenuProps, PropsWithoutRef<WebC
  *
  * @group Components
  */
-export const SettingsMenu = ({ heading, children, ...props }: SettingsMenuProps) => {
+export const SettingsMenu = (props: SettingsMenuProps) => {
+    const { heading, children, ...otherProps } = props;
     return (
-        <RawSettingsMenu {...props}>
+        <RawSettingsMenu {...otherProps}>
             <Slotted slot="heading">{heading}</Slotted>
             {children}
         </RawSettingsMenu>
