@@ -12,6 +12,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-ad-countdown');
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak'] as const;
 
 /**
+ * `<theoplayer-ad-countdown>` - A control that displays the remaining time of the current ad break.
+ *
  * @group Components
  */
 export class AdCountdown extends StateReceiverMixin(HTMLElement, ['player']) {
