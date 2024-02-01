@@ -1,0 +1,11 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./packages/web-ui"
+    },
+    {
+      "path": "./packages/react-ui"
+    }
+  ]
+}

@@ -24,5 +24,9 @@
   "workspaces": [
     "packages/web-ui",
     "packages/react-ui"
-  ]
+  ],
+  "devDependencies": {
+    "typedoc": "^0.25.7",
+    "typescript": "^5.3.3"
+  }
 }
