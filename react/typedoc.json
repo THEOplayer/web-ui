@@ -3,9 +3,16 @@
   "extends": ["../typedoc.json"],
   "entryPoints": ["src/index.ts"],
   "out": "../docs/react-api",
+  "plugin": ["typedoc-plugin-external-resolver"],
   "readme": "none",
   "navigationLinks": {
     "GitHub": "https://github.com/THEOplayer/web-ui/tree/main/react"
+  },
+  "externalDocumentation": {
+    "@theoplayer/web-ui": {
+      "dtsPath": "~/dist/THEOplayerUI.d.ts",
+      "externalBaseURL": "/web-ui/api"
+    }
   },
   "externalSymbolLinkMappings": {
     "theoplayer": {
@@ -18,10 +25,6 @@
     },
     "theoplayer/chromeless": {
       "*": "https://docs.theoplayer.com/api-reference/web/theoplayer.md"
-    },
-    "@theoplayer/web-ui": {
-      "DefaultUI": "https://theoplayer.github.io/web-ui/api/classes/DefaultUI.html",
-      "UIContainer": "https://theoplayer.github.io/web-ui/api/classes/UIContainer.html"
     },
     "react": {
       "*": "https://react.dev/reference/react"

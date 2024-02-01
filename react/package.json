@@ -69,6 +69,7 @@
     "theoplayer": "^6.0.0",
     "tslib": "^2.6.2",
     "typedoc": "^0.25.7",
+    "typedoc-plugin-external-resolver": "^1.0.3",
     "typescript": "^5.1.6"
   },
   "browserslist": [
