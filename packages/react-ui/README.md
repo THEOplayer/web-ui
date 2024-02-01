@@ -1,7 +1,7 @@
 # THEOplayer Open Video UI for React ⚛️
 
 [![NPM version](https://img.shields.io/npm/v/%40theoplayer%2Freact-ui)](https://www.npmjs.com/package/@theoplayer/react-ui)
-[![Build status](https://img.shields.io/github/actions/workflow/status/THEOplayer/web-ui/ci.yml)](https://github.com/THEOplayer/web-ui/actions/workflows/ci.yml)
+[![Build status](https://github.com/THEOplayer/web-ui/workflows/CI/badge.svg)](https://github.com/THEOplayer/web-ui/actions/workflows/ci.yml)
 [![API docs](https://img.shields.io/badge/api%20docs-orange.svg)](https://theoplayer.github.io/web-ui/api/)
 [![GitHub issues](https://img.shields.io/github/issues/THEOplayer/web-ui)](https://github.com/THEOplayer/web-ui/issues)
 
