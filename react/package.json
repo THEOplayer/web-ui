@@ -31,7 +31,7 @@
     "test:typecheck": "tsc --project . --noEmit",
     "docs": "typedoc --treatWarningsAsErrors",
     "docs:watch": "typedoc --watch",
-    "version": "node ../scripts/bump-changelog.mjs CHANGELOG.md && git add CHANGELOG.md"
+    "version": "node ../scripts/bump-changelog.mjs react-ui CHANGELOG.md && git add CHANGELOG.md"
   },
   "keywords": [],
   "author": "THEO Technologies",

@@ -1,6 +1,11 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const changelogPath = process.argv[2];
+const projectName = process.argv[2];
+if (!projectName) {
+    console.error('Missing required argument: projectName');
+    process.exit(1);
+}
+const changelogPath = process.argv[3];
 if (!changelogPath) {
     console.error('Missing required argument: changelogPath');
     process.exit(1);
@@ -12,16 +17,37 @@ const now = new Date();
 const year = String(now.getUTCFullYear());
 const month = String(now.getUTCMonth() + 1).padStart(2, '0');
 const day = String(now.getUTCDate()).padStart(2, '0');
-const versionHeading = `## v${version} (${year}-${month}-${day})`;
 
-const unreleasedRegex = /## Unreleased/;
-const emptyChangelog = `
--   No changes
-`.trim();
 let changelog = readFileSync(changelogPath, 'utf-8');
-if (unreleasedRegex.test(changelog)) {
-    changelog = changelog.replace(unreleasedRegex, versionHeading);
+const headingStart = '\n\n## ';
+const blocks = changelog.split(headingStart);
+
+// Find "Unreleased" block, or create a new one
+let newBlockIndex = blocks.findIndex((block) => block.startsWith('Unreleased'));
+let newBlock;
+if (newBlockIndex >= 0) {
+    newBlock = blocks[newBlockIndex].trim();
 } else {
-    changelog = changelog.replace(/## v/, `${versionHeading}\n\n${emptyChangelog}\n\n## v`);
+    if (projectName === 'web-ui') {
+        newBlock = `Unreleased\n\n-   No changes`;
+    } else {
+        newBlock = `Unreleased\n`;
+    }
+    newBlockIndex = 1;
+    blocks.splice(newBlockIndex, 0, newBlock);
 }
-writeFileSync(changelogPath, changelog, 'utf-8');
+
+// Replace "Unreleased" with actual version number and release date
+newBlock = newBlock.replace(/^Unreleased/, `v${version} (${year}-${month}-${day})`);
+
+// Append "See Web UI" entry for other packages
+const seeWebUiChangelog = `
+-   🏠 See changes to [Open Video UI for Web v${version}](https://github.com/THEOplayer/web-ui/blob/v${version}/CHANGELOG.md)
+`.trim();
+if (projectName !== 'web-ui') {
+    newBlock = `${newBlock}\n${seeWebUiChangelog}`;
+}
+
+blocks[newBlockIndex] = newBlock;
+const newChangelog = blocks.join(headingStart);
+writeFileSync(changelogPath, newChangelog, 'utf-8');
