@@ -4,7 +4,6 @@ import replace from '@rollup/plugin-replace';
 import { minify, swc } from 'rollup-plugin-swc3';
 import * as path from 'node:path';
 import { readFile } from 'node:fs/promises';
-import dts from 'rollup-plugin-dts';
 
 const fileName = 'THEOplayerReactUI';
 const umdName = 'THEOplayerReactUI';
@@ -31,18 +30,7 @@ export default (cliArgs) => {
     const outputDir = cliArgs.configOutputDir || './dist';
     return defineConfig([
         ...jsConfig(outputDir, { es5: false, production, sourcemap: true }),
-        ...jsConfig(outputDir, { es5: true, production, sourcemap: false }),
-        {
-            input: './src/index.ts',
-            output: {
-                file: path.join(outputDir, `${fileName}.d.ts`),
-                format: 'es',
-                indent: false,
-                banner,
-                footer: `export as namespace ${umdName};`
-            },
-            plugins: [nodeResolve(), dts()]
-        }
+        ...jsConfig(outputDir, { es5: true, production, sourcemap: false })
     ]);
 };
 

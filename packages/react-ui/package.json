@@ -4,27 +4,29 @@
   "description": "React component library for the THEOplayer Web SDK",
   "main": "dist/THEOplayerReactUI.js",
   "module": "dist/THEOplayerReactUI.mjs",
-  "types": "dist/THEOplayerReactUI.d.ts",
+  "types": "types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/THEOplayerReactUI.d.ts",
+      "types": "./types/index.d.ts",
       "import": "./dist/THEOplayerReactUI.mjs",
       "default": "./dist/THEOplayerReactUI.js"
     },
     "./es5": {
-      "types": "./dist/THEOplayerReactUI.d.ts",
+      "types": "./types/index.d.ts",
       "import": "./dist/THEOplayerReactUI.es5.mjs",
       "default": "./dist/THEOplayerReactUI.es5.js"
     },
     "./dist/*": "./dist/*"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "types/"
   ],
   "scripts": {
     "build": "npm run build:prod",
-    "build:debug": "rollup -c",
-    "build:prod": "rollup -c --environment BUILD:production",
+    "build:debug": "rollup -c && npm run build:types",
+    "build:prod": "rollup -c --environment BUILD:production && npm run build:types",
+    "build:types": "tsc --project . --emitDeclarationOnly",
     "watch": "rollup -c --watch",
     "test": "npm run test:typecheck",
     "test:typecheck": "tsc --project . --noEmit",
@@ -63,7 +65,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup": "^3.29.3",
-    "rollup-plugin-dts": "^5.3.1",
     "rollup-plugin-swc3": "^0.8.2",
     "theoplayer": "^6.0.0",
     "tslib": "^2.6.2",

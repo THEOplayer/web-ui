@@ -8,7 +8,6 @@ import postcssMixins from 'postcss-mixins';
 import * as path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { string } from 'rollup-plugin-string';
-import dts from 'rollup-plugin-dts';
 
 const fileName = 'THEOplayerUI';
 const umdName = 'THEOplayerUI';
@@ -31,19 +30,7 @@ export default (cliArgs) => {
     const outputDir = cliArgs.configOutputDir || './dist';
     return defineConfig([
         ...jsConfig(outputDir, { es5: false, production, sourcemap: true }),
-        ...jsConfig(outputDir, { es5: true, production, sourcemap: false }),
-        {
-            input: './src/index.ts',
-            output: {
-                file: path.join(outputDir, `${fileName}.d.ts`),
-                format: 'es',
-                indent: false,
-                banner,
-                footer: `export as namespace ${umdName};`
-            },
-            external: [theoplayerModule],
-            plugins: [dts()]
-        }
+        ...jsConfig(outputDir, { es5: true, production, sourcemap: false })
     ]);
 };
 
