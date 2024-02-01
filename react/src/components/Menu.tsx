@@ -27,9 +27,10 @@ export interface MenuProps extends CommonMenuProps, PropsWithoutRef<WebComponent
 /**
  * @group Components
  */
-export const Menu = ({ heading, children, ...props }: MenuProps) => {
+export const Menu = (props: MenuProps) => {
+    const { heading, children, ...otherProps } = props;
     return (
-        <RawMenu {...props}>
+        <RawMenu {...otherProps}>
             <Slotted slot="heading">{heading}</Slotted>
             {children}
         </RawMenu>

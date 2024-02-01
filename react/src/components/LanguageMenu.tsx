@@ -17,9 +17,10 @@ export interface LanguageMenuProps extends CommonMenuProps, PropsWithoutRef<WebC
 /**
  * @group Components
  */
-export const LanguageMenu = ({ heading, children, ...props }: LanguageMenuProps) => {
+export const LanguageMenu = (props: LanguageMenuProps) => {
+    const { heading, children, ...otherProps } = props;
     return (
-        <RawLanguageMenu {...props}>
+        <RawLanguageMenu {...otherProps}>
             <Slotted slot="heading">{heading}</Slotted>
             {children}
         </RawLanguageMenu>

@@ -17,9 +17,10 @@ export interface TextTrackStyleMenuProps extends CommonMenuProps, PropsWithoutRe
 /**
  * @group Components
  */
-export const TextTrackStyleMenu = ({ heading, children, ...props }: TextTrackStyleMenuProps) => {
+export const TextTrackStyleMenu = (props: TextTrackStyleMenuProps) => {
+    const { heading, children, ...otherProps } = props;
     return (
-        <RawTextTrackStyleMenu {...props}>
+        <RawTextTrackStyleMenu {...otherProps}>
             <Slotted slot="heading">{heading}</Slotted>
             {children}
         </RawTextTrackStyleMenu>

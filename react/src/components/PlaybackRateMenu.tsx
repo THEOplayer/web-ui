@@ -17,9 +17,10 @@ export interface PlaybackRateMenuProps extends CommonMenuProps, PropsWithoutRef<
 /**
  * @group Components
  */
-export const PlaybackRateMenu = ({ heading, children, ...props }: PlaybackRateMenuProps) => {
+export const PlaybackRateMenu = (props: PlaybackRateMenuProps) => {
+    const { heading, children, ...otherProps } = props;
     return (
-        <RawPlaybackRateMenu {...props}>
+        <RawPlaybackRateMenu {...otherProps}>
             <Slotted slot="heading">{heading}</Slotted>
             {children}
         </RawPlaybackRateMenu>

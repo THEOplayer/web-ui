@@ -84,10 +84,11 @@ export interface DefaultUIProps extends PropsWithoutRef<Omit<WebComponentProps<D
  *
  * @group Components
  */
-export const DefaultUI = ({ title, topControlBar, bottomControlBar, menu, onReady, ...props }: DefaultUIProps) => {
+export const DefaultUI = (props: DefaultUIProps) => {
+    const { title, topControlBar, bottomControlBar, menu, onReady, ...otherProps } = props;
     const { player, setUi, onReadyHandler } = usePlayer(onReady);
     return (
-        <RawDefaultUI {...props} ref={setUi} onReady={onReadyHandler}>
+        <RawDefaultUI {...otherProps} ref={setUi} onReady={onReadyHandler}>
             <PlayerContext.Provider value={player}>
                 <Slotted slot="title">{title}</Slotted>
                 <Slotted slot="top-control-bar">{topControlBar}</Slotted>
