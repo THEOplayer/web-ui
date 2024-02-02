@@ -1,4 +1,7 @@
 :host {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
     background: var(--theoplayer-ad-skip-background, rgba(0, 0, 0, 0.7));
     color: var(--theoplayer-ad-skip-color, #fff);
     border: var(--theoplayer-ad-skip-border, 1px solid rgba(255, 255, 255, 0.5));
@@ -16,9 +19,22 @@
     border: var(--theoplayer-ad-skip-countdown-border, 1px solid transparent);
 }
 
+[part='countdown'],
 [part='skip'] {
     display: flex;
     align-items: center;
+    /*
+     * Overlay countdown text and skip button, so they'll both contribute to the size of the parent grid.
+     * This avoids a layout shift when the countdown ends and switches to the skip button.
+     * https://dev.to/nhuynh1/overlaying-elements-with-css-grid-is-so-much-cleaner-than-with-position-4hcm
+     */
+    grid-row: 1;
+    grid-column: 1;
+}
+
+[part='skip'] {
+    font-size: var(--theoplayer-ad-skip-font-size, var(--theoplayer-text-font-size, 14px));
+    line-height: var(--theoplayer-ad-skip-line-height, var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px)));
 }
 
 [part='skip-icon'] {

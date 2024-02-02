@@ -115,15 +115,17 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
             // Show countdown.
             const timeToSkip = Math.ceil(skipOffset - currentTime);
             setTextContent(this._countdownEl, `Skip in ${timeToSkip}s`);
-            this._countdownEl.style.display = '';
-            this._skipEl.style.display = 'none';
+            this._countdownEl.style.visibility = 'visible';
+            this._skipEl.style.visibility = 'hidden';
+            this._skipEl.style.pointerEvents = 'none';
             this.style.display = '';
             this.setAttribute(Attribute.DISABLED, '');
             this.setAttribute(Attribute.ARIA_LIVE, 'off');
         } else {
             // Show skip button.
-            this._countdownEl.style.display = 'none';
-            this._skipEl.style.display = '';
+            this._countdownEl.style.visibility = 'hidden';
+            this._skipEl.style.visibility = 'visible';
+            this._skipEl.style.pointerEvents = '';
             this.style.display = '';
             this.removeAttribute(Attribute.DISABLED);
             this.setAttribute(Attribute.ARIA_LIVE, 'polite');

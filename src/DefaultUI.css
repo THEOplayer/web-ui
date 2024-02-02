@@ -138,14 +138,16 @@ theoplayer-ad-countdown {
 
 theoplayer-ad-skip-button {
     border-right: 0 !important;
-}
-
-theoplayer-ad-skip-button:not([disabled]) {
+    /**
+     * Align skip countdown to the bottom right.
+     */
+    align-items: end;
+    justify-items: end;
     /*
      * Make "Skip Ads" text bigger.
      */
-    font-size: var(--theoplayer-ad-skip-font-size, calc(1.25 * var(--theoplayer-text-font-size, 14px)));
-    line-height: var(--theoplayer-ad-skip-line-height, calc(1.25 * var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px))));
+    --theoplayer-ad-skip-font-size: calc(1.25 * var(--theoplayer-text-font-size, 14px));
+    --theoplayer-ad-skip-line-height: calc(1.25 * var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px)));
     --theoplayer-ad-skip-icon-width: 24px;
     --theoplayer-ad-skip-icon-height: 24px;
 }
@@ -202,6 +204,13 @@ theoplayer-ui:not([has-first-play]) [part='centered-chrome'] :not(theoplayer-pla
  * Hide center play button on desktop after first play
  */
 :host(:not([mobile])) theoplayer-ui[has-first-play] [part='centered-chrome'] theoplayer-play-button {
+    display: none !important;
+}
+
+/*
+ * Hide ad clickthrough button on desktop, unless we're casting
+ */
+theoplayer-ui:not([mobile]):not([casting]) theoplayer-ad-clickthrough-button {
     display: none !important;
 }
 
