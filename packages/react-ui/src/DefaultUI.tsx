@@ -60,7 +60,7 @@ export interface DefaultUIProps extends PropsWithoutRef<Omit<WebComponentProps<D
  *
  * ## Usage
  *
- * 1. Create a <DefaultUI> component, passing a valid player configuration as its `configuration` property
+ * 1. Create a `<DefaultUI>` component, passing a valid player configuration as its `configuration` property
  *    and a valid stream source as its `source` property.
  *    ```jsx
  *    <DefaultUI
