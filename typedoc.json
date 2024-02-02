@@ -3,6 +3,7 @@
   "entryPoints": ["src/index.ts"],
   "out": "docs/api",
   "readme": "none",
+  "plugin": ["typedoc-plugin-mdn-links"],
   "navigationLinks": {
     "GitHub": "https://github.com/THEOplayer/web-ui"
   },
