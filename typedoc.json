@@ -9,6 +9,7 @@
     "GitHub": "https://github.com/THEOplayer/web-ui"
   },
   "githubPages": true,
+  "plugin": ["typedoc-plugin-mdn-links"],
   "externalSymbolLinkMappings": {
     "theoplayer": {
       "ChromelessPlayer": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md",
