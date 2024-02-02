@@ -14,7 +14,7 @@
 
 -   🚀 Introducing [Open Video UI for React](https://www.npmjs.com/package/@theoplayer/react-ui). ([#48](https://github.com/THEOplayer/web-ui/pull/48))
     -   Idiomatic React components make the Open Video UI feel right at home in your existing React web app.
--   🚀 Added support for advertisements while casting to Chromecast. This requires THEOplayer version 6.8.0 or higher.
+-   🚀 Added support for advertisements while casting to Chromecast. This requires THEOplayer version 6.8.0 or higher. ([#47](https://github.com/THEOplayer/web-ui/pull/47))
 -   🚀 Added `theoplayerready` event to `<theoplayer-default-ui>` and `<theoplayer-ui>`, which is fired once the backing THEOplayer instance is created. ([#48](https://github.com/THEOplayer/web-ui/pull/48)).
 
 ## v1.5.0 (2023-11-27)
