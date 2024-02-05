@@ -7,6 +7,8 @@ export const ButtonEvents = {
 } as const;
 
 /**
+ * See {@link @theoplayer/web-ui!Button | Button in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const Button = createComponent({

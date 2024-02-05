@@ -4,6 +4,8 @@ import * as React from 'react';
 import { RangeEvents } from './Range';
 
 /**
+ * See {@link @theoplayer/web-ui!TimeRange | TimeRange in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const TimeRange = createComponent({

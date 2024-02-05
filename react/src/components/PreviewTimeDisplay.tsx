@@ -3,6 +3,8 @@ import { PreviewTimeDisplay as PreviewTimeDisplayElement } from '@theoplayer/web
 import * as React from 'react';
 
 /**
+ * See {@link @theoplayer/web-ui!PreviewTimeDisplay | PreviewTimeDisplay in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const PreviewTimeDisplay = createComponent({

@@ -3,6 +3,8 @@ import { PlaybackRateDisplay as PlaybackRateDisplayElement } from '@theoplayer/w
 import * as React from 'react';
 
 /**
+ * See {@link @theoplayer/web-ui!PlaybackRateDisplay | PlaybackRateDisplay in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const PlaybackRateDisplay = createComponent({

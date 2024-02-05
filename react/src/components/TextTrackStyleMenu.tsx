@@ -15,6 +15,8 @@ const RawTextTrackStyleMenu = createComponent({
 export interface TextTrackStyleMenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<TextTrackStyleMenuElement>> {}
 
 /**
+ * See {@link @theoplayer/web-ui!TextTrackStyleMenu | TextTrackStyleMenu in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const TextTrackStyleMenu = (props: TextTrackStyleMenuProps) => {

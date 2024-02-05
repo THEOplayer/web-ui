@@ -4,6 +4,8 @@ import * as React from 'react';
 import { RadioButtonEvents } from './RadioButton';
 
 /**
+ * See {@link @theoplayer/web-ui!MediaTrackRadioButton | MediaTrackRadioButton in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const MediaTrackRadioButton = createComponent({

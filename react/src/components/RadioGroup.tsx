@@ -7,6 +7,8 @@ export const RadioGroupEvents = {
 } as const;
 
 /**
+ * See {@link @theoplayer/web-ui!RadioGroup | RadioGroup in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const RadioGroup = createComponent({

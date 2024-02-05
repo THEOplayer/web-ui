@@ -4,6 +4,8 @@ import * as React from 'react';
 import { ButtonEvents } from './Button';
 
 /**
+ * See {@link @theoplayer/web-ui!PlaybackRateMenuButton | PlaybackRateMenuButton in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const PlaybackRateMenuButton = createComponent({

@@ -4,6 +4,8 @@ import * as React from 'react';
 import { RangeEvents } from './Range';
 
 /**
+ * See {@link @theoplayer/web-ui!VolumeRange | VolumeRange in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const VolumeRange = createComponent({

@@ -25,6 +25,8 @@ export interface CommonMenuProps {
 export interface MenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<MenuElement>> {}
 
 /**
+ * See {@link @theoplayer/web-ui!Menu | Menu in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const Menu = (props: MenuProps) => {

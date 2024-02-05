@@ -15,6 +15,8 @@ const RawLanguageMenu = createComponent({
 export interface LanguageMenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<LanguageMenuElement>> {}
 
 /**
+ * See {@link @theoplayer/web-ui!LanguageMenu | LanguageMenu in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const LanguageMenu = (props: LanguageMenuProps) => {

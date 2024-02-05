@@ -3,6 +3,8 @@ import { ChromecastDisplay as ChromecastDisplayElement } from '@theoplayer/web-u
 import * as React from 'react';
 
 /**
+ * See {@link @theoplayer/web-ui!ChromecastDisplay | ChromecastDisplay in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const ChromecastDisplay = createComponent({

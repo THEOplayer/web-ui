@@ -15,6 +15,8 @@ const RawPlaybackRateMenu = createComponent({
 export interface PlaybackRateMenuProps extends CommonMenuProps, PropsWithoutRef<WebComponentProps<PlaybackRateMenuElement>> {}
 
 /**
+ * See {@link @theoplayer/web-ui!PlaybackRateMenu | PlaybackRateMenu in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const PlaybackRateMenu = (props: PlaybackRateMenuProps) => {

@@ -82,6 +82,8 @@ export interface DefaultUIProps extends PropsWithoutRef<Omit<WebComponentProps<D
  * and {@link DefaultUIProps.bottomControlBar} slots.
  * For more extensive customizations, we recommend defining your own custom UI using a {@link UIContainer}.
  *
+ * See {@link @theoplayer/web-ui!DefaultUI | DefaultUI in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const DefaultUI = (props: DefaultUIProps) => {

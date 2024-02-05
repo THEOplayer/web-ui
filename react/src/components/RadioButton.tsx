@@ -10,6 +10,8 @@ export const RadioButtonEvents = {
 } as const;
 
 /**
+ * See {@link @theoplayer/web-ui!RadioButton | RadioButton in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const RadioButton = createComponent({

@@ -4,6 +4,8 @@ import * as React from 'react';
 import { ButtonEvents } from './Button';
 
 /**
+ * See {@link @theoplayer/web-ui!LinkButton | LinkButton in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const LinkButton = createComponent({

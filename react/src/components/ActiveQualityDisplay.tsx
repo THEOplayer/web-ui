@@ -3,6 +3,8 @@ import { ActiveQualityDisplay as ActiveQualityDisplayElement } from '@theoplayer
 import * as React from 'react';
 
 /**
+ * See {@link @theoplayer/web-ui!ActiveQualityDisplay | ActiveQualityDisplay in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const ActiveQualityDisplay = createComponent({

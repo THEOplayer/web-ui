@@ -4,6 +4,8 @@ import * as React from 'react';
 import { RadioGroupEvents } from './RadioGroup';
 
 /**
+ * See {@link @theoplayer/web-ui!PlaybackRateRadioGroup | PlaybackRateRadioGroup in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const PlaybackRateRadioGroup = createComponent({

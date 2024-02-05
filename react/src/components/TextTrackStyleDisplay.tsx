@@ -3,6 +3,8 @@ import { TextTrackStyleDisplay as TextTrackStyleDisplayElement } from '@theoplay
 import * as React from 'react';
 
 /**
+ * See {@link @theoplayer/web-ui!TextTrackStyleDisplay | TextTrackStyleDisplay in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const TextTrackStyleDisplay = createComponent({

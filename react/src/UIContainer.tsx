@@ -123,6 +123,8 @@ export interface UIContainerProps extends PropsWithoutRef<WebComponentProps<UICo
  * one of the `<UIContainer>` slots. If you're looking for a simple out-of-the-box player experience instead,
  * see {@link DefaultUI}.
  *
+ * See {@link @theoplayer/web-ui!UIContainer | UIContainer in @theoplayer/web-ui}.
+ *
  * @group Components
  */
 export const UIContainer = (props: UIContainerProps) => {
