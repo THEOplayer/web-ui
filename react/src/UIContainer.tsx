@@ -74,7 +74,7 @@ export interface UIContainerProps extends PropsWithoutRef<WebComponentProps<UICo
  * The container component for a THEOplayer UI.
  *
  * This component provides a basic layout structure for a general player UI, and handles the creation and management
- * of a {@link ChromelessPlayer | THEOplayer player instance} for this UI.
+ * of a {@link theoplayer!ChromelessPlayer | THEOplayer player instance} for this UI.
  *
  * ## Usage
  *
