@@ -19,7 +19,9 @@
     "./dist/*": "./dist/*"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "CHANGELOG.md",
+    "LICENSE.md"
   ],
   "scripts": {
     "build": "npm run build:prod",
