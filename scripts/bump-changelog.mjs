@@ -49,5 +49,5 @@ if (projectName !== 'web-ui') {
 }
 
 blocks[newBlockIndex] = newBlock;
-const newChangelog = blocks.join(headingStart);
+const newChangelog = blocks.join(headingStart).trimEnd() + '\n';
 writeFileSync(changelogPath, newChangelog, 'utf-8');
