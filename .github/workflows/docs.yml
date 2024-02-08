@@ -38,8 +38,8 @@ jobs:
           cache: 'npm'
       - run: npm ci --workspaces
       - run: npm run build --workspaces
-      - run: npm run docs
-      - run: cp -r dist/ docs/
+      - run: npm run docs --workspaces
+      - run: cp -r dist/ react/dist/ docs/
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
