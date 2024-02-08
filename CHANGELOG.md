@@ -10,7 +10,7 @@
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.6.0 (2024-02-08)
 
 -   🚀 Introducing [Open Video UI for React](https://www.npmjs.com/package/@theoplayer/react-ui). ([#48](https://github.com/THEOplayer/web-ui/pull/48))
     -   Idiomatic React components make the Open Video UI feel right at home in your existing React web app.
