@@ -128,3 +128,9 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'str
 }
 
 customElements.define('theoplayer-time-display', TimeDisplay);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-time-display': TimeDisplay;
+    }
+}

@@ -83,3 +83,9 @@ function getTrackLabel(track: TextTrack): string {
 }
 
 customElements.define('theoplayer-text-track-radio-button', TextTrackRadioButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-text-track-radio-button': TextTrackRadioButton;
+    }
+}

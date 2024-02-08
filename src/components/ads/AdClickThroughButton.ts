@@ -13,6 +13,8 @@ shadyCss.prepareTemplate(template, 'theoplayer-ad-clickthrough-button');
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
 /**
+ * `<theoplayer-ad-clickthrough-button>` - A button to open the advertisement's click-through webpage.
+ *
  * @group Components
  */
 export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['player']) {
@@ -118,3 +120,9 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
 }
 
 customElements.define('theoplayer-ad-clickthrough-button', AdClickThroughButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-ad-clickthrough-button': AdClickThroughButton;
+    }
+}

@@ -23,3 +23,9 @@ export class ControlBar extends HTMLElement {
 }
 
 customElements.define('theoplayer-control-bar', ControlBar);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-control-bar': ControlBar;
+    }
+}

@@ -43,3 +43,9 @@ export class PlaybackRateDisplay extends StateReceiverMixin(HTMLElement, ['playb
 }
 
 customElements.define('theoplayer-playback-rate-display', PlaybackRateDisplay);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-playback-rate-display': PlaybackRateDisplay;
+    }
+}

@@ -111,3 +111,9 @@ export class QualityRadioButton extends RadioButton {
 }
 
 customElements.define('theoplayer-quality-radio-button', QualityRadioButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-quality-radio-button': QualityRadioButton;
+    }
+}

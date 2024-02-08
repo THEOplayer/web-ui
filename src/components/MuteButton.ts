@@ -109,3 +109,9 @@ export class MuteButton extends StateReceiverMixin(Button, ['player']) {
 }
 
 customElements.define('theoplayer-mute-button', MuteButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-mute-button': MuteButton;
+    }
+}

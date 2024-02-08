@@ -1,0 +1,245 @@
+---
+layout: example-react
+title: React
+permalink: /examples/react
+---
+
+<style>
+    theoplayer-default-ui,
+    theoplayer-ui {
+        font-family: 'Noto Sans', sans-serif;
+        width: 100%;
+    }
+
+    .my-title,
+    .my-time-display {
+        color: white;
+        padding: 10px;
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    .my-menu-table {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        grid-template-rows: auto auto;
+    }
+
+    .my-menu-table > * {
+        align-self: center;
+        font-size: 14px;
+        line-height: 24px;
+        padding: 10px;
+    }
+
+    .my-menu-table > span {
+        display: block;
+    }
+</style>
+
+<div id="app"></div>
+
+<script type="text/babel" data-type="module">
+    import * as React from 'react';
+    import { useContext, useEffect, useState } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import * as THEOplayerReactUI from '@theoplayer/react-ui';
+
+    const configuration = {
+        libraryLocation: 'https://cdn.theoplayer.com/dash/theoplayer/',
+        license: '{{ site.theoplayer_license }}',
+        allowNativeFullscreen: true
+    };
+
+    const sources = {
+        hls: {
+            sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
+            metadata: {
+                title: "Elephant's Dream"
+            },
+            textTracks: [
+                {
+                    default: true,
+                    src: 'https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt',
+                    label: 'thumbnails',
+                    kind: 'metadata'
+                }
+            ]
+        },
+        dash: {
+            sources: {
+                src: 'https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd',
+                type: 'application/dash+xml'
+            },
+            metadata: {
+                title: 'Big Buck Bunny'
+            }
+        }
+    };
+    const firstSourceName = Object.keys(sources)[0];
+
+    // A custom React hook using THEOplayer.
+    // This hook returns the player's current time, automatically updating whenever it changes.
+    const useCurrentTime = () => {
+        // Retrieve the THEOplayer instance.
+        // This will become available as soon as this component is mounted
+        // inside a THEOplayer <DefauLtUI> <UIContainer>.
+        const player = useContext(THEOplayerReactUI.PlayerContext);
+        // Keep track of the player's current time.
+        const [time, setTime] = useState(0);
+        useEffect(() => {
+            const onTimeChange = () => {
+                setTime(player.currentTime);
+            };
+            player?.addEventListener(['timeupdate', 'seeking'], onTimeChange);
+            return () => player?.removeEventListener(['timeupdate', 'seeking'], onTimeChange);
+        }, [player]);
+        return time;
+    };
+
+    // Returns whether the player has (previously) started playback for this stream.
+    // Can be used to show/hide certain initial controls, such as a poster image or a centered play button.
+    const useFirstPlay = () => {
+        const player = useContext(THEOplayerReactUI.PlayerContext);
+        const [firstPlay, setFirstPlay] = useState(false);
+        useEffect(() => {
+            const onPlay = () => {
+                setFirstPlay(true);
+            };
+            const onSourceChange = () => {
+                setFirstPlay(!player.paused);
+            };
+            player?.addEventListener('play', onPlay);
+            player?.addEventListener('sourcechange', onSourceChange);
+            return () => {
+                player?.removeEventListener('play', onPlay);
+                player?.removeEventListener('sourcechange', onSourceChange);
+            };
+        }, [player]);
+        return firstPlay;
+    };
+
+    const ShowOnFirstPlay = ({ children }) => {
+        const firstPlay = useFirstPlay();
+        return firstPlay ? children : null;
+    };
+
+    const HideOnFirstPlay = ({ children }) => {
+        const firstPlay = useFirstPlay();
+        return firstPlay ? null : children;
+    };
+
+    // A custom React component using THEOplayer.
+    const MyTimeDisplay = () => {
+        const time = useCurrentTime();
+        return <span className="my-time-display">{time}</span>;
+    };
+
+    const Spacer = () => {
+        const styles = { flexGrow: 1 };
+        return <span style={styles}></span>;
+    };
+
+    // A custom player UI.
+    const MyCustomUI = ({ configuration, source, title }) => {
+        return (
+            <THEOplayerReactUI.UIContainer
+                configuration={configuration}
+                source={source}
+                onReady={(player) => {
+                    console.log('THEOplayer is ready!', player);
+                }}
+                topChrome={
+                    <ShowOnFirstPlay>
+                        <THEOplayerReactUI.ControlBar>
+                            <span className="my-title">{title}</span>
+                        </THEOplayerReactUI.ControlBar>
+                    </ShowOnFirstPlay>
+                }
+                centeredChrome={
+                    <HideOnFirstPlay>
+                        <THEOplayerReactUI.PlayButton />
+                    </HideOnFirstPlay>
+                }
+                centeredLoading={
+                    <ShowOnFirstPlay>
+                        <THEOplayerReactUI.LoadingIndicator />
+                    </ShowOnFirstPlay>
+                }
+                bottomChrome={
+                    <ShowOnFirstPlay>
+                        <THEOplayerReactUI.ControlBar>
+                            <THEOplayerReactUI.TimeRange />
+                        </THEOplayerReactUI.ControlBar>
+                        <THEOplayerReactUI.ControlBar>
+                            <THEOplayerReactUI.PlayButton />
+                            <THEOplayerReactUI.MuteButton />
+                            <THEOplayerReactUI.VolumeRange />
+                            <MyTimeDisplay />
+                            <Spacer />
+                            <THEOplayerReactUI.LanguageMenuButton menu="language-menu" />
+                            <THEOplayerReactUI.SettingsMenuButton menu="settings-menu" />
+                            <THEOplayerReactUI.FullscreenButton />
+                        </THEOplayerReactUI.ControlBar>
+                    </ShowOnFirstPlay>
+                }
+                menu={
+                    <>
+                        <THEOplayerReactUI.LanguageMenu id="language-menu" />
+                        <THEOplayerReactUI.MenuGroup id="settings-menu">
+                            <THEOplayerReactUI.Menu heading="My custom settings">
+                                <div className="my-menu-table">
+                                    <span>Quality</span>
+                                    <THEOplayerReactUI.MenuButton menu="quality-menu">
+                                        <THEOplayerReactUI.ActiveQualityDisplay />
+                                    </THEOplayerReactUI.MenuButton>
+                                    <span>Playback speed</span>
+                                    <THEOplayerReactUI.MenuButton menu="playback-rate-menu">
+                                        <THEOplayerReactUI.PlaybackRateDisplay />
+                                    </THEOplayerReactUI.MenuButton>
+                                </div>
+                            </THEOplayerReactUI.Menu>
+                            <THEOplayerReactUI.Menu id="quality-menu" closeOnInput hidden heading="Quality">
+                                <THEOplayerReactUI.QualityRadioGroup />
+                            </THEOplayerReactUI.Menu>
+                            <THEOplayerReactUI.PlaybackRateMenu id="playback-rate-menu" closeOnInput hidden heading="Playback speed" />
+                        </THEOplayerReactUI.MenuGroup>
+                    </>
+                }
+                error={<THEOplayerReactUI.ErrorDisplay />}
+            />
+        );
+    };
+
+    const App = () => {
+        const [sourceName, setSourceName] = useState(firstSourceName);
+        const onSourceChange = (e) => {
+            setSourceName(e.target.value);
+        };
+        const source = sources[sourceName];
+        const title = source.metadata.title;
+        return (
+            <>
+                <p>
+                    <label>
+                        Source:&nbsp;
+                        <select value={sourceName} onChange={onSourceChange}>
+                            {Object.entries(sources).map(([key, value]) => (
+                                <option key={key} value={key}>
+                                    {value.metadata.title}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                </p>
+                <h2>Default UI</h2>
+                <THEOplayerReactUI.DefaultUI configuration={configuration} source={source} title={<span>{title}</span>} />
+                <h2>Custom UI</h2>
+                <MyCustomUI configuration={configuration} source={source} title={title} />
+            </>
+        );
+    };
+
+    const root = createRoot(document.getElementById('app'));
+    root.render(<App />);
+</script>

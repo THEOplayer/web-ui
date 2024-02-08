@@ -1,7 +1,7 @@
 import { defineConfig } from 'rollup';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import { minify, swc } from 'rollup-plugin-swc3';
-import { minifyHTML } from './build/minify-html.mjs';
+import { minifyHTML } from './scripts/minify-html.mjs';
 import postcss from 'rollup-plugin-postcss';
 import postcssPresetEnv from 'postcss-preset-env';
 import postcssMixins from 'postcss-mixins';
@@ -149,18 +149,15 @@ function jsPlugins({ es5 = false, module = false, production = false, sourcemap 
                 externalHelpers: true
             }
         }),
-        ...(production
-            ? [
-                  minify({
-                      sourceMap: sourcemap,
-                      mangle: {
-                          toplevel: true
-                      },
-                      toplevel: true,
-                      module,
-                      ecma: es5 ? 5 : 2017
-                  })
-              ]
-            : [])
-    ];
+        production &&
+            minify({
+                sourceMap: sourcemap,
+                mangle: {
+                    toplevel: true
+                },
+                toplevel: true,
+                module,
+                ecma: es5 ? 5 : 2017
+            })
+    ].filter(Boolean);
 }

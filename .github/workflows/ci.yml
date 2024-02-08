@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18]
+        node-version: [20]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
       - name: Checkout
@@ -24,7 +24,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - name: npm install and test
-        run: |
-          npm ci
-          npm test
+      - run: npm ci --workspaces
+      - run: npm run build --workspaces
+      - run: npm test --workspaces

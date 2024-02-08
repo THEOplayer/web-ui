@@ -22,6 +22,9 @@ shadyCss.prepareTemplate(template, 'theoplayer-ad-skip-button');
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
 /**
+ * `<theoplayer-ad-skip-button>` - A button that skips the current advertisement (if skippable).
+ * If the ad cannot be skipped yet, it shows the remaining time until it can be skipped.
+ *
  * @group Components
  */
 export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
@@ -134,3 +137,9 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
 }
 
 customElements.define('theoplayer-ad-skip-button', AdSkipButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-ad-skip-button': AdSkipButton;
+    }
+}

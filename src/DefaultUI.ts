@@ -10,7 +10,9 @@ import type { DeviceType } from './util/DeviceType';
 import type { StreamType } from './util/StreamType';
 import type { TimeRange } from './components/TimeRange';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
+import { READY_EVENT } from './events/ReadyEvent';
 import { toggleAttribute } from './util/CommonUtils';
+import { createCustomEvent } from './util/EventUtils';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
@@ -56,12 +58,20 @@ shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
  * @attribute `dvr-threshold` - The minimum length (in seconds) of a livestream's sliding window for the stream to be DVR
  *   and its stream type to be set to "dvr".
  *
+ * @slot `title` - A slot for the stream's title in the top control bar.
  * @slot `top-control-bar` - A slot for extra UI controls in the top control bar.
  * @slot `bottom-control-bar` - A slot for extra UI controls in the bottom control bar.
  * @slot `menu` - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
  * @group Components
  */
 export class DefaultUI extends HTMLElement {
+    /**
+     * Fired when the backing player is created, and the {@link DefaultUI.player} property is set.
+     *
+     * @group Events
+     */
+    static READY_EVENT: typeof READY_EVENT = READY_EVENT;
+
     static get observedAttributes() {
         return [
             Attribute.CONFIGURATION,
@@ -96,6 +106,7 @@ export class DefaultUI extends HTMLElement {
         shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._ui = shadowRoot.querySelector('theoplayer-ui')!;
+        this._ui.addEventListener(READY_EVENT, this._dispatchReadyEvent);
         this._ui.addEventListener(STREAM_TYPE_CHANGE_EVENT, this._updateStreamType);
         this.setConfiguration_(configuration);
 
@@ -106,6 +117,7 @@ export class DefaultUI extends HTMLElement {
 
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
+        this._upgradeProperty('fluid');
         this._upgradeProperty('muted');
         this._upgradeProperty('autoplay');
         this._upgradeProperty('streamType');
@@ -166,6 +178,17 @@ export class DefaultUI extends HTMLElement {
     set source(value: SourceDescription | undefined) {
         this.removeAttribute(Attribute.SOURCE);
         this._ui.source = value;
+    }
+
+    /**
+     * Whether to automatically adjusts the player's height to fit the video's aspect ratio.
+     */
+    get fluid(): boolean {
+        return this._ui.fluid;
+    }
+
+    set fluid(value: boolean) {
+        this._ui.fluid = value;
     }
 
     /**
@@ -263,7 +286,7 @@ export class DefaultUI extends HTMLElement {
         } else if (attrName === Attribute.AUTOPLAY) {
             this.autoplay = hasValue;
         } else if (attrName === Attribute.FLUID) {
-            toggleAttribute(this._ui, Attribute.FLUID, hasValue);
+            this.fluid = hasValue;
         } else if (attrName === Attribute.DEVICE_TYPE) {
             toggleAttribute(this, Attribute.MOBILE, newValue === 'mobile');
             toggleAttribute(this, Attribute.TV, newValue === 'tv');
@@ -286,9 +309,19 @@ export class DefaultUI extends HTMLElement {
         toggleAttribute(this._timeRange, Attribute.HIDDEN, this.streamType === 'live');
     };
 
+    private readonly _dispatchReadyEvent = () => {
+        this.dispatchEvent(createCustomEvent(READY_EVENT));
+    };
+
     private readonly _onTitleSlotChange = () => {
         toggleAttribute(this, Attribute.HAS_TITLE, this._titleSlot.assignedNodes().length > 0);
     };
 }
 
 customElements.define('theoplayer-default-ui', DefaultUI);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-default-ui': DefaultUI;
+    }
+}

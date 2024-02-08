@@ -35,6 +35,7 @@ import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
 import type { DeviceType } from './util/DeviceType';
 import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
 import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
+import { READY_EVENT } from './events/ReadyEvent';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -110,6 +111,13 @@ const DEFAULT_DVR_THRESHOLD = 60;
  * @group Components
  */
 export class UIContainer extends HTMLElement {
+    /**
+     * Fired when the backing player is created, and the {@link UIContainer.player} property is set.
+     *
+     * @group Events
+     */
+    static READY_EVENT: typeof READY_EVENT = READY_EVENT;
+
     static get observedAttributes() {
         return [
             Attribute.CONFIGURATION,
@@ -193,6 +201,7 @@ export class UIContainer extends HTMLElement {
 
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
+        this._upgradeProperty('fluid');
         this._upgradeProperty('muted');
         this._upgradeProperty('autoplay');
         this._upgradeProperty('userIdleTimeout');
@@ -255,6 +264,17 @@ export class UIContainer extends HTMLElement {
         } else {
             this._source = value;
         }
+    }
+
+    /**
+     * Whether to automatically adjusts the player's height to fit the video's aspect ratio.
+     */
+    get fluid(): boolean {
+        return this.hasAttribute(Attribute.FLUID);
+    }
+
+    set fluid(value: boolean) {
+        toggleAttribute(this, Attribute.FLUID, value);
     }
 
     /**
@@ -436,6 +456,8 @@ export class UIContainer extends HTMLElement {
         this._player.cast?.addEventListener('castingchange', this._updateCasting);
         this._player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updatePlayingAd);
         this._player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
+
+        this.dispatchEvent(createCustomEvent(READY_EVENT));
     }
 
     disconnectedCallback(): void {
@@ -1039,6 +1061,12 @@ export class UIContainer extends HTMLElement {
 }
 
 customElements.define('theoplayer-ui', UIContainer);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-ui': UIContainer;
+    }
+}
 
 function getVisibleRect(slot: HTMLSlotElement): Rectangle | undefined {
     let result: Rectangle | undefined;

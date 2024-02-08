@@ -74,3 +74,9 @@ function disableSubtitleTracks(trackList: TextTracksList): void {
 }
 
 customElements.define('theoplayer-text-track-off-radio-button', TextTrackOffRadioButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-text-track-off-radio-button': TextTrackOffRadioButton;
+    }
+}

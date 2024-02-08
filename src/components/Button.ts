@@ -125,3 +125,9 @@ export class Button extends HTMLElement {
 }
 
 customElements.define('theoplayer-button', Button);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-button': Button;
+    }
+}

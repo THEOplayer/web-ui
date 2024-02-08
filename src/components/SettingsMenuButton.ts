@@ -29,3 +29,9 @@ export class SettingsMenuButton extends MenuButton {
 }
 
 customElements.define('theoplayer-settings-menu-button', SettingsMenuButton);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-settings-menu-button': SettingsMenuButton;
+    }
+}

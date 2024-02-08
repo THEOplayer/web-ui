@@ -31,7 +31,7 @@ export class CastButton extends Button {
     }
 
     /**
-     * The cast API for which this cast button.
+     * The cast API for this cast button.
      */
     get castApi(): VendorCast | undefined {
         return this._castApi;

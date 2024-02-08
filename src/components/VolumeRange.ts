@@ -66,3 +66,9 @@ export class VolumeRange extends StateReceiverMixin(Range, ['player', 'deviceTyp
 }
 
 customElements.define('theoplayer-volume-range', VolumeRange);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theoplayer-volume-range': VolumeRange;
+    }
+}
