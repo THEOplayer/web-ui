@@ -32,7 +32,7 @@
 
 -   💥 **Breaking Change**: This project now requires THEOplayer version 6.0.0 or higher.
 -   🚀 Open Video UI now imports THEOplayer as a JavaScript module using `import from 'theoplayer/chromeless'`.
-    See the [README](./README.md#installation) for updated installation instructions.
+    See the [README](https://github.com/THEOplayer/web-ui/blob/v1.4.0/README.md#installation) for updated installation instructions.
 -   🐛 When the player's source is empty, the UI will no longer attempt to play when clicked. ([#37](https://github.com/THEOplayer/web-ui/pull/37))
 
 ## v1.3.0 (2023-05-16)
@@ -51,7 +51,7 @@
 
 ## v1.1.0 (2023-04-12)
 
--   💥 **Breaking Change**: This project now targets modern browsers, so `dist/THEOplayerUI.js` and `dist/THEOplayerUI.mjs` now use ES2017 syntax (such as `class` and `async`/`await`). See "Legacy browser support" in the [README](./README.md) for more information about targeting older browsers. ([#26](https://github.com/THEOplayer/web-ui/issues/26), [#27](https://github.com/THEOplayer/web-ui/pull/27))
+-   💥 **Breaking Change**: This project now targets modern browsers, so `dist/THEOplayerUI.js` and `dist/THEOplayerUI.mjs` now use ES2017 syntax (such as `class` and `async`/`await`). See "Legacy browser support" in the [README](https://github.com/THEOplayer/web-ui/blob/v1.1.0/README.md) for more information about targeting older browsers. ([#26](https://github.com/THEOplayer/web-ui/issues/26), [#27](https://github.com/THEOplayer/web-ui/pull/27))
 -   🚀 Added support for THEOplayer 5.0
 -   💅 Improved accessibility ([#21](https://github.com/THEOplayer/web-ui/pull/21))
 -   💅 Make menus fill entire player when player is small ([#22](https://github.com/THEOplayer/web-ui/pull/22))
