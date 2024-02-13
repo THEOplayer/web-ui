@@ -75,7 +75,8 @@ function jsConfig(outputDir, { es5 = false, production = false, sourcemap = fals
                 file: path.join(outputDir, `${fileName}${es5 ? '.es5' : ''}.mjs`),
                 format: 'es',
                 sourcemap,
-                indent: false
+                indent: false,
+                banner
             },
             context: 'self',
             external: [theoplayerModule],
