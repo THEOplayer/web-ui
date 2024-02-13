@@ -7,15 +7,17 @@ import lowIcon from '../icons/volume-low.svg';
 import highIcon from '../icons/volume-high.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(
-    `<span part="off-icon"><slot name="off-icon">${offIcon}</slot></span>` +
-        `<span part="low-icon"><slot name="low-icon">${lowIcon}</slot></span>` +
-        `<span part="high-icon"><slot name="high-icon">${highIcon}</slot></span>`,
-    muteButtonCss
+const template = createTemplate(
+    'theoplayer-mute-button',
+    buttonTemplate(
+        `<span part="off-icon"><slot name="off-icon">${offIcon}</slot></span>` +
+            `<span part="low-icon"><slot name="low-icon">${lowIcon}</slot></span>` +
+            `<span part="high-icon"><slot name="high-icon">${highIcon}</slot></span>`,
+        muteButtonCss
+    )
 );
-shadyCss.prepareTemplate(template, 'theoplayer-mute-button');
 
 export type VolumeLevel = 'off' | 'low' | 'high';
 

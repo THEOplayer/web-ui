@@ -3,10 +3,9 @@ import previewThumbnailCss from './PreviewThumbnail.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, TextTrack, TextTrackCue, TextTrackCueList } from 'theoplayer/chromeless';
 import { arrayFind, noOp } from '../util/CommonUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${previewThumbnailCss}</style><canvas></canvas>`;
-shadyCss.prepareTemplate(template, 'theoplayer-preview-thumbnail');
+const template = createTemplate('theoplayer-preview-thumbnail', `<style>${previewThumbnailCss}</style><canvas></canvas>`);
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 

@@ -1,12 +1,10 @@
 import { MenuButton } from './MenuButton';
 import { buttonTemplate } from './Button';
 import settingsIcon from '../icons/settings.svg';
-import * as shadyCss from '@webcomponents/shadycss';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<span part="icon"><slot>${settingsIcon}</slot></span>`);
-shadyCss.prepareTemplate(template, 'theoplayer-settings-menu-button');
+const template = createTemplate('theoplayer-settings-menu-button', buttonTemplate(`<span part="icon"><slot>${settingsIcon}</slot></span>`));
 
 /**
  * `<theoplayer-settings-menu-button>` - A menu button that opens a {@link SettingsMenu}.

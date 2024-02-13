@@ -6,13 +6,12 @@ import seekForwardIcon from '../icons/seek-forward.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import { setTextContent } from '../util/CommonUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(
-    `<span part="icon"><slot name="icon">${seekForwardIcon}</slot></span>` + `<span part="offset"></span>`,
-    seekButtonCss
+const template = createTemplate(
+    'theoplayer-seek-button',
+    buttonTemplate(`<span part="icon"><slot name="icon">${seekForwardIcon}</slot></span>` + `<span part="offset"></span>`, seekButtonCss)
 );
-shadyCss.prepareTemplate(template, 'theoplayer-seek-button');
 
 const DEFAULT_SEEK_OFFSET = 10;
 

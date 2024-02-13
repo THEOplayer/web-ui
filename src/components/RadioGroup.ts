@@ -7,10 +7,9 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import type { DeviceType } from '../util/DeviceType';
 import { navigateByArrowKey } from '../util/KeyboardNavigation';
+import { createTemplate } from '../util/TemplateUtils';
 
-const radioGroupTemplate = document.createElement('template');
-radioGroupTemplate.innerHTML = `<slot></slot>`;
-shadyCss.prepareTemplate(radioGroupTemplate, 'theoplayer-radio-group');
+const template = createTemplate('theoplayer-radio-group', `<slot></slot>`);
 
 /**
  * `<theoplayer-radio-group>` - A group of {@link RadioButton}s. At most one button in the group can be checked.
@@ -34,7 +33,7 @@ export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) 
     constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(radioGroupTemplate.content.cloneNode(true));
+        shadowRoot.appendChild(template.content.cloneNode(true));
 
         this._slot = shadowRoot.querySelector('slot')!;
         this._upgradeProperty('deviceType');

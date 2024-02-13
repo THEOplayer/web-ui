@@ -5,10 +5,12 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import type { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group><slot></slot></theoplayer-radio-group>`;
-shadyCss.prepareTemplate(template, 'theoplayer-playback-rate-radio-group');
+const template = createTemplate(
+    'theoplayer-playback-rate-radio-group',
+    `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group><slot></slot></theoplayer-radio-group>`
+);
 
 /**
  * `<theoplayer-playback-rate-radio-group>` - A radio group that shows a list of playback rates,

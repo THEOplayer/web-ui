@@ -13,10 +13,9 @@ import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
 import { READY_EVENT } from './events/ReadyEvent';
 import { toggleAttribute } from './util/CommonUtils';
 import { createCustomEvent } from './util/EventUtils';
+import { createTemplate } from './util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${defaultUiCss}</style>${defaultUiHtml}`;
-shadyCss.prepareTemplate(template, 'theoplayer-default-ui');
+const template = createTemplate('theoplayer-default-ui', `<style>${defaultUiCss}</style>${defaultUiHtml}`);
 
 /**
  * `<theoplayer-default-ui>` - A default UI for THEOplayer.

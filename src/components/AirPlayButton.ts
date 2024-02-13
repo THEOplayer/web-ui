@@ -1,4 +1,3 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { CastButton } from './CastButton';
@@ -6,10 +5,9 @@ import airPlayButtonHtml from './AirPlayButton.html';
 import airPlayButtonCss from './AirPlayButton.css';
 import { buttonTemplate } from './Button';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(airPlayButtonHtml, airPlayButtonCss);
-shadyCss.prepareTemplate(template, 'theoplayer-airplay-button');
+const template = createTemplate('theoplayer-airplay-button', buttonTemplate(airPlayButtonHtml, airPlayButtonCss));
 
 /**
  * `<theoplayer-airplay-button>` - A button to start and stop casting using AirPlay.

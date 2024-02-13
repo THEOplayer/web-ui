@@ -1,12 +1,10 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import { Button, type ButtonOptions, buttonTemplate } from './Button';
 import { createCustomEvent } from '../util/EventUtils';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from '../events/ToggleMenuEvent';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<slot></slot>`);
-shadyCss.prepareTemplate(template, 'theoplayer-menu-button');
+const template = createTemplate('theoplayer-menu-button', buttonTemplate(`<slot></slot>`));
 
 /**
  * `<theoplayer-menu-button>` - A menu button that opens a {@link Menu}.

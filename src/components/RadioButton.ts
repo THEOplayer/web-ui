@@ -3,10 +3,9 @@ import { Attribute } from '../util/Attribute';
 import * as shadyCss from '@webcomponents/shadycss';
 import { createEvent } from '../util/EventUtils';
 import type { RadioGroup } from './RadioGroup';
+import { createTemplate } from '../util/TemplateUtils';
 
-const defaultTemplate = document.createElement('template');
-defaultTemplate.innerHTML = buttonTemplate('<slot></slot>');
-shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-radio-button');
+const defaultTemplate = createTemplate('theoplayer-radio-button', buttonTemplate('<slot></slot>'));
 
 /**
  * `<theoplayer-radio-button>` - A button that can be checked.

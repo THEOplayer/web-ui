@@ -7,17 +7,19 @@ import { Attribute } from '../../util/Attribute';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind, setTextContent } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
+import { createTemplate } from '../../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(
-    `<span part="countdown">Skip in 0 seconds</span>` +
-        `<span part="skip">` +
-        `<span part="skip-text"><slot name="skip-text">Skip Ad</slot></span> ` +
-        `<span part="skip-icon"><slot name="skip-icon">${skipNextIcon}</slot></span>` +
-        `</span>`,
-    adSkipButtonCss
+const template = createTemplate(
+    'theoplayer-ad-skip-button',
+    buttonTemplate(
+        `<span part="countdown">Skip in 0 seconds</span>` +
+            `<span part="skip">` +
+            `<span part="skip-text"><slot name="skip-text">Skip Ad</slot></span> ` +
+            `<span part="skip-icon"><slot name="skip-icon">${skipNextIcon}</slot></span>` +
+            `</span>`,
+        adSkipButtonCss
+    )
 );
-shadyCss.prepareTemplate(template, 'theoplayer-ad-skip-button');
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 

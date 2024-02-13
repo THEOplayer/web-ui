@@ -5,10 +5,9 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { setTextContent } from '../util/CommonUtils';
 import { formatTime } from '../util/TimeUtils';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${textDisplayCss}</style><span></span>`;
-shadyCss.prepareTemplate(template, 'theoplayer-duration-display');
+const template = createTemplate('theoplayer-duration-display', `<style>${textDisplayCss}</style><span></span>`);
 
 const PLAYER_EVENTS = ['durationchange'] as const;
 

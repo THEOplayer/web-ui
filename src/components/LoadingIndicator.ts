@@ -5,10 +5,9 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${loadingIndicatorCss}</style>${loadingIndicatorHtml}`;
-shadyCss.prepareTemplate(template, 'theoplayer-loading-indicator');
+const template = createTemplate('theoplayer-loading-indicator', `<style>${loadingIndicatorCss}</style>${loadingIndicatorHtml}`);
 
 const PLAYER_EVENTS = ['readystatechange', 'play', 'pause', 'playing', 'seeking', 'seeked'] as const;
 

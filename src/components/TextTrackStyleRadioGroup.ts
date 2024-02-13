@@ -7,10 +7,12 @@ import type { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
 import { Attribute } from '../util/Attribute';
 import { COLOR_BLACK, COLOR_WHITE, colorWithAlpha, parseColor, type RgbaColor, rgbEquals, toRgb, toRgba } from '../util/ColorUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group><slot></slot></theoplayer-radio-group>`;
-shadyCss.prepareTemplate(template, 'theoplayer-text-track-style-radio-group');
+const template = createTemplate(
+    'theoplayer-text-track-style-radio-group',
+    `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group><slot></slot></theoplayer-radio-group>`
+);
 
 export interface TextTrackStyleMap {
     fontFamily: string | undefined;

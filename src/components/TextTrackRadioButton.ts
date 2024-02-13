@@ -1,13 +1,11 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import { RadioButton } from './RadioButton';
 import { buttonTemplate } from './Button';
 import type { TextTrack } from 'theoplayer/chromeless';
 import { localizeLanguageName, setTextContent } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<slot></slot>`);
-shadyCss.prepareTemplate(template, 'theoplayer-text-track-radio-button');
+const template = createTemplate('theoplayer-text-track-radio-button', buttonTemplate(`<slot></slot>`));
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 

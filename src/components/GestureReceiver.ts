@@ -2,10 +2,9 @@ import * as shadyCss from '@webcomponents/shadycss';
 import gestureReceiverCss from './GestureReceiver.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${gestureReceiverCss}</style>`;
-shadyCss.prepareTemplate(template, 'theoplayer-gesture-receiver');
+const template = createTemplate('theoplayer-gesture-receiver', `<style>${gestureReceiverCss}</style>`);
 
 /**
  * `<theoplayer-gesture-receiver>` - An overlay that receives and handles gestures on the player.

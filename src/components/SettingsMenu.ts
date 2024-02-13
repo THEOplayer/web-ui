@@ -1,16 +1,14 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import { MenuGroup, menuGroupTemplate } from './MenuGroup';
 import settingsMenuHtml from './SettingsMenu.html';
 import menuTableCss from './MenuTable.css';
+import { createTemplate } from '../util/TemplateUtils';
 
 // Load components used in template
 import './ActiveQualityDisplay';
 import './PlaybackRateDisplay';
 import './PlaybackRateMenu';
 
-const template = document.createElement('template');
-template.innerHTML = menuGroupTemplate(settingsMenuHtml, menuTableCss);
-shadyCss.prepareTemplate(template, 'theoplayer-settings-menu');
+const template = createTemplate('theoplayer-settings-menu', menuGroupTemplate(settingsMenuHtml, menuTableCss));
 
 /**
  * `<theoplayer-settings-menu>` - A menu to change the settings of the player,

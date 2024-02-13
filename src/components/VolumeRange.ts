@@ -1,11 +1,9 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import { Range, rangeTemplate } from './Range';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = rangeTemplate(`<input type="range" min="0" max="1" step="any" value="0">`);
-shadyCss.prepareTemplate(template, 'theoplayer-volume-range');
+const template = createTemplate('theoplayer-volume-range', rangeTemplate(`<input type="range" min="0" max="1" step="any" value="0">`));
 
 function formatAsPercentString(value: number, max: number) {
     return `${Math.round((value / max) * 100)}%`;

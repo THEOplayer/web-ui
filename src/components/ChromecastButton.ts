@@ -1,4 +1,3 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { CastButton } from './CastButton';
@@ -6,10 +5,9 @@ import chromecastButtonHtml from './ChromecastButton.html';
 import chromecastButtonCss from './ChromecastButton.css';
 import { buttonTemplate } from './Button';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(chromecastButtonHtml, chromecastButtonCss);
-shadyCss.prepareTemplate(template, 'theoplayer-chromecast-button');
+const template = createTemplate('theoplayer-chromecast-button', buttonTemplate(chromecastButtonHtml, chromecastButtonCss));
 
 const maskId = 'theoplayer-chromecast-rings-mask';
 let chromecastButtonId = 0;

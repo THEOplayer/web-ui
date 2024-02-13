@@ -7,15 +7,17 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
 import { toggleAttribute } from '../util/CommonUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(
-    `<span part="icon"><slot name="icon">${liveIcon}</slot></span>` +
-        `<slot name="spacer"> </slot>` +
-        `<span part="text"><slot name="text">LIVE</slot></span>`,
-    liveButtonCss
+const template = createTemplate(
+    'theoplayer-live-button',
+    buttonTemplate(
+        `<span part="icon"><slot name="icon">${liveIcon}</slot></span>` +
+            `<slot name="spacer"> </slot>` +
+            `<span part="text"><slot name="text">LIVE</slot></span>`,
+        liveButtonCss
+    )
 );
-shadyCss.prepareTemplate(template, 'theoplayer-live-button');
 
 const PAUSED_EVENTS = ['play', 'pause', 'playing', 'emptied'] as const;
 const LIVE_EVENTS = ['seeking', 'seeked', 'timeupdate', 'durationchange', 'emptied'] as const;

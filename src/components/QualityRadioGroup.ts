@@ -6,10 +6,12 @@ import type { ChromelessPlayer, MediaTrack, Quality, VideoQuality } from 'theopl
 import { arrayFind, fromArrayLike } from '../util/CommonUtils';
 import { QualityRadioButton } from './QualityRadioButton';
 import { createEvent } from '../util/EventUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`;
-shadyCss.prepareTemplate(template, 'theoplayer-quality-radio-group');
+const template = createTemplate(
+    'theoplayer-quality-radio-group',
+    `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`
+);
 
 const TRACK_EVENTS = ['addtrack', 'removetrack', 'change'] as const;
 

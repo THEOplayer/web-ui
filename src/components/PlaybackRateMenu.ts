@@ -1,13 +1,14 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import { Menu, menuTemplate } from './Menu';
 import playbackRateMenuHtml from './PlaybackRateMenu.html';
+import { createTemplate } from '../util/TemplateUtils';
 
 // Load components used in template
 import './PlaybackRateRadioGroup';
 
-const template = document.createElement('template');
-template.innerHTML = menuTemplate(`<span slot="heading"><slot name="heading">Playback speed</slot></span>`, playbackRateMenuHtml);
-shadyCss.prepareTemplate(template, 'theoplayer-playback-rate-menu');
+const template = createTemplate(
+    'theoplayer-playback-rate-menu',
+    menuTemplate(`<span slot="heading"><slot name="heading">Playback speed</slot></span>`, playbackRateMenuHtml)
+);
 
 /**
  * `<theoplayer-playback-rate-menu>` - A menu to change the playback rate of the player.

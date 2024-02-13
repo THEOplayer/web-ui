@@ -5,6 +5,7 @@ import { MENU_CHANGE_EVENT, type MenuChangeEvent } from '../events/MenuChangeEve
 import { createCustomEvent } from '../util/EventUtils';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
 export interface MenuOptions {
     template?: HTMLTemplateElement;
@@ -18,9 +19,7 @@ export function menuTemplate(heading: string, content: string, extraCss: string 
     );
 }
 
-const defaultTemplate = document.createElement('template');
-defaultTemplate.innerHTML = menuTemplate('<slot name="heading"></slot>', '<slot></slot>');
-shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu');
+const defaultTemplate = createTemplate('theoplayer-menu', menuTemplate('<slot name="heading"></slot>', '<slot></slot>'));
 
 /**
  * `<theoplayer-menu>` - A menu that can be opened on top of the player.
