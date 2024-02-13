@@ -9,6 +9,8 @@ import * as path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { string } from 'rollup-plugin-string';
 import dts from 'rollup-plugin-dts';
+import inject from '@rollup/plugin-inject';
+import virtual from '@rollup/plugin-virtual';
 
 const fileName = 'THEOplayerUI';
 const umdName = 'THEOplayerUI';
@@ -22,6 +24,7 @@ const banner = `/*!
  * License: ${license}
  */`;
 const theoplayerModule = 'theoplayer/chromeless';
+const domShimModule = '@lit-labs/ssr-dom-shim';
 
 /**
  * @param {{configOutputDir?: string}} cliArgs
@@ -30,7 +33,7 @@ const theoplayerModule = 'theoplayer/chromeless';
 export default (cliArgs) => {
     const outputDir = cliArgs.configOutputDir || './dist';
     return defineConfig([
-        ...jsConfig(outputDir, { es5: false, production, sourcemap: true }),
+        ...jsConfig(outputDir, { es5: false, node: true, production, sourcemap: true }),
         ...jsConfig(outputDir, { es5: true, production, sourcemap: false }),
         {
             input: './src/index.ts',
@@ -50,7 +53,7 @@ export default (cliArgs) => {
 /**
  * @return {import("rollup").RollupOptions[]}
  */
-function jsConfig(outputDir, { es5 = false, production = false, sourcemap = false }) {
+function jsConfig(outputDir, { es5 = false, node = false, production = false, sourcemap = false }) {
     return defineConfig([
         {
             input: './src/index.ts',
@@ -81,17 +84,36 @@ function jsConfig(outputDir, { es5 = false, production = false, sourcemap = fals
             context: 'self',
             external: [theoplayerModule],
             plugins: jsPlugins({ es5, module: true, production, sourcemap })
+        },
+        node && {
+            input: './src/index.ts',
+            output: {
+                file: path.join(outputDir, `${fileName}.node${es5 ? '.es5' : ''}.mjs`),
+                format: 'es',
+                sourcemap,
+                indent: false,
+                banner
+            },
+            context: 'globalThis',
+            external: [domShimModule],
+            plugins: jsPlugins({ es5, node, module: true, production, sourcemap })
         }
-    ]);
+    ]).filter(Boolean);
 }
 
 /**
  * @return {import("rollup").Plugin[]}
  */
-function jsPlugins({ es5 = false, module = false, production = false, sourcemap = false }) {
+function jsPlugins({ es5 = false, node = false, module = false, production = false, sourcemap = false }) {
     const browserslist = es5 ? browserslistLegacy : browserslistModern;
     return [
         nodeResolve(),
+        // For Node, stub out THEOplayer.
+        node &&
+            virtual({
+                include: './src/**',
+                [theoplayerModule]: `export const ChromelessPlayer = undefined`
+            }),
         // Run PostCSS on .css files.
         postcss({
             include: './src/**/*.css',
@@ -150,6 +172,17 @@ function jsPlugins({ es5 = false, module = false, production = false, sourcemap 
                 externalHelpers: true
             }
         }),
+        // For Node, inject SSR shims for custom elements.
+        node &&
+            inject({
+                include: './src/**',
+                sourceMap: sourcemap,
+                modules: {
+                    HTMLElement: [domShimModule, 'HTMLElement'],
+                    customElements: [domShimModule, 'customElements']
+                }
+            }),
+        // Minify production builds.
         production &&
             minify({
                 sourceMap: sourcemap,
