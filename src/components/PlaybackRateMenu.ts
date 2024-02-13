@@ -1,6 +1,8 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { Menu, menuTemplate } from './Menu';
 import playbackRateMenuHtml from './PlaybackRateMenu.html';
+
+// Load components used in template
 import './PlaybackRateRadioGroup';
 
 const template = document.createElement('template');

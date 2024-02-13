@@ -3,6 +3,8 @@ import { MenuGroup, menuGroupTemplate } from './MenuGroup';
 import textTrackStyleMenuHtml from './TextTrackStyleMenu.html';
 import textTrackStyleMenuCss from './TextTrackStyleMenu.css';
 import menuTableCss from './MenuTable.css';
+
+// Load components used in template
 import './TextTrackStyleDisplay';
 import './TextTrackStyleRadioGroup';
 

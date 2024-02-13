@@ -22,7 +22,6 @@ import { fullscreenAPI } from './util/FullscreenUtils';
 import { Attribute } from './util/Attribute';
 import { isMobile, isTv } from './util/Environment';
 import { Rectangle } from './util/GeometryUtils';
-import './components/GestureReceiver';
 import { PREVIEW_TIME_CHANGE_EVENT, type PreviewTimeChangeEvent } from './events/PreviewTimeChangeEvent';
 import type { StreamType } from './util/StreamType';
 import type { StreamTypeChangeEvent } from './events/StreamTypeChangeEvent';
@@ -35,6 +34,9 @@ import type { DeviceType } from './util/DeviceType';
 import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
 import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
 import { READY_EVENT } from './events/ReadyEvent';
+
+// Load components used in template
+import './components/GestureReceiver';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;

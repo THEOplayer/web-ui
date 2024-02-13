@@ -3,7 +3,6 @@ import { isArrowKey, KeyCode } from '../util/KeyCode';
 import { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
 import { arrayFind, isElement, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
-import './RadioButton';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import type { DeviceType } from '../util/DeviceType';
