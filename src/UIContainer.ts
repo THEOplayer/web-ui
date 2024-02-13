@@ -29,8 +29,7 @@ import type { StreamTypeChangeEvent } from './events/StreamTypeChangeEvent';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
 import { createCustomEvent } from './util/EventUtils';
 import { getTargetQualities } from './util/TrackUtils';
-import type { MenuGroup } from './components';
-import './components/MenuGroup';
+import { MenuGroup } from './components/MenuGroup';
 import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
 import type { DeviceType } from './util/DeviceType';
 import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
@@ -378,6 +377,10 @@ export class UIContainer extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
+        if (!(this._menuGroup instanceof MenuGroup)) {
+            customElements.upgrade(this._menuGroup);
+        }
+
         if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {
             const deviceType: DeviceType = isMobile() ? 'mobile' : isTv() ? 'tv' : 'desktop';
             this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
@@ -661,7 +664,8 @@ export class UIContainer extends HTMLElement {
     }
 
     private closeMenu_(): void {
-        this._menuGroup.closeMenu();
+        // Menu group might not be upgraded yet
+        this._menuGroup.closeMenu?.();
         this._menuOpener?.focus();
         this._menuOpener = undefined;
     }
