@@ -1,10 +1,10 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import menuGroupCss from './MenuGroup.css';
 import { Attribute } from '../util/Attribute';
-import { arrayFind, arrayFindIndex, fromArrayLike, isElement, isHTMLElement, noOp } from '../util/CommonUtils';
+import { arrayFind, arrayFindIndex, fromArrayLike, isElement, isHTMLElement, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from '../events/ToggleMenuEvent';
-import { isBackKey, KeyCode } from '../util/KeyCode';
+import { isBackKey } from '../util/KeyCode';
 import { createCustomEvent } from '../util/EventUtils';
 import type { MenuChangeEvent } from '../events/MenuChangeEvent';
 import { MENU_CHANGE_EVENT } from '../events/MenuChangeEvent';
@@ -260,18 +260,17 @@ export class MenuGroup extends HTMLElement {
             ...fromArrayLike(this.shadowRoot!.children),
             ...(this._menuSlot ? this._menuSlot.assignedNodes({ flatten: true }).filter(isElement) : [])
         ];
+        const upgradePromises: Array<Promise<unknown>> = [];
         for (const child of children) {
             if (!isMenuElement(child)) {
-                // Upgrade custom elements if needed
-                const childName = child.nodeName.toLowerCase();
-                if (childName.indexOf('-') >= 0) {
-                    if (customElements.get(childName)) {
-                        customElements.upgrade(child);
-                    } else {
-                        customElements.whenDefined(childName).then(this._onMenuListChange, noOp);
-                    }
+                const promise = upgradeCustomElementIfNeeded(child);
+                if (promise) {
+                    upgradePromises.push(promise);
                 }
             }
+        }
+        if (upgradePromises.length > 0) {
+            Promise.all(upgradePromises).then(this._onMenuListChange, noOp);
         }
         const newMenus = children.filter(isMenuElement);
         // Close all removed menus

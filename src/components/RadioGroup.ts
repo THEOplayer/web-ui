@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { isArrowKey, KeyCode } from '../util/KeyCode';
 import { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
-import { arrayFind, isElement, noOp } from '../util/CommonUtils';
+import { arrayFind, isElement, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
 import './RadioButton';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
@@ -78,19 +78,19 @@ export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) 
 
     private readonly _onSlotChange = () => {
         const children = this._slot.assignedNodes({ flatten: true }).filter(isElement);
+        const upgradePromises: Array<Promise<unknown>> = [];
         for (const child of children) {
             if (!isRadioButton(child)) {
-                // Upgrade custom elements if needed
-                const childName = child.nodeName.toLowerCase();
-                if (childName.indexOf('-') >= 0) {
-                    if (customElements.get(childName)) {
-                        customElements.upgrade(child);
-                    } else {
-                        customElements.whenDefined(childName).then(this._onSlotChange, noOp);
-                    }
+                const promise = upgradeCustomElementIfNeeded(child);
+                if (promise) {
+                    upgradePromises.push(promise);
                 }
             }
         }
+        if (upgradePromises.length > 0) {
+            Promise.all(upgradePromises).then(this._onSlotChange, noOp);
+        }
+
         this._radioButtons = children.filter(isRadioButton);
 
         let firstFocusedButton = this.focusedRadioButton;
