@@ -22,7 +22,7 @@ export class RadioButton extends Button {
     private _value: any = undefined;
 
     constructor(options?: ButtonOptions) {
-        super({ template: defaultTemplate, ...options });
+        super({ template: defaultTemplate(), ...options });
         this._upgradeProperty('checked');
     }
 

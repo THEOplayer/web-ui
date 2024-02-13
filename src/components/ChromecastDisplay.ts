@@ -31,7 +31,7 @@ export class ChromecastDisplay extends StateReceiverMixin(HTMLElement, ['player'
     constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
         this._receiverNameEl = shadowRoot.querySelector('[part="receiver"]')!;
 
         this._upgradeProperty('player');

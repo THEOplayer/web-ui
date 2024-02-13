@@ -14,7 +14,7 @@ const template = createTemplate('theoplayer-settings-menu-button', buttonTemplat
  */
 export class SettingsMenuButton extends MenuButton {
     constructor() {
-        super({ template });
+        super({ template: template() });
     }
 
     override connectedCallback() {

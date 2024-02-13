@@ -18,7 +18,7 @@ export class TextTrackOffRadioButton extends RadioButton {
     private _trackList: TextTracksList | undefined = undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._upgradeProperty('trackList');
     }
 

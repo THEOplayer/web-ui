@@ -57,7 +57,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
     private _lastPlaybackRate: number = 0;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
 
         this._previewRailEl = this.shadowRoot!.querySelector('.theoplayer-time-range-preview-rail')!;
         this._previewBoxEl = this._previewRailEl.querySelector('[part~="preview-box"]')!;

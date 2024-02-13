@@ -39,7 +39,7 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
     }
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._countdownEl = this.shadowRoot!.querySelector('[part="countdown"]')!;
         this._skipEl = this.shadowRoot!.querySelector('[part="skip"]')!;
 

@@ -19,7 +19,7 @@ export class TextTrackRadioButton extends RadioButton {
     private _track: TextTrack | undefined = undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._slotEl = this.shadowRoot!.querySelector('slot')!;
         this._upgradeProperty('track');
     }

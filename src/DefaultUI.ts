@@ -102,7 +102,7 @@ export class DefaultUI extends HTMLElement {
     constructor(configuration: PlayerConfiguration = {}) {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
 
         this._ui = shadowRoot.querySelector('theoplayer-ui')!;
         this._ui.addEventListener(READY_EVENT, this._dispatchReadyEvent);

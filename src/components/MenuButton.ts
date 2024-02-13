@@ -18,7 +18,7 @@ export class MenuButton extends Button {
     }
 
     constructor(options?: Partial<ButtonOptions>) {
-        super({ template, ...options });
+        super({ template: template(), ...options });
 
         this._upgradeProperty('menu');
     }

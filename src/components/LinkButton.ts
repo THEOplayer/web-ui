@@ -29,7 +29,7 @@ export class LinkButton extends HTMLElement {
     constructor(options?: ButtonOptions) {
         super();
 
-        const template = options?.template ?? defaultTemplate;
+        const template = options?.template ?? defaultTemplate();
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
         shadowRoot.appendChild(template.content.cloneNode(true));
 

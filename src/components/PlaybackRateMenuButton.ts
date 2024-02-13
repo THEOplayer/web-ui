@@ -14,7 +14,7 @@ const template = createTemplate('theoplayer-playback-rate-button', buttonTemplat
  */
 export class PlaybackRateMenuButton extends MenuButton {
     constructor() {
-        super({ template });
+        super({ template: template() });
     }
 
     override connectedCallback() {

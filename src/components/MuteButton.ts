@@ -38,7 +38,7 @@ export class MuteButton extends StateReceiverMixin(Button, ['player']) {
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._upgradeProperty('player');
     }
 

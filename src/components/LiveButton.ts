@@ -41,7 +41,7 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
 
         this._upgradeProperty('paused');
         this._upgradeProperty('streamType');

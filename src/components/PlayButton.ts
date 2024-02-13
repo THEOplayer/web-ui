@@ -37,7 +37,7 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._upgradeProperty('paused');
         this._upgradeProperty('ended');
         this._upgradeProperty('player');

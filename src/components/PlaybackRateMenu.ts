@@ -19,7 +19,7 @@ const template = createTemplate(
  */
 export class PlaybackRateMenu extends Menu {
     constructor() {
-        super({ template });
+        super({ template: template() });
     }
 }
 

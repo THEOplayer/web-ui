@@ -20,7 +20,7 @@ export class CloseMenuButton extends Button {
     }
 
     constructor() {
-        super({ template });
+        super({ template: template() });
     }
 
     override connectedCallback() {

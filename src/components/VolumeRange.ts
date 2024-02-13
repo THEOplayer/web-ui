@@ -19,7 +19,7 @@ export class VolumeRange extends StateReceiverMixin(Range, ['player', 'deviceTyp
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._upgradeProperty('player');
     }
 

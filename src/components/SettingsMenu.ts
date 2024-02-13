@@ -20,7 +20,7 @@ const template = createTemplate('theoplayer-settings-menu', menuGroupTemplate(se
  */
 export class SettingsMenu extends MenuGroup {
     constructor() {
-        super({ template });
+        super({ template: template() });
     }
 }
 

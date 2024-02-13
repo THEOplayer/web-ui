@@ -30,7 +30,7 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
     constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
 
         this._radioGroup = shadowRoot.querySelector('theoplayer-radio-group')!;
         this._optionsSlot = shadowRoot.querySelector('slot')!;

@@ -28,7 +28,7 @@ export class LoadingIndicator extends StateReceiverMixin(HTMLElement, ['player']
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
 
         this._upgradeProperty('player');
     }

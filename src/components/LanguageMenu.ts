@@ -32,7 +32,7 @@ export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
     }
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._upgradeProperty('player');
     }
 

@@ -24,7 +24,7 @@ export class QualityRadioButton extends RadioButton {
     private _quality: VideoQuality | undefined = undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._slotEl = this.shadowRoot!.querySelector('slot')!;
 
         this._upgradeProperty('track');

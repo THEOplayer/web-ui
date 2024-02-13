@@ -37,7 +37,7 @@ export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error', 'ful
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
 
         this._messageSlot = shadowRoot.querySelector('slot[name="message"]')!;
 

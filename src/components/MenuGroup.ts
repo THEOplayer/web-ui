@@ -47,7 +47,7 @@ export class MenuGroup extends HTMLElement {
 
     constructor(options?: MenuGroupOptions) {
         super();
-        const template = options?.template ?? defaultTemplate;
+        const template = options?.template ?? defaultTemplate();
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
         shadowRoot.appendChild(template.content.cloneNode(true));
 

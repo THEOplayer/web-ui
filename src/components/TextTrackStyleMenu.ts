@@ -22,7 +22,7 @@ const template = createTemplate(
  */
 export class TextTrackStyleMenu extends MenuGroup {
     constructor() {
-        super({ template });
+        super({ template: template() });
     }
 }
 

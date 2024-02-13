@@ -30,7 +30,7 @@ export class SeekButton extends StateReceiverMixin(Button, ['player']) {
     private _offsetEl: HTMLElement;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._offsetEl = this.shadowRoot!.querySelector('[part="offset"]')!;
         this._upgradeProperty('player');
         this._upgradeProperty('seekOffset');

@@ -21,7 +21,7 @@ export class ChromecastButton extends StateReceiverMixin(CastButton, ['player'])
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
 
         // Make ID attributes unique
         const id = ++chromecastButtonId;

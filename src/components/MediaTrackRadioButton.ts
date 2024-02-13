@@ -20,7 +20,7 @@ export class MediaTrackRadioButton extends RadioButton {
     private _track: MediaTrack | undefined = undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._slotEl = this.shadowRoot!.querySelector('slot')!;
 
         this._upgradeProperty('track');

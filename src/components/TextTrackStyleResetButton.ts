@@ -18,7 +18,7 @@ export class TextTrackStyleResetButton extends StateReceiverMixin(Button, ['play
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
     }
 
     get player(): ChromelessPlayer | undefined {

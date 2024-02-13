@@ -33,7 +33,7 @@ export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) 
     constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
 
         this._slot = shadowRoot.querySelector('slot')!;
         this._upgradeProperty('deviceType');

@@ -18,7 +18,7 @@ export class AirPlayButton extends StateReceiverMixin(CastButton, ['player']) {
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._upgradeProperty('player');
     }
 

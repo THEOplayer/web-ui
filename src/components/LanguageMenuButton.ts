@@ -24,7 +24,7 @@ export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player'
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._upgradeProperty('player');
     }
 

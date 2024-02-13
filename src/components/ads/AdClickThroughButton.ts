@@ -24,7 +24,7 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
     }
 
     constructor() {
-        super({ template });
+        super({ template: template() });
 
         this.disabled = true;
         this.style.display = 'none';

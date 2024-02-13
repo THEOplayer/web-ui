@@ -35,7 +35,7 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'str
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
         this._spanEl = shadowRoot.querySelector('span')!;
 
         this._upgradeProperty('player');

@@ -38,7 +38,7 @@ export class Button extends HTMLElement {
      */
     constructor(options?: ButtonOptions) {
         super();
-        const template = options?.template ?? defaultTemplate;
+        const template = options?.template ?? defaultTemplate();
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
 
