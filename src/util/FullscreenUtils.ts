@@ -8,7 +8,7 @@ export interface FullscreenAPIMap {
 }
 
 export const fullscreenAPI: FullscreenAPIMap | undefined = (() => {
-    if (!document) {
+    if (typeof document === 'undefined') {
         return;
     }
 
