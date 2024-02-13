@@ -10,6 +10,10 @@
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🐛 Fixed an issue where `<theoplayer-ui>` could throw an error when the player changes sources before all custom elements are properly registered. ([#49](https://github.com/THEOplayer/web-ui/pull/49))
+
 ## v1.6.0 (2024-02-08)
 
 -   🚀 Introducing [Open Video UI for React](https://www.npmjs.com/package/@theoplayer/react-ui). ([#48](https://github.com/THEOplayer/web-ui/pull/48))
