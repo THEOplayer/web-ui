@@ -7,7 +7,7 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
  * This can be used to access the backing player's state and add event listeners from within a custom React component.
  * The component *must* be a child of {@link DefaultUI} or {@link UIContainer} in order to receive the context.
  * ```jsx
- * import { useContext, useState } from 'react';
+ * import { useCallback, useContext, useSyncExternalStore } from 'react';
  * import { PlayerContext } from '@theoplayer/react-ui';
  *
  * const MyCustomComponent = () => {
@@ -15,17 +15,20 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
  *     const player = useContext(PlayerContext);
  *
  *     // Track the paused state of the player
- *     const [paused, setPaused] = useState(player?.paused ?? true);
- *     useEffect(() => {
- *         if (!player) return;
- *         const updatePaused = () => {
- *             setPaused(player.paused);
- *         };
- *         player.addEventListener(['play', 'pause'], updatePaused);
- *         return () => {
- *             player.removeEventListener(['play', 'pause'], updatePaused);
- *         };
- *     }, [player]);
+ *     const subscribePaused = useCallback(
+ *         (callback) => {
+ *             player?.addEventListener(['play', 'pause'], callback);
+ *             return () => {
+ *                 player?.removeEventListener(['play', 'pause'], callback);
+ *             };
+ *         },
+ *         [player]
+ *     );
+ *     const paused = useSyncExternalStore(
+ *         subscribePaused,
+ *         () => player?.paused ?? true,
+ *         () => true
+ *     );
  *
  *     // Show the paused state in your UI
  *     return <p>Player is {paused ? "paused" : "playing"}</p>
