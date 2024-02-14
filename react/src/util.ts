@@ -1,13 +1,11 @@
-import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useSyncExternalStore } from 'react';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import type { DefaultUI as DefaultUIElement, UIContainer as UIContainerElement } from '@theoplayer/web-ui';
 
-export function usePlayer(onReady?: (player: ChromelessPlayer) => void): {
-    player: ChromelessPlayer | undefined;
-    setUi: (ui: DefaultUIElement | UIContainerElement | null) => void;
-} {
-    const [ui, setUi] = useState<DefaultUIElement | UIContainerElement | null>(null);
-
+export function usePlayer(
+    ui: DefaultUIElement | UIContainerElement | null,
+    onReady?: (player: ChromelessPlayer) => void
+): ChromelessPlayer | undefined {
     // Update player when UI is created, or when 'theoplayerready' event fires.
     const subscribeReady = useCallback(
         (callback: () => void) => {
@@ -28,5 +26,5 @@ export function usePlayer(onReady?: (player: ChromelessPlayer) => void): {
         onReady?.(player);
     }, [player, onReady]);
 
-    return { player, setUi };
+    return player;
 }
