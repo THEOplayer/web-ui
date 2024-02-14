@@ -87,10 +87,13 @@ permalink: /examples/react
         // inside a THEOplayer <DefauLtUI> or <UIContainer>.
         const player = useContext(THEOplayerReactUI.PlayerContext);
         // Keep track of the player's current time.
-        const subscribe = useCallback((callback) => {
-            player?.addEventListener(['timeupdate', 'seeking', 'seeked'], callback);
-            return () => player?.removeEventListener(['timeupdate', 'seeking', 'seeked'], callback);
-        });
+        const subscribe = useCallback(
+            (callback) => {
+                player?.addEventListener(['timeupdate', 'seeking', 'seeked'], callback);
+                return () => player?.removeEventListener(['timeupdate', 'seeking', 'seeked'], callback);
+            },
+            [player]
+        );
         return useSyncExternalStore(
             subscribe,
             () => player?.currentTime ?? 0,
