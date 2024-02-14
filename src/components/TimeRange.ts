@@ -10,11 +10,13 @@ import type { PreviewTimeChangeEvent } from '../events/PreviewTimeChangeEvent';
 import { PREVIEW_TIME_CHANGE_EVENT } from '../events/PreviewTimeChangeEvent';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
-import './PreviewThumbnail';
-import './PreviewTimeDisplay';
 import { isLinearAd } from '../util/AdUtils';
 import type { ColorStops } from '../util/ColorStops';
 import { KeyCode } from '../util/KeyCode';
+
+// Load components used in template
+import './PreviewThumbnail';
+import './PreviewTimeDisplay';
 
 const template = document.createElement('template');
 template.innerHTML = rangeTemplate(timeRangeHtml, timeRangeCss);

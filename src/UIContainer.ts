@@ -22,20 +22,21 @@ import { fullscreenAPI } from './util/FullscreenUtils';
 import { Attribute } from './util/Attribute';
 import { isMobile, isTv } from './util/Environment';
 import { Rectangle } from './util/GeometryUtils';
-import './components/GestureReceiver';
 import { PREVIEW_TIME_CHANGE_EVENT, type PreviewTimeChangeEvent } from './events/PreviewTimeChangeEvent';
 import type { StreamType } from './util/StreamType';
 import type { StreamTypeChangeEvent } from './events/StreamTypeChangeEvent';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
 import { createCustomEvent } from './util/EventUtils';
 import { getTargetQualities } from './util/TrackUtils';
-import type { MenuGroup } from './components';
-import './components/MenuGroup';
+import { MenuGroup } from './components/MenuGroup';
 import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
 import type { DeviceType } from './util/DeviceType';
 import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
 import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
 import { READY_EVENT } from './events/ReadyEvent';
+
+// Load components used in template
+import './components/GestureReceiver';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
@@ -378,6 +379,10 @@ export class UIContainer extends HTMLElement {
     connectedCallback(): void {
         shadyCss.styleElement(this);
 
+        if (!(this._menuGroup instanceof MenuGroup)) {
+            customElements.upgrade(this._menuGroup);
+        }
+
         if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {
             const deviceType: DeviceType = isMobile() ? 'mobile' : isTv() ? 'tv' : 'desktop';
             this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
@@ -661,7 +666,8 @@ export class UIContainer extends HTMLElement {
     }
 
     private closeMenu_(): void {
-        this._menuGroup.closeMenu();
+        // Menu group might not be upgraded yet
+        this._menuGroup.closeMenu?.();
         this._menuOpener?.focus();
         this._menuOpener = undefined;
     }

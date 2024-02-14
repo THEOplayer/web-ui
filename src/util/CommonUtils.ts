@@ -231,3 +231,15 @@ export function getActiveElement(): Element | null {
     }
     return activeElement;
 }
+
+export function upgradeCustomElementIfNeeded(element: Element): Promise<unknown> | undefined {
+    const elementName = element.nodeName.toLowerCase();
+    if (elementName.indexOf('-') >= 0) {
+        if (customElements.get(elementName)) {
+            customElements.upgrade(element);
+        } else {
+            return customElements.whenDefined(elementName);
+        }
+    }
+    return undefined;
+}

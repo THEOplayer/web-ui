@@ -6,9 +6,11 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, TextTrack } from 'theoplayer/chromeless';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
+import { toggleAttribute } from '../util/CommonUtils';
+
+// Load components used in template
 import './TrackRadioGroup';
 import './TextTrackStyleMenu';
-import { toggleAttribute } from '../util/CommonUtils';
 
 const template = document.createElement('template');
 template.innerHTML = menuGroupTemplate(languageMenuHtml, languageMenuCss);

@@ -2,6 +2,8 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { MenuGroup, menuGroupTemplate } from './MenuGroup';
 import settingsMenuHtml from './SettingsMenu.html';
 import menuTableCss from './MenuTable.css';
+
+// Load components used in template
 import './ActiveQualityDisplay';
 import './PlaybackRateDisplay';
 import './PlaybackRateMenu';
