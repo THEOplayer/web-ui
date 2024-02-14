@@ -12,6 +12,9 @@
 
 ## Unreleased
 
+-   🚀 Added support for loading in Node for static site generation (SSG) or server-side rendering (SSR). ([#50](https://github.com/THEOplayer/web-ui/pull/50))
+    -   ⚠️ Although the Node entry point exports all custom element classes as usual, attempting to actually construct those classes will result in errors. Most dependencies are either replaced with stubs (using [`@lit-labs/ssr-dom-shim`](https://lit.dev/docs/ssr/dom-emulation/)) or removed altogether (such as THEOplayer itself).
+    -   This should always be used together with an SSG or SSR solution. For example, you can use [Open Video UI for React](https://www.npmjs.com/package/@theoplayer/react-ui) together with [React server rendering](https://react.dev/reference/react-dom/server).
 -   🐛 Fixed an issue where `<theoplayer-ui>` could throw an error when the player changes sources before all custom elements are properly registered. ([#49](https://github.com/THEOplayer/web-ui/pull/49))
 
 ## v1.6.0 (2024-02-08)
