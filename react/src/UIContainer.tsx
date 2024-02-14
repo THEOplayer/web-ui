@@ -129,9 +129,9 @@ export interface UIContainerProps extends PropsWithoutRef<WebComponentProps<UICo
  */
 export const UIContainer = (props: UIContainerProps) => {
     const { topChrome, middleChrome, bottomChrome, centeredChrome, centeredLoading, menu, error, onReady, ...otherProps } = props;
-    const { player, setUi, onReadyHandler } = usePlayer(onReady);
+    const { player, setUi } = usePlayer(onReady);
     return (
-        <RawUIContainer {...otherProps} ref={setUi} onReady={onReadyHandler}>
+        <RawUIContainer {...otherProps} ref={setUi}>
             <PlayerContext.Provider value={player}>
                 <Slotted slot="top-chrome">{topChrome}</Slotted>
                 <Slotted slot="middle-chrome">{middleChrome}</Slotted>
