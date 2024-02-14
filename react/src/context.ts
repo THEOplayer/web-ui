@@ -30,6 +30,10 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
  *         () => true
  *     );
  *
+ *     // Alternatively, you can use the built-in hook:
+ *     // import { usePaused } from '@theoplayer/react-ui';
+ *     // const paused = usePaused();
+ *
  *     // Show the paused state in your UI
  *     return <p>Player is {paused ? "paused" : "playing"}</p>
  * };
