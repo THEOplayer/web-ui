@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { type PropsWithoutRef, type ReactNode } from 'react';
+import { type PropsWithoutRef, type ReactNode, useState } from 'react';
 import { UIContainer as UIContainerElement } from '@theoplayer/web-ui';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { createComponent, type WebComponentProps } from '@lit/react';
@@ -129,9 +129,10 @@ export interface UIContainerProps extends PropsWithoutRef<WebComponentProps<UICo
  */
 export const UIContainer = (props: UIContainerProps) => {
     const { topChrome, middleChrome, bottomChrome, centeredChrome, centeredLoading, menu, error, onReady, ...otherProps } = props;
-    const { player, setUi, onReadyHandler } = usePlayer(onReady);
+    const [ui, setUi] = useState<UIContainerElement | null>(null);
+    const player = usePlayer(ui, onReady);
     return (
-        <RawUIContainer {...otherProps} ref={setUi} onReady={onReadyHandler}>
+        <RawUIContainer {...otherProps} ref={setUi}>
             <PlayerContext.Provider value={player}>
                 <Slotted slot="top-chrome">{topChrome}</Slotted>
                 <Slotted slot="middle-chrome">{middleChrome}</Slotted>
