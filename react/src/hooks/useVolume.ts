@@ -1,9 +1,8 @@
 import { useCallback, useContext, useSyncExternalStore } from 'react';
 import { PlayerContext } from '../context';
-import type { ChromelessPlayer } from 'theoplayer';
 
 /**
- * Returns [the player's volume]{@link ChromelessPlayer.volume}, automatically updating whenever it changes.
+ * Returns {@link theoplayer!ChromelessPlayer.volume | the player's volume}, automatically updating whenever it changes.
  *
  * This hook must only be used in a component mounted inside a {@link DefaultUI} or {@link UIContainer},
  * or alternatively any other component that provides a {@link PlayerContext}.

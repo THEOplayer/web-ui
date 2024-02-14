@@ -1,9 +1,9 @@
 import { useCallback, useContext, useSyncExternalStore } from 'react';
 import { PlayerContext } from '../context';
-import type { ChromelessPlayer, SourceDescription } from 'theoplayer';
+import type { SourceDescription } from 'theoplayer';
 
 /**
- * Returns [the player's source]{@link ChromelessPlayer.source}, automatically updating whenever it changes.
+ * Returns {@link theoplayer!ChromelessPlayer.source | the player's source}, automatically updating whenever it changes.
  *
  * This hook must only be used in a component mounted inside a {@link DefaultUI} or {@link UIContainer},
  * or alternatively any other component that provides a {@link PlayerContext}.

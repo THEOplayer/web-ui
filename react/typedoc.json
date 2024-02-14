@@ -17,6 +17,12 @@
   "externalSymbolLinkMappings": {
     "theoplayer": {
       "ChromelessPlayer": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md",
+      "ChromelessPlayer.currentTime": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#currenttime",
+      "ChromelessPlayer.duration": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#duration",
+      "ChromelessPlayer.muted": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#muted",
+      "ChromelessPlayer.paused": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#paused",
+      "ChromelessPlayer.source": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#source",
+      "ChromelessPlayer.volume": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#volume",
       "PlayerConfiguration": "https://docs.theoplayer.com/api-reference/web/theoplayer.playerconfiguration.md",
       "SourceDescription": "https://docs.theoplayer.com/api-reference/web/theoplayer.sourcedescription.md",
       "THEOplayerError": "https://docs.theoplayer.com/api-reference/web/theoplayer.theoplayererror.md",

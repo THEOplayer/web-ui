@@ -1,11 +1,11 @@
 import { useCallback, useContext, useSyncExternalStore } from 'react';
 import { PlayerContext } from '../context';
-import type { ChromelessPlayer, PlayerEventMap } from 'theoplayer';
+import type { PlayerEventMap } from 'theoplayer';
 
 const PAUSED_CHANGE_EVENTS = ['play', 'pause'] satisfies ReadonlyArray<keyof PlayerEventMap>;
 
 /**
- * Returns [the player's paused state]{@link ChromelessPlayer.source}, automatically updating whenever it changes.
+ * Returns {@link theoplayer!ChromelessPlayer.paused | the player's paused state}, automatically updating whenever it changes.
  *
  * This hook must only be used in a component mounted inside a {@link DefaultUI} or {@link UIContainer},
  * or alternatively any other component that provides a {@link PlayerContext}.
