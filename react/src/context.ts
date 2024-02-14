@@ -15,7 +15,7 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
  *     const player = useContext(PlayerContext);
  *
  *     // Track the paused state of the player
- *     const subscribePaused = useCallback(
+ *     const subscribe = useCallback(
  *         (callback) => {
  *             player?.addEventListener(['play', 'pause'], callback);
  *             return () => {
@@ -25,7 +25,7 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
  *         [player]
  *     );
  *     const paused = useSyncExternalStore(
- *         subscribePaused,
+ *         subscribe,
  *         () => player?.paused ?? true,
  *         () => true
  *     );
