@@ -1,13 +1,11 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import { RadioButton } from './RadioButton';
 import { buttonTemplate } from './Button';
 import type { MediaTrack } from 'theoplayer/chromeless';
 import { localizeLanguageName, setTextContent } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<slot></slot>`);
-shadyCss.prepareTemplate(template, 'theoplayer-media-track-radio-button');
+const template = createTemplate('theoplayer-media-track-radio-button', buttonTemplate(`<slot></slot>`));
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
@@ -22,7 +20,7 @@ export class MediaTrackRadioButton extends RadioButton {
     private _track: MediaTrack | undefined = undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._slotEl = this.shadowRoot!.querySelector('slot')!;
 
         this._upgradeProperty('track');

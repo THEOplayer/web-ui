@@ -28,9 +28,10 @@
     "build:debug": "rollup -c",
     "build:prod": "rollup -c --environment BUILD:production",
     "watch": "rollup -c --watch",
-    "test": "npm run test:typecheck",
+    "test": "npm run test:typecheck && npm run test:unit",
     "test:format": "prettier --check .",
     "test:typecheck": "tsc --project . --noEmit",
+    "test:unit": "node --test test/ssr.test.mjs",
     "docs": "typedoc --treatWarningsAsErrors",
     "docs:watch": "typedoc --watch",
     "version": "node ../scripts/bump-changelog.mjs react-ui CHANGELOG.md && git add CHANGELOG.md"

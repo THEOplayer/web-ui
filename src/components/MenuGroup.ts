@@ -9,6 +9,7 @@ import { createCustomEvent } from '../util/EventUtils';
 import type { MenuChangeEvent } from '../events/MenuChangeEvent';
 import { MENU_CHANGE_EVENT } from '../events/MenuChangeEvent';
 import { Menu } from './Menu';
+import { createTemplate } from '../util/TemplateUtils';
 
 export interface MenuGroupOptions {
     template?: HTMLTemplateElement;
@@ -18,9 +19,7 @@ export function menuGroupTemplate(content: string, extraCss: string = ''): strin
     return `<style>${menuGroupCss}${extraCss}</style>${content}`;
 }
 
-const defaultTemplate = document.createElement('template');
-defaultTemplate.innerHTML = menuGroupTemplate(`<slot></slot>`);
-shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-menu-group');
+const defaultTemplate = createTemplate('theoplayer-menu-group', menuGroupTemplate(`<slot></slot>`));
 
 interface OpenMenuEntry {
     menu: Menu | MenuGroup;
@@ -48,7 +47,7 @@ export class MenuGroup extends HTMLElement {
 
     constructor(options?: MenuGroupOptions) {
         super();
-        const template = options?.template ?? defaultTemplate;
+        const template = options?.template ?? defaultTemplate();
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
         shadowRoot.appendChild(template.content.cloneNode(true));
 

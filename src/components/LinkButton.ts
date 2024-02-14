@@ -5,14 +5,13 @@ import type { ButtonOptions } from './Button';
 import { Button, buttonTemplate } from './Button';
 import { KeyCode } from '../util/KeyCode';
 import { toggleAttribute } from '../util/CommonUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
 export function linkButtonTemplate(button: string, extraCss: string = ''): string {
     return buttonTemplate(`<a>${button}</a>`, `${linkButtonCss}\n${extraCss}`);
 }
 
-const defaultTemplate = document.createElement('template');
-defaultTemplate.innerHTML = linkButtonTemplate('<slot></slot>');
-shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-link-button');
+const defaultTemplate = createTemplate('theoplayer-link-button', linkButtonTemplate('<slot></slot>'));
 
 /**
  * `<theoplayer-link-button>` - A {@link Button | button} that opens a hyperlink.
@@ -30,7 +29,7 @@ export class LinkButton extends HTMLElement {
     constructor(options?: ButtonOptions) {
         super();
 
-        const template = options?.template ?? defaultTemplate;
+        const template = options?.template ?? defaultTemplate();
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
         shadowRoot.appendChild(template.content.cloneNode(true));
 

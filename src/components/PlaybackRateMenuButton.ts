@@ -1,12 +1,10 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import { buttonTemplate } from './Button';
 import { MenuButton } from './MenuButton';
 import speedIcon from '../icons/speed.svg';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<span part="icon"><slot>${speedIcon}</slot></span>`);
-shadyCss.prepareTemplate(template, 'theoplayer-playback-rate-button');
+const template = createTemplate('theoplayer-playback-rate-button', buttonTemplate(`<span part="icon"><slot>${speedIcon}</slot></span>`));
 
 /**
  * `<theoplayer-playback-rate-menu-button>` - A menu button that opens a [playback rate menu]{@link PlaybackRateMenu}.
@@ -16,7 +14,7 @@ shadyCss.prepareTemplate(template, 'theoplayer-playback-rate-button');
  */
 export class PlaybackRateMenuButton extends MenuButton {
     constructor() {
-        super({ template });
+        super({ template: template() });
     }
 
     override connectedCallback() {

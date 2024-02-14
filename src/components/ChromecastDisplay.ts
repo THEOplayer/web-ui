@@ -5,16 +5,17 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { setTextContent } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML =
+const template = createTemplate(
+    'theoplayer-chromecast-display',
     `<style>${chromecastDisplayCss}</style>` +
-    `<div part="icon"><slot name="icon">${chromecastIcon}</slot></div>` +
-    `<div part="text">` +
-    `<p part="heading"><slot name="heading">Playing on</slot></p>` +
-    `<p part="receiver">Chromecast Receiver</p>` +
-    `</div>`;
-shadyCss.prepareTemplate(template, 'theoplayer-chromecast-display');
+        `<div part="icon"><slot name="icon">${chromecastIcon}</slot></div>` +
+        `<div part="text">` +
+        `<p part="heading"><slot name="heading">Playing on</slot></p>` +
+        `<p part="receiver">Chromecast Receiver</p>` +
+        `</div>`
+);
 
 const CAST_EVENTS = ['statechange'] as const;
 
@@ -30,7 +31,7 @@ export class ChromecastDisplay extends StateReceiverMixin(HTMLElement, ['player'
     constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
         this._receiverNameEl = shadowRoot.querySelector('[part="receiver"]')!;
 
         this._upgradeProperty('player');

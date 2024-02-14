@@ -1,13 +1,11 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import { Button, buttonTemplate } from './Button';
 import backIcon from '../icons/back.svg';
 import { createCustomEvent } from '../util/EventUtils';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<span part="icon"><slot>${backIcon}</slot></span>`);
-shadyCss.prepareTemplate(template, 'theoplayer-menu-close-button');
+const template = createTemplate('theoplayer-menu-close-button', buttonTemplate(`<span part="icon"><slot>${backIcon}</slot></span>`));
 
 /**
  * `<theoplayer-menu-close-button>` - A button that closes its parent menu.
@@ -22,7 +20,7 @@ export class CloseMenuButton extends Button {
     }
 
     constructor() {
-        super({ template });
+        super({ template: template() });
     }
 
     override connectedCallback() {

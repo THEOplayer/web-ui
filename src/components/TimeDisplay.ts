@@ -6,10 +6,9 @@ import { setTextContent } from '../util/CommonUtils';
 import { formatAsTimePhrase, formatTime } from '../util/TimeUtils';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${textDisplayCss}</style><span></span>`;
-shadyCss.prepareTemplate(template, 'theoplayer-time-display');
+const template = createTemplate('theoplayer-time-display', `<style>${textDisplayCss}</style><span></span>`);
 
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as const;
 
@@ -36,7 +35,7 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'str
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
         this._spanEl = shadowRoot.querySelector('span')!;
 
         this._upgradeProperty('player');

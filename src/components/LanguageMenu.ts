@@ -7,14 +7,13 @@ import type { ChromelessPlayer, MediaTrack, TextTrack } from 'theoplayer/chromel
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
 // Load components used in template
 import './TrackRadioGroup';
 import './TextTrackStyleMenu';
 
-const template = document.createElement('template');
-template.innerHTML = menuGroupTemplate(languageMenuHtml, languageMenuCss);
-shadyCss.prepareTemplate(template, 'theoplayer-language-menu');
+const template = createTemplate('theoplayer-language-menu', menuGroupTemplate(languageMenuHtml, languageMenuCss));
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
@@ -33,7 +32,7 @@ export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
     }
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._upgradeProperty('player');
     }
 

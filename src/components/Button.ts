@@ -1,8 +1,8 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import buttonCss from './Button.css';
-import { KeyCode } from '../util/KeyCode';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
 export interface ButtonOptions {
     template: HTMLTemplateElement;
@@ -12,9 +12,7 @@ export function buttonTemplate(button: string, extraCss: string = ''): string {
     return `<style>${buttonCss}\n${extraCss}</style>${button}`;
 }
 
-const defaultTemplate = document.createElement('template');
-defaultTemplate.innerHTML = buttonTemplate('<slot></slot>');
-shadyCss.prepareTemplate(defaultTemplate, 'theoplayer-button');
+const defaultTemplate = createTemplate('theoplayer-button', buttonTemplate('<slot></slot>'));
 
 /**
  * `<theoplayer-button>` - A basic button.
@@ -40,7 +38,7 @@ export class Button extends HTMLElement {
      */
     constructor(options?: ButtonOptions) {
         super();
-        const template = options?.template ?? defaultTemplate;
+        const template = options?.template ?? defaultTemplate();
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
 

@@ -1,11 +1,9 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import { Button, buttonTemplate } from './Button';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<slot>Reset</slot>`);
-shadyCss.prepareTemplate(template, 'theoplayer-text-track-style-reset-button');
+const template = createTemplate('theoplayer-text-track-style-reset-button', buttonTemplate(`<slot>Reset</slot>`));
 
 /**
  * `<theoplayer-text-track-style-reset-button>` - A button that resets the text track style.
@@ -20,7 +18,7 @@ export class TextTrackStyleResetButton extends StateReceiverMixin(Button, ['play
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
     }
 
     get player(): ChromelessPlayer | undefined {

@@ -9,14 +9,16 @@ import { ENTER_FULLSCREEN_EVENT, type EnterFullscreenEvent } from '../events/Ent
 import { EXIT_FULLSCREEN_EVENT, type ExitFullscreenEvent } from '../events/ExitFullscreenEvent';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(
-    `<span part="enter-icon"><slot name="enter-icon">${enterIcon}</slot></span>` +
-        `<span part="exit-icon"><slot name="exit-icon">${exitIcon}</slot></span>`,
-    fullscreenButtonCss
+const template = createTemplate(
+    'theoplayer-fullscreen-button',
+    buttonTemplate(
+        `<span part="enter-icon"><slot name="enter-icon">${enterIcon}</slot></span>` +
+            `<span part="exit-icon"><slot name="exit-icon">${exitIcon}</slot></span>`,
+        fullscreenButtonCss
+    )
 );
-shadyCss.prepareTemplate(template, 'theoplayer-fullscreen-button');
 
 /**
  * `<theoplayer-fullscreen-button>` - A button that toggles fullscreen.
@@ -29,7 +31,7 @@ export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen'])
     }
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._upgradeProperty('fullscreen');
     }
 

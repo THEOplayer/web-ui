@@ -1,16 +1,14 @@
 import { MenuButton } from './MenuButton';
 import { buttonTemplate } from './Button';
 import languageIcon from '../icons/language.svg';
-import * as shadyCss from '@webcomponents/shadycss';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<span part="icon"><slot>${languageIcon}</slot></span>`);
-shadyCss.prepareTemplate(template, 'theoplayer-language-menu-button');
+const template = createTemplate('theoplayer-language-menu-button', buttonTemplate(`<span part="icon"><slot>${languageIcon}</slot></span>`));
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
@@ -26,7 +24,7 @@ export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player'
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._upgradeProperty('player');
     }
 

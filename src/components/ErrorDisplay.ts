@@ -5,19 +5,20 @@ import { StateReceiverMixin } from './StateReceiverMixin';
 import type { THEOplayerError } from 'theoplayer/chromeless';
 import { setTextContent, toggleAttribute } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML =
+const template = createTemplate(
+    'theoplayer-error-display',
     `<style>${errorDisplayCss}</style>` +
-    `<div part="icon"><slot name="icon">${errorIcon}</slot></div>` +
-    `<div part="text">` +
-    `<h1 part="heading"><slot name="heading">An error occurred</slot></h1>` +
-    `<p part="message"><slot name="message"></slot></p>` +
-    `</div>` +
-    `<div part="fullscreen-controls">` +
-    `<slot name="fullscreen-controls"><theoplayer-fullscreen-button></theoplayer-fullscreen-button></slot>` +
-    `</div>`;
-shadyCss.prepareTemplate(template, 'theoplayer-error-display');
+        `<div part="icon"><slot name="icon">${errorIcon}</slot></div>` +
+        `<div part="text">` +
+        `<h1 part="heading"><slot name="heading">An error occurred</slot></h1>` +
+        `<p part="message"><slot name="message"></slot></p>` +
+        `</div>` +
+        `<div part="fullscreen-controls">` +
+        `<slot name="fullscreen-controls"><theoplayer-fullscreen-button></theoplayer-fullscreen-button></slot>` +
+        `</div>`
+);
 
 /**
  * `<theoplayer-error-display>` - A screen that shows the details of a fatal player error.
@@ -36,7 +37,7 @@ export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error', 'ful
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
 
         this._messageSlot = shadowRoot.querySelector('slot[name="message"]')!;
 

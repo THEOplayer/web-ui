@@ -5,10 +5,9 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { setTextContent } from '../util/CommonUtils';
 import { formatTime } from '../util/TimeUtils';
 import { Attribute } from '../util/Attribute';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${textDisplayCss}</style><span></span>`;
-shadyCss.prepareTemplate(template, 'theoplayer-duration-display');
+const template = createTemplate('theoplayer-duration-display', `<style>${textDisplayCss}</style><span></span>`);
 
 const PLAYER_EVENTS = ['durationchange'] as const;
 
@@ -24,7 +23,7 @@ export class DurationDisplay extends StateReceiverMixin(HTMLElement, ['player'])
     constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
         this._spanEl = shadowRoot.querySelector('span')!;
 
         this._upgradeProperty('player');

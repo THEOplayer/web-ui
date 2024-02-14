@@ -34,13 +34,12 @@ import type { DeviceType } from './util/DeviceType';
 import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
 import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
 import { READY_EVENT } from './events/ReadyEvent';
+import { createTemplate } from './util/TemplateUtils';
 
 // Load components used in template
 import './components/GestureReceiver';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${elementCss}</style>${elementHtml}`;
-shadyCss.prepareTemplate(template, 'theoplayer-ui');
+const template = createTemplate('theoplayer-ui', `<style>${elementCss}</style>${elementHtml}`);
 
 const DEFAULT_USER_IDLE_TIMEOUT = 2;
 const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
@@ -173,7 +172,7 @@ export class UIContainer extends HTMLElement {
     constructor(configuration: PlayerConfiguration = {}) {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
 
         this._configuration = configuration;
 

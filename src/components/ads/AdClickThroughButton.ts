@@ -5,10 +5,9 @@ import { Attribute } from '../../util/Attribute';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
+import { createTemplate } from '../../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = linkButtonTemplate(`<slot>Visit Advertiser</slot>`);
-shadyCss.prepareTemplate(template, 'theoplayer-ad-clickthrough-button');
+const template = createTemplate('theoplayer-ad-clickthrough-button', linkButtonTemplate(`<slot>Visit Advertiser</slot>`));
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
@@ -25,7 +24,7 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
     }
 
     constructor() {
-        super({ template });
+        super({ template: template() });
 
         this.disabled = true;
         this.style.display = 'none';

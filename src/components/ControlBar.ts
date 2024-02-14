@@ -1,9 +1,8 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import controlBarCss from './ControlBar.css';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${controlBarCss}</style><slot></slot>`;
-shadyCss.prepareTemplate(template, 'theoplayer-control-bar');
+const template = createTemplate('theoplayer-control-bar', `<style>${controlBarCss}</style><slot></slot>`);
 
 /**
  * `<theoplayer-control-bar>` - A horizontal control bar that can contain other controls.
@@ -14,7 +13,7 @@ export class ControlBar extends HTMLElement {
     constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
     }
 
     connectedCallback(): void {

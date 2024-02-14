@@ -13,14 +13,13 @@ import type { StreamType } from '../util/StreamType';
 import { isLinearAd } from '../util/AdUtils';
 import type { ColorStops } from '../util/ColorStops';
 import { KeyCode } from '../util/KeyCode';
+import { createTemplate } from '../util/TemplateUtils';
 
 // Load components used in template
 import './PreviewThumbnail';
 import './PreviewTimeDisplay';
 
-const template = document.createElement('template');
-template.innerHTML = rangeTemplate(timeRangeHtml, timeRangeCss);
-shadyCss.prepareTemplate(template, 'theoplayer-time-range');
+const template = createTemplate('theoplayer-time-range', rangeTemplate(timeRangeHtml, timeRangeCss));
 
 const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 'seeked'] as const;
 const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'readystatechange', 'error'] as const;
@@ -58,7 +57,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
     private _lastPlaybackRate: number = 0;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
 
         this._previewRailEl = this.shadowRoot!.querySelector('.theoplayer-time-range-preview-rail')!;
         this._previewBoxEl = this._previewRailEl.querySelector('[part~="preview-box"]')!;

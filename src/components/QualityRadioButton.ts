@@ -5,10 +5,9 @@ import type { MediaTrack, VideoQuality } from 'theoplayer/chromeless';
 import { setTextContent } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
 import { formatQualityLabel } from '../util/TrackUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<slot></slot>`);
-shadyCss.prepareTemplate(template, 'theoplayer-quality-radio-button');
+const template = createTemplate('theoplayer-quality-radio-button', buttonTemplate(`<slot></slot>`));
 
 const TRACK_EVENTS = ['activequalitychanged', 'targetqualitychanged'] as const;
 const QUALITY_EVENTS = ['update'] as const;
@@ -25,7 +24,7 @@ export class QualityRadioButton extends RadioButton {
     private _quality: VideoQuality | undefined = undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
         this._slotEl = this.shadowRoot!.querySelector('slot')!;
 
         this._upgradeProperty('track');

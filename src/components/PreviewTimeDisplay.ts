@@ -6,10 +6,9 @@ import { formatTime } from '../util/TimeUtils';
 import { Attribute } from '../util/Attribute';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import type { StreamType } from '../util/StreamType';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${textDisplayCss}</style><span></span>`;
-shadyCss.prepareTemplate(template, 'theoplayer-preview-time-display');
+const template = createTemplate('theoplayer-preview-time-display', `<style>${textDisplayCss}</style><span></span>`);
 
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as const;
 
@@ -33,7 +32,7 @@ export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['player
     constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
         this._spanEl = shadowRoot.querySelector('span')!;
 
         this._upgradeProperty('previewTime');

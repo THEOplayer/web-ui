@@ -5,10 +5,9 @@ import { StateReceiverMixin } from '../StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind, setTextContent } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
+import { createTemplate } from '../../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${textDisplayCss}\n${adDisplayCss}</style><span></span>`;
-shadyCss.prepareTemplate(template, 'theoplayer-ad-display');
+const template = createTemplate('theoplayer-ad-display', `<style>${textDisplayCss}\n${adDisplayCss}</style><span></span>`);
 
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'adskip', 'addad', 'updatead'] as const;
 
@@ -25,7 +24,7 @@ export class AdDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
     constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
         this._spanEl = shadowRoot.querySelector('span')!;
 
         this._upgradeProperty('player');

@@ -10,10 +10,12 @@ import { isSubtitleTrack } from '../util/TrackUtils';
 import { TextTrackOffRadioButton } from './TextTrackOffRadioButton';
 import { fromArrayLike, toggleAttribute } from '../util/CommonUtils';
 import { createEvent } from '../util/EventUtils';
+import { createTemplate } from '../util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`;
-shadyCss.prepareTemplate(template, 'theoplayer-track-radio-group');
+const template = createTemplate(
+    'theoplayer-track-radio-group',
+    `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`
+);
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
@@ -41,7 +43,7 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
     constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
 
         this._radioGroup = shadowRoot.querySelector('theoplayer-radio-group')!;
 
