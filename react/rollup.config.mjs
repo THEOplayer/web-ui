@@ -17,11 +17,18 @@ const banner = `/*!
  * THEOplayer Open Video UI for React (v${version})
  * License: ${license}
  */`;
-const externals = {
+const globals = {
     react: 'React',
     '@theoplayer/web-ui': 'THEOplayerUI',
     '@theoplayer/web-ui/es5': 'THEOplayerUI'
 };
+const external = Object.keys(globals);
+const esmExternal = [
+    ...external,
+    // @lit-react has a separate entry point for Node, to support SSR.
+    // Don't bundle it ourselves, otherwise we'll always ship the browser version.
+    '@lit/react'
+];
 
 /**
  * @param {{configOutputDir?: string}} cliArgs
@@ -60,10 +67,10 @@ function jsConfig(outputDir, { es5 = false, production = false, sourcemap = fals
                 sourcemap,
                 indent: false,
                 banner,
-                globals: externals
+                globals
             },
             context: 'self',
-            external: Object.keys(externals),
+            external,
             plugins: jsPlugins({ es5, module: false, production, sourcemap })
         },
         {
@@ -75,7 +82,7 @@ function jsConfig(outputDir, { es5 = false, production = false, sourcemap = fals
                 indent: false
             },
             context: 'self',
-            external: Object.keys(externals),
+            external: esmExternal,
             plugins: jsPlugins({ es5, module: true, production, sourcemap })
         }
     ]);

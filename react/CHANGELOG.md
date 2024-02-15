@@ -10,6 +10,10 @@
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🐛 Fix "Warning: useLayoutEffect does nothing on the server" when using `@theoplayer/react-ui` in Node. ([#52](https://github.com/THEOplayer/web-ui/pull/52))
+
 ## v1.7.0 (2024-02-15)
 
 -   🚀 Added support for loading in Node for static site generation (SSG) or server-side rendering (SSR). ([#50](https://github.com/THEOplayer/web-ui/pull/50))
