@@ -16,7 +16,9 @@
       "import": "./dist/THEOplayerReactUI.es5.mjs",
       "default": "./dist/THEOplayerReactUI.es5.js"
     },
-    "./dist/*": "./dist/*"
+    "./dist/*": "./dist/*",
+    "./package": "./package.json",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist/",
