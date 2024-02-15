@@ -11,6 +11,7 @@ import { string } from 'rollup-plugin-string';
 import dts from 'rollup-plugin-dts';
 import inject from '@rollup/plugin-inject';
 import virtual from '@rollup/plugin-virtual';
+import json from '@rollup/plugin-json';
 
 const fileName = 'THEOplayerUI';
 const umdName = 'THEOplayerUI';
@@ -45,7 +46,7 @@ export default (cliArgs) => {
                 footer: `export as namespace ${umdName};`
             },
             external: [theoplayerModule],
-            plugins: [dts()]
+            plugins: [json(), dts()]
         }
     ]);
 };
@@ -117,6 +118,7 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
                 // Remove createTemplate() helper.
                 ['./src/util/TemplateUtils']: `export function createTemplate() { return () => undefined; }`
             }),
+        json(),
         // Run PostCSS on .css files.
         postcss({
             include: './src/**/*.css',

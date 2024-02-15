@@ -60,6 +60,7 @@
     "theoplayer": "^6"
   },
   "devDependencies": {
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-replace": "^5.0.5",
     "@swc/cli": "^0.1.62",
