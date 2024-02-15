@@ -18,7 +18,9 @@
       "import": "./dist/THEOplayerUI.es5.mjs",
       "default": "./dist/THEOplayerUI.es5.js"
     },
-    "./dist/*": "./dist/*"
+    "./dist/*": "./dist/*",
+    "./package": "./package.json",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist/",
@@ -61,6 +63,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-inject": "^5.0.5",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-virtual": "^3.0.2",
     "@rollup/pluginutils": "^5.0.4",

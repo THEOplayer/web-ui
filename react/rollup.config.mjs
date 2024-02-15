@@ -1,6 +1,7 @@
 import { defineConfig } from 'rollup';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
+import json from '@rollup/plugin-json';
 import { minify, swc } from 'rollup-plugin-swc3';
 import * as path from 'node:path';
 import { readFile } from 'node:fs/promises';
@@ -106,6 +107,7 @@ function jsPlugins({ es5 = false, module = false, production = false, sourcemap 
                 }
             }),
         nodeResolve(),
+        json(),
         // Transpile TypeScript.
         swc({
             include: './src/**',

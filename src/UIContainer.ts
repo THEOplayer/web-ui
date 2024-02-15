@@ -54,10 +54,10 @@ const DEFAULT_DVR_THRESHOLD = 60;
  * ## Usage
  *
  * 1. Create a `<theoplayer-ui>` element.
- * 1. Place your UI elements as children of the `<theoplayer-ui>`.
+ * 2. Place your UI elements as children of the `<theoplayer-ui>`.
  *    Set their `slot` attribute to one of the defined slots (see below) to place them in the layout.
- * 1. Set its `configuration` attribute or property to a valid player configuration.
- * 1. Set its `source` attribute or property to a valid stream source.
+ * 3. Set its `configuration` attribute or property to a valid player configuration.
+ * 4. Set its `source` attribute or property to a valid stream source.
  *
  * ## Customization
  *

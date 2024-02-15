@@ -10,6 +10,11 @@
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   💅 Export `version` in public API. ([#53](https://github.com/THEOplayer/web-ui/pull/53))
+-   💅 Allow importing `@theoplayer/web-ui/package.json`. ([#53](https://github.com/THEOplayer/web-ui/pull/53))
+
 ## v1.7.0 (2024-02-15)
 
 -   🚀 Added support for loading in Node for static site generation (SSG) or server-side rendering (SSR). ([#50](https://github.com/THEOplayer/web-ui/pull/50))
