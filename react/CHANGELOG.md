@@ -10,11 +10,12 @@
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.7.1 (2024-02-15)
 
 -   🐛 Fix "Warning: useLayoutEffect does nothing on the server" when using `@theoplayer/react-ui` in Node. ([#52](https://github.com/THEOplayer/web-ui/pull/52))
 -   💅 Export `version` in public API. ([#53](https://github.com/THEOplayer/web-ui/pull/53))
 -   💅 Allow importing `@theoplayer/react-ui/package.json`. ([#53](https://github.com/THEOplayer/web-ui/pull/53))
+-   🏠 See changes to [Open Video UI for Web v1.7.1](https://github.com/THEOplayer/web-ui/blob/v1.7.1/CHANGELOG.md)
 
 ## v1.7.0 (2024-02-15)
 

@@ -10,7 +10,7 @@
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.7.1 (2024-02-15)
 
 -   💅 Export `version` in public API. ([#53](https://github.com/THEOplayer/web-ui/pull/53))
 -   💅 Allow importing `@theoplayer/web-ui/package.json`. ([#53](https://github.com/THEOplayer/web-ui/pull/53))
