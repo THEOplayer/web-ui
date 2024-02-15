@@ -27,9 +27,9 @@ const template = createTemplate('theoplayer-default-ui', `<style>${defaultUiCss}
  * ## Usage
  *
  * 1. Create a `<theoplayer-default-ui>` element.
- * 1. Set its `configuration` attribute or property to a valid player configuration.
- * 1. Set its `source` attribute or property to a valid stream source.
- * 1. Optionally, customize the player using CSS custom properties and/or extra controls.
+ * 2. Set its `configuration` attribute or property to a valid player configuration.
+ * 3. Set its `source` attribute or property to a valid stream source.
+ * 4. Optionally, customize the player using CSS custom properties and/or extra controls.
  *
  * ## Customization
  *
