@@ -46,7 +46,7 @@ export default (cliArgs) => {
                 footer: `export as namespace ${umdName};`
             },
             external: [theoplayerModule],
-            plugins: [json(), dts()]
+            plugins: [dts()]
         }
     ]);
 };

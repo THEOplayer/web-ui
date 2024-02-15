@@ -49,7 +49,7 @@ export default (cliArgs) => {
                 banner,
                 footer: `export as namespace ${umdName};`
             },
-            plugins: [nodeResolve(), json(), dts()]
+            plugins: [nodeResolve(), dts()]
         }
     ]);
 };

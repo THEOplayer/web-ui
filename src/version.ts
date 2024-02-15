@@ -1,4 +1,6 @@
+import { version as packageVersion } from '../package.json';
+
 /**
  * The version of Open Video UI for Web.
  */
-export { version } from '../package.json';
+export const version: string = packageVersion;
