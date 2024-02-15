@@ -10,7 +10,7 @@
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.7.0 (2024-02-15)
 
 -   🚀 Added support for loading in Node for static site generation (SSG) or server-side rendering (SSR). ([#50](https://github.com/THEOplayer/web-ui/pull/50))
     -   ⚠️ Although the Node entry point exports all custom element classes as usual, attempting to actually construct those classes will result in errors. Most dependencies are either replaced with stubs (using [`@lit-labs/ssr-dom-shim`](https://lit.dev/docs/ssr/dom-emulation/)) or removed altogether (such as THEOplayer itself).
