@@ -1,0 +1,54 @@
+---
+sidebar_position: 2
+---
+
+# Custom UI
+
+import demoUrl from './custom-ui/demo.html';
+import styles from './shared.module.css';
+
+<iframe className={styles.player} src={demoUrl}></iframe>
+
+<details>
+    <summary>Code</summary>
+    ```html showLineNumbers
+    <theoplayer-ui
+        configuration='{"libraryLocation":"/path/to/theoplayer/","license":"your_theoplayer_license"}'
+        source='{"sources":{"src":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
+        fluid
+    >
+        <theoplayer-control-bar slot="top-chrome" class="top-chrome">
+            <span class="title">Elephant's Dream</span>
+            <span class="spacer"></span>
+            <theoplayer-language-menu-button menu="language-menu" mobile-only></theoplayer-language-menu-button>
+            <theoplayer-settings-menu-button menu="settings-menu" mobile-only></theoplayer-settings-menu-button>
+            <theoplayer-airplay-button mobile-only></theoplayer-airplay-button>
+            <theoplayer-chromecast-button mobile-only></theoplayer-chromecast-button>
+        </theoplayer-control-bar>
+        <theoplayer-loading-indicator slot="centered-loading" no-auto-hide></theoplayer-loading-indicator>
+        <div slot="centered-chrome" class="centered-chrome">
+            <theoplayer-play-button></theoplayer-play-button>
+        </div>
+        <div class="bottom-chrome">
+            <theoplayer-control-bar>
+                <theoplayer-time-range></theoplayer-time-range>
+            </theoplayer-control-bar>
+            <theoplayer-control-bar>
+                <theoplayer-play-button mobile-hidden></theoplayer-play-button>
+                <theoplayer-mute-button></theoplayer-mute-button>
+                <theoplayer-volume-range mobile-hidden></theoplayer-volume-range>
+                <theoplayer-time-display show-duration></theoplayer-time-display>
+                <span class="spacer"></span>
+                <theoplayer-language-menu-button menu="language-menu" mobile-hidden></theoplayer-language-menu-button>
+                <theoplayer-settings-menu-button menu="settings-menu" mobile-hidden></theoplayer-settings-menu-button>
+                <theoplayer-airplay-button mobile-hidden></theoplayer-airplay-button>
+                <theoplayer-chromecast-button mobile-hidden></theoplayer-chromecast-button>
+                <theoplayer-fullscreen-button></theoplayer-fullscreen-button>
+            </theoplayer-control-bar>
+        </div>
+        <theoplayer-language-menu id="language-menu" slot="menu" hidden></theoplayer-language-menu>
+        <theoplayer-settings-menu id="settings-menu" slot="menu" hidden></theoplayer-settings-menu>
+        <theoplayer-error-display slot="error"></theoplayer-error-display>
+    </theoplayer-ui>
+    ```
+</details>
