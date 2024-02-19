@@ -1,0 +1,21 @@
+---
+sidebar_position: 1
+---
+
+# Default UI
+
+import demoUrl from './default-ui/demo.html';
+import styles from './shared.module.css';
+
+<iframe className={styles.player} src={demoUrl}></iframe>
+
+<details>
+    <summary>Code</summary>
+    ```html showLineNumbers
+    <theoplayer-default-ui
+        configuration='{"libraryLocation":"/path/to/theoplayer/","license":"your_theoplayer_license"}'
+        source='{"sources":{"src":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
+        fluid
+    ></theoplayer-default-ui>
+    ```
+</details>

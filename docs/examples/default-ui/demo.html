@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Default UI</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+        <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            theoplayer-default-ui:not(:defined) {
+                display: inline-block;
+                box-sizing: border-box;
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                background: #000;
+            }
+
+            theoplayer-default-ui {
+                font-family: 'Noto Sans', sans-serif;
+                width: 100%;
+            }
+        </style>
+        <script src="https://unpkg.com/theoplayer@6/THEOplayer.js"></script>
+        <script async src="https://unpkg.com/@theoplayer/web-ui@1"></script>
+    </head>
+    <body>
+        <!--
+            libraryLocation: For demonstration purposes, we use the free unpkg.com CDN.
+            For production use, we recommend hosting THEOplayer yourself
+            and changing this (as well as the <script> and <link> tags above)
+            to point to THEOplayer's location on your own website.
+
+            license: Change this to your THEOplayer license.
+        -->
+        <theoplayer-default-ui
+            configuration='{"libraryLocation":"https://unpkg.com/theoplayer@6/","license":"your_theoplayer_license"}'
+            source='{"sources":{"src":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
+            fluid
+        ></theoplayer-default-ui>
+    </body>
+</html>
