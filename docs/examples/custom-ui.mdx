@@ -4,10 +4,10 @@ sidebar_position: 2
 
 # Custom UI
 
-import demoUrl from './custom-ui/demo.html';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './shared.module.css';
 
-<iframe className={styles.player} src={demoUrl}></iframe>
+<iframe className={styles.player} src={useBaseUrl('/web-ui-examples/custom-ui/demo.html')}></iframe>
 
 <details>
     <summary>Code</summary>
