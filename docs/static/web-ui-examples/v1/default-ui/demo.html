@@ -17,14 +17,13 @@
             theoplayer-default-ui:not(:defined) {
                 display: inline-block;
                 box-sizing: border-box;
-                width: 100%;
-                aspect-ratio: 16 / 9;
-                background: #000;
             }
 
             theoplayer-default-ui {
-                font-family: 'Noto Sans', sans-serif;
                 width: 100%;
+                aspect-ratio: 16 / 9;
+                font-family: 'Noto Sans', sans-serif;
+                background: #000;
             }
         </style>
         <script src="https://unpkg.com/theoplayer@6/THEOplayer.js"></script>
@@ -43,7 +42,6 @@
         <theoplayer-default-ui
             configuration='{"libraryLocation":"https://unpkg.com/theoplayer@6/","licenseUrl":"/docs/theoplayer-license"}'
             source='{"sources":{"src":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
-            fluid
         ></theoplayer-default-ui>
     </body>
 </html>

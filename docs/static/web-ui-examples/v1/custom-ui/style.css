@@ -7,14 +7,13 @@ body {
 theoplayer-ui:not(:defined) {
     display: inline-block;
     box-sizing: border-box;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    background: #000;
 }
 
 theoplayer-ui {
-    font-family: 'Noto Sans', sans-serif;
     width: 100%;
+    aspect-ratio: 16 / 9;
+    font-family: 'Noto Sans', sans-serif;
+    background: #000;
 }
 
 .spacer {
