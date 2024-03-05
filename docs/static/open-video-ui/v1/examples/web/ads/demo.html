@@ -26,12 +26,12 @@
                 background: #000;
             }
         </style>
-        <script src="https://unpkg.com/theoplayer@6/THEOplayer.js"></script>
+        <script src="https://cdn.theoplayer.com/dash/theoplayer/THEOplayer.js"></script>
         <script async src="https://unpkg.com/@theoplayer/web-ui@1"></script>
     </head>
     <body>
         <!--
-            libraryLocation: For demonstration purposes, we use the free unpkg.com CDN.
+            libraryLocation: For demonstration purposes, we use the theoplayer.com CDN.
             For production use, we recommend hosting THEOplayer yourself
             and changing this (as well as the <script> and <link> tags above)
             to point to THEOplayer's location on your own website.
@@ -40,7 +40,7 @@
             Alternatively, replace it with a "license" property whose value is your THEOplayer license itself.
         -->
         <theoplayer-default-ui
-            configuration='{"libraryLocation":"https://unpkg.com/theoplayer@6/","licenseUrl":"/docs/theoplayer-license.txt"}'
+            configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","licenseUrl":"/docs/theoplayer-license.txt"}'
         ></theoplayer-default-ui>
         <script>
             var ui = document.querySelector('theoplayer-default-ui');
