@@ -1,10 +1,10 @@
 import React, { type ComponentPropsWithoutRef, forwardRef, type JSX, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 export interface Props extends ComponentPropsWithoutRef<'iframe'> {
-    customStyle?: string;
+    hideDeviceType?: boolean;
 }
 
-export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ customStyle, ...props }: Props, ref): JSX.Element {
+export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ hideDeviceType, ...props }: Props, ref): JSX.Element {
     const iframeRef = useRef<HTMLIFrameElement | null>(null);
     useImperativeHandle(ref, () => iframeRef.current, [iframeRef.current]);
 
@@ -18,17 +18,19 @@ export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ cu
     return (
         <>
             <iframe ref={iframeRef} {...props}></iframe>
-            <p>
-                <label style={{ userSelect: 'none' }}>
-                    Override device type{' '}
-                    <select value={deviceType} onChange={(e) => setDeviceType(e.target.value)}>
-                        <option value=""></option>
-                        <option value="desktop">Desktop</option>
-                        <option value="mobile">Mobile</option>
-                        <option value="tv">TV</option>
-                    </select>
-                </label>
-            </p>
+            {!hideDeviceType && (
+                <p>
+                    <label style={{ userSelect: 'none' }}>
+                        Override device type{' '}
+                        <select value={deviceType} onChange={(e) => setDeviceType(e.target.value)}>
+                            <option value=""></option>
+                            <option value="desktop">Desktop</option>
+                            <option value="mobile">Mobile</option>
+                            <option value="tv">TV</option>
+                        </select>
+                    </label>
+                </p>
+            )}
         </>
     );
 });
