@@ -1,9 +1,12 @@
-import React, { type ComponentPropsWithoutRef, type JSX, useEffect, useRef, useState } from 'react';
+import React, { type ComponentPropsWithoutRef, forwardRef, type JSX, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
-export interface Props extends ComponentPropsWithoutRef<'iframe'> {}
+export interface Props extends ComponentPropsWithoutRef<'iframe'> {
+    customStyle?: string;
+}
 
-export default function Example(props: Props): JSX.Element {
+export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ customStyle, ...props }: Props, ref): JSX.Element {
     const iframeRef = useRef<HTMLIFrameElement | null>(null);
+    useImperativeHandle(ref, () => iframeRef.current, [iframeRef.current]);
 
     const [deviceType, setDeviceType] = useState('');
     useEffect(() => {
@@ -28,4 +31,4 @@ export default function Example(props: Props): JSX.Element {
             </p>
         </>
     );
-}
+});
