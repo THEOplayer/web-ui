@@ -22,7 +22,9 @@ export default function StylableExample({ defaultCustomStyle, ...props }: Props)
     return (
         <>
             <Example ref={setIframe} {...props} />
-            <CodeInput lang="CSS" value={customStyle} onInput={(e) => setCustomStyle((e.target as CodeInputElement).value)} />
+            <CodeInput lang="CSS" onInput={(e) => setCustomStyle((e.target as CodeInputElement).value)}>
+                {defaultCustomStyle}
+            </CodeInput>
         </>
     );
 }
