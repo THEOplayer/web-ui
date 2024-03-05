@@ -6,3 +6,8 @@
      */
     aspect-ratio: 16 / 9.1;
 }
+
+.portraitPlayer {
+    width: 100%;
+    aspect-ratio: 9 / 10;
+}
