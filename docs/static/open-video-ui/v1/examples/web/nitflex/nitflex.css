@@ -1,0 +1,91 @@
+@font-face {
+    font-display: optional;
+    font-family: Netflix Sans;
+    font-weight: 300;
+    src: url(https://assets.nflxext.com/ffe/siteui/fonts/netflix-sans/v3/NetflixSans_W_Lt.woff2) format('woff2'),
+        url(https://assets.nflxext.com/ffe/siteui/fonts/netflix-sans/v3/NetflixSans_W_Lt.woff) format('woff');
+}
+
+@font-face {
+    font-display: optional;
+    font-family: Netflix Sans;
+    font-weight: 700;
+    src: url(https://assets.nflxext.com/ffe/siteui/fonts/netflix-sans/v3/NetflixSans_W_Bd.woff2) format('woff2'),
+        url(https://assets.nflxext.com/ffe/siteui/fonts/netflix-sans/v3/NetflixSans_W_Bd.woff) format('woff');
+}
+
+.material-symbols-sharp {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}
+
+.material-symbols-sharp.material-symbols-sharp-fill {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}
+
+theoplayer-ui {
+    font-family: 'Netflix Sans', sans-serif;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+
+    --nitflex-primary-color: rgb(229, 9, 20);
+
+    --theoplayer-control-backdrop-background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.5) 100%);
+    --theoplayer-loading-icon-color: var(--nitflex-primary-color);
+    --theoplayer-range-bar-color: var(--nitflex-primary-color);
+    --theoplayer-range-thumb-background: var(--nitflex-primary-color);
+    --theoplayer-range-track-pointer-background: rgba(255, 255, 255, 0.5);
+    --theoplayer-range-track-height: 2px;
+    --theoplayer-range-thumb-width: 16px;
+    --theoplayer-range-thumb-height: 16px;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+.title {
+    user-select: none;
+    color: var(--theoplayer-text-color, #fff);
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.75);
+    font-weight: 700;
+    font-size: var(--theoplayer-text-font-size, 14px);
+    line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
+    margin: 0 auto;
+    padding: var(--theoplayer-control-padding, 10px);
+}
+
+.centered-chrome {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.centered-chrome * {
+    --theoplayer-control-height: 48px;
+    --theoplayer-text-content-height: 100%;
+}
+
+.centered-chrome .material-symbols-sharp {
+    font-size: var(--theoplayer-control-height);
+}
+
+theoplayer-control-bar {
+    font-weight: 300;
+    align-items: center;
+}
+
+.bottom-chrome {
+    justify-content: space-around;
+}
+
+theoplayer-time-range {
+    --theoplayer-control-height: 12px;
+}
+
+/*
+ * Hide all controls before first play, except for the center play button
+ */
+theoplayer-ui:not([has-first-play]) theoplayer-control-bar,
+theoplayer-ui:not([has-first-play]) .centered-chrome > :not(theoplayer-play-button) {
+    display: none !important;
+}
