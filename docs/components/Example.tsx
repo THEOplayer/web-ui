@@ -1,4 +1,14 @@
-import React, { type ComponentPropsWithoutRef, forwardRef, type JSX, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, {
+    type ComponentPropsWithoutRef,
+    forwardRef,
+    type JSX,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useRef,
+    useState,
+    useSyncExternalStore
+} from 'react';
 
 export interface Props extends ComponentPropsWithoutRef<'iframe'> {
     hideDeviceType?: boolean;
@@ -9,9 +19,10 @@ export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ hi
     useImperativeHandle(ref, () => iframeRef.current, [iframeRef.current]);
 
     const [deviceType, setDeviceType] = useState('');
+    const iframeDocument = useIframeDocument(iframeRef.current);
     useEffect(() => {
-        if (!iframeRef.current || !deviceType) return;
-        const ui = iframeRef.current.contentDocument.querySelector('theoplayer-default-ui, theoplayer-ui');
+        if (!iframeDocument || !deviceType) return;
+        const ui = iframeDocument.querySelector('theoplayer-default-ui, theoplayer-ui');
         ui?.setAttribute('device-type', deviceType);
     }, [iframeRef.current, deviceType]);
 
@@ -34,3 +45,34 @@ export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ hi
         </>
     );
 });
+
+/**
+ * Returns `iframe.contentDocument`, but only when its ready state is "interactive" or "complete".
+ */
+export function useIframeDocument(iframe: HTMLIFrameElement | null): Document | null {
+    const subscribe = useCallback(
+        (cb) => {
+            const iframeWindow = iframe?.contentWindow;
+            if (!iframeWindow) return;
+            const iframeDocument = iframe?.contentDocument;
+            iframeWindow.addEventListener('load', cb);
+            iframeDocument?.addEventListener('readystatechange', cb);
+            return () => {
+                iframeWindow.removeEventListener('load', cb);
+                iframeDocument?.removeEventListener('readystatechange', cb);
+            };
+        },
+        [iframe]
+    );
+    return useSyncExternalStore(
+        subscribe,
+        () => {
+            const iframeDocument = iframe?.contentDocument;
+            if (!iframeDocument || iframeDocument.readyState === 'loading') {
+                return null;
+            }
+            return iframeDocument;
+        },
+        () => null
+    );
+}
