@@ -1,0 +1,25 @@
+---
+sidebar_position: 10
+---
+
+# Default UI
+
+import Example from '../components/Example';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from './shared.module.css';
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/examples/web/default-ui/demo.html')}></Example>
+
+<details>
+    <summary>Code</summary>
+    ```html showLineNumbers
+    <theoplayer-default-ui
+        configuration='{"libraryLocation":"/path/to/theoplayer/","license":"your_theoplayer_license"}'
+        source='{"sources":{"src":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
+        fluid
+    ></theoplayer-default-ui>
+    ```
+
+    [📜 View full source on GitHub](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/examples/web/default-ui/demo.html)
+
+</details>

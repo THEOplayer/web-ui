@@ -1,0 +1,64 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+theoplayer-ui:not(:defined) {
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+theoplayer-ui {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    font-family: 'Noto Sans', sans-serif;
+    background: #000;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+.title {
+    user-select: none;
+    color: var(--theoplayer-text-color, #fff);
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.75);
+    font-size: var(--theoplayer-text-font-size, 14px);
+    line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
+    padding: var(--theoplayer-control-padding, 10px);
+}
+
+.centered-chrome * {
+    --theoplayer-control-height: 48px;
+}
+
+.bottom-chrome {
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: stretch;
+}
+
+/*
+ * Hide mobile-hidden elements on mobile, and mobile-only elements on desktop
+ */
+theoplayer-ui[mobile] [mobile-hidden],
+theoplayer-ui:not([mobile]) [mobile-only] {
+    display: none !important;
+}
+
+/*
+ * Hide all controls before first play, except for the center play button
+ */
+theoplayer-ui:not([has-first-play]) theoplayer-control-bar,
+theoplayer-ui:not([has-first-play]) .centered-chrome :not(theoplayer-play-button) {
+    display: none !important;
+}
+
+/*
+ * Hide center play button on desktop after first play
+ */
+theoplayer-ui[has-first-play]:not([mobile]) .centered-chrome theoplayer-play-button {
+    display: none !important;
+}

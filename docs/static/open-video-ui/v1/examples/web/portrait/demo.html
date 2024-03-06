@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Default UI</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
+        <link href="portrait.css" rel="stylesheet" />
+        <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+        <script src="https://cdn.theoplayer.com/dash/theoplayer/THEOplayer.js"></script>
+        <script async src="https://unpkg.com/@theoplayer/web-ui@1"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="phone">
+                <!--
+                     libraryLocation: For demonstration purposes, we use the theoplayer.com CDN.
+                     For production use, we recommend hosting THEOplayer yourself
+                     and changing this (as well as the <script> and <link> tags above)
+                     to point to THEOplayer's location on your own website.
+
+                     licenseUrl: Change this to point to your THEOplayer license file.
+                     Alternatively, replace it with a "license" property whose value is your THEOplayer license itself.
+                 -->
+                <theoplayer-ui
+                    configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","licenseUrl":"/docs/theoplayer-license.txt"}'
+                    source='{"sources":"https://cdn.theoplayer.com/video/skating-portrait.mp4"}'
+                    device-type="mobile"
+                >
+                    <theoplayer-control-bar slot="top-chrome" class="top-chrome">
+                        <theoplayer-settings-menu-button menu="settings-menu" mobile-only></theoplayer-settings-menu-button>
+                    </theoplayer-control-bar>
+                    <theoplayer-loading-indicator slot="centered-loading" no-auto-hide></theoplayer-loading-indicator>
+                    <div slot="centered-chrome" class="centered-chrome">
+                        <theoplayer-play-button></theoplayer-play-button>
+                    </div>
+                    <div slot="middle-chrome" class="side-chrome">
+                        <theoplayer-mute-button></theoplayer-mute-button>
+                        <theoplayer-button><span class="material-symbols-rounded">thumb_up</span></theoplayer-button>
+                        <theoplayer-button><span class="material-symbols-rounded">comment</span>️</theoplayer-button>
+                        <theoplayer-button>️<span class="material-symbols-rounded">share</span></theoplayer-button>
+                    </div>
+                    <div class="bottom-chrome">
+                        <theoplayer-control-bar>
+                            <theoplayer-time-display></theoplayer-time-display>
+                            <span class="spacer"></span>
+                            <theoplayer-time-display remaining></theoplayer-time-display>
+                        </theoplayer-control-bar>
+                        <theoplayer-control-bar>
+                            <theoplayer-time-range></theoplayer-time-range>
+                        </theoplayer-control-bar>
+                    </div>
+                    <theoplayer-settings-menu id="settings-menu" slot="menu" hidden></theoplayer-settings-menu>
+                    <theoplayer-error-display slot="error"></theoplayer-error-display>
+                </theoplayer-ui>
+            </div>
+        </div>
+    </body>
+</html>

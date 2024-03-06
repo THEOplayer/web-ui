@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Advertisements</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+        <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            theoplayer-default-ui:not(:defined) {
+                display: inline-block;
+                box-sizing: border-box;
+            }
+
+            theoplayer-default-ui {
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                font-family: 'Noto Sans', sans-serif;
+                background: #000;
+            }
+        </style>
+        <script src="https://cdn.theoplayer.com/dash/theoplayer/THEOplayer.js"></script>
+        <script async src="https://unpkg.com/@theoplayer/web-ui@1"></script>
+    </head>
+    <body>
+        <!--
+            libraryLocation: For demonstration purposes, we use the theoplayer.com CDN.
+            For production use, we recommend hosting THEOplayer yourself
+            and changing this (as well as the <script> and <link> tags above)
+            to point to THEOplayer's location on your own website.
+
+            licenseUrl: Change this to point to your THEOplayer license file.
+            Alternatively, replace it with a "license" property whose value is your THEOplayer license itself.
+        -->
+        <theoplayer-default-ui
+            configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","licenseUrl":"/docs/theoplayer-license.txt"}'
+        ></theoplayer-default-ui>
+        <script>
+            var ui = document.querySelector('theoplayer-default-ui');
+            ui.source = {
+                sources: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8',
+                ads: [
+                    {
+                        sources: {
+                            src: 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpremidpostpod&ciu_szs=300x250&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&impl=s&cmsid=496&vid=short_onecue&correlator=',
+                            type: 'vmap'
+                        }
+                    }
+                ]
+            };
+        </script>
+    </body>
+</html>

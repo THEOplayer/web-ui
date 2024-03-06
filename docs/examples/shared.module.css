@@ -1,0 +1,13 @@
+.player {
+    width: 100%;
+    /*
+     * Make the player slightly higher than necessary,
+     * to avoid scrollbars.
+     */
+    aspect-ratio: 16 / 9.1;
+}
+
+.portraitPlayer {
+    width: 100%;
+    aspect-ratio: 9 / 10;
+}

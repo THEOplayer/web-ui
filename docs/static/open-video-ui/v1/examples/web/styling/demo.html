@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Styling the default UI</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+        <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            theoplayer-default-ui:not(:defined) {
+                display: inline-block;
+                box-sizing: border-box;
+            }
+
+            theoplayer-default-ui {
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                font-family: 'Noto Sans', sans-serif;
+                background: #000;
+            }
+        </style>
+        <style id="custom-style">
+            /* A festive theme for the holidays. */
+            theoplayer-default-ui {
+                font-family: 'Comic Sans MS', sans-serif;
+                width: 100%;
+                --theoplayer-icon-color: red;
+                --theoplayer-text-color: white;
+                --theoplayer-range-bar-color: red;
+                --theoplayer-range-thumb-background: linear-gradient(
+                    to bottom right,
+                    red 0% 25%,
+                    white 25% 40%,
+                    red 40% 60%,
+                    white 60% 75%,
+                    red 75% 100%
+                );
+                --theoplayer-range-thumb-box-shadow: 1px 1px 5px red;
+                --theoplayer-range-thumb-height: 19px;
+                --theoplayer-range-thumb-width: 19px;
+                --theoplayer-range-track-height: 6px;
+                --theoplayer-time-range-track-pointer-background: rgb(255 0 0 / 25%);
+                --theoplayer-control-background-gradient-stops: transparent 0%, rgb(0 100 0) 100%;
+                --theoplayer-menu-backdrop-background: rgb(0 100 0 / 75%);
+                --theoplayer-mobile-control-backdrop-background: rgb(0 100 0 / 75%);
+            }
+        </style>
+        <script src="https://cdn.theoplayer.com/dash/theoplayer/THEOplayer.js"></script>
+        <script async src="https://unpkg.com/@theoplayer/web-ui@1"></script>
+    </head>
+    <body>
+        <!--
+            libraryLocation: For demonstration purposes, we use the theoplayer.com CDN.
+            For production use, we recommend hosting THEOplayer yourself
+            and changing this (as well as the <script> and <link> tags above)
+            to point to THEOplayer's location on your own website.
+
+            licenseUrl: Change this to point to your THEOplayer license file.
+            Alternatively, replace it with a "license" property whose value is your THEOplayer license itself.
+        -->
+        <theoplayer-default-ui
+            configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","licenseUrl":"/docs/theoplayer-license.txt"}'
+            source='{"sources":{"src":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
+        ></theoplayer-default-ui>
+    </body>
+</html>
