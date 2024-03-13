@@ -87,6 +87,7 @@
             import { useCallback, useContext, useState, useSyncExternalStore } from 'react';
             import { createRoot } from 'react-dom/client';
             import * as THEOplayerReactUI from '@theoplayer/react-ui';
+            import { useSourceFromParent } from '../utils.js';
 
             const configuration = {
                 /**
@@ -254,7 +255,7 @@
             };
 
             const App = () => {
-                const source = defaultSource;
+                const source = useSourceFromParent() || defaultSource;
                 const title = source.metadata.title;
                 return <MyCustomUI configuration={configuration} source={source} title={title} />;
             };
