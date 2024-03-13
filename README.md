@@ -127,7 +127,7 @@ If you want to fully customize your video player layout, you can use a `<theopla
 
 See [docs/examples/custom-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/custom-ui.html) for a complete example.
 
-# Legacy browser support
+### Legacy browser support
 
 By default, Open Video UI for Web targets modern browsers that support modern JavaScript syntax (such as [async/await](https://caniuse.com/async-functions)) and native [Custom Elements](https://caniuse.com/custom-elementsv1). This keeps the download size small, so your viewers can spend less time waiting for your page to load and start watching their video faster.
 

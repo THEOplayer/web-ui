@@ -108,7 +108,7 @@ const App = () => {
 
 See [docs/examples/react.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/react.html) for a complete example.
 
-# Legacy browser support
+### Legacy browser support
 
 By default, Open Video UI for React targets modern browsers that support modern JavaScript syntax (such as [async/await](https://caniuse.com/async-functions)) and native [Custom Elements](https://caniuse.com/custom-elementsv1). This keeps the download size small, so your viewers can spend less time waiting for your page to load and start watching their video faster.
 
