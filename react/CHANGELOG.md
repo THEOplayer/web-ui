@@ -1,3 +1,7 @@
+---
+description: Find out what's new in Open Video UI for React.
+---
+
 # Changelog
 
 > **Tags:**
