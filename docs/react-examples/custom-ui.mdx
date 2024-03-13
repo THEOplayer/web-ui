@@ -15,23 +15,62 @@ import styles from './shared.module.css';
     <summary>Code</summary>
 
     ```jsx
-    import {DefaultUI} from '@theoplayer/react-ui'
+    import * as THEOplayerReactUI from '@theoplayer/react-ui';
 
     const configuration = {
-        libraryLocation: "/path/to/theoplayer/",
-        license: "your_theoplayer_license"
-
+        libraryLocation: '/path/to/theoplayer/',
+        license: 'your_theoplayer_license'
     };
 
     const source = {
-        sources: {src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8'},
+        sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
         metadata: {
             title: "Elephant's Dream"
         }
     };
 
+    const Spacer = () => {
+        return <span style={{ flexGrow: 1 }} />;
+    };
+
     const App = () => {
-        return <DefaultUI configuration={configuration} source={source}/>;
+        return (
+            <THEOplayerReactUI.UIContainer
+                configuration={configuration}
+                source={source}
+                topChrome={
+                    <THEOplayerReactUI.ControlBar>
+                        <span className="my-title">{title}</span>
+                    </THEOplayerReactUI.ControlBar>
+                }
+                centeredChrome={<THEOplayerReactUI.PlayButton />}
+                centeredLoading={<THEOplayerReactUI.LoadingIndicator />}
+                bottomChrome={
+                    <>
+                        <THEOplayerReactUI.ControlBar>
+                            <THEOplayerReactUI.TimeRange />
+                        </THEOplayerReactUI.ControlBar>
+                        <THEOplayerReactUI.ControlBar>
+                            <THEOplayerReactUI.PlayButton />
+                            <THEOplayerReactUI.MuteButton />
+                            <THEOplayerReactUI.VolumeRange />
+                            <THEOplayerReactUI.TimeDisplay />
+                            <Spacer />
+                            <THEOplayerReactUI.LanguageMenuButton menu="language-menu" />
+                            <THEOplayerReactUI.SettingsMenuButton menu="settings-menu" />
+                            <THEOplayerReactUI.FullscreenButton />
+                        </THEOplayerReactUI.ControlBar>
+                    </>
+                }
+                menu={
+                    <>
+                        <THEOplayerReactUI.LanguageMenu id="language-menu" />
+                        <THEOplayerReactUI.SettingsMenu id="settings-menu" />
+                    </>
+                }
+                error={<THEOplayerReactUI.ErrorDisplay />}
+            />
+        );
     };
     ```
 
