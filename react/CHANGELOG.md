@@ -1,5 +1,6 @@
 ---
 description: Find out what's new in Open Video UI for React.
+sidebar_custom_props: { 'icon': '📰' }
 ---
 
 # Changelog
