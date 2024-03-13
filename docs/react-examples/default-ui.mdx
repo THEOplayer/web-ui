@@ -1,0 +1,39 @@
+---
+sidebar_position: 1
+slug: /react/examples/default-ui
+---
+
+# Default UI
+
+import Example from '../components/Example';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from './shared.module.css';
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/examples/react/default-ui/demo.html')} />
+
+<details>
+    <summary>Code</summary>
+
+    ```jsx
+    import {DefaultUI} from '@theoplayer/react-ui'
+
+    const configuration = {
+        libraryLocation: "/path/to/theoplayer/",
+        license: "your_theoplayer_license"
+    };
+
+    const source = {
+        sources: {src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8'},
+        metadata: {
+            title: "Elephant's Dream"
+        }
+    };
+
+    const App = () => {
+        return <DefaultUI configuration={configuration} source={source}/>;
+    };
+    ```
+
+    [📜 View full source on GitHub](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/examples/react/default-ui/demo.html)
+
+</details>
