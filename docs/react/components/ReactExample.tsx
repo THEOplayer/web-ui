@@ -35,20 +35,23 @@ export default function ReactExample(props: Props): JSX.Element {
     }, [iframe, sourceName]);
 
     return (
-        <>
-            <p>
-                <label>
-                    Source:&nbsp;
-                    <select value={sourceName} onChange={(ev) => setSourceName(ev.target.value)}>
-                        {Object.entries(sources).map(([key, value]) => (
-                            <option key={key} value={key}>
-                                {value.metadata.title}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-            </p>
-            <Example ref={setIframe} {...props} />
-        </>
+        <Example
+            ref={setIframe}
+            {...props}
+            options={
+                <div>
+                    <label>
+                        Source:{' '}
+                        <select value={sourceName} onChange={(ev) => setSourceName(ev.target.value)}>
+                            {Object.entries(sources).map(([key, value]) => (
+                                <option key={key} value={key}>
+                                    {value.metadata.title}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                </div>
+            }
+        />
     );
 }

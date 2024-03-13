@@ -2,6 +2,7 @@ import React, {
     type ComponentPropsWithoutRef,
     forwardRef,
     type JSX,
+    type ReactNode,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -12,9 +13,10 @@ import React, {
 
 export interface Props extends ComponentPropsWithoutRef<'iframe'> {
     hideDeviceType?: boolean;
+    options?: ReactNode;
 }
 
-export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ hideDeviceType, ...props }: Props, ref): JSX.Element {
+export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ hideDeviceType, options, ...props }: Props, ref): JSX.Element {
     const iframeRef = useRef<HTMLIFrameElement | null>(null);
     useImperativeHandle(ref, () => iframeRef.current, [iframeRef.current]);
 
@@ -29,17 +31,22 @@ export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ hi
     return (
         <>
             <iframe ref={iframeRef} {...props}></iframe>
-            {!hideDeviceType && (
+            {(options || !hideDeviceType) && (
                 <p>
-                    <label style={{ userSelect: 'none' }}>
-                        Override device type{' '}
-                        <select value={deviceType} onChange={(e) => setDeviceType(e.target.value)}>
-                            <option value=""></option>
-                            <option value="desktop">Desktop</option>
-                            <option value="mobile">Mobile</option>
-                            <option value="tv">TV</option>
-                        </select>
-                    </label>
+                    {!hideDeviceType && (
+                        <div>
+                            <label style={{ userSelect: 'none' }}>
+                                Override device type:{' '}
+                                <select value={deviceType} onChange={(e) => setDeviceType(e.target.value)}>
+                                    <option value=""></option>
+                                    <option value="desktop">Desktop</option>
+                                    <option value="mobile">Mobile</option>
+                                    <option value="tv">TV</option>
+                                </select>
+                            </label>
+                        </div>
+                    )}
+                    {options}
                 </p>
             )}
         </>
