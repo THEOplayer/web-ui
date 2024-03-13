@@ -1,5 +1,5 @@
 import React, { type JSX, useEffect, useState } from 'react';
-import Example, { type Props as ExampleProps } from './Example';
+import Example, { type Props as ExampleProps } from '../../components/Example';
 
 const sources = {
     hls: {
