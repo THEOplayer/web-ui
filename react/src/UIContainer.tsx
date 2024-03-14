@@ -5,8 +5,7 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { createComponent, type WebComponentProps } from '@lit/react';
 import { usePlayer } from './util';
 import { PlayerContext } from './context';
-import { Slotted, SlottedInPlace } from './slotted';
-import type { ChromecastButton, ErrorDisplay, Menu, PlayButton, TimeRange } from './components';
+import { type ChromecastButton, type ErrorDisplay, type Menu, type PlayButton, SlotContainer, type TimeRange } from './components';
 
 const RawUIContainer = createComponent({
     tagName: 'theoplayer-ui',
@@ -134,13 +133,13 @@ export const UIContainer = (props: UIContainerProps) => {
     return (
         <RawUIContainer {...otherProps} ref={setUi}>
             <PlayerContext.Provider value={player}>
-                <Slotted slot="top-chrome">{topChrome}</Slotted>
-                <Slotted slot="middle-chrome">{middleChrome}</Slotted>
-                <Slotted slot="centered-chrome">{centeredChrome}</Slotted>
-                <Slotted slot="centered-loading">{centeredLoading}</Slotted>
+                <SlotContainer slot="top-chrome">{topChrome}</SlotContainer>
+                <SlotContainer slot="middle-chrome">{middleChrome}</SlotContainer>
+                <SlotContainer slot="centered-chrome">{centeredChrome}</SlotContainer>
+                <SlotContainer slot="centered-loading">{centeredLoading}</SlotContainer>
                 {bottomChrome}
-                <SlottedInPlace slot="menu">{menu}</SlottedInPlace>
-                <Slotted slot="error">{error}</Slotted>
+                <SlotContainer slot="menu">{menu}</SlotContainer>
+                <SlotContainer slot="error">{error}</SlotContainer>
             </PlayerContext.Provider>
         </RawUIContainer>
     );
