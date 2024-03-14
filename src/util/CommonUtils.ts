@@ -1,5 +1,5 @@
 import { Attribute } from './Attribute';
-import { isSlotContainer } from '../components';
+import { isSlotContainer } from '../components/SlotContainer';
 
 export type Constructor<T> = abstract new (...args: any[]) => T;
 
