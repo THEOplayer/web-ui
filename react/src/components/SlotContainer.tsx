@@ -6,6 +6,7 @@ import * as React from 'react';
  * See {@link @theoplayer/web-ui!SlotContainer | SlotContainer in @theoplayer/web-ui}.
  *
  * @group Components
+ * @internal
  */
 export const SlotContainer = createComponent({
     tagName: 'theoplayer-slot-container',
