@@ -86,9 +86,10 @@ export class DefaultUI extends HTMLElement {
         ];
     }
 
-    private readonly _ui: UIContainer;
-    private readonly _titleSlot: HTMLSlotElement;
-    private readonly _timeRange: TimeRange;
+    protected readonly _shadowRoot: ShadowRoot;
+    protected readonly _ui: UIContainer;
+    private readonly _titleSlot: HTMLSlotElement | undefined;
+    private readonly _timeRange: TimeRange | undefined;
     private _appliedExtensions: boolean = false;
 
     /**
@@ -101,18 +102,17 @@ export class DefaultUI extends HTMLElement {
      */
     constructor(configuration: PlayerConfiguration = {}) {
         super();
-        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template().content.cloneNode(true));
+        this._shadowRoot = this.initShadowRoot();
 
-        this._ui = shadowRoot.querySelector('theoplayer-ui')!;
+        this._ui = this._shadowRoot.querySelector('theoplayer-ui')!;
         this._ui.addEventListener(READY_EVENT, this._dispatchReadyEvent);
         this._ui.addEventListener(STREAM_TYPE_CHANGE_EVENT, this._updateStreamType);
         this.setConfiguration_(configuration);
 
-        this._titleSlot = shadowRoot.querySelector('slot[name="title"]')!;
-        this._titleSlot.addEventListener('slotchange', this._onTitleSlotChange);
+        this._titleSlot = this._shadowRoot.querySelector<HTMLSlotElement>('slot[name="title"]') ?? undefined;
+        this._titleSlot?.addEventListener('slotchange', this._onTitleSlotChange);
 
-        this._timeRange = shadowRoot.querySelector('theoplayer-time-range')!;
+        this._timeRange = this._shadowRoot.querySelector('theoplayer-time-range') ?? undefined;
 
         this._upgradeProperty('configuration');
         this._upgradeProperty('source');
@@ -122,6 +122,12 @@ export class DefaultUI extends HTMLElement {
         this._upgradeProperty('streamType');
         this._upgradeProperty('userIdleTimeout');
         this._upgradeProperty('dvrThreshold');
+    }
+
+    protected initShadowRoot(): ShadowRoot {
+        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
+        shadowRoot.appendChild(template().content.cloneNode(true));
+        return shadowRoot;
     }
 
     private _upgradeProperty(prop: keyof this) {
@@ -304,8 +310,10 @@ export class DefaultUI extends HTMLElement {
 
     private readonly _updateStreamType = () => {
         this.setAttribute(Attribute.STREAM_TYPE, this.streamType);
-        // Hide seekbar when stream is live with no DVR
-        toggleAttribute(this._timeRange, Attribute.HIDDEN, this.streamType === 'live');
+        if (this._timeRange) {
+            // Hide seekbar when stream is live with no DVR
+            toggleAttribute(this._timeRange, Attribute.HIDDEN, this.streamType === 'live');
+        }
     };
 
     private readonly _dispatchReadyEvent = () => {
@@ -313,7 +321,9 @@ export class DefaultUI extends HTMLElement {
     };
 
     private readonly _onTitleSlotChange = () => {
-        toggleAttribute(this, Attribute.HAS_TITLE, this._titleSlot.assignedNodes().length > 0);
+        if (this._titleSlot) {
+            toggleAttribute(this, Attribute.HAS_TITLE, this._titleSlot.assignedNodes().length > 0);
+        }
     };
 }
 
