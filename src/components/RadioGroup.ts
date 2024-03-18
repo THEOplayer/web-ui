@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { isArrowKey, KeyCode } from '../util/KeyCode';
 import { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
-import { arrayFind, isElement, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
+import { arrayFind, getSlottedElements, isElement, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import type { DeviceType } from '../util/DeviceType';
@@ -75,7 +75,7 @@ export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) 
     }
 
     private readonly _onSlotChange = () => {
-        const children = this._slot.assignedNodes({ flatten: true }).filter(isElement);
+        const children = getSlottedElements(this._slot);
         const upgradePromises: Array<Promise<unknown>> = [];
         for (const child of children) {
             if (!isRadioButton(child)) {

@@ -5,8 +5,7 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { createComponent, type WebComponentProps } from '@lit/react';
 import { usePlayer } from './util';
 import { PlayerContext } from './context';
-import { Slotted, SlottedInPlace } from './slotted';
-import type { Menu } from './components';
+import { type Menu, SlotContainer } from './components';
 
 const RawDefaultUI = createComponent({
     tagName: 'theoplayer-default-ui',
@@ -93,10 +92,10 @@ export const DefaultUI = (props: DefaultUIProps) => {
     return (
         <RawDefaultUI {...otherProps} ref={setUi}>
             <PlayerContext.Provider value={player}>
-                <Slotted slot="title">{title}</Slotted>
-                <Slotted slot="top-control-bar">{topControlBar}</Slotted>
-                <Slotted slot="bottom-control-bar">{bottomControlBar}</Slotted>
-                <SlottedInPlace slot="menu">{menu}</SlottedInPlace>
+                {title && <SlotContainer slot="title">{title}</SlotContainer>}
+                {topControlBar && <SlotContainer slot="top-control-bar">{topControlBar}</SlotContainer>}
+                {bottomControlBar && <SlotContainer slot="bottom-control-bar">{bottomControlBar}</SlotContainer>}
+                {menu && <SlotContainer slot="menu">{menu}</SlotContainer>}
             </PlayerContext.Provider>
         </RawDefaultUI>
     );

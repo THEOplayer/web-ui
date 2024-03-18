@@ -1,4 +1,5 @@
 import { Attribute } from './Attribute';
+import { isSlotContainer } from '../components/SlotContainer';
 
 export type Constructor<T> = abstract new (...args: any[]) => T;
 
@@ -156,6 +157,19 @@ export function getChildren(element: Element): ArrayLike<Element> {
         return element.children;
     }
     return [];
+}
+
+export function getSlottedElements(slot: HTMLSlotElement): Element[] {
+    const elements: Element[] = [];
+    for (const node of slot.assignedNodes({ flatten: true })) {
+        if (isElement(node)) {
+            elements.push(node);
+            if (isSlotContainer(node)) {
+                elements.push(...fromArrayLike(node.children));
+            }
+        }
+    }
+    return elements;
 }
 
 export function getTvFocusChildren(element: Element): HTMLElement[] | undefined {

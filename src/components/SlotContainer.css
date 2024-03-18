@@ -1,0 +1,11 @@
+:host {
+    display: contents;
+}
+
+slot,
+::slotted(:not([no-auto-hide])) {
+    /*
+     * Inherit opacity from parent container, so auto-hide works.
+     */
+    opacity: inherit;
+}

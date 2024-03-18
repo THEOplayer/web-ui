@@ -10,6 +10,12 @@
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🐛 Fixed `topChrome`, `middleChrome` and `centeredChrome` slots not auto-hiding in `<UIContainer>`. ([#55](https://github.com/THEOplayer/web-ui/pull/55))
+-   🐛 Fixed `no-auto-hide` attribute not working for React components. ([#55](https://github.com/THEOplayer/web-ui/pull/55))
+-   🚀 Added `<SlotContainer>`. ([#55](https://github.com/THEOplayer/web-ui/pull/55))
+
 ## v1.7.1 (2024-02-15)
 
 -   🐛 Fix "Warning: useLayoutEffect does nothing on the server" when using `@theoplayer/react-ui` in Node. ([#52](https://github.com/THEOplayer/web-ui/pull/52))

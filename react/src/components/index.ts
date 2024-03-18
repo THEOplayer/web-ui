@@ -45,4 +45,5 @@ export * from './GestureReceiver';
 export * from './PreviewTimeDisplay';
 export * from './PreviewThumbnail';
 export * from './LiveButton';
+export * from './SlotContainer';
 export * from './ads/index';

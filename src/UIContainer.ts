@@ -7,6 +7,7 @@ import {
     arrayRemove,
     containsComposedNode,
     getFocusableChildren,
+    getSlottedElements,
     getTvFocusChildren,
     isElement,
     isHTMLElement,
@@ -1075,7 +1076,7 @@ declare global {
 
 function getVisibleRect(slot: HTMLSlotElement): Rectangle | undefined {
     let result: Rectangle | undefined;
-    const children = slot.assignedNodes().filter(isHTMLElement);
+    const children = getSlottedElements(slot).filter(isHTMLElement);
     for (const child of children) {
         if (getComputedStyle(child).opacity !== '0') {
             const childRect = Rectangle.fromRect(child.getBoundingClientRect());

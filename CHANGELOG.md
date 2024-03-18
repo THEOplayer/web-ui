@@ -10,6 +10,10 @@
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🚀 Added `<theoplayer-slot-container>`. ([#55](https://github.com/THEOplayer/web-ui/pull/55))
+
 ## v1.7.1 (2024-02-15)
 
 -   💅 Export `version` in public API. ([#53](https://github.com/THEOplayer/web-ui/pull/53))

@@ -1,7 +1,16 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import menuGroupCss from './MenuGroup.css';
 import { Attribute } from '../util/Attribute';
-import { arrayFind, arrayFindIndex, fromArrayLike, isElement, isHTMLElement, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
+import {
+    arrayFind,
+    arrayFindIndex,
+    fromArrayLike,
+    getSlottedElements,
+    isElement,
+    isHTMLElement,
+    noOp,
+    upgradeCustomElementIfNeeded
+} from '../util/CommonUtils';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from '../events/ToggleMenuEvent';
 import { isBackKey } from '../util/KeyCode';
@@ -255,10 +264,7 @@ export class MenuGroup extends HTMLElement {
      * this listener to each nested `<slot>`.
      */
     private readonly _onMenuListChange = () => {
-        const children: Element[] = [
-            ...fromArrayLike(this.shadowRoot!.children),
-            ...(this._menuSlot ? this._menuSlot.assignedNodes({ flatten: true }).filter(isElement) : [])
-        ];
+        const children: Element[] = [...fromArrayLike(this.shadowRoot!.children), ...(this._menuSlot ? getSlottedElements(this._menuSlot) : [])];
         const upgradePromises: Array<Promise<unknown>> = [];
         for (const child of children) {
             if (!isMenuElement(child)) {
