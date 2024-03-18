@@ -23,8 +23,8 @@ describe('Server-side rendering (SSR)', () => {
         );
         const expected =
             '<theoplayer-default-ui>' +
-            '<div slot="top-control-bar" style="display:contents"><theoplayer-play-button></theoplayer-play-button></div>' +
-            '<div slot="bottom-control-bar" style="display:contents"><theoplayer-time-range></theoplayer-time-range></div>' +
+            '<theoplayer-slot-container slot="top-control-bar"><theoplayer-play-button></theoplayer-play-button></theoplayer-slot-container>' +
+            '<theoplayer-slot-container slot="bottom-control-bar"><theoplayer-time-range></theoplayer-time-range></theoplayer-slot-container>' +
             '</theoplayer-default-ui>';
         assert.equal(actual, expected);
     });
@@ -43,7 +43,7 @@ describe('Server-side rendering (SSR)', () => {
         );
         const expected =
             '<theoplayer-ui>' +
-            '<div slot="top-chrome" style="display:contents"><theoplayer-play-button></theoplayer-play-button></div>' +
+            '<theoplayer-slot-container slot="top-chrome"><theoplayer-play-button></theoplayer-play-button></theoplayer-slot-container>' +
             '<theoplayer-time-range></theoplayer-time-range>' +
             '</theoplayer-ui>';
         assert.equal(actual, expected);
