@@ -92,10 +92,10 @@ export const DefaultUI = (props: DefaultUIProps) => {
     return (
         <RawDefaultUI {...otherProps} ref={setUi}>
             <PlayerContext.Provider value={player}>
-                <SlotContainer slot="title">{title}</SlotContainer>
-                <SlotContainer slot="top-control-bar">{topControlBar}</SlotContainer>
-                <SlotContainer slot="bottom-control-bar">{bottomControlBar}</SlotContainer>
-                <SlotContainer slot="menu">{menu}</SlotContainer>
+                {title && <SlotContainer slot="title">{title}</SlotContainer>}
+                {topControlBar && <SlotContainer slot="top-control-bar">{topControlBar}</SlotContainer>}
+                {bottomControlBar && <SlotContainer slot="bottom-control-bar">{bottomControlBar}</SlotContainer>}
+                {menu && <SlotContainer slot="menu">{menu}</SlotContainer>}
             </PlayerContext.Provider>
         </RawDefaultUI>
     );

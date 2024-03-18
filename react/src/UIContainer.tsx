@@ -133,13 +133,13 @@ export const UIContainer = (props: UIContainerProps) => {
     return (
         <RawUIContainer {...otherProps} ref={setUi}>
             <PlayerContext.Provider value={player}>
-                <SlotContainer slot="top-chrome">{topChrome}</SlotContainer>
-                <SlotContainer slot="middle-chrome">{middleChrome}</SlotContainer>
-                <SlotContainer slot="centered-chrome">{centeredChrome}</SlotContainer>
-                <SlotContainer slot="centered-loading">{centeredLoading}</SlotContainer>
+                {topChrome && <SlotContainer slot="top-chrome">{topChrome}</SlotContainer>}
+                {middleChrome && <SlotContainer slot="middle-chrome">{middleChrome}</SlotContainer>}
+                {centeredChrome && <SlotContainer slot="centered-chrome">{centeredChrome}</SlotContainer>}
+                {centeredLoading && <SlotContainer slot="centered-loading">{centeredLoading}</SlotContainer>}
                 {bottomChrome}
-                <SlotContainer slot="menu">{menu}</SlotContainer>
-                <SlotContainer slot="error">{error}</SlotContainer>
+                {menu && <SlotContainer slot="menu">{menu}</SlotContainer>}
+                {error && <SlotContainer slot="error">{error}</SlotContainer>}
             </PlayerContext.Provider>
         </RawUIContainer>
     );
