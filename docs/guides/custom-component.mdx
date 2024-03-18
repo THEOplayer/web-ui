@@ -1,0 +1,110 @@
+---
+description: Build a custom button component that integrates with the player, and which you can use in your own custom UI.
+sidebar_position: 2
+---
+
+# Making a custom component
+
+import Example from '../components/Example';
+import CodeBlock from '@theme/CodeBlock';
+import Link from '@docusaurus/Link';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from './shared.module.css';
+import jsStep1 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-play-button-step1.js';
+import jsStep2 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-play-button-step2.js';
+
+## A custom play button
+
+First, we'll build a simple button that plays or pauses the player when clicked.
+
+### Step 1: Create a custom button
+
+Create a new JavaScript file called `my-play-button.js` with the following code:
+
+<!-- See https://docusaurus.io/docs/markdown-features/react#importing-code-snippets -->
+
+<CodeBlock
+    language="js"
+    title={
+        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/guides/web/custom-component/my-play-button-step1.js">
+            my-play-button.js (step 1)
+        </Link>
+    }
+>
+    {jsStep1}
+</CodeBlock>
+
+Now add your new button to your custom UI. In our example, we'll place it in the `centered-chrome` slot, so it'll appear in the center of the player:
+
+```html
+<script type="module" src="./my-play-button.js"></script>
+<theoplayer-ui
+    configuration='{"libraryLocation":"/path/to/node_modules/theoplayer/","license":"your_theoplayer_license_goes_here"}'
+    source='{"sources":{"src":"https://example.com/stream.m3u8"}}'
+>
+    <my-play-button slot="centered-chrome"></my-play-button>
+</theoplayer-ui>
+```
+
+It should look something like this:
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/step1.html')} hideDeviceType />
+
+Try clicking the "Play" button in the middle of the screen.
+You should see an alert window popping up saying `My play button was clicked!`.
+
+### Step 2: Integrate with the backing player
+
+Of course, we want the player to start playing of showing an alert!
+For this, we need to get access to the backing THEOplayer instance.
+
+Open Video UI for Web provides a built-in mechanism to automatically inject dependencies into UI components,
+such as the player instance, or other fullscreen state of the UI. When a UI component is added as a child (or descendant)
+of a `<theoplayer-default-ui>` or `<theoplayer-ui>`, the parent UI will automatically inject those dependencies.
+
+First, the UI component needs to opt into this mechanism by [mixing in](https://www.typescriptlang.org/docs/handbook/mixins.html)
+`StateReceiverMixin` into its superclass (see [API documentation](https://theoplayer.github.io/web-ui/api/functions/StateReceiverMixin.html)).
+This mixin takes the original superclass, and an array of dependencies which need to be injected:
+
+```js
+import { Button, buttonTemplate, StateReceiverMixin } from '@theoplayer/web-ui';
+
+export class MyPlayButton extends StateReceiverMixin(Button, ['player']) {
+    // ...
+}
+```
+
+Once this button is added to a `<theoplayer-ui>`, it'll automatically receive the backing THEOplayer instance in its `player` property.
+If you want to do some custom logic when this happens, you can implement a setter for this property:
+
+```js
+export class MyPlayButton extends StateReceiverMixin(Button, ['player']) {
+    set player(player) {
+        this._player = player;
+        console.log('My play button received a player!');
+    }
+}
+```
+
+Change your `handleClick()` method to call `play()` or `pause()` on the player.
+You can also update the text content of your button to reflect the new state:
+
+<CodeBlock
+    language="js"
+    title={
+        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/guides/web/custom-component/my-play-button-step2.js">
+            my-play-button.js (step 2)
+        </Link>
+    }
+>
+    {jsStep2}
+</CodeBlock>
+
+It should look something like this:
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/step2.html')} hideDeviceType />
+
+Try clicking the "Play" button in the middle of the screen. The player starts playing!<br/>
+Clicking it again should pause the player.
+
+Congratulations, you've built your very own play button! 🎉

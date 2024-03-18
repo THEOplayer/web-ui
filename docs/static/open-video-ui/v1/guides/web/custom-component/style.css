@@ -1,0 +1,17 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+theoplayer-ui:not(:defined) {
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+theoplayer-ui {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    font-family: 'Noto Sans', sans-serif;
+    background: #000;
+}
