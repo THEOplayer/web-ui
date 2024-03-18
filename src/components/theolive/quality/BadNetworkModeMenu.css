@@ -1,0 +1,9 @@
+:host, theoplayer-radio-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+/*:host([hidden]) {*/
+/*    display: none !important;*/
+/*}*/
