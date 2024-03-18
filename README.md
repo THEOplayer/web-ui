@@ -1,14 +1,16 @@
 # THEOplayer Open Video UI for Web
 
+[![NPM version](https://img.shields.io/npm/v/%40theoplayer%2Fweb-ui)](https://www.npmjs.com/package/@theoplayer/web-ui)
+[![Build status](https://github.com/THEOplayer/web-ui/workflows/CI/badge.svg)](https://github.com/THEOplayer/web-ui/actions/workflows/ci.yml)
+[![API docs](https://img.shields.io/badge/api%20docs-orange.svg)](https://theoplayer.github.io/web-ui/api/)
+[![GitHub issues](https://img.shields.io/github/issues/THEOplayer/web-ui)](https://github.com/THEOplayer/web-ui/issues)
+
 A component library for building a world-class video player experience powered by
 the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 
 -   Use the default UI for a great out-of-the-box experience, or use the individual components to build your own custom UI.
 -   Built using [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), so works great with (or without) any app framework.
 -   Easy to customize: use HTML to lay out your controls, and CSS to style them.
-
-> [!NOTE]  
-> This project is under active development. While we believe it's ready for use in production, not all features are available in this first release. If you find a problem or have an idea for a new feature, don't hesitate to [open an issue](https://github.com/THEOplayer/web-ui/issues)!
 
 | ![Screenshot on desktop](https://raw.githubusercontent.com/THEOplayer/web-ui/v1.0.0/docs/assets/screenshot-desktop.png) | ![Screenshot on mobile](https://raw.githubusercontent.com/THEOplayer/web-ui/v1.0.0/docs/assets/screenshot-mobile.png) |
 | :---------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: |

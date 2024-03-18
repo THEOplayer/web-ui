@@ -1,14 +1,16 @@
 # THEOplayer Open Video UI for React ⚛️
 
+[![NPM version](https://img.shields.io/npm/v/%40theoplayer%2Freact-ui)](https://www.npmjs.com/package/@theoplayer/react-ui)
+[![Build status](https://github.com/THEOplayer/web-ui/workflows/CI/badge.svg)](https://github.com/THEOplayer/web-ui/actions/workflows/ci.yml)
+[![API docs](https://img.shields.io/badge/api%20docs-orange.svg)](https://theoplayer.github.io/web-ui/react-api/)
+[![GitHub issues](https://img.shields.io/github/issues/THEOplayer/web-ui)](https://github.com/THEOplayer/web-ui/issues)
+
 A [React](https://react.dev/) component library for building a world-class video player experience powered by
 the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 
 -   Use the default UI for a great out-of-the-box experience, or use the individual components to build your own custom UI.
 -   Idiomatic React components make the UI feel right at home in your existing React web app.
 -   Easy to customize: use JSX to lay out your controls, and CSS to style them.
-
-> [!NOTE]  
-> This project is under active development. While we believe it's ready for use in production, not all features are available in this first release. If you find a problem or have an idea for a new feature, don't hesitate to [open an issue](https://github.com/THEOplayer/web-ui/issues)!
 
 ## Installation
 
