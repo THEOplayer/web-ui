@@ -3,7 +3,7 @@
 }
 
 slot,
-::slotted(*) {
+::slotted(:not([no-auto-hide])) {
     /*
      * Inherit opacity from parent container, so auto-hide works.
      */
