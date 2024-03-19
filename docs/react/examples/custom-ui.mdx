@@ -1,0 +1,80 @@
+---
+sidebar_position: 2
+sidebar_custom_props: { 'icon': '▶️' }
+slug: /react/examples/custom-ui
+---
+
+# Custom UI
+
+import ReactExample from '../components/ReactExample';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from './shared.module.css';
+
+<ReactExample className={styles.player} src={useBaseUrl('/open-video-ui/v1/examples/react/custom-ui/demo.html')} hideDeviceType />
+
+<details>
+    <summary>Code</summary>
+
+    ```jsx
+    import * as THEOplayerReactUI from '@theoplayer/react-ui';
+
+    const configuration = {
+        libraryLocation: '/path/to/theoplayer/',
+        license: 'your_theoplayer_license'
+    };
+
+    const source = {
+        sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
+        metadata: {
+            title: "Elephant's Dream"
+        }
+    };
+
+    const Spacer = () => {
+        return <span style={{ flexGrow: 1 }} />;
+    };
+
+    const App = () => {
+        return (
+            <THEOplayerReactUI.UIContainer
+                configuration={configuration}
+                source={source}
+                topChrome={
+                    <THEOplayerReactUI.ControlBar>
+                        <span className="my-title">{title}</span>
+                    </THEOplayerReactUI.ControlBar>
+                }
+                centeredChrome={<THEOplayerReactUI.PlayButton />}
+                centeredLoading={<THEOplayerReactUI.LoadingIndicator />}
+                bottomChrome={
+                    <>
+                        <THEOplayerReactUI.ControlBar>
+                            <THEOplayerReactUI.TimeRange />
+                        </THEOplayerReactUI.ControlBar>
+                        <THEOplayerReactUI.ControlBar>
+                            <THEOplayerReactUI.PlayButton />
+                            <THEOplayerReactUI.MuteButton />
+                            <THEOplayerReactUI.VolumeRange />
+                            <THEOplayerReactUI.TimeDisplay />
+                            <Spacer />
+                            <THEOplayerReactUI.LanguageMenuButton menu="language-menu" />
+                            <THEOplayerReactUI.SettingsMenuButton menu="settings-menu" />
+                            <THEOplayerReactUI.FullscreenButton />
+                        </THEOplayerReactUI.ControlBar>
+                    </>
+                }
+                menu={
+                    <>
+                        <THEOplayerReactUI.LanguageMenu id="language-menu" />
+                        <THEOplayerReactUI.SettingsMenu id="settings-menu" />
+                    </>
+                }
+                error={<THEOplayerReactUI.ErrorDisplay />}
+            />
+        );
+    };
+    ```
+
+    [📜 View full source on GitHub](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/examples/react/custom-ui/demo.html)
+
+</details>

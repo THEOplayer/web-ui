@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Custom UI with React</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+        <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            theoplayer-ui:not(:defined) {
+                display: inline-block;
+                box-sizing: border-box;
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                background: #000;
+            }
+
+            theoplayer-ui {
+                font-family: 'Noto Sans', sans-serif;
+                width: 100%;
+            }
+
+            .my-title,
+            .my-time-display {
+                color: white;
+                padding: 10px;
+                font-size: 14px;
+                line-height: 24px;
+            }
+
+            .my-menu-table {
+                display: grid;
+                grid-template-columns: max-content 1fr;
+                grid-template-rows: auto auto;
+            }
+
+            .my-menu-table > * {
+                align-self: center;
+                font-size: 14px;
+                line-height: 24px;
+                padding: 10px;
+            }
+
+            .my-menu-table > span {
+                display: block;
+            }
+        </style>
+        <!--
+          JSPM Generator Import Map
+          Edit URL: https://generator.jspm.io/#VYxLDkBAEAV7IW5iqRkR7PQlHMCnE5M0I6NF3J4gEduqei8KAMK6mdWq8AAkVhPPba9kMMUcSEd2i7QH+4fHm71UidlP7dx94ukGN5GpMMM06cXyrPD+3gy+MRVo7mr0bmLhdT0BSwPyx5UA
+        -->
+        <script type="importmap">
+            {
+                "imports": {
+                    "@theoplayer/react-ui": "https://ga.jspm.io/npm:@theoplayer/react-ui@1.7.2/dist/THEOplayerReactUI.mjs",
+                    "@theoplayer/web-ui": "https://ga.jspm.io/npm:@theoplayer/web-ui@1.7.2/dist/THEOplayerUI.mjs",
+                    "@lit/react": "https://ga.jspm.io/npm:@lit/react@1.0.4/development/index.js",
+                    "react": "https://ga.jspm.io/npm:react@18.2.0/dev.index.js",
+                    "react-dom/client": "https://ga.jspm.io/npm:react-dom@18.2.0/dev.client.js",
+                    "theoplayer/chromeless": "https://cdn.theoplayer.com/dash/theoplayer/THEOplayer.chromeless.esm.js"
+                },
+                "scopes": {
+                    "https://ga.jspm.io/": {
+                        "react-dom": "https://ga.jspm.io/npm:react-dom@18.2.0/dev.index.js",
+                        "scheduler": "https://ga.jspm.io/npm:scheduler@0.23.0/dev.index.js"
+                    }
+                }
+            }
+        </script>
+        <!-- Import maps polyfill for browsers without import maps support (e.g. Safari 16.3) -->
+        <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.3/dist/es-module-shims.js" crossorigin="anonymous"></script>
+        <!-- Use Babel for JSX in <script> tags -->
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="text/babel" data-type="module">
+            import * as React from 'react';
+            import { useCallback, useContext, useState, useSyncExternalStore } from 'react';
+            import { createRoot } from 'react-dom/client';
+            import * as THEOplayerReactUI from '@theoplayer/react-ui';
+            import { useSourceFromParent } from '../utils.js';
+
+            const configuration = {
+                /**
+                 * libraryLocation: For demonstration purposes, we use the free unpkg.com CDN.
+                 * For production use, we recommend hosting THEOplayer yourself
+                 * and changing this (as well as the <script> and <link> tags above)
+                 * to point to THEOplayer's location on your own website.
+                 */
+                libraryLocation: 'https://cdn.theoplayer.com/dash/theoplayer/',
+                /**
+                 * licenseUrl: Change this to point to your THEOplayer license file.
+                 * Alternatively, replace it with a "license" property whose value is your THEOplayer license itself.
+                 */
+                licenseUrl: '../../../../../theoplayer-license.txt'
+            };
+
+            const defaultSource = {
+                sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
+                metadata: {
+                    title: "Elephant's Dream"
+                },
+                textTracks: [
+                    {
+                        default: true,
+                        src: 'https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt',
+                        label: 'thumbnails',
+                        kind: 'metadata'
+                    }
+                ]
+            };
+
+            // A custom React hook using THEOplayer.
+            // This hook returns the player's current time, automatically updating whenever it changes.
+            // (Alternatively, you can use the built-in `useCurrentTime` hook.)
+            const useCurrentTime = () => {
+                // Retrieve the THEOplayer instance.
+                // This will become available as soon as this component is mounted
+                // inside a THEOplayer <DefauLtUI> or <UIContainer>.
+                const player = useContext(THEOplayerReactUI.PlayerContext);
+                // Keep track of the player's current time.
+                const subscribe = useCallback(
+                    (callback) => {
+                        player?.addEventListener(['timeupdate', 'seeking', 'seeked'], callback);
+                        return () => player?.removeEventListener(['timeupdate', 'seeking', 'seeked'], callback);
+                    },
+                    [player]
+                );
+                return useSyncExternalStore(
+                    subscribe,
+                    () => player?.currentTime ?? 0,
+                    () => 0
+                );
+            };
+
+            // Returns whether the player has (previously) started playback for this stream.
+            // Can be used to show/hide certain initial controls, such as a poster image or a centered play button.
+            const useFirstPlay = () => {
+                const source = THEOplayerReactUI.useSource();
+                const paused = THEOplayerReactUI.usePaused();
+                const [firstPlay, setFirstPlay] = useState(false);
+
+                // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+                const [prevSource, setPrevSource] = useState(source);
+                if (source !== prevSource) {
+                    setPrevSource(source);
+                    setFirstPlay(false);
+                }
+                if (!firstPlay && !paused) {
+                    setFirstPlay(true);
+                }
+
+                return firstPlay;
+            };
+
+            const ShowOnFirstPlay = ({ children }) => {
+                const firstPlay = useFirstPlay();
+                return firstPlay ? children : null;
+            };
+
+            const HideOnFirstPlay = ({ children }) => {
+                const firstPlay = useFirstPlay();
+                return firstPlay ? null : children;
+            };
+
+            // A custom React component using THEOplayer.
+            const MyTimeDisplay = () => {
+                const time = useCurrentTime();
+                return <span className="my-time-display">{time.toFixed(3)}</span>;
+            };
+
+            const Spacer = () => {
+                const styles = { flexGrow: 1 };
+                return <span style={styles}></span>;
+            };
+
+            // A custom player UI.
+            const MyCustomUI = ({ configuration, source, title }) => {
+                return (
+                    <THEOplayerReactUI.UIContainer
+                        configuration={configuration}
+                        source={source}
+                        onReady={(player) => {
+                            console.log('THEOplayer is ready!', player);
+                        }}
+                        topChrome={
+                            <ShowOnFirstPlay>
+                                <THEOplayerReactUI.ControlBar>
+                                    <span className="my-title">{title}</span>
+                                </THEOplayerReactUI.ControlBar>
+                            </ShowOnFirstPlay>
+                        }
+                        centeredChrome={
+                            <HideOnFirstPlay>
+                                <THEOplayerReactUI.PlayButton />
+                            </HideOnFirstPlay>
+                        }
+                        centeredLoading={
+                            <ShowOnFirstPlay>
+                                <THEOplayerReactUI.LoadingIndicator />
+                            </ShowOnFirstPlay>
+                        }
+                        bottomChrome={
+                            <ShowOnFirstPlay>
+                                <THEOplayerReactUI.ControlBar>
+                                    <THEOplayerReactUI.TimeRange />
+                                </THEOplayerReactUI.ControlBar>
+                                <THEOplayerReactUI.ControlBar>
+                                    <THEOplayerReactUI.PlayButton />
+                                    <THEOplayerReactUI.MuteButton />
+                                    <THEOplayerReactUI.VolumeRange />
+                                    <MyTimeDisplay />
+                                    <Spacer />
+                                    <THEOplayerReactUI.LanguageMenuButton menu="language-menu" />
+                                    <THEOplayerReactUI.SettingsMenuButton menu="settings-menu" />
+                                    <THEOplayerReactUI.FullscreenButton />
+                                </THEOplayerReactUI.ControlBar>
+                            </ShowOnFirstPlay>
+                        }
+                        menu={
+                            <>
+                                <THEOplayerReactUI.LanguageMenu id="language-menu" />
+                                <THEOplayerReactUI.MenuGroup id="settings-menu">
+                                    <THEOplayerReactUI.Menu heading="My custom settings">
+                                        <div className="my-menu-table">
+                                            <span>Quality</span>
+                                            <THEOplayerReactUI.MenuButton menu="quality-menu">
+                                                <THEOplayerReactUI.ActiveQualityDisplay />
+                                            </THEOplayerReactUI.MenuButton>
+                                            <span>Playback speed</span>
+                                            <THEOplayerReactUI.MenuButton menu="playback-rate-menu">
+                                                <THEOplayerReactUI.PlaybackRateDisplay />
+                                            </THEOplayerReactUI.MenuButton>
+                                        </div>
+                                    </THEOplayerReactUI.Menu>
+                                    <THEOplayerReactUI.Menu id="quality-menu" closeOnInput hidden heading="Quality">
+                                        <THEOplayerReactUI.QualityRadioGroup />
+                                    </THEOplayerReactUI.Menu>
+                                    <THEOplayerReactUI.PlaybackRateMenu id="playback-rate-menu" closeOnInput hidden heading="Playback speed" />
+                                </THEOplayerReactUI.MenuGroup>
+                            </>
+                        }
+                        error={<THEOplayerReactUI.ErrorDisplay />}
+                    />
+                );
+            };
+
+            const App = () => {
+                const source = useSourceFromParent() || defaultSource;
+                const title = source.metadata.title;
+                return <MyCustomUI configuration={configuration} source={source} title={title} />;
+            };
+
+            const root = createRoot(document.getElementById('app'));
+            root.render(<App />);
+        </script>
+    </body>
+</html>

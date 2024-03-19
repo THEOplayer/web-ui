@@ -1,3 +1,8 @@
+---
+description: Find out what's new in Open Video UI for Web.
+sidebar_custom_props: { 'icon': '📰' }
+---
+
 # Changelog
 
 > **Tags:**
