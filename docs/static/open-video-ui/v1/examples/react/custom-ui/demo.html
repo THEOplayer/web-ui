@@ -87,7 +87,7 @@
             import { useCallback, useContext, useState, useSyncExternalStore } from 'react';
             import { createRoot } from 'react-dom/client';
             import * as THEOplayerReactUI from '@theoplayer/react-ui';
-            import { useSourceFromParent } from '../utils.js';
+            import { useDeviceTypeFromParent, useSourceFromParent } from '../utils.js';
 
             const configuration = {
                 /**
@@ -184,11 +184,12 @@
             };
 
             // A custom player UI.
-            const MyCustomUI = ({ configuration, source, title }) => {
+            const MyCustomUI = ({ configuration, source, deviceType, title }) => {
                 return (
                     <THEOplayerReactUI.UIContainer
                         configuration={configuration}
                         source={source}
+                        device-type={deviceType}
                         onReady={(player) => {
                             console.log('THEOplayer is ready!', player);
                         }}
@@ -256,8 +257,9 @@
 
             const App = () => {
                 const source = useSourceFromParent() || defaultSource;
+                const deviceType = useDeviceTypeFromParent() || null;
                 const title = source.metadata.title;
-                return <MyCustomUI configuration={configuration} source={source} title={title} />;
+                return <MyCustomUI configuration={configuration} source={source} deviceType={deviceType} title={title} />;
             };
 
             const root = createRoot(document.getElementById('app'));

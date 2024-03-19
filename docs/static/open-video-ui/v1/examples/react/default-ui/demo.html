@@ -61,7 +61,7 @@
             import * as React from 'react';
             import { createRoot } from 'react-dom/client';
             import * as THEOplayerReactUI from '@theoplayer/react-ui';
-            import { useSourceFromParent } from '../utils.js';
+            import { useDeviceTypeFromParent, useSourceFromParent } from '../utils.js';
 
             const configuration = {
                 /**
@@ -95,8 +95,9 @@
 
             const App = () => {
                 const source = useSourceFromParent() || defaultSource;
+                const deviceType = useDeviceTypeFromParent() || null;
                 const title = source.metadata.title;
-                return <THEOplayerReactUI.DefaultUI configuration={configuration} source={source} title={<span>{title}</span>} />;
+                return <THEOplayerReactUI.DefaultUI configuration={configuration} source={source} device-type={deviceType} title={<span>{title}</span>} />;
             };
 
             const root = createRoot(document.getElementById('app'));
