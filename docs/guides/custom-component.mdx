@@ -12,6 +12,8 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './shared.module.css';
 import playButtonStep1 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-play-button-step1.js';
 import playButtonStep2 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-play-button-step2.js';
+import qualityLabelStep1 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-quality-label-step1.js';
+import qualityLabelStep2 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-quality-label-step2.js';
 
 ## A custom play button
 
@@ -112,3 +114,90 @@ Try clicking the "Play" button in the middle of the screen. The player starts pl
 Clicking it again should pause the player.
 
 Congratulations, you've built your very own play button! 🎉
+
+## A custom quality label
+
+Next, let's create a label that displays the resolution of the player's current video quality.
+
+### Step 1: Create a custom component
+
+Create a new JavaScript file called `my-quality-label.js` with the following code:
+
+<CodeBlock
+    language="js"
+    showLineNumbers
+    title={
+        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/guides/web/custom-component/my-quality-label-step1.js">
+            my-quality-label.js (step 1)
+        </Link>
+    }
+>
+    {qualityLabelStep1}
+</CodeBlock>
+
+Now add your new label to your custom UI. In our example, we'll place it inside a `<theoplayer-control-bar>` in the default slot, so it'll appear at the bottom of the player:
+
+```html
+<script type="module" src="./my-quality-label.js"></script>
+<theoplayer-ui
+    configuration='{"libraryLocation":"/path/to/node_modules/theoplayer/","license":"your_theoplayer_license_goes_here"}'
+    source='{"sources":{"src":"https://example.com/stream.m3u8"}}'
+>
+    <theoplayer-control-bar>
+        <!-- A seek bar -->
+        <theoplayer-time-range></theoplayer-time-range>
+    </theoplayer-control-bar>
+    <theoplayer-control-bar>
+        <!-- A few commonly used built-in controls -->
+        <theoplayer-play-button></theoplayer-play-button>
+        <theoplayer-mute-button></theoplayer-mute-button>
+        <!-- A spacer, to fill up the remaining space in the middle -->
+        <span style="flex-grow: 1"></span>
+        <!-- highlight-start -->
+        <!-- Your brand new quality label! -->
+        <my-quality-label></my-quality-label>
+        <!-- highlight-end -->
+        <!-- Some other controls -->
+        <theoplayer-settings-menu-button menu="settings-menu"></theoplayer-settings-menu-button>
+        <theoplayer-fullscreen-button></theoplayer-fullscreen-button>
+    </theoplayer-control-bar>
+    <!-- A settings menu, so you can manually change the active quality -->
+    <theoplayer-settings-menu slot="menu" id="settings-menu"></theoplayer-settings-menu>
+</theoplayer-ui>
+```
+
+It should look something like this:
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-quality-label-step1.html')} hideDeviceType />
+
+### Step 2: Listen to quality changes
+
+Right now, the quality label is static, it doesn't actually update when the player's quality changes. Let's fix that!
+
+1. Once again, we use the `StateReceiverMixin` to gain access to the backing THEOplayer instance.
+2. When we receive the player, we add an event listener for the `addtrack` event of `player.videoTracks`,
+   so we'll be notified when the video track becomes available.
+3. We register an `activequalitychanged` event listener on that video track,
+   so we can respond when the active video quality changes.
+4. When our `activequalitychanged` listener fires, we update the contents of our `<span>` with the quality's height.
+
+<CodeBlock
+    language="js"
+    showLineNumbers
+    title={
+        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/guides/web/custom-component/my-quality-label-step2.js">
+            my-quality-label.js (step 2)
+        </Link>
+    }
+>
+    {qualityLabelStep2}
+</CodeBlock>
+
+It should look something like this:
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-quality-label-step2.html')} hideDeviceType />
+
+Try changing the active quality by clicking the ⚙️ (Settings) button, and changing "Automatic" to a specific quality.
+You should see your custom label update to show the height of the new quality.
+
+That's it! You now have your very own active quality label! 🥳
