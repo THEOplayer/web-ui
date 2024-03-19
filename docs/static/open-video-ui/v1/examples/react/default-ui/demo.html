@@ -97,7 +97,14 @@
                 const source = useSourceFromParent() || defaultSource;
                 const deviceType = useDeviceTypeFromParent() || null;
                 const title = source.metadata.title;
-                return <THEOplayerReactUI.DefaultUI configuration={configuration} source={source} device-type={deviceType} title={<span>{title}</span>} />;
+                return (
+                    <THEOplayerReactUI.DefaultUI
+                        configuration={configuration}
+                        source={source}
+                        device-type={deviceType}
+                        title={<span>{title}</span>}
+                    />
+                );
             };
 
             const root = createRoot(document.getElementById('app'));
