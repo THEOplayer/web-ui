@@ -18,6 +18,7 @@ export class MyPlayButton extends StateReceiverMixin(Button, ['player']) {
         console.log('My play button received a player!');
     }
 
+    // highlight-start
     handleClick() {
         if (!this._player) {
             // Not (yet) attached to a player.
@@ -33,6 +34,7 @@ export class MyPlayButton extends StateReceiverMixin(Button, ['player']) {
             this._buttonSpan.textContent = 'Play';
         }
     }
+    // highlight-end
 }
 
 customElements.define('my-play-button', MyPlayButton);

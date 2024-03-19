@@ -25,6 +25,7 @@ Create a new JavaScript file called `my-play-button.js` with the following code:
 
 <CodeBlock
     language="js"
+    showLineNumbers
     title={
         <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/guides/web/custom-component/my-play-button-step1.js">
             my-play-button.js (step 1)
@@ -42,7 +43,9 @@ Now add your new button to your custom UI. In our example, we'll place it in the
     configuration='{"libraryLocation":"/path/to/node_modules/theoplayer/","license":"your_theoplayer_license_goes_here"}'
     source='{"sources":{"src":"https://example.com/stream.m3u8"}}'
 >
+    <!-- highlight-start -->
     <my-play-button slot="centered-chrome"></my-play-button>
+    <!-- highlight-end -->
 </theoplayer-ui>
 ```
 
@@ -91,6 +94,7 @@ You can also update the text content of your button to reflect the new state:
 
 <CodeBlock
     language="js"
+    showLineNumbers
     title={
         <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/guides/web/custom-component/my-play-button-step2.js">
             my-play-button.js (step 2)
