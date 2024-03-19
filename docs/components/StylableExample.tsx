@@ -12,7 +12,7 @@ export default function StylableExample({ defaultCustomStyle, ...props }: Props)
 
     // Send message to <iframe> when style changes
     useEffect(() => {
-        iframe?.contentWindow.postMessage({
+        iframe?.contentWindow?.postMessage({
             type: 'style',
             style: customStyle
         });

@@ -13,7 +13,7 @@ export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ hi
 
     // Send message to <iframe> when device type override changes
     useEffect(() => {
-        iframeRef.current?.contentWindow.postMessage({
+        iframeRef.current?.contentWindow?.postMessage({
             type: 'deviceType',
             deviceType: deviceType
         });
