@@ -10,8 +10,8 @@ import CodeBlock from '@theme/CodeBlock';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './shared.module.css';
-import jsStep1 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-play-button-step1.js';
-import jsStep2 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-play-button-step2.js';
+import playButtonStep1 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-play-button-step1.js';
+import playButtonStep2 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-play-button-step2.js';
 
 ## A custom play button
 
@@ -31,7 +31,7 @@ Create a new JavaScript file called `my-play-button.js` with the following code:
         </Link>
     }
 >
-    {jsStep1}
+    {playButtonStep1}
 </CodeBlock>
 
 Now add your new button to your custom UI. In our example, we'll place it in the `centered-chrome` slot, so it'll appear in the center of the player:
@@ -48,7 +48,7 @@ Now add your new button to your custom UI. In our example, we'll place it in the
 
 It should look something like this:
 
-<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/step1.html')} hideDeviceType />
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-play-button-step1.html')} hideDeviceType />
 
 Try clicking the "Play" button in the middle of the screen.
 You should see an alert window popping up saying `My play button was clicked!`.
@@ -97,12 +97,12 @@ You can also update the text content of your button to reflect the new state:
         </Link>
     }
 >
-    {jsStep2}
+    {playButtonStep2}
 </CodeBlock>
 
 It should look something like this:
 
-<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/step2.html')} hideDeviceType />
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-play-button-step2.html')} hideDeviceType />
 
 Try clicking the "Play" button in the middle of the screen. The player starts playing!<br/>
 Clicking it again should pause the player.
