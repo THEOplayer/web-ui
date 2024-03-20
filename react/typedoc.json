@@ -3,6 +3,7 @@
   "extends": ["../typedoc.json"],
   "entryPoints": ["src/index.ts"],
   "out": "../docs/react-api",
+  "sitemapBaseUrl": "https://theoplayer.github.io/web-ui/react-api/",
   "plugin": ["typedoc-plugin-external-resolver", "typedoc-plugin-mdn-links"],
   "readme": "none",
   "navigationLinks": {
