@@ -10,30 +10,16 @@
     "GitHub": "https://github.com/THEOplayer/web-ui/tree/main/react"
   },
   "externalDocumentation": {
+    "theoplayer": {
+      "dtsPath": "~/THEOplayer.d.ts",
+      "externalBaseURL": "https://www.theoplayer.com/docs/theoplayer/v6/api-reference/web"
+    },
     "@theoplayer/web-ui": {
       "dtsPath": "~/dist/THEOplayerUI.d.ts",
       "externalBaseURL": "/web-ui/api"
     }
   },
   "externalSymbolLinkMappings": {
-    "theoplayer": {
-      "ChromelessPlayer": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md",
-      "ChromelessPlayer.currentTime": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#currenttime",
-      "ChromelessPlayer.duration": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#duration",
-      "ChromelessPlayer.muted": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#muted",
-      "ChromelessPlayer.paused": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#paused",
-      "ChromelessPlayer.seeking": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#seeking",
-      "ChromelessPlayer.source": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#source",
-      "ChromelessPlayer.volume": "https://docs.theoplayer.com/api-reference/web/theoplayer.chromelessplayer.md#volume",
-      "PlayerConfiguration": "https://docs.theoplayer.com/api-reference/web/theoplayer.playerconfiguration.md",
-      "SourceDescription": "https://docs.theoplayer.com/api-reference/web/theoplayer.sourcedescription.md",
-      "THEOplayerError": "https://docs.theoplayer.com/api-reference/web/theoplayer.theoplayererror.md",
-      "VideoQuality": "https://docs.theoplayer.com/api-reference/web/theoplayer.videoquality.md",
-      "*": "https://docs.theoplayer.com/api-reference/web/theoplayer.md"
-    },
-    "theoplayer/chromeless": {
-      "*": "https://docs.theoplayer.com/api-reference/web/theoplayer.md"
-    },
     "react": {
       "*": "https://react.dev/reference/react"
     }
