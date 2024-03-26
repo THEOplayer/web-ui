@@ -28,7 +28,7 @@ export default function ReactExample(props: Props): JSX.Element {
 
     // Send message to <iframe> when source changes
     useEffect(() => {
-        iframe?.contentWindow.postMessage({
+        iframe?.contentWindow?.postMessage({
             type: 'source',
             source: sources[sourceName]
         });

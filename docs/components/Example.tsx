@@ -1,15 +1,4 @@
-import React, {
-    type ComponentPropsWithoutRef,
-    forwardRef,
-    type JSX,
-    type ReactNode,
-    useCallback,
-    useEffect,
-    useImperativeHandle,
-    useRef,
-    useState,
-    useSyncExternalStore
-} from 'react';
+import React, { type ComponentPropsWithoutRef, forwardRef, type JSX, type ReactNode, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 export interface Props extends ComponentPropsWithoutRef<'iframe'> {
     hideDeviceType?: boolean;
@@ -21,11 +10,13 @@ export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ hi
     useImperativeHandle(ref, () => iframeRef.current, [iframeRef.current]);
 
     const [deviceType, setDeviceType] = useState('');
-    const iframeDocument = useIframeDocument(iframeRef.current);
+
+    // Send message to <iframe> when device type override changes
     useEffect(() => {
-        if (!iframeDocument || !deviceType) return;
-        const ui = iframeDocument.querySelector('theoplayer-default-ui, theoplayer-ui');
-        ui?.setAttribute('device-type', deviceType);
+        iframeRef.current?.contentWindow?.postMessage({
+            type: 'deviceType',
+            deviceType: deviceType
+        });
     }, [iframeRef.current, deviceType]);
 
     return (
@@ -52,34 +43,3 @@ export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ hi
         </>
     );
 });
-
-/**
- * Returns `iframe.contentDocument`, but only when its ready state is "interactive" or "complete".
- */
-export function useIframeDocument(iframe: HTMLIFrameElement | null): Document | null {
-    const subscribe = useCallback(
-        (cb) => {
-            const iframeWindow = iframe?.contentWindow;
-            if (!iframeWindow) return;
-            const iframeDocument = iframe?.contentDocument;
-            iframeWindow.addEventListener('load', cb);
-            iframeDocument?.addEventListener('readystatechange', cb);
-            return () => {
-                iframeWindow.removeEventListener('load', cb);
-                iframeDocument?.removeEventListener('readystatechange', cb);
-            };
-        },
-        [iframe]
-    );
-    return useSyncExternalStore(
-        subscribe,
-        () => {
-            const iframeDocument = iframe?.contentDocument;
-            if (!iframeDocument || iframeDocument.readyState === 'loading') {
-                return null;
-            }
-            return iframeDocument;
-        },
-        () => null
-    );
-}

@@ -2,33 +2,30 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Default UI</title>
+        <title>Making a custom play button (step 1)</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
-        <style>
-            html,
-            body {
-                margin: 0;
-                padding: 0;
+        <link rel="stylesheet" href="style.css" />
+        <!--
+          JSPM Generator Import Map
+          Edit URL: https://generator.jspm.io/#U2VhYGBiDs0rySzJSU1hcCjJSM0vyEmsTC3SL09N0i3NdDDUM9czYkCIO5jpGRrpGegnZxTl56bmpBYXAwDszD7GRAA
+        -->
+        <script type="importmap">
+            {
+                "imports": {
+                    "@theoplayer/web-ui": "https://ga.jspm.io/npm:@theoplayer/web-ui@1.7.2/dist/THEOplayerUI.mjs",
+                    "theoplayer/chromeless": "https://cdn.theoplayer.com/dash/theoplayer/THEOplayer.chromeless.esm.js"
+                }
             }
-
-            theoplayer-default-ui:not(:defined) {
-                display: inline-block;
-                box-sizing: border-box;
-            }
-
-            theoplayer-default-ui {
-                width: 100%;
-                aspect-ratio: 16 / 9;
-                font-family: 'Noto Sans', sans-serif;
-                background: #000;
-            }
-        </style>
-        <script src="https://cdn.theoplayer.com/dash/theoplayer/THEOplayer.js"></script>
-        <script async src="https://unpkg.com/@theoplayer/web-ui@1"></script>
-        <script async src="../utils.js"></script>
+        </script>
+        <!-- Import maps polyfill for browsers without import maps support (e.g. Safari 16.3) -->
+        <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.3/dist/es-module-shims.js" crossorigin="anonymous"></script>
+        <script type="module">
+            import '@theoplayer/web-ui';
+            import './my-play-button-step1.js';
+        </script>
     </head>
     <body>
         <!--
@@ -40,9 +37,11 @@
             licenseUrl: Change this to point to your THEOplayer license file.
             Alternatively, replace it with a "license" property whose value is your THEOplayer license itself.
         -->
-        <theoplayer-default-ui
+        <theoplayer-ui
             configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","licenseUrl":"../../../../../theoplayer-license.txt"}'
             source='{"sources":{"src":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
-        ></theoplayer-default-ui>
+        >
+            <my-play-button slot="centered-chrome"></my-play-button>
+        </theoplayer-ui>
     </body>
 </html>

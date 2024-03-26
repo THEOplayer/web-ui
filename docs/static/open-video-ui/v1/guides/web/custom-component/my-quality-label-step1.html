@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Making a custom quality label (step 1)</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="style.css" />
+        <!--
+          JSPM Generator Import Map
+          Edit URL: https://generator.jspm.io/#U2VhYGBiDs0rySzJSU1hcCjJSM0vyEmsTC3SL09N0i3NdDDUM9czYkCIO5jpGRrpGegnZxTl56bmpBYXAwDszD7GRAA
+        -->
+        <script type="importmap">
+            {
+                "imports": {
+                    "@theoplayer/web-ui": "https://ga.jspm.io/npm:@theoplayer/web-ui@1.7.2/dist/THEOplayerUI.mjs",
+                    "theoplayer/chromeless": "https://cdn.theoplayer.com/dash/theoplayer/THEOplayer.chromeless.esm.js"
+                }
+            }
+        </script>
+        <!-- Import maps polyfill for browsers without import maps support (e.g. Safari 16.3) -->
+        <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.3/dist/es-module-shims.js" crossorigin="anonymous"></script>
+        <script type="module">
+            import '@theoplayer/web-ui';
+            import './my-quality-label-step1.js';
+        </script>
+    </head>
+    <body>
+        <!--
+            libraryLocation: For demonstration purposes, we use the theoplayer.com CDN.
+            For production use, we recommend hosting THEOplayer yourself
+            and changing this (as well as the <script> and <link> tags above)
+            to point to THEOplayer's location on your own website.
+
+            licenseUrl: Change this to point to your THEOplayer license file.
+            Alternatively, replace it with a "license" property whose value is your THEOplayer license itself.
+        -->
+        <theoplayer-ui
+            configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","licenseUrl":"../../../../../theoplayer-license.txt"}'
+            source='{"sources":{"src":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
+        >
+            <theoplayer-control-bar>
+                <!-- A seek bar -->
+                <theoplayer-time-range></theoplayer-time-range>
+            </theoplayer-control-bar>
+            <theoplayer-control-bar>
+                <!-- A few commonly used built-in controls -->
+                <theoplayer-play-button></theoplayer-play-button>
+                <theoplayer-mute-button></theoplayer-mute-button>
+                <!-- A spacer, to fill up the remaining space in the middle -->
+                <span style="flex-grow: 1"></span>
+                <!-- Your brand new quality label! -->
+                <my-quality-label></my-quality-label>
+                <!-- Some other controls -->
+                <theoplayer-settings-menu-button menu="settings-menu"></theoplayer-settings-menu-button>
+                <theoplayer-fullscreen-button></theoplayer-fullscreen-button>
+            </theoplayer-control-bar>
+            <!-- A settings menu, so you can manually change the active quality -->
+            <theoplayer-settings-menu slot="menu" id="settings-menu"></theoplayer-settings-menu>
+        </theoplayer-ui>
+    </body>
+</html>
