@@ -1,4 +1,3 @@
-import './components/theolive/Logo';
 import './components/theolive/quality/BadNetworkModeButton';
 import './components/theolive/quality/BadNetworkModeMenu';
 import css from './THEOliveDefaultUI.css';
