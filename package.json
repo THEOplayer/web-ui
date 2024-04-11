@@ -59,7 +59,7 @@
     "@lit-labs/ssr-dom-shim": "^1.2.0"
   },
   "peerDependencies": {
-    "theoplayer": "^6"
+    "theoplayer": "^7"
   },
   "devDependencies": {
     "@rollup/plugin-inject": "^5.0.5",
@@ -84,7 +84,7 @@
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-string": "^3.0.0",
     "rollup-plugin-swc3": "^0.8.2",
-    "theoplayer": "^6.0.0",
+    "theoplayer": "^7.0.0",
     "tslib": "^2.6.2",
     "typedoc": "^0.25.8",
     "typedoc-plugin-mdn-links": "^3.1.14",
