@@ -5,15 +5,13 @@ import './BadNetworkModeSelector';
 import { RadioGroup } from '../../RadioGroup';
 import { createTemplate } from '../../../util/TemplateUtils';
 
-const template = createTemplate(
-    'theolive-bad-network-menu',
-    `<style>${verticalRadioGroupCss}</style>
+const html = `<style>${verticalRadioGroupCss}</style>
 <theoplayer-radio-group>
     <theolive-automatic-quality-selector></theolive-automatic-quality-selector>
     <theolive-bad-network-quality-selector></theolive-bad-network-quality-selector>
 </theoplayer-radio-group>
-`
-);
+`;
+const template = createTemplate('theolive-bad-network-menu', html);
 
 export class BadNetworkModeMenu extends HTMLElement {
     private readonly _radioGroup: RadioGroup;

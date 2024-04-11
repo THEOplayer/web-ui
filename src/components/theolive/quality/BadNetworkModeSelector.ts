@@ -1,9 +1,13 @@
 import { AbstractQualitySelector } from './AbstractQualitySelector';
 import { setTextContent } from '../../../util/CommonUtils';
+import { createTemplate } from '../../../util/TemplateUtils';
+import { buttonTemplate } from '../../Button';
+
+const template = createTemplate('theolive-bad-network-quality-selector', buttonTemplate('<slot></slot>'));
 
 export class BadNetworkModeSelector extends AbstractQualitySelector {
     constructor() {
-        super();
+        super({ template: template() });
         setTextContent(this._slotEl, 'Low Quality');
     }
 

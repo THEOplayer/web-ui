@@ -1,9 +1,13 @@
 import { AbstractQualitySelector } from './AbstractQualitySelector';
 import { setTextContent } from '../../../util/CommonUtils';
+import { createTemplate } from '../../../util/TemplateUtils';
+import { buttonTemplate } from '../../Button';
+
+const template = createTemplate('theolive-automatic-quality-selector', buttonTemplate('<slot></slot>'));
 
 export class AutomaticQualitySelector extends AbstractQualitySelector {
     constructor() {
-        super();
+        super({ template: template() });
         setTextContent(this._slotEl, 'High Quality');
     }
 

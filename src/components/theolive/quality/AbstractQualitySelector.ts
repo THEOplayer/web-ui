@@ -1,13 +1,8 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
-import { buttonTemplate } from '../../Button';
+import { type ButtonOptions } from '../../Button';
 import { StateReceiverMixin } from '../../StateReceiverMixin';
 import { RadioButton } from '../../RadioButton';
 import { Attribute } from '../../../util/Attribute';
-
-const template = document.createElement('template');
-template.innerHTML = buttonTemplate(`<slot></slot>`);
-shadyCss.prepareTemplate(template, 'theoplayer-quality-radio-button');
 
 /**
  * A radio button that shows the label of a given video quality, and switches the video track's
@@ -20,8 +15,8 @@ export abstract class AbstractQualitySelector extends StateReceiverMixin(RadioBu
     protected _slotEl: HTMLSlotElement;
     protected _badNetworkMode: boolean = false;
 
-    protected constructor() {
-        super({ template });
+    protected constructor(options: ButtonOptions) {
+        super(options);
         this._slotEl = this.shadowRoot!.querySelector('slot')!;
     }
 

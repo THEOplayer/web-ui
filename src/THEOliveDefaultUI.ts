@@ -6,9 +6,9 @@ import type { ErrorEvent, PlayerConfiguration } from 'theoplayer/chromeless';
 import { DefaultUI } from './DefaultUI';
 import { READY_EVENT } from './events/ReadyEvent';
 import { ErrorDisplay, PlayButton } from './components';
+import { createTemplate } from './util/TemplateUtils';
 
-const template = document.createElement('template');
-template.innerHTML = `<style>${css}</style>${html}`;
+const template = createTemplate('theolive-default-ui', `<style>${css}</style>${html}`);
 
 /**
  * `<theolive-default-ui>` - A default UI for THEOlive.
@@ -37,7 +37,7 @@ export class THEOliveDefaultUI extends DefaultUI {
 
     protected initShadowRoot(): ShadowRoot {
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(template().content.cloneNode(true));
         return shadowRoot;
     }
 

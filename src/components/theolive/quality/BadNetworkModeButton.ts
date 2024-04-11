@@ -1,5 +1,4 @@
 import { ChromelessPlayer as TheoPlayer } from 'theoplayer/chromeless';
-import * as shadyCss from '@webcomponents/shadycss';
 import settingsCss from './BadNetworkModeButton.css';
 import { buttonTemplate } from '../../Button';
 import settingsIcon from '../../../icons/settings.svg';
@@ -7,17 +6,14 @@ import warningIcon from '../../../icons/warning.svg';
 import { StateReceiverMixin } from '../../StateReceiverMixin';
 import { MenuButton } from '../../MenuButton';
 import { Attribute } from '../../../util/Attribute';
+import { createTemplate } from '../../../util/TemplateUtils';
 
-const template = document.createElement('template');
-
-template.innerHTML = buttonTemplate(`
-<style>${settingsCss}</style>
+const html = `<style>${settingsCss}</style>
 <div id="container">
-    ${settingsIcon}
-    ${warningIcon}
-</div>
-`);
-shadyCss.prepareTemplate(template, 'theolive-bad-network-button');
+<span id="settings-icon">${settingsIcon}</span>
+<span id="warning-icon">${warningIcon}</span>
+</div>`;
+const template = createTemplate('theolive-bad-network-button', buttonTemplate(html));
 
 /**
  * A menu button that opens a settings menu.
@@ -30,7 +26,7 @@ export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['playe
     #warningIcon: HTMLElement | undefined;
 
     constructor() {
-        super({ template });
+        super({ template: template() });
     }
 
     override connectedCallback() {
