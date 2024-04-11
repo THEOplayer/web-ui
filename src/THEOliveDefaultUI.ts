@@ -1,8 +1,8 @@
 import "./components/theolive/Logo";
 import "./components/theolive/quality/BadNetworkModeButton";
 import "./components/theolive/quality/BadNetworkModeMenu";
-import css from './THEOliveUI.css'
-import html from './THEOliveUI.html';
+import css from './THEOliveDefaultUI.css'
+import html from './THEOliveDefaultUI.html';
 import type {ErrorEvent, PlayerConfiguration} from "theoplayer/chromeless";
 import {DefaultUI} from "./DefaultUI";
 import {READY_EVENT} from "./events/ReadyEvent";
@@ -11,7 +11,7 @@ import {ErrorDisplay, PlayButton} from "./components";
 const template = document.createElement('template');
 template.innerHTML = `<style>${css}</style>${html}`;
 
-export class THEOLiveUI extends DefaultUI {
+export class THEOliveDefaultUI extends DefaultUI {
     private readonly _loading: HTMLParagraphElement;
     private readonly _offline: HTMLParagraphElement;
     private readonly _announcement: HTMLParagraphElement;
@@ -113,4 +113,10 @@ export class THEOLiveUI extends DefaultUI {
     }
 }
 
-customElements.define('theo-live-default-ui', THEOLiveUI);
+customElements.define('theolive-default-ui', THEOliveDefaultUI);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'theolive-default-ui': THEOliveDefaultUI;
+    }
+}
