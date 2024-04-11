@@ -10,6 +10,11 @@ import { ErrorDisplay, PlayButton } from './components';
 const template = document.createElement('template');
 template.innerHTML = `<style>${css}</style>${html}`;
 
+/**
+ * `<theolive-default-ui>` - A default UI for THEOlive.
+ *
+ * @group Components
+ */
 export class THEOliveDefaultUI extends DefaultUI {
     private readonly _loading: HTMLParagraphElement;
     private readonly _offline: HTMLParagraphElement;
