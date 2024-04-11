@@ -1,4 +1,5 @@
-:host, theoplayer-radio-group {
+:host,
+theoplayer-radio-group {
     display: flex;
     flex-direction: column;
     align-items: stretch;

@@ -1,9 +1,9 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import type {ChromelessPlayer} from 'theoplayer/chromeless';
-import {buttonTemplate} from "../../Button";
-import {StateReceiverMixin} from "../../StateReceiverMixin";
-import {RadioButton} from "../../RadioButton";
-import {Attribute} from "../../../util/Attribute";
+import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import { buttonTemplate } from '../../Button';
+import { StateReceiverMixin } from '../../StateReceiverMixin';
+import { RadioButton } from '../../RadioButton';
+import { Attribute } from '../../../util/Attribute';
 
 const template = document.createElement('template');
 template.innerHTML = buttonTemplate(`<slot></slot>`);
@@ -16,13 +16,12 @@ shadyCss.prepareTemplate(template, 'theoplayer-quality-radio-button');
  * @group Components
  */
 export abstract class AbstractQualitySelector extends StateReceiverMixin(RadioButton, ['player']) {
-
     private _player: ChromelessPlayer | undefined;
     protected _slotEl: HTMLSlotElement;
     protected _badNetworkMode: boolean = false;
 
     protected constructor() {
-        super({template});
+        super({ template });
         this._slotEl = this.shadowRoot!.querySelector('slot')!;
     }
 
@@ -35,7 +34,7 @@ export abstract class AbstractQualitySelector extends StateReceiverMixin(RadioBu
             return;
         }
         if (this._player) {
-            this._player.theoLive?.removeEventListener('enterbadnetworkmode', this.#handleEnterBadNetworkMode)
+            this._player.theoLive?.removeEventListener('enterbadnetworkmode', this.#handleEnterBadNetworkMode);
             this._player.theoLive?.removeEventListener('exitbadnetworkmode', this.#handleExitBadNetworkMode);
         }
         this._player = player;
@@ -45,7 +44,7 @@ export abstract class AbstractQualitySelector extends StateReceiverMixin(RadioBu
             this._player.theoLive?.addEventListener('enterbadnetworkmode', this.#handleEnterBadNetworkMode);
             this._player.theoLive?.addEventListener('exitbadnetworkmode', this.#handleExitBadNetworkMode);
         }
-        this.handlePlayer()
+        this.handlePlayer();
     }
 
     readonly #handleEnterBadNetworkMode = () => {

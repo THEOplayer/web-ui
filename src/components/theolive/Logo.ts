@@ -1,7 +1,9 @@
-import {createTemplate} from "../../util/TemplateUtils";
-import {Attribute} from "../../util/Attribute";
+import { createTemplate } from '../../util/TemplateUtils';
+import { Attribute } from '../../util/Attribute';
 
-const template = createTemplate('theolive-logo', `
+const template = createTemplate(
+    'theolive-logo',
+    `
     <style>
         :host {
             position: absolute;
@@ -15,10 +17,10 @@ const template = createTemplate('theolive-logo', `
             height: 100%;
         }
     </style>
-`);
+`
+);
 
 export class Logo extends HTMLElement {
-
     static get observedAttributes() {
         return [Attribute.VALUE];
     }
@@ -28,7 +30,7 @@ export class Logo extends HTMLElement {
 
     constructor() {
         super();
-        this._shadowRoot = this.attachShadow({mode: 'open', delegatesFocus: true});
+        this._shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
         this._shadowRoot.appendChild(template().content.cloneNode(true));
 
         this._img = new Image();

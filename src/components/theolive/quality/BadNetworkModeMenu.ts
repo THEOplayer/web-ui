@@ -2,22 +2,25 @@ import * as shadyCss from '@webcomponents/shadycss';
 import verticalRadioGroupCss from './BadNetworkModeMenu.css';
 import './AutomaticQualitySelector';
 import './BadNetworkModeSelector';
-import {RadioGroup} from "../../RadioGroup";
-import {createTemplate} from "../../../util/TemplateUtils";
+import { RadioGroup } from '../../RadioGroup';
+import { createTemplate } from '../../../util/TemplateUtils';
 
-const template = createTemplate('theolive-bad-network-menu', `<style>${verticalRadioGroupCss}</style>
+const template = createTemplate(
+    'theolive-bad-network-menu',
+    `<style>${verticalRadioGroupCss}</style>
 <theoplayer-radio-group>
     <theolive-automatic-quality-selector></theolive-automatic-quality-selector>
     <theolive-bad-network-quality-selector></theolive-bad-network-quality-selector>
 </theoplayer-radio-group>
-`);
+`
+);
 
 export class BadNetworkModeMenu extends HTMLElement {
     private readonly _radioGroup: RadioGroup;
 
     constructor() {
         super();
-        const shadowRoot = this.attachShadow({mode: 'open'});
+        const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template().content.cloneNode(true));
         this._radioGroup = shadowRoot.querySelector('theoplayer-radio-group')!;
     }
@@ -44,7 +47,7 @@ export class BadNetworkModeMenu extends HTMLElement {
     }
 
     private readonly _onChange = () => {
-        this.dispatchEvent(new Event('change', {bubbles: true}));
+        this.dispatchEvent(new Event('change', { bubbles: true }));
     };
 }
 

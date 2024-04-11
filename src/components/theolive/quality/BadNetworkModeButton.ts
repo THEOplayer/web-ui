@@ -1,12 +1,12 @@
-import {ChromelessPlayer as TheoPlayer} from 'theoplayer/chromeless';
+import { ChromelessPlayer as TheoPlayer } from 'theoplayer/chromeless';
 import * as shadyCss from '@webcomponents/shadycss';
 import settingsCss from './BadNetworkModeButton.css';
-import {buttonTemplate} from "../../Button";
+import { buttonTemplate } from '../../Button';
 import settingsIcon from '../icons/settings.svg';
 import warningIcon from '../icons/warning.svg';
-import {StateReceiverMixin} from "../../StateReceiverMixin";
-import {MenuButton} from "../../MenuButton";
-import {Attribute} from "../../../util/Attribute";
+import { StateReceiverMixin } from '../../StateReceiverMixin';
+import { MenuButton } from '../../MenuButton';
+import { Attribute } from '../../../util/Attribute';
 
 const template = document.createElement('template');
 
@@ -26,12 +26,11 @@ shadyCss.prepareTemplate(template, 'theolive-bad-network-button');
  * @group Components
  */
 export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['player']) {
-
     private _player: TheoPlayer | undefined;
     #warningIcon: HTMLElement | undefined;
 
     constructor() {
-        super({template});
+        super({ template });
     }
 
     override connectedCallback() {

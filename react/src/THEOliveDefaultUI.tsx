@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {type PropsWithoutRef, type ReactNode, useState} from 'react';
-import {THEOliveDefaultUI as THEOliveDefaultUIElement} from '@theoplayer/web-ui';
-import type {ChromelessPlayer} from 'theoplayer/chromeless';
-import {createComponent, type WebComponentProps} from '@lit/react';
-import {usePlayer} from './util';
-import {PlayerContext} from './context';
-import {SlotContainer} from './components';
+import { type PropsWithoutRef, type ReactNode, useState } from 'react';
+import { THEOliveDefaultUI as THEOliveDefaultUIElement } from '@theoplayer/web-ui';
+import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import { createComponent, type WebComponentProps } from '@lit/react';
+import { usePlayer } from './util';
+import { PlayerContext } from './context';
+import { SlotContainer } from './components';
 
 const RawTHEOliveDefaultUI = createComponent({
     tagName: 'theolive-default-ui',

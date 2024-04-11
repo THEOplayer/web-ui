@@ -1,12 +1,12 @@
-import "./components/theolive/Logo";
-import "./components/theolive/quality/BadNetworkModeButton";
-import "./components/theolive/quality/BadNetworkModeMenu";
-import css from './THEOliveDefaultUI.css'
+import './components/theolive/Logo';
+import './components/theolive/quality/BadNetworkModeButton';
+import './components/theolive/quality/BadNetworkModeMenu';
+import css from './THEOliveDefaultUI.css';
 import html from './THEOliveDefaultUI.html';
-import type {ErrorEvent, PlayerConfiguration} from "theoplayer/chromeless";
-import {DefaultUI} from "./DefaultUI";
-import {READY_EVENT} from "./events/ReadyEvent";
-import {ErrorDisplay, PlayButton} from "./components";
+import type { ErrorEvent, PlayerConfiguration } from 'theoplayer/chromeless';
+import { DefaultUI } from './DefaultUI';
+import { READY_EVENT } from './events/ReadyEvent';
+import { ErrorDisplay, PlayButton } from './components';
 
 const template = document.createElement('template');
 template.innerHTML = `<style>${css}</style>${html}`;
@@ -21,18 +21,18 @@ export class THEOliveDefaultUI extends DefaultUI {
 
     constructor(configuration: PlayerConfiguration = {}) {
         super(configuration);
-        this._loading = this._shadowRoot.querySelector<HTMLParagraphElement>("#loading-announcement")!;
-        this._offline = this._shadowRoot.querySelector<HTMLParagraphElement>("#offline-announcement")!;
-        this._announcement = this._shadowRoot.querySelector<HTMLParagraphElement>("#announcement")!;
-        this._errorDisplay = this._shadowRoot.querySelector<ErrorDisplay>("theoplayer-error-display")!;
-        this._playButton = this._shadowRoot.querySelector<PlayButton>("theoplayer-play-button")!;
-        this._root = this._shadowRoot.querySelector<HTMLElement>('theoplayer-ui')!
+        this._loading = this._shadowRoot.querySelector<HTMLParagraphElement>('#loading-announcement')!;
+        this._offline = this._shadowRoot.querySelector<HTMLParagraphElement>('#offline-announcement')!;
+        this._announcement = this._shadowRoot.querySelector<HTMLParagraphElement>('#announcement')!;
+        this._errorDisplay = this._shadowRoot.querySelector<ErrorDisplay>('theoplayer-error-display')!;
+        this._playButton = this._shadowRoot.querySelector<PlayButton>('theoplayer-play-button')!;
+        this._root = this._shadowRoot.querySelector<HTMLElement>('theoplayer-ui')!;
 
         this._ui.addEventListener(READY_EVENT, this.onReady);
     }
 
     protected initShadowRoot(): ShadowRoot {
-        const shadowRoot = this.attachShadow({mode: 'open', delegatesFocus: true});
+        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
         shadowRoot.appendChild(template.content.cloneNode(true));
         return shadowRoot;
     }
@@ -46,7 +46,7 @@ export class THEOliveDefaultUI extends DefaultUI {
             player.theoLive?.addEventListener('publicationloaded', this.onChannelLoaded);
             player.addEventListener('error', this.onError);
         }
-    }
+    };
 
     private onLoadChannelStart = () => {
         this.showMessage_('loading', undefined);
@@ -59,10 +59,10 @@ export class THEOliveDefaultUI extends DefaultUI {
     private onChannelLoaded = () => {
         this.hidePlayerError();
         this.hideMessage_();
-    }
+    };
 
     private onError = (e: ErrorEvent) => {
-        const errorCode = e.errorObject.code
+        const errorCode = e.errorObject.code;
         if (errorCode < 13_000 || errorCode >= 14_000) {
             this.showMessage_('offline', undefined);
             return;
@@ -73,20 +73,20 @@ export class THEOliveDefaultUI extends DefaultUI {
 
     private hidePlayerError(): void {
         this._root.removeAttribute('has-error');
-        this._errorDisplay.style.display = "none";
+        this._errorDisplay.style.display = 'none';
     }
 
     private stopHidingPlayerError(): void {
         this._root.setAttribute('has-error', '');
-        this._errorDisplay.style.display = "flex";
+        this._errorDisplay.style.display = 'flex';
     }
 
     private hidePlayerPlayButton_(): void {
-        this._playButton.style.display = "none";
+        this._playButton.style.display = 'none';
     }
 
     private stopHidingPlayerPlayButton(): void {
-        this._playButton.style.display = "inline-flex";
+        this._playButton.style.display = 'inline-flex';
     }
 
     private showMessage_(type: 'offline' | 'loading' | 'announcement', text: string | undefined): void {

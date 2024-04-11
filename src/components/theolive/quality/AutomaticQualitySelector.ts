@@ -1,8 +1,7 @@
-import {AbstractQualitySelector} from "./AbstractQualitySelector";
-import {setTextContent} from "../../../util/CommonUtils";
+import { AbstractQualitySelector } from './AbstractQualitySelector';
+import { setTextContent } from '../../../util/CommonUtils';
 
 export class AutomaticQualitySelector extends AbstractQualitySelector {
-
     constructor() {
         super();
         setTextContent(this._slotEl, 'High Quality');

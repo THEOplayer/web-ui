@@ -78,9 +78,9 @@ export class QualityRadioButton extends RadioButton {
             let targetQualities = this._track.targetQuality;
             if (Array.isArray(targetQualities)) {
                 if (targetQualities.length === 1) {
-                    targetQualities = targetQualities[0]
+                    targetQualities = targetQualities[0];
                 } else {
-                    targetQualities = undefined
+                    targetQualities = undefined;
                 }
             }
             if (this._quality === undefined) {
