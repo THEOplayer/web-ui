@@ -23,7 +23,7 @@ const template = createTemplate('theolive-bad-network-button', buttonTemplate(ht
  */
 export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['player']) {
     private _player: TheoPlayer | undefined;
-    #warningIcon: HTMLElement | undefined;
+    private _warningIcon: HTMLElement | undefined;
 
     constructor() {
         super({ template: template() });
@@ -36,22 +36,22 @@ export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['playe
             this.setAttribute(Attribute.ARIA_LABEL, 'open settings menu');
         }
 
-        this.#warningIcon = this.shadowRoot!.getElementById('warning-icon') ?? undefined;
+        this._warningIcon = this.shadowRoot!.getElementById('warning-icon') ?? undefined;
     }
 
-    readonly #handleEnterBadNetworkMode = () => {
-        if (this.#warningIcon) {
-            this.#warningIcon.style.display = 'block';
+    private readonly handleEnterBadNetworkMode_ = () => {
+        if (this._warningIcon) {
+            this._warningIcon.style.display = 'block';
         }
     };
 
-    readonly #handleExitBadNetworkMode = () => {
-        if (this.#warningIcon) {
-            this.#warningIcon.style.display = 'none';
+    private readonly handleExitBadNetworkMode_ = () => {
+        if (this._warningIcon) {
+            this._warningIcon.style.display = 'none';
         }
     };
 
-    readonly #handleTrackUpdate = () => {
+    private readonly handleTrackUpdate_ = () => {
         // const player = uiPlayers.get(this._player!)!;
         // const videoTrack = player.videoTracks.item(0);
         // if (player.sourceType === 'theolive' && videoTrack && videoTrack.qualities.some((q) => q.isBadNetworkOnly)) {
@@ -70,17 +70,17 @@ export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['playe
             return;
         }
         if (this._player) {
-            this._player.theoLive?.removeEventListener('enterbadnetworkmode', this.#handleEnterBadNetworkMode);
-            this._player.theoLive?.removeEventListener('exitbadnetworkmode', this.#handleExitBadNetworkMode);
-            this._player.videoTracks.removeEventListener('addtrack', this.#handleTrackUpdate);
-            this._player.videoTracks.removeEventListener('removetrack', this.#handleTrackUpdate);
+            this._player.theoLive?.removeEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
+            this._player.theoLive?.removeEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
+            this._player.videoTracks.removeEventListener('addtrack', this.handleTrackUpdate_);
+            this._player.videoTracks.removeEventListener('removetrack', this.handleTrackUpdate_);
         }
         this._player = player;
         if (this._player) {
-            this._player.theoLive?.addEventListener('enterbadnetworkmode', this.#handleEnterBadNetworkMode);
-            this._player.theoLive?.addEventListener('exitbadnetworkmode', this.#handleExitBadNetworkMode);
-            this._player.videoTracks.addEventListener('addtrack', this.#handleTrackUpdate);
-            this._player.videoTracks.addEventListener('removetrack', this.#handleTrackUpdate);
+            this._player.theoLive?.addEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
+            this._player.theoLive?.addEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
+            this._player.videoTracks.addEventListener('addtrack', this.handleTrackUpdate_);
+            this._player.videoTracks.addEventListener('removetrack', this.handleTrackUpdate_);
         }
     }
 }

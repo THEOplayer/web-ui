@@ -29,25 +29,25 @@ export abstract class AbstractQualitySelector extends StateReceiverMixin(RadioBu
             return;
         }
         if (this._player) {
-            this._player.theoLive?.removeEventListener('enterbadnetworkmode', this.#handleEnterBadNetworkMode);
-            this._player.theoLive?.removeEventListener('exitbadnetworkmode', this.#handleExitBadNetworkMode);
+            this._player.theoLive?.removeEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
+            this._player.theoLive?.removeEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
         }
         this._player = player;
         this._badNetworkMode = false;
         if (this._player) {
             this._badNetworkMode = this._player.theoLive?.badNetworkMode ?? false;
-            this._player.theoLive?.addEventListener('enterbadnetworkmode', this.#handleEnterBadNetworkMode);
-            this._player.theoLive?.addEventListener('exitbadnetworkmode', this.#handleExitBadNetworkMode);
+            this._player.theoLive?.addEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
+            this._player.theoLive?.addEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
         }
         this.handlePlayer();
     }
 
-    readonly #handleEnterBadNetworkMode = () => {
+    private readonly handleEnterBadNetworkMode_ = () => {
         this._badNetworkMode = true;
         this.handleEnterBadNetworkMode();
     };
 
-    readonly #handleExitBadNetworkMode = () => {
+    private readonly handleExitBadNetworkMode_ = () => {
         this._badNetworkMode = false;
         this.handleExitBadNetworkMode();
     };

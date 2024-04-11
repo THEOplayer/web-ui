@@ -12,18 +12,18 @@ export class BadNetworkModeSelector extends AbstractQualitySelector {
     }
 
     handleEnterBadNetworkMode() {
-        this.#update();
+        this.update_();
     }
 
     handleExitBadNetworkMode() {
-        this.#update();
+        this.update_();
     }
 
     protected handlePlayer() {
-        this.#update();
+        this.update_();
     }
 
-    #update() {
+    private update_() {
         const newChecked = this.player?.theoLive?.badNetworkMode === true;
         if (this.checked !== newChecked) {
             this.checked = newChecked;
