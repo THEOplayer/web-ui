@@ -15,6 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   💥 **Breaking Change**: This project now requires THEOplayer version 7.0.0 or higher. ([#60](https://github.com/THEOplayer/web-ui/pull/60))
+
 ## v1.7.2 (2024-03-18)
 
 -   🚀 Added `<theoplayer-slot-container>`. ([#55](https://github.com/THEOplayer/web-ui/pull/55))
