@@ -48,4 +48,24 @@ describe('Server-side rendering (SSR)', () => {
             '</theoplayer-ui>';
         assert.equal(actual, expected);
     });
+
+    it('can render <THEOliveDefaultUI> to string', async () => {
+        const { THEOliveDefaultUI, PlayButton, TimeRange } = await import('@theoplayer/react-ui');
+        const actual = renderToString(
+            React.createElement(THEOliveDefaultUI, {
+                // Properties are ignored during SSR
+                configuration: { libraryLocation: 'foo', license: 'bar' },
+                onReady: () => console.log('ready!'),
+                // Slots are inserted as elements
+                loadingAnnouncement: 'Loading',
+                offlineAnnouncement: 'Offline'
+            })
+        );
+        const expected =
+            '<theolive-default-ui>' +
+            '<theoplayer-slot-container slot="loading-announcement">Loading</theoplayer-slot-container>' +
+            '<theoplayer-slot-container slot="offline-announcement">Offline</theoplayer-slot-container>' +
+            '</theolive-default-ui>';
+        assert.equal(actual, expected);
+    });
 });
