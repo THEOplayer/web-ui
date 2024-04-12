@@ -1,5 +1,5 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import verticalRadioGroupCss from './BadNetworkModeMenu.css';
+import verticalRadioGroupCss from '../../VerticalRadioGroup.css';
 import './AutomaticQualitySelector';
 import './BadNetworkModeSelector';
 import { RadioGroup } from '../../RadioGroup';
