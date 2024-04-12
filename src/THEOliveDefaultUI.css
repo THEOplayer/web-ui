@@ -209,5 +209,5 @@ theolive-bad-network-button {
 }
 
 theoplayer-settings-menu-button {
-    display: var(--theolive-quality-button-display, flex);
+    display: var(--theolive-quality-button-display, inline-flex);
 }

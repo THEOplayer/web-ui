@@ -8,12 +8,8 @@ import { MenuButton } from '../../MenuButton';
 import { Attribute } from '../../../util/Attribute';
 import { createTemplate } from '../../../util/TemplateUtils';
 
-const html = `<style>${settingsCss}</style>
-<div id="container">
-<span id="settings-icon">${settingsIcon}</span>
-<span id="warning-icon">${warningIcon}</span>
-</div>`;
-const template = createTemplate('theolive-bad-network-button', buttonTemplate(html));
+const html = `<span part="icon">${settingsIcon}<span part="warning-icon">${warningIcon}</span></span>`;
+const template = createTemplate('theolive-bad-network-button', buttonTemplate(html, settingsCss));
 
 /**
  * A menu button that opens a settings menu.
@@ -36,7 +32,7 @@ export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['playe
             this.setAttribute(Attribute.ARIA_LABEL, 'open settings menu');
         }
 
-        this._warningIcon = this.shadowRoot!.getElementById('warning-icon') ?? undefined;
+        this._warningIcon = this.shadowRoot!.querySelector<HTMLElement>('[part="warning-icon"]') ?? undefined;
     }
 
     private readonly handleEnterBadNetworkMode_ = () => {
