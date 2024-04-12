@@ -20,7 +20,6 @@ sidebar_custom_props: { 'icon': '📰' }
 -   💥 **Breaking Change**: This project now requires THEOplayer version 7.0.0 or higher. ([#60](https://github.com/THEOplayer/web-ui/pull/60))
 -   🚀 Added `<THEOliveDefaultUI>` that provides a default UI for THEOlive streams. ([#58](https://github.com/THEOplayer/web-ui/pull/58))
 
-
 ## v1.7.2 (2024-03-18)
 
 -   🐛 Fixed `topChrome`, `middleChrome` and `centeredChrome` slots not auto-hiding in `<UIContainer>`. ([#55](https://github.com/THEOplayer/web-ui/pull/55))
