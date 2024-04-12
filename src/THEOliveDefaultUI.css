@@ -1,0 +1,213 @@
+:host {
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+:host([hidden]) {
+    display: none !important;
+}
+
+theoplayer-ui {
+    font-family: Helvetica, Arial, sans-serif;
+    width: 100%;
+    --theoplayer-loading-delay: 0.1s;
+}
+
+:host(:fullscreen),
+:host(:fullscreen) theoplayer-ui {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+theoplayer-menu::part(heading) {
+    display: none !important;
+}
+
+[part='centered-chrome'] * {
+    --theoplayer-control-height: 48px;
+}
+
+[part='middle-chrome'] {
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    /* Align to bottom for Chromecast display */
+    justify-content: flex-end;
+    flex-grow: 1;
+    pointer-events: none;
+}
+
+[part='bottom-chrome'] {
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: stretch;
+}
+
+/*
+ * On mobile, put a backdrop color on the entire player when showing controls.
+ */
+:host([mobile]) theoplayer-ui {
+    --theoplayer-control-backdrop-background: rgba(0, 0, 0, 0.5);
+}
+
+/*
+ * On desktop, put a soft gradient behind the top and bottom control bars.
+ */
+:host {
+    /*
+     * Smooth transparent-to-black gradient from Chrome's <video> controls.
+     * See: https://bugs.chromium.org/p/chromium/issues/detail?id=1404684
+     */
+    /* prettier-ignore */
+    --theoplayer-control-background-gradient-stops: rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.01) 8.1%,
+    rgba(0, 0, 0, 0.037) 15.5%,
+    rgba(0, 0, 0, 0.078) 22.5%,
+    rgba(0, 0, 0, 0.131) 29%,
+    rgba(0, 0, 0, 0.195) 35.3%,
+    rgba(0, 0, 0, 0.264) 41.2%,
+    rgba(0, 0, 0, 0.337) 47.1%,
+    rgba(0, 0, 0, 0.413) 52.9%,
+    rgba(0, 0, 0, 0.486) 58.8%,
+    rgba(0, 0, 0, 0.555) 64.7%,
+    rgba(0, 0, 0, 0.619) 71%,
+    rgba(0, 0, 0, 0.672) 77.5%,
+    rgba(0, 0, 0, 0.713) 84.5%,
+    rgba(0, 0, 0, 0.74) 91.9%,
+    rgba(0, 0, 0, 0.75) 100%;
+}
+
+:host(:not([mobile])) [part='top-chrome']::before,
+:host(:not([mobile])) [part='bottom-chrome']::before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+:host(:not([mobile])) [part='top-chrome']::before {
+    background: linear-gradient(to top, var(--theoplayer-control-background-gradient-stops));
+}
+
+:host(:not([mobile])) [part='bottom-chrome']::before {
+    background: linear-gradient(to bottom, var(--theoplayer-control-background-gradient-stops));
+}
+
+.theoplayer-spacer {
+    flex-grow: 1;
+}
+
+theoplayer-time-range {
+    --theoplayer-control-height: 12px;
+    --theoplayer-range-track-pointer-background: rgba(255, 255, 255, 0.5);
+}
+
+/*
+ * Mobile-only and mobile-hidden elements
+ */
+:host([mobile]) [mobile-hidden],
+:host(:not([mobile])) [mobile-only] {
+    display: none !important;
+}
+
+/*
+ * Live-only and live-hidden elements
+ */
+:host(:not([stream-type='vod'])) [live-hidden],
+:host(:not([stream-type='vod'])) theoplayer-control-bar ::slotted([live-hidden]),
+:host([stream-type='vod']) [live-only],
+:host([stream-type='vod']) theoplayer-control-bar ::slotted([live-only]) {
+    display: none !important;
+}
+
+/*
+ * Ad-only and ad-hidden elements
+ */
+theoplayer-ui[playing-ad] [ad-hidden],
+theoplayer-ui:not([playing-ad]) [ad-only] {
+    display: none !important;
+}
+
+/*
+ * Hide all controls before first play, except for the center play button
+ */
+theoplayer-ui:not([has-first-play]) theoplayer-control-bar,
+theoplayer-ui:not([has-first-play]) [part='centered-chrome'] :not(theoplayer-play-button) {
+    display: none !important;
+}
+
+/*
+ * Hide center play button on desktop after first play
+ */
+:host(:not([mobile])) theoplayer-ui[has-first-play] [part='centered-chrome'] theoplayer-play-button {
+    display: none !important;
+}
+
+theoplayer-volume-range {
+    --theoplayer-range-padding-left: 0;
+}
+
+theoplayer-mute-button + theoplayer-volume-range {
+    width: 0;
+    overflow: hidden;
+    --theoplayer-range-padding-right: 0;
+
+    /* Set the internal width so it reveals, not grows */
+    --theoplayer-range-track-width: 70px;
+    transition: width 0.2s ease-in;
+}
+
+/* Expand volume control in all relevant states */
+theoplayer-mute-button:hover + theoplayer-volume-range,
+theoplayer-mute-button:focus + theoplayer-volume-range,
+theoplayer-mute-button + theoplayer-volume-range:hover,
+theoplayer-mute-button + theoplayer-volume-range:focus {
+    width: 70px;
+}
+
+/* IE doesn't support :focus-within, so keep these separate (and use a polyfill?) */
+theoplayer-mute-button:focus-within + theoplayer-volume-range,
+theoplayer-mute-button + theoplayer-volume-range:focus-within {
+    width: 70px;
+}
+
+/* Reduce space between live button and remaining time display */
+theoplayer-live-button + theoplayer-time-display {
+    padding-left: 0;
+}
+
+/* Hide remaining time display when playing at live edge */
+theoplayer-live-button[live] + theoplayer-time-display {
+    display: none !important;
+}
+
+p {
+    color: var(--theoplayer-text-color, #fff);
+    font-size: var(--theoplayer-text-font-size, 20px);
+}
+
+#loading-announcement {
+    display: none;
+}
+
+#offline-announcement {
+    display: none;
+}
+
+#announcement {
+    display: none;
+}
+
+theolive-bad-network-button {
+    display: var(--theolive-bad-network-button-display, none);
+}
+
+theoplayer-settings-menu-button {
+    display: var(--theolive-quality-button-display, inline-flex);
+}

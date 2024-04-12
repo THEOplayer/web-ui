@@ -1,0 +1,18 @@
+[part='icon'] {
+    display: inline-block;
+    position: relative;
+}
+
+[part='warning-icon'] {
+    position: absolute;
+    top: 0;
+    right: -10%;
+    width: 60%;
+    min-width: 60%;
+    height: 60%;
+    display: none;
+}
+
+[part='warning-icon'] svg {
+    fill: var(--theolive-bad-network-mode, red);
+}

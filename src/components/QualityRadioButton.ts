@@ -75,11 +75,18 @@ export class QualityRadioButton extends RadioButton {
 
     private readonly _updateFromTrack = () => {
         if (this._track !== undefined) {
-            const targetQualities = this._track.targetQuality;
+            let targetQualities = this._track.targetQuality;
+            if (Array.isArray(targetQualities)) {
+                if (targetQualities.length === 1) {
+                    targetQualities = targetQualities[0];
+                } else {
+                    targetQualities = undefined;
+                }
+            }
             if (this._quality === undefined) {
                 this.checked = targetQualities === undefined;
             } else {
-                this.checked = Array.isArray(targetQualities) ? targetQualities.indexOf(this._quality) >= 0 : targetQualities === this._quality;
+                this.checked = targetQualities === this._quality;
             }
         }
         this._updateFromQuality();

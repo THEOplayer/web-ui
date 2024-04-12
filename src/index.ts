@@ -2,6 +2,7 @@ export * from './components/index';
 export * from './extensions/index';
 export * from './UIContainer';
 export * from './DefaultUI';
+export * from './THEOliveDefaultUI';
 export { Attribute } from './util/Attribute';
 export { type DeviceType } from './util/DeviceType';
 export { type StreamType } from './util/StreamType';
