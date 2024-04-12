@@ -51,16 +51,6 @@ export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['playe
         }
     };
 
-    private readonly handleTrackUpdate_ = () => {
-        // const player = uiPlayers.get(this._player!)!;
-        // const videoTrack = player.videoTracks.item(0);
-        // if (player.sourceType === 'theolive' && videoTrack && videoTrack.qualities.some((q) => q.isBadNetworkOnly)) {
-        //     this.style.display = 'flex';
-        // } else {
-        //     this.style.display = 'none';
-        // }
-    };
-
     get player(): TheoPlayer | undefined {
         return this._player;
     }
@@ -72,15 +62,11 @@ export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['playe
         if (this._player) {
             this._player.theoLive?.removeEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
             this._player.theoLive?.removeEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
-            this._player.videoTracks.removeEventListener('addtrack', this.handleTrackUpdate_);
-            this._player.videoTracks.removeEventListener('removetrack', this.handleTrackUpdate_);
         }
         this._player = player;
         if (this._player) {
             this._player.theoLive?.addEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
             this._player.theoLive?.addEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
-            this._player.videoTracks.addEventListener('addtrack', this.handleTrackUpdate_);
-            this._player.videoTracks.addEventListener('removetrack', this.handleTrackUpdate_);
         }
     }
 }
