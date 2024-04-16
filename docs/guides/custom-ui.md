@@ -127,6 +127,6 @@ Have a look at [`DefaultUI.html`](https://github.com/THEOplayer/web-ui/blob/main
 
 The "Nitflex" theme shows an example of a fully customized player UI, inspired by a popular streaming platform. It has a custom layout for its playback controls, custom colors to match the brand's style, and even custom icons for its buttons.
 
-Have a look at its [HTML](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/nitflex.html) and [CSS](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/nitflex.css) to see how it's done.
+Have a look at its [HTML](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/examples/web/nitflex/demo.html) and [CSS](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/examples/web/nitflex/nitflex.css) to see how it's done.
 
 ![Screenshot](../assets/nitflex-theme.png)
