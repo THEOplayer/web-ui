@@ -1,6 +1,6 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer, EdgeStyle } from 'theoplayer/chromeless';
+import type { ChromelessPlayer, EdgeStyle, TextTrackStyle } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
 import { parseColor, toRgb } from '../util/ColorUtils';
 import type { TextTrackStyleOption } from './TextTrackStyleRadioGroup';
@@ -21,6 +21,7 @@ export class TextTrackStyleDisplay extends StateReceiverMixin(HTMLElement, ['pla
 
     private readonly _spanEl: HTMLSpanElement;
     private _player: ChromelessPlayer | undefined;
+    private _textTrackStyle: TextTrackStyle | undefined;
 
     constructor() {
         super();
@@ -67,14 +68,11 @@ export class TextTrackStyleDisplay extends StateReceiverMixin(HTMLElement, ['pla
         if (this._player === player) {
             return;
         }
-        if (this._player !== undefined) {
-            this._player.textTrackStyle.removeEventListener('change', this._updateFromPlayer);
-        }
+        this._textTrackStyle?.removeEventListener('change', this._updateFromPlayer);
         this._player = player;
+        this._textTrackStyle = player?.textTrackStyle;
         this._updateFromPlayer();
-        if (this._player !== undefined) {
-            this._player.textTrackStyle.addEventListener('change', this._updateFromPlayer);
-        }
+        this._textTrackStyle?.addEventListener('change', this._updateFromPlayer);
     }
 
     private readonly _updateFromPlayer = (): void => {

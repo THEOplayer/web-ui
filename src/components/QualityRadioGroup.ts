@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { RadioGroup } from './RadioGroup';
 import verticalRadioGroupCss from './VerticalRadioGroup.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer, MediaTrack, Quality, VideoQuality } from 'theoplayer/chromeless';
+import type { ChromelessPlayer, MediaTrack, MediaTrackList, Quality, VideoQuality } from 'theoplayer/chromeless';
 import { arrayFind, fromArrayLike } from '../util/CommonUtils';
 import { QualityRadioButton } from './QualityRadioButton';
 import { createEvent } from '../util/EventUtils';
@@ -24,6 +24,7 @@ const TRACK_EVENTS = ['addtrack', 'removetrack', 'change'] as const;
 export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
     private readonly _radioGroup: RadioGroup;
     private _player: ChromelessPlayer | undefined;
+    private _videoTracks: MediaTrackList | undefined;
     private _track: MediaTrack | undefined;
 
     constructor() {
@@ -67,14 +68,11 @@ export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player'
         if (this._player === player) {
             return;
         }
-        if (this._player !== undefined) {
-            this._player.videoTracks.removeEventListener(TRACK_EVENTS, this._updateTrack);
-        }
+        this._videoTracks?.removeEventListener(TRACK_EVENTS, this._updateTrack);
         this._player = player;
+        this._videoTracks = player?.videoTracks;
         this._updateTrack();
-        if (this._player !== undefined) {
-            this._player.videoTracks.addEventListener(TRACK_EVENTS, this._updateTrack);
-        }
+        this._videoTracks?.addEventListener(TRACK_EVENTS, this._updateTrack);
     }
 
     private readonly _onChange = () => {

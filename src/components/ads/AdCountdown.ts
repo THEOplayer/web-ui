@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import textDisplayCss from '../TextDisplay.css';
 import adCountdownCss from './AdCountdown.css';
 import { StateReceiverMixin } from '../StateReceiverMixin';
-import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { setTextContent } from '../../util/CommonUtils';
 import { createTemplate } from '../../util/TemplateUtils';
 
@@ -18,6 +18,7 @@ const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak
 export class AdCountdown extends StateReceiverMixin(HTMLElement, ['player']) {
     private readonly _spanEl: HTMLElement;
     private _player: ChromelessPlayer | undefined;
+    private _ads: Ads | undefined;
 
     constructor() {
         super();
@@ -49,15 +50,12 @@ export class AdCountdown extends StateReceiverMixin(HTMLElement, ['player']) {
         if (this._player === player) {
             return;
         }
-        if (this._player !== undefined) {
-            this._player.removeEventListener('timeupdate', this._update);
-            this._player.ads?.removeEventListener(AD_EVENTS, this._onAdChange);
-        }
+        this._player?.removeEventListener('timeupdate', this._update);
+        this._ads?.removeEventListener(AD_EVENTS, this._onAdChange);
         this._player = player;
+        this._ads = player?.ads;
         this._onAdChange();
-        if (this._player !== undefined) {
-            this._player.ads?.addEventListener(AD_EVENTS, this._onAdChange);
-        }
+        this._ads?.addEventListener(AD_EVENTS, this._onAdChange);
     }
 
     private readonly _onAdChange = () => {

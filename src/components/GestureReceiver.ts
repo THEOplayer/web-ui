@@ -16,6 +16,7 @@ const template = createTemplate('theoplayer-gesture-receiver', `<style>${gesture
  */
 export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player']) {
     private _player: ChromelessPlayer | undefined;
+    private _playerElement: HTMLElement | undefined;
     private _pointerType: string = '';
 
     constructor() {
@@ -49,14 +50,15 @@ export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player'])
         if (this._player === player) {
             return;
         }
-        if (this._player !== undefined) {
-            this._player.element.removeEventListener('pointerdown', this._onPointerDown);
-            this._player.element.removeEventListener('click', this._onClick);
+        if (this._playerElement !== undefined) {
+            this._playerElement.removeEventListener('pointerdown', this._onPointerDown);
+            this._playerElement.removeEventListener('click', this._onClick);
         }
         this._player = player;
-        if (this._player !== undefined) {
-            this._player.element.addEventListener('pointerdown', this._onPointerDown);
-            this._player.element.addEventListener('click', this._onClick);
+        this._playerElement = player?.element;
+        if (this._playerElement !== undefined) {
+            this._playerElement.addEventListener('pointerdown', this._onPointerDown);
+            this._playerElement.addEventListener('click', this._onClick);
         }
     }
 

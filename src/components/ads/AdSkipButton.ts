@@ -4,7 +4,7 @@ import adSkipButtonCss from './AdSkipButton.css';
 import skipNextIcon from '../../icons/skip-next.svg';
 import { StateReceiverMixin } from '../StateReceiverMixin';
 import { Attribute } from '../../util/Attribute';
-import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind, setTextContent } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
 import { createTemplate } from '../../util/TemplateUtils';
@@ -33,6 +33,7 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
     private readonly _countdownEl: HTMLElement;
     private readonly _skipEl: HTMLElement;
     private _player: ChromelessPlayer | undefined;
+    private _ads: Ads | undefined;
 
     static get observedAttributes() {
         return [...Button.observedAttributes];
@@ -59,15 +60,12 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
         if (this._player === player) {
             return;
         }
-        if (this._player !== undefined) {
-            this._player.removeEventListener('timeupdate', this._update);
-            this._player.ads?.removeEventListener(AD_EVENTS, this._onAdChange);
-        }
+        this._player?.removeEventListener('timeupdate', this._update);
+        this._ads?.removeEventListener(AD_EVENTS, this._onAdChange);
         this._player = player;
+        this._ads = player?.ads;
         this._onAdChange();
-        if (this._player !== undefined) {
-            this._player.ads?.addEventListener(AD_EVENTS, this._onAdChange);
-        }
+        this._ads?.addEventListener(AD_EVENTS, this._onAdChange);
     }
 
     protected override handleClick(): void {
