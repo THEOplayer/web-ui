@@ -1,8 +1,4 @@
 ---
-layout: page
-title: Guides
-permalink: /guides/
-show_in_nav: true
+layout: redirect
+redirect_to: https://www.theoplayer.com/docs/open-video-ui/web/guides/
 ---
-
--   [Making a custom UI](./custom-ui.md)

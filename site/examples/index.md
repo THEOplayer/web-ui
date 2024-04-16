@@ -1,14 +1,4 @@
 ---
-layout: page
-title: Examples
-permalink: /examples/
-show_in_nav: true
+layout: redirect
+redirect_to: https://www.theoplayer.com/docs/open-video-ui/web/examples/
 ---
-
--   [Default UI](./default-ui.html)
-    -   [Advertisements](./ads.html)
-    -   [Styling](./styling.html)
--   [Custom UI](./custom-ui.html)
-    -   [Portrait](./portrait.html)
-    -   [Nitflex theme](./nitflex.html)
--   [React](./react.html)
