@@ -438,17 +438,12 @@ export class UIContainer extends HTMLElement {
         this._player.muted = this.muted;
         this._player.autoplay = this.autoplay;
 
-        for (const receiver of this._stateReceivers) {
-            if (receiver[StateReceiverProps].indexOf('player') >= 0) {
-                receiver.player = this._player;
-            }
-        }
-
         this._updateAspectRatio();
         this._updateError();
         this._updatePausedAndEnded();
         this._updateCasting();
         this._addPlayerListeners(this._player);
+        this.propagatePlayerToAllReceivers_();
 
         this.dispatchEvent(createCustomEvent(READY_EVENT));
     }
@@ -457,10 +452,6 @@ export class UIContainer extends HTMLElement {
         this._resizeObserver?.disconnect();
         this._mutationObserver.disconnect();
         this.shadowRoot!.removeEventListener('slotchange', this._onSlotChange);
-        for (const receiver of this._stateReceivers) {
-            this.removeStateFromReceiver_(receiver);
-        }
-        this._stateReceivers.length = 0;
 
         this._menuGroup.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
         this._menuGroup.removeEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
@@ -481,7 +472,10 @@ export class UIContainer extends HTMLElement {
             this._removePlayerListeners(this._player);
             this._player.destroy();
             this._player = undefined;
+            this.propagatePlayerToAllReceivers_();
         }
+
+        this._stateReceivers.length = 0;
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
@@ -613,6 +607,15 @@ export class UIContainer extends HTMLElement {
         }
         if (receiverProps.indexOf('previewTime') >= 0) {
             receiver.previewTime = this._previewTime;
+        }
+    }
+
+    private propagatePlayerToAllReceivers_(): void {
+        for (const receiver of this._stateReceivers) {
+            const receiverProps = receiver[StateReceiverProps];
+            if (receiverProps.indexOf('player') >= 0) {
+                receiver.player = this._player;
+            }
         }
     }
 
@@ -1094,6 +1097,7 @@ export class UIContainer extends HTMLElement {
         if (this._player) {
             this._removePlayerListeners(this._player);
             this._player = undefined;
+            this.propagatePlayerToAllReceivers_();
         }
     };
 }
