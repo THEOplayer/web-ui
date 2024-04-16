@@ -442,7 +442,7 @@ export class UIContainer extends HTMLElement {
         this._updateError();
         this._updatePausedAndEnded();
         this._updateCasting();
-        this._addPlayerListeners(this._player);
+        this.addPlayerListeners_(this._player);
         this.propagatePlayerToAllReceivers_();
 
         this.dispatchEvent(createCustomEvent(READY_EVENT));
@@ -469,7 +469,7 @@ export class UIContainer extends HTMLElement {
         this.removeEventListener('mouseleave', this._onMouseLeave);
 
         if (this._player) {
-            this._removePlayerListeners(this._player);
+            this.removePlayerListeners_(this._player);
             this._player.destroy();
             this._player = undefined;
             this.propagatePlayerToAllReceivers_();
@@ -1057,7 +1057,7 @@ export class UIContainer extends HTMLElement {
         }
     };
 
-    private _addPlayerListeners(player: ChromelessPlayer): void {
+    private addPlayerListeners_(player: ChromelessPlayer): void {
         player.addEventListener('destroy', this._onDestroy);
         player.addEventListener('resize', this._updateAspectRatio);
         player.addEventListener(['error', 'sourcechange', 'emptied'], this._updateError);
@@ -1075,7 +1075,7 @@ export class UIContainer extends HTMLElement {
         player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
     }
 
-    private _removePlayerListeners(player: ChromelessPlayer): void {
+    private removePlayerListeners_(player: ChromelessPlayer): void {
         player.removeEventListener('destroy', this._onDestroy);
         player.removeEventListener('resize', this._updateAspectRatio);
         player.removeEventListener(['error', 'sourcechange', 'emptied'], this._updateError);
@@ -1095,7 +1095,7 @@ export class UIContainer extends HTMLElement {
 
     private readonly _onDestroy = (): void => {
         if (this._player) {
-            this._removePlayerListeners(this._player);
+            this.removePlayerListeners_(this._player);
             this._player = undefined;
             this.propagatePlayerToAllReceivers_();
         }
