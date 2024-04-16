@@ -64,7 +64,7 @@ const App = () => {
 };
 ```
 
-See [docs/examples/react.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/react.html) for a complete example.
+See [default-ui/demo.html](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/examples/react/default-ui/demo.html) for a complete example.
 
 ### Custom UI
 
@@ -106,7 +106,7 @@ const App = () => {
 };
 ```
 
-See [docs/examples/react.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/react.html) for a complete example.
+See [custom-ui/demo.html](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/examples/react/custom-ui/demo.html) for a complete example.
 
 ### Legacy browser support
 
