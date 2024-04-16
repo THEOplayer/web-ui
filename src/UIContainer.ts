@@ -1068,10 +1068,11 @@ export class UIContainer extends HTMLElement {
         player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updateStreamType);
         player.addEventListener('ratechange', this._updatePlaybackRate);
         player.addEventListener('sourcechange', this._onSourceChange);
+        player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updatePlayingAd);
+
         player.theoLive?.addEventListener('publicationloadstart', this._onSourceChange);
         player.videoTracks.addEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
         player.cast?.addEventListener('castingchange', this._updateCasting);
-        player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updatePlayingAd);
         player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
     }
 
@@ -1086,11 +1087,16 @@ export class UIContainer extends HTMLElement {
         player.removeEventListener(['durationchange', 'sourcechange', 'emptied'], this._updateStreamType);
         player.removeEventListener('ratechange', this._updatePlaybackRate);
         player.removeEventListener('sourcechange', this._onSourceChange);
-        player.theoLive?.removeEventListener('publicationloadstart', this._onSourceChange);
-        player.videoTracks.removeEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
-        player.cast?.removeEventListener('castingchange', this._updateCasting);
         player.removeEventListener(['durationchange', 'sourcechange', 'emptied'], this._updatePlayingAd);
-        player.ads?.removeEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
+
+        try {
+            player.theoLive?.removeEventListener('publicationloadstart', this._onSourceChange);
+            player.videoTracks.removeEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
+            player.cast?.removeEventListener('castingchange', this._updateCasting);
+            player.ads?.removeEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
+        } catch {
+            // Ignore errors from accessing player.ads when the player is already destroyed.
+        }
     }
 
     private readonly _onDestroy = (): void => {
