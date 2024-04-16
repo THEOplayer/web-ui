@@ -39,7 +39,6 @@ jobs:
       - run: npm ci --workspaces
       - run: npm run build --workspaces
       - run: npm run docs --workspaces
-      - run: cp -r dist/ react/dist/ site/
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
