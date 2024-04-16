@@ -6,11 +6,11 @@
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
-      <excludeFolder url="file://$MODULE_DIR$/docs/_site" />
-      <excludeFolder url="file://$MODULE_DIR$/docs/api" />
-      <excludeFolder url="file://$MODULE_DIR$/docs/dist" />
       <excludeFolder url="file://$MODULE_DIR$/react/dist" />
-      <excludeFolder url="file://$MODULE_DIR$/docs/react-api" />
+      <excludeFolder url="file://$MODULE_DIR$/site/_site" />
+      <excludeFolder url="file://$MODULE_DIR$/site/api" />
+      <excludeFolder url="file://$MODULE_DIR$/site/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/site/react-api" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

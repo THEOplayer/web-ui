@@ -191,5 +191,5 @@ dist
 
 ### Project
 dist/
-docs/api/
-docs/react-api/
+site/api/
+site/react-api/

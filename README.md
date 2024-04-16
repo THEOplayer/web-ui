@@ -102,7 +102,7 @@ The current THEOplayer Web SDK comes with a built-in UI based on [video.js](http
     ui.player.addEventListener('playing', () => console.log('THEOplayer is now playing'));
     ```
 
-See [docs/examples/default-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/default-ui.html) for a complete example.
+See [default-ui/demo.html](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/examples/web/default-ui/demo.html) for a complete example.
 
 ### Custom UI
 
@@ -125,7 +125,7 @@ If you want to fully customize your video player layout, you can use a `<theopla
 </theoplayer-ui>
 ```
 
-See [docs/examples/custom-ui.html](https://github.com/THEOplayer/web-ui/blob/main/docs/examples/custom-ui.html) for a complete example.
+See [custom-ui/demo.html](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/examples/web/custom-ui/demo.html) for a complete example.
 
 ### Legacy browser support
 

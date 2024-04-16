@@ -39,11 +39,10 @@ jobs:
       - run: npm ci --workspaces
       - run: npm run build --workspaces
       - run: npm run docs --workspaces
-      - run: cp -r dist/ react/dist/ docs/
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
-          source: ./docs
+          source: ./site
           destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
