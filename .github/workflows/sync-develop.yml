@@ -1,0 +1,29 @@
+name: Sync develop with main
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create app token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.THEOPLAYER_BOT_APP_ID }}
+          private-key: ${{ secrets.THEOPLAYER_BOT_PRIVATE_KEY }}
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          ref: develop
+      - name: Configure Git user
+        run: |
+          git config user.name 'theoplayer-bot[bot]'
+          git config user.email '873105+theoplayer-bot[bot]@users.noreply.github.com'
+      - name: Sync develop with main
+        run: |
+          git merge --ff $GITHUB_REF
+          git push origin HEAD:develop
