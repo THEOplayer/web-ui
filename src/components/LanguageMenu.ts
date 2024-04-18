@@ -3,7 +3,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import languageMenuHtml from './LanguageMenu.html';
 import languageMenuCss from './LanguageMenu.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer, MediaTrack, TextTrack } from 'theoplayer/chromeless';
+import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer/chromeless';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
@@ -26,6 +26,8 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  */
 export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
     private _player: ChromelessPlayer | undefined;
+    private _audioTrackList: MediaTrackList | undefined;
+    private _textTrackList: TextTracksList | undefined;
 
     static get observedAttributes() {
         return [...MenuGroup.observedAttributes, Attribute.HAS_AUDIO, Attribute.HAS_SUBTITLES];
@@ -44,17 +46,15 @@ export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
         if (this._player === player) {
             return;
         }
-        if (this._player !== undefined) {
-            this._player.audioTracks.removeEventListener(TRACK_EVENTS, this._updateAudioTracks);
-            this._player.textTracks.removeEventListener(TRACK_EVENTS, this._updateTextTracks);
-        }
+        this._audioTrackList?.removeEventListener(TRACK_EVENTS, this._updateAudioTracks);
+        this._textTrackList?.removeEventListener(TRACK_EVENTS, this._updateTextTracks);
         this._player = player;
+        this._audioTrackList = player?.audioTracks;
+        this._textTrackList = player?.textTracks;
         this._updateAudioTracks();
         this._updateTextTracks();
-        if (this._player !== undefined) {
-            this._player.audioTracks.addEventListener(TRACK_EVENTS, this._updateAudioTracks);
-            this._player.textTracks.addEventListener(TRACK_EVENTS, this._updateTextTracks);
-        }
+        this._audioTrackList?.addEventListener(TRACK_EVENTS, this._updateAudioTracks);
+        this._textTrackList?.addEventListener(TRACK_EVENTS, this._updateTextTracks);
     }
 
     private readonly _updateAudioTracks = (): void => {

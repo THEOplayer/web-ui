@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import { RadioGroup } from './RadioGroup';
 import verticalRadioGroupCss from './VerticalRadioGroup.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer, EdgeStyle } from 'theoplayer/chromeless';
+import type { ChromelessPlayer, EdgeStyle, TextTrackStyle } from 'theoplayer/chromeless';
 import type { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
 import { Attribute } from '../util/Attribute';
@@ -45,6 +45,7 @@ export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['
     private readonly _radioGroup: RadioGroup;
     private readonly _optionsSlot: HTMLSlotElement;
     private _player: ChromelessPlayer | undefined;
+    private _textTrackStyle: TextTrackStyle | undefined;
     private _value: any;
 
     constructor() {
@@ -125,14 +126,11 @@ export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['
         if (this._player === player) {
             return;
         }
-        if (this._player !== undefined) {
-            this._player.textTrackStyle.removeEventListener('change', this._updateFromPlayer);
-        }
+        this._textTrackStyle?.removeEventListener('change', this._updateFromPlayer);
         this._player = player;
+        this._textTrackStyle = player?.textTrackStyle;
         this._updateFromPlayer();
-        if (this._player !== undefined) {
-            this._player.textTrackStyle.addEventListener('change', this._updateFromPlayer);
-        }
+        this._textTrackStyle?.addEventListener('change', this._updateFromPlayer);
     }
 
     private readonly _updateChecked = (): void => {

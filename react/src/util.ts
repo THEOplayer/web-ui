@@ -26,5 +26,16 @@ export function usePlayer(
         onReady?.(player);
     }, [player, onReady]);
 
+    // Destroy player on unmount.
+    useEffect(() => {
+        return () => {
+            try {
+                player?.destroy();
+            } catch {
+                // Ignore, probably already destroyed.
+            }
+        };
+    }, [player]);
+
     return player;
 }

@@ -1,4 +1,4 @@
-import { ChromelessPlayer as TheoPlayer } from 'theoplayer/chromeless';
+import { ChromelessPlayer as TheoPlayer, type TheoLiveApi } from 'theoplayer/chromeless';
 import settingsCss from './BadNetworkModeButton.css';
 import { buttonTemplate } from '../../Button';
 import settingsIcon from '../../../icons/settings.svg';
@@ -19,6 +19,7 @@ const template = createTemplate('theolive-bad-network-button', buttonTemplate(ht
  */
 export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['player']) {
     private _player: TheoPlayer | undefined;
+    private _theoLive: TheoLiveApi | undefined;
     private _warningIcon: HTMLElement | undefined;
 
     constructor() {
@@ -55,14 +56,15 @@ export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['playe
         if (this._player === player) {
             return;
         }
-        if (this._player) {
-            this._player.theoLive?.removeEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
-            this._player.theoLive?.removeEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
+        if (this._theoLive) {
+            this._theoLive.removeEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
+            this._theoLive.removeEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
         }
         this._player = player;
-        if (this._player) {
-            this._player.theoLive?.addEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
-            this._player.theoLive?.addEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
+        this._theoLive = player?.theoLive;
+        if (this._theoLive) {
+            this._theoLive.addEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
+            this._theoLive.addEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
         }
     }
 }

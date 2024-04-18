@@ -2,7 +2,7 @@ import { MenuButton } from './MenuButton';
 import { buttonTemplate } from './Button';
 import languageIcon from '../icons/language.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import type { ChromelessPlayer, MediaTrackList, TextTracksList } from 'theoplayer/chromeless';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
@@ -22,6 +22,8 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  */
 export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player']) {
     private _player: ChromelessPlayer | undefined;
+    private _audioTrackList: MediaTrackList | undefined;
+    private _textTrackList: TextTracksList | undefined;
 
     constructor() {
         super({ template: template() });
@@ -44,16 +46,14 @@ export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player'
         if (this._player === player) {
             return;
         }
-        if (this._player !== undefined) {
-            this._player.audioTracks.removeEventListener(TRACK_EVENTS, this._updateTracks);
-            this._player.textTracks.removeEventListener(TRACK_EVENTS, this._updateTracks);
-        }
+        this._audioTrackList?.removeEventListener(TRACK_EVENTS, this._updateTracks);
+        this._textTrackList?.removeEventListener(TRACK_EVENTS, this._updateTracks);
         this._player = player;
+        this._audioTrackList = player?.audioTracks;
+        this._textTrackList = player?.textTracks;
         this._updateTracks();
-        if (this._player !== undefined) {
-            this._player.audioTracks.addEventListener(TRACK_EVENTS, this._updateTracks);
-            this._player.textTracks.addEventListener(TRACK_EVENTS, this._updateTracks);
-        }
+        this._audioTrackList?.addEventListener(TRACK_EVENTS, this._updateTracks);
+        this._textTrackList?.addEventListener(TRACK_EVENTS, this._updateTracks);
     }
 
     private readonly _updateTracks = (): void => {
