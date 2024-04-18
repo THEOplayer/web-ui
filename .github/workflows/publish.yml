@@ -1,32 +1,63 @@
 name: Publish release
 on:
-  # Runs whenever a new release is created in GitHub
-  release:
-    types: [created]
+  # Runs whenever a release PR is merged
+  pull_request:
+    branches:
+      - release/**
+    types: [closed]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
-  # Publish job
   publish:
+    # Run only when pull request is merged, not abandoned
+    if: ${{ !github.event.pull_request || github.event.pull_request.merged }}
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       id-token: write
     strategy:
       matrix:
         node-version: [20]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
+      - name: Create app token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.THEOPLAYER_BOT_APP_ID }}
+          private-key: ${{ secrets.THEOPLAYER_BOT_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+      - name: Configure Git user
+        run: |
+          git config user.name 'theoplayer-bot[bot]'
+          git config user.email '873105+theoplayer-bot[bot]@users.noreply.github.com'
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
+      - name: Get version
+        shell: bash
+        run: |
+          echo "npm_version=$(jq -r .version package.json)" >> "$GITHUB_ENV"
       - run: npm ci --workspaces
       - run: npm run build --workspaces
       - run: npm publish --workspaces --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Push tag
+        run: |
+          git tag "v$npm_version" -m "$npm_version"
+          git push origin "v$npm_version"
+      - name: Create GitHub release
+        run: |
+          gh release create "v$npm_version" --verify-tag --latest \
+            --title "v$npm_version" \
+            --notes "$(npm run --silent github:changelog)"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
