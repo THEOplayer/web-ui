@@ -3,7 +3,7 @@ import { Range, rangeTemplate } from './Range';
 import timeRangeHtml from './TimeRange.html';
 import timeRangeCss from './TimeRange.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { formatAsTimePhrase } from '../util/TimeUtils';
 import { createCustomEvent } from '../util/EventUtils';
 import type { PreviewTimeChangeEvent } from '../events/PreviewTimeChangeEvent';
@@ -49,6 +49,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
     private readonly _previewBoxEl: HTMLElement;
 
     private _player: ChromelessPlayer | undefined;
+    private _ads: Ads | undefined;
     private _pausedWhileScrubbing: boolean = false;
 
     private _autoAdvanceId: number = 0;
@@ -90,16 +91,17 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         if (this._player !== undefined) {
             this._player.removeEventListener(UPDATE_EVENTS, this._updateFromPlayer);
             this._player.removeEventListener(AUTO_ADVANCE_EVENTS, this._toggleAutoAdvance);
-            this._player.ads?.removeEventListener(AD_EVENTS, this._onAdChange);
         }
+        this._ads?.removeEventListener(AD_EVENTS, this._onAdChange);
         this._player = player;
+        this._ads = player?.ads;
         this._updateFromPlayer();
         this._toggleAutoAdvance();
         if (this._player !== undefined) {
             this._player.addEventListener(UPDATE_EVENTS, this._updateFromPlayer);
             this._player.addEventListener(AUTO_ADVANCE_EVENTS, this._toggleAutoAdvance);
-            this._player.ads?.addEventListener(AD_EVENTS, this._onAdChange);
         }
+        this._ads?.addEventListener(AD_EVENTS, this._onAdChange);
     }
 
     get streamType(): StreamType {

@@ -1,4 +1,4 @@
-import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import type { ChromelessPlayer, TheoLiveApi } from 'theoplayer/chromeless';
 import { type ButtonOptions } from '../../Button';
 import { StateReceiverMixin } from '../../StateReceiverMixin';
 import { RadioButton } from '../../RadioButton';
@@ -12,6 +12,7 @@ import { Attribute } from '../../../util/Attribute';
  */
 export abstract class AbstractQualitySelector extends StateReceiverMixin(RadioButton, ['player']) {
     private _player: ChromelessPlayer | undefined;
+    private _theoLive: TheoLiveApi | undefined;
     protected _slotEl: HTMLSlotElement;
     protected _badNetworkMode: boolean = false;
 
@@ -28,16 +29,16 @@ export abstract class AbstractQualitySelector extends StateReceiverMixin(RadioBu
         if (this._player === player) {
             return;
         }
-        if (this._player) {
-            this._player.theoLive?.removeEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
-            this._player.theoLive?.removeEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
+        if (this._theoLive) {
+            this._theoLive.removeEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
+            this._theoLive.removeEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
         }
         this._player = player;
-        this._badNetworkMode = false;
-        if (this._player) {
-            this._badNetworkMode = this._player.theoLive?.badNetworkMode ?? false;
-            this._player.theoLive?.addEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
-            this._player.theoLive?.addEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
+        this._theoLive = player?.theoLive;
+        this._badNetworkMode = this._theoLive?.badNetworkMode ?? false;
+        if (this._theoLive) {
+            this._theoLive.addEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
+            this._theoLive.addEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
         }
         this.handlePlayer();
     }

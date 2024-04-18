@@ -438,30 +438,12 @@ export class UIContainer extends HTMLElement {
         this._player.muted = this.muted;
         this._player.autoplay = this.autoplay;
 
-        for (const receiver of this._stateReceivers) {
-            if (receiver[StateReceiverProps].indexOf('player') >= 0) {
-                receiver.player = this._player;
-            }
-        }
-
         this._updateAspectRatio();
         this._updateError();
         this._updatePausedAndEnded();
         this._updateCasting();
-        this._player.addEventListener('resize', this._updateAspectRatio);
-        this._player.addEventListener(['error', 'sourcechange', 'emptied'], this._updateError);
-        this._player.addEventListener('volumechange', this._updateMuted);
-        this._player.addEventListener('play', this._onPlay);
-        this._player.addEventListener('pause', this._onPause);
-        this._player.addEventListener(['ended', 'emptied'], this._updatePausedAndEnded);
-        this._player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updateStreamType);
-        this._player.addEventListener('ratechange', this._updatePlaybackRate);
-        this._player.addEventListener('sourcechange', this._onSourceChange);
-        this._player.theoLive?.addEventListener('publicationloadstart', this._onSourceChange);
-        this._player.videoTracks.addEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
-        this._player.cast?.addEventListener('castingchange', this._updateCasting);
-        this._player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updatePlayingAd);
-        this._player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
+        this.addPlayerListeners_(this._player);
+        this.propagatePlayerToAllReceivers_();
 
         this.dispatchEvent(createCustomEvent(READY_EVENT));
     }
@@ -470,10 +452,6 @@ export class UIContainer extends HTMLElement {
         this._resizeObserver?.disconnect();
         this._mutationObserver.disconnect();
         this.shadowRoot!.removeEventListener('slotchange', this._onSlotChange);
-        for (const receiver of this._stateReceivers) {
-            this.removeStateFromReceiver_(receiver);
-        }
-        this._stateReceivers.length = 0;
 
         this._menuGroup.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
         this._menuGroup.removeEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
@@ -491,9 +469,13 @@ export class UIContainer extends HTMLElement {
         this.removeEventListener('mouseleave', this._onMouseLeave);
 
         if (this._player) {
+            this.removePlayerListeners_(this._player);
             this._player.destroy();
             this._player = undefined;
+            this.propagatePlayerToAllReceivers_();
         }
+
+        this._stateReceivers.length = 0;
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
@@ -625,6 +607,15 @@ export class UIContainer extends HTMLElement {
         }
         if (receiverProps.indexOf('previewTime') >= 0) {
             receiver.previewTime = this._previewTime;
+        }
+    }
+
+    private propagatePlayerToAllReceivers_(): void {
+        for (const receiver of this._stateReceivers) {
+            const receiverProps = receiver[StateReceiverProps];
+            if (receiverProps.indexOf('player') >= 0) {
+                receiver.player = this._player;
+            }
         }
     }
 
@@ -1063,6 +1054,56 @@ export class UIContainer extends HTMLElement {
             if (receiver[StateReceiverProps].indexOf('previewTime') >= 0) {
                 receiver.previewTime = this._previewTime;
             }
+        }
+    };
+
+    private addPlayerListeners_(player: ChromelessPlayer): void {
+        player.addEventListener('destroy', this._onDestroy);
+        player.addEventListener('resize', this._updateAspectRatio);
+        player.addEventListener(['error', 'sourcechange', 'emptied'], this._updateError);
+        player.addEventListener('volumechange', this._updateMuted);
+        player.addEventListener('play', this._onPlay);
+        player.addEventListener('pause', this._onPause);
+        player.addEventListener(['ended', 'emptied'], this._updatePausedAndEnded);
+        player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updateStreamType);
+        player.addEventListener('ratechange', this._updatePlaybackRate);
+        player.addEventListener('sourcechange', this._onSourceChange);
+        player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updatePlayingAd);
+
+        player.theoLive?.addEventListener('publicationloadstart', this._onSourceChange);
+        player.videoTracks.addEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
+        player.cast?.addEventListener('castingchange', this._updateCasting);
+        player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
+    }
+
+    private removePlayerListeners_(player: ChromelessPlayer): void {
+        player.removeEventListener('destroy', this._onDestroy);
+        player.removeEventListener('resize', this._updateAspectRatio);
+        player.removeEventListener(['error', 'sourcechange', 'emptied'], this._updateError);
+        player.removeEventListener('volumechange', this._updateMuted);
+        player.removeEventListener('play', this._onPlay);
+        player.removeEventListener('pause', this._onPause);
+        player.removeEventListener(['ended', 'emptied'], this._updatePausedAndEnded);
+        player.removeEventListener(['durationchange', 'sourcechange', 'emptied'], this._updateStreamType);
+        player.removeEventListener('ratechange', this._updatePlaybackRate);
+        player.removeEventListener('sourcechange', this._onSourceChange);
+        player.removeEventListener(['durationchange', 'sourcechange', 'emptied'], this._updatePlayingAd);
+
+        try {
+            player.theoLive?.removeEventListener('publicationloadstart', this._onSourceChange);
+            player.videoTracks.removeEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
+            player.cast?.removeEventListener('castingchange', this._updateCasting);
+            player.ads?.removeEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
+        } catch {
+            // Ignore errors from accessing player.ads when the player is already destroyed.
+        }
+    }
+
+    private readonly _onDestroy = (): void => {
+        if (this._player) {
+            this.removePlayerListeners_(this._player);
+            this._player = undefined;
+            this.propagatePlayerToAllReceivers_();
         }
     };
 }

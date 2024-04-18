@@ -1,7 +1,7 @@
 import * as shadyCss from '@webcomponents/shadycss';
 import previewThumbnailCss from './PreviewThumbnail.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer, TextTrack, TextTrackCue, TextTrackCueList } from 'theoplayer/chromeless';
+import type { ChromelessPlayer, TextTrack, TextTrackCue, TextTrackCueList, TextTracksList } from 'theoplayer/chromeless';
 import { arrayFind, noOp } from '../util/CommonUtils';
 import { createTemplate } from '../util/TemplateUtils';
 
@@ -27,6 +27,7 @@ export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player',
     private readonly _thumbnailImageSource: HTMLImageElement;
 
     private _player: ChromelessPlayer | undefined;
+    private _textTrackList: TextTracksList | undefined;
     private _previewTime: number = NaN;
     private _thumbnailTextTrack: TextTrack | undefined;
     private _lastLoadedThumbnailUrl: string | undefined;
@@ -66,14 +67,11 @@ export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player',
         if (this._player === player) {
             return;
         }
-        if (this._player !== undefined) {
-            this._player.textTracks.removeEventListener(TRACK_EVENTS, this._updateThumbnailTextTrack);
-        }
+        this._textTrackList?.removeEventListener(TRACK_EVENTS, this._updateThumbnailTextTrack);
         this._player = player;
+        this._textTrackList = player?.textTracks;
         this._updateThumbnailTextTrack();
-        if (this._player !== undefined) {
-            this._player.textTracks.addEventListener(TRACK_EVENTS, this._updateThumbnailTextTrack);
-        }
+        this._textTrackList?.addEventListener(TRACK_EVENTS, this._updateThumbnailTextTrack);
     }
 
     get previewTime(): number {

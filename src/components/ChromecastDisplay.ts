@@ -2,7 +2,7 @@ import * as shadyCss from '@webcomponents/shadycss';
 import chromecastDisplayCss from './ChromecastDisplay.css';
 import chromecastIcon from '../icons/chromecast-48px.svg';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import type { Chromecast, ChromelessPlayer } from 'theoplayer/chromeless';
 import { setTextContent } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
 import { createTemplate } from '../util/TemplateUtils';
@@ -27,6 +27,7 @@ const CAST_EVENTS = ['statechange'] as const;
 export class ChromecastDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
     private readonly _receiverNameEl: HTMLElement;
     private _player: ChromelessPlayer | undefined;
+    private _castApi: Chromecast | undefined;
 
     constructor() {
         super();
@@ -61,10 +62,15 @@ export class ChromecastDisplay extends StateReceiverMixin(HTMLElement, ['player'
         if (this._player === player) {
             return;
         }
-        this._player?.cast?.chromecast?.removeEventListener(CAST_EVENTS, this._updateFromPlayer);
+        if (this._castApi !== undefined) {
+            this._castApi.removeEventListener(CAST_EVENTS, this._updateFromPlayer);
+        }
         this._player = player;
+        this._castApi = player?.cast?.chromecast;
         this._updateFromPlayer();
-        this._player?.cast?.chromecast?.addEventListener(CAST_EVENTS, this._updateFromPlayer);
+        if (this._castApi !== undefined) {
+            this._castApi.addEventListener(CAST_EVENTS, this._updateFromPlayer);
+        }
     }
 
     private readonly _updateFromPlayer = () => {
