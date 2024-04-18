@@ -15,9 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.8.1 (2024-04-18)
 
 -   🐛 Fixed backing THEOplayer not always being destroyed on unmount. ([#59](https://github.com/THEOplayer/web-ui/issues/59), [#62](https://github.com/THEOplayer/web-ui/pull/62))
+-   🏠 See changes to [Open Video UI for Web v1.8.1](https://github.com/THEOplayer/web-ui/blob/v1.8.1/CHANGELOG.md)
 
 ## v1.8.0 (2024-04-12)
 
