@@ -63,6 +63,6 @@ jobs:
             --base main \
             --head "release/$npm_version" \
             --title "Release $npm_version" \
-            --body "This PR will publish version $npm_version."
+            --body "$(npm run --silent github:changelog)"
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
