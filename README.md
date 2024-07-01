@@ -131,7 +131,7 @@ See [custom-ui/demo.html](https://github.com/THEOplayer/web-ui/blob/main/docs/st
 
 By default, Open Video UI for Web targets modern browsers that support modern JavaScript syntax (such as [async/await](https://caniuse.com/async-functions)) and native [Custom Elements](https://caniuse.com/custom-elementsv1). This keeps the download size small, so your viewers can spend less time waiting for your page to load and start watching their video faster.
 
-On older browsers (such as Internet Explorer 11 and older smart TVs), you need to load a different version of the Open Video UI that uses older JavaScript syntax. You also need to load additional polyfills for missing features such as Promises or Custom Elements. We recommend [Polyfill.io](https://polyfill.io/) and [Web Components Polyfills](https://github.com/webcomponents/polyfills) for these.
+On older browsers (such as Internet Explorer 11 and older smart TVs), you need to load a different version of the Open Video UI that uses older JavaScript syntax. You also need to load additional polyfills for missing features such as Promises or Custom Elements. We recommend [the Cloudflare mirror of Polyfill.io](https://cdnjs.cloudflare.com/polyfill/) and [Web Components Polyfills](https://github.com/webcomponents/polyfills) for these.
 
 -   Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`), while legacy browsers will load the legacy build (with `nomodule`).
 
@@ -148,7 +148,7 @@ On older browsers (such as Internet Explorer 11 and older smart TVs), you need t
     <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js" crossorigin="anonymous"></script>
     <script type="module" src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.mjs"></script>
     <!-- Legacy browsers -->
-    <script nomodule src="https://polyfill.io/v3/polyfill.min.js?features=es2015"></script>
+    <script nomodule src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es2015"></script>
     <script nomodule src="https://unpkg.com/@webcomponents/webcomponentsjs@2.8.0/custom-elements-es5-adapter.js"></script>
     <script nomodule src="https://unpkg.com/@webcomponents/webcomponentsjs@2.8.0/webcomponents-bundle.js"></script>
     <script nomodule src="/path/to/node_modules/theoplayer/THEOplayer.chromeless.js"></script>
