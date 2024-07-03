@@ -15,6 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   📝 Updated documentation to use a different polyfill service. ([#64](https://github.com/THEOplayer/web-ui/pull/64))
+
 ## v1.8.1 (2024-04-18)
 
 -   🐛 Fixed `ui.player.destroy()` not working. ([#59](https://github.com/THEOplayer/web-ui/issues/59), [#62](https://github.com/THEOplayer/web-ui/pull/62))
