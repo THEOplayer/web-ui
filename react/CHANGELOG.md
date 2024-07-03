@@ -15,9 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.8.2 (2024-07-03)
 
 -   📝 Updated documentation to use a different polyfill service. ([#64](https://github.com/THEOplayer/web-ui/pull/64))
+-   🏠 See changes to [Open Video UI for Web v1.8.2](https://github.com/THEOplayer/web-ui/blob/v1.8.2/CHANGELOG.md)
 
 ## v1.8.1 (2024-04-18)
 
