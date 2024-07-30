@@ -3,12 +3,12 @@ import Example, { type Props as ExampleProps } from '../../components/Example';
 
 const sources = {
     hls: {
-        sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
-        metadata: { title: "Elephant's Dream" },
+        sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
+        metadata: { title: 'Big Buck Bunny' },
         textTracks: [
             {
                 default: true,
-                src: 'https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt',
+                src: 'https://cdn.theoplayer.com/video/big_buck_bunny/thumbnails.vtt',
                 label: 'thumbnails',
                 kind: 'metadata'
             }
