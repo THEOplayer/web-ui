@@ -4,7 +4,7 @@ import Example, { type Props as ExampleProps } from '../../components/Example';
 const sources = {
     hls: {
         sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
-        metadata: { title: "Big Buck Bunny" },
+        metadata: { title: 'Big Buck Bunny' },
         textTracks: [
             {
                 default: true,
