@@ -1,4 +1,4 @@
-import React, { type ComponentPropsWithoutRef, forwardRef, type JSX, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { type ComponentPropsWithoutRef, type JSX, useEffect, useRef, useState } from 'react';
 import { type SourceName, sources } from './sources';
 
 export interface Props extends ComponentPropsWithoutRef<'iframe'> {
@@ -6,9 +6,8 @@ export interface Props extends ComponentPropsWithoutRef<'iframe'> {
     hideDeviceType?: boolean;
 }
 
-export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ hideSource, hideDeviceType, ...props }: Props, ref): JSX.Element {
+export default function Example({ hideSource, hideDeviceType, ...props }: Props): JSX.Element {
     const iframeRef = useRef<HTMLIFrameElement | null>(null);
-    useImperativeHandle(ref, () => iframeRef.current, [iframeRef.current]);
 
     const [sourceName, setSourceName] = useState<SourceName>('hls');
     const [deviceType, setDeviceType] = useState('');
@@ -66,4 +65,4 @@ export default forwardRef<HTMLIFrameElement | null, Props>(function Example({ hi
             )}
         </>
     );
-});
+}
