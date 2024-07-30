@@ -8,6 +8,8 @@
  * Supported message formats for `event.data`:
  * - `{ type: "deviceType", deviceType: "" | "desktop" | "mobile" | "tv" }`
  *   Overrides the player's device type.
+ * - `{ type: "source", source: SourceDescription }`
+ *   Changes the player's source.
  * - `{ type: "style", style: string }`
  *   Updates the custom CSS style.
  */
@@ -19,6 +21,13 @@ window.addEventListener('message', (event) => {
         case 'deviceType': {
             const ui = document.querySelector('theoplayer-default-ui, theoplayer-ui');
             ui?.setAttribute('device-type', data.deviceType);
+            break;
+        }
+        case 'source': {
+            const ui = document.querySelector('theoplayer-default-ui, theoplayer-ui');
+            if (ui) {
+                ui.source = data.source;
+            }
             break;
         }
         case 'style': {
