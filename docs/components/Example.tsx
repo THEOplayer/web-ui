@@ -36,7 +36,7 @@ export default function Example({ hideSource, hideDeviceType, ...props }: Props)
                 <p>
                     {!hideSource && (
                         <div>
-                            <label>
+                            <label style={{ userSelect: 'none' }}>
                                 Source:{' '}
                                 <select value={sourceName} onChange={(ev) => setSourceName(ev.target.value as SourceName)}>
                                     {Object.entries(sources).map(([key, value]) => (
