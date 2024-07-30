@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -34,7 +34,7 @@
         -->
         <theoplayer-ui
             configuration='{"libraryLocation":"https://cdn.theoplayer.com/dash/theoplayer/","licenseUrl":"../../../../../theoplayer-license.txt"}'
-            source='{"sources":{"src":"https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/dash/theoplayer/thumbnails/big_buck_bunny_thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
+            source='{"sources":{"src":"https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8"},"metadata":{"title":"Big Buck Bunny"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/dash/theoplayer/thumbnails/big_buck_bunny_thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
             fluid
         >
             <theoplayer-control-bar slot="top-chrome" class="top-chrome">
@@ -75,5 +75,24 @@
             </theoplayer-language-menu>
             <theoplayer-error-display slot="error"></theoplayer-error-display>
         </theoplayer-ui>
+        <script>
+            var ui = document.querySelector('theoplayer-ui');
+            var titleEl = ui.querySelector('.title');
+            if (ui.player) {
+                onPlayerReady();
+            } else {
+                ui.addEventListener('theoplayerready', onPlayerReady, { once: true });
+            }
+
+            function onPlayerReady() {
+                ui.player.addEventListener('sourcechange', updateTitle);
+                updateTitle();
+            }
+
+            function updateTitle() {
+                var source = ui.player.source;
+                titleEl.textContent = (source && source.metadata && source.metadata.title) || '';
+            }
+        </script>
     </body>
 </html>
