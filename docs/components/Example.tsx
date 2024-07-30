@@ -9,7 +9,7 @@ export interface Props extends ComponentPropsWithoutRef<'iframe'> {
 export default function Example({ hideSource, hideDeviceType, ...props }: Props): JSX.Element {
     const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
-    const [sourceName, setSourceName] = useState<SourceName>('hls');
+    const [sourceName, setSourceName] = useState<SourceName>('bigBuckBunny');
     const [deviceType, setDeviceType] = useState('');
 
     // Send message to <iframe> when source changes
