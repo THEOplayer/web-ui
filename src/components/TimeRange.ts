@@ -120,17 +120,21 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         this._lastCurrentTime = this._player.currentTime;
         this._lastPlaybackRate = this._player.playbackRate;
         const seekable = this._player.seekable;
+        let min: number;
+        let max: number;
         if (seekable.length !== 0) {
-            this.min = seekable.start(0);
-            this.max = seekable.end(0);
+            min = seekable.start(0);
+            max = seekable.end(0);
         } else {
-            this.min = 0;
-            this.max = this._player.duration;
+            min = 0;
+            max = this._player.duration;
         }
         if (!isFinite(this._lastCurrentTime)) {
             const isLive = this._player.duration === Infinity;
-            this._lastCurrentTime = isLive ? this.max : this.min;
+            this._lastCurrentTime = isLive ? max : min;
         }
+        this._rangeEl.min = String(min);
+        this._rangeEl.max = String(max);
         this._rangeEl.valueAsNumber = this._lastCurrentTime;
         this.update();
         this._updateDisabled();
