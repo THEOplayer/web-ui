@@ -245,10 +245,13 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         }
 
         const delta = (performance.now() - this._lastUpdateTime) / 1000;
-        this._rangeEl.valueAsNumber = this._lastCurrentTime + delta * this._lastPlaybackRate;
+        const newValue = this._lastCurrentTime + delta * this._lastPlaybackRate;
+        if (this.isVisibleValueChange_(newValue)) {
+            this._rangeEl.valueAsNumber = newValue;
 
-        // Use cached width to avoid synchronous layout
-        this.update(/* useCachedWidth = */ true);
+            // Use cached width to avoid synchronous layout
+            this.update(/* useCachedWidth = */ true);
+        }
 
         this._autoAdvanceId = requestAnimationFrame(this._autoAdvanceWhilePlaying);
     };

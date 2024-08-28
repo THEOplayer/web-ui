@@ -246,6 +246,19 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
         }
     }
 
+    protected isVisibleValueChange_(newValue: number): boolean {
+        const { value, min, max } = this;
+        const relativeMax = max - min;
+        if (isNaN(relativeMax) || relativeMax <= 0) {
+            return false;
+        }
+        // Compute the pixel offsets for the old and new values
+        const oldOffset = ((value - min) / relativeMax) * this._rangeWidth;
+        const newOffset = ((newValue - min) / relativeMax) * this._rangeWidth;
+        // The offsets must differ by at least one pixel to be visible
+        return Math.abs(newOffset - oldOffset) >= 1;
+    }
+
     private readonly _updatePointerBar = (e: PointerEvent): void => {
         if (this.disabled) {
             return;
