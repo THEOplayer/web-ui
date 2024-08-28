@@ -22,7 +22,7 @@ import './PreviewTimeDisplay';
 const template = createTemplate('theoplayer-time-range', rangeTemplate(timeRangeHtml, timeRangeCss));
 
 const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 'seeked'] as const;
-const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'readystatechange', 'error'] as const;
+const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'durationchange', 'readystatechange', 'error'] as const;
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'adskip', 'addad', 'updatead'] as const;
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
@@ -219,8 +219,18 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
             !this._player.paused &&
             !this._player.ended &&
             !this._player.errorObject &&
-            this._player.readyState >= 3
+            this._player.readyState >= 3 &&
+            this.needToUpdateEveryFrame_()
         );
+    }
+
+    private needToUpdateEveryFrame_(): boolean {
+        // The player fires at least one timeupdate event every 250ms.
+        // If it takes more than 250ms to advance the playhead by 1 pixel,
+        // then we definitely don't need to update every frame.
+        const minimumStep = this.getMinimumStepForVisibleChange_();
+        const timeUpdateStep = 0.25 * this._lastPlaybackRate;
+        return minimumStep < timeUpdateStep;
     }
 
     private readonly _toggleAutoAdvance = () => {
@@ -246,7 +256,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
 
         const delta = (performance.now() - this._lastUpdateTime) / 1000;
         const newValue = this._lastCurrentTime + delta * this._lastPlaybackRate;
-        if (this.isVisibleValueChange_(newValue)) {
+        if (Math.abs(newValue - this.value) >= this.getMinimumStepForVisibleChange_()) {
             this._rangeEl.valueAsNumber = newValue;
 
             // Use cached width to avoid synchronous layout
