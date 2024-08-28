@@ -10,6 +10,7 @@
 
 theoplayer-ui {
     width: 100%;
+    display: block;
 }
 
 :host(:fullscreen),
