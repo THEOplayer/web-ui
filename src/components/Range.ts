@@ -208,8 +208,9 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
      * Creating an array so progress-bar can insert the buffered bar.
      */
     protected getBarColors(useCachedWidth?: boolean): ColorStops {
-        const relativeValue = this.value - this.min;
-        const relativeMax = this.max - this.min;
+        const { value, min, max } = this;
+        const relativeValue = value - min;
+        const relativeMax = max - min;
         let rangePercent = (relativeValue / relativeMax) * 100;
         if (isNaN(rangePercent)) {
             rangePercent = 0;
@@ -223,7 +224,7 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
         // If the range thumb is at min or max don't correct the time range.
         // Ideally the thumb center would go all the way to min and max values
         // but input[type=range] doesn't play like that.
-        if (this.min < this.value && this.value < this.max) {
+        if (min < value && value < max) {
             const thumbOffset = this._thumbWidth * (0.5 - rangePercent / 100);
             thumbPercent = (thumbOffset / this._rangeWidth) * 100;
         }
