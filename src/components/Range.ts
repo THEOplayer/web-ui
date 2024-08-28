@@ -171,12 +171,12 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
         this.update();
     }
 
-    protected update(): void {
+    protected update(useCachedWidth?: boolean): void {
         if (this.hasAttribute(Attribute.HIDDEN)) {
             return;
         }
         this._rangeEl.setAttribute('aria-valuetext', this.getAriaValueText());
-        this.updateBar_();
+        this.updateBar_(useCachedWidth);
     }
 
     /**
@@ -195,8 +195,8 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
      * showing playback progress or volume level. Here we're building that bar
      * by using a background gradient that moves with the range value.
      */
-    private updateBar_() {
-        const gradientStops = this.getBarColors().toGradientStops();
+    private updateBar_(useCachedWidth?: boolean) {
+        const gradientStops = this.getBarColors(useCachedWidth).toGradientStops();
         shadyCss.styleSubtree(this, {
             '--theoplayer-range-track-progress-internal': `linear-gradient(to right, ${gradientStops})`
         });
@@ -206,7 +206,7 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
      * Build the color gradient for the range bar.
      * Creating an array so progress-bar can insert the buffered bar.
      */
-    protected getBarColors(): ColorStops {
+    protected getBarColors(useCachedWidth?: boolean): ColorStops {
         const relativeValue = this.value - this.min;
         const relativeMax = this.max - this.min;
         let rangePercent = (relativeValue / relativeMax) * 100;
@@ -214,10 +214,8 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
             rangePercent = 0;
         }
 
-        // Use the last non-zero range width, in case the range is temporarily hidden.
-        const rangeWidth = this._rangeEl.offsetWidth;
-        if (rangeWidth > 0) {
-            this._lastRangeWidth = rangeWidth;
+        if (!useCachedWidth) {
+            this.updateRangeWidth_();
         }
 
         let thumbPercent = 0;
@@ -233,6 +231,14 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
         const stops = new ColorStops();
         stops.add('var(--theoplayer-range-bar-color, #fff)', 0, rangePercent + thumbPercent);
         return stops;
+    }
+
+    private updateRangeWidth_(): void {
+        // Use the last non-zero range width, in case the range is temporarily hidden.
+        const rangeWidth = this._rangeEl.offsetWidth;
+        if (rangeWidth > 0) {
+            this._lastRangeWidth = rangeWidth;
+        }
     }
 
     private readonly _updatePointerBar = (e: PointerEvent): void => {

@@ -242,7 +242,9 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
 
         const delta = (performance.now() - this._lastUpdateTime) / 1000;
         this._rangeEl.valueAsNumber = this._lastCurrentTime + delta * this._lastPlaybackRate;
-        this.update();
+
+        // Use cached width to avoid synchronous layout
+        this.update(/* useCachedWidth = */ true);
 
         this._autoAdvanceId = requestAnimationFrame(this._autoAdvanceWhilePlaying);
     };
@@ -273,8 +275,8 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         this.dispatchEvent(previewTimeChangeEvent);
     }
 
-    protected override getBarColors(): ColorStops {
-        const colorStops = super.getBarColors();
+    protected override getBarColors(useCachedWidth?: boolean): ColorStops {
+        const colorStops = super.getBarColors(useCachedWidth);
         if (!this.hasAttribute(Attribute.SHOW_AD_MARKERS) || !this._player || !this._player.ads) {
             return colorStops;
         }
