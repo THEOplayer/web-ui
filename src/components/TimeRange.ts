@@ -3,7 +3,7 @@ import { Range, rangeTemplate } from './Range';
 import timeRangeHtml from './TimeRange.html';
 import timeRangeCss from './TimeRange.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
+import type { Ads, ChromelessPlayer, TimeRanges } from 'theoplayer/chromeless';
 import { formatAsTimePhrase } from '../util/TimeUtils';
 import { createCustomEvent } from '../util/EventUtils';
 import type { PreviewTimeChangeEvent } from '../events/PreviewTimeChangeEvent';
@@ -137,18 +137,18 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         this._rangeEl.max = String(max);
         this._rangeEl.valueAsNumber = this._lastCurrentTime;
         this.update();
-        this._updateDisabled();
+        this.updateDisabled_(seekable);
     };
 
-    private readonly _updateDisabled = () => {
+    private updateDisabled_(seekable: TimeRanges | undefined = this._player?.seekable) {
         let disabled = this.streamType === 'live';
-        if (this._player !== undefined) {
-            disabled ||= this._player.seekable.length === 0;
+        if (seekable !== undefined) {
+            disabled ||= seekable.length === 0;
         }
         if (this.disabled !== disabled) {
             this.disabled = disabled;
         }
-    };
+    }
 
     protected override getAriaLabel(): string {
         return 'seek';
@@ -169,7 +169,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
             return;
         }
         if (attrName === Attribute.STREAM_TYPE) {
-            this._updateDisabled();
+            this.updateDisabled_();
         } else if (attrName === Attribute.SHOW_AD_MARKERS) {
             this.update();
         }
