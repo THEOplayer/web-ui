@@ -116,9 +116,20 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         if (this._player === undefined) {
             return;
         }
-        this._lastUpdateTime = performance.now();
+
+        const now = performance.now();
+        if (now - this._lastUpdateTime < 500) {
+            return;
+        }
+
+        this._lastUpdateTime = now;
         this._lastCurrentTime = this._player.currentTime;
         this._lastPlaybackRate = this._player.playbackRate;
+
+        if (this._autoAdvanceId > 0) {
+            return;
+        }
+
         const seekable = this._player.seekable;
         if (seekable.length !== 0) {
             this.min = seekable.start(0);
@@ -223,7 +234,9 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         if (this.shouldAutoAdvance_()) {
             if (this._autoAdvanceId === 0) {
                 this._updateFromPlayer();
-                this._autoAdvanceId = requestAnimationFrame(this._autoAdvanceWhilePlaying);
+                setTimeout(() => {
+                    this._autoAdvanceId = requestAnimationFrame(this._autoAdvanceWhilePlaying);
+                }, 500);
             }
         } else {
             if (this._autoAdvanceId !== 0) {
@@ -241,10 +254,15 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         }
 
         const delta = (performance.now() - this._lastUpdateTime) / 1000;
-        this._rangeEl.valueAsNumber = this._lastCurrentTime + delta * this._lastPlaybackRate;
-        this.update();
 
-        this._autoAdvanceId = requestAnimationFrame(this._autoAdvanceWhilePlaying);
+        if (delta > 0.5) {
+            this._rangeEl.valueAsNumber = this._lastCurrentTime + delta * this._lastPlaybackRate;
+            this.update();
+        }
+
+        setTimeout(() => {
+            this._autoAdvanceId = requestAnimationFrame(this._autoAdvanceWhilePlaying);
+        }, 500);
     };
 
     protected override updatePointer_(mousePercent: number, rangeRect: DOMRectReadOnly): void {
