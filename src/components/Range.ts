@@ -30,7 +30,8 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
 
     protected readonly _rangeEl: HTMLInputElement;
     protected readonly _pointerEl: HTMLElement;
-    private _lastRangeWidth: number = 0;
+    private _rangeWidth: number = 0;
+    private _thumbWidth: number = 10;
 
     constructor(options: RangeOptions) {
         super();
@@ -215,7 +216,7 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
         }
 
         if (!useCachedWidth) {
-            this.updateRangeWidth_();
+            this.updateCachedWidths_();
         }
 
         let thumbPercent = 0;
@@ -223,9 +224,8 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
         // Ideally the thumb center would go all the way to min and max values
         // but input[type=range] doesn't play like that.
         if (this.min < this.value && this.value < this.max) {
-            const thumbWidth = getComputedStyle(this).getPropertyValue('--theoplayer-range-thumb-width') || '10px';
-            const thumbOffset = parseInt(thumbWidth) * (0.5 - rangePercent / 100);
-            thumbPercent = (thumbOffset / this._lastRangeWidth) * 100;
+            const thumbOffset = this._thumbWidth * (0.5 - rangePercent / 100);
+            thumbPercent = (thumbOffset / this._rangeWidth) * 100;
         }
 
         const stops = new ColorStops();
@@ -233,11 +233,15 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
         return stops;
     }
 
-    private updateRangeWidth_(): void {
+    private updateCachedWidths_(): void {
         // Use the last non-zero range width, in case the range is temporarily hidden.
         const rangeWidth = this._rangeEl.offsetWidth;
         if (rangeWidth > 0) {
-            this._lastRangeWidth = rangeWidth;
+            this._rangeWidth = rangeWidth;
+        }
+        const thumbWidth = parseInt(getComputedStyle(this).getPropertyValue('--theoplayer-range-thumb-width') || '10px');
+        if (thumbWidth > 0) {
+            this._thumbWidth = thumbWidth;
         }
     }
 
