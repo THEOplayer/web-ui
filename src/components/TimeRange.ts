@@ -282,8 +282,8 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         this.dispatchEvent(previewTimeChangeEvent);
     }
 
-    protected override getBarColors(useCachedWidth?: boolean): ColorStops {
-        const colorStops = super.getBarColors(useCachedWidth);
+    protected override getBarColors(): ColorStops {
+        const colorStops = super.getBarColors();
         if (!this.hasAttribute(Attribute.SHOW_AD_MARKERS) || !this._player || !this._player.ads) {
             return colorStops;
         }

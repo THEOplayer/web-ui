@@ -176,8 +176,11 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
         if (this.hasAttribute(Attribute.HIDDEN)) {
             return;
         }
+        if (!useCachedWidth) {
+            this.updateCachedWidths_();
+        }
         this._rangeEl.setAttribute('aria-valuetext', this.getAriaValueText());
-        this.updateBar_(useCachedWidth);
+        this.updateBar_();
     }
 
     /**
@@ -196,8 +199,8 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
      * showing playback progress or volume level. Here we're building that bar
      * by using a background gradient that moves with the range value.
      */
-    private updateBar_(useCachedWidth?: boolean) {
-        const gradientStops = this.getBarColors(useCachedWidth).toGradientStops();
+    private updateBar_() {
+        const gradientStops = this.getBarColors().toGradientStops();
         shadyCss.styleSubtree(this, {
             '--theoplayer-range-track-progress-internal': `linear-gradient(to right, ${gradientStops})`
         });
@@ -207,17 +210,13 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
      * Build the color gradient for the range bar.
      * Creating an array so progress-bar can insert the buffered bar.
      */
-    protected getBarColors(useCachedWidth?: boolean): ColorStops {
+    protected getBarColors(): ColorStops {
         const { value, min, max } = this;
         const relativeValue = value - min;
         const relativeMax = max - min;
         let rangePercent = (relativeValue / relativeMax) * 100;
         if (isNaN(rangePercent)) {
             rangePercent = 0;
-        }
-
-        if (!useCachedWidth) {
-            this.updateCachedWidths_();
         }
 
         let thumbPercent = 0;
