@@ -15,7 +15,7 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.8.2 (2024-08-29)
 
 -   🐛 Fixed blank space below UI when using `<theoplayer-default-ui>`.
 -   💅 Optimized performance of `<theoplayer-time-range>`. ([#70](https://github.com/THEOplayer/web-ui/issues/70))
