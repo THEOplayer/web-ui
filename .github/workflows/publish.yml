@@ -3,15 +3,15 @@ on:
   # Runs whenever a release PR is merged
   pull_request:
     branches:
-      - release/**
+      - main
     types: [closed]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
   publish:
-    # Run only when pull request is merged, not abandoned
-    if: ${{ !github.event.pull_request || github.event.pull_request.merged }}
+    # Run only for "release/x.y.z" PRs, and only when the PR is merged (not abandoned)
+    if: ${{ startsWith(github.head_ref, 'releases/') && (!github.event.pull_request || github.event.pull_request.merged) }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
