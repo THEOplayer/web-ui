@@ -19,11 +19,13 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           ref: develop
+          fetch-depth: 50
       - name: Configure Git user
         run: |
           git config user.name 'theoplayer-bot[bot]'
           git config user.email '873105+theoplayer-bot[bot]@users.noreply.github.com'
       - name: Sync develop with main
         run: |
-          git merge --ff $GITHUB_REF
+          git fetch --no-tags --prune --no-recurse-submodules --depth=50 origin +refs/heads/main:refs/remotes/origin/main
+          git merge --ff origin/main
           git push origin HEAD:develop
