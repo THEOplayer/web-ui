@@ -3,7 +3,7 @@ import { Range, rangeTemplate } from './Range';
 import timeRangeHtml from './TimeRange.html';
 import timeRangeCss from './TimeRange.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
-import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
+import type { Ads, ChromelessPlayer, TimeRanges } from 'theoplayer/chromeless';
 import { formatAsTimePhrase } from '../util/TimeUtils';
 import { createCustomEvent } from '../util/EventUtils';
 import type { PreviewTimeChangeEvent } from '../events/PreviewTimeChangeEvent';
@@ -22,7 +22,7 @@ import './PreviewTimeDisplay';
 const template = createTemplate('theoplayer-time-range', rangeTemplate(timeRangeHtml, timeRangeCss));
 
 const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 'seeked'] as const;
-const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'readystatechange', 'error'] as const;
+const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'durationchange', 'readystatechange', 'error'] as const;
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'adskip', 'addad', 'updatead'] as const;
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
@@ -120,31 +120,35 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         this._lastCurrentTime = this._player.currentTime;
         this._lastPlaybackRate = this._player.playbackRate;
         const seekable = this._player.seekable;
+        let min: number;
+        let max: number;
         if (seekable.length !== 0) {
-            this.min = seekable.start(0);
-            this.max = seekable.end(0);
+            min = seekable.start(0);
+            max = seekable.end(0);
         } else {
-            this.min = 0;
-            this.max = this._player.duration;
+            min = 0;
+            max = this._player.duration;
         }
         if (!isFinite(this._lastCurrentTime)) {
             const isLive = this._player.duration === Infinity;
-            this._lastCurrentTime = isLive ? this.max : this.min;
+            this._lastCurrentTime = isLive ? max : min;
         }
+        this._rangeEl.min = String(min);
+        this._rangeEl.max = String(max);
         this._rangeEl.valueAsNumber = this._lastCurrentTime;
         this.update();
-        this._updateDisabled();
+        this.updateDisabled_(seekable);
     };
 
-    private readonly _updateDisabled = () => {
+    private updateDisabled_(seekable: TimeRanges | undefined = this._player?.seekable) {
         let disabled = this.streamType === 'live';
-        if (this._player !== undefined) {
-            disabled ||= this._player.seekable.length === 0;
+        if (seekable !== undefined) {
+            disabled ||= seekable.length === 0;
         }
         if (this.disabled !== disabled) {
             this.disabled = disabled;
         }
-    };
+    }
 
     protected override getAriaLabel(): string {
         return 'seek';
@@ -165,7 +169,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
             return;
         }
         if (attrName === Attribute.STREAM_TYPE) {
-            this._updateDisabled();
+            this.updateDisabled_();
         } else if (attrName === Attribute.SHOW_AD_MARKERS) {
             this.update();
         }
@@ -215,8 +219,18 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
             !this._player.paused &&
             !this._player.ended &&
             !this._player.errorObject &&
-            this._player.readyState >= 3
+            this._player.readyState >= 3 &&
+            this.needToUpdateEveryFrame_()
         );
+    }
+
+    private needToUpdateEveryFrame_(): boolean {
+        // The player fires at least one timeupdate event every 250ms.
+        // If it takes more than 250ms to advance the playhead by 1 pixel,
+        // then we definitely don't need to update every frame.
+        const minimumStep = this.getMinimumStepForVisibleChange_();
+        const timeUpdateStep = 0.25 * this._lastPlaybackRate;
+        return minimumStep < timeUpdateStep;
     }
 
     private readonly _toggleAutoAdvance = () => {
@@ -241,8 +255,13 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         }
 
         const delta = (performance.now() - this._lastUpdateTime) / 1000;
-        this._rangeEl.valueAsNumber = this._lastCurrentTime + delta * this._lastPlaybackRate;
-        this.update();
+        const newValue = this._lastCurrentTime + delta * this._lastPlaybackRate;
+        if (Math.abs(newValue - this.value) >= this.getMinimumStepForVisibleChange_()) {
+            this._rangeEl.valueAsNumber = newValue;
+
+            // Use cached width to avoid synchronous layout
+            this.update(/* useCachedWidth = */ true);
+        }
 
         this._autoAdvanceId = requestAnimationFrame(this._autoAdvanceWhilePlaying);
     };

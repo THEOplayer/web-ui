@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>THEOplayer Open Video UI for Web: Default UI</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+        <style>
+            theoplayer-default-ui:not(:defined) {
+                display: inline-block;
+                box-sizing: border-box;
+            }
+
+            theoplayer-default-ui {
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                font-family: 'Noto Sans', sans-serif;
+                background: #000;
+            }
+        </style>
+        <script type="importmap">
+            {
+                "imports": {
+                    "theoplayer/chromeless": "../node_modules/theoplayer/THEOplayer.chromeless.esm.js",
+                    "@theoplayer/web-ui": "../dist/THEOplayerUI.mjs"
+                }
+            }
+        </script>
+        <!-- Import maps polyfill for browsers without import maps support (e.g. Safari 16.3) -->
+        <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js" crossorigin="anonymous"></script>
+        <script type="module">
+            import '@theoplayer/web-ui';
+        </script>
+    </head>
+    <body>
+        <h1>Default UI</h1>
+        <theoplayer-default-ui
+            configuration='{"libraryLocation":"../node_modules/theoplayer/","license":""}'
+            source='{"sources":{"src":"https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8"},"metadata":{"title":"Big Buck Bunny"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/video/big_buck_bunny/thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
+        ></theoplayer-default-ui>
+    </body>
+</html>

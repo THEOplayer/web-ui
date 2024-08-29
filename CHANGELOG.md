@@ -15,6 +15,15 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## v1.8.2 (2024-08-29)
+
+-   🐛 Fixed blank space below UI when using `<theoplayer-default-ui>`.
+-   💅 Optimized performance of `<theoplayer-time-range>`. ([#70](https://github.com/THEOplayer/web-ui/issues/70))
+    -   Optimized the `requestAnimationFrame` callback used to update the seekbar's progress
+        to avoid synchronous re-layouts as much as possible.
+    -   When playing a long video, the seek bar no longer uses `requestAnimationFrame` at all to update its progress.
+        Instead, it updates using only less frequent `timeupdate` events.
+
 ## v1.8.1 (2024-04-18)
 
 -   🐛 Fixed `ui.player.destroy()` not working. ([#59](https://github.com/THEOplayer/web-ui/issues/59), [#62](https://github.com/THEOplayer/web-ui/pull/62))
