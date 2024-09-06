@@ -15,6 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🚀 Added support for THEOplayer 8.0.
+
 ## v1.8.2 (2024-08-29)
 
 -   🏠 See changes to [Open Video UI for Web v1.8.2](https://github.com/THEOplayer/web-ui/blob/v1.8.2/CHANGELOG.md)
