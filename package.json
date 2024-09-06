@@ -60,7 +60,7 @@
     "@lit-labs/ssr-dom-shim": "^1.2.0"
   },
   "peerDependencies": {
-    "theoplayer": "^7"
+    "theoplayer": "^7 || ^8"
   },
   "devDependencies": {
     "@rollup/plugin-inject": "^5.0.5",
