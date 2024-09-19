@@ -3,6 +3,7 @@ import buttonCss from './Button.css';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
 import { createTemplate } from '../util/TemplateUtils';
+import { isActivationKey } from '../util/KeyCode';
 
 export interface ButtonOptions {
     template: HTMLTemplateElement;
@@ -73,6 +74,8 @@ export class Button extends HTMLElement {
 
     disconnectedCallback(): void {
         this.removeEventListener('click', this._onClick);
+        this.removeEventListener('keydown', this._onKeyDown);
+        this.removeEventListener('keyup', this._onKeyUp);
     }
 
     /**
@@ -104,13 +107,20 @@ export class Button extends HTMLElement {
 
     private _enable(): void {
         this.removeEventListener('click', this._onClick);
+        this.removeEventListener('keydown', this._onKeyDown);
+        this.removeEventListener('keyup', this._onKeyUp);
         this.addEventListener('click', this._onClick);
+        this.addEventListener('keydown', this._onKeyDown);
+
         this.setAttribute('aria-disabled', 'false');
         this.setAttribute('tabindex', '0');
     }
 
     private _disable(): void {
         this.removeEventListener('click', this._onClick);
+        this.removeEventListener('keydown', this._onKeyDown);
+        this.removeEventListener('keyup', this._onKeyUp);
+
         this.setAttribute('aria-disabled', 'true');
 
         // The `tabindex` attribute does not provide a way to fully remove focusability from an element.
@@ -124,6 +134,21 @@ export class Button extends HTMLElement {
 
     private readonly _onClick = () => {
         this.handleClick();
+    };
+
+    protected readonly _onKeyDown = (e: KeyboardEvent) => {
+        if (isActivationKey(e.keyCode) && !e.metaKey && !e.altKey) {
+            this.addEventListener('keyup', this._onKeyUp);
+        } else {
+            this.removeEventListener('keyup', this._onKeyUp);
+        }
+    };
+
+    protected readonly _onKeyUp = (e: KeyboardEvent) => {
+        this.removeEventListener('keyup', this._onKeyUp);
+        if (isActivationKey(e.keyCode)) {
+            this.handleClick();
+        }
     };
 
     /**
