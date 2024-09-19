@@ -66,6 +66,9 @@ export class Button extends HTMLElement {
             // Let the screen reader user know that the text of the button may change
             this.setAttribute(Attribute.ARIA_LIVE, 'polite');
         }
+        if (!this.hasAttribute(Attribute.DISABLED)) {
+            this._enable();
+        }
 
         this.addEventListener('click', this._onClick);
     }
@@ -90,21 +93,32 @@ export class Button extends HTMLElement {
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         if (attrName === Attribute.DISABLED && newValue !== oldValue) {
             const hasValue = newValue != null;
-            this.setAttribute('aria-disabled', hasValue ? 'true' : 'false');
-            // The `tabindex` attribute does not provide a way to fully remove focusability from an element.
-            // Elements with `tabindex=-1` can still be focused with a mouse or by calling `focus()`.
-            // To make sure an element is disabled and not focusable, remove the `tabindex` attribute.
             if (hasValue) {
-                this.removeAttribute('tabindex');
-                // If the focus is currently on this element, unfocus it by calling the `HTMLElement.blur()` method.
-                this.blur();
+                this._disable();
             } else {
-                this.setAttribute('tabindex', '0');
+                this._enable();
             }
         }
         if (Button.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
         }
+    }
+
+    private _enable(): void {
+        this.setAttribute('aria-disabled', 'false');
+        this.setAttribute('tabindex', '0');
+    }
+
+    private _disable(): void {
+        this.setAttribute('aria-disabled', 'true');
+
+        // The `tabindex` attribute does not provide a way to fully remove focusability from an element.
+        // Elements with `tabindex=-1` can still be focused with a mouse or by calling `focus()`.
+        // To make sure an element is disabled and not focusable, remove the `tabindex` attribute.
+        this.removeAttribute('tabindex');
+
+        // If the focus is currently on this element, unfocus it by calling the `HTMLElement.blur()` method.
+        this.blur();
     }
 
     private readonly _onClick = () => {
