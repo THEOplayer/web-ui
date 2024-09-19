@@ -69,8 +69,6 @@ export class Button extends HTMLElement {
         if (!this.hasAttribute(Attribute.DISABLED)) {
             this._enable();
         }
-
-        this.addEventListener('click', this._onClick);
     }
 
     disconnectedCallback(): void {
@@ -105,11 +103,14 @@ export class Button extends HTMLElement {
     }
 
     private _enable(): void {
+        this.removeEventListener('click', this._onClick);
+        this.addEventListener('click', this._onClick);
         this.setAttribute('aria-disabled', 'false');
         this.setAttribute('tabindex', '0');
     }
 
     private _disable(): void {
+        this.removeEventListener('click', this._onClick);
         this.setAttribute('aria-disabled', 'true');
 
         // The `tabindex` attribute does not provide a way to fully remove focusability from an element.
@@ -122,9 +123,6 @@ export class Button extends HTMLElement {
     }
 
     private readonly _onClick = () => {
-        if (this.disabled) {
-            return;
-        }
         this.handleClick();
     };
 
