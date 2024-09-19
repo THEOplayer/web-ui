@@ -123,7 +123,7 @@ export class LinkButton extends HTMLElement {
 
     private readonly _onKeyDown = (event: KeyboardEvent) => {
         // Don't handle modifier shortcuts typically used by assistive technology.
-        if (event.altKey) return;
+        if (event.metaKey || event.altKey) return;
 
         switch (event.keyCode) {
             // Enter is already handled by the browser.
