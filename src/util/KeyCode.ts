@@ -17,6 +17,7 @@ export enum KeyCode {
 
 export type ArrowKeyCode = KeyCode.LEFT | KeyCode.UP | KeyCode.RIGHT | KeyCode.DOWN;
 export type BackKeyCode = KeyCode.BACK_TIZEN | KeyCode.ESCAPE | KeyCode.BACK_SAMSUNG | KeyCode.BACK_WEBOS;
+export type ActivationKeyCode = KeyCode.ENTER | KeyCode.SPACE;
 
 export function isArrowKey(keyCode: number): keyCode is ArrowKeyCode {
     return KeyCode.LEFT <= keyCode && keyCode <= KeyCode.DOWN;
@@ -24,4 +25,8 @@ export function isArrowKey(keyCode: number): keyCode is ArrowKeyCode {
 
 export function isBackKey(keyCode: number): keyCode is BackKeyCode {
     return keyCode === KeyCode.BACK_TIZEN || keyCode === KeyCode.ESCAPE || keyCode === KeyCode.BACK_SAMSUNG || keyCode === KeyCode.BACK_WEBOS;
+}
+
+export function isActivationKey(keyCode: number): keyCode is ActivationKeyCode {
+    return keyCode === KeyCode.ENTER || keyCode === KeyCode.SPACE;
 }

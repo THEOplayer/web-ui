@@ -15,6 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🐛 Fixed <kbd>Enter</kbd> and <kbd>Space</kbd> keys not working to activate buttons in the UI.
+
 ## v1.9.0 (2024-09-06)
 
 -   🚀 Added support for THEOplayer 8.0.
