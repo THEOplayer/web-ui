@@ -3,6 +3,7 @@ import buttonCss from './Button.css';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
 import { createTemplate } from '../util/TemplateUtils';
+import { isActivationKey } from '../util/KeyCode';
 
 export interface ButtonOptions {
     template: HTMLTemplateElement;
@@ -66,12 +67,15 @@ export class Button extends HTMLElement {
             // Let the screen reader user know that the text of the button may change
             this.setAttribute(Attribute.ARIA_LIVE, 'polite');
         }
-
-        this.addEventListener('click', this._onClick);
+        if (!this.hasAttribute(Attribute.DISABLED)) {
+            this._enable();
+        }
     }
 
     disconnectedCallback(): void {
         this.removeEventListener('click', this._onClick);
+        this.removeEventListener('keydown', this._onKeyDown);
+        this.removeEventListener('keyup', this._onKeyUp);
     }
 
     /**
@@ -90,16 +94,10 @@ export class Button extends HTMLElement {
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         if (attrName === Attribute.DISABLED && newValue !== oldValue) {
             const hasValue = newValue != null;
-            this.setAttribute('aria-disabled', hasValue ? 'true' : 'false');
-            // The `tabindex` attribute does not provide a way to fully remove focusability from an element.
-            // Elements with `tabindex=-1` can still be focused with a mouse or by calling `focus()`.
-            // To make sure an element is disabled and not focusable, remove the `tabindex` attribute.
             if (hasValue) {
-                this.removeAttribute('tabindex');
-                // If the focus is currently on this element, unfocus it by calling the `HTMLElement.blur()` method.
-                this.blur();
+                this._disable();
             } else {
-                this.setAttribute('tabindex', '0');
+                this._enable();
             }
         }
         if (Button.observedAttributes.indexOf(attrName as Attribute) >= 0) {
@@ -107,11 +105,50 @@ export class Button extends HTMLElement {
         }
     }
 
+    private _enable(): void {
+        this.removeEventListener('click', this._onClick);
+        this.removeEventListener('keydown', this._onKeyDown);
+        this.removeEventListener('keyup', this._onKeyUp);
+        this.addEventListener('click', this._onClick);
+        this.addEventListener('keydown', this._onKeyDown);
+
+        this.setAttribute('aria-disabled', 'false');
+        this.setAttribute('tabindex', '0');
+    }
+
+    private _disable(): void {
+        this.removeEventListener('click', this._onClick);
+        this.removeEventListener('keydown', this._onKeyDown);
+        this.removeEventListener('keyup', this._onKeyUp);
+
+        this.setAttribute('aria-disabled', 'true');
+
+        // The `tabindex` attribute does not provide a way to fully remove focusability from an element.
+        // Elements with `tabindex=-1` can still be focused with a mouse or by calling `focus()`.
+        // To make sure an element is disabled and not focusable, remove the `tabindex` attribute.
+        this.removeAttribute('tabindex');
+
+        // If the focus is currently on this element, unfocus it by calling the `HTMLElement.blur()` method.
+        this.blur();
+    }
+
     private readonly _onClick = () => {
-        if (this.disabled) {
-            return;
-        }
         this.handleClick();
+    };
+
+    protected readonly _onKeyDown = (e: KeyboardEvent) => {
+        if (isActivationKey(e.keyCode) && !e.metaKey && !e.altKey) {
+            this.addEventListener('keyup', this._onKeyUp);
+        } else {
+            this.removeEventListener('keyup', this._onKeyUp);
+        }
+    };
+
+    protected readonly _onKeyUp = (e: KeyboardEvent) => {
+        this.removeEventListener('keyup', this._onKeyUp);
+        if (isActivationKey(e.keyCode)) {
+            this.handleClick();
+        }
     };
 
     /**
