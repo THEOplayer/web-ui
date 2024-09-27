@@ -15,7 +15,7 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.9.1 (2024-09-27)
 
 -   🐛 Fixed <kbd>Enter</kbd> and <kbd>Space</kbd> keys not working to activate buttons in the UI.
 
