@@ -15,13 +15,17 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## v1.9.2 (2024-11-20)
+
+-   🐛 Fixed live UI not showing for Millicast streams. ([#79](https://github.com/THEOplayer/web-ui/pull/79))
+
 ## v1.9.1 (2024-09-27)
 
--   🐛 Fixed <kbd>Enter</kbd> and <kbd>Space</kbd> keys not working to activate buttons in the UI.
+-   🐛 Fixed <kbd>Enter</kbd> and <kbd>Space</kbd> keys not working to activate buttons in the UI. ([#76](https://github.com/THEOplayer/web-ui/pull/76))
 
 ## v1.9.0 (2024-09-06)
 
--   🚀 Added support for THEOplayer 8.0.
+-   🚀 Added support for THEOplayer 8.0. ([#72](https://github.com/THEOplayer/web-ui/pull/72))
 
 ## v1.8.2 (2024-08-29)
 

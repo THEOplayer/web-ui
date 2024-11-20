@@ -162,6 +162,8 @@ function isLive(player: ChromelessPlayer, threshold: number): boolean {
         const seekable = player.seekable;
         if (seekable.length > 0) {
             return seekable.end(seekable.length - 1) - player.currentTime <= threshold;
+        } else {
+            return true;
         }
     }
     return false;
