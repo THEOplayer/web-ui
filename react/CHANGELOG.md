@@ -15,6 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## v1.9.2 (2024-11-20)
+
+-   🏠 See changes to [Open Video UI for Web v1.9.2](https://github.com/THEOplayer/web-ui/blob/v1.9.2/CHANGELOG.md)
+
 ## v1.9.1 (2024-09-27)
 
 -   🏠 See changes to [Open Video UI for Web v1.9.1](https://github.com/THEOplayer/web-ui/blob/v1.9.1/CHANGELOG.md)

@@ -15,7 +15,7 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.9.2 (2024-11-20)
 
 -   🐛 Fixed live UI not showing for Millicast streams. ([#79](https://github.com/THEOplayer/web-ui/pull/79))
 
