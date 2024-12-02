@@ -15,6 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🚀 Added support for MBR Millicast streams. ([#81](https://github.com/THEOplayer/web-ui/pull/81))
+
 ## v1.9.2 (2024-11-20)
 
 -   🏠 See changes to [Open Video UI for Web v1.9.2](https://github.com/THEOplayer/web-ui/blob/v1.9.2/CHANGELOG.md)
