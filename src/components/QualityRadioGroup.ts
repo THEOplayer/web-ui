@@ -84,7 +84,9 @@ export class QualityRadioGroup extends StateReceiverMixin(HTMLElement, ['player'
         if (this._track === track) {
             return;
         }
+        this._track?.removeEventListener('update', this._update);
         this._track = track;
+        this._track?.addEventListener('update', this._update);
         this._update();
     };
 
