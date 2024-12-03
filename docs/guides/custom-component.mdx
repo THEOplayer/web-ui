@@ -59,7 +59,12 @@ Now add your new button to your custom UI. In our example, we'll place it in the
 
 It should look something like this:
 
-<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-play-button-step1.html')} hideDeviceType />
+<Example
+    className={styles.player}
+    src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-play-button-step1.html')}
+    hideDeviceType
+    hideSource
+/>
 
 Try clicking the "Play" button in the middle of the screen.
 You should see an alert window popping up saying `My play button was clicked!`.
@@ -114,7 +119,12 @@ You can also update the text content of your button to reflect the new state:
 
 It should look something like this:
 
-<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-play-button-step2.html')} hideDeviceType />
+<Example
+    className={styles.player}
+    src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-play-button-step2.html')}
+    hideDeviceType
+    hideSource
+/>
 
 Try clicking the "Play" button in the middle of the screen. The player starts playing!<br/>
 Clicking it again should pause the player.
@@ -180,7 +190,12 @@ Now add your new label to your custom UI. In our example, we'll place it inside 
 
 It should look something like this:
 
-<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-quality-label-step1.html')} hideDeviceType />
+<Example
+    className={styles.player}
+    src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-quality-label-step1.html')}
+    hideDeviceType
+    hideSource
+/>
 
 ### Step 2: Listen to quality changes
 
@@ -207,7 +222,12 @@ Right now, the quality label is static, it doesn't actually update when the play
 
 It should look something like this:
 
-<Example className={styles.player} src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-quality-label-step2.html')} hideDeviceType />
+<Example
+    className={styles.player}
+    src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-quality-label-step2.html')}
+    hideDeviceType
+    hideSource
+/>
 
 Try changing the active quality by clicking the ⚙️ (Settings) button, and changing "Automatic" to a specific quality.
 You should see your custom label update to show the height of the new quality.
