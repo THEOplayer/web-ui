@@ -1,4 +1,5 @@
-import { html, type TemplateResult } from 'lit-html';
+import { html, type TemplateResult } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import { MenuGroup } from './MenuGroup';
 import menuTableCss from './MenuTable.css';
 
@@ -15,6 +16,7 @@ import './PlaybackRateMenu';
  *
  * @group Components
  */
+@customElement('theoplayer-settings-menu')
 export class SettingsMenu extends MenuGroup {
     protected override render(): TemplateResult {
         return this.renderMenuGroup(
@@ -52,8 +54,6 @@ export class SettingsMenu extends MenuGroup {
         );
     }
 }
-
-customElements.define('theoplayer-settings-menu', SettingsMenu);
 
 declare global {
     interface HTMLElementTagNameMap {
