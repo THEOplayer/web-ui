@@ -121,7 +121,13 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
 function jsPlugins({ es5 = false, node = false, module = false, production = false, sourcemap = false }) {
     const browserslist = es5 ? browserslistLegacy : browserslistModern;
     return [
-        nodeResolve(),
+        nodeResolve({
+            exportConditions: [
+                // Use Lit's Node entry point for SSR
+                node ? 'node' : 'browser',
+                production ? false : 'development'
+            ].filter(Boolean)
+        }),
         // For Node, stub out THEOplayer.
         node &&
             virtual({
