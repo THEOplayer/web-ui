@@ -20,6 +20,7 @@
                 background: #000;
             }
         </style>
+        <!-- Modern browsers -->
         <script type="importmap">
             {
                 "imports": {
@@ -28,9 +29,17 @@
                 }
             }
         </script>
+        <!-- Import maps polyfill for browsers without import maps support (e.g. Safari 16.3) -->
+        <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js" crossorigin="anonymous"></script>
+        <script type="module">
+            import * as THEOplayerUI from '@theoplayer/web-ui';
+            self.THEOplayerUI = THEOplayerUI;
+        </script>
+        <!-- Legacy browsers -->
+        <script nomodule src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es2015"></script>
         <script src="../node_modules/theoplayer/THEOplayer.chromeless.js"></script>
         <script nomodule src="../dist/THEOplayerUI.polyfills.js"></script>
-        <script async src="../dist/THEOplayerUI.js"></script>
+        <script nomodule src="../dist/THEOplayerUI.es5.js"></script>
     </head>
     <body>
         <h1>Default UI</h1>
