@@ -1,5 +1,5 @@
 import { html, LitElement, type TemplateResult } from 'lit';
-import { customElement, query } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import { updateWhenLocaleChanges } from '@lit/localize';
 import menuGroupCss from './MenuGroup.css';
 import { Attribute } from '../util/Attribute';
@@ -29,10 +29,8 @@ interface OpenMenuEntry {
  */
 @customElement('theoplayer-menu-group')
 export class MenuGroup extends LitElement {
-    static get observedAttributes() {
-        return [...LitElement.observedAttributes, Attribute.MENU_OPENED];
-    }
-
+    @property({ reflect: true, type: Boolean, attribute: Attribute.MENU_OPENED })
+    private accessor _menuOpened: boolean = false;
     @query('slot')
     private accessor _menuSlot: HTMLSlotElement | null = null;
     private _menus: Array<Menu | MenuGroup> = [];
@@ -54,7 +52,7 @@ export class MenuGroup extends LitElement {
     connectedCallback(): void {
         super.connectedCallback();
 
-        if (!this.hasAttribute(Attribute.MENU_OPENED)) {
+        if (!this._menuOpened) {
             this.setAttribute('hidden', '');
         }
     }
@@ -73,7 +71,7 @@ export class MenuGroup extends LitElement {
             return;
         }
         if (attrName === Attribute.MENU_OPENED) {
-            const hasValue = newValue != null;
+            const hasValue = this._menuOpened;
             if (hasValue) {
                 this.removeAttribute('hidden');
                 this.removeEventListener('keydown', this._onKeyDown);
@@ -153,7 +151,7 @@ export class MenuGroup extends LitElement {
             previousEntry.menu.closeMenu();
         }
         menuToOpen.openMenu();
-        this.setAttribute(Attribute.MENU_OPENED, '');
+        this._menuOpened = true;
 
         menuToOpen.focus();
         return true;
@@ -190,7 +188,7 @@ export class MenuGroup extends LitElement {
         const nextEntry = this.getCurrentMenu_();
         if (nextEntry !== undefined) {
             nextEntry.menu.openMenu();
-            this.setAttribute(Attribute.MENU_OPENED, '');
+            this._menuOpened = true;
             if (oldEntry.opener && nextEntry.menu.contains(oldEntry.opener)) {
                 oldEntry.opener.focus();
             } else {
@@ -199,7 +197,7 @@ export class MenuGroup extends LitElement {
             return true;
         }
 
-        this.removeAttribute(Attribute.MENU_OPENED);
+        this._menuOpened = false;
         oldEntry.opener?.focus();
         return true;
     }
