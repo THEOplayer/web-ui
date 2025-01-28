@@ -1,6 +1,6 @@
-import { MenuGroup, menuGroupTemplate } from './MenuGroup';
+import { html, type TemplateResult } from 'lit-html';
+import { MenuGroup } from './MenuGroup';
 import * as shadyCss from '@webcomponents/shadycss';
-import languageMenuHtml from './LanguageMenu.html';
 import languageMenuCss from './LanguageMenu.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer/chromeless';
@@ -11,8 +11,6 @@ import { toggleAttribute } from '../util/CommonUtils';
 // Load components used in template
 import './TrackRadioGroup';
 import './TextTrackStyleMenu';
-
-const template = menuGroupTemplate(languageMenuHtml, languageMenuCss);
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
@@ -33,7 +31,7 @@ export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
     }
 
     constructor() {
-        super({ template });
+        super();
         this._upgradeProperty('player');
     }
 
@@ -73,6 +71,33 @@ export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
         if (LanguageMenu.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
         }
+    }
+
+    protected override render(): TemplateResult {
+        return super.renderMenuGroup(
+            html`
+                <theoplayer-menu>
+                    <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">Language</slot></span>
+                    <theoplayer-settings-menu-button
+                        class="theoplayer-menu-heading-button"
+                        menu="subtitle-options-menu"
+                        slot="heading"
+                    ></theoplayer-settings-menu-button>
+                    <div part="content">
+                        <div part="audio">
+                            <h2>Audio</h2>
+                            <theoplayer-track-radio-group track-type="audio"></theoplayer-track-radio-group>
+                        </div>
+                        <div part="subtitles">
+                            <h2>Subtitles</h2>
+                            <theoplayer-track-radio-group track-type="subtitles" show-off></theoplayer-track-radio-group>
+                        </div>
+                    </div>
+                </theoplayer-menu>
+                <theoplayer-text-track-style-menu id="subtitle-options-menu"></theoplayer-text-track-style-menu>
+            `,
+            languageMenuCss
+        );
     }
 }
 
