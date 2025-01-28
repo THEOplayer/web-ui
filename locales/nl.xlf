@@ -14,6 +14,18 @@
   <source>pause</source>
   <target>pauzeren</target>
 </trans-unit>
+<trans-unit id="sefcf950b3cc4fc3b">
+  <source>Language</source>
+  <target>Taal</target>
+</trans-unit>
+<trans-unit id="s08e6bd98452e6bb9">
+  <source>Audio</source>
+  <target>Audio</target>
+</trans-unit>
+<trans-unit id="s8d4efa71fde7e9be">
+  <source>Subtitles</source>
+  <target>Ondertitels</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
