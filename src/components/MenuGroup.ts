@@ -51,16 +51,14 @@ export class MenuGroup extends LitElement {
         if (!this.hasAttribute(Attribute.MENU_OPENED)) {
             this.setAttribute('hidden', '');
         }
-
-        this.shadowRoot!.addEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
-        this.shadowRoot!.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
-        this.shadowRoot!.addEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
     }
 
-    disconnectedCallback(): void {
-        this.shadowRoot!.removeEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
-        this.shadowRoot!.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
-        this.shadowRoot!.removeEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
+    protected createRenderRoot() {
+        const root = super.createRenderRoot();
+        root.addEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
+        root.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
+        root.addEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
+        return root;
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
