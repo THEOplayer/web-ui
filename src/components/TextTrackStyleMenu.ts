@@ -1,4 +1,5 @@
-import { html, type TemplateResult } from 'lit-html';
+import { html, type TemplateResult } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import { MenuGroup } from './MenuGroup';
 import textTrackStyleMenuCss from './TextTrackStyleMenu.css';
 import menuTableCss from './MenuTable.css';
@@ -14,6 +15,7 @@ import './TextTrackStyleRadioGroup';
  *
  * @group Components
  */
+@customElement('theoplayer-text-track-style-menu')
 export class TextTrackStyleMenu extends MenuGroup {
     protected override render(): TemplateResult {
         return super.renderMenuGroup(
@@ -180,8 +182,6 @@ export class TextTrackStyleMenu extends MenuGroup {
         );
     }
 }
-
-customElements.define('theoplayer-text-track-style-menu', TextTrackStyleMenu);
 
 declare global {
     interface HTMLElementTagNameMap {
