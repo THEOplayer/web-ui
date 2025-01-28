@@ -1,5 +1,6 @@
 import { html, LitElement, type TemplateResult } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
+import { updateWhenLocaleChanges } from '@lit/localize';
 import menuGroupCss from './MenuGroup.css';
 import { Attribute } from '../util/Attribute';
 import { arrayFind, arrayFindIndex, fromArrayLike, getSlottedElements, isHTMLElement, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
@@ -36,6 +37,11 @@ export class MenuGroup extends LitElement {
     private accessor _menuSlot: HTMLSlotElement | null = null;
     private _menus: Array<Menu | MenuGroup> = [];
     private readonly _openMenuStack: OpenMenuEntry[] = [];
+
+    constructor() {
+        super();
+        updateWhenLocaleChanges(this);
+    }
 
     protected _upgradeProperty(prop: keyof this) {
         if (this.hasOwnProperty(prop)) {
