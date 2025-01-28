@@ -120,6 +120,7 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
  */
 function jsPlugins({ es5 = false, node = false, module = false, production = false, sourcemap = false }) {
     const browserslist = es5 ? browserslistLegacy : browserslistModern;
+    const ecmaVersion = es5 ? 5 : 2017;
     return [
         nodeResolve({
             exportConditions: [
@@ -166,6 +167,7 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
         }),
         es5 &&
             replace({
+                include: './node_modules/lit-html/**',
                 preventAssignment: true,
                 delimiters: ['', ''],
                 values: {
@@ -229,7 +231,7 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
                 },
                 toplevel: true,
                 module,
-                ecma: es5 ? 5 : 2017
+                ecma: ecmaVersion
             })
     ].filter(Boolean);
 }
