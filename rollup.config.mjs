@@ -181,7 +181,7 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
         }),
         es5 &&
             replace({
-                include: './node_modules/lit-html/**',
+                include: ['./node_modules/lit/**', './node_modules/lit-html/**', './node_modules/@lit/**'],
                 preventAssignment: true,
                 delimiters: ['', ''],
                 values: {
@@ -207,7 +207,11 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
                 loose: true,
                 externalHelpers: true,
                 parser: {
-                    syntax: 'typescript'
+                    syntax: 'typescript',
+                    decorators: true
+                },
+                transform: {
+                    decoratorVersion: '2022-03'
                 }
             }
         }),
