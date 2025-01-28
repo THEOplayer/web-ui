@@ -11,22 +11,6 @@ import { MENU_CHANGE_EVENT } from '../events/MenuChangeEvent';
 import { Menu } from './Menu';
 import { html, render, type TemplateResult } from 'lit-html';
 
-export interface MenuGroupOptions {
-    template?: TemplateResult;
-}
-
-export function menuGroupTemplate(content: TemplateResult, extraCss: string | TemplateResult = ''): TemplateResult {
-    return html`
-        <style>
-            ${menuGroupCss}
-            ${extraCss}
-        </style>
-        ${content}
-    `;
-}
-
-const defaultTemplate = menuGroupTemplate(html`<slot></slot>`);
-
 interface OpenMenuEntry {
     menu: Menu | MenuGroup;
     opener: HTMLElement | undefined;
@@ -47,17 +31,14 @@ export class MenuGroup extends HTMLElement {
         return [Attribute.MENU_OPENED];
     }
 
-    private readonly _menuSlot: HTMLSlotElement | null;
+    private _menuSlot: HTMLSlotElement | null = null;
     private _menus: Array<Menu | MenuGroup> = [];
     private readonly _openMenuStack: OpenMenuEntry[] = [];
 
-    constructor(options?: MenuGroupOptions) {
+    constructor() {
         super();
-        const template = options?.template ?? defaultTemplate;
-        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        render(template, shadowRoot);
-
-        this._menuSlot = shadowRoot.querySelector('slot');
+        this.attachShadow({ mode: 'open', delegatesFocus: true });
+        this.runRender();
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -80,6 +61,9 @@ export class MenuGroup extends HTMLElement {
         this.shadowRoot!.addEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
         this.shadowRoot!.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
         this.shadowRoot!.addEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
+
+        this.runRender();
+        this._menuSlot = this.shadowRoot!.querySelector('slot');
         this._menuSlot?.addEventListener('slotchange', this._onMenuListChange);
     }
 
@@ -88,6 +72,7 @@ export class MenuGroup extends HTMLElement {
         this.shadowRoot!.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
         this.shadowRoot!.removeEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
         this._menuSlot?.removeEventListener('slotchange', this._onMenuListChange);
+        this._menuSlot = null;
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
@@ -110,6 +95,28 @@ export class MenuGroup extends HTMLElement {
         if (MenuGroup.observedAttributes.indexOf(attrName as Attribute) >= 0) {
             shadyCss.styleSubtree(this);
         }
+    }
+
+    private runRender(): void {
+        render(this.render(), this.shadowRoot!, {
+            host: this,
+            creationScope: this.ownerDocument,
+            isConnected: this.isConnected
+        });
+    }
+
+    protected render(): TemplateResult {
+        return this.renderMenuGroup(html`<slot></slot>`);
+    }
+
+    protected renderMenuGroup(content: TemplateResult, extraCss: string | TemplateResult = ''): TemplateResult {
+        return html`
+            <style>
+                ${menuGroupCss}
+                ${extraCss}
+            </style>
+            ${content}
+        `;
     }
 
     /**
