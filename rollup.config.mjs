@@ -132,7 +132,13 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
         collapseWhitespace: production
     };
     return [
-        nodeResolve(),
+        nodeResolve({
+            exportConditions: [
+                // Use Lit's Node entry point for SSR
+                node ? 'node' : 'browser',
+                production ? false : 'development'
+            ].filter(Boolean)
+        }),
         // For Node, stub out THEOplayer.
         node &&
             virtual({
