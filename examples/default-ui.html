@@ -32,7 +32,8 @@
         <!-- Import maps polyfill for browsers without import maps support (e.g. Safari 16.3) -->
         <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js" crossorigin="anonymous"></script>
         <script type="module">
-            import '@theoplayer/web-ui';
+            import * as THEOplayerUI from '@theoplayer/web-ui';
+            self.THEOplayerUI = THEOplayerUI;
         </script>
     </head>
     <body>
