@@ -48,8 +48,8 @@
             <label style="user-select: none">
                 Source:
                 <select id="source-select">
-                    <option value="bigBuckBunny" selected>Big Buck Bunny</option>
-                    <option value="elephantsDream">Elephant's Dream</option>
+                    <option value="bigBuckBunny">Big Buck Bunny</option>
+                    <option value="elephantsDream" selected>Elephant's Dream</option>
                     <option value="starWarsTrailer">Star Wars Episode VII Trailer</option>
                 </select>
             </label>
@@ -101,7 +101,7 @@
                 }
             };
 
-            ui.source = sources.bigBuckBunny;
+            ui.source = sources.elephantsDream;
             document.querySelector('#source-select').addEventListener('change', function (e) {
                 ui.source = sources[e.target.value];
             });
