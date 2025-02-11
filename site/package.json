@@ -1,8 +1,10 @@
 {
   "name": "site",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "build": "npx @11ty/eleventy --input=. --output=../_site"
+    "build": "npx @11ty/eleventy --input=. --output=../_site",
+    "serve": "npm run build -- --serve"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0"

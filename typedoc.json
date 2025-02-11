@@ -1,7 +1,7 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": ["src/index.ts"],
-  "out": "site/api",
+  "out": "api",
   "sitemapBaseUrl": "https://theoplayer.github.io/web-ui/api/",
   "readme": "none",
   "plugin": ["typedoc-plugin-external-resolver", "typedoc-plugin-mdn-links"],
