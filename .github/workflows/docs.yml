@@ -41,7 +41,7 @@ jobs:
       - run: npm run docs --workspaces
       - name: Build website
         run: |
-          cd docs
+          cd site
           npm ci
           npm run build
       - name: Upload artifact
