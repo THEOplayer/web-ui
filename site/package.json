@@ -1,0 +1,10 @@
+{
+  "name": "site",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "npx @11ty/eleventy --input=. --output=./_site"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}
