@@ -7,7 +7,7 @@
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/react/dist" />
-      <excludeFolder url="file://$MODULE_DIR$/site/_site" />
+      <excludeFolder url="file://$MODULE_DIR$/_site" />
       <excludeFolder url="file://$MODULE_DIR$/site/api" />
       <excludeFolder url="file://$MODULE_DIR$/site/dist" />
       <excludeFolder url="file://$MODULE_DIR$/site/react-api" />

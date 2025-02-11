@@ -39,11 +39,11 @@ jobs:
       - run: npm ci --workspaces
       - run: npm run build --workspaces
       - run: npm run docs --workspaces
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./site
-          destination: ./_site
+      - name: Build website
+        run: |
+          cd docs
+          npm ci
+          npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
 
