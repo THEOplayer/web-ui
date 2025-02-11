@@ -1,5 +1,7 @@
 {
   "name": "site",
+  "description": "Documentation website for Open Video UI.",
+  "homepage": "https://theoplayer.github.io/web-ui/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
