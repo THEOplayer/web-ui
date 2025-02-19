@@ -98,7 +98,7 @@ export class DefaultUI extends HTMLElement {
      * @param configuration - The player configuration.
      *   Will be passed to the {@link theoplayer!ChromelessPlayer | ChromelessPlayer} constructor to create
      *   the underlying THEOplayer instance.
-     *   Can also be set later on through the {@link configuration} property.
+     *   Can also be set later on through the {@link DefaultUI.configuration} property.
      */
     constructor(configuration: PlayerConfiguration = {}) {
         super();
