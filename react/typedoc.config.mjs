@@ -1,27 +1,27 @@
 /** @type {import('typedoc').TypeDocOptions} */
 export default {
-  "extends": ["../typedoc.json"],
-  "entryPoints": ["src/index.ts"],
-  "out": "../react-api",
-  "sitemapBaseUrl": "https://theoplayer.github.io/web-ui/react-api/",
-  "plugin": ["typedoc-plugin-external-resolver", "typedoc-plugin-mdn-links"],
-  "readme": "none",
-  "navigationLinks": {
-    "GitHub": "https://github.com/THEOplayer/web-ui/tree/main/react"
-  },
-  "externalDocumentation": {
-    "theoplayer": {
-      "dtsPath": "~/THEOplayer.d.ts",
-      "externalBaseURL": "https://www.theoplayer.com/docs/theoplayer/v6/api-reference/web"
+    extends: ['../typedoc.json'],
+    entryPoints: ['src/index.ts'],
+    out: '../react-api',
+    sitemapBaseUrl: 'https://theoplayer.github.io/web-ui/react-api/',
+    plugin: ['typedoc-plugin-external-resolver', 'typedoc-plugin-mdn-links'],
+    readme: 'none',
+    navigationLinks: {
+        GitHub: 'https://github.com/THEOplayer/web-ui/tree/main/react'
     },
-    "@theoplayer/web-ui": {
-      "dtsPath": "~/dist/THEOplayerUI.d.ts",
-      "externalBaseURL": "/web-ui/api"
+    externalDocumentation: {
+        theoplayer: {
+            dtsPath: '~/THEOplayer.d.ts',
+            externalBaseURL: 'https://www.theoplayer.com/docs/theoplayer/v6/api-reference/web'
+        },
+        '@theoplayer/web-ui': {
+            dtsPath: '~/dist/THEOplayerUI.d.ts',
+            externalBaseURL: '/web-ui/api'
+        }
+    },
+    externalSymbolLinkMappings: {
+        react: {
+            '*': 'https://react.dev/reference/react'
+        }
     }
-  },
-  "externalSymbolLinkMappings": {
-    "react": {
-      "*": "https://react.dev/reference/react"
-    }
-  }
-}
+};

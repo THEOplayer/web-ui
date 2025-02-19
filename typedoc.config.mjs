@@ -1,21 +1,21 @@
 /** @type {import('typedoc').TypeDocOptions} */
 export default {
-  "entryPoints": ["src/index.ts"],
-  "out": "api",
-  "sitemapBaseUrl": "https://theoplayer.github.io/web-ui/api/",
-  "readme": "none",
-  "plugin": ["typedoc-plugin-external-resolver", "typedoc-plugin-mdn-links"],
-  "navigationLinks": {
-    "GitHub": "https://github.com/THEOplayer/web-ui"
-  },
-  "githubPages": true,
-  "excludePrivate": true,
-  "excludeInternal": true,
-  "excludeExternals": true,
-  "externalDocumentation": {
-    "theoplayer": {
-      "dtsPath": "~/THEOplayer.d.ts",
-      "externalBaseURL": "https://www.theoplayer.com/docs/theoplayer/v6/api-reference/web"
+    entryPoints: ['src/index.ts'],
+    out: 'api',
+    sitemapBaseUrl: 'https://theoplayer.github.io/web-ui/api/',
+    readme: 'none',
+    plugin: ['typedoc-plugin-external-resolver', 'typedoc-plugin-mdn-links'],
+    navigationLinks: {
+        GitHub: 'https://github.com/THEOplayer/web-ui'
+    },
+    githubPages: true,
+    excludePrivate: true,
+    excludeInternal: true,
+    excludeExternals: true,
+    externalDocumentation: {
+        theoplayer: {
+            dtsPath: '~/THEOplayer.d.ts',
+            externalBaseURL: 'https://www.theoplayer.com/docs/theoplayer/v6/api-reference/web'
+        }
     }
-  }
-}
+};
