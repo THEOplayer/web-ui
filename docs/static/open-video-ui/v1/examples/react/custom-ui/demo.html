@@ -128,17 +128,22 @@
                 // inside a THEOplayer <DefauLtUI> or <UIContainer>.
                 const player = useContext(THEOplayerReactUI.PlayerContext);
                 // Keep track of the player's current time.
+                const [currentTime, setCurrentTime] = useState(player?.currentTime ?? 0);
                 const subscribe = useCallback(
                     (callback) => {
-                        player?.addEventListener(['timeupdate', 'seeking', 'seeked'], callback);
-                        return () => player?.removeEventListener(['timeupdate', 'seeking', 'seeked'], callback);
+                        const listener = () => {
+                            setCurrentTime(player.currentTime);
+                            callback();
+                        };
+                        player?.addEventListener(['timeupdate', 'seeking', 'seeked'], listener);
+                        return () => player?.removeEventListener(['timeupdate', 'seeking', 'seeked'], listener);
                     },
                     [player]
                 );
                 return useSyncExternalStore(
                     subscribe,
-                    () => player?.currentTime ?? 0,
-                    () => 0
+                    () => currentTime,
+                    () => currentTime
                 );
             };
 

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useSyncExternalStore } from 'react';
+import { useCallback, useContext, useState, useSyncExternalStore } from 'react';
 import { PlayerContext } from '../context';
 import type { PlayerEventMap } from 'theoplayer';
 
@@ -14,16 +14,21 @@ const TIME_CHANGE_EVENTS = ['timeupdate', 'seeking', 'seeked', 'emptied'] satisf
  */
 export function useCurrentTime(): number {
     const player = useContext(PlayerContext);
+    const [currentTime, setCurrentTime] = useState(player ? player.currentTime : 0);
     const subscribe = useCallback(
         (callback: () => void) => {
-            player?.addEventListener(TIME_CHANGE_EVENTS, callback);
-            return () => player?.removeEventListener(TIME_CHANGE_EVENTS, callback);
+            const listener = () => {
+                setCurrentTime(player!.currentTime);
+                callback();
+            };
+            player?.addEventListener(TIME_CHANGE_EVENTS, listener);
+            return () => player?.removeEventListener(TIME_CHANGE_EVENTS, listener);
         },
         [player]
     );
     return useSyncExternalStore(
         subscribe,
-        () => (player ? player.currentTime : 0),
-        () => 0
+        () => currentTime,
+        () => currentTime
     );
 }
