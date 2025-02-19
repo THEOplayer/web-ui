@@ -1,6 +1,6 @@
 {
   "name": "@theoplayer/react-ui",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "description": "React component library for the THEOplayer Web SDK",
   "main": "dist/THEOplayerReactUI.js",
   "module": "dist/THEOplayerReactUI.mjs",
@@ -51,8 +51,8 @@
     "directory": "react"
   },
   "dependencies": {
-    "@lit/react": "^1.0.3",
-    "@theoplayer/web-ui": "^1.9.3"
+    "@lit/react": "^1.0.7",
+    "@theoplayer/web-ui": "^1.9.4"
   },
   "peerDependencies": {
     "@types/react": "^16.3.0 || ^17 || ^18",
@@ -61,23 +61,23 @@
   },
   "devDependencies": {
     "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^15.2.1",
-    "@rollup/plugin-replace": "^5.0.5",
-    "@swc/cli": "^0.1.62",
-    "@swc/core": "^1.3.89",
-    "@swc/helpers": "^0.5.2",
-    "@types/react": "^18.2.48",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-replace": "^6.0.2",
+    "@swc/cli": "^0.6.0",
+    "@swc/core": "^1.10.15",
+    "@swc/helpers": "^0.5.15",
+    "@types/react": "^18.2.79",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rollup": "^3.29.3",
-    "rollup-plugin-dts": "^5.3.1",
-    "rollup-plugin-swc3": "^0.8.2",
+    "rollup": "^4.34.6",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-swc3": "^0.12.1",
     "theoplayer": "^7.0.0",
-    "tslib": "^2.6.2",
-    "typedoc": "^0.25.8",
+    "tslib": "^2.8.1",
+    "typedoc": "^0.27.7",
     "typedoc-plugin-external-resolver": "^1.0.3",
-    "typedoc-plugin-mdn-links": "^3.1.15",
-    "typescript": "^5.1.6"
+    "typedoc-plugin-mdn-links": "^4.0.12",
+    "typescript": "^5.7.3"
   },
   "browserslist": [
     "last 2 versions",

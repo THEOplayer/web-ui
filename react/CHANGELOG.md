@@ -15,6 +15,11 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## v1.9.4 (2025-02-19)
+
+-   🐛 Fixed `useCurrentTime` hook causing an infinite loop in Safari. ([#89](https://github.com/THEOplayer/web-ui/pull/89))
+-   🏠 See changes to [Open Video UI for Web v1.9.4](https://github.com/THEOplayer/web-ui/blob/v1.9.4/CHANGELOG.md)
+
 ## v1.9.3 (2024-12-03)
 
 -   🏠 See changes to [Open Video UI for Web v1.9.3](https://github.com/THEOplayer/web-ui/blob/v1.9.3/CHANGELOG.md)
