@@ -1,14 +1,15 @@
 /** @type {import('typedoc').TypeDocOptions} */
 export default {
-    extends: ['../typedoc.json'],
+    extends: ['../typedoc.config.mjs'],
     entryPoints: ['src/index.ts'],
     out: '../react-api',
-    sitemapBaseUrl: 'https://theoplayer.github.io/web-ui/react-api/',
+    hostedBaseUrl: 'https://theoplayer.github.io/web-ui/react-api/',
     plugin: ['typedoc-plugin-external-resolver', 'typedoc-plugin-mdn-links'],
     readme: 'none',
     navigationLinks: {
         GitHub: 'https://github.com/THEOplayer/web-ui/tree/main/react'
     },
+    highlightLanguages: ['jsx'],
     externalDocumentation: {
         theoplayer: {
             dtsPath: '~/THEOplayer.d.ts',

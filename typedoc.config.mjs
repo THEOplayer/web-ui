@@ -2,7 +2,7 @@
 export default {
     entryPoints: ['src/index.ts'],
     out: 'api',
-    sitemapBaseUrl: 'https://theoplayer.github.io/web-ui/api/',
+    hostedBaseUrl: 'https://theoplayer.github.io/web-ui/api/',
     readme: 'none',
     plugin: ['typedoc-plugin-external-resolver', 'typedoc-plugin-mdn-links'],
     navigationLinks: {
