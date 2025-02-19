@@ -18,7 +18,7 @@ the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 
 ## Motivation
 
-The current THEOplayer Web SDK comes with a built-in UI based on [video.js](https://github.com/videojs/video.js) through [the `Player` constructor](https://www.theoplayer.com/docs/theoplayer/v6/api-reference/web/classes/Player.html). This new UI aims to solve some limitations from the old approach:
+The current THEOplayer Web SDK comes with a built-in UI based on [video.js](https://github.com/videojs/video.js) through [the `Player` constructor](https://www.theoplayer.com/docs/theoplayer/v8/api-reference/web/classes/Player.html). This new UI aims to solve some limitations from the old approach:
 
 -   Designed with customization in mind. With the old UI, customizing anything beyond changing some text and icon colors was difficult, and could break in unpredictable ways when updating to a new THEOplayer version. With the new UI, all components can be customized in a variety of ways with well-documented attributes and CSS custom properties.
 -   Built for the modern web. The old UI was built at a time when Internet Explorer was still a major browser, so it couldn't use newer web technologies. The new UI breaks with the past and takes full advantage of Web Components, so it works well in modern web apps.

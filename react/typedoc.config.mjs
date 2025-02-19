@@ -13,7 +13,7 @@ export default {
     externalDocumentation: {
         theoplayer: {
             dtsPath: '~/THEOplayer.d.ts',
-            externalBaseURL: 'https://www.theoplayer.com/docs/theoplayer/v6/api-reference/web'
+            externalBaseURL: 'https://www.theoplayer.com/docs/theoplayer/v8/api-reference/web'
         },
         '@theoplayer/web-ui': {
             dtsPath: '~/dist/THEOplayerUI.d.ts',
