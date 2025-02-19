@@ -1,5 +1,5 @@
-{
-  "$schema": "https://typedoc.org/schema.json",
+/** @type {import('typedoc').TypeDocOptions} */
+export default {
   "entryPoints": ["src/index.ts"],
   "out": "api",
   "sitemapBaseUrl": "https://theoplayer.github.io/web-ui/api/",

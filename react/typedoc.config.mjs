@@ -1,5 +1,5 @@
-{
-  "$schema": "https://typedoc.org/schema.json",
+/** @type {import('typedoc').TypeDocOptions} */
+export default {
   "extends": ["../typedoc.json"],
   "entryPoints": ["src/index.ts"],
   "out": "../react-api",
