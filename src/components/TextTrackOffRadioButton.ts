@@ -1,7 +1,7 @@
 import { RadioButton } from './RadioButton';
 import { buttonTemplate } from './Button';
 import type { TextTracksList } from 'theoplayer/chromeless';
-import { isSubtitleTrack } from '../util/TrackUtils';
+import { isNonForcedSubtitleTrack, isSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import { createTemplate } from '../util/TemplateUtils';
 
@@ -60,7 +60,7 @@ export class TextTrackOffRadioButton extends RadioButton {
 }
 
 function hasShowingSubtitleTrack(trackList: TextTracksList): boolean {
-    return trackList.filter(isSubtitleTrack).some((x) => x.mode === 'showing');
+    return trackList.filter(isNonForcedSubtitleTrack).some((x) => x.mode === 'showing');
 }
 
 function disableSubtitleTracks(trackList: TextTracksList): void {
