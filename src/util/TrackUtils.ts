@@ -4,6 +4,10 @@ export function isSubtitleTrack(track: TextTrack): boolean {
     return track.kind === 'subtitles' || track.kind === 'captions';
 }
 
+export function isNonForcedSubtitleTrack(track: TextTrack): boolean {
+    return isSubtitleTrack(track) && !track.forced;
+}
+
 export function getTargetQualities(videoTrack: MediaTrack | undefined): Quality[] | undefined {
     let targetQualities = videoTrack?.targetQuality;
     if (targetQualities !== undefined && !Array.isArray(targetQualities)) {

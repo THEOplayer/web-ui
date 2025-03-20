@@ -4,7 +4,7 @@ import languageMenuHtml from './LanguageMenu.html';
 import languageMenuCss from './LanguageMenu.css';
 import { StateReceiverMixin } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer/chromeless';
-import { isSubtitleTrack } from '../util/TrackUtils';
+import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
 import { createTemplate } from '../util/TemplateUtils';
@@ -64,7 +64,7 @@ export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
     };
 
     private readonly _updateTextTracks = (): void => {
-        const newSubtitleTracks: readonly TextTrack[] = this._player?.textTracks.filter(isSubtitleTrack) ?? [];
+        const newSubtitleTracks: readonly TextTrack[] = this._player?.textTracks.filter(isNonForcedSubtitleTrack) ?? [];
         // Hide subtitle track selection if there are no tracks. If there's one, we still show an "off" option.
         toggleAttribute(this, Attribute.HAS_SUBTITLES, newSubtitleTracks.length > 0);
     };

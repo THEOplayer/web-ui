@@ -15,6 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## v1.9.5 (2025-03-20)
+
+-   💅 Forced subtitles are no longer shown in the subtitle menu. ([#92](https://github.com/THEOplayer/web-ui/pull/92))
+
 ## v1.9.4 (2025-02-19)
 
 -   No changes

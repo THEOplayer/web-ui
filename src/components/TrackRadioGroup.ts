@@ -6,7 +6,7 @@ import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTrack
 import { Attribute } from '../util/Attribute';
 import { MediaTrackRadioButton } from './MediaTrackRadioButton';
 import { TextTrackRadioButton } from './TextTrackRadioButton';
-import { isSubtitleTrack } from '../util/TrackUtils';
+import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
 import { TextTrackOffRadioButton } from './TextTrackOffRadioButton';
 import { fromArrayLike, toggleAttribute } from '../util/CommonUtils';
 import { createEvent } from '../util/EventUtils';
@@ -151,7 +151,7 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
         } else if (trackType === 'video') {
             return this._player.videoTracks;
         } else if (trackType === 'subtitles') {
-            return this._player.textTracks.filter(isSubtitleTrack);
+            return this._player.textTracks.filter(isNonForcedSubtitleTrack);
         } else {
             return [];
         }
