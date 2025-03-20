@@ -60,7 +60,7 @@ export class TextTrackOffRadioButton extends RadioButton {
 }
 
 function hasShowingSubtitleTrack(trackList: TextTracksList): boolean {
-    return trackList.filter(isNonForcedSubtitleTrack).some((x) => x.mode === 'showing');
+    return trackList.some((track) => isNonForcedSubtitleTrack(track) && track.mode === 'showing');
 }
 
 function disableSubtitleTracks(trackList: TextTracksList): void {
