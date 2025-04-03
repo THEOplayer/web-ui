@@ -1,6 +1,6 @@
 {
   "name": "@theoplayer/react-ui",
-  "version": "1.9.5",
+  "version": "1.10.0",
   "description": "React component library for the THEOplayer Web SDK",
   "main": "dist/THEOplayerReactUI.js",
   "module": "dist/THEOplayerReactUI.mjs",
@@ -52,12 +52,12 @@
   },
   "dependencies": {
     "@lit/react": "^1.0.7",
-    "@theoplayer/web-ui": "^1.9.5"
+    "@theoplayer/web-ui": "^1.10.0"
   },
   "peerDependencies": {
     "@types/react": "^16.3.0 || ^17 || ^18",
     "react": "^16.3.0 || ^17 || ^18",
-    "theoplayer": "^7 || ^8"
+    "theoplayer": "^7 || ^8|| ^9"
   },
   "devDependencies": {
     "@rollup/plugin-json": "^6.1.0",
