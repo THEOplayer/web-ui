@@ -1,23 +1,23 @@
 import { html } from 'lit-html';
 
 export default html`
-<theoplayer-menu>
-    <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">Language</slot></span>
-    <theoplayer-settings-menu-button
-        class="theoplayer-menu-heading-button"
-        menu="subtitle-options-menu"
-        slot="heading"
-    ></theoplayer-settings-menu-button>
-    <div part="content">
-        <div part="audio">
-            <h2>Audio</h2>
-            <theoplayer-track-radio-group track-type="audio"></theoplayer-track-radio-group>
+    <theoplayer-menu>
+        <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">Language</slot></span>
+        <theoplayer-settings-menu-button
+            class="theoplayer-menu-heading-button"
+            menu="subtitle-options-menu"
+            slot="heading"
+        ></theoplayer-settings-menu-button>
+        <div part="content">
+            <div part="audio">
+                <h2>Audio</h2>
+                <theoplayer-track-radio-group track-type="audio"></theoplayer-track-radio-group>
+            </div>
+            <div part="subtitles">
+                <h2>Subtitles</h2>
+                <theoplayer-track-radio-group track-type="subtitles" show-off></theoplayer-track-radio-group>
+            </div>
         </div>
-        <div part="subtitles">
-            <h2>Subtitles</h2>
-            <theoplayer-track-radio-group track-type="subtitles" show-off></theoplayer-track-radio-group>
-        </div>
-    </div>
-</theoplayer-menu>
-<theoplayer-text-track-style-menu id="subtitle-options-menu"></theoplayer-text-track-style-menu>
+    </theoplayer-menu>
+    <theoplayer-text-track-style-menu id="subtitle-options-menu"></theoplayer-text-track-style-menu>
 `;
