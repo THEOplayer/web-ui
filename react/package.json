@@ -62,7 +62,7 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-replace": "^6.0.2",
-    "@swc/cli": "^0.6.0",
+    "@swc/cli": "^0.7.3",
     "@swc/core": "^1.10.15",
     "@swc/helpers": "^0.5.15",
     "@types/react": "^18.2.79",
