@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { MenuGroup } from './MenuGroup';
 import * as shadyCss from '@webcomponents/shadycss';
 import languageMenuCss from './LanguageMenu.css';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer/chromeless';
 import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
@@ -23,7 +23,8 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  * @group Components
  */
 @customElement('theoplayer-language-menu')
-export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
+@stateReceiver(['player'])
+export class LanguageMenu extends MenuGroup {
     private _player: ChromelessPlayer | undefined;
     private _audioTrackList: MediaTrackList | undefined;
     private _textTrackList: TextTracksList | undefined;
