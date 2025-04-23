@@ -39,6 +39,26 @@ export function isStateReceiverElement(element: Element): element is StateReceiv
 }
 
 /**
+ * Decorates a custom element class, such that it will automatically receive selected state updates
+ * from an ancestor {@link UIContainer | `<theoplayer-ui>`} element.
+ *
+ * For each property name in `props`, the custom element *MUST* implement a corresponding property with a setter.
+ * For example, if `props` equals `["player", "fullscreen"]`, then the element must have writable `player` and `fullscreen`
+ * properties.
+ *
+ * @param props - The names of the properties this element will receive.
+ * @returns A class decorator.
+ * @see {@link StateReceiverElement}
+ */
+export const stateReceiver =
+    (props: Array<keyof StateReceiverPropertyMap>) =>
+    (target: Constructor<Element>, _context: ClassDecoratorContext<Constructor<Element>>): void => {
+        Object.defineProperty(target.prototype, StateReceiverProps, {
+            value: props
+        });
+    };
+
+/**
  * A [mixin class](https://www.typescriptlang.org/docs/handbook/mixins.html) to apply on the superclass of a custom element,
  * such that it will automatically receive selected state updates from an ancestor {@link UIContainer | `<theoplayer-ui>`} element.
  *
