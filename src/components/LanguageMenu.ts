@@ -1,5 +1,5 @@
 import { html, type TemplateResult } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { MenuGroup } from './MenuGroup';
 import * as shadyCss from '@webcomponents/shadycss';
 import languageMenuCss from './LanguageMenu.css';
@@ -32,15 +32,11 @@ export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
         return [...MenuGroup.observedAttributes, Attribute.HAS_AUDIO, Attribute.HAS_SUBTITLES];
     }
 
-    constructor() {
-        super();
-        this._upgradeProperty('player');
-    }
-
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
+    @property({ state: true })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
