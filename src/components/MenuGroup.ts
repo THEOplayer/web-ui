@@ -28,25 +28,37 @@ interface OpenMenuEntry {
  */
 @customElement('theoplayer-menu-group')
 export class MenuGroup extends LitElement {
-    @property({ reflect: true, type: Boolean, attribute: Attribute.MENU_OPENED })
-    private accessor _menuOpened: boolean = false;
+    private _menuOpened: boolean = false;
+
+    private get menuOpened_(): boolean {
+        return this._menuOpened;
+    }
+
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.MENU_OPENED })
+    private set menuOpened_(menuOpened: boolean) {
+        if (this._menuOpened === menuOpened) return;
+        this._menuOpened = menuOpened;
+        if (menuOpened) {
+            this.removeAttribute('hidden');
+            this.removeEventListener('keydown', this._onKeyDown);
+            this.addEventListener('keydown', this._onKeyDown);
+        } else {
+            this.setAttribute('hidden', '');
+            this.removeEventListener('keydown', this._onKeyDown);
+        }
+        const changeEvent: MenuChangeEvent = createCustomEvent(MENU_CHANGE_EVENT, { bubbles: true });
+        this.dispatchEvent(changeEvent);
+    }
+
     @query('slot')
     private accessor _menuSlot: HTMLSlotElement | null = null;
     private _menus: Array<Menu | MenuGroup> = [];
     private readonly _openMenuStack: OpenMenuEntry[] = [];
 
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
-
     connectedCallback(): void {
         super.connectedCallback();
 
-        if (!this._menuOpened) {
+        if (!this.menuOpened_) {
             this.setAttribute('hidden', '');
         }
     }
@@ -57,26 +69,6 @@ export class MenuGroup extends LitElement {
         root.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
         root.addEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
         return root;
-    }
-
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (newValue === oldValue) {
-            return;
-        }
-        if (attrName === Attribute.MENU_OPENED) {
-            const hasValue = this._menuOpened;
-            if (hasValue) {
-                this.removeAttribute('hidden');
-                this.removeEventListener('keydown', this._onKeyDown);
-                this.addEventListener('keydown', this._onKeyDown);
-            } else {
-                this.setAttribute('hidden', '');
-                this.removeEventListener('keydown', this._onKeyDown);
-            }
-            const changeEvent: MenuChangeEvent = createCustomEvent(MENU_CHANGE_EVENT, { bubbles: true });
-            this.dispatchEvent(changeEvent);
-        }
     }
 
     protected render(): TemplateResult {
@@ -145,7 +137,7 @@ export class MenuGroup extends LitElement {
             previousEntry.menu.closeMenu();
         }
         menuToOpen.openMenu();
-        this._menuOpened = true;
+        this.menuOpened_ = true;
 
         menuToOpen.focus();
         return true;
@@ -182,7 +174,7 @@ export class MenuGroup extends LitElement {
         const nextEntry = this.getCurrentMenu_();
         if (nextEntry !== undefined) {
             nextEntry.menu.openMenu();
-            this._menuOpened = true;
+            this.menuOpened_ = true;
             if (oldEntry.opener && nextEntry.menu.contains(oldEntry.opener)) {
                 oldEntry.opener.focus();
             } else {
@@ -191,7 +183,7 @@ export class MenuGroup extends LitElement {
             return true;
         }
 
-        this._menuOpened = false;
+        this.menuOpened_ = false;
         oldEntry.opener?.focus();
         return true;
     }
