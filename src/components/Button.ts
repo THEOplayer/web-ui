@@ -1,19 +1,21 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import buttonCss from './Button.css';
 import { Attribute } from '../util/Attribute';
-import { toggleAttribute } from '../util/CommonUtils';
-import { createTemplate } from '../util/TemplateUtils';
 import { isActivationKey } from '../util/KeyCode';
 
 export interface ButtonOptions {
     template: HTMLTemplateElement;
 }
 
-export function buttonTemplate(button: string, extraCss: string = ''): string {
-    return `<style>${buttonCss}\n${extraCss}</style>${button}`;
+export function buttonTemplate(button: string, extraCss: string = ''): HTMLTemplateResult {
+    return html`
+        <style>
+            ${extraCss}
+        </style>
+        ${button}
+    `;
 }
-
-const defaultTemplate = createTemplate('theoplayer-button', buttonTemplate('<slot></slot>'));
 
 /**
  * `<theoplayer-button>` - A basic button.
@@ -23,27 +25,20 @@ const defaultTemplate = createTemplate('theoplayer-button', buttonTemplate('<slo
  */
 // Based on howto-toggle-button
 // https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-toggle-button/howto-toggle-button.js
-export class Button extends HTMLElement {
-    static get observedAttributes() {
-        return [Attribute.DISABLED];
-    }
+@customElement('theoplayer-button')
+export class Button extends LitElement {
+    static styles = [buttonCss];
+
+    private _disabled: boolean = false;
 
     /**
      * Creates a basic button.
      *
      * By default, the button renders the contents of its direct children (i.e. it has a single unnamed `<slot>`).
-     * Subclasses can override this by passing a different {@link ButtonOptions.template} in the options,
-     * using {@link buttonTemplate} to correctly style the custom template.
-     *
-     * @param options - The options for this button.
+     * Subclasses can override this by overriding {@link render}.
      */
-    constructor(options?: ButtonOptions) {
+    constructor() {
         super();
-        const template = options?.template ?? defaultTemplate();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
-
-        this._upgradeProperty('disabled');
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -55,7 +50,7 @@ export class Button extends HTMLElement {
     }
 
     connectedCallback(): void {
-        shadyCss.styleElement(this);
+        super.connectedCallback();
 
         if (!this.hasAttribute('role')) {
             this.setAttribute('role', 'button');
@@ -67,7 +62,7 @@ export class Button extends HTMLElement {
             // Let the screen reader user know that the text of the button may change
             this.setAttribute(Attribute.ARIA_LIVE, 'polite');
         }
-        if (!this.hasAttribute(Attribute.DISABLED)) {
+        if (!this._disabled) {
             this._enable();
         }
     }
@@ -83,25 +78,17 @@ export class Button extends HTMLElement {
      *
      * When disabled, the button cannot be clicked.
      */
-    get disabled() {
-        return this.hasAttribute(Attribute.DISABLED);
+    get disabled(): boolean {
+        return this._disabled;
     }
 
-    set disabled(disabled: boolean) {
-        toggleAttribute(this, Attribute.DISABLED, disabled);
-    }
-
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (attrName === Attribute.DISABLED && newValue !== oldValue) {
-            const hasValue = newValue != null;
-            if (hasValue) {
-                this._disable();
-            } else {
-                this._enable();
-            }
-        }
-        if (Button.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
+    @property({ reflect: true, type: Boolean, attribute: Attribute.DISABLED })
+    set disabled(value: boolean) {
+        this._disabled = value;
+        if (value) {
+            this._disable();
+        } else {
+            this._enable();
         }
     }
 
@@ -151,6 +138,10 @@ export class Button extends HTMLElement {
         }
     };
 
+    protected render(): HTMLTemplateResult {
+        return html`<slot></slot>`;
+    }
+
     /**
      * Handle a button click.
      *
@@ -158,8 +149,6 @@ export class Button extends HTMLElement {
      */
     protected handleClick(): void {}
 }
-
-customElements.define('theoplayer-button', Button);
 
 declare global {
     interface HTMLElementTagNameMap {
