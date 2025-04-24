@@ -1,24 +1,14 @@
-import * as shadyCss from '@webcomponents/shadycss';
-import { Button, buttonTemplate } from './Button';
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import { Button } from './Button';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import playButtonCss from './PlayButton.css';
 import playIcon from '../icons/play.svg';
 import pauseIcon from '../icons/pause.svg';
 import replayIcon from '../icons/replay.svg';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
-import { toggleAttribute } from '../util/CommonUtils';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate(
-    'theoplayer-play-button',
-    buttonTemplate(
-        `<span part="play-icon"><slot name="play-icon">${playIcon}</slot></span>` +
-            `<span part="pause-icon"><slot name="pause-icon">${pauseIcon}</slot></span>` +
-            `<span part="replay-icon"><slot name="replay-icon">${replayIcon}</slot></span>`,
-        playButtonCss
-    )
-);
 
 const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied', 'sourcechange'] as const;
 
@@ -29,19 +19,12 @@ const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied', 'sourcechange'] 
  * @attribute `ended` (readonly) - Whether the player is ended. Reflects `ui.player.ended`.
  * @group Components
  */
-export class PlayButton extends StateReceiverMixin(Button, ['player']) {
-    static get observedAttributes() {
-        return [...Button.observedAttributes, Attribute.PAUSED, Attribute.ENDED];
-    }
+@customElement('theoplayer-play-button')
+@stateReceiver(['player'])
+export class PlayButton extends Button {
+    static styles = [...Button.styles, playButtonCss];
 
     private _player: ChromelessPlayer | undefined;
-
-    constructor() {
-        super({ template: template() });
-        this._upgradeProperty('paused');
-        this._upgradeProperty('ended');
-        this._upgradeProperty('player');
-    }
 
     override connectedCallback(): void {
         super.connectedCallback();
@@ -49,21 +32,11 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
         this._updateAriaLabel();
     }
 
-    get paused(): boolean {
-        return this.hasAttribute(Attribute.PAUSED);
-    }
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.PAUSED })
+    accessor paused: boolean = false;
 
-    set paused(paused: boolean) {
-        toggleAttribute(this, Attribute.PAUSED, paused);
-    }
-
-    get ended(): boolean {
-        return this.hasAttribute(Attribute.ENDED);
-    }
-
-    set ended(ended: boolean) {
-        toggleAttribute(this, Attribute.ENDED, ended);
-    }
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.ENDED })
+    accessor ended: boolean = false;
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
@@ -128,7 +101,6 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
     override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (PlayButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
             this._updateAriaLabel();
         }
     }
@@ -137,9 +109,15 @@ export class PlayButton extends StateReceiverMixin(Button, ['player']) {
         const label = this.ended ? 'replay' : this.paused ? 'play' : 'pause';
         this.setAttribute(Attribute.ARIA_LABEL, label);
     }
-}
 
-customElements.define('theoplayer-play-button', PlayButton);
+    protected override render(): HTMLTemplateResult {
+        return html`
+            <span part="play-icon"><slot name="play-icon">${unsafeSVG(playIcon)}</slot></span>
+            <span part="pause-icon"><slot name="pause-icon">${unsafeSVG(pauseIcon)}</slot></span>
+            <span part="replay-icon"><slot name="replay-icon">${unsafeSVG(replayIcon)}</slot></span>
+        `;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {
