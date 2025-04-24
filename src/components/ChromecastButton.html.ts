@@ -1,7 +1,9 @@
-<span part="icon">
+import { html } from 'lit';
+
+export default (id: number) => html`<span part="icon">
     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="24">
         <defs>
-            <clipPath id="theoplayer-chromecast-rings-mask">
+            <clipPath id="theoplayer-chromecast-rings-mask-${id}">
                 <path d="M0-36h44V0H0z" />
             </clipPath>
         </defs>
@@ -13,7 +15,7 @@
             stroke="currentColor"
             stroke-width="4"
             transform="translate(2 42)"
-            clip-path="url(#theoplayer-chromecast-rings-mask)"
+            clip-path="url(#theoplayer-chromecast-rings-mask-${id})"
         >
             <circle stroke="none" cx="0" cy="0" r="30" />
             <circle class="theoplayer-chromecast-ring theoplayer-chromecast-ring1" stroke-width="6" cx="0" cy="0" r="3" />
@@ -22,4 +24,4 @@
             <path class="theoplayer-chromecast-ring theoplayer-chromecast-ring4" stroke-linecap="round" d="M0-20A20 20 0 0 1 20 0" />
         </g>
     </svg>
-</span>
+</span>`;

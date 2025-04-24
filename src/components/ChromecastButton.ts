@@ -1,15 +1,11 @@
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import { CastButton } from './CastButton';
 import chromecastButtonHtml from './ChromecastButton.html';
 import chromecastButtonCss from './ChromecastButton.css';
-import { buttonTemplate } from './Button';
 import { Attribute } from '../util/Attribute';
-import { createTemplate } from '../util/TemplateUtils';
+import { customElement } from 'lit/decorators.js';
 
-const template = createTemplate('theoplayer-chromecast-button', buttonTemplate(chromecastButtonHtml, chromecastButtonCss));
-
-const maskId = 'theoplayer-chromecast-rings-mask';
 let chromecastButtonId = 0;
 
 /**
@@ -17,20 +13,16 @@ let chromecastButtonId = 0;
  *
  * @group Components
  */
-export class ChromecastButton extends StateReceiverMixin(CastButton, ['player']) {
+@customElement('theoplayer-chromecast-button')
+@stateReceiver(['player'])
+export class ChromecastButton extends CastButton {
+    static styles = [...CastButton.styles, chromecastButtonCss];
+
     private _player: ChromelessPlayer | undefined;
+    private readonly _buttonId = ++chromecastButtonId;
 
     constructor() {
-        super({ template: template() });
-
-        // Make ID attributes unique
-        const id = ++chromecastButtonId;
-        const mask = this.shadowRoot!.querySelector<SVGClipPathElement>(`svg clipPath#${maskId}`);
-        const rings = this.shadowRoot!.querySelector<SVGGElement>(`svg .theoplayer-chromecast-rings`)!;
-        const uniqueMaskId = `${maskId}-${id}`;
-        mask?.setAttribute('id', uniqueMaskId);
-        rings.setAttribute('clip-path', uniqueMaskId);
-
+        super();
         this._upgradeProperty('player');
     }
 
@@ -60,9 +52,11 @@ export class ChromecastButton extends StateReceiverMixin(CastButton, ['player'])
             this.castState === 'connecting' || this.castState === 'connected' ? 'stop casting to Chromecast' : 'start casting to Chromecast';
         this.setAttribute(Attribute.ARIA_LABEL, label);
     }
-}
 
-customElements.define('theoplayer-chromecast-button', ChromecastButton);
+    protected override render() {
+        return chromecastButtonHtml(this._buttonId);
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {
