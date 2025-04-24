@@ -1,15 +1,14 @@
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { ChromelessPlayer as TheoPlayer, type TheoLiveApi } from 'theoplayer/chromeless';
-import settingsCss from './BadNetworkModeButton.css';
-import { buttonTemplate } from '../../Button';
+import badNetworkModeButtonCss from './BadNetworkModeButton.css';
 import settingsIcon from '../../../icons/settings.svg';
 import warningIcon from '../../../icons/warning.svg';
-import { StateReceiverMixin } from '../../StateReceiverMixin';
+import { stateReceiver } from '../../StateReceiverMixin';
 import { MenuButton } from '../../MenuButton';
 import { Attribute } from '../../../util/Attribute';
-import { createTemplate } from '../../../util/TemplateUtils';
-
-const html = `<span part="icon">${settingsIcon}<span part="warning-icon">${warningIcon}</span></span>`;
-const template = createTemplate('theolive-bad-network-button', buttonTemplate(html, settingsCss));
 
 /**
  * A menu button that opens a settings menu.
@@ -17,14 +16,16 @@ const template = createTemplate('theolive-bad-network-button', buttonTemplate(ht
  * @attribute `menu` - The ID of the settings menu.
  * @group Components
  */
-export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['player']) {
+@customElement('theolive-bad-network-button')
+@stateReceiver(['player'])
+export class BadNetworkModeButton extends MenuButton {
+    static styles = [...MenuButton.styles, badNetworkModeButtonCss];
+
     private _player: TheoPlayer | undefined;
     private _theoLive: TheoLiveApi | undefined;
-    private _warningIcon: HTMLElement | undefined;
 
-    constructor() {
-        super({ template: template() });
-    }
+    @state()
+    private accessor _inBadNetworkMode = false;
 
     override connectedCallback() {
         super.connectedCallback();
@@ -32,26 +33,21 @@ export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['playe
         if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
             this.setAttribute(Attribute.ARIA_LABEL, 'open settings menu');
         }
-
-        this._warningIcon = this.shadowRoot!.querySelector<HTMLElement>('[part="warning-icon"]') ?? undefined;
     }
 
     private readonly handleEnterBadNetworkMode_ = () => {
-        if (this._warningIcon) {
-            this._warningIcon.style.display = 'block';
-        }
+        this._inBadNetworkMode = true;
     };
 
     private readonly handleExitBadNetworkMode_ = () => {
-        if (this._warningIcon) {
-            this._warningIcon.style.display = 'none';
-        }
+        this._inBadNetworkMode = false;
     };
 
     get player(): TheoPlayer | undefined {
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: TheoPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -67,6 +63,13 @@ export class BadNetworkModeButton extends StateReceiverMixin(MenuButton, ['playe
             this._theoLive.addEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
         }
     }
-}
 
-customElements.define('theolive-bad-network-button', BadNetworkModeButton);
+    protected override render(): HTMLTemplateResult {
+        const warningStyles = {
+            display: this._inBadNetworkMode ? '' : 'none'
+        };
+        return html`<span part="icon"
+            >${unsafeSVG(settingsIcon)}<span part="warning-icon" style=${styleMap(warningStyles)}>${unsafeSVG(warningIcon)}</span></span
+        >`;
+    }
+}
