@@ -1,13 +1,11 @@
-import * as shadyCss from '@webcomponents/shadycss';
-import { LinkButton, linkButtonTemplate } from '../LinkButton';
-import { StateReceiverMixin } from '../StateReceiverMixin';
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { LinkButton } from '../LinkButton';
+import { stateReceiver } from '../StateReceiverMixin';
 import { Attribute } from '../../util/Attribute';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
-import { createTemplate } from '../../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-ad-clickthrough-button', linkButtonTemplate(`<slot>Visit Advertiser</slot>`));
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
@@ -16,19 +14,15 @@ const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as cons
  *
  * @group Components
  */
-export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['player']) {
+@customElement('theoplayer-ad-clickthrough-button')
+@stateReceiver(['player'])
+export class AdClickThroughButton extends LinkButton {
     private _player: ChromelessPlayer | undefined;
     private _ads: Ads | undefined;
-
-    static get observedAttributes() {
-        return [...LinkButton.observedAttributes, Attribute.CLICKTHROUGH];
-    }
+    private _clickThrough: string | null = null;
 
     constructor() {
-        super({ template: template() });
-
-        this._upgradeProperty('clickThrough');
-        this._upgradeProperty('player');
+        super();
     }
 
     override connectedCallback(): void {
@@ -42,21 +36,26 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
     }
 
     get clickThrough(): string | null {
-        return this.getAttribute(Attribute.CLICKTHROUGH);
+        return this._clickThrough;
     }
 
+    @property({ reflect: true, type: String, attribute: Attribute.CLICKTHROUGH })
     set clickThrough(clickThrough: string | null) {
-        if (clickThrough == null) {
-            this.removeAttribute(Attribute.CLICKTHROUGH);
-        } else {
-            this.setAttribute(Attribute.CLICKTHROUGH, clickThrough);
+        if (this._clickThrough === clickThrough) {
+            return;
         }
+        this._clickThrough = clickThrough;
+        this.href = clickThrough ? String(clickThrough).trim() : '#';
+        this.target = '_blank';
+        this.disabled = clickThrough == null;
+        this.style.display = clickThrough != null ? '' : 'none';
     }
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -66,24 +65,6 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
         this._ads = player?.ads;
         this._updateFromPlayer();
         this._ads?.addEventListener(AD_EVENTS, this._updateFromPlayer);
-    }
-
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (attrName === Attribute.CLICKTHROUGH && newValue !== oldValue) {
-            const hasValue = newValue != null;
-            const href = newValue ? String(newValue).trim() : '#';
-            this.setLink(href, '_blank');
-            this.disabled = !hasValue;
-            if (hasValue) {
-                this.style.display = '';
-            } else {
-                this.style.display = 'none';
-            }
-        }
-        if (AdClickThroughButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
     }
 
     private readonly _updateFromPlayer = () => {
@@ -116,9 +97,11 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
     protected override handleClick(): void {
         this._player?.pause();
     }
-}
 
-customElements.define('theoplayer-ad-clickthrough-button', AdClickThroughButton);
+    protected override renderLinkContent(): HTMLTemplateResult {
+        return html`<slot>Visit Advertiser</slot>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {
