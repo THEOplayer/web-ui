@@ -28,6 +28,8 @@ interface OpenMenuEntry {
  */
 @customElement('theoplayer-menu-group')
 export class MenuGroup extends LitElement {
+    static styles = [menuGroupCss];
+
     private _menuOpened: boolean = false;
 
     private get menuOpened_(): boolean {
@@ -72,17 +74,7 @@ export class MenuGroup extends LitElement {
     }
 
     protected render(): TemplateResult {
-        return this.renderMenuGroup(html`<slot @slotchange=${this._onMenuListChange}></slot>`);
-    }
-
-    protected renderMenuGroup(content: TemplateResult, extraCss: string | TemplateResult = ''): TemplateResult {
-        return html`
-            <style>
-                ${menuGroupCss}
-                ${extraCss}
-            </style>
-            ${content}
-        `;
+        return html`<slot @slotchange=${this._onMenuListChange}></slot>`;
     }
 
     protected override firstUpdated(): void {

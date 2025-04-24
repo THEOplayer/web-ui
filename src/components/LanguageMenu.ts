@@ -1,7 +1,6 @@
 import { html, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { MenuGroup } from './MenuGroup';
-import * as shadyCss from '@webcomponents/shadycss';
 import languageMenuCss from './LanguageMenu.css';
 import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer/chromeless';
@@ -24,6 +23,8 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 @customElement('theoplayer-language-menu')
 @stateReceiver(['player'])
 export class LanguageMenu extends MenuGroup {
+    static styles = [...MenuGroup.styles, languageMenuCss];
+
     private _player: ChromelessPlayer | undefined;
     private _audioTrackList: MediaTrackList | undefined;
     private _textTrackList: TextTracksList | undefined;
@@ -67,30 +68,27 @@ export class LanguageMenu extends MenuGroup {
     };
 
     protected override render(): TemplateResult {
-        return super.renderMenuGroup(
-            html`
-                <theoplayer-menu>
-                    <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">Language</slot></span>
-                    <theoplayer-settings-menu-button
-                        class="theoplayer-menu-heading-button"
-                        menu="subtitle-options-menu"
-                        slot="heading"
-                    ></theoplayer-settings-menu-button>
-                    <div part="content">
-                        <div part="audio">
-                            <h2>Audio</h2>
-                            <theoplayer-track-radio-group track-type="audio"></theoplayer-track-radio-group>
-                        </div>
-                        <div part="subtitles">
-                            <h2>Subtitles</h2>
-                            <theoplayer-track-radio-group track-type="subtitles" show-off></theoplayer-track-radio-group>
-                        </div>
+        return html`
+            <theoplayer-menu>
+                <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">Language</slot></span>
+                <theoplayer-settings-menu-button
+                    class="theoplayer-menu-heading-button"
+                    menu="subtitle-options-menu"
+                    slot="heading"
+                ></theoplayer-settings-menu-button>
+                <div part="content">
+                    <div part="audio">
+                        <h2>Audio</h2>
+                        <theoplayer-track-radio-group track-type="audio"></theoplayer-track-radio-group>
                     </div>
-                </theoplayer-menu>
-                <theoplayer-text-track-style-menu id="subtitle-options-menu"></theoplayer-text-track-style-menu>
-            `,
-            languageMenuCss
-        );
+                    <div part="subtitles">
+                        <h2>Subtitles</h2>
+                        <theoplayer-track-radio-group track-type="subtitles" show-off></theoplayer-track-radio-group>
+                    </div>
+                </div>
+            </theoplayer-menu>
+            <theoplayer-text-track-style-menu id="subtitle-options-menu"></theoplayer-text-track-style-menu>
+        `;
     }
 }
 
