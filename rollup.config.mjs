@@ -6,6 +6,7 @@ import minifyHtmlLiterals from 'rollup-plugin-minify-html-literals-v3';
 import postcss from 'rollup-plugin-postcss';
 import postcssPresetEnv from 'postcss-preset-env';
 import postcssMixins from 'postcss-mixins';
+import postcssLit from 'rollup-plugin-postcss-lit';
 import * as path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { string } from 'rollup-plugin-string';
@@ -159,6 +160,9 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
                 postcssMixins()
             ],
             minimize: production
+        }),
+        postcssLit({
+            include: './src/**/*.css'
         }),
         // Minify HTML and CSS.
         minifyHTML({
