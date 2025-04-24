@@ -1,11 +1,8 @@
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import { RadioButton } from './RadioButton';
-import { buttonTemplate } from './Button';
 import type { TextTracksList } from 'theoplayer/chromeless';
 import { isNonForcedSubtitleTrack, isSubtitleTrack } from '../util/TrackUtils';
-import { Attribute } from '../util/Attribute';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-text-track-off-radio-button', buttonTemplate(`<slot>Off</slot>`));
 
 const TRACK_EVENTS = ['change'] as const;
 
@@ -14,18 +11,15 @@ const TRACK_EVENTS = ['change'] as const;
  *
  * @group Components
  */
+@customElement('theoplayer-text-track-off-radio-button')
 export class TextTrackOffRadioButton extends RadioButton {
     private _trackList: TextTracksList | undefined = undefined;
-
-    constructor() {
-        super({ template: template() });
-        this._upgradeProperty('trackList');
-    }
 
     get trackList(): TextTracksList | undefined {
         return this._trackList;
     }
 
+    @property({ reflect: false, attribute: false })
     set trackList(trackList: TextTracksList | undefined) {
         if (this._trackList) {
             this._trackList.removeEventListener(TRACK_EVENTS, this._onTrackChange);
@@ -51,11 +45,12 @@ export class TextTrackOffRadioButton extends RadioButton {
         this._updateFromTrackList();
     };
 
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (attrName === Attribute.ARIA_CHECKED && oldValue !== newValue) {
-            this._updateTrackList();
-        }
+    protected override handleChange() {
+        this._updateTrackList();
+    }
+
+    protected override render(): HTMLTemplateResult {
+        return html`<slot>Off</slot>`;
     }
 }
 
@@ -70,8 +65,6 @@ function disableSubtitleTracks(trackList: TextTracksList): void {
         }
     }
 }
-
-customElements.define('theoplayer-text-track-off-radio-button', TextTrackOffRadioButton);
 
 declare global {
     interface HTMLElementTagNameMap {

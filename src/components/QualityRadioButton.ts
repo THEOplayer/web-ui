@@ -1,13 +1,7 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import { RadioButton } from './RadioButton';
-import { buttonTemplate } from './Button';
 import type { MediaTrack, VideoQuality } from 'theoplayer/chromeless';
-import { setTextContent } from '../util/CommonUtils';
-import { Attribute } from '../util/Attribute';
 import { formatQualityLabel } from '../util/TrackUtils';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-quality-radio-button', buttonTemplate(`<slot></slot>`));
+import { customElement, property, state } from 'lit/decorators.js';
 
 const TRACK_EVENTS = ['activequalitychanged', 'targetqualitychanged'] as const;
 const QUALITY_EVENTS = ['update'] as const;
@@ -18,18 +12,13 @@ const QUALITY_EVENTS = ['update'] as const;
  *
  * @group Components
  */
+@customElement('theoplayer-quality-radio-button')
 export class QualityRadioButton extends RadioButton {
-    private _slotEl: HTMLSlotElement;
     private _track: MediaTrack | undefined = undefined;
     private _quality: VideoQuality | undefined = undefined;
 
-    constructor() {
-        super({ template: template() });
-        this._slotEl = this.shadowRoot!.querySelector('slot')!;
-
-        this._upgradeProperty('track');
-        this._upgradeProperty('quality');
-    }
+    @state()
+    private accessor _qualityLabel = '';
 
     /**
      * The video track containing the quality being controlled.
@@ -38,6 +27,7 @@ export class QualityRadioButton extends RadioButton {
         return this._track;
     }
 
+    @property({ reflect: false, attribute: false })
     set track(track: MediaTrack | undefined) {
         if (this._track === track) {
             return;
@@ -59,6 +49,7 @@ export class QualityRadioButton extends RadioButton {
         return this._quality;
     }
 
+    @property({ reflect: false, attribute: false })
     set quality(quality: VideoQuality | undefined) {
         if (this._quality === quality) {
             return;
@@ -93,30 +84,19 @@ export class QualityRadioButton extends RadioButton {
     };
 
     private readonly _updateFromQuality = () => {
-        setTextContent(this._slotEl, formatQualityLabel(this._quality) ?? 'Automatic');
+        this._qualityLabel = formatQualityLabel(this._quality) ?? 'Automatic';
     };
+
+    protected override handleChange(): void {
+        this._updateTargetQuality();
+    }
 
     private _updateTargetQuality(): void {
         if (this._track && this.checked) {
             this._track.targetQuality = this._quality;
         }
     }
-
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (newValue === oldValue) {
-            return;
-        }
-        if (attrName === Attribute.ARIA_CHECKED) {
-            this._updateTargetQuality();
-        }
-        if (QualityRadioButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
-    }
 }
-
-customElements.define('theoplayer-quality-radio-button', QualityRadioButton);
 
 declare global {
     interface HTMLElementTagNameMap {
