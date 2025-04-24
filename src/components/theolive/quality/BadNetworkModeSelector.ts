@@ -1,16 +1,9 @@
 import { AbstractQualitySelector } from './AbstractQualitySelector';
-import { setTextContent } from '../../../util/CommonUtils';
-import { createTemplate } from '../../../util/TemplateUtils';
-import { buttonTemplate } from '../../Button';
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
-const template = createTemplate('theolive-bad-network-quality-selector', buttonTemplate('<slot></slot>'));
-
+@customElement('theolive-bad-network-quality-selector')
 export class BadNetworkModeSelector extends AbstractQualitySelector {
-    constructor() {
-        super({ template: template() });
-        setTextContent(this._slotEl, 'Low Quality');
-    }
-
     handleEnterBadNetworkMode() {
         this.update_();
     }
@@ -30,11 +23,13 @@ export class BadNetworkModeSelector extends AbstractQualitySelector {
         }
     }
 
-    protected handleChecked(checked: boolean) {
-        if (checked && this.player && this.player.theoLive) {
+    protected handleChange(): void {
+        if (this.checked && this.player && this.player.theoLive) {
             this.player.theoLive.badNetworkMode = true;
         }
     }
-}
 
-customElements.define('theolive-bad-network-quality-selector', BadNetworkModeSelector);
+    protected override render(): HTMLTemplateResult {
+        return html`<slot>Low Quality</slot>`;
+    }
+}
