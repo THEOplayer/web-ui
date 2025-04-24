@@ -1,13 +1,11 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 import textDisplayCss from '../TextDisplay.css';
 import adDisplayCss from './AdDisplay.css';
-import { StateReceiverMixin } from '../StateReceiverMixin';
+import { stateReceiver } from '../StateReceiverMixin';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
-import { arrayFind, setTextContent } from '../../util/CommonUtils';
+import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
-import { createTemplate } from '../../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-ad-display', `<style>${textDisplayCss}\n${adDisplayCss}</style><span></span>`);
 
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'adskip', 'addad', 'updatead'] as const;
 
@@ -17,30 +15,19 @@ const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak
  *
  * @group Components
  */
-export class AdDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
-    private readonly _spanEl: HTMLElement;
+@customElement('theoplayer-ad-display')
+@stateReceiver(['player'])
+export class AdDisplay extends LitElement {
+    static styles = [textDisplayCss, adDisplayCss];
+
     private _player: ChromelessPlayer | undefined;
     private _ads: Ads | undefined;
 
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-        this._spanEl = shadowRoot.querySelector('span')!;
-
-        this._upgradeProperty('player');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
+    @state()
+    private accessor _text: string = '';
 
     connectedCallback(): void {
-        shadyCss.styleElement(this);
+        super.connectedCallback();
         this._updateFromPlayer();
     }
 
@@ -48,6 +35,7 @@ export class AdDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -63,7 +51,7 @@ export class AdDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
         const ads = this._player?.ads;
         const linearAds = (ads?.currentAdBreak?.ads ?? []).filter(isLinearAd);
         if (ads === undefined || !ads.playing || linearAds.length === 0) {
-            setTextContent(this._spanEl, '');
+            this._text = '';
             this.style.display = 'none';
             return;
         }
@@ -73,18 +61,20 @@ export class AdDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
             if (currentLinearAd) {
                 const currentAdIndex = linearAds.indexOf(currentLinearAd);
                 if (currentAdIndex >= 0) {
-                    setTextContent(this._spanEl, `Ad ${currentAdIndex + 1} of ${linearAds.length}`);
+                    this._text = `Ad ${currentAdIndex + 1} of ${linearAds.length}`;
                     this.style.display = '';
                     return;
                 }
             }
         }
-        setTextContent(this._spanEl, 'Ad');
+        this._text = 'Ad';
         this.style.display = '';
     };
-}
 
-customElements.define('theoplayer-ad-display', AdDisplay);
+    protected override render(): HTMLTemplateResult {
+        return html`<span>${this._text}</span>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {
