@@ -3,10 +3,53 @@ import { customElement } from 'lit/decorators.js';
 import { MenuGroup } from './MenuGroup';
 import textTrackStyleMenuCss from './TextTrackStyleMenu.css';
 import menuTableCss from './MenuTable.css';
+import type { EdgeStyle } from 'theoplayer/chromeless';
 
 // Load components used in template
 import './TextTrackStyleDisplay';
 import './TextTrackStyleRadioGroup';
+
+const colorOptions: ReadonlyArray<{ label: string; value: `rgb(${number},${number},${number})` | '' }> = [
+    { label: 'Default', value: '' },
+    { label: 'White', value: 'rgb(255,255,255)' },
+    { label: 'Yellow', value: 'rgb(255,255,0)' },
+    { label: 'Green', value: 'rgb(0,255,0)' },
+    { label: 'Cyan', value: 'rgb(0,255,255)' },
+    { label: 'Blue', value: 'rgb(0,0,255)' },
+    { label: 'Magenta', value: 'rgb(255,0,255)' },
+    { label: 'Red', value: 'rgb(255,0,0)' },
+    { label: 'Black', value: 'rgb(0,0,0)' }
+];
+const fontFamilyOptions: ReadonlyArray<{ label: string; value: string }> = [
+    { label: 'Default', value: '' },
+    { label: 'Monospace Serif', value: '"Courier New", Courier, "Nimbus Mono L", "Cutive Mono", monospace' },
+    { label: 'Proportional Serif', value: '"Times New Roman", Times, Georgia, Cambria, "PT Serif Caption", serif' },
+    { label: 'Monospace Sans', value: '"Deja Vu Sans Mono", "Lucida Console", Monaco, Consolas, "PT Mono", monospace' },
+    { label: 'Proportional Sans', value: 'Arial, Helvetica, Verdana, "PT Sans Caption", sans-serif' }
+];
+const sizeOptions: ReadonlyArray<{ label: string; value: `${number}%` | '' }> = [
+    { label: 'Default', value: '' },
+    { label: '50%', value: '50%' },
+    { label: '75%', value: '75%' },
+    { label: '100%', value: '100%' },
+    { label: '150%', value: '150%' },
+    { label: '200%', value: '200%' }
+];
+const opacityOptions: ReadonlyArray<{ label: string; value: `${number}` | '' }> = [
+    { label: 'Default', value: '' },
+    { label: '25%', value: '25' },
+    { label: '50%', value: '50' },
+    { label: '75%', value: '75' },
+    { label: '100%', value: '100' }
+];
+const edgeStyleOptions: ReadonlyArray<{ label: string; value: EdgeStyle | '' }> = [
+    { label: 'Default', value: '' },
+    { label: 'None', value: 'none' },
+    { label: 'Drop shadow', value: 'dropshadow' },
+    { label: 'Raised', value: 'raised' },
+    { label: 'Depressed', value: 'depressed' },
+    { label: 'Uniform', value: 'uniform' }
+];
 
 /**
  * `<theoplayer-text-track-style-menu>` - A menu to change the {@link theoplayer!TextTrackStyle | text track style} of the player.
@@ -104,113 +147,59 @@ export class TextTrackStyleMenu extends MenuGroup {
                 <theoplayer-menu id="font-family-menu" menu-close-on-input hidden>
                     <span slot="heading">Font family</span>
                     <theoplayer-text-track-style-radio-group property="fontFamily">
-                        <theoplayer-radio-button value="">Default</theoplayer-radio-button>
-                        <theoplayer-radio-button value='"Courier New", Courier, "Nimbus Mono L", "Cutive Mono", monospace'
-                            >Monospace Serif</theoplayer-radio-button
-                        >
-                        <theoplayer-radio-button value='"Times New Roman", Times, Georgia, Cambria, "PT Serif Caption", serif'
-                            >Proportional Serif</theoplayer-radio-button
-                        >
-                        <theoplayer-radio-button value='"Deja Vu Sans Mono", "Lucida Console", Monaco, Consolas, "PT Mono", monospace'
-                            >Monospace Sans</theoplayer-radio-button
-                        >
-                        <theoplayer-radio-button value='Arial, Helvetica, Verdana, "PT Sans Caption", sans-serif'
-                            >Proportional Sans</theoplayer-radio-button
-                        >
+                        ${fontFamilyOptions.map(
+                            ({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `
+                        )}
                     </theoplayer-text-track-style-radio-group>
                 </theoplayer-menu>
                 <theoplayer-menu id="font-color-menu" menu-close-on-input hidden>
                     <span slot="heading">Font color</span>
                     <theoplayer-text-track-style-radio-group property="fontColor">
-                        <theoplayer-radio-button value="">Default</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(255,255,255)">White</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(255,255,0)">Yellow</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(0,255,0)">Green</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(0,255,255)">Cyan</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(0,0,255)">Blue</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(255,0,255)">Magenta</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(255,0,0)">Red</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(0,0,0)">Black</theoplayer-radio-button>
+                        ${colorOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
                     </theoplayer-text-track-style-radio-group>
                 </theoplayer-menu>
                 <theoplayer-menu id="font-opacity-menu" menu-close-on-input hidden>
                     <span slot="heading">Font opacity</span>
                     <theoplayer-text-track-style-radio-group property="fontOpacity">
-                        <theoplayer-radio-button value="">Default</theoplayer-radio-button>
-                        <theoplayer-radio-button value="25">25%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="50">50%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="75">75%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="100">100%</theoplayer-radio-button>
+                        ${opacityOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
                     </theoplayer-text-track-style-radio-group>
                 </theoplayer-menu>
                 <theoplayer-menu id="font-size-menu" menu-close-on-input hidden>
                     <span slot="heading">Font size</span>
                     <theoplayer-text-track-style-radio-group property="fontSize">
-                        <theoplayer-radio-button value="">Default</theoplayer-radio-button>
-                        <theoplayer-radio-button value="50%">50%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="75%">75%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="100%">100%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="150%">150%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="200%">200%</theoplayer-radio-button>
+                        ${sizeOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
                     </theoplayer-text-track-style-radio-group>
                 </theoplayer-menu>
                 <theoplayer-menu id="background-color-menu" menu-close-on-input hidden>
                     <span slot="heading">Background color</span>
                     <theoplayer-text-track-style-radio-group property="backgroundColor">
-                        <theoplayer-radio-button value="">Default</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(255,255,255)">White</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(255,255,0)">Yellow</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(0,255,0)">Green</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(0,255,255)">Cyan</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(0,0,255)">Blue</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(255,0,255)">Magenta</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(255,0,0)">Red</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(0,0,0)">Black</theoplayer-radio-button>
+                        ${colorOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
                     </theoplayer-text-track-style-radio-group>
                 </theoplayer-menu>
                 <theoplayer-menu id="background-opacity-menu" menu-close-on-input hidden>
                     <span slot="heading">Background opacity</span>
                     <theoplayer-text-track-style-radio-group property="backgroundOpacity">
-                        <theoplayer-radio-button value="">Default</theoplayer-radio-button>
-                        <theoplayer-radio-button value="25">25%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="50">50%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="75">75%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="100">100%</theoplayer-radio-button>
+                        ${opacityOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
                     </theoplayer-text-track-style-radio-group>
                 </theoplayer-menu>
                 <theoplayer-menu id="window-color-menu" menu-close-on-input hidden>
                     <span slot="heading">Window color</span>
                     <theoplayer-text-track-style-radio-group property="windowColor">
-                        <theoplayer-radio-button value="">Default</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(255,255,255)">White</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(255,255,0)">Yellow</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(0,255,0)">Green</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(0,255,255)">Cyan</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(0,0,255)">Blue</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(255,0,255)">Magenta</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(255,0,0)">Red</theoplayer-radio-button>
-                        <theoplayer-radio-button value="rgb(0,0,0)">Black</theoplayer-radio-button>
+                        ${colorOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
                     </theoplayer-text-track-style-radio-group>
                 </theoplayer-menu>
                 <theoplayer-menu id="window-opacity-menu" menu-close-on-input hidden>
                     <span slot="heading">Window opacity</span>
                     <theoplayer-text-track-style-radio-group property="windowOpacity">
-                        <theoplayer-radio-button value="">Default</theoplayer-radio-button>
-                        <theoplayer-radio-button value="25">25%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="50">50%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="75">75%</theoplayer-radio-button>
-                        <theoplayer-radio-button value="100">100%</theoplayer-radio-button>
+                        ${opacityOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
                     </theoplayer-text-track-style-radio-group>
                 </theoplayer-menu>
                 <theoplayer-menu id="edge-style-menu" menu-close-on-input hidden>
                     <span slot="heading">Character edge style</span>
                     <theoplayer-text-track-style-radio-group property="edgeStyle">
-                        <theoplayer-radio-button value="">Default</theoplayer-radio-button>
-                        <theoplayer-radio-button value="none">None</theoplayer-radio-button>
-                        <theoplayer-radio-button value="dropshadow">Drop shadow</theoplayer-radio-button>
-                        <theoplayer-radio-button value="raised">Raised</theoplayer-radio-button>
-                        <theoplayer-radio-button value="depressed">Depressed</theoplayer-radio-button>
-                        <theoplayer-radio-button value="uniform">Uniform</theoplayer-radio-button>
+                        ${edgeStyleOptions.map(
+                            ({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `
+                        )}
                     </theoplayer-text-track-style-radio-group>
                 </theoplayer-menu>
             `,
