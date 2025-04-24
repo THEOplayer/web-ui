@@ -60,151 +60,146 @@ const edgeStyleOptions: ReadonlyArray<{ label: string; value: EdgeStyle | '' }> 
  */
 @customElement('theoplayer-text-track-style-menu')
 export class TextTrackStyleMenu extends MenuGroup {
+    static styles = [...MenuGroup.styles, menuTableCss, textTrackStyleMenuCss];
+
     protected override render(): TemplateResult {
-        return super.renderMenuGroup(
-            html`
-                <theoplayer-menu class="theoplayer-text-track-style-menu">
-                    <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">Subtitle options</slot></span>
-                    <theoplayer-text-track-style-reset-button
-                        class="theoplayer-menu-heading-button"
-                        slot="heading"
-                    ></theoplayer-text-track-style-reset-button>
-                    <table class="theoplayer-menu-table">
-                        <tr>
-                            <td><span>Font family</span></td>
-                            <td>
-                                <theoplayer-menu-button menu="font-family-menu">
-                                    <theoplayer-text-track-style-display property="fontFamily"></theoplayer-text-track-style-display>
-                                </theoplayer-menu-button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span>Font color</span></td>
-                            <td>
-                                <theoplayer-menu-button menu="font-color-menu">
-                                    <theoplayer-text-track-style-display property="fontColor"></theoplayer-text-track-style-display>
-                                </theoplayer-menu-button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span>Font opacity</span></td>
-                            <td>
-                                <theoplayer-menu-button menu="font-opacity-menu">
-                                    <theoplayer-text-track-style-display property="fontOpacity"></theoplayer-text-track-style-display>
-                                </theoplayer-menu-button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span>Font size</span></td>
-                            <td>
-                                <theoplayer-menu-button menu="font-size-menu">
-                                    <theoplayer-text-track-style-display property="fontSize"></theoplayer-text-track-style-display>
-                                </theoplayer-menu-button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span>Background color</span></td>
-                            <td>
-                                <theoplayer-menu-button menu="background-color-menu">
-                                    <theoplayer-text-track-style-display property="backgroundColor"></theoplayer-text-track-style-display>
-                                </theoplayer-menu-button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span>Background opacity</span></td>
-                            <td>
-                                <theoplayer-menu-button menu="background-opacity-menu">
-                                    <theoplayer-text-track-style-display property="backgroundOpacity"></theoplayer-text-track-style-display>
-                                </theoplayer-menu-button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span>Window color</span></td>
-                            <td>
-                                <theoplayer-menu-button menu="window-color-menu">
-                                    <theoplayer-text-track-style-display property="windowColor"></theoplayer-text-track-style-display>
-                                </theoplayer-menu-button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span>Window opacity</span></td>
-                            <td>
-                                <theoplayer-menu-button menu="window-opacity-menu">
-                                    <theoplayer-text-track-style-display property="windowOpacity"></theoplayer-text-track-style-display>
-                                </theoplayer-menu-button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span>Character edge style</span></td>
-                            <td>
-                                <theoplayer-menu-button menu="edge-style-menu">
-                                    <theoplayer-text-track-style-display property="edgeStyle"></theoplayer-text-track-style-display>
-                                </theoplayer-menu-button>
-                            </td>
-                        </tr>
-                    </table>
-                </theoplayer-menu>
-                <theoplayer-menu id="font-family-menu" menu-close-on-input hidden>
-                    <span slot="heading">Font family</span>
-                    <theoplayer-text-track-style-radio-group property="fontFamily">
-                        ${fontFamilyOptions.map(
-                            ({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `
-                        )}
-                    </theoplayer-text-track-style-radio-group>
-                </theoplayer-menu>
-                <theoplayer-menu id="font-color-menu" menu-close-on-input hidden>
-                    <span slot="heading">Font color</span>
-                    <theoplayer-text-track-style-radio-group property="fontColor">
-                        ${colorOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
-                    </theoplayer-text-track-style-radio-group>
-                </theoplayer-menu>
-                <theoplayer-menu id="font-opacity-menu" menu-close-on-input hidden>
-                    <span slot="heading">Font opacity</span>
-                    <theoplayer-text-track-style-radio-group property="fontOpacity">
-                        ${opacityOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
-                    </theoplayer-text-track-style-radio-group>
-                </theoplayer-menu>
-                <theoplayer-menu id="font-size-menu" menu-close-on-input hidden>
-                    <span slot="heading">Font size</span>
-                    <theoplayer-text-track-style-radio-group property="fontSize">
-                        ${sizeOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
-                    </theoplayer-text-track-style-radio-group>
-                </theoplayer-menu>
-                <theoplayer-menu id="background-color-menu" menu-close-on-input hidden>
-                    <span slot="heading">Background color</span>
-                    <theoplayer-text-track-style-radio-group property="backgroundColor">
-                        ${colorOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
-                    </theoplayer-text-track-style-radio-group>
-                </theoplayer-menu>
-                <theoplayer-menu id="background-opacity-menu" menu-close-on-input hidden>
-                    <span slot="heading">Background opacity</span>
-                    <theoplayer-text-track-style-radio-group property="backgroundOpacity">
-                        ${opacityOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
-                    </theoplayer-text-track-style-radio-group>
-                </theoplayer-menu>
-                <theoplayer-menu id="window-color-menu" menu-close-on-input hidden>
-                    <span slot="heading">Window color</span>
-                    <theoplayer-text-track-style-radio-group property="windowColor">
-                        ${colorOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
-                    </theoplayer-text-track-style-radio-group>
-                </theoplayer-menu>
-                <theoplayer-menu id="window-opacity-menu" menu-close-on-input hidden>
-                    <span slot="heading">Window opacity</span>
-                    <theoplayer-text-track-style-radio-group property="windowOpacity">
-                        ${opacityOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
-                    </theoplayer-text-track-style-radio-group>
-                </theoplayer-menu>
-                <theoplayer-menu id="edge-style-menu" menu-close-on-input hidden>
-                    <span slot="heading">Character edge style</span>
-                    <theoplayer-text-track-style-radio-group property="edgeStyle">
-                        ${edgeStyleOptions.map(
-                            ({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `
-                        )}
-                    </theoplayer-text-track-style-radio-group>
-                </theoplayer-menu>
-            `,
-            `${menuTableCss}\n${textTrackStyleMenuCss}`
-        );
+        return html`
+            <theoplayer-menu class="theoplayer-text-track-style-menu">
+                <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">Subtitle options</slot></span>
+                <theoplayer-text-track-style-reset-button
+                    class="theoplayer-menu-heading-button"
+                    slot="heading"
+                ></theoplayer-text-track-style-reset-button>
+                <table class="theoplayer-menu-table">
+                    <tr>
+                        <td><span>Font family</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="font-family-menu">
+                                <theoplayer-text-track-style-display property="fontFamily"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Font color</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="font-color-menu">
+                                <theoplayer-text-track-style-display property="fontColor"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Font opacity</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="font-opacity-menu">
+                                <theoplayer-text-track-style-display property="fontOpacity"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Font size</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="font-size-menu">
+                                <theoplayer-text-track-style-display property="fontSize"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Background color</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="background-color-menu">
+                                <theoplayer-text-track-style-display property="backgroundColor"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Background opacity</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="background-opacity-menu">
+                                <theoplayer-text-track-style-display property="backgroundOpacity"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Window color</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="window-color-menu">
+                                <theoplayer-text-track-style-display property="windowColor"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Window opacity</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="window-opacity-menu">
+                                <theoplayer-text-track-style-display property="windowOpacity"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Character edge style</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="edge-style-menu">
+                                <theoplayer-text-track-style-display property="edgeStyle"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                </table>
+            </theoplayer-menu>
+            <theoplayer-menu id="font-family-menu" menu-close-on-input hidden>
+                <span slot="heading">Font family</span>
+                <theoplayer-text-track-style-radio-group property="fontFamily">
+                    ${fontFamilyOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                </theoplayer-text-track-style-radio-group>
+            </theoplayer-menu>
+            <theoplayer-menu id="font-color-menu" menu-close-on-input hidden>
+                <span slot="heading">Font color</span>
+                <theoplayer-text-track-style-radio-group property="fontColor">
+                    ${colorOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                </theoplayer-text-track-style-radio-group>
+            </theoplayer-menu>
+            <theoplayer-menu id="font-opacity-menu" menu-close-on-input hidden>
+                <span slot="heading">Font opacity</span>
+                <theoplayer-text-track-style-radio-group property="fontOpacity">
+                    ${opacityOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                </theoplayer-text-track-style-radio-group>
+            </theoplayer-menu>
+            <theoplayer-menu id="font-size-menu" menu-close-on-input hidden>
+                <span slot="heading">Font size</span>
+                <theoplayer-text-track-style-radio-group property="fontSize">
+                    ${sizeOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                </theoplayer-text-track-style-radio-group>
+            </theoplayer-menu>
+            <theoplayer-menu id="background-color-menu" menu-close-on-input hidden>
+                <span slot="heading">Background color</span>
+                <theoplayer-text-track-style-radio-group property="backgroundColor">
+                    ${colorOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                </theoplayer-text-track-style-radio-group>
+            </theoplayer-menu>
+            <theoplayer-menu id="background-opacity-menu" menu-close-on-input hidden>
+                <span slot="heading">Background opacity</span>
+                <theoplayer-text-track-style-radio-group property="backgroundOpacity">
+                    ${opacityOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                </theoplayer-text-track-style-radio-group>
+            </theoplayer-menu>
+            <theoplayer-menu id="window-color-menu" menu-close-on-input hidden>
+                <span slot="heading">Window color</span>
+                <theoplayer-text-track-style-radio-group property="windowColor">
+                    ${colorOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                </theoplayer-text-track-style-radio-group>
+            </theoplayer-menu>
+            <theoplayer-menu id="window-opacity-menu" menu-close-on-input hidden>
+                <span slot="heading">Window opacity</span>
+                <theoplayer-text-track-style-radio-group property="windowOpacity">
+                    ${opacityOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                </theoplayer-text-track-style-radio-group>
+            </theoplayer-menu>
+            <theoplayer-menu id="edge-style-menu" menu-close-on-input hidden>
+                <span slot="heading">Character edge style</span>
+                <theoplayer-text-track-style-radio-group property="edgeStyle">
+                    ${edgeStyleOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                </theoplayer-text-track-style-radio-group>
+            </theoplayer-menu>
+        `;
     }
 }
 
