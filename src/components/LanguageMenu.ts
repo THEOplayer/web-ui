@@ -7,7 +7,6 @@ import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer/chromeless';
 import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
-import { toggleAttribute } from '../util/CommonUtils';
 
 // Load components used in template
 import './TrackRadioGroup';
@@ -29,10 +28,6 @@ export class LanguageMenu extends MenuGroup {
     private _audioTrackList: MediaTrackList | undefined;
     private _textTrackList: TextTracksList | undefined;
 
-    static get observedAttributes() {
-        return [...MenuGroup.observedAttributes, Attribute.HAS_AUDIO, Attribute.HAS_SUBTITLES];
-    }
-
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
@@ -53,24 +48,23 @@ export class LanguageMenu extends MenuGroup {
         this._textTrackList?.addEventListener(TRACK_EVENTS, this._updateTextTracks);
     }
 
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_AUDIO })
+    private accessor _hasAudioTracks: boolean = false;
+
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_SUBTITLES })
+    private accessor _hasSubtitles: boolean = false;
+
     private readonly _updateAudioTracks = (): void => {
         const newAudioTracks: readonly MediaTrack[] = this._player?.audioTracks ?? [];
         // Hide audio track selection if there's only one track.
-        toggleAttribute(this, Attribute.HAS_AUDIO, newAudioTracks.length > 1);
+        this._hasAudioTracks = newAudioTracks.length > 1;
     };
 
     private readonly _updateTextTracks = (): void => {
         const newSubtitleTracks: readonly TextTrack[] = this._player?.textTracks.filter(isNonForcedSubtitleTrack) ?? [];
         // Hide subtitle track selection if there are no tracks. If there's one, we still show an "off" option.
-        toggleAttribute(this, Attribute.HAS_SUBTITLES, newSubtitleTracks.length > 0);
+        this._hasSubtitles = newSubtitleTracks.length > 0;
     };
-
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (LanguageMenu.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
-    }
 
     protected override render(): TemplateResult {
         return super.renderMenuGroup(
