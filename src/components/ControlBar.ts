@@ -1,27 +1,24 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import controlBarCss from './ControlBar.css';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-control-bar', `<style>${controlBarCss}</style><slot></slot>`);
 
 /**
  * `<theoplayer-control-bar>` - A horizontal control bar that can contain other controls.
  *
  * @group Components
  */
-export class ControlBar extends HTMLElement {
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-    }
+@customElement('theoplayer-control-bar')
+export class ControlBar extends LitElement {
+    static override styles = [controlBarCss];
+    static override shadowRootOptions = {
+        ...LitElement.shadowRootOptions,
+        delegatesFocus: true
+    };
 
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
+    protected override render(): HTMLTemplateResult {
+        return html`<slot></slot>`;
     }
 }
-
-customElements.define('theoplayer-control-bar', ControlBar);
 
 declare global {
     interface HTMLElementTagNameMap {

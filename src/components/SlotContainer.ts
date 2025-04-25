@@ -1,7 +1,6 @@
-import { createTemplate } from '../util/TemplateUtils';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import slotContainerCss from './SlotContainer.css';
-
-const template = createTemplate('theoplayer-slot-container', `<style>${slotContainerCss}</style><slot></slot>`);
 
 /**
  * `<theoplayer-slot-container>` - A container that can be assigned to a slot,
@@ -18,15 +17,14 @@ const template = createTemplate('theoplayer-slot-container', `<style>${slotConta
  * @group Components
  * @internal
  */
-export class SlotContainer extends HTMLElement {
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
+@customElement('theoplayer-slot-container')
+export class SlotContainer extends LitElement {
+    static override styles = [slotContainerCss];
+
+    protected override render(): HTMLTemplateResult {
+        return html`<slot></slot>`;
     }
 }
-
-customElements.define('theoplayer-slot-container', SlotContainer);
 
 export function isSlotContainer(element: Element): element is SlotContainer {
     return element.nodeName.toLowerCase() === 'theoplayer-slot-container';
