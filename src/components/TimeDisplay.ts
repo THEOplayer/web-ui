@@ -1,14 +1,11 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 import textDisplayCss from './TextDisplay.css';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
-import { setTextContent } from '../util/CommonUtils';
 import { formatAsTimePhrase, formatTime } from '../util/TimeUtils';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-time-display', `<style>${textDisplayCss}</style><span></span>`);
 
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as const;
 
@@ -23,34 +20,15 @@ const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
  *   (until the live point) of the stream.
  * @group Components
  */
-export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'streamType']) {
-    private readonly _spanEl: HTMLElement;
+@customElement('theoplayer-time-display')
+@stateReceiver(['player', 'streamType'])
+export class TimeDisplay extends LitElement {
+    static override styles = [textDisplayCss];
+
     private _player: ChromelessPlayer | undefined;
 
-    static get observedAttributes() {
-        return [Attribute.REMAINING, Attribute.REMAINING_WHEN_LIVE, Attribute.SHOW_DURATION, Attribute.STREAM_TYPE];
-    }
-
-    constructor() {
-        super();
-
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-        this._spanEl = shadowRoot.querySelector('span')!;
-
-        this._upgradeProperty('player');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
-
     connectedCallback(): void {
-        shadyCss.styleElement(this);
+        super.connectedCallback();
 
         if (!this.hasAttribute('role')) {
             this.setAttribute('role', 'progressbar');
@@ -62,14 +40,13 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'str
             // Tell screen readers not to automatically read the time as it changes
             this.setAttribute(Attribute.ARIA_LIVE, 'off');
         }
-
-        this._updateFromPlayer();
     }
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -83,56 +60,64 @@ export class TimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'str
             this._player.addEventListener(PLAYER_EVENTS, this._updateFromPlayer);
         }
     }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.REMAINING })
+    accessor remaining: boolean = false;
 
-    get streamType(): StreamType {
-        return (this.getAttribute(Attribute.STREAM_TYPE) || 'vod') as StreamType;
-    }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.REMAINING_WHEN_LIVE })
+    accessor remainingWhenLive: boolean = false;
 
-    set streamType(streamType: StreamType) {
-        this.setAttribute(Attribute.STREAM_TYPE, streamType);
-    }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.SHOW_DURATION })
+    accessor showDuration: boolean = false;
+
+    @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
+    accessor streamType: StreamType = 'vod';
+
+    @state()
+    private accessor _currentTime: number = 0;
+
+    @state()
+    private accessor _duration: number = NaN;
+
+    @state()
+    private accessor _endTime: number = 0;
 
     private readonly _updateFromPlayer = () => {
         const currentTime = this._player ? this._player.currentTime : 0;
         const duration = this._player ? this._player.duration : NaN;
         const seekable = this._player?.seekable;
         const endTime = isFinite(duration) ? duration : seekable && seekable.length > 0 ? seekable.end(0) : NaN;
-        const remaining = this.hasAttribute(Attribute.REMAINING) || (this.hasAttribute(Attribute.REMAINING_WHEN_LIVE) && this.streamType !== 'vod');
-        let time = currentTime;
+        this._currentTime = currentTime;
+        this._duration = duration;
+        this._endTime = endTime;
+    };
+
+    protected override render(): HTMLTemplateResult {
+        const remaining = this.remaining || (this.remainingWhenLive && this.streamType !== 'vod');
+        let time = this._currentTime;
+        const endTime = this._endTime;
         if (remaining) {
-            time = -((endTime || 0) - currentTime);
+            time = -((this._endTime || 0) - time);
         }
-        const showDuration = this.hasAttribute(Attribute.SHOW_DURATION);
         let text: string;
-        if (showDuration && !remaining) {
+        if (this.showDuration && !remaining) {
             text = `${formatTime(time, endTime, remaining)} / ${formatTime(endTime)}`;
         } else {
             text = formatTime(time, endTime, remaining);
         }
+
         let ariaValueText: string;
-        if (isNaN(duration)) {
+        if (isNaN(this._duration)) {
             ariaValueText = DEFAULT_MISSING_TIME_PHRASE;
-        } else if (showDuration) {
+        } else if (this.showDuration) {
             ariaValueText = `${formatAsTimePhrase(time, remaining)} of ${formatAsTimePhrase(endTime)}`;
         } else {
             ariaValueText = formatAsTimePhrase(time, remaining);
         }
-        setTextContent(this._spanEl, text);
         this.setAttribute('aria-valuetext', ariaValueText);
-    };
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (newValue === oldValue) {
-            return;
-        }
-        if (TimeDisplay.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            this._updateFromPlayer();
-            shadyCss.styleSubtree(this);
-        }
+        return html`<span>${text}</span>`;
     }
 }
-
-customElements.define('theoplayer-time-display', TimeDisplay);
 
 declare global {
     interface HTMLElementTagNameMap {
