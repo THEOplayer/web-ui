@@ -9,9 +9,6 @@ import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import type { DeviceType } from '../util/DeviceType';
 import { navigateByArrowKey } from '../util/KeyboardNavigation';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-radio-group', `<slot></slot>`);
 
 /**
  * `<theoplayer-radio-group>` - A group of {@link RadioButton}s. At most one button in the group can be checked.
