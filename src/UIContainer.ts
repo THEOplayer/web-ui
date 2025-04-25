@@ -131,6 +131,7 @@ export class UIContainer extends LitElement {
     private readonly _playerRef: Ref<HTMLElement> = createRef<HTMLElement>();
     private readonly _menuRef: Ref<HTMLElement> = createRef<HTMLElement>();
     private readonly _menuGroupRef: Ref<MenuGroup> = createRef<MenuGroup>();
+    private _menuOpened: boolean = false;
     private _menuOpener: HTMLElement | undefined;
     private readonly _topChromeRef: Ref<HTMLElement> = createRef<HTMLElement>();
     private readonly _topChromeSlotRef: Ref<HTMLSlotElement> = createRef<HTMLSlotElement>();
@@ -667,8 +668,17 @@ export class UIContainer extends LitElement {
         }
     }
 
+    private get menuOpened_(): boolean {
+        return this._menuOpened;
+    }
+
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.MENU_OPENED })
-    private accessor _menuOpened: boolean = false;
+    private set menuOpened_(menuOpened: boolean) {
+        if (this._menuOpened === menuOpened) return;
+        this._menuOpened = menuOpened;
+        // Toggle manually, so the menu layer immediately becomes visible and can receive focus.
+        toggleAttribute(this, Attribute.MENU_OPENED, menuOpened);
+    }
 
     private openMenu_(menuToOpen: string, opener: HTMLElement | undefined): void {
         const topChromeRect = Rectangle.fromRect(this._topChromeRef.value!.getBoundingClientRect());
@@ -740,9 +750,9 @@ export class UIContainer extends LitElement {
         if (this._menuGroupRef.value!.hasCurrentMenu()) {
             menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
             menuEl.addEventListener('click', this._onMenuClick);
-            this._menuOpened = true;
+            this.menuOpened_ = true;
         } else {
-            this._menuOpened = false;
+            this.menuOpened_ = false;
         }
         this.updateUserIdle_();
     };
