@@ -1,6 +1,7 @@
 import { html, type HTMLTemplateResult, LitElement } from 'lit';
 import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import type { ChromelessPlayer, PlayerConfiguration, SourceDescription } from 'theoplayer/chromeless';
 import { DEFAULT_DVR_THRESHOLD, DEFAULT_TV_USER_IDLE_TIMEOUT, DEFAULT_USER_IDLE_TIMEOUT, type UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
@@ -12,7 +13,6 @@ import type { StreamType } from './util/StreamType';
 import { READY_EVENT } from './events/ReadyEvent';
 import { toggleAttribute } from './util/CommonUtils';
 import { createCustomEvent } from './util/EventUtils';
-import { classMap } from 'lit/directives/class-map.js';
 
 /**
  * `<theoplayer-default-ui>` - A default UI for THEOplayer.
@@ -289,7 +289,7 @@ export class DefaultUI extends LitElement {
     protected renderUiContent(): HTMLTemplateResult {
         return html`
             <theoplayer-control-bar slot="top-chrome" part="top-chrome">
-                <div part="title" ad-hidden class=${classMap({ [Attribute.HIDDEN]: !this._hasTitle })}>
+                <div part="title" ad-hidden style=${styleMap({ display: this._hasTitle ? '' : 'none' })}>
                     <slot name="title" @slotchange=${this._onTitleSlotChange}></slot>
                 </div>
                 <span class="theoplayer-spacer"></span>
@@ -322,10 +322,10 @@ export class DefaultUI extends LitElement {
                     <theoplayer-time-range
                         show-ad-markers
                         tv-focus
-                        class=${classMap({
-                            'theoplayer-ad-control': true,
+                        class="theoplayer-ad-control"
+                        style=${styleMap({
                             // Hide seekbar when stream is live with no DVR
-                            [Attribute.HIDDEN]: this.streamType === 'live'
+                            display: this.streamType === 'live' ? 'none' : ''
                         })}
                     ></theoplayer-time-range>
                     <theoplayer-chromecast-button tv-hidden ad-only class="theoplayer-ad-control"></theoplayer-chromecast-button>
