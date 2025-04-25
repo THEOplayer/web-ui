@@ -211,7 +211,7 @@ export class DefaultUI extends LitElement {
         return this._userIdleTimeout ?? (this.deviceType === 'tv' ? DEFAULT_TV_USER_IDLE_TIMEOUT : DEFAULT_USER_IDLE_TIMEOUT);
     }
 
-    @property({ reflect: true, type: Number, attribute: Attribute.USER_IDLE_TIMEOUT })
+    @property({ reflect: true, type: Number, attribute: Attribute.USER_IDLE_TIMEOUT, useDefault: true })
     set userIdleTimeout(value: number | undefined) {
         this._userIdleTimeout = value === undefined || isNaN(value) ? undefined : value;
     }
