@@ -1,14 +1,10 @@
-import { Menu, menuTemplate } from './Menu';
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import { Menu } from './Menu';
 import playbackRateMenuHtml from './PlaybackRateMenu.html';
-import { createTemplate } from '../util/TemplateUtils';
 
 // Load components used in template
 import './PlaybackRateRadioGroup';
-
-const template = createTemplate(
-    'theoplayer-playback-rate-menu',
-    menuTemplate(`<span slot="heading"><slot name="heading">Playback speed</slot></span>`, playbackRateMenuHtml)
-);
 
 /**
  * `<theoplayer-playback-rate-menu>` - A menu to change the playback rate of the player.
@@ -17,13 +13,16 @@ const template = createTemplate(
  *
  * @group Components
  */
+@customElement('theoplayer-playback-rate-menu')
 export class PlaybackRateMenu extends Menu {
-    constructor() {
-        super({ template: template() });
+    protected override renderMenuHeading(): HTMLTemplateResult {
+        return html`<span slot="heading"><slot name="heading">Playback speed</slot></span>`;
+    }
+
+    protected override renderMenuContent(): HTMLTemplateResult {
+        return playbackRateMenuHtml;
     }
 }
-
-customElements.define('theoplayer-playback-rate-menu', PlaybackRateMenu);
 
 declare global {
     interface HTMLElementTagNameMap {
