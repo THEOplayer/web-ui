@@ -3,7 +3,6 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { RadioButton } from './RadioButton';
 import type { MediaTrack } from 'theoplayer/chromeless';
 import { localizeLanguageName } from '../util/CommonUtils';
-import { Attribute } from '../util/Attribute';
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
@@ -57,11 +56,8 @@ export class MediaTrackRadioButton extends RadioButton {
         this._updateFromTrack();
     };
 
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (attrName === Attribute.ARIA_CHECKED && oldValue !== newValue) {
-            this._updateTrack();
-        }
+    protected override handleChange(): void {
+        this._updateTrack();
     }
 
     protected override render(): HTMLTemplateResult {
