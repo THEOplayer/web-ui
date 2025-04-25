@@ -2,7 +2,16 @@ import { html, LitElement, type TemplateResult } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import menuGroupCss from './MenuGroup.css';
 import { Attribute } from '../util/Attribute';
-import { arrayFind, arrayFindIndex, fromArrayLike, getSlottedElements, isHTMLElement, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
+import {
+    arrayFind,
+    arrayFindIndex,
+    fromArrayLike,
+    getSlottedElements,
+    isHTMLElement,
+    noOp,
+    toggleAttribute,
+    upgradeCustomElementIfNeeded
+} from '../util/CommonUtils';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from '../events/ToggleMenuEvent';
 import { isBackKey } from '../util/KeyCode';
@@ -29,6 +38,10 @@ interface OpenMenuEntry {
 @customElement('theoplayer-menu-group')
 export class MenuGroup extends LitElement {
     static styles = [menuGroupCss];
+    static override shadowRootOptions = {
+        ...LitElement.shadowRootOptions,
+        delegatesFocus: true
+    };
 
     private _menuOpened: boolean = false;
 
@@ -40,6 +53,7 @@ export class MenuGroup extends LitElement {
     private set menuOpened_(menuOpened: boolean) {
         if (this._menuOpened === menuOpened) return;
         this._menuOpened = menuOpened;
+        toggleAttribute(this, Attribute.MENU_OPENED, menuOpened);
         if (menuOpened) {
             this.removeAttribute('hidden');
             this.removeEventListener('keydown', this._onKeyDown);
