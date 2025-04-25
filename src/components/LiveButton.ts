@@ -1,3 +1,6 @@
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { Button } from './Button';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import liveButtonCss from './LiveButton.css';
@@ -5,8 +8,6 @@ import liveIcon from '../icons/live.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
-import { html, type HTMLTemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
 
 const PAUSED_EVENTS = ['play', 'pause', 'playing', 'emptied'] as const;
 const LIVE_EVENTS = ['seeking', 'seeked', 'timeupdate', 'durationchange', 'emptied'] as const;
@@ -100,7 +101,7 @@ export class LiveButton extends Button {
     }
 
     protected override render(): HTMLTemplateResult {
-        return html`<span part="icon"><slot name="icon">${liveIcon}</slot></span
+        return html`<span part="icon"><slot name="icon">${unsafeSVG(liveIcon)}</slot></span
             ><slot name="spacer"> </slot><span part="text"><slot name="text">LIVE</slot></span>`;
     }
 }
