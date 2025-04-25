@@ -74,25 +74,17 @@ export class THEOliveDefaultUI extends DefaultUI {
         this._hideErrorDisplay = false;
     }
 
-    private hidePlayerPlayButton_(): void {
-        this._hidePlayButton = true;
-    }
-
-    private stopHidingPlayerPlayButton(): void {
-        this._hidePlayButton = false;
-    }
-
     private showMessage_(type: 'offline' | 'loading' | 'announcement', text: string | undefined): void {
         this.hidePlayerError();
         this._announcementType = type;
         this._announcementMessage = text ?? '';
-        this.hidePlayerPlayButton_();
+        this._hidePlayButton = true;
     }
 
     private hideMessage_(): void {
         this._announcementType = '';
         this._announcementMessage = '';
-        this.stopHidingPlayerPlayButton();
+        this._hidePlayButton = false;
     }
 
     protected override renderUiContent(): HTMLTemplateResult {
