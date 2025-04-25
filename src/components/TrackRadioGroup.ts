@@ -1,21 +1,12 @@
-import * as shadyCss from '@webcomponents/shadycss';
-import { RadioGroup } from './RadioGroup';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 import verticalRadioGroupCss from './VerticalRadioGroup.css';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
-import { MediaTrackRadioButton } from './MediaTrackRadioButton';
-import { TextTrackRadioButton } from './TextTrackRadioButton';
 import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
-import { TextTrackOffRadioButton } from './TextTrackOffRadioButton';
-import { fromArrayLike, toggleAttribute } from '../util/CommonUtils';
 import { createEvent } from '../util/EventUtils';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate(
-    'theoplayer-track-radio-group',
-    `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group></theoplayer-radio-group>`
-);
+import { repeat } from 'lit/directives/repeat.js';
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
@@ -30,62 +21,28 @@ export type TrackType = 'audio' | 'video' | 'subtitles';
  *   Can only be used with the "subtitles" track type.
  * @group Components
  */
-export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
-    static get observedAttributes() {
-        return [Attribute.TRACK_TYPE, Attribute.SHOW_OFF];
-    }
+@customElement('theoplayer-track-radio-group')
+@stateReceiver(['player'])
+export class TrackRadioGroup extends LitElement {
+    static override styles = [verticalRadioGroupCss];
 
-    private readonly _radioGroup: RadioGroup;
-    private _offButton: TextTrackOffRadioButton | undefined;
     private _player: ChromelessPlayer | undefined;
-    private _tracksList: MediaTrackList | TextTracksList | undefined;
+    private _trackType: TrackType = 'audio';
 
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-
-        this._radioGroup = shadowRoot.querySelector('theoplayer-radio-group')!;
-
-        this._upgradeProperty('trackType');
-        this._upgradeProperty('showOffButton');
-        this._upgradeProperty('player');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
-
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
-
-        if (!(this._radioGroup instanceof RadioGroup)) {
-            customElements.upgrade(this._radioGroup);
-        }
-
-        this._updateOffButton();
-        this._updateTracks();
-
-        this.shadowRoot!.addEventListener('change', this._onChange);
-    }
-
-    disconnectedCallback(): void {
-        this.shadowRoot!.removeEventListener('change', this._onChange);
-    }
+    @state()
+    private accessor _tracksList: MediaTrackList | TextTracksList | undefined;
 
     /**
      * The track type of the available tracks.
      */
     get trackType(): TrackType {
-        return (this.getAttribute(Attribute.TRACK_TYPE) || 'audio') as TrackType;
+        return this._trackType;
     }
 
-    set trackType(value: TrackType) {
-        this.setAttribute(Attribute.TRACK_TYPE, value || 'audio');
+    @property({ reflect: true, type: String, attribute: Attribute.TRACK_TYPE })
+    set trackType(trackType: TrackType) {
+        this._trackType = trackType;
+        this._updateTracksList();
     }
 
     /**
@@ -93,13 +50,8 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
      *
      * Can only be used with the `"subtitles"` track type.
      */
-    get showOffButton(): boolean {
-        return this.hasAttribute(Attribute.SHOW_OFF);
-    }
-
-    set showOffButton(value: boolean) {
-        toggleAttribute(this, Attribute.SHOW_OFF, value);
-    }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.SHOW_OFF })
+    accessor showOffButton: boolean = false;
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
@@ -137,7 +89,6 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
             oldList?.removeEventListener(TRACK_EVENTS, this._updateTracks);
             newList?.addEventListener(TRACK_EVENTS, this._updateTracks);
             this._tracksList = newList;
-            this._updateOffButton();
         }
     }
 
@@ -157,85 +108,39 @@ export class TrackRadioGroup extends StateReceiverMixin(HTMLElement, ['player'])
         }
     }
 
-    private readonly _updateTracks = (): void => {
-        let oldButtons = fromArrayLike(this._radioGroup.children) as (MediaTrackRadioButton | TextTrackRadioButton)[];
-        const newTracks = this._getTracks();
-        if (this._offButton !== undefined) {
-            // First child is the "off" button, skip it.
-            oldButtons = oldButtons.slice(1);
-        }
-        for (const oldButton of oldButtons) {
-            if (!oldButton.track || newTracks.indexOf(oldButton.track) < 0) {
-                this._radioGroup.removeChild(oldButton);
-            }
-        }
-        for (const newTrack of newTracks) {
-            if (!hasButtonForTrack(oldButtons, newTrack)) {
-                let newButton = this._createTrackButton(newTrack);
-                this._radioGroup.appendChild(newButton);
-            }
-        }
-    };
-
-    private _createTrackButton(track: MediaTrack | TextTrack): MediaTrackRadioButton | TextTrackRadioButton {
-        if (this.trackType === 'subtitles') {
-            let button = new TextTrackRadioButton();
-            button.track = track as TextTrack;
-            return button;
-        } else {
-            let button = new MediaTrackRadioButton();
-            button.track = track as MediaTrack;
-            return button;
-        }
-    }
-
-    private _updateOffButton(): void {
-        if (this.trackType === 'subtitles' && this.showOffButton) {
-            if (this._offButton === undefined) {
-                this._offButton = new TextTrackOffRadioButton();
-                this._radioGroup.insertBefore(this._offButton, this._radioGroup.firstChild);
-            }
-            this._offButton.trackList = this._tracksList! as TextTracksList;
-        } else if (this._offButton !== undefined) {
-            this._radioGroup.removeChild(this._offButton);
-            this._offButton = undefined;
-        }
-    }
+    private readonly _updateTracks = (): void => this.requestUpdate();
 
     private readonly _onChange = () => {
         this.dispatchEvent(createEvent('change', { bubbles: true }));
     };
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (newValue === oldValue) {
-            return;
-        }
-        if (attrName === Attribute.TRACK_TYPE) {
-            this._updateTracksList();
-            this._updateTracks();
-        } else if (attrName === Attribute.SHOW_OFF) {
-            this._updateOffButton();
-            this._updateTracks();
-        }
-        if (TrackRadioGroup.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
+    protected override render(): HTMLTemplateResult {
+        const tracks = this._getTracks();
+        const isSubtitles = this.trackType === 'subtitles';
+        return html`<theoplayer-radio-group @change=${this._onChange}>
+            ${
+                /* "Off" button */
+                this.showOffButton && isSubtitles
+                    ? html`<theoplayer-text-track-off-radio-button .trackList=${this._tracksList}></theoplayer-text-track-off-radio-button>`
+                    : undefined
+            }
+            ${
+                /* Track buttons */
+                repeat(
+                    tracks as ReadonlyArray<MediaTrack | TextTrack>,
+                    (track) => track.uid,
+                    (track) =>
+                        isSubtitles
+                            ? html`<theoplayer-text-track-radio-button .track=${track}></theoplayer-text-track-radio-button>`
+                            : html`<theoplayer-media-track-radio-button .track=${track}></theoplayer-media-track-radio-button>`
+                )
+            }
+        </theoplayer-radio-group>`;
     }
 }
-
-customElements.define('theoplayer-track-radio-group', TrackRadioGroup);
 
 declare global {
     interface HTMLElementTagNameMap {
         'theoplayer-track-radio-group': TrackRadioGroup;
     }
-}
-
-function hasButtonForTrack(buttons: readonly (MediaTrackRadioButton | TextTrackRadioButton)[], track: MediaTrack | TextTrack): boolean {
-    for (let i = 0; i < buttons.length; i++) {
-        if (buttons[i].track === track) {
-            return true;
-        }
-    }
-    return false;
 }
