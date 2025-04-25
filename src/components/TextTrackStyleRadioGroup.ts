@@ -51,6 +51,9 @@ export class TextTrackStyleRadioGroup extends LitElement {
     private _value: any;
 
     protected override firstUpdated(): void {
+        if (this._radioGroupRef.value && !(this._radioGroupRef.value instanceof RadioGroup)) {
+            customElements.upgrade(this._radioGroupRef.value);
+        }
         this._updateChecked();
     }
 
@@ -102,23 +105,15 @@ export class TextTrackStyleRadioGroup extends LitElement {
         this._textTrackStyle?.addEventListener('change', this._updateFromPlayer);
     }
 
-    private get radioGroup_(): RadioGroup | undefined {
-        const radioGroup = this._radioGroupRef.value;
-        if (radioGroup && !(radioGroup instanceof RadioGroup)) {
-            customElements.upgrade(radioGroup);
-        }
-        return radioGroup;
-    }
-
     private readonly _updateChecked = (): void => {
-        const buttons = this.radioGroup_?.allRadioButtons() ?? [];
+        const buttons = this._radioGroupRef.value?.allRadioButtons() ?? [];
         for (const button of buttons) {
             button.checked = button.value === this.value;
         }
     };
 
     private readonly _onChange = (): void => {
-        const button = this.radioGroup_?.checkedRadioButton;
+        const button = this._radioGroupRef.value?.checkedRadioButton;
         if (button && this.value !== button.value) {
             this.value = button.value;
         }
