@@ -40,10 +40,10 @@ import { addGlobalStyles } from './Global';
 // Load components used in template
 import './components/GestureReceiver';
 
-const DEFAULT_USER_IDLE_TIMEOUT = 2;
-const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
-const DEFAULT_DVR_THRESHOLD = 60;
-const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
+export const DEFAULT_USER_IDLE_TIMEOUT = 2;
+export const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
+export const DEFAULT_DVR_THRESHOLD = 60;
+export const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
 
 /**
  * `<theoplayer-ui>` - The container element for a THEOplayer UI.
