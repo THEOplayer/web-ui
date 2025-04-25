@@ -1,7 +1,8 @@
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 import { RadioButton } from './RadioButton';
 import type { MediaTrack, VideoQuality } from 'theoplayer/chromeless';
 import { formatQualityLabel } from '../util/TrackUtils';
-import { customElement, property, state } from 'lit/decorators.js';
 
 const TRACK_EVENTS = ['activequalitychanged', 'targetqualitychanged'] as const;
 const QUALITY_EVENTS = ['update'] as const;
@@ -95,6 +96,10 @@ export class QualityRadioButton extends RadioButton {
         if (this._track && this.checked) {
             this._track.targetQuality = this._quality;
         }
+    }
+
+    protected override render(): HTMLTemplateResult {
+        return html`<slot>${this._qualityLabel}</slot>`;
     }
 }
 
