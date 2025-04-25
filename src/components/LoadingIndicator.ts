@@ -1,13 +1,10 @@
-import * as shadyCss from '@webcomponents/shadycss';
 import loadingIndicatorCss from './LoadingIndicator.css';
 import loadingIndicatorHtml from './LoadingIndicator.html';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
-import { toggleAttribute } from '../util/CommonUtils';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-loading-indicator', `<style>${loadingIndicatorCss}</style>${loadingIndicatorHtml}`);
+import { customElement, property } from 'lit/decorators.js';
+import { type HTMLTemplateResult, LitElement } from 'lit';
 
 const PLAYER_EVENTS = ['readystatechange', 'play', 'pause', 'playing', 'seeking', 'seeked'] as const;
 
@@ -17,39 +14,18 @@ const PLAYER_EVENTS = ['readystatechange', 'play', 'pause', 'playing', 'seeking'
  * @attribute `loading` (readonly) - Whether the player is waiting for more data. If set, the indicator is shown.
  * @group Components
  */
-export class LoadingIndicator extends StateReceiverMixin(HTMLElement, ['player']) {
+@customElement('theoplayer-loading-indicator')
+@stateReceiver(['player'])
+export class LoadingIndicator extends LitElement {
+    static override styles = [loadingIndicatorCss];
+
     private _player: ChromelessPlayer | undefined;
-
-    static get observedAttributes() {
-        return [Attribute.LOADING];
-    }
-
-    constructor() {
-        super();
-
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-
-        this._upgradeProperty('player');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
-
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
-        this._updateFromPlayer();
-    }
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -64,19 +40,17 @@ export class LoadingIndicator extends StateReceiverMixin(HTMLElement, ['player']
         }
     }
 
+    @property({ reflect: true, type: Boolean, attribute: Attribute.LOADING })
+    accessor loading: boolean = false;
+
     private readonly _updateFromPlayer = () => {
-        const loading = this._player !== undefined && !this._player.paused && (this._player.seeking || this._player.readyState < 3);
-        toggleAttribute(this, Attribute.LOADING, loading);
+        this.loading = this._player !== undefined && !this._player.paused && (this._player.seeking || this._player.readyState < 3);
     };
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (LoadingIndicator.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
+    protected override render(): HTMLTemplateResult {
+        return loadingIndicatorHtml;
     }
 }
-
-customElements.define('theoplayer-loading-indicator', LoadingIndicator);
 
 declare global {
     interface HTMLElementTagNameMap {
