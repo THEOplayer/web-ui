@@ -1,9 +1,11 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { isArrowKey, KeyCode } from '../util/KeyCode';
 import { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
-import { arrayFind, getSlottedElements, isElement, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { arrayFind, getSlottedElements, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
+import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import type { DeviceType } from '../util/DeviceType';
 import { navigateByArrowKey } from '../util/KeyboardNavigation';
@@ -26,16 +28,14 @@ const template = createTemplate('theoplayer-radio-group', `<slot></slot>`);
  */
 // Based on howto-radio-group
 // https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-radio-group/howto-radio-group.js
-export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) {
-    private _slot: HTMLSlotElement;
+@customElement('theoplayer-radio-group')
+@stateReceiver(['deviceType'])
+export class RadioGroup extends LitElement {
+    private readonly _slotRef: Ref<HTMLSlotElement> = createRef<HTMLSlotElement>();
     private _radioButtons: RadioButton[] = [];
 
     constructor() {
         super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-
-        this._slot = shadowRoot.querySelector('slot')!;
         this._upgradeProperty('deviceType');
     }
 
@@ -48,34 +48,34 @@ export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) 
     }
 
     connectedCallback(): void {
-        shadyCss.styleElement(this);
+        super.connectedCallback();
 
         if (!this.hasAttribute('role')) {
             this.setAttribute('role', 'radiogroup');
         }
 
         this.addEventListener('keydown', this._onKeyDown);
-        this.shadowRoot!.addEventListener('change', this._onButtonChange);
-        this._slot.addEventListener('slotchange', this._onSlotChange);
         this._onSlotChange();
     }
 
     disconnectedCallback(): void {
+        super.disconnectedCallback();
         this.removeEventListener('keydown', this._onKeyDown);
-        this.shadowRoot!.removeEventListener('change', this._onButtonChange);
-        this._slot.removeEventListener('slotchange', this._onSlotChange);
     }
 
-    get deviceType(): DeviceType {
-        return (this.getAttribute(Attribute.DEVICE_TYPE) || 'desktop') as DeviceType;
+    protected override createRenderRoot(): HTMLElement | DocumentFragment {
+        const root = super.createRenderRoot();
+        root.addEventListener('change', this._onButtonChange);
+        return root;
     }
 
-    set deviceType(deviceType: DeviceType) {
-        this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
-    }
+    @property({ reflect: true, type: String, attribute: Attribute.DEVICE_TYPE })
+    accessor deviceType: DeviceType = 'desktop';
 
     private readonly _onSlotChange = () => {
-        const children = getSlottedElements(this._slot);
+        const slot = this._slotRef.value;
+        if (!slot) return;
+        const children = getSlottedElements(slot);
         const upgradePromises: Array<Promise<unknown>> = [];
         for (const child of children) {
             if (!isRadioButton(child)) {
@@ -226,9 +226,11 @@ export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) 
             this.setCheckedRadioButton(event.target as RadioButton);
         }
     };
-}
 
-customElements.define('theoplayer-radio-group', RadioGroup);
+    protected override render(): HTMLTemplateResult {
+        return html`<slot ${ref(this._slotRef)} @slotchange=${this._onSlotChange}></slot>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {
