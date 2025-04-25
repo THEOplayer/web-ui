@@ -142,9 +142,7 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
             virtual({
                 include: './src/**',
                 // Remove THEOplayer altogether.
-                [theoplayerModule]: `export const ChromelessPlayer = undefined;`,
-                // Remove createTemplate() helper.
-                ['./src/util/TemplateUtils']: `export function createTemplate() { return () => undefined; }`
+                [theoplayerModule]: `export const ChromelessPlayer = undefined;`
             }),
         json(),
         // Run PostCSS on .css files.
