@@ -1,11 +1,8 @@
-import { Button, buttonTemplate } from './Button';
+import { Button } from './Button';
 import { createCustomEvent } from '../util/EventUtils';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from '../events/ToggleMenuEvent';
 import { Attribute } from '../util/Attribute';
-import { createTemplate } from '../util/TemplateUtils';
 import { customElement, property } from 'lit/decorators.js';
-
-const template = createTemplate('theoplayer-menu-button', buttonTemplate(`<slot></slot>`));
 
 /**
  * `<theoplayer-menu-button>` - A menu button that opens a {@link Menu}.
