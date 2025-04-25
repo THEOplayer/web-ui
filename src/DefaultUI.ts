@@ -1,5 +1,5 @@
 import { html, type HTMLTemplateResult, LitElement } from 'lit';
-import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
+import { customElement, property, queryAssignedNodes } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import type { ChromelessPlayer, PlayerConfiguration, SourceDescription } from 'theoplayer/chromeless';
 import { DEFAULT_DVR_THRESHOLD, DEFAULT_TV_USER_IDLE_TIMEOUT, DEFAULT_USER_IDLE_TIMEOUT, type UIContainer } from './UIContainer';
@@ -233,9 +233,6 @@ export class DefaultUI extends LitElement {
     @property({ reflect: true, type: Boolean, attribute: Attribute.HAS_TITLE })
     private accessor _hasTitle: boolean = false;
 
-    @state()
-    private accessor _timeRangeHidden: boolean = false;
-
     connectedCallback(): void {
         super.connectedCallback();
 
@@ -266,8 +263,6 @@ export class DefaultUI extends LitElement {
         if (this._uiRef.value) {
             this.streamType = this._uiRef.value.streamType;
         }
-        // Hide seekbar when stream is live with no DVR
-        this._timeRangeHidden = this.streamType === 'live';
     };
 
     private readonly _onTitleSlotChange = () => {
@@ -329,7 +324,8 @@ export class DefaultUI extends LitElement {
                         tv-focus
                         class=${classMap({
                             'theoplayer-ad-control': true,
-                            [Attribute.HIDDEN]: this._timeRangeHidden
+                            // Hide seekbar when stream is live with no DVR
+                            [Attribute.HIDDEN]: this.streamType === 'live'
                         })}
                     ></theoplayer-time-range>
                     <theoplayer-chromecast-button tv-hidden ad-only class="theoplayer-ad-control"></theoplayer-chromecast-button>
