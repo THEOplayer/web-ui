@@ -1,8 +1,9 @@
-import { Button, type ButtonOptions, buttonTemplate } from './Button';
+import { Button, buttonTemplate } from './Button';
 import { createCustomEvent } from '../util/EventUtils';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from '../events/ToggleMenuEvent';
 import { Attribute } from '../util/Attribute';
 import { createTemplate } from '../util/TemplateUtils';
+import { customElement, property } from 'lit/decorators.js';
 
 const template = createTemplate('theoplayer-menu-button', buttonTemplate(`<slot></slot>`));
 
@@ -12,16 +13,9 @@ const template = createTemplate('theoplayer-menu-button', buttonTemplate(`<slot>
  * @attribute `menu` - The ID of the menu to open.
  * @group Components
  */
+@customElement('theoplayer-menu-button')
 export class MenuButton extends Button {
-    static get observedAttributes() {
-        return [...Button.observedAttributes, Attribute.MENU];
-    }
-
-    constructor(options?: Partial<ButtonOptions>) {
-        super({ template: template(), ...options });
-
-        this._upgradeProperty('menu');
-    }
+    private _menuId: string | null = null;
 
     override connectedCallback() {
         super.connectedCallback();
@@ -35,25 +29,25 @@ export class MenuButton extends Button {
      * The ID of the menu to open.
      */
     get menu(): string | null {
-        return this.getAttribute(Attribute.MENU);
+        return this._menuId;
     }
 
+    @property({ reflect: true, type: String, attribute: Attribute.MENU })
     set menu(menuId: string | null) {
         if (menuId) {
-            this.setAttribute(Attribute.MENU, menuId);
+            if (this._ariaControls == null || this._ariaControls === this._menuId) {
+                this._ariaControls = menuId;
+            }
         } else {
-            this.removeAttribute(Attribute.MENU);
-        }
-    }
-
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (attrName === Attribute.MENU) {
-            if (!this.hasAttribute('aria-controls') || this.getAttribute('aria-controls') === oldValue) {
-                this.setAttribute('aria-controls', newValue);
+            if (this._ariaControls === this._menuId) {
+                this._ariaControls = null;
             }
         }
+        this._menuId = menuId;
     }
+
+    @property({ reflect: true, state: true, type: String, attribute: 'aria-controls' })
+    private accessor _ariaControls: string | null = null;
 
     protected override handleClick() {
         const menu = this.menu;
@@ -67,8 +61,6 @@ export class MenuButton extends Button {
         }
     }
 }
-
-customElements.define('theoplayer-menu-button', MenuButton);
 
 declare global {
     interface HTMLElementTagNameMap {
