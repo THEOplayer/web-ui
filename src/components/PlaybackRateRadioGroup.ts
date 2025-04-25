@@ -27,6 +27,9 @@ export class PlaybackRateRadioGroup extends LitElement {
     private _value: number = 1;
 
     protected override firstUpdated(): void {
+        if (this._radioGroupRef.value && !(this._radioGroupRef.value instanceof RadioGroup)) {
+            customElements.upgrade(this._radioGroupRef.value);
+        }
         this._updateChecked();
     }
 
@@ -70,23 +73,15 @@ export class PlaybackRateRadioGroup extends LitElement {
         }
     }
 
-    private get radioGroup_(): RadioGroup | undefined {
-        const radioGroup = this._radioGroupRef.value;
-        if (radioGroup && !(radioGroup instanceof RadioGroup)) {
-            customElements.upgrade(radioGroup);
-        }
-        return radioGroup;
-    }
-
     private readonly _updateChecked = (): void => {
-        const buttons = this.radioGroup_?.allRadioButtons() ?? [];
+        const buttons = this._radioGroupRef.value?.allRadioButtons() ?? [];
         for (const button of buttons) {
             button.checked = Number(button.value) === this.value;
         }
     };
 
     private readonly _onChange = (): void => {
-        const button = this.radioGroup_?.checkedRadioButton;
+        const button = this._radioGroupRef.value?.checkedRadioButton;
         if (button && this.value !== Number(button.value)) {
             this.value = button.value;
         }

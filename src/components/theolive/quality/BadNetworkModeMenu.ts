@@ -1,6 +1,6 @@
-import { html, type HTMLTemplateResult, LitElement, type PropertyValues } from 'lit';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { createRef, type Ref } from 'lit/directives/ref.js';
+import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import verticalRadioGroupCss from '../../VerticalRadioGroup.css';
 import './AutomaticQualitySelector';
 import './BadNetworkModeSelector';
@@ -10,11 +10,11 @@ import { RadioGroup } from '../../RadioGroup';
 export class BadNetworkModeMenu extends LitElement {
     static styles = [verticalRadioGroupCss];
 
-    private readonly _radioGroup: Ref<RadioGroup> = createRef<RadioGroup>();
+    private readonly _radioGroupRef: Ref<RadioGroup> = createRef<RadioGroup>();
 
-    protected firstUpdated(_changedProperties: PropertyValues) {
-        if (this._radioGroup.value && !(this._radioGroup.value instanceof RadioGroup)) {
-            customElements.upgrade(this._radioGroup.value);
+    protected firstUpdated() {
+        if (this._radioGroupRef.value && !(this._radioGroupRef.value instanceof RadioGroup)) {
+            customElements.upgrade(this._radioGroupRef.value);
         }
     }
 
@@ -23,7 +23,7 @@ export class BadNetworkModeMenu extends LitElement {
     };
 
     protected override render(): HTMLTemplateResult {
-        return html`<theoplayer-radio-group @change=${this._onChange}>
+        return html`<theoplayer-radio-group ${ref(this._radioGroupRef)} @change=${this._onChange}>
             <theolive-automatic-quality-selector></theolive-automatic-quality-selector>
             <theolive-bad-network-quality-selector></theolive-bad-network-quality-selector>
         </theoplayer-radio-group>`;
