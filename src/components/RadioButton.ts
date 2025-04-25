@@ -33,7 +33,15 @@ export class RadioButton extends Button {
         return this._checked;
     }
 
-    @property({ reflect: true, type: Boolean, attribute: Attribute.ARIA_CHECKED })
+    @property({
+        reflect: true,
+        type: Boolean,
+        attribute: Attribute.ARIA_CHECKED,
+        converter: {
+            fromAttribute: (value: string | null) => value != null && value !== 'false',
+            toAttribute: (value: boolean) => String(value)
+        }
+    })
     set checked(checked: boolean) {
         if (this._checked !== checked) {
             this._checked = checked;
