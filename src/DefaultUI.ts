@@ -1,6 +1,6 @@
 import { html, type HTMLTemplateResult, LitElement } from 'lit';
 import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
-import { createRef, type Ref } from 'lit/directives/ref.js';
+import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import type { ChromelessPlayer, SourceDescription, UIPlayerConfiguration } from 'theoplayer/chromeless';
 import { DEFAULT_DVR_THRESHOLD, DEFAULT_TV_USER_IDLE_TIMEOUT, DEFAULT_USER_IDLE_TIMEOUT, type UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
@@ -257,6 +257,7 @@ export class DefaultUI extends LitElement {
 
     protected override render(): HTMLTemplateResult {
         return html`<theoplayer-ui
+            ${ref(this._uiRef)}
             .configuration=${this.configuration}
             .source=${this.source}
             .fluid=${this.fluid}
