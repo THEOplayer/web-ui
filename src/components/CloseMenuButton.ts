@@ -1,11 +1,11 @@
-import { Button, buttonTemplate } from './Button';
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import { Button } from './Button';
 import backIcon from '../icons/back.svg';
 import { createCustomEvent } from '../util/EventUtils';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
 import { Attribute } from '../util/Attribute';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-menu-close-button', buttonTemplate(`<span part="icon"><slot>${backIcon}</slot></span>`));
 
 /**
  * `<theoplayer-menu-close-button>` - A button that closes its parent menu.
@@ -14,15 +14,8 @@ const template = createTemplate('theoplayer-menu-close-button', buttonTemplate(`
  *
  * @group Components
  */
+@customElement('theoplayer-menu-close-button')
 export class CloseMenuButton extends Button {
-    static get observedAttributes() {
-        return [...Button.observedAttributes];
-    }
-
-    constructor() {
-        super({ template: template() });
-    }
-
     override connectedCallback() {
         super.connectedCallback();
 
@@ -38,9 +31,11 @@ export class CloseMenuButton extends Button {
         });
         this.dispatchEvent(event);
     }
-}
 
-customElements.define('theoplayer-menu-close-button', CloseMenuButton);
+    protected override render(): HTMLTemplateResult {
+        return html`<span part="icon"><slot>${unsafeSVG(backIcon)}</slot></span>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {

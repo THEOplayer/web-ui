@@ -1,25 +1,18 @@
-import { Button, buttonTemplate } from './Button';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import { Button } from './Button';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-text-track-style-reset-button', buttonTemplate(`<slot>Reset</slot>`));
 
 /**
  * `<theoplayer-text-track-style-reset-button>` - A button that resets the text track style.
  *
  * @group Components
  */
-export class TextTrackStyleResetButton extends StateReceiverMixin(Button, ['player']) {
-    static get observedAttributes() {
-        return [...Button.observedAttributes];
-    }
-
+@customElement('theoplayer-text-track-style-reset-button')
+@stateReceiver(['player'])
+export class TextTrackStyleResetButton extends Button {
     private _player: ChromelessPlayer | undefined;
-
-    constructor() {
-        super({ template: template() });
-    }
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
@@ -41,9 +34,11 @@ export class TextTrackStyleResetButton extends StateReceiverMixin(Button, ['play
         textTrackStyle.windowColor = undefined;
         textTrackStyle.edgeStyle = undefined;
     }
-}
 
-customElements.define('theoplayer-text-track-style-reset-button', TextTrackStyleResetButton);
+    protected override render(): HTMLTemplateResult {
+        return html`<slot>Reset</slot>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {

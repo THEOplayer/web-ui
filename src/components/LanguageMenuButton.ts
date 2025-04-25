@@ -1,14 +1,13 @@
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { MenuButton } from './MenuButton';
-import { buttonTemplate } from './Button';
 import languageIcon from '../icons/language.svg';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrackList, TextTracksList } from 'theoplayer/chromeless';
 import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-language-menu-button', buttonTemplate(`<span part="icon"><slot>${languageIcon}</slot></span>`));
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
@@ -20,15 +19,12 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  * @attribute `menu` - The ID of the language menu.
  * @group Components
  */
-export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player']) {
+@customElement('theoplayer-language-menu-button')
+@stateReceiver(['player'])
+export class LanguageMenuButton extends MenuButton {
     private _player: ChromelessPlayer | undefined;
     private _audioTrackList: MediaTrackList | undefined;
     private _textTrackList: TextTracksList | undefined;
-
-    constructor() {
-        super({ template: template() });
-        this._upgradeProperty('player');
-    }
 
     override connectedCallback() {
         super.connectedCallback();
@@ -42,6 +38,7 @@ export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player'
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -61,9 +58,11 @@ export class LanguageMenuButton extends StateReceiverMixin(MenuButton, ['player'
             this._player !== undefined && (this._player.audioTracks.length >= 2 || this._player.textTracks.some(isNonForcedSubtitleTrack));
         toggleAttribute(this, Attribute.HIDDEN, !hasTracks);
     };
-}
 
-customElements.define('theoplayer-language-menu-button', LanguageMenuButton);
+    protected override render(): HTMLTemplateResult {
+        return html`<span part="icon"><slot>${unsafeSVG(languageIcon)}</slot></span>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {
