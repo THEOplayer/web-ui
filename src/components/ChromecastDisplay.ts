@@ -6,17 +6,6 @@ import chromecastIcon from '../icons/chromecast-48px.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import type { Chromecast, ChromelessPlayer } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate(
-    'theoplayer-chromecast-display',
-
-    `<div part="icon"><slot name="icon">${chromecastIcon}</slot></div>` +
-        `<div part="text">` +
-        `<p part="heading"><slot name="heading">Playing on</slot></p>` +
-        `<p part="receiver">Chromecast Receiver</p>` +
-        `</div>`
-);
 
 const CAST_EVENTS = ['statechange'] as const;
 
