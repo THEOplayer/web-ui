@@ -1,23 +1,12 @@
-import * as shadyCss from '@webcomponents/shadycss';
-import { Button, buttonTemplate } from './Button';
+import { Button } from './Button';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import liveButtonCss from './LiveButton.css';
 import liveIcon from '../icons/live.svg';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
-import { toggleAttribute } from '../util/CommonUtils';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate(
-    'theoplayer-live-button',
-    buttonTemplate(
-        `<span part="icon"><slot name="icon">${liveIcon}</slot></span>` +
-            `<slot name="spacer"> </slot>` +
-            `<span part="text"><slot name="text">LIVE</slot></span>`,
-        liveButtonCss
-    )
-);
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
 const PAUSED_EVENTS = ['play', 'pause', 'playing', 'emptied'] as const;
 const LIVE_EVENTS = ['seeking', 'seeked', 'timeupdate', 'durationchange', 'emptied'] as const;
@@ -33,22 +22,13 @@ const DEFAULT_LIVE_THRESHOLD = 10;
  * @attribute `live` (readonly) - Whether the player is considered to be playing at the live point.
  * @group Components
  */
-export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamType']) {
-    static get observedAttributes() {
-        return [...Button.observedAttributes, Attribute.STREAM_TYPE, Attribute.LIVE, Attribute.PAUSED, Attribute.LIVE_THRESHOLD];
-    }
+@customElement('theoplayer-live-button')
+@stateReceiver(['player', 'streamType'])
+export class LiveButton extends Button {
+    static styles = [...Button.styles, liveButtonCss];
 
     private _player: ChromelessPlayer | undefined;
-
-    constructor() {
-        super({ template: template() });
-
-        this._upgradeProperty('paused');
-        this._upgradeProperty('streamType');
-        this._upgradeProperty('liveThreshold');
-        this._upgradeProperty('live');
-        this._upgradeProperty('player');
-    }
+    private _liveThreshold: number = DEFAULT_LIVE_THRESHOLD;
 
     connectedCallback() {
         super.connectedCallback();
@@ -58,43 +38,30 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
         }
     }
 
-    get paused(): boolean {
-        return this.hasAttribute(Attribute.PAUSED);
-    }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.PAUSED })
+    accessor paused: boolean = false;
 
-    set paused(paused: boolean) {
-        toggleAttribute(this, Attribute.PAUSED, paused);
-    }
-
-    get streamType(): StreamType {
-        return (this.getAttribute(Attribute.STREAM_TYPE) || 'vod') as StreamType;
-    }
-
-    set streamType(streamType: StreamType) {
-        this.setAttribute(Attribute.STREAM_TYPE, streamType);
-    }
+    @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
+    accessor streamType: StreamType = 'vod';
 
     get liveThreshold(): number {
-        return Number(this.getAttribute(Attribute.LIVE_THRESHOLD) ?? DEFAULT_LIVE_THRESHOLD);
+        return this._liveThreshold;
     }
 
+    @property({ reflect: true, type: Number, attribute: Attribute.LIVE_THRESHOLD, useDefault: true })
     set liveThreshold(value: number) {
-        value = Number(value);
-        this.setAttribute(Attribute.LIVE_THRESHOLD, String(isNaN(value) ? 0 : value));
+        this._liveThreshold = isNaN(value) ? 0 : value;
+        this._updateLive();
     }
 
-    get live(): boolean {
-        return this.hasAttribute(Attribute.LIVE);
-    }
-
-    set live(live: boolean) {
-        toggleAttribute(this, Attribute.LIVE, live);
-    }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.LIVE })
+    accessor live: boolean = false;
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -117,10 +84,7 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
     };
 
     private readonly _updateLive = () => {
-        const live = this._player !== undefined ? isLive(this._player, this.liveThreshold) : false;
-        if (this.live !== live) {
-            this.live = live;
-        }
+        this.live = this._player !== undefined ? isLive(this._player, this.liveThreshold) : false;
     };
 
     protected override handleClick() {
@@ -135,21 +99,11 @@ export class LiveButton extends StateReceiverMixin(Button, ['player', 'streamTyp
         }
     }
 
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (newValue === oldValue) {
-            return;
-        }
-        if (attrName === Attribute.LIVE_THRESHOLD) {
-            this._updateLive();
-        }
-        if (LiveButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
+    protected override render(): HTMLTemplateResult {
+        return html`<span part="icon"><slot name="icon">${liveIcon}</slot></span
+            ><slot name="spacer"> </slot><span part="text"><slot name="text">LIVE</slot></span>`;
     }
 }
-
-customElements.define('theoplayer-live-button', LiveButton);
 
 declare global {
     interface HTMLElementTagNameMap {
