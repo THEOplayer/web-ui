@@ -55,11 +55,11 @@ export class MenuGroup extends LitElement {
         this._menuOpened = menuOpened;
         toggleAttribute(this, Attribute.MENU_OPENED, menuOpened);
         if (menuOpened) {
-            this.removeAttribute('hidden');
+            this.removeAttribute(Attribute.HIDDEN);
             this.removeEventListener('keydown', this._onKeyDown);
             this.addEventListener('keydown', this._onKeyDown);
         } else {
-            this.setAttribute('hidden', '');
+            this.setAttribute(Attribute.HIDDEN, '');
             this.removeEventListener('keydown', this._onKeyDown);
         }
         const changeEvent: MenuChangeEvent = createCustomEvent(MENU_CHANGE_EVENT, { bubbles: true });
@@ -75,7 +75,7 @@ export class MenuGroup extends LitElement {
         super.connectedCallback();
 
         if (!this.menuOpened_) {
-            this.setAttribute('hidden', '');
+            this.setAttribute(Attribute.HIDDEN, '');
         }
     }
 
