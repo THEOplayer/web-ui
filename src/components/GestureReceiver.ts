@@ -54,7 +54,7 @@ export class GestureReceiver extends LitElement {
     };
 
     private readonly _onClick = (event: MouseEvent) => {
-        // If the browser doesn't support yet `pointerType` on `click` events,
+        // If the browser doesn't yet support `pointerType` on `click` events,
         // we use the type from the previous `pointerdown` event.
         const pointerType = (event as PointerEvent).pointerType ?? this._pointerType;
         if (pointerType === 'touch') {
