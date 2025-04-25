@@ -12,9 +12,6 @@ import { formatQualityLabel } from '../util/TrackUtils';
 @customElement('theoplayer-active-quality-display')
 @stateReceiver(['activeVideoQuality', 'targetVideoQualities'])
 export class ActiveQualityDisplay extends LitElement {
-    private _activeVideoQuality: VideoQuality | undefined = undefined;
-    private _targetVideoQualities: VideoQuality[] | undefined = undefined;
-
     @property({ reflect: false, attribute: false })
     accessor activeVideoQuality: VideoQuality | undefined = undefined;
 
@@ -24,10 +21,10 @@ export class ActiveQualityDisplay extends LitElement {
     protected override render(): HTMLTemplateResult {
         // If no target quality is selected, or more than one target quality is selected,
         // treat as "automatic" quality selection.
-        const hasSingleTargetQuality = this._targetVideoQualities !== undefined && this._targetVideoQualities.length === 1;
-        const targetQuality = hasSingleTargetQuality ? this._targetVideoQualities![0] : undefined;
+        const hasSingleTargetQuality = this.targetVideoQualities !== undefined && this.targetVideoQualities.length === 1;
+        const targetQuality = hasSingleTargetQuality ? this.targetVideoQualities![0] : undefined;
         // Always show the target quality immediately, even if it's not the active quality yet.
-        const selectedQuality = targetQuality ?? this._activeVideoQuality;
+        const selectedQuality = targetQuality ?? this.activeVideoQuality;
         const qualityLabel = formatQualityLabel(selectedQuality);
         let label: string;
         if (hasSingleTargetQuality) {
