@@ -1,89 +1,46 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import errorDisplayCss from './ErrorDisplay.css';
 import errorIcon from '../icons/error.svg';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { THEOplayerError } from 'theoplayer/chromeless';
-import { setTextContent, toggleAttribute } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate(
-    'theoplayer-error-display',
-    `<style>${errorDisplayCss}</style>` +
-        `<div part="icon"><slot name="icon">${errorIcon}</slot></div>` +
-        `<div part="text">` +
-        `<h1 part="heading"><slot name="heading">An error occurred</slot></h1>` +
-        `<p part="message"><slot name="message"></slot></p>` +
-        `</div>` +
-        `<div part="fullscreen-controls">` +
-        `<slot name="fullscreen-controls"><theoplayer-fullscreen-button></theoplayer-fullscreen-button></slot>` +
-        `</div>`
-);
 
 /**
  * `<theoplayer-error-display>` - A screen that shows the details of a fatal player error.
  *
  * @group Components
  */
-export class ErrorDisplay extends StateReceiverMixin(HTMLElement, ['error', 'fullscreen']) {
-    private readonly _messageSlot: HTMLSlotElement;
-    private _error: THEOplayerError | undefined;
-
-    static get observedAttributes() {
-        return [Attribute.FULLSCREEN];
-    }
-
-    constructor() {
-        super();
-
-        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-
-        this._messageSlot = shadowRoot.querySelector('slot[name="message"]')!;
-
-        this._upgradeProperty('error');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
-
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
-    }
+@customElement('theoplayer-error-display')
+@stateReceiver(['error', 'fullscreen'])
+export class ErrorDisplay extends LitElement {
+    static override styles = [errorDisplayCss];
+    static override shadowRootOptions = {
+        ...LitElement.shadowRootOptions,
+        delegatesFocus: true
+    };
 
     /**
      * The error.
      */
-    get error(): THEOplayerError | undefined {
-        return this._error;
-    }
+    @property({ reflect: false, attribute: false })
+    accessor error: THEOplayerError | undefined;
 
-    set error(error: THEOplayerError | undefined) {
-        this._error = error;
-        setTextContent(this._messageSlot, error ? error.message : '');
-    }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.FULLSCREEN })
+    accessor fullscreen: boolean = false;
 
-    get fullscreen(): boolean {
-        return this.hasAttribute(Attribute.FULLSCREEN);
-    }
-
-    set fullscreen(fullscreen: boolean) {
-        toggleAttribute(this, Attribute.FULLSCREEN, fullscreen);
-    }
-
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (ErrorDisplay.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
+    protected override render() {
+        return html`<div part="icon"><slot name="icon">${unsafeSVG(errorIcon)}</slot></div>
+            <div part="text">
+                <h1 part="heading"><slot name="heading">An error occurred</slot></h1>
+                <p part="message"><slot name="message">${this.error?.message ?? ''}</slot></p>
+            </div>
+            <div part="fullscreen-controls">
+                <slot name="fullscreen-controls"><theoplayer-fullscreen-button></theoplayer-fullscreen-button></slot>
+            </div>`;
     }
 }
-
-customElements.define('theoplayer-error-display', ErrorDisplay);
 
 declare global {
     interface HTMLElementTagNameMap {
