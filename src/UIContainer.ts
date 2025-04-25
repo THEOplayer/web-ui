@@ -39,9 +39,9 @@ import { READY_EVENT } from './events/ReadyEvent';
 // Load components used in template
 import './components/GestureReceiver';
 
-const DEFAULT_USER_IDLE_TIMEOUT = 2;
-const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
-const DEFAULT_DVR_THRESHOLD = 60;
+export const DEFAULT_USER_IDLE_TIMEOUT = 2;
+export const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
+export const DEFAULT_DVR_THRESHOLD = 60;
 
 /**
  * `<theoplayer-ui>` - The container element for a THEOplayer UI.
