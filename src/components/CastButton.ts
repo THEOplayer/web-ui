@@ -1,4 +1,4 @@
-import { Button } from './Button';
+import { Button, type ButtonOptions } from './Button';
 import { property } from 'lit/decorators.js';
 import { Attribute } from '../util/Attribute';
 import type { CastState, VendorCast } from 'theoplayer/chromeless';
@@ -13,8 +13,8 @@ export class CastButton extends Button {
     private _castApi: VendorCast | undefined;
     private _castState: CastState = 'unavailable';
 
-    constructor() {
-        super();
+    constructor(options?: ButtonOptions) {
+        super(options);
         this._upgradeProperty('castState');
         this._upgradeProperty('castApi');
     }

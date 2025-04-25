@@ -1,9 +1,18 @@
 import { html, type HTMLTemplateResult, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { templateContent } from 'lit/directives/template-content.js';
 import linkButtonCss from './LinkButton.css';
 import { Attribute } from '../util/Attribute';
 import { KeyCode } from '../util/KeyCode';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
+import { type ButtonOptions, buttonTemplate } from './Button';
+
+/**
+ * @deprecated Override {@link LinkButton.render} instead.
+ */
+export function linkButtonTemplate(button: string, extraCss: string = ''): string {
+    return buttonTemplate(`<a>${button}</a>`, extraCss);
+}
 
 /**
  * `<theoplayer-link-button>` - A {@link Button | button} that opens a hyperlink.
@@ -15,9 +24,15 @@ import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 export class LinkButton extends LitElement {
     static styles = [linkButtonCss];
 
+    private readonly _template: HTMLTemplateElement | undefined;
     private _disabled: boolean = false;
 
     private readonly _linkRef: Ref<HTMLAnchorElement> = createRef<HTMLAnchorElement>();
+
+    constructor(options?: ButtonOptions) {
+        super();
+        this._template = options?.template;
+    }
 
     connectedCallback(): void {
         super.connectedCallback();
@@ -104,6 +119,9 @@ export class LinkButton extends LitElement {
     };
 
     protected override render(): HTMLTemplateResult {
+        if (this._template) {
+            return html`${templateContent(this._template)}`;
+        }
         return html`<a ${ref(this._linkRef)} href=${this.href} target=${this.target} @keydown=${this._onKeyDown} @click=${this._onClick}
             >${this.renderLinkContent()}</a
         >`;
