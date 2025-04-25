@@ -81,6 +81,7 @@ export class DefaultUI extends LitElement {
     private _appliedExtensions: boolean = false;
 
     private _configuration: UIPlayerConfiguration = {};
+    private _source: SourceDescription | undefined = undefined;
     private _userIdleTimeout: number | undefined = undefined;
     private _deviceType: DeviceType = 'desktop';
     private _dvrThreshold: number = DEFAULT_DVR_THRESHOLD;
@@ -141,6 +142,10 @@ export class DefaultUI extends LitElement {
     /**
      * The player's current source.
      */
+    get source() {
+        return this._uiRef.value ? this._uiRef.value.source : this._source;
+    }
+
     @property({
         reflect: false,
         attribute: Attribute.SOURCE,
@@ -148,7 +153,14 @@ export class DefaultUI extends LitElement {
             fromAttribute: (value: string | null) => (value ? (JSON.parse(value) as SourceDescription) : undefined)
         }
     })
-    accessor source: SourceDescription | undefined = undefined;
+    set source(source: SourceDescription | undefined) {
+        if (this._uiRef.value) {
+            this._source = undefined;
+            this._uiRef.value.source = source;
+        } else {
+            this._source = source;
+        }
+    }
 
     /**
      * Whether to automatically adjusts the player's height to fit the video's aspect ratio.
@@ -239,6 +251,13 @@ export class DefaultUI extends LitElement {
         this._onTitleSlotChange();
     }
 
+    protected override firstUpdated() {
+        if (this._source) {
+            this._uiRef.value!.source = this._source;
+            this._source = undefined;
+        }
+    }
+
     protected _onUiReady(): void {
         this.dispatchEvent(createCustomEvent(READY_EVENT));
     }
@@ -259,7 +278,6 @@ export class DefaultUI extends LitElement {
         return html`<theoplayer-ui
             ${ref(this._uiRef)}
             .configuration=${this.configuration}
-            .source=${this.source}
             .fluid=${this.fluid}
             .muted=${this.muted}
             .autoplay=${this.autoplay}
