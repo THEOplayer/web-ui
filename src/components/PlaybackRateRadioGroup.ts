@@ -1,16 +1,12 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
+import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { RadioGroup } from './RadioGroup';
 import verticalRadioGroupCss from './VerticalRadioGroup.css';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import type { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate(
-    'theoplayer-playback-rate-radio-group',
-    `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group><slot></slot></theoplayer-radio-group>`
-);
 
 /**
  * `<theoplayer-playback-rate-radio-group>` - A radio group that shows a list of playback rates,
@@ -21,47 +17,17 @@ const template = createTemplate(
  *   For example: `<theoplayer-radio-button value="2">2x</theoplayer-radio-button>`
  * @group Components
  */
-export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
-    private readonly _radioGroup: RadioGroup;
-    private readonly _optionsSlot: HTMLSlotElement;
+@customElement('theoplayer-playback-rate-radio-group')
+@stateReceiver(['player'])
+export class PlaybackRateRadioGroup extends LitElement {
+    static override styles = [verticalRadioGroupCss];
+
+    private readonly _radioGroupRef: Ref<RadioGroup> = createRef<RadioGroup>();
     private _player: ChromelessPlayer | undefined;
     private _value: number = 1;
 
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-
-        this._radioGroup = shadowRoot.querySelector('theoplayer-radio-group')!;
-        this._optionsSlot = shadowRoot.querySelector('slot')!;
-
-        this._upgradeProperty('value');
-        this._upgradeProperty('player');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
-
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
-
-        if (!(this._radioGroup instanceof RadioGroup)) {
-            customElements.upgrade(this._radioGroup);
-        }
-
+    protected override firstUpdated(): void {
         this._updateChecked();
-        this.shadowRoot!.addEventListener('change', this._onChange);
-        this._optionsSlot.addEventListener('slotchange', this._updateChecked);
-    }
-
-    disconnectedCallback(): void {
-        this.shadowRoot!.removeEventListener('change', this._onChange);
-        this._optionsSlot.removeEventListener('slotchange', this._updateChecked);
     }
 
     /**
@@ -71,6 +37,7 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
         return this._value;
     }
 
+    @state()
     set value(value: number) {
         value = Number(value);
         if (this._value === value) {
@@ -88,6 +55,7 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
         return this._player;
     }
 
+    @state()
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -102,16 +70,24 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
         }
     }
 
+    private get radioGroup_(): RadioGroup | undefined {
+        const radioGroup = this._radioGroupRef.value;
+        if (radioGroup && !(radioGroup instanceof RadioGroup)) {
+            customElements.upgrade(radioGroup);
+        }
+        return radioGroup;
+    }
+
     private readonly _updateChecked = (): void => {
-        const buttons = this._radioGroup.allRadioButtons();
+        const buttons = this.radioGroup_?.allRadioButtons() ?? [];
         for (const button of buttons) {
             button.checked = Number(button.value) === this.value;
         }
     };
 
     private readonly _onChange = (): void => {
-        const button = this._radioGroup.checkedRadioButton as RadioButton | null;
-        if (button !== null && this.value !== Number(button.value)) {
+        const button = this.radioGroup_?.checkedRadioButton;
+        if (button && this.value !== Number(button.value)) {
             this.value = button.value;
         }
     };
@@ -121,9 +97,13 @@ export class PlaybackRateRadioGroup extends StateReceiverMixin(HTMLElement, ['pl
             this.value = this._player.playbackRate;
         }
     };
-}
 
-customElements.define('theoplayer-playback-rate-radio-group', PlaybackRateRadioGroup);
+    protected override render(): HTMLTemplateResult {
+        return html`<theoplayer-radio-group ${ref(this._radioGroupRef)} @change=${this._onChange}
+            ><slot @slotchange=${this._updateChecked}></slot
+        ></theoplayer-radio-group>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {
