@@ -239,16 +239,16 @@ export class DefaultUI extends LitElement {
         this._onTitleSlotChange();
     }
 
+    protected _onUiReady(): void {
+        this.dispatchEvent(createCustomEvent(READY_EVENT));
+    }
+
     private readonly _updateStreamType = () => {
         if (this._uiRef.value) {
             this.streamType = this._uiRef.value.streamType;
         }
         // Hide seekbar when stream is live with no DVR
         this._timeRangeHidden = this.streamType === 'live';
-    };
-
-    private readonly _dispatchReadyEvent = () => {
-        this.dispatchEvent(createCustomEvent(READY_EVENT));
     };
 
     private readonly _onTitleSlotChange = () => {
@@ -266,9 +266,14 @@ export class DefaultUI extends LitElement {
             .streamType=${this.streamType}
             .userIdleTimeout=${this.userIdleTimeout}
             .dvrThreshold=${this.dvrThreshold}
-            @theoplayerready=${this._dispatchReadyEvent}
+            @theoplayerready=${this._onUiReady}
             @theoplayerstreamtypechange=${this._updateStreamType}
-        >
+            >${this.renderUiContent()}
+        </theoplayer-ui>`;
+    }
+
+    protected renderUiContent(): HTMLTemplateResult {
+        return html`
             <theoplayer-control-bar slot="top-chrome" part="top-chrome">
                 <div part="title" ad-hidden>
                     <slot name="title" @slotchange=${this._onTitleSlotChange}></slot>
@@ -330,7 +335,7 @@ export class DefaultUI extends LitElement {
             <theoplayer-settings-menu id="settings-menu" slot="menu" hidden></theoplayer-settings-menu>
             <slot name="error" slot="error"><theoplayer-error-display></theoplayer-error-display></slot>
             <slot name="menu" slot="menu"></slot>
-        </theoplayer-ui>`;
+        `;
     }
 }
 
