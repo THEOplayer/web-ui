@@ -2,18 +2,13 @@ import * as shadyCss from '@webcomponents/shadycss';
 import rangeCss from './Range.css';
 import { Attribute } from '../util/Attribute';
 import { ColorStops } from '../util/ColorStops';
-import { toggleAttribute } from '../util/CommonUtils';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { DeviceType } from '../util/DeviceType';
 import { isArrowKey, KeyCode } from '../util/KeyCode';
-
-export interface RangeOptions {
-    template: HTMLTemplateElement;
-}
-
-export function rangeTemplate(range: string, extraCss: string = ''): string {
-    return `<style>${rangeCss}\n${extraCss}</style><div part="container"><div part="background"></div><div part="pointer"></div>${range}</div>`;
-}
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { createRef, ref, type Ref } from 'lit/directives/ref.js';
+import { property, state } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 /**
  * A slider to select a value from a range.
@@ -23,51 +18,28 @@ export function rangeTemplate(range: string, extraCss: string = ''): string {
  *
  * @group Components
  */
-export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType']) {
-    static get observedAttributes() {
-        return [Attribute.DISABLED, Attribute.HIDDEN];
-    }
+@stateReceiver(['deviceType'])
+export abstract class Range extends LitElement {
+    static override styles = [rangeCss];
 
-    protected readonly _rangeEl: HTMLInputElement;
-    protected readonly _pointerEl: HTMLElement;
+    protected readonly _rangeRef: Ref<HTMLInputElement> = createRef<HTMLInputElement>();
+
+    private _min: number = 0;
+    private _max: number = 100;
+    private _value: number = 0;
+    private _disabled: boolean = false;
+    private _hidden: boolean = false;
+
     private _rangeWidth: number = 0;
     private _thumbWidth: number = 10;
 
-    constructor(options: RangeOptions) {
-        super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(options.template.content.cloneNode(true));
-
-        this._rangeEl = shadowRoot.querySelector('input[type="range"]')!;
-        this._rangeEl.addEventListener('input', this._onInput);
-        // Internet Explorer does not fire 'input' events for <input> elements... use 'change' instead.
-        this._rangeEl.addEventListener('change', this._onInput);
-        this._rangeEl.addEventListener('keydown', this._onKeyDown);
-
-        this._pointerEl = shadowRoot.querySelector('[part="pointer"]')!;
-
-        this._upgradeProperty('disabled');
-        this._upgradeProperty('value');
-        this._upgradeProperty('min');
-        this._upgradeProperty('max');
-        this._upgradeProperty('step');
-        this._upgradeProperty('deviceType');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
+    @state()
+    private accessor _pointerWidth: number = 0;
 
     connectedCallback(): void {
-        shadyCss.styleElement(this);
+        super.connectedCallback();
 
-        this._rangeEl.setAttribute(Attribute.ARIA_LABEL, this.getAriaLabel());
-        this.update();
-
+        this._updateRange();
         this.addEventListener('pointermove', this._updatePointerBar);
     }
 
@@ -80,23 +52,49 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
      *
      * When disabled, the slider value cannot be changed, and the slider thumb is hidden.
      */
-    get disabled() {
-        return this.hasAttribute(Attribute.DISABLED);
+    get disabled(): boolean {
+        return this._disabled;
     }
 
+    @property({ reflect: true, type: Boolean, attribute: Attribute.DISABLED })
     set disabled(disabled: boolean) {
-        toggleAttribute(this, Attribute.DISABLED, disabled);
+        if (this._disabled === disabled) return;
+        this._disabled = disabled;
+        this.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+    }
+
+    /**
+     * Whether the range is hidden.
+     */
+    get hidden(): boolean {
+        return this._hidden;
+    }
+
+    @property({ reflect: true, type: Boolean, attribute: Attribute.HIDDEN })
+    set hidden(hidden: boolean) {
+        if (this._hidden === hidden) return;
+        this._hidden = hidden;
+        this._updateRange();
     }
 
     /**
      * The current value.
      */
     get value(): number {
-        return this._rangeEl.valueAsNumber;
+        return this._value;
     }
 
+    @property({ reflect: false, attribute: false })
     set value(value: number) {
-        this._rangeEl.valueAsNumber = value;
+        let newValue = value;
+        if (!isNaN(this.min)) {
+            newValue = Math.max(this.min, newValue);
+        }
+        if (!isNaN(this.max)) {
+            newValue = Math.min(this.max, newValue);
+        }
+        if (this._value === newValue) return;
+        this._value = newValue;
         this.handleInput();
     }
 
@@ -104,24 +102,26 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
      * The minimum allowed value.
      */
     get min(): number {
-        return Number(this._rangeEl.min);
+        return this._min;
     }
 
+    @property({ reflect: true, type: Number, attribute: 'min' })
     set min(min: number) {
-        this._rangeEl.min = String(min);
-        this.update();
+        this._min = min;
+        this._updateRange();
     }
 
     /**
      * The maximum allowed value.
      */
     get max(): number {
-        return Number(this._rangeEl.max);
+        return this._max;
     }
 
+    @property({ reflect: true, type: Number, attribute: 'max' })
     set max(max: number) {
-        this._rangeEl.max = String(max);
-        this.update();
+        this._max = max;
+        this._updateRange();
     }
 
     /**
@@ -129,57 +129,36 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
      *
      * If set to `"any"`, the value can change with arbitrary precision.
      */
-    get step(): number | 'any' {
-        const raw = this._rangeEl.step;
-        return raw === 'any' ? raw : Number(raw);
-    }
-
-    set step(step: number | 'any') {
-        this._rangeEl.step = String(step);
-    }
-
-    get deviceType(): DeviceType {
-        return (this.getAttribute(Attribute.DEVICE_TYPE) || 'desktop') as DeviceType;
-    }
-
-    set deviceType(deviceType: DeviceType) {
-        this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
-    }
-
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (newValue === oldValue) {
-            return;
+    @property({
+        reflect: true,
+        attribute: 'step',
+        converter: {
+            fromAttribute: (value): number | 'any' => (value == null || value === 'any' ? 'any' : Number(value))
         }
-        const hasValue = newValue != null;
-        if (attrName === Attribute.DISABLED) {
-            this.setAttribute('aria-disabled', hasValue ? 'true' : 'false');
-            toggleAttribute(this._rangeEl, Attribute.DISABLED, hasValue);
-        } else if (attrName === Attribute.HIDDEN) {
-            if (!hasValue) {
-                this.update();
-            }
-        }
-        if (Range.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
-    }
+    })
+    accessor step: number | 'any' = 'any';
 
-    private readonly _onInput = () => {
-        this.handleInput();
+    @property({ reflect: true, type: String, attribute: Attribute.DEVICE_TYPE })
+    accessor deviceType: DeviceType = 'desktop';
+
+    @property({ reflect: true, type: String, attribute: 'aria-live' })
+    accessor ariaLive: string | null = null;
+
+    private readonly _onInput = (event: Event) => {
+        this.value = (event.target as HTMLInputElement).valueAsNumber;
     };
 
     protected handleInput(): void {
-        this.update();
+        this._updateRange();
     }
 
-    protected update(useCachedWidth?: boolean): void {
-        if (this.hasAttribute(Attribute.HIDDEN)) {
+    protected _updateRange(useCachedWidth?: boolean): void {
+        if (this.hidden) {
             return;
         }
         if (!useCachedWidth) {
             this.updateCachedWidths_();
         }
-        this._rangeEl.setAttribute('aria-valuetext', this.getAriaValueText());
         this.updateBar_();
     }
 
@@ -235,7 +214,7 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
 
     private updateCachedWidths_(): void {
         // Use the last non-zero range width, in case the range is temporarily hidden.
-        const rangeWidth = this._rangeEl.offsetWidth;
+        const rangeWidth = this._rangeRef.value?.offsetWidth ?? 0;
         if (rangeWidth > 0) {
             this._rangeWidth = rangeWidth;
         }
@@ -257,11 +236,12 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
     }
 
     private readonly _updatePointerBar = (e: PointerEvent): void => {
-        if (this.disabled) {
+        const rangeEl = this._rangeRef.value;
+        if (this.disabled || !rangeEl) {
             return;
         }
         // Get mouse position percent
-        const rangeRect = this._rangeEl.getBoundingClientRect();
+        const rangeRect = rangeEl.getBoundingClientRect();
         let mousePercent = (e.clientX - rangeRect.left) / rangeRect.width;
         // Lock between 0 and 1
         mousePercent = Math.max(0, Math.min(1, mousePercent));
@@ -269,7 +249,7 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
     };
 
     protected updatePointer_(mousePercent: number, rangeRect: DOMRectReadOnly): void {
-        this._pointerEl.style.width = `${mousePercent * rangeRect.width}px`;
+        this._pointerWidth = mousePercent * rangeRect.width;
     }
 
     private readonly _onKeyDown = (e: KeyboardEvent): void => {
@@ -288,5 +268,35 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
                 e.preventDefault();
             }
         }
+    }
+
+    protected override render(): HTMLTemplateResult {
+        return html`<div part="container">
+            <div part="background"></div>
+            <div part="pointer" style=${styleMap({ width: `${this._pointerWidth}px` })}></div>
+            <input
+                type="range"
+                ${ref(this._rangeRef)}
+                .min=${this.min}
+                .max=${this.max}
+                .step=${this.step}
+                .value=${this.value}
+                .disabled=${this.disabled}
+                aria-label="${this.getAriaLabel()}"
+                aria-valuetext=${this.getAriaValueText()}
+                aria-live=${this.ariaLive}
+                @input=${this._onInput}
+                @change=${
+                    /* Internet Explorer does not fire 'input' events for <input> elements... use 'change' instead. */
+                    this._onInput
+                }
+                @keydown=${this._onKeyDown}
+            />
+            ${this.renderRangeExtras()}
+        </div>`;
+    }
+
+    protected renderRangeExtras(): HTMLTemplateResult {
+        return html``;
     }
 }
