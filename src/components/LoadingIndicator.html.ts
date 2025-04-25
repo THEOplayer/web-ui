@@ -1,4 +1,6 @@
-<div part="icon">
+import { html } from 'lit';
+
+export default html`<div part="icon">
     <slot name="icon">
         <div aria-hidden="true" class="theoplayer-loading-progress">
             <div class="theoplayer-loading-spinner">
@@ -20,4 +22,4 @@
             </div>
         </div>
     </slot>
-</div>
+</div>`;
