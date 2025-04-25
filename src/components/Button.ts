@@ -1,20 +1,23 @@
 import { html, type HTMLTemplateResult, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { templateContent } from 'lit/directives/template-content.js';
 import buttonCss from './Button.css';
 import { Attribute } from '../util/Attribute';
 import { isActivationKey } from '../util/KeyCode';
 
+/** @deprecated */
 export interface ButtonOptions {
-    template: HTMLTemplateElement;
+    /**
+     * @deprecated Override {@link Button.render} instead.
+     */
+    template?: HTMLTemplateElement;
 }
 
-export function buttonTemplate(button: string, extraCss: string = ''): HTMLTemplateResult {
-    return html`
-        <style>
-            ${extraCss}
-        </style>
-        ${button}
-    `;
+/**
+ * @deprecated Override {@link Button.render} instead.
+ */
+export function buttonTemplate(button: string, extraCss: string = ''): string {
+    return `<style>${extraCss}</style>${button}`;
 }
 
 /**
@@ -29,6 +32,7 @@ export function buttonTemplate(button: string, extraCss: string = ''): HTMLTempl
 export class Button extends LitElement {
     static styles = [buttonCss];
 
+    private readonly _template: HTMLTemplateElement | undefined;
     private _disabled: boolean = false;
 
     /**
@@ -37,8 +41,9 @@ export class Button extends LitElement {
      * By default, the button renders the contents of its direct children (i.e. it has a single unnamed `<slot>`).
      * Subclasses can override this by overriding {@link render}.
      */
-    constructor() {
+    constructor(options?: ButtonOptions) {
         super();
+        this._template = options?.template;
     }
 
     protected _upgradeProperty(prop: keyof this) {
@@ -139,6 +144,9 @@ export class Button extends LitElement {
     };
 
     protected render(): HTMLTemplateResult {
+        if (this._template) {
+            return html`${templateContent(this._template)}`;
+        }
         return html`<slot></slot>`;
     }
 

@@ -6,6 +6,26 @@ import { MENU_CHANGE_EVENT, type MenuChangeEvent } from '../events/MenuChangeEve
 import { createCustomEvent } from '../util/EventUtils';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
+import { templateContent } from 'lit/directives/template-content.js';
+
+/** @deprecated */
+export interface MenuOptions {
+    /**
+     * @deprecated Override {@link Menu.render} instead.
+     */
+    template?: HTMLTemplateElement;
+}
+
+/**
+ * @deprecated Override {@link Menu.render} instead.
+ */
+export function menuTemplate(heading: string, content: string, extraCss: string = ''): string {
+    return (
+        `<style>${extraCss}</style>` +
+        `<div part="heading"><theoplayer-menu-close-button></theoplayer-menu-close-button>${heading}</div>` +
+        `<div part="content">${content}</div>`
+    );
+}
 
 /**
  * `<theoplayer-menu>` - A menu that can be opened on top of the player.
@@ -28,6 +48,7 @@ export class Menu extends LitElement {
         delegatesFocus: true
     };
 
+    private readonly _template: HTMLTemplateElement | undefined;
     private _menuOpened: boolean = false;
 
     /**
@@ -36,8 +57,9 @@ export class Menu extends LitElement {
      * By default, the button has an unnamed `<slot>` for its contents, and a named `"heading"` `<slot>` for its heading text.
      * Subclasses can override this by overriding {@link renderMenuHeading} and/or {@link renderMenuContent}.
      */
-    constructor() {
+    constructor(options?: MenuOptions) {
         super();
+        this._template = options?.template;
     }
 
     connectedCallback(): void {
@@ -94,6 +116,9 @@ export class Menu extends LitElement {
     };
 
     protected override render(): HTMLTemplateResult {
+        if (this._template) {
+            return html`${templateContent(this._template)}`;
+        }
         return html`<div part="heading">
                 <theoplayer-menu-close-button></theoplayer-menu-close-button>
                 ${this.renderMenuHeading()}

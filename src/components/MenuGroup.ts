@@ -19,6 +19,22 @@ import { createCustomEvent } from '../util/EventUtils';
 import type { MenuChangeEvent } from '../events/MenuChangeEvent';
 import { MENU_CHANGE_EVENT } from '../events/MenuChangeEvent';
 import { Menu } from './Menu';
+import { templateContent } from 'lit/directives/template-content.js';
+
+/** @deprecated */
+export interface MenuGroupOptions {
+    /**
+     * @deprecated Override {@link MenuGroup.render} instead.
+     */
+    template?: HTMLTemplateElement;
+}
+
+/**
+ * @deprecated Override {@link MenuGroup.render} instead.
+ */
+export function menuGroupTemplate(content: string, extraCss: string = ''): string {
+    return `<style>${extraCss}</style>${content}`;
+}
 
 interface OpenMenuEntry {
     menu: Menu | MenuGroup;
@@ -42,6 +58,13 @@ export class MenuGroup extends LitElement {
         ...LitElement.shadowRootOptions,
         delegatesFocus: true
     };
+
+    private readonly _template: HTMLTemplateElement | undefined;
+
+    constructor(options?: MenuGroupOptions) {
+        super();
+        this._template = options?.template;
+    }
 
     private _menuOpened: boolean = false;
 
@@ -88,6 +111,9 @@ export class MenuGroup extends LitElement {
     }
 
     protected render(): TemplateResult {
+        if (this._template) {
+            return html`${templateContent(this._template)}`;
+        }
         return html`<slot @slotchange=${this._onMenuListChange}></slot>`;
     }
 
