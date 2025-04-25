@@ -1,5 +1,5 @@
 import { html, type HTMLTemplateResult, LitElement } from 'lit';
-import { customElement, property, queryAssignedNodes } from 'lit/decorators.js';
+import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import type { ChromelessPlayer, SourceDescription, UIPlayerConfiguration } from 'theoplayer/chromeless';
 import { DEFAULT_DVR_THRESHOLD, DEFAULT_TV_USER_IDLE_TIMEOUT, DEFAULT_USER_IDLE_TIMEOUT, type UIContainer } from './UIContainer';
@@ -230,7 +230,7 @@ export class DefaultUI extends LitElement {
         this._dvrThreshold = isNaN(value) ? 0 : value;
     }
 
-    @property({ reflect: true, type: Boolean, attribute: Attribute.HAS_TITLE })
+    @state()
     private accessor _hasTitle: boolean = false;
 
     connectedCallback(): void {
@@ -289,7 +289,7 @@ export class DefaultUI extends LitElement {
     protected renderUiContent(): HTMLTemplateResult {
         return html`
             <theoplayer-control-bar slot="top-chrome" part="top-chrome">
-                <div part="title" ad-hidden>
+                <div part="title" ad-hidden class=${classMap({ [Attribute.HIDDEN]: !this._hasTitle })}>
                     <slot name="title" @slotchange=${this._onTitleSlotChange}></slot>
                 </div>
                 <span class="theoplayer-spacer"></span>
