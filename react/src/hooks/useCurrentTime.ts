@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState, useSyncExternalStore } from 'react';
 import { PlayerContext } from '../context';
-import type { PlayerEventMap } from 'theoplayer';
+import type { PlayerEventMap } from 'theoplayer/chromeless';
 
 const TIME_CHANGE_EVENTS = ['timeupdate', 'seeking', 'seeked', 'emptied'] satisfies ReadonlyArray<keyof PlayerEventMap>;
 

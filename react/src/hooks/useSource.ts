@@ -1,6 +1,6 @@
 import { useCallback, useContext, useSyncExternalStore } from 'react';
 import { PlayerContext } from '../context';
-import type { SourceDescription } from 'theoplayer';
+import type { SourceDescription } from 'theoplayer/chromeless';
 
 /**
  * Returns {@link theoplayer!ChromelessPlayer.source | the player's source}, automatically updating whenever it changes.
