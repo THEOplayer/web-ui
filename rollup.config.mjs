@@ -12,7 +12,6 @@ import { readFile } from 'node:fs/promises';
 import { string } from 'rollup-plugin-string';
 import replace from '@rollup/plugin-replace';
 import dts from 'rollup-plugin-dts';
-import inject from '@rollup/plugin-inject';
 import virtual from '@rollup/plugin-virtual';
 import json from '@rollup/plugin-json';
 
@@ -28,7 +27,6 @@ const banner = `/*!
  * License: ${license}
  */`;
 const theoplayerModule = 'theoplayer/chromeless';
-const domShimModule = '@lit-labs/ssr-dom-shim';
 
 /**
  * @param {{configOutputDir?: string}} cliArgs
@@ -111,7 +109,6 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
                 banner
             },
             context: 'globalThis',
-            external: [domShimModule],
             plugins: jsPlugins({ es5, node, module: true, production, sourcemap })
         }
     ]).filter(Boolean);
@@ -228,16 +225,6 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
                 externalHelpers: true
             }
         }),
-        // For Node, inject SSR shims for custom elements.
-        node &&
-            inject({
-                include: './src/**',
-                sourceMap: sourcemap,
-                modules: {
-                    HTMLElement: [domShimModule, 'HTMLElement'],
-                    customElements: [domShimModule, 'customElements']
-                }
-            }),
         // Minify production builds.
         production &&
             minify({
