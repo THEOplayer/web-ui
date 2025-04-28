@@ -60,6 +60,10 @@ export class Menu extends LitElement {
     constructor(options?: MenuOptions) {
         super();
         this._template = options?.template;
+        if (this._template) {
+            // Render immediately to populate the shadow DOM.
+            this.performUpdate();
+        }
     }
 
     connectedCallback(): void {
