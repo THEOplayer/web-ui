@@ -64,6 +64,10 @@ export class MenuGroup extends LitElement {
     constructor(options?: MenuGroupOptions) {
         super();
         this._template = options?.template;
+        if (this._template) {
+            // Render immediately to populate the shadow DOM.
+            this.performUpdate();
+        }
     }
 
     private _menuOpened: boolean = false;
