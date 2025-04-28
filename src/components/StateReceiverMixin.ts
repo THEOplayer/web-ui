@@ -22,8 +22,9 @@ export interface StateReceiverPropertyMap {
  * A custom element that automatically receives selected state updates
  * from an ancestor {@link UIContainer | `<theoplayer-ui>`} element.
  *
- * Do not implement this interface directly, instead use {@link StateReceiverMixin}.
+ * Do not implement this interface directly, instead use {@link stateReceiver} or {@link StateReceiverMixin}.
  *
+ * @see {@link stateReceiver}
  * @see {@link StateReceiverMixin}
  */
 export interface StateReceiverElement extends Partial<StateReceiverPropertyMap>, Element {
@@ -70,15 +71,15 @@ export const stateReceiver =
  * @param props - The names of the properties this element will receive.
  * @returns A class constructor that extends `base` and implements {@link StateReceiverElement}.
  * @see {@link StateReceiverElement}
+ * @deprecated Use {@link stateReceiver} decorator instead.
  */
 export function StateReceiverMixin<T extends Constructor<Element>>(
     base: T,
     props: Array<keyof StateReceiverPropertyMap>
 ): T & Constructor<StateReceiverElement> {
+    @stateReceiver(props)
     abstract class StateReceiver extends base implements StateReceiverElement {
-        get [StateReceiverProps](): Array<keyof StateReceiverPropertyMap> {
-            return props;
-        }
+        declare readonly [StateReceiverProps]: Array<keyof StateReceiverPropertyMap>;
     }
 
     return StateReceiver;
