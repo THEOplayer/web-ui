@@ -32,6 +32,10 @@ export class LinkButton extends LitElement {
     constructor(options?: ButtonOptions) {
         super();
         this._template = options?.template;
+        if (this._template) {
+            // Render immediately to populate the shadow DOM.
+            this.performUpdate();
+        }
     }
 
     connectedCallback(): void {
