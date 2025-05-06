@@ -7,6 +7,7 @@ import elementCss from './UIContainer.css';
 import {
     arrayFind,
     arrayRemove,
+    closestRecursive,
     containsComposedNode,
     getFocusableChildren,
     getSlottedElements,
@@ -38,6 +39,7 @@ import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
 import { READY_EVENT } from './events/ReadyEvent';
 import { addGlobalStyles } from './Global';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
+import { type addLocale, type Locale } from './i18n';
 
 // Load components used in template
 import './components/GestureReceiver';
@@ -150,6 +152,7 @@ export class UIContainer extends LitElement {
     private _deviceType: DeviceType = 'desktop';
     private _streamType: StreamType = 'vod';
     private _fluid: boolean = false;
+    private _language: string = '';
     private _userIdle: boolean = false;
     private _userIdleTimeout: number | undefined = undefined;
     private _isUserActive: boolean = false;
@@ -252,6 +255,27 @@ export class UIContainer extends LitElement {
     set fluid(value: boolean) {
         this._fluid = value;
         this._updateAspectRatio();
+    }
+
+    /**
+     * The language of this element.
+     *
+     * When set, this also updates the {@link Locale} of the UI if one is registered with {@link addLocale}.
+     *
+     * @see HTMLElement.lang
+     */
+    get lang(): string {
+        return this._language;
+    }
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    set lang(value: string | null) {
+        this._language = value ?? '';
+        for (const receiver of this._stateReceivers) {
+            if (receiver[StateReceiverProps].indexOf('lang') >= 0) {
+                receiver.lang = this._language;
+            }
+        }
     }
 
     /**
@@ -457,6 +481,9 @@ export class UIContainer extends LitElement {
         super.connectedCallback();
         addGlobalStyles();
 
+        if (!this.hasAttribute(Attribute.LANG)) {
+            this.lang = closestRecursive<HTMLElement>(this, '[lang]')?.lang ?? '';
+        }
         if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {
             this.deviceType = isMobile() ? 'mobile' : isTv() ? 'tv' : 'desktop';
         }
@@ -622,6 +649,9 @@ export class UIContainer extends LitElement {
         const receiverProps = receiver[StateReceiverProps];
         if (receiverProps.indexOf('player') >= 0) {
             receiver.player = this._player;
+        }
+        if (receiverProps.indexOf('lang') >= 0) {
+            receiver.lang = this.lang;
         }
         if (receiverProps.indexOf('fullscreen') >= 0) {
             receiver.fullscreen = this.fullscreen;
