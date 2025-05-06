@@ -218,12 +218,20 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
             sourceMaps: sourcemap,
             tsconfig: false,
             env: {
-                loose: true,
+                loose: false,
                 targets: browserslist
             },
             jsc: {
-                loose: true,
-                externalHelpers: true
+                loose: false,
+                externalHelpers: true,
+                assumptions: {
+                    constantSuper: true,
+                    noDocumentAll: true,
+                    ignoreFunctionName: true,
+                    ignoreFunctionLength: true,
+                    ignoreToPrimitiveHint: true,
+                    iterableIsArray: false // must NEVER be true!
+                }
             }
         }),
         // Minify production builds.
