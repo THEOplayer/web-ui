@@ -1,8 +1,16 @@
 const localesByName: Record<string, Locale> = {};
 
-export interface Locale {}
+export interface Locale {
+    playAria: string;
+    pauseAria: string;
+    replayAria: string;
+}
 
-const defaultLocale: Locale = {};
+const defaultLocale: Locale = {
+    playAria: 'play',
+    pauseAria: 'pause',
+    replayAria: 'replay'
+};
 
 export function getLocale(name: string): Locale {
     return localesByName[name] ?? defaultLocale;
