@@ -9,6 +9,7 @@ import pauseIcon from '../icons/pause.svg';
 import replayIcon from '../icons/replay.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
+import { getLocale } from '../i18n';
 
 const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied', 'sourcechange'] as const;
 
@@ -20,7 +21,7 @@ const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied', 'sourcechange'] 
  * @group Components
  */
 @customElement('theoplayer-play-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class PlayButton extends Button {
     static styles = [...Button.styles, playButtonCss];
 
@@ -37,6 +38,9 @@ export class PlayButton extends Button {
 
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.ENDED })
     accessor ended: boolean = false;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
@@ -106,7 +110,8 @@ export class PlayButton extends Button {
     }
 
     private _updateAriaLabel(): void {
-        const label = this.ended ? 'replay' : this.paused ? 'play' : 'pause';
+        const locale = getLocale(this.lang);
+        const label = this.ended ? locale.replayAria : this.paused ? locale.playAria : locale.pauseAria;
         this.setAttribute(Attribute.ARIA_LABEL, label);
     }
 
