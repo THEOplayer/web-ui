@@ -50,5 +50,6 @@ export enum Attribute {
     SHOW_AD_MARKERS = 'show-ad-markers',
     CLICKTHROUGH = 'clickthrough',
     PROPERTY = 'property',
-    VALUE = 'value'
+    VALUE = 'value',
+    LANG = 'lang'
 }

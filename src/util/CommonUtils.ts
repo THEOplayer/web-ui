@@ -257,3 +257,12 @@ export function upgradeCustomElementIfNeeded(element: Element): Promise<unknown>
     }
     return undefined;
 }
+
+export function closestRecursive<E extends Element>(element: Element, selector: string): E | null {
+    if (!element.closest) return null;
+    const closest = element.closest<E>(selector);
+    if (closest) return closest;
+    const host = (element.getRootNode?.() as ShadowRoot | null)?.host;
+    if (host) return closestRecursive<E>(host, selector);
+    return null;
+}
