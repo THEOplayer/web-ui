@@ -8,4 +8,5 @@ export { type DeviceType } from './util/DeviceType';
 export { type StreamType } from './util/StreamType';
 export { type Constructor } from './util/CommonUtils';
 export { ColorStops } from './util/ColorStops';
+export { type Locale, addLocale } from './i18n/index';
 export * from './version';
