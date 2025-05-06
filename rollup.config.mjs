@@ -192,6 +192,7 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
         // Transpile TypeScript.
         swc({
             include: './src/**',
+            extensions: ['.ts', '.js', '.html', '.css'],
             sourceMaps: sourcemap,
             tsconfig: false,
             env: {
