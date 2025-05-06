@@ -163,7 +163,7 @@ export class DefaultUI extends LitElement {
     }
 
     /**
-     * Whether to automatically adjusts the player's height to fit the video's aspect ratio.
+     * Whether to automatically adjust the player's height to fit the video's aspect ratio.
      */
     @property({ reflect: true, type: Boolean, attribute: Attribute.FLUID })
     accessor fluid: boolean = false;
