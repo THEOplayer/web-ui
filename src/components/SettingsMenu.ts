@@ -24,7 +24,7 @@ export class SettingsMenu extends MenuGroup {
         return html`
             <theoplayer-menu>
                 <span slot="heading"><slot name="heading">Settings</slot></span>
-                <table class="theoplayer-menu-table">
+                <table>
                     <tr>
                         <td><span>Quality</span></td>
                         <td>
