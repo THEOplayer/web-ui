@@ -70,7 +70,7 @@ export class TextTrackStyleMenu extends MenuGroup {
                     class="theoplayer-menu-heading-button"
                     slot="heading"
                 ></theoplayer-text-track-style-reset-button>
-                <table class="theoplayer-menu-table">
+                <table>
                     <tr>
                         <td><span>Font family</span></td>
                         <td>

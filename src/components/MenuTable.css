@@ -1,31 +1,31 @@
-.theoplayer-menu-table {
+table {
     table-layout: auto;
     border-collapse: collapse;
 }
 
-.theoplayer-menu-table,
-.theoplayer-menu-table tr,
-.theoplayer-menu-table td {
+table,
+table tr,
+table td {
     margin: 0;
     padding: 0;
 }
 
-.theoplayer-menu-table td > * {
+table td > * {
     font-size: var(--theoplayer-text-font-size, 14px);
     line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
     padding: var(--theoplayer-control-padding, 10px);
 }
 
-.theoplayer-menu-table td:first-child {
+table td:first-child {
     width: 0;
     white-space: nowrap;
 }
 
-.theoplayer-menu-table td:last-child {
+table td:last-child {
     text-align: center;
 }
 
-.theoplayer-menu-table td > theoplayer-menu-button {
+table td > theoplayer-menu-button {
     /* Fill entire cell */
     display: flex;
 }
