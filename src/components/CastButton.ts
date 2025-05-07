@@ -1,5 +1,5 @@
 import { Button, type ButtonOptions } from './Button';
-import { property } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { Attribute } from '../util/Attribute';
 import type { CastState, VendorCast } from 'theoplayer/chromeless';
 
@@ -15,8 +15,6 @@ export class CastButton extends Button {
 
     constructor(options?: ButtonOptions) {
         super(options);
-        this._upgradeProperty('castState');
-        this._upgradeProperty('castApi');
     }
 
     override connectedCallback() {
@@ -31,6 +29,7 @@ export class CastButton extends Button {
         return this._castApi;
     }
 
+    @state()
     set castApi(castApi: VendorCast | undefined) {
         if (this._castApi !== undefined) {
             this._castApi.removeEventListener('statechange', this._updateCastState);
