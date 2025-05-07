@@ -70,44 +70,80 @@ export class TextTrackStyleMenu extends MenuGroup {
                     class="theoplayer-menu-heading-button"
                     slot="heading"
                 ></theoplayer-text-track-style-reset-button>
-                <div class="theoplayer-menu-table">
-                    <span>Font family</span>
-                    <theoplayer-menu-button menu="font-family-menu">
-                        <theoplayer-text-track-style-display property="fontFamily"></theoplayer-text-track-style-display>
-                    </theoplayer-menu-button>
-                    <span>Font color</span>
-                    <theoplayer-menu-button menu="font-color-menu">
-                        <theoplayer-text-track-style-display property="fontColor"></theoplayer-text-track-style-display>
-                    </theoplayer-menu-button>
-                    <span>Font opacity</span>
-                    <theoplayer-menu-button menu="font-opacity-menu">
-                        <theoplayer-text-track-style-display property="fontOpacity"></theoplayer-text-track-style-display>
-                    </theoplayer-menu-button>
-                    <span>Font size</span>
-                    <theoplayer-menu-button menu="font-size-menu">
-                        <theoplayer-text-track-style-display property="fontSize"></theoplayer-text-track-style-display>
-                    </theoplayer-menu-button>
-                    <span>Background color</span>
-                    <theoplayer-menu-button menu="background-color-menu">
-                        <theoplayer-text-track-style-display property="backgroundColor"></theoplayer-text-track-style-display>
-                    </theoplayer-menu-button>
-                    <span>Background opacity</span>
-                    <theoplayer-menu-button menu="background-opacity-menu">
-                        <theoplayer-text-track-style-display property="backgroundOpacity"></theoplayer-text-track-style-display>
-                    </theoplayer-menu-button>
-                    <span>Window color</span>
-                    <theoplayer-menu-button menu="window-color-menu">
-                        <theoplayer-text-track-style-display property="windowColor"></theoplayer-text-track-style-display>
-                    </theoplayer-menu-button>
-                    <span>Window opacity</span>
-                    <theoplayer-menu-button menu="window-opacity-menu">
-                        <theoplayer-text-track-style-display property="windowOpacity"></theoplayer-text-track-style-display>
-                    </theoplayer-menu-button>
-                    <span>Character edge style</span>
-                    <theoplayer-menu-button menu="edge-style-menu">
-                        <theoplayer-text-track-style-display property="edgeStyle"></theoplayer-text-track-style-display>
-                    </theoplayer-menu-button>
-                </div>
+                <table class="theoplayer-menu-table">
+                    <tr>
+                        <td><span>Font family</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="font-family-menu">
+                                <theoplayer-text-track-style-display property="fontFamily"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Font color</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="font-color-menu">
+                                <theoplayer-text-track-style-display property="fontColor"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Font opacity</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="font-opacity-menu">
+                                <theoplayer-text-track-style-display property="fontOpacity"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Font size</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="font-size-menu">
+                                <theoplayer-text-track-style-display property="fontSize"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Background color</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="background-color-menu">
+                                <theoplayer-text-track-style-display property="backgroundColor"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Background opacity</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="background-opacity-menu">
+                                <theoplayer-text-track-style-display property="backgroundOpacity"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Window color</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="window-color-menu">
+                                <theoplayer-text-track-style-display property="windowColor"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Window opacity</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="window-opacity-menu">
+                                <theoplayer-text-track-style-display property="windowOpacity"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>Character edge style</span></td>
+                        <td>
+                            <theoplayer-menu-button menu="edge-style-menu">
+                                <theoplayer-text-track-style-display property="edgeStyle"></theoplayer-text-track-style-display>
+                            </theoplayer-menu-button>
+                        </td>
+                    </tr>
+                </table>
             </theoplayer-menu>
             <theoplayer-menu id="font-family-menu" menu-close-on-input hidden>
                 <span slot="heading">Font family</span>
