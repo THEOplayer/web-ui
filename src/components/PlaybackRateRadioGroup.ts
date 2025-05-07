@@ -27,10 +27,11 @@ export class PlaybackRateRadioGroup extends LitElement {
     private _value: number = 1;
 
     protected override firstUpdated(): void {
-        if (this._radioGroupRef.value && !(this._radioGroupRef.value instanceof RadioGroup)) {
-            customElements.upgrade(this._radioGroupRef.value);
+        const radioGroup = this._radioGroupRef.value!;
+        if (!(radioGroup instanceof RadioGroup)) {
+            customElements.upgrade(radioGroup);
         }
-        this._updateChecked();
+        radioGroup.value = String(this.value);
     }
 
     /**
@@ -50,7 +51,10 @@ export class PlaybackRateRadioGroup extends LitElement {
         if (this._player !== undefined) {
             this._player.playbackRate = value;
         }
-        this._updateChecked();
+        const radioGroup = this._radioGroupRef.value;
+        if (radioGroup) {
+            radioGroup.value = String(value);
+        }
         this.dispatchEvent(createEvent('change', { bubbles: true }));
     }
 
@@ -73,18 +77,10 @@ export class PlaybackRateRadioGroup extends LitElement {
         }
     }
 
-    private readonly _updateChecked = (): void => {
-        const buttons = this._radioGroupRef.value?.allRadioButtons() ?? [];
-        for (const button of buttons) {
-            button.checked = Number(button.value) === this.value;
-        }
-    };
-
     private readonly _onChange = (): void => {
-        const button = this._radioGroupRef.value?.checkedRadioButton;
-        if (button && this.value !== Number(button.value)) {
-            this.value = button.value;
-        }
+        const radioGroup = this._radioGroupRef.value;
+        if (!radioGroup) return;
+        this.value = Number(radioGroup.value);
     };
 
     private readonly _updateFromPlayer = (): void => {
@@ -94,9 +90,7 @@ export class PlaybackRateRadioGroup extends LitElement {
     };
 
     protected override render(): HTMLTemplateResult {
-        return html`<theoplayer-radio-group ${ref(this._radioGroupRef)} @change=${this._onChange}
-            ><slot @slotchange=${this._updateChecked}></slot
-        ></theoplayer-radio-group>`;
+        return html`<theoplayer-radio-group ${ref(this._radioGroupRef)} @change=${this._onChange}><slot></slot></theoplayer-radio-group>`;
     }
 }
 
