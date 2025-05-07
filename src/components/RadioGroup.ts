@@ -30,6 +30,7 @@ import { navigateByArrowKey } from '../util/KeyboardNavigation';
 export class RadioGroup extends LitElement {
     private readonly _slotRef: Ref<HTMLSlotElement> = createRef<HTMLSlotElement>();
     private _radioButtons: RadioButton[] = [];
+    private _value: any = undefined;
 
     constructor() {
         super();
@@ -60,6 +61,10 @@ export class RadioGroup extends LitElement {
         this.removeEventListener('keydown', this._onKeyDown);
     }
 
+    protected override firstUpdated(): void {
+        this._onSlotChange();
+    }
+
     protected override createRenderRoot(): HTMLElement | DocumentFragment {
         const root = super.createRenderRoot();
         root.addEventListener('change', this._onButtonChange);
@@ -68,6 +73,23 @@ export class RadioGroup extends LitElement {
 
     @property({ reflect: true, type: String, attribute: Attribute.DEVICE_TYPE })
     accessor deviceType: DeviceType = 'desktop';
+
+    /**
+     * The selected value.
+     */
+    get value(): any {
+        return this._value;
+    }
+
+    @property({ attribute: Attribute.VALUE })
+    set value(value: any) {
+        if (this._value === value) {
+            return;
+        }
+        this._value = value;
+        this.updateCheckedButton();
+        this.dispatchEvent(createEvent('change', { bubbles: true }));
+    }
 
     private readonly _onSlotChange = () => {
         const slot = this._slotRef.value;
@@ -92,6 +114,8 @@ export class RadioGroup extends LitElement {
         if (!firstFocusedButton) {
             this.firstRadioButton?.setAttribute('tabindex', '0');
         }
+
+        this.updateCheckedButton();
     };
 
     private readonly _onKeyDown = (event: KeyboardEvent) => {
@@ -196,7 +220,7 @@ export class RadioGroup extends LitElement {
         return true;
     }
 
-    setFocusedRadioButton(button: RadioButton | null): void {
+    private setFocusedRadioButton(button: RadioButton | null): void {
         this._unfocusAll();
         if (button) {
             button.tabIndex = 0;
@@ -210,17 +234,24 @@ export class RadioGroup extends LitElement {
         }
     }
 
-    setCheckedRadioButton(checkedButton: RadioButton | null): void {
+    private setCheckedRadioButton(checkedButton: RadioButton | null): void {
         for (const button of this.allRadioButtons()) {
             button.checked = button === checkedButton;
         }
-        this.dispatchEvent(createEvent('change', { bubbles: true }));
+    }
+
+    private updateCheckedButton(): void {
+        const button = this.allRadioButtons().find((button) => {
+            // Allow '1' == 1
+            return button.value == this.value;
+        });
+        this.setCheckedRadioButton(button ?? null);
     }
 
     private readonly _onButtonChange = (event: Event) => {
         const button = event.target as RadioButton | null;
         if (button !== null && button.checked) {
-            this.setCheckedRadioButton(event.target as RadioButton);
+            this.value = button.value;
         }
     };
 
