@@ -50,14 +50,6 @@ export class Button extends LitElement {
         }
     }
 
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
-
     connectedCallback(): void {
         super.connectedCallback();
 

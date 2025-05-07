@@ -23,7 +23,6 @@ export class ChromecastButton extends CastButton {
 
     constructor() {
         super();
-        this._upgradeProperty('player');
     }
 
     override connectedCallback() {
