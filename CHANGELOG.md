@@ -15,7 +15,7 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.11.0 (2025-06-12)
 
 -   🚀 Add settings menu button to default UI. ([#99](https://github.com/THEOplayer/web-ui/pull/99))
 
