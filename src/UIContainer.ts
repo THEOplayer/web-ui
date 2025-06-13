@@ -967,7 +967,8 @@ export class UIContainer extends HTMLElement {
             return;
         }
         if (event.keyCode === KeyCode.ENTER) {
-            if (this._player !== undefined && focusedChild !== null) {
+            if (focusedChild !== null) {
+                event.preventDefault();
                 focusedChild.click();
             }
         } else if (isArrowKey(event.keyCode) && navigateByArrowKey(this, focusableChildren, event.keyCode)) {

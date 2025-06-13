@@ -15,6 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+-   🐛 Fix pressing `Enter` on TV remote triggering click twice. ([#101](https://github.com/THEOplayer/web-ui/pull/101))
+
 ## v1.11.0 (2025-06-12)
 
 -   🚀 Add settings menu button to default UI. ([#99](https://github.com/THEOplayer/web-ui/pull/99))
