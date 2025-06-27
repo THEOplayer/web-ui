@@ -61,6 +61,8 @@ const template = createTemplate('theoplayer-default-ui', `<style>${defaultUiCss}
  * @slot `top-control-bar` - A slot for extra UI controls in the top control bar.
  * @slot `bottom-control-bar` - A slot for extra UI controls in the bottom control bar.
  * @slot `menu` - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
+ * @slot `error` - A slot for an error display, to show when the player encounters a fatal error.
+ *   By default, this shows an {@link ErrorDisplay | `<theoplayer-error-display>`}.
  * @group Components
  */
 export class DefaultUI extends HTMLElement {
