@@ -1,13 +1,10 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, LitElement } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 import textDisplayCss from './TextDisplay.css';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
-import { setTextContent } from '../util/CommonUtils';
 import { formatTime } from '../util/TimeUtils';
 import { Attribute } from '../util/Attribute';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-duration-display', `<style>${textDisplayCss}</style><span></span>`);
 
 const PLAYER_EVENTS = ['durationchange'] as const;
 
@@ -16,42 +13,27 @@ const PLAYER_EVENTS = ['durationchange'] as const;
  *
  * @group Components
  */
-export class DurationDisplay extends StateReceiverMixin(HTMLElement, ['player']) {
-    private readonly _spanEl: HTMLElement;
+@customElement('theoplayer-duration-display')
+@stateReceiver(['player'])
+export class DurationDisplay extends LitElement {
+    static override styles = [textDisplayCss];
+
     private _player: ChromelessPlayer | undefined;
 
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-        this._spanEl = shadowRoot.querySelector('span')!;
-
-        this._upgradeProperty('player');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
-
     connectedCallback(): void {
-        shadyCss.styleElement(this);
+        super.connectedCallback();
 
         if (!this.hasAttribute(Attribute.ARIA_LIVE)) {
             // Tell screen readers not to automatically read the duration as it changes
             this.setAttribute(Attribute.ARIA_LIVE, 'off');
         }
-
-        this._updateFromPlayer();
     }
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -66,14 +48,20 @@ export class DurationDisplay extends StateReceiverMixin(HTMLElement, ['player'])
         }
     }
 
-    private readonly _updateFromPlayer = () => {
-        const duration = this._player ? this._player.duration : NaN;
-        const text = formatTime(duration);
-        setTextContent(this._spanEl, text);
-    };
-}
+    /**
+     * The current duration.
+     */
+    @state()
+    accessor duration: number = NaN;
 
-customElements.define('theoplayer-duration-display', DurationDisplay);
+    private readonly _updateFromPlayer = () => {
+        this.duration = this._player ? this._player.duration : NaN;
+    };
+
+    protected override render() {
+        return html`<span>${formatTime(this.duration)}</span>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {

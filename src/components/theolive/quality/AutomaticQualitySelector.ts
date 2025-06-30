@@ -1,16 +1,9 @@
 import { AbstractQualitySelector } from './AbstractQualitySelector';
-import { setTextContent } from '../../../util/CommonUtils';
-import { createTemplate } from '../../../util/TemplateUtils';
-import { buttonTemplate } from '../../Button';
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
-const template = createTemplate('theolive-automatic-quality-selector', buttonTemplate('<slot></slot>'));
-
+@customElement('theolive-automatic-quality-selector')
 export class AutomaticQualitySelector extends AbstractQualitySelector {
-    constructor() {
-        super({ template: template() });
-        setTextContent(this._slotEl, 'High Quality');
-    }
-
     handleEnterBadNetworkMode() {
         this.update_();
     }
@@ -30,11 +23,13 @@ export class AutomaticQualitySelector extends AbstractQualitySelector {
         }
     }
 
-    protected handleChecked(checked: boolean) {
-        if (checked && this.player && this.player.theoLive) {
+    protected handleChange() {
+        if (this.checked && this.player && this.player.theoLive) {
             this.player.theoLive.badNetworkMode = false;
         }
     }
-}
 
-customElements.define('theolive-automatic-quality-selector', AutomaticQualitySelector);
+    protected override render(): HTMLTemplateResult {
+        return html`<slot>High Quality</slot>`;
+    }
+}
