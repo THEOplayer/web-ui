@@ -35,6 +35,11 @@ export interface DefaultUIProps extends PropsWithoutRef<Omit<WebComponentProps<D
      */
     menu?: ReactNode;
     /**
+     * A slot for an error display, to show when the player encounters a fatal error.
+     * By default, this shows an {@link ErrorDisplay}.
+     */
+    error?: ReactNode;
+    /**
      * Use a named slot instead, such as:
      *  - {@link title}
      *  - {@link topControlBar}
@@ -86,7 +91,7 @@ export interface DefaultUIProps extends PropsWithoutRef<Omit<WebComponentProps<D
  * @group Components
  */
 export const DefaultUI = (props: DefaultUIProps) => {
-    const { title, topControlBar, bottomControlBar, menu, onReady, ...otherProps } = props;
+    const { title, topControlBar, bottomControlBar, menu, error, onReady, ...otherProps } = props;
     const [ui, setUi] = useState<DefaultUIElement | null>(null);
     const player = usePlayer(ui, onReady);
     return (
@@ -96,6 +101,7 @@ export const DefaultUI = (props: DefaultUIProps) => {
                 {topControlBar && <SlotContainer slot="top-control-bar">{topControlBar}</SlotContainer>}
                 {bottomControlBar && <SlotContainer slot="bottom-control-bar">{bottomControlBar}</SlotContainer>}
                 {menu && <SlotContainer slot="menu">{menu}</SlotContainer>}
+                {error && <SlotContainer slot="error">{error}</SlotContainer>}
             </PlayerContext.Provider>
         </RawDefaultUI>
     );
