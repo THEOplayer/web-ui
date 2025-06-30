@@ -36,6 +36,7 @@ theoplayer-ui {
 
 [part='centered-chrome'] * {
     --theoplayer-control-height: var(--theoplayer-centered-chrome-control-height, 48px);
+    --theoplayer-play-button-icon-color: var(--theoplayer-center-play-button-icon-color, unset);
 }
 
 [part='middle-chrome'] {

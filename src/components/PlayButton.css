@@ -1,3 +1,7 @@
+:host {
+    --theoplayer-icon-color: var(--theoplayer-play-button-icon-color, unset);
+}
+
 :host([paused]) [part='pause-icon'],
 :host([ended]) [part='pause-icon'],
 :host([ended]) [part='play-icon'],
