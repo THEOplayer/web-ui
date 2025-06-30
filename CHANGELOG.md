@@ -18,6 +18,7 @@ sidebar_custom_props: { 'icon': '📰' }
 ## Unreleased
 
 -   🐛 Fix pressing `Enter` on TV remote triggering click twice. ([#101](https://github.com/THEOplayer/web-ui/pull/101))
+-   🚀 Add `error` slot to default UI, to allow for a custom error display. ([#102](https://github.com/THEOplayer/web-ui/pull/102))
 
 ## v1.11.0 (2025-06-12)
 
