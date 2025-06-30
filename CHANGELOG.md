@@ -18,6 +18,7 @@ sidebar_custom_props: { 'icon': '📰' }
 ## Unreleased
 
 -   🚀 Add `--theoplayer-play-button-icon-color` CSS property to change the icon color of _only_ the `<theoplayer-play-button>`. ([#104](https://github.com/THEOplayer/web-ui/pull/104))
+-   🚀 Add `--theoplayer-center-play-button-icon-color` CSS property to change the icon color of _only_ the centered play button in a `<theoplayer-default-ui>`. ([#104](https://github.com/THEOplayer/web-ui/pull/104))
 
 ## v1.11.1 (2025-06-30)
 
