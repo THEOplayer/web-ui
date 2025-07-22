@@ -1,14 +1,11 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 import textDisplayCss from './TextDisplay.css';
-import { StateReceiverMixin } from './StateReceiverMixin';
-import { setTextContent } from '../util/CommonUtils';
+import { stateReceiver } from './StateReceiverMixin';
 import { formatTime } from '../util/TimeUtils';
 import { Attribute } from '../util/Attribute';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import type { StreamType } from '../util/StreamType';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-preview-time-display', `<style>${textDisplayCss}</style><span></span>`);
 
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as const;
 
@@ -20,97 +17,68 @@ const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as c
  *   (until the live point) of the stream.
  * @group Components
  */
-export class PreviewTimeDisplay extends StateReceiverMixin(HTMLElement, ['player', 'previewTime', 'streamType']) {
-    private readonly _spanEl: HTMLElement;
-    private _previewTime: number = NaN;
+@customElement('theoplayer-preview-time-display')
+@stateReceiver(['player', 'previewTime', 'streamType'])
+export class PreviewTimeDisplay extends LitElement {
+    static override styles = [textDisplayCss];
+
     private _player: ChromelessPlayer | undefined;
 
-    static get observedAttributes() {
-        return [Attribute.REMAINING, Attribute.REMAINING_WHEN_LIVE, Attribute.STREAM_TYPE];
-    }
-
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-        this._spanEl = shadowRoot.querySelector('span')!;
-
-        this._upgradeProperty('previewTime');
-        this._upgradeProperty('player');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
-
     connectedCallback(): void {
-        shadyCss.styleElement(this);
-        this._update();
+        super.connectedCallback();
+        this._updateFromPlayer();
     }
 
-    get previewTime(): number {
-        return this._previewTime;
-    }
+    @state()
+    accessor previewTime: number = NaN;
 
-    set previewTime(previewTime: number) {
-        this._previewTime = previewTime;
-        this._update();
-    }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.REMAINING })
+    accessor remaining: boolean = false;
 
-    get streamType(): StreamType {
-        return (this.getAttribute(Attribute.STREAM_TYPE) || 'vod') as StreamType;
-    }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.REMAINING_WHEN_LIVE })
+    accessor remainingWhenLive: boolean = false;
 
-    set streamType(streamType: StreamType) {
-        this.setAttribute(Attribute.STREAM_TYPE, streamType);
-    }
+    @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
+    accessor streamType: StreamType = 'vod';
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
         }
         if (this._player !== undefined) {
-            this._player.removeEventListener(PLAYER_EVENTS, this._update);
+            this._player.removeEventListener(PLAYER_EVENTS, this._updateFromPlayer);
         }
         this._player = player;
-        this._update();
+        this._updateFromPlayer();
         if (this._player !== undefined) {
-            this._player.addEventListener(PLAYER_EVENTS, this._update);
+            this._player.addEventListener(PLAYER_EVENTS, this._updateFromPlayer);
         }
     }
 
-    private readonly _update = (): void => {
-        let previewTime = this._previewTime;
+    @state()
+    private accessor _endTime: number = 0;
+
+    private readonly _updateFromPlayer = (): void => {
         const duration = this._player ? this._player.duration : NaN;
         const seekable = this._player?.seekable;
-        const endTime = isFinite(duration) ? duration : seekable && seekable.length > 0 ? seekable.end(0) : NaN;
-        const remaining = this.hasAttribute(Attribute.REMAINING) || (this.hasAttribute(Attribute.REMAINING_WHEN_LIVE) && this.streamType !== 'vod');
+        this._endTime = isFinite(duration) ? duration : seekable && seekable.length > 0 ? seekable.end(0) : NaN;
+    };
+
+    protected override render(): HTMLTemplateResult {
+        let previewTime = this.previewTime;
+        const endTime = this._endTime;
+        const remaining = this.remaining || (this.remainingWhenLive && this.streamType !== 'vod');
         if (remaining) {
             previewTime = -((endTime || 0) - previewTime);
         }
-        setTextContent(this._spanEl, formatTime(previewTime, endTime, remaining));
-    };
-
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (newValue === oldValue) {
-            return;
-        }
-        if (PreviewTimeDisplay.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            this._update();
-            shadyCss.styleSubtree(this);
-        }
+        return html`<span>${formatTime(previewTime, endTime, remaining)}</span>`;
     }
 }
-
-customElements.define('theoplayer-preview-time-display', PreviewTimeDisplay);
 
 declare global {
     interface HTMLElementTagNameMap {
