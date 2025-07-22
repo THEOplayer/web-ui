@@ -15,6 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## Unreleased
+
+- 🐛 Fix issue with the `<theoplayer-ad-clickthrough-button>` component that was triggering the error `Failed to execute 'createElement' on 'Document': The result must not have attributes` when loaded into a React application. ([#106](https://github.com/THEOplayer/web-ui/pull/106))
+
 ## v1.11.2 (2025-06-30)
 
 -   🚀 Add `--theoplayer-play-button-icon-color` CSS property to change the icon color of _only_ the `<theoplayer-play-button>`. ([#104](https://github.com/THEOplayer/web-ui/pull/104))
