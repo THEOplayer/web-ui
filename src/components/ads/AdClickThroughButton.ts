@@ -27,9 +27,6 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
     constructor() {
         super({ template: template() });
 
-        this.disabled = true;
-        this.style.display = 'none';
-
         this._upgradeProperty('clickThrough');
         this._upgradeProperty('player');
     }
@@ -37,6 +34,11 @@ export class AdClickThroughButton extends StateReceiverMixin(LinkButton, ['playe
     override connectedCallback(): void {
         super.connectedCallback();
         this._updateFromPlayer();
+
+        if (this.clickThrough == null) {
+            this.disabled = true;
+            this.style.display = 'none';
+        }
     }
 
     get clickThrough(): string | null {
