@@ -15,7 +15,7 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.11.3 (2025-07-22)
 
 -   🐛 Fix issue with the `<theoplayer-ad-clickthrough-button>` component that was triggering the error `Failed to execute 'createElement' on 'Document': The result must not have attributes` when loaded into a React application. ([#106](https://github.com/THEOplayer/web-ui/pull/106))
 
