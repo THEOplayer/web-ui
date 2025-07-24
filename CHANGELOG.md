@@ -17,7 +17,7 @@ sidebar_custom_props: { 'icon': '📰' }
 
 ## Unreleased
 
--   🐛 Fix language and settings menu not displaying correctly on older smart TVs. ([#108](https://github.com/THEOplayer/web-ui/pull/108))
+-   🐛 Fix settings menu and subtitle options menu not displaying correctly on older smart TVs. ([#108](https://github.com/THEOplayer/web-ui/pull/108), [#109](https://github.com/THEOplayer/web-ui/pull/109))
 
 ## v1.11.3 (2025-07-22)
 

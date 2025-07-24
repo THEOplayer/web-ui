@@ -126,7 +126,7 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
             plugins: [
                 postcssPresetEnv({
                     browsers: browserslist,
-                    autoprefixer: { grid: false },
+                    autoprefixer: { grid: 'no-autoplace' },
                     enableClientSidePolyfills: false
                 }),
                 postcssMixins()
