@@ -1,13 +1,25 @@
-import React, { type ComponentPropsWithoutRef, type JSX, useEffect, useRef, useState } from 'react';
+import React, { type ComponentPropsWithoutRef, type JSX, type Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { type SourceName, sources } from './sources';
+
+export interface Controller {
+    postMessage(message: any): void;
+}
 
 export interface Props extends ComponentPropsWithoutRef<'iframe'> {
     hideSource?: boolean;
     hideDeviceType?: boolean;
+    ref?: Ref<Controller> | undefined;
 }
 
-export default function Example({ hideSource, hideDeviceType, ...props }: Props): JSX.Element {
+export default function Example({ hideSource, hideDeviceType, ref, ...props }: Props): JSX.Element {
     const iframeRef = useRef<HTMLIFrameElement | null>(null);
+    useImperativeHandle(ref, () => {
+        return {
+            postMessage(message: any) {
+                iframeRef.current?.contentWindow?.postMessage(message);
+            }
+        };
+    }, []);
 
     const [sourceName, setSourceName] = useState<SourceName>('bigBuckBunny');
     const [deviceType, setDeviceType] = useState('');

@@ -1,5 +1,5 @@
-import React, { type JSX, useEffect, useState } from 'react';
-import Example, { type Props as ExampleProps } from './Example';
+import React, { type JSX, useEffect, useRef, useState } from 'react';
+import Example, { type Controller as ExampleController, type Props as ExampleProps } from './Example';
 import { CodeInput, CodeInputElement } from '@site/src/components/CodeInput';
 
 export interface Props extends ExampleProps {
@@ -7,23 +7,21 @@ export interface Props extends ExampleProps {
 }
 
 export default function StylableExample({ defaultCustomStyle, ...props }: Props): JSX.Element {
-    const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null);
+    const controllerRef = useRef<ExampleController | null>(null);
     const [customStyle, setCustomStyle] = useState(defaultCustomStyle);
 
     // Send message to <iframe> when style changes
     useEffect(() => {
-        iframe?.contentWindow?.postMessage({
+        controllerRef.current?.postMessage({
             type: 'style',
             style: customStyle
         });
-    }, [iframe, customStyle]);
+    }, [customStyle]);
 
     return (
         <>
-            <Example ref={setIframe} {...props} />
-            <CodeInput lang="CSS" onInput={(e) => setCustomStyle((e.target as CodeInputElement).value)}>
-                {defaultCustomStyle}
-            </CodeInput>
+            <Example ref={controllerRef} {...props} />
+            <CodeInput lang="CSS" defaultValue={defaultCustomStyle} onInput={(e) => setCustomStyle((e.target as CodeInputElement).value)} />
         </>
     );
 }
