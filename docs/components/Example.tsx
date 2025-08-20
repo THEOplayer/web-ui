@@ -14,19 +14,21 @@ export default function Example({ hideSource, hideDeviceType, ...props }: Props)
 
     // Send message to <iframe> when source changes
     useEffect(() => {
+        if (hideSource) return;
         iframeRef.current?.contentWindow?.postMessage({
             type: 'source',
             source: sources[sourceName]
         });
-    }, [iframeRef.current, sourceName]);
+    }, [iframeRef.current, sourceName, hideSource]);
 
     // Send message to <iframe> when device type override changes
     useEffect(() => {
+        if (hideDeviceType) return;
         iframeRef.current?.contentWindow?.postMessage({
             type: 'deviceType',
             deviceType: deviceType
         });
-    }, [iframeRef.current, deviceType]);
+    }, [iframeRef.current, deviceType, hideDeviceType]);
 
     const showOptions = !hideSource || !hideDeviceType;
     return (
