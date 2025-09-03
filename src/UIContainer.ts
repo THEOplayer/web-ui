@@ -36,6 +36,7 @@ import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
 import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
 import { READY_EVENT } from './events/ReadyEvent';
 import { createTemplate } from './util/TemplateUtils';
+import { addGlobalStyles } from './Global';
 
 // Load components used in template
 import './components/GestureReceiver';
@@ -45,6 +46,7 @@ const template = createTemplate('theoplayer-ui', `<style>${elementCss}</style>${
 const DEFAULT_USER_IDLE_TIMEOUT = 2;
 const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
 const DEFAULT_DVR_THRESHOLD = 60;
+const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
 
 /**
  * `<theoplayer-ui>` - The container element for a THEOplayer UI.
@@ -379,6 +381,7 @@ export class UIContainer extends HTMLElement {
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+        addGlobalStyles();
 
         if (!(this._menuGroup instanceof MenuGroup)) {
             customElements.upgrade(this._menuGroup);
@@ -733,6 +736,7 @@ export class UIContainer extends HTMLElement {
         } else if (!this._fullWindow) {
             this._fullWindow = true;
             toggleAttribute(this, Attribute.FULLWINDOW, true);
+            document.documentElement.classList.add(FULL_WINDOW_ROOT_CLASS);
             window.addEventListener('keydown', this._exitFullscreenOnEsc);
             this._onFullscreenChange();
         }
@@ -753,6 +757,7 @@ export class UIContainer extends HTMLElement {
         if (this._fullWindow) {
             this._fullWindow = false;
             toggleAttribute(this, Attribute.FULLWINDOW, false);
+            document.documentElement.classList.remove(FULL_WINDOW_ROOT_CLASS);
             window.removeEventListener('keydown', this._exitFullscreenOnEsc);
             this._onFullscreenChange();
         }
