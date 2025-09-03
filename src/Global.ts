@@ -1,4 +1,5 @@
 import globalCss from './Global.css';
+import { setTextContent } from './util/CommonUtils';
 
 const GLOBAL_STYLE_ID = 'theoplayer-ui-global-styles';
 
@@ -14,7 +15,7 @@ export function addGlobalStyles() {
     }
     const styleEl = document.createElement('style');
     styleEl.id = GLOBAL_STYLE_ID;
-    styleEl.innerHTML = globalCss;
+    setTextContent(styleEl, globalCss);
     document.head.appendChild(styleEl);
     globalStylesAdded = true;
 }
