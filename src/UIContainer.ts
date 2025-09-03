@@ -162,7 +162,6 @@ export class UIContainer extends HTMLElement {
     private _source: SourceDescription | undefined = undefined;
     private _userIdleTimer: number = 0;
     private _previewTime: number = NaN;
-    private _fullWindow: boolean = false;
     private _activeVideoTrack: MediaTrack | undefined = undefined;
 
     /**
@@ -420,7 +419,7 @@ export class UIContainer extends HTMLElement {
         if (this.deviceType === 'tv') {
             window.addEventListener('keydown', this._onTvKeyDown);
         }
-        if (this._fullWindow) {
+        if (this.hasAttribute(Attribute.FULLWINDOW)) {
             window.addEventListener('keydown', this._exitFullscreenOnEsc);
         }
         this.addEventListener('keyup', this._onKeyUp);
@@ -733,8 +732,7 @@ export class UIContainer extends HTMLElement {
             }
         } else if (this._player && this._player.presentation.supportsMode('fullscreen')) {
             this._player.presentation.requestMode('fullscreen');
-        } else if (!this._fullWindow) {
-            this._fullWindow = true;
+        } else if (!this.hasAttribute(Attribute.FULLWINDOW)) {
             toggleAttribute(this, Attribute.FULLWINDOW, true);
             document.documentElement.classList.add(FULL_WINDOW_ROOT_CLASS);
             window.addEventListener('keydown', this._exitFullscreenOnEsc);
@@ -754,8 +752,7 @@ export class UIContainer extends HTMLElement {
         if (this._player && this._player.presentation.currentMode === 'fullscreen') {
             this._player.presentation.requestMode('inline');
         }
-        if (this._fullWindow) {
-            this._fullWindow = false;
+        if (this.hasAttribute(Attribute.FULLWINDOW)) {
             toggleAttribute(this, Attribute.FULLWINDOW, false);
             document.documentElement.classList.remove(FULL_WINDOW_ROOT_CLASS);
             window.removeEventListener('keydown', this._exitFullscreenOnEsc);
@@ -777,7 +774,7 @@ export class UIContainer extends HTMLElement {
         if (!isFullscreen && this._player !== undefined && this._player.presentation.currentMode === 'fullscreen') {
             isFullscreen = true;
         }
-        if (this._fullWindow) {
+        if (this.hasAttribute(Attribute.FULLWINDOW)) {
             isFullscreen = true;
         }
         toggleAttribute(this, Attribute.FULLSCREEN, isFullscreen);
