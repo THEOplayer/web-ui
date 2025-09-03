@@ -160,6 +160,7 @@ export class UIContainer extends HTMLElement {
     private _source: SourceDescription | undefined = undefined;
     private _userIdleTimer: number = 0;
     private _previewTime: number = NaN;
+    private _fullWindow: boolean = false;
     private _activeVideoTrack: MediaTrack | undefined = undefined;
 
     /**
@@ -416,6 +417,9 @@ export class UIContainer extends HTMLElement {
         if (this.deviceType === 'tv') {
             window.addEventListener('keydown', this._onTvKeyDown);
         }
+        if (this._fullWindow) {
+            window.addEventListener('keydown', this._exitFullscreenOnEsc);
+        }
         this.addEventListener('keyup', this._onKeyUp);
         this.addEventListener('pointerup', this._onPointerUp);
         this.addEventListener('pointermove', this._onPointerMove);
@@ -462,6 +466,7 @@ export class UIContainer extends HTMLElement {
         }
 
         window.removeEventListener('keydown', this._onTvKeyDown);
+        window.removeEventListener('keydown', this._exitFullscreenOnEsc);
         this.removeEventListener('keyup', this._onKeyUp);
         this.removeEventListener('pointerup', this._onPointerUp);
         this.removeEventListener('click', this._onClickAfterPointerUp, true);
@@ -725,6 +730,11 @@ export class UIContainer extends HTMLElement {
             }
         } else if (this._player && this._player.presentation.supportsMode('fullscreen')) {
             this._player.presentation.requestMode('fullscreen');
+        } else if (!this._fullWindow) {
+            this._fullWindow = true;
+            toggleAttribute(this, Attribute.FULLWINDOW, true);
+            window.addEventListener('keydown', this._exitFullscreenOnEsc);
+            this._onFullscreenChange();
         }
     };
 
@@ -739,6 +749,12 @@ export class UIContainer extends HTMLElement {
         }
         if (this._player && this._player.presentation.currentMode === 'fullscreen') {
             this._player.presentation.requestMode('inline');
+        }
+        if (this._fullWindow) {
+            this._fullWindow = false;
+            toggleAttribute(this, Attribute.FULLWINDOW, false);
+            window.removeEventListener('keydown', this._exitFullscreenOnEsc);
+            this._onFullscreenChange();
         }
     };
 
@@ -756,7 +772,16 @@ export class UIContainer extends HTMLElement {
         if (!isFullscreen && this._player !== undefined && this._player.presentation.currentMode === 'fullscreen') {
             isFullscreen = true;
         }
+        if (this._fullWindow) {
+            isFullscreen = true;
+        }
         toggleAttribute(this, Attribute.FULLSCREEN, isFullscreen);
+    };
+
+    private readonly _exitFullscreenOnEsc = (event: KeyboardEvent): void => {
+        if (event.keyCode == KeyCode.ESCAPE) {
+            this._onExitFullscreen(event);
+        }
     };
 
     private readonly _updateAspectRatio = (): void => {
