@@ -17,6 +17,7 @@ sidebar_custom_props: { 'icon': '📰' }
 
 ## Unreleased
 
+-   🚀 Fill the entire window when fullscreen is not natively supported. ([#94](https://github.com/THEOplayer/web-ui/issues/94), [#110](https://github.com/THEOplayer/web-ui/pull/110))
 -   🐛 Fix settings menu and subtitle options menu not displaying correctly on older smart TVs. ([#108](https://github.com/THEOplayer/web-ui/pull/108), [#109](https://github.com/THEOplayer/web-ui/pull/109))
 
 ## v1.11.3 (2025-07-22)

@@ -36,6 +36,7 @@ import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
 import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
 import { READY_EVENT } from './events/ReadyEvent';
 import { createTemplate } from './util/TemplateUtils';
+import { addGlobalStyles } from './Global';
 
 // Load components used in template
 import './components/GestureReceiver';
@@ -45,6 +46,7 @@ const template = createTemplate('theoplayer-ui', `<style>${elementCss}</style>${
 const DEFAULT_USER_IDLE_TIMEOUT = 2;
 const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
 const DEFAULT_DVR_THRESHOLD = 60;
+const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
 
 /**
  * `<theoplayer-ui>` - The container element for a THEOplayer UI.
@@ -378,6 +380,7 @@ export class UIContainer extends HTMLElement {
 
     connectedCallback(): void {
         shadyCss.styleElement(this);
+        addGlobalStyles();
 
         if (!(this._menuGroup instanceof MenuGroup)) {
             customElements.upgrade(this._menuGroup);
@@ -415,6 +418,9 @@ export class UIContainer extends HTMLElement {
         this.setUserIdle_();
         if (this.deviceType === 'tv') {
             window.addEventListener('keydown', this._onTvKeyDown);
+        }
+        if (this.hasAttribute(Attribute.FULLWINDOW)) {
+            window.addEventListener('keydown', this._exitFullscreenOnEsc);
         }
         this.addEventListener('keyup', this._onKeyUp);
         this.addEventListener('pointerup', this._onPointerUp);
@@ -462,6 +468,7 @@ export class UIContainer extends HTMLElement {
         }
 
         window.removeEventListener('keydown', this._onTvKeyDown);
+        window.removeEventListener('keydown', this._exitFullscreenOnEsc);
         this.removeEventListener('keyup', this._onKeyUp);
         this.removeEventListener('pointerup', this._onPointerUp);
         this.removeEventListener('click', this._onClickAfterPointerUp, true);
@@ -725,6 +732,11 @@ export class UIContainer extends HTMLElement {
             }
         } else if (this._player && this._player.presentation.supportsMode('fullscreen')) {
             this._player.presentation.requestMode('fullscreen');
+        } else if (!this.hasAttribute(Attribute.FULLWINDOW)) {
+            toggleAttribute(this, Attribute.FULLWINDOW, true);
+            document.documentElement.classList.add(FULL_WINDOW_ROOT_CLASS);
+            window.addEventListener('keydown', this._exitFullscreenOnEsc);
+            this._onFullscreenChange();
         }
     };
 
@@ -739,6 +751,12 @@ export class UIContainer extends HTMLElement {
         }
         if (this._player && this._player.presentation.currentMode === 'fullscreen') {
             this._player.presentation.requestMode('inline');
+        }
+        if (this.hasAttribute(Attribute.FULLWINDOW)) {
+            toggleAttribute(this, Attribute.FULLWINDOW, false);
+            document.documentElement.classList.remove(FULL_WINDOW_ROOT_CLASS);
+            window.removeEventListener('keydown', this._exitFullscreenOnEsc);
+            this._onFullscreenChange();
         }
     };
 
@@ -756,7 +774,16 @@ export class UIContainer extends HTMLElement {
         if (!isFullscreen && this._player !== undefined && this._player.presentation.currentMode === 'fullscreen') {
             isFullscreen = true;
         }
+        if (this.hasAttribute(Attribute.FULLWINDOW)) {
+            isFullscreen = true;
+        }
         toggleAttribute(this, Attribute.FULLSCREEN, isFullscreen);
+    };
+
+    private readonly _exitFullscreenOnEsc = (event: KeyboardEvent): void => {
+        if (event.keyCode == KeyCode.ESCAPE) {
+            this._onExitFullscreen(event);
+        }
     };
 
     private readonly _updateAspectRatio = (): void => {
