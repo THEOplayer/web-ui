@@ -1,17 +1,31 @@
-/* autoprefixer grid: autoplace */
 .theoplayer-menu-table {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    grid-template-rows: auto auto;
+    table-layout: auto;
+    border-collapse: collapse;
 }
 
-.theoplayer-menu-table > * {
-    align-self: center;
+.theoplayer-menu-table,
+.theoplayer-menu-table tr,
+.theoplayer-menu-table td {
+    margin: 0;
+    padding: 0;
+}
+
+.theoplayer-menu-table td > * {
     font-size: var(--theoplayer-text-font-size, 14px);
     line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
     padding: var(--theoplayer-control-padding, 10px);
 }
 
-.theoplayer-menu-table > span {
-    display: block;
+.theoplayer-menu-table td:first-child {
+    width: 0;
+    white-space: nowrap;
+}
+
+.theoplayer-menu-table td:last-child {
+    text-align: center;
+}
+
+.theoplayer-menu-table td > theoplayer-menu-button {
+    /* Fill entire cell */
+    display: flex;
 }

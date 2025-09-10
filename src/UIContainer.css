@@ -31,6 +31,13 @@
     @mixin fullscreen-styles;
 }
 
+:host([fullwindow]) {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 1000 !important;
+    overflow: hidden !important;
+}
+
 :host([fluid]) {
     padding-bottom: calc(100% * var(--theoplayer-video-height, 9) / var(--theoplayer-video-width, 16));
 }

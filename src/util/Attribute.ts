@@ -4,6 +4,7 @@ export enum Attribute {
     AUTOPLAY = 'autoplay',
     MUTED = 'muted',
     FULLSCREEN = 'fullscreen',
+    FULLWINDOW = 'fullwindow',
     FLUID = 'fluid',
     DEVICE_TYPE = 'device-type',
     MOBILE = 'mobile',

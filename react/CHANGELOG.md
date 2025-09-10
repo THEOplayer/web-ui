@@ -15,6 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## v1.12.0 (2025-09-10)
+
+-   🏠 See changes to [Open Video UI for Web v1.12.0](https://github.com/THEOplayer/web-ui/blob/v1.12.0/CHANGELOG.md)
+
 ## v1.11.3 (2025-07-22)
 
 -   🐛 Fix issue with the `<AdClickThroughButton>` component that was triggering the error `Failed to execute 'createElement' on 'Document': The result must not have attributes`. ([#106](https://github.com/THEOplayer/web-ui/pull/106))
