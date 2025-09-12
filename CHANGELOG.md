@@ -15,6 +15,10 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
+## v1.13.0 (2025-09-12)
+
+-   🚀 Added support for THEOplayer 10.0. ([#112](https://github.com/THEOplayer/web-ui/pull/112))
+
 ## v1.12.0 (2025-09-10)
 
 -   🚀 Fill the entire window when fullscreen is not natively supported. ([#94](https://github.com/THEOplayer/web-ui/issues/94), [#110](https://github.com/THEOplayer/web-ui/pull/110))
@@ -40,7 +44,7 @@ sidebar_custom_props: { 'icon': '📰' }
 
 ## v1.10.0 (2025-04-02)
 
--   🚀 Added support for THEOplayer 9.0.
+-   🚀 Added support for THEOplayer 9.0. ([#95](https://github.com/THEOplayer/web-ui/pull/95))
 
 ## v1.9.5 (2025-03-20)
 
