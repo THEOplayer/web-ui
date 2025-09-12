@@ -15,7 +15,7 @@ sidebar_custom_props: { 'icon': '📰' }
 > -   🏠 Internal
 > -   💅 Polish
 
-## Unreleased
+## v1.13.0 (2025-09-12)
 
 -   🚀 Added support for THEOplayer 10.0. ([#112](https://github.com/THEOplayer/web-ui/pull/112))
 
