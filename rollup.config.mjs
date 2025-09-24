@@ -30,9 +30,8 @@ const theoplayerModule = 'theoplayer/chromeless';
 const globals = {
     [theoplayerModule]: 'THEOplayer'
 };
-const external = Object.keys(globals);
-const esmExternal = [...external, /^lit/, /^@lit/];
-const nodeExternal = [/^lit/, /^@lit/];
+const theoplayerExternals = [theoplayerModule];
+const litExternals = [/^lit/, /^@lit/];
 
 /**
  * @param {{configOutputDir?: string}} cliArgs
@@ -64,7 +63,7 @@ export default (cliArgs) => {
                 banner,
                 footer: `export as namespace ${umdName};`
             },
-            external: esmExternal,
+            external: [...theoplayerExternals, ...litExternals],
             plugins: [dts()]
         }
     ]);
@@ -87,7 +86,7 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
                 globals
             },
             context: 'self',
-            external,
+            external: theoplayerExternals,
             plugins: jsPlugins({ es5, module: false, production, sourcemap })
         },
         {
@@ -100,7 +99,7 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
                 banner
             },
             context: 'self',
-            external: esmExternal,
+            external: es5 ? theoplayerExternals : [...theoplayerExternals, ...litExternals],
             plugins: jsPlugins({ es5, module: true, production, sourcemap })
         },
         node && {
@@ -113,7 +112,7 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
                 banner
             },
             context: 'globalThis',
-            external: nodeExternal,
+            external: litExternals,
             plugins: jsPlugins({ es5, node, module: true, production, sourcemap })
         }
     ]).filter(Boolean);
