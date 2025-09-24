@@ -27,6 +27,10 @@ const banner = `/*!
  * License: ${license}
  */`;
 const theoplayerModule = 'theoplayer/chromeless';
+const globals = {
+    [theoplayerModule]: 'THEOplayer'
+};
+const external = Object.keys(globals);
 
 /**
  * @param {{configOutputDir?: string}} cliArgs
@@ -58,7 +62,7 @@ export default (cliArgs) => {
                 banner,
                 footer: `export as namespace ${umdName};`
             },
-            external: [theoplayerModule],
+            external,
             plugins: [dts()]
         }
     ]);
@@ -78,12 +82,10 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
                 sourcemap,
                 indent: false,
                 banner,
-                globals: {
-                    [theoplayerModule]: 'THEOplayer'
-                }
+                globals
             },
             context: 'self',
-            external: [theoplayerModule],
+            external,
             plugins: jsPlugins({ es5, module: false, production, sourcemap })
         },
         {
@@ -96,7 +98,7 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
                 banner
             },
             context: 'self',
-            external: [theoplayerModule],
+            external,
             plugins: jsPlugins({ es5, module: true, production, sourcemap })
         },
         node && {
@@ -109,6 +111,7 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
                 banner
             },
             context: 'globalThis',
+            external,
             plugins: jsPlugins({ es5, node, module: true, production, sourcemap })
         }
     ]).filter(Boolean);
