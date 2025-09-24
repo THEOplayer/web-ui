@@ -51,14 +51,17 @@ The current THEOplayer Web SDK comes with a built-in UI based on [video.js](http
         ```js
         import { DefaultUI } from '@theoplayer/web-ui';
         ```
-        Open Video UI will import THEOplayer from `theoplayer/chromeless`.
-        If you're using a bundler such as Webpack or Rollup, this dependency should automatically get bundled with your web app.
+        Open Video UI will import THEOplayer from `theoplayer/chromeless` and [Lit](https://lit.dev/) from `lit`.
+        If you're using a bundler such as Webpack or Rollup, these dependencies should automatically get bundled with your web app.
         Alternatively, you can use an [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) to let the browser resolve it:
         ```html
         <script type="importmap">
             {
                 "imports": {
-                    "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js"
+                    "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js",
+                    "lit": "/path/to/node_modules/lit/index.js",
+                    "lit/decorators.js": "/path/to/node_modules/lit/decorators.js",
+                    "lit/directives/": "/path/to/node_modules/lit/directives/"
                 }
             }
         </script>
@@ -143,7 +146,10 @@ On older browsers (such as Internet Explorer 11 and older smart TVs), you need t
     <script type="importmap">
         {
             "imports": {
-                "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js"
+                "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js",
+                "lit": "/path/to/node_modules/lit/index.js",
+                "lit/decorators.js": "/path/to/node_modules/lit/decorators.js",
+                "lit/directives/": "/path/to/node_modules/lit/directives/"
             }
         }
     </script>
