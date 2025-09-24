@@ -31,6 +31,7 @@ const globals = {
     [theoplayerModule]: 'THEOplayer'
 };
 const external = Object.keys(globals);
+const esmExternal = [...external, /^lit/, /^@lit/];
 const nodeExternal = [/^lit/, /^@lit/];
 
 /**
@@ -63,7 +64,7 @@ export default (cliArgs) => {
                 banner,
                 footer: `export as namespace ${umdName};`
             },
-            external,
+            external: esmExternal,
             plugins: [dts()]
         }
     ]);
@@ -99,7 +100,7 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
                 banner
             },
             context: 'self',
-            external,
+            external: esmExternal,
             plugins: jsPlugins({ es5, module: true, production, sourcemap })
         },
         node && {
