@@ -1,0 +1,9 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@theoplayer/web-ui": "1.13.0",
+    "@theoplayer/react-ui": "1.13.0"
+  },
+  "changesets": []
+}
