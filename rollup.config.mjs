@@ -214,7 +214,7 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
         // Transpile dependencies for older browsers.
         swc({
             include: './node_modules/**',
-            exclude: './src/**',
+            exclude: ['./src/**', './node_modules/@swc/helpers/**'],
             sourceMaps: sourcemap,
             tsconfig: false,
             env: {
