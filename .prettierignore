@@ -1,3 +1,4 @@
+.changeset/pre.json
 node_modules/
 dist/
 _site/
