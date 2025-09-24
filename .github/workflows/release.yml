@@ -40,8 +40,8 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          commit: "Release"
-          title: "Release"
+          commit: 'Release'
+          title: 'Release'
           version: npm run changeset:version
           publish: npx changeset publish
           createGithubReleases: true

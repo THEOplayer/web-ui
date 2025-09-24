@@ -52,7 +52,7 @@ sidebar_custom_props: { 'icon': '🚀' }
 
 `<theoplayer-default-ui>` provides a fully-featured video player experience with minimal setup, and allows for small customizations such as changing colors or fonts.
 
--   Option 1: in your HTML.
+- Option 1: in your HTML.
     ```html
     <theoplayer-default-ui
         configuration='{"libraryLocation":"/path/to/node_modules/theoplayer/","license":"your_theoplayer_license_goes_here"}'
@@ -64,7 +64,7 @@ sidebar_custom_props: { 'icon': '🚀' }
         ui.player.addEventListener('playing', () => console.log('THEOplayer is now playing'));
     </script>
     ```
--   Option 2: in your JavaScript.
+- Option 2: in your JavaScript.
     ```js
     import { DefaultUI } from '@theoplayer/web-ui';
     const ui = new DefaultUI({
@@ -112,7 +112,7 @@ By default, Open Video UI for Web targets modern browsers that support modern Ja
 
 On older browsers (such as Internet Explorer 11 and older smart TVs), you need to load a different version of the Open Video UI that uses older JavaScript syntax. You also need to load additional polyfills for missing features such as Promises or Custom Elements. We recommend [the Cloudflare mirror of Polyfill.io](https://cdnjs.cloudflare.com/polyfill/) and [Web Components Polyfills](https://github.com/webcomponents/polyfills) for these.
 
--   Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`), while legacy browsers will load the legacy build (with `nomodule`).
+- Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`), while legacy browsers will load the legacy build (with `nomodule`).
 
     ```html
     <!-- Modern browsers -->
@@ -134,7 +134,7 @@ On older browsers (such as Internet Explorer 11 and older smart TVs), you need t
     <script nomodule src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.es5.js"></script>
     ```
 
--   Option 2: in your JavaScript. This will load the legacy build on both modern and legacy browsers, which is suboptimal. Instead, we recommend configuring your bundler to produce a modern and legacy build of your entire web app, and to import the appropriate version of Open Video UI for each build flavor.
+- Option 2: in your JavaScript. This will load the legacy build on both modern and legacy browsers, which is suboptimal. Instead, we recommend configuring your bundler to produce a modern and legacy build of your entire web app, and to import the appropriate version of Open Video UI for each build flavor.
 
     ```js
     import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js';
