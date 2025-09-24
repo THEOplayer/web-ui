@@ -1,19 +1,4 @@
----
-description: Find out what's new in Open Video UI for Web.
-sidebar_custom_props: { 'icon': '📰' }
----
-
-# Changelog
-
-> **Tags:**
->
-> -   💥 Breaking Change
-> -   🚀 New Feature
-> -   🐛 Bug Fix
-> -   👎 Deprecation
-> -   📝 Documentation
-> -   🏠 Internal
-> -   💅 Polish
+# @theoplayer/web-ui
 
 ## v1.13.0 (2025-09-12)
 

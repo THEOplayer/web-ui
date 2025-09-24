@@ -41,11 +41,7 @@
     "test:unit": "node --test test/ssr.test.mjs",
     "docs": "cross-env NODE_OPTIONS=\"--experimental-require-module\" typedoc --treatWarningsAsErrors",
     "docs:watch": "cross-env NODE_OPTIONS=\"--experimental-require-module\" typedoc --watch",
-    "version": "npm run version:changelog && npm run version:deps && npm run version:react",
-    "version:changelog": "node scripts/bump-changelog.mjs web-ui CHANGELOG.md && git add CHANGELOG.md",
-    "version:deps": "cross-env-shell \"npm install $npm_package_name@$npm_package_version --workspace react && git add react/package.json\"",
-    "version:react": "cross-env-shell \"npm version $npm_package_version --workspace react --no-git-tag-version && git add react/package.json\"",
-    "github:changelog": "node scripts/github-changelog.mjs"
+    "changeset:version": "changeset version && node .changeset/post-process.mjs"
   },
   "keywords": [],
   "author": "THEO Technologies",
@@ -63,6 +59,8 @@
     "theoplayer": "^7 || ^8 || ^9 || ^10"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.7",
+    "@changesets/types": "^6.1.0",
     "@rollup/plugin-inject": "^5.0.5",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
