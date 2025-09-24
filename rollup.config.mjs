@@ -31,6 +31,7 @@ const globals = {
     [theoplayerModule]: 'THEOplayer'
 };
 const external = Object.keys(globals);
+const nodeExternal = [/^lit/, /^@lit/];
 
 /**
  * @param {{configOutputDir?: string}} cliArgs
@@ -111,7 +112,7 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
                 banner
             },
             context: 'globalThis',
-            external,
+            external: nodeExternal,
             plugins: jsPlugins({ es5, node, module: true, production, sourcemap })
         }
     ]).filter(Boolean);
