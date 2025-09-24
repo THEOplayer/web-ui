@@ -18,13 +18,17 @@ input[type='range'] {
     width: 1%;
     pointer-events: none;
 
-    transition: visibility 0.25s, opacity 0.25s;
+    transition:
+        visibility 0.25s,
+        opacity 0.25s;
     visibility: hidden;
     opacity: 0;
 }
 
 :host(:hover:not([disabled])) .theoplayer-time-range-preview-rail {
-    transition: visibility 0.5s, opacity 0.5s;
+    transition:
+        visibility 0.5s,
+        opacity 0.5s;
     visibility: visible;
     opacity: 1;
 }

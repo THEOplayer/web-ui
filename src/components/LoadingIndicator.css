@@ -6,13 +6,17 @@
 }
 
 [part='icon'] {
-    transition: visibility 0.15s, opacity 0.15s;
+    transition:
+        visibility 0.15s,
+        opacity 0.15s;
     opacity: 0;
     visibility: hidden;
 }
 
 :host([loading]) [part='icon'] {
-    transition: visibility 0s, opacity 0s;
+    transition:
+        visibility 0s,
+        opacity 0s;
     /**
      * Show the loading spinner only after a small delay.
      */
