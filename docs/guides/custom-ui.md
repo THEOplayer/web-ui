@@ -53,13 +53,13 @@ We can add more components so the user can mute or seek the player, or go fullsc
 </theoplayer-ui>
 ```
 
--   `<theoplayer-loading-indicator>` is a circular loading spinner that is automatically shown when the player is waiting for more data. It is placed in the `"centered-loading"` slot, which appears in the center of the player but behind the `"centered-chrome"` elements. The `no-auto-hide` attribute ensures that it is visible even when all other controls are hidden.
--   `<theoplayer-control-bar>` is a horizontal container for playback controls. It's not required that all controls are inside a `<theoplayer-control-bar>`, you can use any element such as a `<div>` or a `<section>`. This element does not have a `slot` attribute, so it is placed in the "default slot", at the bottom of the player.
--   `<theoplayer-time-range>` is a seek bar, showing the player's current position in the video, and allowing the user to seek to a different time.
--   `<theoplayer-mute-button>` is a button to mute or unmute the player's audio.
--   `<theoplayer-time-display>` is a text showing the player's current position in hours, minutes and seconds. By adding the `show-duration` attribute, the text will also show the player's total video duration.
--   `<theoplayer-fullscreen-button>` is a button to make the player take up the entire screen.
--   The `<span>` with `flex-grow: 1` acts as a "spacer": it will stretch to fill the remaining space left by the other controls inside the `<theoplayer-control-bar>`. This works because `<theoplayer-control-bar>` is a flexbox container, i.e. it has `display: inline-flex`. The result is that the `<theoplayer-fullscreen-button>` will be aligned to the right side of the player.
+- `<theoplayer-loading-indicator>` is a circular loading spinner that is automatically shown when the player is waiting for more data. It is placed in the `"centered-loading"` slot, which appears in the center of the player but behind the `"centered-chrome"` elements. The `no-auto-hide` attribute ensures that it is visible even when all other controls are hidden.
+- `<theoplayer-control-bar>` is a horizontal container for playback controls. It's not required that all controls are inside a `<theoplayer-control-bar>`, you can use any element such as a `<div>` or a `<section>`. This element does not have a `slot` attribute, so it is placed in the "default slot", at the bottom of the player.
+- `<theoplayer-time-range>` is a seek bar, showing the player's current position in the video, and allowing the user to seek to a different time.
+- `<theoplayer-mute-button>` is a button to mute or unmute the player's audio.
+- `<theoplayer-time-display>` is a text showing the player's current position in hours, minutes and seconds. By adding the `show-duration` attribute, the text will also show the player's total video duration.
+- `<theoplayer-fullscreen-button>` is a button to make the player take up the entire screen.
+- The `<span>` with `flex-grow: 1` acts as a "spacer": it will stretch to fill the remaining space left by the other controls inside the `<theoplayer-control-bar>`. This works because `<theoplayer-control-bar>` is a flexbox container, i.e. it has `display: inline-flex`. The result is that the `<theoplayer-fullscreen-button>` will be aligned to the right side of the player.
 
 ![Screenshot](../assets/custom-ui-seekbar.png)
 

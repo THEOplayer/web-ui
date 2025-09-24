@@ -8,9 +8,9 @@
 A [React](https://react.dev/) component library for building a world-class video player experience powered by
 the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 
--   Use the default UI for a great out-of-the-box experience, or use the individual components to build your own custom UI.
--   Idiomatic React components make the UI feel right at home in your existing React web app.
--   Easy to customize: use JSX to lay out your controls, and CSS to style them.
+- Use the default UI for a great out-of-the-box experience, or use the individual components to build your own custom UI.
+- Idiomatic React components make the UI feel right at home in your existing React web app.
+- Easy to customize: use JSX to lay out your controls, and CSS to style them.
 
 ## Installation
 

@@ -8,9 +8,9 @@
 A component library for building a world-class video player experience powered by
 the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 
--   Use the default UI for a great out-of-the-box experience, or use the individual components to build your own custom UI.
--   Built using [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), so works great with (or without) any app framework.
--   Easy to customize: use HTML to lay out your controls, and CSS to style them.
+- Use the default UI for a great out-of-the-box experience, or use the individual components to build your own custom UI.
+- Built using [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components), so works great with (or without) any app framework.
+- Easy to customize: use HTML to lay out your controls, and CSS to style them.
 
 | ![Screenshot on desktop](https://raw.githubusercontent.com/THEOplayer/web-ui/v1.0.0/docs/assets/screenshot-desktop.png) | ![Screenshot on mobile](https://raw.githubusercontent.com/THEOplayer/web-ui/v1.0.0/docs/assets/screenshot-mobile.png) |
 | :---------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: |
@@ -20,9 +20,9 @@ the [THEOplayer Web SDK](https://www.theoplayer.com/product/theoplayer).
 
 The current THEOplayer Web SDK comes with a built-in UI based on [video.js](https://github.com/videojs/video.js) through [the `Player` constructor](https://www.theoplayer.com/docs/theoplayer/v8/api-reference/web/classes/Player.html). This new UI aims to solve some limitations from the old approach:
 
--   Designed with customization in mind. With the old UI, customizing anything beyond changing some text and icon colors was difficult, and could break in unpredictable ways when updating to a new THEOplayer version. With the new UI, all components can be customized in a variety of ways with well-documented attributes and CSS custom properties.
--   Built for the modern web. The old UI was built at a time when Internet Explorer was still a major browser, so it couldn't use newer web technologies. The new UI breaks with the past and takes full advantage of Web Components, so it works well in modern web apps.
--   Developed in the open. Although the old UI is based on the open-source video.js library, any custom components bundled with THEOplayer remained closed-source. With the new UI, the source code of all components is publicly available. Advanced users can learn about the inner workings of each component, modify them, and even contribute their changes back to Open Video UI.
+- Designed with customization in mind. With the old UI, customizing anything beyond changing some text and icon colors was difficult, and could break in unpredictable ways when updating to a new THEOplayer version. With the new UI, all components can be customized in a variety of ways with well-documented attributes and CSS custom properties.
+- Built for the modern web. The old UI was built at a time when Internet Explorer was still a major browser, so it couldn't use newer web technologies. The new UI breaks with the past and takes full advantage of Web Components, so it works well in modern web apps.
+- Developed in the open. Although the old UI is based on the open-source video.js library, any custom components bundled with THEOplayer remained closed-source. With the new UI, the source code of all components is publicly available. Advanced users can learn about the inner workings of each component, modify them, and even contribute their changes back to Open Video UI.
 
 > [!NOTE]  
 > THEOplayer Open Video UI for Web currently exists separately from the old THEOplayer UI. In the future, we hope to deprecate and remove the old UI, and ship this new UI as default UI for the THEOplayer Web SDK.
@@ -73,7 +73,7 @@ The current THEOplayer Web SDK comes with a built-in UI based on [video.js](http
 
 `<theoplayer-default-ui>` provides a fully-featured video player experience with minimal setup, and allows for small customizations such as changing colors or fonts.
 
--   Option 1: in your HTML.
+- Option 1: in your HTML.
     ```html
     <theoplayer-default-ui
         configuration='{"libraryLocation":"/path/to/node_modules/theoplayer/","license":"your_theoplayer_license_goes_here"}'
@@ -85,7 +85,7 @@ The current THEOplayer Web SDK comes with a built-in UI based on [video.js](http
         ui.player.addEventListener('playing', () => console.log('THEOplayer is now playing'));
     </script>
     ```
--   Option 2: in your JavaScript.
+- Option 2: in your JavaScript.
     ```js
     import { DefaultUI } from '@theoplayer/web-ui';
     const ui = new DefaultUI({
@@ -133,7 +133,7 @@ By default, Open Video UI for Web targets modern browsers that support modern Ja
 
 On older browsers (such as Internet Explorer 11 and older smart TVs), you need to load a different version of the Open Video UI that uses older JavaScript syntax. You also need to load additional polyfills for missing features such as Promises or Custom Elements. We recommend [the Cloudflare mirror of Polyfill.io](https://cdnjs.cloudflare.com/polyfill/) and [Web Components Polyfills](https://github.com/webcomponents/polyfills) for these.
 
--   Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`), while legacy browsers will load the legacy build (with `nomodule`).
+- Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`), while legacy browsers will load the legacy build (with `nomodule`).
 
     ```html
     <!-- Modern browsers -->
@@ -155,7 +155,7 @@ On older browsers (such as Internet Explorer 11 and older smart TVs), you need t
     <script nomodule src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.es5.js"></script>
     ```
 
--   Option 2: in your JavaScript. This will load the legacy build on both modern and legacy browsers, which is suboptimal. Instead, we recommend configuring your bundler to produce a modern and legacy build of your entire web app, and to import the appropriate version of Open Video UI for each build flavor.
+- Option 2: in your JavaScript. This will load the legacy build on both modern and legacy browsers, which is suboptimal. Instead, we recommend configuring your bundler to produce a modern and legacy build of your entire web app, and to import the appropriate version of Open Video UI for each build flavor.
 
     ```js
     import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js';
