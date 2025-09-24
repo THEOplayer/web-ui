@@ -3,3 +3,4 @@ dist/
 _site/
 api/
 react-api/
+**/*.md
