@@ -23,7 +23,9 @@ export async function getDependencyReleaseLine(changesets, dependenciesUpdated, 
 
     const updatedDependenciesList = dependenciesUpdated.map((dependency) => {
         if (dependency.name === '@theoplayer/web-ui') {
-            return `- See changes to [Open Video UI for Web v${dependency.newVersion}](https://github.com/THEOplayer/web-ui/blob/v${dependency.newVersion}/CHANGELOG.md)`;
+            const tagName = `${dependency.name}@${dependency.newVersion}`;
+            const changelogUrl = `https://github.com/THEOplayer/web-ui/blob/${encodeURIComponent(tagName)}/CHANGELOG.md`;
+            return `- See changes to [Open Video UI for Web v${dependency.newVersion}](${changelogUrl})`;
         } else {
             return `- Updated ${dependency.name} to version ${dependency.newVersion}`;
         }
