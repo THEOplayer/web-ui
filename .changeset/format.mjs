@@ -21,8 +21,12 @@ export async function getReleaseLine(changeset, type, changelogOpts) {
 export async function getDependencyReleaseLine(changesets, dependenciesUpdated, changelogOpts) {
     if (dependenciesUpdated.length === 0) return '';
 
-    const updatedDependenciesList = dependenciesUpdated.map(
-        (dependency) => `- ${dependency.name}@${dependency.newVersion}`
-    );
+    const updatedDependenciesList = dependenciesUpdated.map((dependency) => {
+        if (dependency.name === '@theoplayer/web-ui') {
+            return `- See changes to [Open Video UI for Web v${dependency.newVersion}](https://github.com/THEOplayer/web-ui/blob/v${dependency.newVersion}/CHANGELOG.md)`;
+        } else {
+            return `- Updated ${dependency.name} to version ${dependency.newVersion}`;
+        }
+    });
     return `\n### 📦 Dependency Updates\n\n${updatedDependenciesList.join('\n')}`;
 }
