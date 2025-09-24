@@ -63,7 +63,7 @@ The current THEOplayer Web SDK comes with a built-in UI based on [video.js](http
             }
         </script>
         <!-- Import maps polyfill for browsers without import maps support (e.g. Safari 16.3) -->
-        <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js" crossorigin="anonymous"></script>
+        <script async src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js" crossorigin="anonymous"></script>
         <script type="module" src="/path/to/my_app.js"></script>
         ```
 
@@ -148,7 +148,7 @@ On older browsers (such as Internet Explorer 11 and older smart TVs), you need t
         }
     </script>
     <!-- Import maps polyfill for browsers without import maps support (e.g. Safari 16.3) -->
-    <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js" crossorigin="anonymous"></script>
+    <script async src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js" crossorigin="anonymous"></script>
     <script type="module" src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.mjs"></script>
     <!-- Legacy browsers -->
     <script nomodule src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es2015%2CglobalThis%2CReflect"></script>
