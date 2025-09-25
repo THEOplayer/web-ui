@@ -113,7 +113,7 @@ export const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
 @customElement('theoplayer-ui')
 export class UIContainer extends LitElement {
     static override styles = [elementCss];
-    static override shadowRootOptions = {
+    static override shadowRootOptions: ShadowRootInit = {
         ...LitElement.shadowRootOptions,
         delegatesFocus: true
     };

@@ -16,7 +16,7 @@ import { Attribute } from '../util/Attribute';
 @stateReceiver(['error', 'fullscreen'])
 export class ErrorDisplay extends LitElement {
     static override styles = [errorDisplayCss];
-    static override shadowRootOptions = {
+    static override shadowRootOptions: ShadowRootInit = {
         ...LitElement.shadowRootOptions,
         delegatesFocus: true
     };

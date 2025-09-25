@@ -54,7 +54,7 @@ interface OpenMenuEntry {
 @customElement('theoplayer-menu-group')
 export class MenuGroup extends LitElement {
     static styles = [menuGroupCss];
-    static override shadowRootOptions = {
+    static override shadowRootOptions: ShadowRootInit = {
         ...LitElement.shadowRootOptions,
         delegatesFocus: true
     };
