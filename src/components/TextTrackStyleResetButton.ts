@@ -5,7 +5,7 @@ import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 
 /**
- * `<theoplayer-text-track-style-reset-button>` - A button that resets the text track style.
+ * A button that resets the text track style.
  *
  * @group Components
  */

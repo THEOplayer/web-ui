@@ -10,7 +10,7 @@ import { repeat } from 'lit/directives/repeat.js';
 const TRACK_EVENTS = ['addtrack', 'removetrack', 'change'] as const;
 
 /**
- * `<theoplayer-quality-radio-group>` - A radio group that shows a list of available video qualities,
+ * A radio group that shows a list of available video qualities,
  * from which the user can choose a desired target quality.
  *
  * @group Components

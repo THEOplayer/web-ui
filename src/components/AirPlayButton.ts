@@ -7,7 +7,7 @@ import airPlayButtonCss from './AirPlayButton.css';
 import { Attribute } from '../util/Attribute';
 
 /**
- * `<theoplayer-airplay-button>` - A button to start and stop casting using AirPlay.
+ * A button to start and stop casting using AirPlay.
  *
  * @group Components
  */

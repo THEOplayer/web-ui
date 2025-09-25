@@ -12,7 +12,7 @@ const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as c
 const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
 /**
- * `<theoplayer-time-display>` - A control that displays the current time of the stream.
+ * A control that displays the current time of the stream.
  *
  * @attribute `show-duration` - If set, also shows the duration of the stream.
  * @attribute `remaining` - If set, shows the remaining time of the stream. Not compatible with `show-duration`.

@@ -9,7 +9,7 @@ import { Attribute } from '../util/Attribute';
 const PLAYER_EVENTS = ['durationchange'] as const;
 
 /**
- * `<theoplayer-duration-display>` - A control that displays the duration of the stream.
+ * A control that displays the duration of the stream.
  *
  * @group Components
  */

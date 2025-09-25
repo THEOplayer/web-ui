@@ -15,7 +15,7 @@ import { toggleAttribute } from './util/CommonUtils';
 import { createCustomEvent } from './util/EventUtils';
 
 /**
- * `<theoplayer-default-ui>` - A default UI for THEOplayer.
+ * A default UI for THEOplayer.
  *
  * This default UI provides a great player experience out-of-the-box, that works well on all types of devices
  * and for all types of streams. It provides all the common playback controls for playing, seeking,

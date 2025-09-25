@@ -8,7 +8,7 @@ import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent'
 import { Attribute } from '../util/Attribute';
 
 /**
- * `<theoplayer-menu-close-button>` - A button that closes its parent menu.
+ * A button that closes its parent menu.
  *
  * This button must be placed inside a {@link Menu | `<theoplayer-menu>`}.
  *

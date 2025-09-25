@@ -21,7 +21,7 @@ export function buttonTemplate(button: string, extraCss: string = ''): string {
 }
 
 /**
- * `<theoplayer-button>` - A basic button.
+ * A basic button.
  *
  * @attribute `disabled` - Whether the button is disabled. When disabled, the button cannot be clicked.
  * @group Components

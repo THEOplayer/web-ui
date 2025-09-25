@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js';
 import controlBarCss from './ControlBar.css';
 
 /**
- * `<theoplayer-control-bar>` - A horizontal control bar that can contain other controls.
+ * A horizontal control bar that can contain other controls.
  *
  * @group Components
  */

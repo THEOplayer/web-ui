@@ -10,7 +10,7 @@ import { isLinearAd } from '../../util/AdUtils';
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
 /**
- * `<theoplayer-ad-clickthrough-button>` - A button to open the advertisement's click-through webpage.
+ * A button to open the advertisement's click-through webpage.
  *
  * @group Components
  */

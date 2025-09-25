@@ -10,7 +10,7 @@ import type { StreamType } from '../util/StreamType';
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as const;
 
 /**
- * `<theoplayer-preview-time-display>` - A display that shows the current preview time of a {@link TimeRange | `<theoplayer-time-range>`}.
+ * A display that shows the current preview time of a {@link TimeRange | `<theoplayer-time-range>`}.
  *
  * @attribute `remaining` - If set, shows the remaining time of the stream.
  * @attribute `remaining-when-live` - If set, and the stream is a livestream, shows the remaining time

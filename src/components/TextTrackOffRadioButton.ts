@@ -7,7 +7,7 @@ import { isNonForcedSubtitleTrack, isSubtitleTrack } from '../util/TrackUtils';
 const TRACK_EVENTS = ['change'] as const;
 
 /**
- * `<theoplayer-text-track-off-radio-button>` - A radio button that disables the active subtitle track when clicked.
+ * A radio button that disables the active subtitle track when clicked.
  *
  * @group Components
  */

@@ -9,7 +9,7 @@ import type { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
 
 /**
- * `<theoplayer-playback-rate-radio-group>` - A radio group that shows a list of playback rates,
+ * A radio group that shows a list of playback rates,
  * from which the user can choose a desired playback rate.
  *
  * @slot {@link RadioButton} - The possible options for the playback rate.

@@ -3,7 +3,7 @@ import { stateReceiver } from './StateReceiverMixin';
 import { customElement, state } from 'lit/decorators.js';
 
 /**
- * `<theoplayer-playback-rate-display>` - A control that displays the current playback rate of the player.
+ * A control that displays the current playback rate of the player.
  *
  * @group Components
  */

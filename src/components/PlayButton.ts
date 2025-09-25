@@ -13,7 +13,7 @@ import { Attribute } from '../util/Attribute';
 const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied', 'sourcechange'] as const;
 
 /**
- * `<theoplayer-play-button>` - A button that toggles whether the player is playing or paused.
+ * A button that toggles whether the player is playing or paused.
  *
  * @attribute `paused` (readonly) - Whether the player is paused. Reflects `ui.player.paused`.
  * @attribute `ended` (readonly) - Whether the player is ended. Reflects `ui.player.ended`.

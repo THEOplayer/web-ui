@@ -8,7 +8,7 @@ import './PlaybackRateRadioGroup';
 const PLAYBACK_RATES = [0.25, 0.5, 1, 1.25, 1.5, 2];
 
 /**
- * `<theoplayer-playback-rate-menu>` - A menu to change the playback rate of the player.
+ * A menu to change the playback rate of the player.
  *
  * @slot `heading` - A slot for the menu's heading.
  *

@@ -5,7 +5,7 @@ import type { VideoQuality } from 'theoplayer/chromeless';
 import { formatQualityLabel } from '../util/TrackUtils';
 
 /**
- * `<theoplayer-active-quality-display>` - A control that displays the name of the active video quality.
+ * A control that displays the name of the active video quality.
  *
  * @group Components
  */

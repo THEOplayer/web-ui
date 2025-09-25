@@ -52,7 +52,7 @@ const edgeStyleOptions: ReadonlyArray<{ label: string; value: EdgeStyle | '' }> 
 ];
 
 /**
- * `<theoplayer-text-track-style-menu>` - A menu to change the {@link theoplayer!TextTrackStyle | text track style} of the player.
+ * A menu to change the {@link theoplayer!TextTrackStyle | text track style} of the player.
  *
  * @slot `heading` - A slot for the menu's heading.
  *

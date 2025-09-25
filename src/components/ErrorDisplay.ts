@@ -8,7 +8,7 @@ import type { THEOplayerError } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
 
 /**
- * `<theoplayer-error-display>` - A screen that shows the details of a fatal player error.
+ * A screen that shows the details of a fatal player error.
  *
  * @group Components
  */

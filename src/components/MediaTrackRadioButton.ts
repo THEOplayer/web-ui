@@ -7,7 +7,7 @@ import { localizeLanguageName } from '../util/CommonUtils';
 const TRACK_EVENTS = ['change', 'update'] as const;
 
 /**
- * `<theoplayer-media-track-radio-button>` - A radio button that shows the label of a given media track,
+ * A radio button that shows the label of a given media track,
  * and switches to that track when clicked.
  *
  * @group Components

@@ -6,7 +6,7 @@ import speedIcon from '../icons/speed.svg';
 import { Attribute } from '../util/Attribute';
 
 /**
- * `<theoplayer-playback-rate-menu-button>` - A menu button that opens a [playback rate menu]{@link PlaybackRateMenu}.
+ * A menu button that opens a [playback rate menu]{@link PlaybackRateMenu}.
  *
  * @attribute menu - The ID of the playback rate menu.
  * @group Components
