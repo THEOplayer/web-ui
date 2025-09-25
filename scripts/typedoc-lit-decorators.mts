@@ -51,6 +51,7 @@ function onSignature(context: typedoc.Context, refl: typedoc.SignatureReflection
 function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection, declaration: ts.Declaration) {
     // Based on https://github.com/TypeStrong/typedoc/issues/2346#issuecomment-1656806051
     if (
+        !ts.isClassDeclaration(declaration) &&
         !ts.isPropertyDeclaration(declaration) &&
         !ts.isMethodDeclaration(declaration) &&
         !ts.isGetAccessorDeclaration(declaration) &&
@@ -71,6 +72,14 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
         if (!ts.isIdentifier(callIdentifier)) continue;
         const decoratorName = callIdentifier.text;
         switch (decoratorName) {
+            case 'customElement': {
+                // Look for `tagName` in `@customElement(tagName)`
+                if (!ts.isLiteralExpression(callArgument)) continue;
+                const tagName = callArgument.text;
+                const comment = (refl.comment ??= new typedoc.Comment([]));
+                comment.blockTags.push(new typedoc.CommentTag(`@customElement`, [{ kind: 'code', text: `\`<${tagName}>\`` }]));
+                break;
+            }
             case 'property': {
                 // Look for `attributeValue` in `@property({ attribute: attributeValue })`
                 if (!ts.isObjectLiteralExpression(callArgument)) continue;
