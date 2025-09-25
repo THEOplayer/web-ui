@@ -4,7 +4,12 @@ export default {
     out: 'api',
     hostedBaseUrl: 'https://theoplayer.github.io/web-ui/api/',
     readme: 'none',
-    plugin: ['typedoc-plugin-external-resolver', 'typedoc-plugin-mdn-links', import.meta.resolve('./scripts/typedoc-symbol-resolver.mts')],
+    plugin: [
+        'typedoc-plugin-external-resolver',
+        'typedoc-plugin-mdn-links',
+        import.meta.resolve('./scripts/typedoc-lit-decorators.mts'),
+        import.meta.resolve('./scripts/typedoc-symbol-resolver.mts')
+    ],
     navigationLinks: {
         GitHub: 'https://github.com/THEOplayer/web-ui'
     },
