@@ -78,6 +78,7 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
                 const tagName = callArgument.text;
                 const comment = (refl.comment ??= new typedoc.Comment([]));
                 comment.blockTags.push(new typedoc.CommentTag(`@customElement`, [{ kind: 'code', text: `\`<${tagName}>\`` }]));
+                comment.blockTags.push(new typedoc.CommentTag(`@group`, [{ kind: 'text', text: 'Components' }]));
                 break;
             }
             case 'property': {
