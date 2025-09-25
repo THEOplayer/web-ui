@@ -74,10 +74,15 @@
     "rollup-plugin-swc3": "^0.12.1",
     "theoplayer": "^10.6.1",
     "tslib": "^2.8.1",
-    "typedoc": "^0.27.7",
+    "typedoc": "^0.28.13",
     "typedoc-plugin-external-resolver": "^1.0.3",
-    "typedoc-plugin-mdn-links": "^4.0.12",
-    "typescript": "^5.7.3"
+    "typedoc-plugin-mdn-links": "^5.0.9",
+    "typescript": "^5.9.2"
+  },
+  "overrides": {
+    "typedoc-plugin-external-resolver": {
+      "typedoc": "$typedoc"
+    }
   },
   "browserslist": [
     "last 2 versions",
