@@ -10,7 +10,7 @@ import controlBarCss from './ControlBar.css';
 @customElement('theoplayer-control-bar')
 export class ControlBar extends LitElement {
     static override styles = [controlBarCss];
-    static override shadowRootOptions = {
+    static override shadowRootOptions: ShadowRootInit = {
         ...LitElement.shadowRootOptions,
         delegatesFocus: true
     };

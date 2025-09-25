@@ -69,7 +69,7 @@ import { createCustomEvent } from './util/EventUtils';
 @customElement('theoplayer-default-ui')
 export class DefaultUI extends LitElement {
     static override styles = [defaultUiCss];
-    static override shadowRootOptions = {
+    static override shadowRootOptions: ShadowRootInit = {
         ...LitElement.shadowRootOptions,
         delegatesFocus: true
     };

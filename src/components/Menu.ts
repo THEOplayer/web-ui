@@ -43,7 +43,7 @@ export function menuTemplate(heading: string, content: string, extraCss: string 
 @customElement('theoplayer-menu')
 export class Menu extends LitElement {
     static override styles = [menuCss];
-    static override shadowRootOptions = {
+    static override shadowRootOptions: ShadowRootInit = {
         ...LitElement.shadowRootOptions,
         delegatesFocus: true
     };
