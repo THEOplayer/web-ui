@@ -1,7 +1,6 @@
-/**
- * @param {import('typedoc').Application} app
- */
-export function load(app) {
+import type { Application } from 'typedoc';
+
+export function load(app: Application) {
     app.converter.addUnknownSymbolResolver((declaration, _refl, _part, _symbolId) => {
         // The Lit docs have some references to `html` and `css` without importing these types from `lit-element`.
         // Resolve them manually.
