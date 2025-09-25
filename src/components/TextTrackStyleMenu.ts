@@ -55,8 +55,6 @@ const edgeStyleOptions: ReadonlyArray<{ label: string; value: EdgeStyle | '' }> 
  * A menu to change the {@link theoplayer!TextTrackStyle | text track style} of the player.
  *
  * @slot `heading` - A slot for the menu's heading.
- *
- * @group Components
  */
 @customElement('theoplayer-text-track-style-menu')
 export class TextTrackStyleMenu extends MenuGroup {

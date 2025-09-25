@@ -49,7 +49,6 @@ interface OpenMenuEntry {
  * When a submenu is closed, the menu that originally opened it is shown again.
  *
  * @attribute `menu-opened` (readonly) - Whether any menu in the group is currently open.
- * @group Components
  */
 @customElement('theoplayer-menu-group')
 export class MenuGroup extends LitElement {

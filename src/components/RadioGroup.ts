@@ -20,8 +20,6 @@ import { navigateByArrowKey } from '../util/KeyboardNavigation';
  *  - `Down`/`Right` arrow moves focus to the next radio button.
  *  - `Home` moves focus to the first radio button.
  *  - `End` moves focus to the last radio button.
- *
- * @group Components
  */
 // Based on howto-radio-group
 // https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-radio-group/howto-radio-group.js

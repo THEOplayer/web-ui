@@ -9,8 +9,6 @@ import { Attribute } from '../util/Attribute';
 
 /**
  * A screen that shows the details of a fatal player error.
- *
- * @group Components
  */
 @customElement('theoplayer-error-display')
 @stateReceiver(['error', 'fullscreen'])

@@ -9,8 +9,6 @@ const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak
 
 /**
  * A control that displays the remaining time of the current ad break.
- *
- * @group Components
  */
 @customElement('theoplayer-ad-countdown')
 @stateReceiver(['player'])

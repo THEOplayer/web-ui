@@ -10,8 +10,6 @@ import { Attribute } from './util/Attribute';
 
 /**
  * `<theolive-default-ui>` - A default UI for THEOlive.
- *
- * @group Components
  */
 @customElement('theolive-default-ui')
 export class THEOliveDefaultUI extends DefaultUI {

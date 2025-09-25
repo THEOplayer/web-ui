@@ -10,8 +10,6 @@ import type { DeviceType } from '../util/DeviceType';
  *
  * On desktop devices, this plays or pauses the player whenever it is clicked.
  * On mobile devices, this currently does nothing.
- *
- * @group Components
  */
 @customElement('theoplayer-gesture-receiver')
 @stateReceiver(['player', 'deviceType'])

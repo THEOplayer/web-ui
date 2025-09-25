@@ -13,7 +13,6 @@ import { knownColors, knownEdgeStyles, knownFontFamilies } from '../util/TextTra
  * in a human-readable format.
  *
  * @attribute `property` - The property name of the text track style option. One of {@link TextTrackStyleOption}.
- * @group Components
  */
 @customElement('theoplayer-text-track-style-display')
 @stateReceiver(['player'])

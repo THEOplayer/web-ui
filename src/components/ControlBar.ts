@@ -4,8 +4,6 @@ import controlBarCss from './ControlBar.css';
 
 /**
  * A horizontal control bar that can contain other controls.
- *
- * @group Components
  */
 @customElement('theoplayer-control-bar')
 export class ControlBar extends LitElement {

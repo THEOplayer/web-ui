@@ -10,8 +10,6 @@ let chromecastButtonId = 0;
 
 /**
  * A button to start and stop casting using Chromecast.
- *
- * @group Components
  */
 @customElement('theoplayer-chromecast-button')
 @stateReceiver(['player'])

@@ -11,8 +11,6 @@ const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as cons
 
 /**
  * A button to open the advertisement's click-through webpage.
- *
- * @group Components
  */
 @customElement('theoplayer-ad-clickthrough-button')
 @stateReceiver(['player'])

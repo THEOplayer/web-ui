@@ -8,7 +8,6 @@ import { customElement, property } from 'lit/decorators.js';
  * A menu button that opens a {@link Menu}.
  *
  * @attribute `menu` - The ID of the menu to open.
- * @group Components
  */
 @customElement('theoplayer-menu-button')
 export class MenuButton extends Button {

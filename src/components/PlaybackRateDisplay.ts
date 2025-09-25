@@ -4,8 +4,6 @@ import { customElement, state } from 'lit/decorators.js';
 
 /**
  * A control that displays the current playback rate of the player.
- *
- * @group Components
  */
 @customElement('theoplayer-playback-rate-display')
 @stateReceiver(['playbackRate'])

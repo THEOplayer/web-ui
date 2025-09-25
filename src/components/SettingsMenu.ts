@@ -13,8 +13,6 @@ import './PlaybackRateMenu';
  * such as the active video quality and the playback speed.
  *
  * @slot `heading` - A slot for the menu's heading.
- *
- * @group Components
  */
 @customElement('theoplayer-settings-menu')
 export class SettingsMenu extends MenuGroup {

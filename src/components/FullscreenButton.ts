@@ -13,8 +13,6 @@ import { Attribute } from '../util/Attribute';
 
 /**
  * A button that toggles fullscreen.
- *
- * @group Components
  */
 @customElement('theoplayer-fullscreen-button')
 @stateReceiver(['fullscreen'])

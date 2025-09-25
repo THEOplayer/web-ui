@@ -12,8 +12,6 @@ const TRACK_EVENTS = ['addtrack', 'removetrack', 'change'] as const;
 /**
  * A radio group that shows a list of available video qualities,
  * from which the user can choose a desired target quality.
- *
- * @group Components
  */
 @customElement('theoplayer-quality-radio-group')
 @stateReceiver(['player'])

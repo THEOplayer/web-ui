@@ -19,7 +19,6 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  * (e.g. `#xywh=180,80,60,40`), then the thumbnail is clipped to the rectangle defined by that fragment.
  *
  * If the stream does not contain thumbnails, then this display shows nothing.
- * @group Components
  */
 @customElement('theoplayer-preview-thumbnail')
 @stateReceiver(['player', 'previewTime'])

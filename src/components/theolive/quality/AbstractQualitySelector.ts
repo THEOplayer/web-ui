@@ -5,8 +5,6 @@ import { RadioButton } from '../../RadioButton';
 /**
  * A radio button that shows the label of a given video quality, and switches the video track's
  * {@link theoplayer!MediaTrack.targetQuality | target quality} to that quality when clicked.
- *
- * @group Components
  */
 @stateReceiver(['player'])
 export abstract class AbstractQualitySelector extends RadioButton {

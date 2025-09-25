@@ -10,8 +10,6 @@ const PLAYER_EVENTS = ['durationchange'] as const;
 
 /**
  * A control that displays the duration of the stream.
- *
- * @group Components
  */
 @customElement('theoplayer-duration-display')
 @stateReceiver(['player'])

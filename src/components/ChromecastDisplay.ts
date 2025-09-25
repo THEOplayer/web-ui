@@ -11,8 +11,6 @@ const CAST_EVENTS = ['statechange'] as const;
 
 /**
  * A control that displays the casting status while using Chromecast.
- *
- * @group Components
  */
 @customElement('theoplayer-chromecast-display')
 @stateReceiver(['player'])

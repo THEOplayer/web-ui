@@ -16,8 +16,6 @@ const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as cons
 /**
  * A button that skips the current advertisement (if skippable).
  * If the ad cannot be skipped yet, it shows the remaining time until it can be skipped.
- *
- * @group Components
  */
 @customElement('theoplayer-ad-skip-button')
 @stateReceiver(['player'])
