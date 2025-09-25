@@ -42,7 +42,7 @@ interface OpenMenuEntry {
 }
 
 /**
- * `<theoplayer-menu-group>` - A group of {@link Menu}s.
+ * A group of {@link Menu}s.
  *
  * This can contain multiple other menus, which can be opened with {@link openMenu}.
  * When a {@link MenuButton} in one menu opens another menu in this group, it is opened as a "submenu".

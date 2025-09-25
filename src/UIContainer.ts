@@ -48,7 +48,7 @@ export const DEFAULT_DVR_THRESHOLD = 60;
 export const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
 
 /**
- * `<theoplayer-ui>` - The container element for a THEOplayer UI.
+ * The container element for a THEOplayer UI.
  *
  * This element provides a basic layout structure for a general player UI, and handles the creation and management
  * of a {@link theoplayer!ChromelessPlayer | THEOplayer player instance} for this UI.

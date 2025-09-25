@@ -10,7 +10,7 @@ import { arrayFind, noOp } from '../util/CommonUtils';
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 /**
- * `<theoplayer-preview-thumbnail>` - A display that shows the thumbnail image at the current preview time
+ * A display that shows the thumbnail image at the current preview time
  * of a {@link TimeRange | `<theoplayer-time-range>`}.
  *
  * The first `metadata` text track whose label equals `"thumbnails"` is used as source for the thumbnails.

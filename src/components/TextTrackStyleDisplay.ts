@@ -9,7 +9,7 @@ import { arrayFind } from '../util/CommonUtils';
 import { knownColors, knownEdgeStyles, knownFontFamilies } from '../util/TextTrackStylePresets';
 
 /**
- * `<theoplayer-text-track-style-display>` - A control that displays the value of a single text track style option
+ * A control that displays the value of a single text track style option
  * in a human-readable format.
  *
  * @attribute `property` - The property name of the text track style option. One of {@link TextTrackStyleOption}.

@@ -8,7 +8,7 @@ import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak'] as const;
 
 /**
- * `<theoplayer-ad-countdown>` - A control that displays the remaining time of the current ad break.
+ * A control that displays the remaining time of the current ad break.
  *
  * @group Components
  */

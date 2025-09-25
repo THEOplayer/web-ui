@@ -9,7 +9,7 @@ import { customElement } from 'lit/decorators.js';
 let chromecastButtonId = 0;
 
 /**
- * `<theoplayer-chromecast-button>` - A button to start and stop casting using Chromecast.
+ * A button to start and stop casting using Chromecast.
  *
  * @group Components
  */

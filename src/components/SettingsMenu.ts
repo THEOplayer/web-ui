@@ -9,7 +9,7 @@ import './PlaybackRateDisplay';
 import './PlaybackRateMenu';
 
 /**
- * `<theoplayer-settings-menu>` - A menu to change the settings of the player,
+ * A menu to change the settings of the player,
  * such as the active video quality and the playback speed.
  *
  * @slot `heading` - A slot for the menu's heading.

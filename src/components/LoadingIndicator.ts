@@ -9,7 +9,7 @@ import { type HTMLTemplateResult, LitElement } from 'lit';
 const PLAYER_EVENTS = ['readystatechange', 'play', 'pause', 'playing', 'seeking', 'seeked'] as const;
 
 /**
- * `<theoplayer-loading-indicator>` - An indicator that shows whether the player is currently waiting for more data to resume playback.
+ * An indicator that shows whether the player is currently waiting for more data to resume playback.
  *
  * @attribute `loading` (readonly) - Whether the player is waiting for more data. If set, the indicator is shown.
  * @group Components

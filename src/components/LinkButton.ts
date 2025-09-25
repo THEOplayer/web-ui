@@ -15,7 +15,7 @@ export function linkButtonTemplate(button: string, extraCss: string = ''): strin
 }
 
 /**
- * `<theoplayer-link-button>` - A {@link Button | button} that opens a hyperlink.
+ * A {@link Button | button} that opens a hyperlink.
  *
  * @attribute `disabled` - Whether the button is disabled. When disabled, the button cannot be clicked.
  * @group Components

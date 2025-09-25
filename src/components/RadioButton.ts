@@ -5,7 +5,7 @@ import { createEvent } from '../util/EventUtils';
 import type { RadioGroup } from './RadioGroup';
 
 /**
- * `<theoplayer-radio-button>` - A button that can be checked.
+ * A button that can be checked.
  *
  * When part of a {@link RadioGroup}, at most one button in the group can be checked.
  *

@@ -14,7 +14,7 @@ import './TextTrackStyleMenu';
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 /**
- * `<theoplayer-language-menu>` - A menu to change the spoken language and subtitles of the stream.
+ * A menu to change the spoken language and subtitles of the stream.
  *
  * @slot `heading` - A slot for the menu's heading.
  *

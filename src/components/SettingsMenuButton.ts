@@ -6,7 +6,7 @@ import settingsIcon from '../icons/settings.svg';
 import { Attribute } from '../util/Attribute';
 
 /**
- * `<theoplayer-settings-menu-button>` - A menu button that opens a {@link SettingsMenu}.
+ * A menu button that opens a {@link SettingsMenu}.
  *
  * @attribute `menu` - The ID of the settings menu.
  * @group Components

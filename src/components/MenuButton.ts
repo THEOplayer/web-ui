@@ -5,7 +5,7 @@ import { Attribute } from '../util/Attribute';
 import { customElement, property } from 'lit/decorators.js';
 
 /**
- * `<theoplayer-menu-button>` - A menu button that opens a {@link Menu}.
+ * A menu button that opens a {@link Menu}.
  *
  * @attribute `menu` - The ID of the menu to open.
  * @group Components

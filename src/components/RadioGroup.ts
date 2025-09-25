@@ -11,7 +11,7 @@ import type { DeviceType } from '../util/DeviceType';
 import { navigateByArrowKey } from '../util/KeyboardNavigation';
 
 /**
- * `<theoplayer-radio-group>` - A group of {@link RadioButton}s. At most one button in the group can be checked.
+ * A group of {@link RadioButton}s. At most one button in the group can be checked.
  *
  * ## Behavior
  * This radio group implements the [roving tabindex](https://www.w3.org/WAI/ARIA/apg/example-index/radio/radio.html) pattern.

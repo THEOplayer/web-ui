@@ -31,7 +31,7 @@ const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 const AD_MARKER_WIDTH = 1;
 
 /**
- * `<theoplayer-time-range>` - A seek bar, showing the current time of the player,
+ * A seek bar, showing the current time of the player,
  * and which seeks the player when clicked or dragged.
  *
  * @slot `preview` - A slot holding a preview of the seek time, shown while hovering the seek bar.

@@ -25,7 +25,7 @@ export interface TextTrackStyleMap {
 export type TextTrackStyleOption = keyof TextTrackStyleMap;
 
 /**
- * `<theoplayer-text-track-style-radio-group>` - A radio group that shows a list of values for a text track style option,
+ * A radio group that shows a list of values for a text track style option,
  * from which the user can choose a desired value.
  *
  * @attribute `property` - The property name of the text track style option. One of {@link TextTrackStyleOption}.

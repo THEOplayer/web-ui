@@ -10,7 +10,7 @@ import { Attribute } from '../util/Attribute';
 const CAST_EVENTS = ['statechange'] as const;
 
 /**
- * `<theoplayer-chromecast-display>` - A control that displays the casting status while using Chromecast.
+ * A control that displays the casting status while using Chromecast.
  *
  * @group Components
  */

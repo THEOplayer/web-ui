@@ -28,7 +28,7 @@ export function menuTemplate(heading: string, content: string, extraCss: string 
 }
 
 /**
- * `<theoplayer-menu>` - A menu that can be opened on top of the player.
+ * A menu that can be opened on top of the player.
  *
  * The menu has a heading at the top, with a {@link CloseMenuButton | close button} and a heading text.
  *

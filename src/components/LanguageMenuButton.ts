@@ -12,7 +12,7 @@ import { toggleAttribute } from '../util/CommonUtils';
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 /**
- * `<theoplayer-language-menu-button>` - A menu button that opens a {@link LanguageMenu}.
+ * A menu button that opens a {@link LanguageMenu}.
  *
  * When there are no alternative audio languages or subtitles, this button automatically hides itself.
  *

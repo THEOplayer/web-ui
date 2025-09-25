@@ -12,7 +12,7 @@ import { EXIT_FULLSCREEN_EVENT, type ExitFullscreenEvent } from '../events/ExitF
 import { Attribute } from '../util/Attribute';
 
 /**
- * `<theoplayer-fullscreen-button>` - A button that toggles fullscreen.
+ * A button that toggles fullscreen.
  *
  * @group Components
  */

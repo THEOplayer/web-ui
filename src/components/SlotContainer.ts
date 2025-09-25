@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js';
 import slotContainerCss from './SlotContainer.css';
 
 /**
- * `<theoplayer-slot-container>` - A container that can be assigned to a slot,
+ * A container that can be assigned to a slot,
  * and behaves as if all its children are directly assigned to that slot.
  *
  * This behaves approximately like a regular `<div>` with style `display: contents`,

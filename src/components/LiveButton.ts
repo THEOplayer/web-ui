@@ -15,7 +15,7 @@ const LIVE_EVENTS = ['seeking', 'seeked', 'timeupdate', 'durationchange', 'empti
 const DEFAULT_LIVE_THRESHOLD = 10;
 
 /**
- * `<theoplayer-live-button>` - A button that shows whether the player is currently playing at the live point,
+ * A button that shows whether the player is currently playing at the live point,
  * and seeks to the live point when clicked.
  *
  * @attribute `live-threshold` - The maximum distance (in seconds) from the live point that the player's current time
