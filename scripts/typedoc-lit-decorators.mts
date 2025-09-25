@@ -77,8 +77,8 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
                 if (!ts.isLiteralExpression(callArgument)) continue;
                 const tagName = callArgument.text;
                 const comment = (refl.comment ??= new typedoc.Comment([]));
-                comment.blockTags.push(new typedoc.CommentTag(`@customElement`, [{ kind: 'code', text: `\`<${tagName}>\`` }]));
-                comment.blockTags.push(new typedoc.CommentTag(`@group`, [{ kind: 'text', text: 'Components' }]));
+                comment.blockTags.unshift(new typedoc.CommentTag(`@customElement`, [{ kind: 'code', text: `\`<${tagName}>\`` }]));
+                comment.blockTags.unshift(new typedoc.CommentTag(`@group`, [{ kind: 'text', text: 'Components' }]));
                 break;
             }
             case 'property': {
@@ -94,7 +94,9 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
                     continue;
                 }
                 const comment = (refl.comment ??= new typedoc.Comment([]));
-                comment.blockTags.push(new typedoc.CommentTag(`@attribute`, [{ kind: 'inline-tag', tag: '@link', text: attributeValue.getText() }]));
+                comment.blockTags.unshift(
+                    new typedoc.CommentTag(`@attribute`, [{ kind: 'inline-tag', tag: '@link', text: attributeValue.getText() }])
+                );
                 break;
             }
         }
