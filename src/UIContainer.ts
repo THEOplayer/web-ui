@@ -108,7 +108,6 @@ export const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
  * @slot `menu` - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
  * @slot `error` - A slot for an error display, to show when the player encounters a fatal error
  *   (see {@link ErrorDisplay | `<theoplayer-error-display>`}).
- * @group Components
  */
 @customElement('theoplayer-ui')
 export class UIContainer extends LitElement {

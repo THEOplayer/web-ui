@@ -8,8 +8,6 @@ const TRACK_EVENTS = ['change'] as const;
 
 /**
  * A radio button that disables the active subtitle track when clicked.
- *
- * @group Components
  */
 @customElement('theoplayer-text-track-off-radio-button')
 export class TextTrackOffRadioButton extends RadioButton {

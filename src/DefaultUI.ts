@@ -60,7 +60,6 @@ import { createCustomEvent } from './util/EventUtils';
  * @slot `menu` - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
  * @slot `error` - A slot for an error display, to show when the player encounters a fatal error.
  *   By default, this shows an {@link ErrorDisplay | `<theoplayer-error-display>`}.
- * @group Components
  */
 @customElement('theoplayer-default-ui')
 export class DefaultUI extends LitElement {

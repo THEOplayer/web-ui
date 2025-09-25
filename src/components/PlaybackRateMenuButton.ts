@@ -9,7 +9,6 @@ import { Attribute } from '../util/Attribute';
  * A menu button that opens a [playback rate menu]{@link PlaybackRateMenu}.
  *
  * @attribute menu - The ID of the playback rate menu.
- * @group Components
  */
 @customElement('theoplayer-playback-rate-menu-button')
 export class PlaybackRateMenuButton extends MenuButton {

@@ -12,8 +12,6 @@ const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak
 /**
  * A control that shows when an advertisement is playing,
  * and the number of the current ad in the ad break (if the break has multiple ads).
- *
- * @group Components
  */
 @customElement('theoplayer-ad-display')
 @stateReceiver(['player'])

@@ -6,8 +6,6 @@ import { formatQualityLabel } from '../util/TrackUtils';
 
 /**
  * A control that displays the name of the active video quality.
- *
- * @group Components
  */
 @customElement('theoplayer-active-quality-display')
 @stateReceiver(['activeVideoQuality', 'targetVideoQualities'])

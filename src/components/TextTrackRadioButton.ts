@@ -8,8 +8,6 @@ const TRACK_EVENTS = ['change', 'update'] as const;
 
 /**
  * `<theoplayer-text-track-radio-button>` -A radio button that shows the label of a given text track, and switches to that track when clicked.
- *
- * @group Components
  */
 @customElement('theoplayer-text-track-radio-button')
 export class TextTrackRadioButton extends RadioButton {

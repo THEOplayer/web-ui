@@ -13,8 +13,6 @@ import slotContainerCss from './SlotContainer.css';
  *
  * This is an internal component, used mainly by Open Video UI for React.
  * You shouldn't need this under normal circumstances.
- *
- * @group Components
  * @internal
  */
 @customElement('theoplayer-slot-container')

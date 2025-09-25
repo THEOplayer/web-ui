@@ -8,8 +8,6 @@ import type { RadioGroup } from './RadioGroup';
  * A button that can be checked.
  *
  * When part of a {@link RadioGroup}, at most one button in the group can be checked.
- *
- * @group Components
  */
 @customElement('theoplayer-radio-button')
 export class RadioButton extends Button {

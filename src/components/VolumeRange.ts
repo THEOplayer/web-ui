@@ -10,8 +10,6 @@ function formatAsPercentString(value: number, max: number) {
 /**
  * A volume slider, showing the current audio volume of the player,
  * and which changes the volume when clicked or dragged.
- *
- * @group Components
  */
 @customElement('theoplayer-volume-range')
 @stateReceiver(['player', 'deviceType'])

@@ -17,7 +17,6 @@ const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied', 'sourcechange'] 
  *
  * @attribute `paused` (readonly) - Whether the player is paused. Reflects `ui.player.paused`.
  * @attribute `ended` (readonly) - Whether the player is ended. Reflects `ui.player.ended`.
- * @group Components
  */
 @customElement('theoplayer-play-button')
 @stateReceiver(['player'])

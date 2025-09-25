@@ -6,8 +6,6 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
 
 /**
  * A button that resets the text track style.
- *
- * @group Components
  */
 @customElement('theoplayer-text-track-style-reset-button')
 @stateReceiver(['player'])

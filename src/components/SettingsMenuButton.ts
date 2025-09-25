@@ -9,7 +9,6 @@ import { Attribute } from '../util/Attribute';
  * A menu button that opens a {@link SettingsMenu}.
  *
  * @attribute `menu` - The ID of the settings menu.
- * @group Components
  */
 @customElement('theoplayer-settings-menu-button')
 export class SettingsMenuButton extends MenuButton {

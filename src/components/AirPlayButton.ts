@@ -8,8 +8,6 @@ import { Attribute } from '../util/Attribute';
 
 /**
  * A button to start and stop casting using AirPlay.
- *
- * @group Components
  */
 @customElement('theoplayer-airplay-button')
 @stateReceiver(['player'])

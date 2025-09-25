@@ -12,7 +12,6 @@ const PLAYER_EVENTS = ['readystatechange', 'play', 'pause', 'playing', 'seeking'
  * An indicator that shows whether the player is currently waiting for more data to resume playback.
  *
  * @attribute `loading` (readonly) - Whether the player is waiting for more data. If set, the indicator is shown.
- * @group Components
  */
 @customElement('theoplayer-loading-indicator')
 @stateReceiver(['player'])

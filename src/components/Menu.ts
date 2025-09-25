@@ -37,8 +37,6 @@ export function menuTemplate(heading: string, content: string, extraCss: string 
  * @attribute `menu-opened` (readonly) - Whether the menu is currently open.
  *
  * @slot `heading` - A slot for the menu's heading.
- *
- * @group Components
  */
 @customElement('theoplayer-menu')
 export class Menu extends LitElement {

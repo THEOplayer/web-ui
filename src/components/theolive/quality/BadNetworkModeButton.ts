@@ -14,7 +14,6 @@ import { Attribute } from '../../../util/Attribute';
  * A menu button that opens a settings menu.
  *
  * @attribute `menu` - The ID of the settings menu.
- * @group Components
  */
 @customElement('theolive-bad-network-button')
 @stateReceiver(['player'])

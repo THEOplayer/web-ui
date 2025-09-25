@@ -11,8 +11,6 @@ import { Attribute } from '../util/Attribute';
  * A button that closes its parent menu.
  *
  * This button must be placed inside a {@link Menu | `<theoplayer-menu>`}.
- *
- * @group Components
  */
 @customElement('theoplayer-menu-close-button')
 export class CloseMenuButton extends Button {
