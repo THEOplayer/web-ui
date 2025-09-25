@@ -1,9 +1,11 @@
 import type { Application } from 'typedoc';
 
+/**
+ * Resolves references to `html` and `css` in Lit docs,
+ * which are lacking an explicit import from `lit-element`.
+ */
 export function load(app: Application) {
     app.converter.addUnknownSymbolResolver((declaration, _refl, _part, _symbolId) => {
-        // The Lit docs have some references to `html` and `css` without importing these types from `lit-element`.
-        // Resolve them manually.
         if (declaration.moduleSource === undefined) {
             const path = declaration.symbolReference?.path;
             if (path && path.length === 1) {
