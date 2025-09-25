@@ -10,7 +10,7 @@ export function load(app: typedoc.Application) {
 }
 
 function onDeclaration(context: typedoc.Context, refl: typedoc.DeclarationReflection) {
-    const symbol = context.project.getSymbolFromReflection(refl);
+    const symbol = context.getSymbolFromReflection(refl);
     if (!symbol) return;
     const declarations = symbol.declarations;
     if (!declarations) return;
@@ -20,7 +20,7 @@ function onDeclaration(context: typedoc.Context, refl: typedoc.DeclarationReflec
 }
 
 function onSignature(context: typedoc.Context, refl: typedoc.SignatureReflection) {
-    const symbol = context.project.getSymbolFromReflection(refl.parent);
+    const symbol = context.getSymbolFromReflection(refl.parent);
     if (!symbol) return;
     const declarations = symbol.declarations;
     if (!declarations) return;
