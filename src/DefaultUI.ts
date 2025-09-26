@@ -1,5 +1,5 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import type { ChromelessPlayer, PlayerConfiguration, SourceDescription } from 'theoplayer/chromeless';
+import type { ChromelessPlayer, SourceDescription, UIPlayerConfiguration } from 'theoplayer/chromeless';
 import type { UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
 import defaultUiHtml from './DefaultUI.html';
@@ -38,7 +38,7 @@ const template = createTemplate('theoplayer-default-ui', `<style>${defaultUiCss}
  * For more extensive customizations, we recommend defining your own custom UI using
  * a {@link UIContainer | `<theoplayer-ui>`}.
  *
- * @attribute `configuration` - The THEOplayer {@link theoplayer!PlayerConfiguration | PlayerConfiguration}, as a JSON string.
+ * @attribute `configuration` - The THEOplayer {@link theoplayer!UIPlayerConfiguration | UIPlayerConfiguration}, as a JSON string.
  * @attribute `source` - The THEOplayer {@link theoplayer!SourceDescription | SourceDescription}, as a JSON string.
  * @attribute `fluid` - If set, the player automatically adjusts its height to fit the video's aspect ratio.
  * @attribute `muted` - If set, the player starts out as muted. Reflects `ui.player.muted`.
@@ -102,7 +102,7 @@ export class DefaultUI extends HTMLElement {
      *   the underlying THEOplayer instance.
      *   Can also be set later on through the {@link DefaultUI.configuration} property.
      */
-    constructor(configuration: PlayerConfiguration = {}) {
+    constructor(configuration: UIPlayerConfiguration = {}) {
         super();
         this._shadowRoot = this.initShadowRoot();
 
@@ -154,16 +154,16 @@ export class DefaultUI extends HTMLElement {
      *
      * Used to create the underlying THEOplayer instance.
      */
-    get configuration(): PlayerConfiguration {
+    get configuration(): UIPlayerConfiguration {
         return this._ui.configuration;
     }
 
-    set configuration(configuration: PlayerConfiguration) {
+    set configuration(configuration: UIPlayerConfiguration) {
         this.removeAttribute(Attribute.CONFIGURATION);
         this.setConfiguration_(configuration);
     }
 
-    private setConfiguration_(configuration: PlayerConfiguration) {
+    private setConfiguration_(configuration: UIPlayerConfiguration) {
         this._ui.configuration = {
             ...configuration,
             ads: {
@@ -287,7 +287,7 @@ export class DefaultUI extends HTMLElement {
         if (attrName === Attribute.SOURCE) {
             this._ui.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
         } else if (attrName === Attribute.CONFIGURATION) {
-            this.setConfiguration_(newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {});
+            this.setConfiguration_(newValue ? (JSON.parse(newValue) as UIPlayerConfiguration) : {});
         } else if (attrName === Attribute.MUTED) {
             this.muted = hasValue;
         } else if (attrName === Attribute.AUTOPLAY) {

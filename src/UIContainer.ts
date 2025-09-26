@@ -1,5 +1,5 @@
 import * as shadyCss from '@webcomponents/shadycss';
-import { ChromelessPlayer, type MediaTrack, type PlayerConfiguration, type SourceDescription, type VideoQuality } from 'theoplayer/chromeless';
+import { ChromelessPlayer, type MediaTrack, type SourceDescription, type UIPlayerConfiguration, type VideoQuality } from 'theoplayer/chromeless';
 import elementCss from './UIContainer.css';
 import elementHtml from './UIContainer.html';
 import {
@@ -70,7 +70,7 @@ const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
  *
  * The styling can be controlled using CSS custom properties (see below).
  *
- * @attribute `configuration` - The THEOplayer {@link theoplayer!PlayerConfiguration | PlayerConfiguration}, as a JSON string.
+ * @attribute `configuration` - The THEOplayer {@link theoplayer!UIPlayerConfiguration | UIPlayerConfiguration}, as a JSON string.
  * @attribute `source` - The THEOplayer {@link theoplayer!SourceDescription | SourceDescription}, as a JSON string.
  * @attribute `fluid` - If set, the player automatically adjusts its height to fit the video's aspect ratio.
  * @attribute `muted` - If set, the player starts out as muted. Reflects `ui.player.muted`.
@@ -143,7 +143,7 @@ export class UIContainer extends HTMLElement {
         ];
     }
 
-    private _configuration: PlayerConfiguration = {};
+    private _configuration: UIPlayerConfiguration = {};
     private readonly _playerEl: HTMLElement;
     private readonly _menuEl: HTMLElement;
     private readonly _menuGroup: MenuGroup;
@@ -172,7 +172,7 @@ export class UIContainer extends HTMLElement {
      *   the underlying THEOplayer instance.
      *   Can also be set later on through the {@link UIContainer.configuration} property.
      */
-    constructor(configuration: PlayerConfiguration = {}) {
+    constructor(configuration: UIPlayerConfiguration = {}) {
         super();
         const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
         shadowRoot.appendChild(template().content.cloneNode(true));
@@ -235,16 +235,16 @@ export class UIContainer extends HTMLElement {
      *
      * Used to create the underlying THEOplayer instance.
      */
-    get configuration(): PlayerConfiguration {
+    get configuration(): UIPlayerConfiguration {
         return this._configuration;
     }
 
-    set configuration(playerConfiguration: PlayerConfiguration) {
+    set configuration(playerConfiguration: UIPlayerConfiguration) {
         this.removeAttribute(Attribute.CONFIGURATION);
         this._setConfiguration(playerConfiguration);
     }
 
-    private _setConfiguration(playerConfiguration: PlayerConfiguration): void {
+    private _setConfiguration(playerConfiguration: UIPlayerConfiguration): void {
         this._configuration = playerConfiguration ?? {};
         this.tryInitializePlayer_();
     }
@@ -491,7 +491,7 @@ export class UIContainer extends HTMLElement {
         }
         const hasValue = newValue != null;
         if (attrName === Attribute.CONFIGURATION) {
-            this._setConfiguration(newValue ? (JSON.parse(newValue) as PlayerConfiguration) : {});
+            this._setConfiguration(newValue ? (JSON.parse(newValue) as UIPlayerConfiguration) : {});
         } else if (attrName === Attribute.SOURCE) {
             this._setSource(newValue ? (JSON.parse(newValue) as SourceDescription) : undefined);
         } else if (attrName === Attribute.MUTED) {
