@@ -1,5 +1,17 @@
 # @theoplayer/react-ui
 
+## 2.0.0-beta.0
+
+### 💥 Breaking Changes
+
+- Open Video UI for Web is now built using [Lit](https://lit.dev/).
+    - This shouldn't affect any custom UIs or custom components built using Open Video UI for React.
+    - For older browsers that don't support Custom Elements, we recommend loading our new polyfills library from `@theoplayer/web-ui/polyfills`.
+
+### 📦 Dependency Updates
+
+- See changes to [Open Video UI for Web v2.0.0-beta.0](https://github.com/THEOplayer/web-ui/blob/%40theoplayer%2Fweb-ui%402.0.0-beta.0/CHANGELOG.md)
+
 ## 1.13.1
 
 ### 📦 Dependency Updates
