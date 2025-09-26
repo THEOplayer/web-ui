@@ -1,52 +1,31 @@
-import * as shadyCss from '@webcomponents/shadycss';
-import { Button, buttonTemplate } from './Button';
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import { Button } from './Button';
 import fullscreenButtonCss from './FullscreenButton.css';
 import enterIcon from '../icons/fullscreen-enter.svg';
 import exitIcon from '../icons/fullscreen-exit.svg';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import { createCustomEvent } from '../util/EventUtils';
 import { ENTER_FULLSCREEN_EVENT, type EnterFullscreenEvent } from '../events/EnterFullscreenEvent';
 import { EXIT_FULLSCREEN_EVENT, type ExitFullscreenEvent } from '../events/ExitFullscreenEvent';
 import { Attribute } from '../util/Attribute';
-import { toggleAttribute } from '../util/CommonUtils';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate(
-    'theoplayer-fullscreen-button',
-    buttonTemplate(
-        `<span part="enter-icon"><slot name="enter-icon">${enterIcon}</slot></span>` +
-            `<span part="exit-icon"><slot name="exit-icon">${exitIcon}</slot></span>`,
-        fullscreenButtonCss
-    )
-);
 
 /**
- * `<theoplayer-fullscreen-button>` - A button that toggles fullscreen.
- *
- * @group Components
+ * A button that toggles fullscreen.
  */
-export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen']) {
-    static get observedAttributes() {
-        return [...Button.observedAttributes, Attribute.FULLSCREEN];
-    }
-
-    constructor() {
-        super({ template: template() });
-        this._upgradeProperty('fullscreen');
-    }
+@customElement('theoplayer-fullscreen-button')
+@stateReceiver(['fullscreen'])
+export class FullscreenButton extends Button {
+    static styles = [...Button.styles, fullscreenButtonCss];
 
     override connectedCallback() {
         super.connectedCallback();
         this._updateAriaLabel();
     }
 
-    get fullscreen(): boolean {
-        return this.hasAttribute(Attribute.FULLSCREEN);
-    }
-
-    set fullscreen(fullscreen: boolean) {
-        toggleAttribute(this, Attribute.FULLSCREEN, fullscreen);
-    }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.FULLSCREEN })
+    accessor fullscreen: boolean = false;
 
     protected override handleClick(): void {
         if (!this.fullscreen) {
@@ -67,7 +46,6 @@ export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen'])
     override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
         super.attributeChangedCallback(attrName, oldValue, newValue);
         if (FullscreenButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
             this._updateAriaLabel();
         }
     }
@@ -76,9 +54,12 @@ export class FullscreenButton extends StateReceiverMixin(Button, ['fullscreen'])
         const label = this.fullscreen ? 'exit fullscreen' : 'enter fullscreen';
         this.setAttribute(Attribute.ARIA_LABEL, label);
     }
-}
 
-customElements.define('theoplayer-fullscreen-button', FullscreenButton);
+    protected override render(): HTMLTemplateResult {
+        return html`<span part="enter-icon"><slot name="enter-icon">${unsafeSVG(enterIcon)}</slot></span>
+            <span part="exit-icon"><slot name="exit-icon">${unsafeSVG(exitIcon)}</slot></span>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {

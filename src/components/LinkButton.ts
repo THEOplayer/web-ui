@@ -1,53 +1,44 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { templateContent } from 'lit/directives/template-content.js';
 import linkButtonCss from './LinkButton.css';
 import { Attribute } from '../util/Attribute';
-import type { ButtonOptions } from './Button';
-import { Button, buttonTemplate } from './Button';
 import { KeyCode } from '../util/KeyCode';
-import { toggleAttribute } from '../util/CommonUtils';
-import { createTemplate } from '../util/TemplateUtils';
-
-export function linkButtonTemplate(button: string, extraCss: string = ''): string {
-    return buttonTemplate(`<a>${button}</a>`, `${linkButtonCss}\n${extraCss}`);
-}
-
-const defaultTemplate = createTemplate('theoplayer-link-button', linkButtonTemplate('<slot></slot>'));
+import { createRef, ref, type Ref } from 'lit/directives/ref.js';
+import { type ButtonOptions, buttonTemplate } from './Button';
 
 /**
- * `<theoplayer-link-button>` - A {@link Button | button} that opens a hyperlink.
+ * @deprecated Override {@link LinkButton.render} instead.
+ */
+export function linkButtonTemplate(button: string, extraCss: string = ''): string {
+    return buttonTemplate(`<a>${button}</a>`, extraCss);
+}
+
+/**
+ * A {@link Button | button} that opens a hyperlink.
  *
  * @attribute `disabled` - Whether the button is disabled. When disabled, the button cannot be clicked.
- * @group Components
  */
-export class LinkButton extends HTMLElement {
-    private readonly _linkEl: HTMLAnchorElement;
+@customElement('theoplayer-link-button')
+export class LinkButton extends LitElement {
+    static styles = [linkButtonCss];
 
-    static get observedAttributes() {
-        return [Attribute.DISABLED];
-    }
+    private readonly _template: HTMLTemplateElement | undefined;
+    private _disabled: boolean = false;
+
+    private readonly _linkRef: Ref<HTMLAnchorElement> = createRef<HTMLAnchorElement>();
 
     constructor(options?: ButtonOptions) {
         super();
-
-        const template = options?.template ?? defaultTemplate();
-        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template.content.cloneNode(true));
-
-        this._linkEl = shadowRoot.querySelector('a')!;
-
-        this._upgradeProperty('disabled');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
+        this._template = options?.template;
+        if (this._template) {
+            // Render immediately to populate the shadow DOM.
+            this.performUpdate();
         }
     }
 
     connectedCallback(): void {
-        shadyCss.styleElement(this);
+        super.connectedCallback();
 
         if (!this.hasAttribute('role')) {
             this.setAttribute('role', 'button');
@@ -62,14 +53,6 @@ export class LinkButton extends HTMLElement {
         if (!this.hasAttribute(Attribute.DISABLED)) {
             this._enable();
         }
-
-        this._linkEl.addEventListener('keydown', this._onKeyDown);
-        this._linkEl.addEventListener('click', this._onClick);
-    }
-
-    disconnectedCallback(): void {
-        this._linkEl.removeEventListener('keydown', this._onKeyDown);
-        this._linkEl.removeEventListener('click', this._onClick);
     }
 
     /**
@@ -77,32 +60,25 @@ export class LinkButton extends HTMLElement {
      *
      * When disabled, the button cannot be clicked.
      */
-    get disabled() {
-        return this.hasAttribute(Attribute.DISABLED);
+    get disabled(): boolean {
+        return this._disabled;
     }
 
-    set disabled(disabled: boolean) {
-        toggleAttribute(this, Attribute.DISABLED, disabled);
-    }
-
-    protected setLink(href: string, target: string): void {
-        this._linkEl.href = href;
-        this._linkEl.target = target;
-    }
-
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (attrName === Attribute.DISABLED && newValue !== oldValue) {
-            const hasValue = newValue != null;
-            if (hasValue) {
-                this._disable();
-            } else {
-                this._enable();
-            }
-        }
-        if (Button.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
+    @property({ reflect: true, type: Boolean, attribute: Attribute.DISABLED })
+    set disabled(value: boolean) {
+        this._disabled = value;
+        if (value) {
+            this._disable();
+        } else {
+            this._enable();
         }
     }
+
+    @state()
+    protected accessor href: string = '';
+
+    @state()
+    protected accessor target: string = '';
 
     private _enable(): void {
         this.setAttribute('aria-disabled', 'false');
@@ -130,7 +106,7 @@ export class LinkButton extends HTMLElement {
             // case KeyCode.ENTER:
             case KeyCode.SPACE:
                 event.preventDefault();
-                this._linkEl.click();
+                this._linkRef.value?.click();
                 break;
             // Any other key press is ignored and passed back to the browser.
             default:
@@ -145,10 +121,21 @@ export class LinkButton extends HTMLElement {
         this.handleClick();
     };
 
+    protected override render(): HTMLTemplateResult {
+        if (this._template) {
+            return html`${templateContent(this._template)}`;
+        }
+        return html`<a ${ref(this._linkRef)} href=${this.href} target=${this.target} @keydown=${this._onKeyDown} @click=${this._onClick}
+            >${this.renderLinkContent()}</a
+        >`;
+    }
+
+    protected renderLinkContent(): HTMLTemplateResult {
+        return html`<slot></slot>`;
+    }
+
     protected handleClick(): void {}
 }
-
-customElements.define('theoplayer-link-button', LinkButton);
 
 declare global {
     interface HTMLElementTagNameMap {

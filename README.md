@@ -51,19 +51,22 @@ The current THEOplayer Web SDK comes with a built-in UI based on [video.js](http
         ```js
         import { DefaultUI } from '@theoplayer/web-ui';
         ```
-        Open Video UI will import THEOplayer from `theoplayer/chromeless`.
-        If you're using a bundler such as Webpack or Rollup, this dependency should automatically get bundled with your web app.
+        Open Video UI will import THEOplayer from `theoplayer/chromeless` and [Lit](https://lit.dev/) from `lit`.
+        If you're using a bundler such as Webpack or Rollup, these dependencies should automatically get bundled with your web app.
         Alternatively, you can use an [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) to let the browser resolve it:
         ```html
         <script type="importmap">
             {
                 "imports": {
-                    "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js"
+                    "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js",
+                    "lit": "/path/to/node_modules/lit/index.js",
+                    "lit/decorators.js": "/path/to/node_modules/lit/decorators.js",
+                    "lit/directives/": "/path/to/node_modules/lit/directives/"
                 }
             }
         </script>
         <!-- Import maps polyfill for browsers without import maps support (e.g. Safari 16.3) -->
-        <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js" crossorigin="anonymous"></script>
+        <script async src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js" crossorigin="anonymous"></script>
         <script type="module" src="/path/to/my_app.js"></script>
         ```
 
@@ -131,34 +134,38 @@ See [custom-ui/demo.html](https://github.com/THEOplayer/web-ui/blob/main/docs/st
 
 By default, Open Video UI for Web targets modern browsers that support modern JavaScript syntax (such as [async/await](https://caniuse.com/async-functions)) and native [Custom Elements](https://caniuse.com/custom-elementsv1). This keeps the download size small, so your viewers can spend less time waiting for your page to load and start watching their video faster.
 
-On older browsers (such as Internet Explorer 11 and older smart TVs), you need to load a different version of the Open Video UI that uses older JavaScript syntax. You also need to load additional polyfills for missing features such as Promises or Custom Elements. We recommend [the Cloudflare mirror of Polyfill.io](https://cdnjs.cloudflare.com/polyfill/) and [Web Components Polyfills](https://github.com/webcomponents/polyfills) for these.
+On older browsers (such as Internet Explorer 11 and older smart TVs), you need to load a different version of the Open Video UI that uses older JavaScript syntax. You also need to load additional polyfills for missing features such as `Promise`, `Symbol.iterator` or Custom Elements:
 
-- Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`), while legacy browsers will load the legacy build (with `nomodule`).
+- For ES2015 features like `Promise` and `Symbol.iterator`, we recommend [the Cloudflare mirror of Polyfill.io](https://cdnjs.cloudflare.com/polyfill/).
+- For Custom Elements, we recommend loading our polyfill bundle from `@theoplayer/web-ui/polyfills`. Alternatively, you can load the [Web Components Polyfills](https://github.com/webcomponents/polyfills).
+
+* Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`), while legacy browsers will load the legacy build (with `nomodule`).
 
     ```html
     <!-- Modern browsers -->
     <script type="importmap">
         {
             "imports": {
-                "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js"
+                "theoplayer/chromeless": "/path/to/node_modules/theoplayer/THEOplayer.chromeless.esm.js",
+                "lit": "/path/to/node_modules/lit/index.js",
+                "lit/decorators.js": "/path/to/node_modules/lit/decorators.js",
+                "lit/directives/": "/path/to/node_modules/lit/directives/"
             }
         }
     </script>
     <!-- Import maps polyfill for browsers without import maps support (e.g. Safari 16.3) -->
-    <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js" crossorigin="anonymous"></script>
+    <script async src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js" crossorigin="anonymous"></script>
     <script type="module" src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.mjs"></script>
     <!-- Legacy browsers -->
-    <script nomodule src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es2015"></script>
-    <script nomodule src="https://unpkg.com/@webcomponents/webcomponentsjs@2.8.0/custom-elements-es5-adapter.js"></script>
-    <script nomodule src="https://unpkg.com/@webcomponents/webcomponentsjs@2.8.0/webcomponents-bundle.js"></script>
+    <script nomodule src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es2015%2CglobalThis%2CReflect"></script>
     <script nomodule src="/path/to/node_modules/theoplayer/THEOplayer.chromeless.js"></script>
+    <script nomodule src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.polyfills.js"></script>
     <script nomodule src="/path/to/node_modules/@theoplayer/web-ui/dist/THEOplayerUI.es5.js"></script>
     ```
 
-- Option 2: in your JavaScript. This will load the legacy build on both modern and legacy browsers, which is suboptimal. Instead, we recommend configuring your bundler to produce a modern and legacy build of your entire web app, and to import the appropriate version of Open Video UI for each build flavor.
+* Option 2: in your JavaScript. This will load the legacy build on both modern and legacy browsers, which is suboptimal. Instead, we recommend configuring your bundler to produce a modern and legacy build of your entire web app, and to import the appropriate version of Open Video UI for each build flavor.
 
     ```js
-    import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js';
-    import '@webcomponents/webcomponentsjs/webcomponents-bundle.js';
+    import '@theoplayer/web-ui/polyfills';
     import { DefaultUI } from '@theoplayer/web-ui/es5'; // note the "/es5" suffix
     ```
