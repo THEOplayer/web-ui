@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 1.13.1
+
+### 🐛 Issues
+
+- When entering fullscreen, the player will now always hide the browser's navigation UI. (This can be overridden by setting [`ui.fullscreenOptions.navigationUI`](https://optiview.dolby.com/docs/theoplayer/v10/api-reference/web/interfaces/FullscreenOptions.html#navigationUI) in your player configuration.)
+
 ## 1.13.0 (2025-09-12)
 
 - 🚀 Added support for THEOplayer 10.0. ([#112](https://github.com/THEOplayer/web-ui/pull/112))
