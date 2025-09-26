@@ -20,25 +20,97 @@
                 background: #000;
             }
         </style>
+        <!-- Modern browsers -->
         <script type="importmap">
             {
                 "imports": {
                     "theoplayer/chromeless": "../node_modules/theoplayer/THEOplayer.chromeless.esm.js",
-                    "@theoplayer/web-ui": "../dist/THEOplayerUI.mjs"
+                    "@theoplayer/web-ui": "../dist/THEOplayerUI.mjs",
+                    "lit": "https://ga.jspm.io/npm:lit@3.3.1/index.js",
+                    "lit/decorators.js": "https://ga.jspm.io/npm:lit@3.3.1/decorators.js",
+                    "lit/directives/": "https://ga.jspm.io/npm:lit@3.3.1/directives/"
+                },
+                "scopes": {
+                    "https://ga.jspm.io/": {
+                        "@lit/reactive-element": "https://ga.jspm.io/npm:@lit/reactive-element@2.1.1/development/reactive-element.js",
+                        "@lit/reactive-element/decorators/": "https://ga.jspm.io/npm:@lit/reactive-element@2.1.1/development/decorators/",
+                        "lit-element/lit-element.js": "https://ga.jspm.io/npm:lit-element@4.2.1/development/lit-element.js",
+                        "lit-html": "https://ga.jspm.io/npm:lit-html@3.3.1/development/lit-html.js",
+                        "lit-html/": "https://ga.jspm.io/npm:lit-html@3.3.1/development/"
+                    }
                 }
             }
         </script>
         <!-- Import maps polyfill for browsers without import maps support (e.g. Safari 16.3) -->
-        <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js" crossorigin="anonymous"></script>
+        <script async src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js" crossorigin="anonymous"></script>
         <script type="module">
-            import '@theoplayer/web-ui';
+            import * as THEOplayerUI from '@theoplayer/web-ui';
+            self.THEOplayerUI = THEOplayerUI;
         </script>
+        <!-- Legacy browsers -->
+        <script
+            nomodule
+            src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?version=4.8.0&features=es2015%2CglobalThis%2CReflect%2CqueueMicrotask%2CArray.prototype.flat"
+        ></script>
+        <script src="../node_modules/theoplayer/THEOplayer.chromeless.js"></script>
+        <script nomodule src="../dist/THEOplayerUI.polyfills.js"></script>
+        <script nomodule src="../dist/THEOplayerUI.es5.js"></script>
     </head>
     <body>
         <h1>Default UI</h1>
-        <theoplayer-default-ui
-            configuration='{"libraryLocation":"../node_modules/theoplayer/","license":""}'
-            source='{"sources":{"src":"https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8"},"metadata":{"title":"Big Buck Bunny"},"textTracks":[{"default":true,"src":"https://cdn.theoplayer.com/video/big_buck_bunny/thumbnails.vtt","label":"thumbnails","kind":"metadata"}]}'
-        ></theoplayer-default-ui>
+        <theoplayer-default-ui configuration='{"libraryLocation":"../node_modules/theoplayer/","license":""}'></theoplayer-default-ui>
+        <div>
+            <label style="user-select: none">
+                Source:
+                <select id="source-select">
+                    <option value="bigBuckBunny" selected>Big Buck Bunny</option>
+                    <option value="elephantsDream">Elephant's Dream</option>
+                    <option value="starWarsTrailer">Star Wars Episode VII Trailer</option>
+                </select>
+            </label>
+        </div>
+        <script>
+            const ui = document.querySelector('theoplayer-default-ui');
+            const sources = {
+                bigBuckBunny: {
+                    sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
+                    metadata: { title: 'Big Buck Bunny' },
+                    textTracks: [
+                        {
+                            default: true,
+                            src: 'https://cdn.theoplayer.com/video/big_buck_bunny/thumbnails.vtt',
+                            label: 'thumbnails',
+                            kind: 'metadata'
+                        }
+                    ]
+                },
+                elephantsDream: {
+                    sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
+                    metadata: { title: "Elephant's Dream" },
+                    textTracks: [
+                        {
+                            default: true,
+                            src: 'https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt',
+                            label: 'thumbnails',
+                            kind: 'metadata'
+                        }
+                    ]
+                },
+                starWarsTrailer: {
+                    sources: {
+                        src: 'https://cdn.theoplayer.com/video/star_wars_episode_vii-the_force_awakens_official_comic-con_2015_reel_(2015)/index.m3u8'
+                    },
+                    metadata: {
+                        title: 'Star Wars Episode VII Trailer'
+                    },
+                    poster: 'https://cdn.theoplayer.com/video/star_wars_episode_vii-the_force_awakens_official_comic-con_2015_reel_(2015)/poster.jpg'
+                }
+            };
+
+            ui.source = sources.bigBuckBunny;
+            document.querySelector('#source-select').addEventListener('change', (e) => {
+                ui.source = sources[e.target.value];
+            });
+        </script>
     </body>
 </html>

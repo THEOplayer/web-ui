@@ -1,30 +1,21 @@
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 import { RadioButton } from './RadioButton';
-import { buttonTemplate } from './Button';
 import type { MediaTrack } from 'theoplayer/chromeless';
-import { localizeLanguageName, setTextContent } from '../util/CommonUtils';
-import { Attribute } from '../util/Attribute';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-media-track-radio-button', buttonTemplate(`<slot></slot>`));
+import { localizeLanguageName } from '../util/CommonUtils';
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
 /**
- * `<theoplayer-media-track-radio-button>` - A radio button that shows the label of a given media track,
+ * A radio button that shows the label of a given media track,
  * and switches to that track when clicked.
- *
- * @group Components
  */
+@customElement('theoplayer-media-track-radio-button')
 export class MediaTrackRadioButton extends RadioButton {
-    private _slotEl: HTMLSlotElement;
     private _track: MediaTrack | undefined = undefined;
 
-    constructor() {
-        super({ template: template() });
-        this._slotEl = this.shadowRoot!.querySelector('slot')!;
-
-        this._upgradeProperty('track');
-    }
+    @state()
+    private accessor _trackLabel = '';
 
     /**
      * The media track that is controlled by this radio button.
@@ -33,6 +24,7 @@ export class MediaTrackRadioButton extends RadioButton {
         return this._track;
     }
 
+    @property({ reflect: false, attribute: false })
     set track(track: MediaTrack | undefined) {
         if (this._track === track) {
             return;
@@ -48,7 +40,7 @@ export class MediaTrackRadioButton extends RadioButton {
     }
 
     private _updateFromTrack(): void {
-        setTextContent(this._slotEl, this._track ? getTrackLabel(this._track) : '');
+        this._trackLabel = this._track ? getTrackLabel(this._track) : '';
         this.checked = this._track ? this._track.enabled : false;
     }
 
@@ -62,11 +54,12 @@ export class MediaTrackRadioButton extends RadioButton {
         this._updateFromTrack();
     };
 
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (attrName === Attribute.ARIA_CHECKED && oldValue !== newValue) {
-            this._updateTrack();
-        }
+    protected override handleChange(): void {
+        this._updateTrack();
+    }
+
+    protected override render(): HTMLTemplateResult {
+        return html`<slot>${this._trackLabel}</slot>`;
     }
 }
 
@@ -81,8 +74,6 @@ function getTrackLabel(track: MediaTrack): string {
     }
     return localizeLanguageName(languageCode) || languageCode || '';
 }
-
-customElements.define('theoplayer-media-track-radio-button', MediaTrackRadioButton);
 
 declare global {
     interface HTMLElementTagNameMap {

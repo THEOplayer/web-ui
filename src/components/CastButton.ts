@@ -1,7 +1,7 @@
 import { Button, type ButtonOptions } from './Button';
+import { property, state } from 'lit/decorators.js';
 import { Attribute } from '../util/Attribute';
 import type { CastState, VendorCast } from 'theoplayer/chromeless';
-import * as shadyCss from '@webcomponents/shadycss';
 
 /**
  * A generic button to start and stop casting.
@@ -11,22 +11,14 @@ import * as shadyCss from '@webcomponents/shadycss';
  */
 export class CastButton extends Button {
     private _castApi: VendorCast | undefined;
-
-    static get observedAttributes() {
-        return [...Button.observedAttributes, Attribute.CAST_STATE];
-    }
+    private _castState: CastState = 'unavailable';
 
     constructor(options?: ButtonOptions) {
         super(options);
-        this._upgradeProperty('castState');
-        this._upgradeProperty('castApi');
     }
 
     override connectedCallback() {
         super.connectedCallback();
-        if (!this.hasAttribute(Attribute.CAST_STATE)) {
-            this.setAttribute(Attribute.CAST_STATE, 'unavailable');
-        }
         this._updateCastState();
     }
 
@@ -37,6 +29,7 @@ export class CastButton extends Button {
         return this._castApi;
     }
 
+    @state()
     set castApi(castApi: VendorCast | undefined) {
         if (this._castApi !== undefined) {
             this._castApi.removeEventListener('statechange', this._updateCastState);
@@ -52,7 +45,12 @@ export class CastButton extends Button {
      * The current cast state.
      */
     get castState(): CastState {
-        return this.getAttribute(Attribute.CAST_STATE) as CastState;
+        return this._castState;
+    }
+
+    @property({ reflect: true, state: true, type: String, attribute: Attribute.CAST_STATE })
+    private set castState(castState: CastState) {
+        this._castState = castState;
     }
 
     protected override handleClick(): void {
@@ -68,14 +66,6 @@ export class CastButton extends Button {
     }
 
     private readonly _updateCastState = (): void => {
-        const castState = this._castApi ? this._castApi.state : 'unavailable';
-        this.setAttribute(Attribute.CAST_STATE, castState);
+        this.castState = this._castApi ? this._castApi.state : 'unavailable';
     };
-
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (CastButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
-    }
 }

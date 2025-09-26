@@ -9,7 +9,7 @@ export default {
     navigationLinks: {
         GitHub: 'https://github.com/THEOplayer/web-ui/tree/main/react'
     },
-    highlightLanguages: ['jsx'],
+    highlightLanguages: ['typescript', 'tsx', 'jsx'],
     externalDocumentation: {
         theoplayer: {
             dtsPath: '~/THEOplayer.d.ts',

@@ -1,18 +1,14 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { RadioGroup } from './RadioGroup';
 import verticalRadioGroupCss from './VerticalRadioGroup.css';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer, EdgeStyle, TextTrackStyle } from 'theoplayer/chromeless';
 import type { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
 import { Attribute } from '../util/Attribute';
 import { COLOR_BLACK, COLOR_WHITE, colorWithAlpha, parseColor, type RgbaColor, rgbEquals, toRgb, toRgba } from '../util/ColorUtils';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate(
-    'theoplayer-text-track-style-radio-group',
-    `<style>${verticalRadioGroupCss}</style><theoplayer-radio-group><slot></slot></theoplayer-radio-group>`
-);
 
 export interface TextTrackStyleMap {
     fontFamily: string | undefined;
@@ -29,76 +25,44 @@ export interface TextTrackStyleMap {
 export type TextTrackStyleOption = keyof TextTrackStyleMap;
 
 /**
- * `<theoplayer-text-track-style-radio-group>` - A radio group that shows a list of values for a text track style option,
+ * A radio group that shows a list of values for a text track style option,
  * from which the user can choose a desired value.
  *
  * @attribute `property` - The property name of the text track style option. One of {@link TextTrackStyleOption}.
  * @slot {@link RadioButton} - The possible options for the text track style option.
  *   For example: `<theoplayer-radio-button value="#ff0000">Red</theoplayer-radio-button>`
- * @group Components
  */
-export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['player']) {
-    static get observedAttributes() {
-        return [Attribute.PROPERTY];
-    }
+@customElement('theoplayer-text-track-style-radio-group')
+@stateReceiver(['player'])
+export class TextTrackStyleRadioGroup extends LitElement {
+    static override styles = [verticalRadioGroupCss];
 
-    private readonly _radioGroup: RadioGroup;
-    private readonly _optionsSlot: HTMLSlotElement;
+    private readonly _radioGroupRef: Ref<RadioGroup> = createRef<RadioGroup>();
     private _player: ChromelessPlayer | undefined;
     private _textTrackStyle: TextTrackStyle | undefined;
+    private _property: TextTrackStyleOption = 'fontColor';
     private _value: any;
 
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-
-        this._radioGroup = shadowRoot.querySelector('theoplayer-radio-group')!;
-        this._optionsSlot = shadowRoot.querySelector('slot')!;
-    }
-
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
-
-        if (!(this._radioGroup instanceof RadioGroup)) {
-            customElements.upgrade(this._radioGroup);
+    protected override firstUpdated(): void {
+        const radioGroup = this._radioGroupRef.value!;
+        if (!(radioGroup instanceof RadioGroup)) {
+            customElements.upgrade(radioGroup);
         }
-
-        this._upgradeProperty('property');
-        this._upgradeProperty('value');
-        this._upgradeProperty('player');
-
-        if (!this.hasAttribute(Attribute.PROPERTY)) {
-            this.property = 'fontColor';
-        }
-
-        this._updateChecked();
-        this.shadowRoot!.addEventListener('change', this._onChange);
-        this._optionsSlot.addEventListener('slotchange', this._updateChecked);
-    }
-
-    disconnectedCallback(): void {
-        this.shadowRoot!.removeEventListener('change', this._onChange);
-        this._optionsSlot.removeEventListener('slotchange', this._updateChecked);
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
+        radioGroup.value = this.value;
     }
 
     /**
      * The property name of the text track style option.
      */
     get property(): TextTrackStyleOption {
-        return this.getAttribute(Attribute.PROPERTY) as TextTrackStyleOption;
+        return this._property;
     }
 
-    set property(value: TextTrackStyleOption) {
-        this.setAttribute(Attribute.PROPERTY, value);
+    @property({ reflect: true, type: String, attribute: Attribute.PROPERTY })
+    set property(property: TextTrackStyleOption) {
+        if (this._property === property) return;
+        this._property = property;
+        this._updateFromPlayer();
     }
 
     /**
@@ -108,13 +72,17 @@ export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['
         return this._value;
     }
 
+    @property({ reflect: false, attribute: false })
     set value(value: string) {
         if (this._value === value) {
             return;
         }
         this._value = value;
         this._updateToPlayer();
-        this._updateChecked();
+        const radioGroup = this._radioGroupRef.value;
+        if (radioGroup) {
+            radioGroup.value = value;
+        }
         this.dispatchEvent(createEvent('change', { bubbles: true }));
     }
 
@@ -122,6 +90,7 @@ export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -133,18 +102,10 @@ export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['
         this._textTrackStyle?.addEventListener('change', this._updateFromPlayer);
     }
 
-    private readonly _updateChecked = (): void => {
-        const buttons = this._radioGroup.allRadioButtons();
-        for (const button of buttons) {
-            button.checked = button.value === this.value;
-        }
-    };
-
     private readonly _onChange = (): void => {
-        const button = this._radioGroup.checkedRadioButton as RadioButton | null;
-        if (button !== null && this.value !== button.value) {
-            this.value = button.value;
-        }
+        const radioGroup = this._radioGroupRef.value;
+        if (!radioGroup) return;
+        this.value = radioGroup.value;
     };
 
     private readonly _updateFromPlayer = (): void => {
@@ -225,16 +186,8 @@ export class TextTrackStyleRadioGroup extends StateReceiverMixin(HTMLElement, ['
         }
     }
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (newValue === oldValue) {
-            return;
-        }
-        if (attrName === Attribute.PROPERTY) {
-            this._updateFromPlayer();
-        }
-        if (TextTrackStyleRadioGroup.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
+    protected override render(): HTMLTemplateResult {
+        return html`<theoplayer-radio-group ${ref(this._radioGroupRef)} @change=${this._onChange}><slot></slot></theoplayer-radio-group>`;
     }
 }
 
@@ -257,8 +210,6 @@ function updateOpacity(opacityValue: string, colorValue: string | undefined, def
         return toRgba(colorWithAlpha(color, alpha));
     }
 }
-
-customElements.define('theoplayer-text-track-style-radio-group', TextTrackStyleRadioGroup);
 
 declare global {
     interface HTMLElementTagNameMap {

@@ -1,30 +1,17 @@
-import { Button, type ButtonOptions, buttonTemplate } from './Button';
+import { customElement, property } from 'lit/decorators.js';
+import { Button } from './Button';
 import { Attribute } from '../util/Attribute';
-import * as shadyCss from '@webcomponents/shadycss';
 import { createEvent } from '../util/EventUtils';
 import type { RadioGroup } from './RadioGroup';
-import { createTemplate } from '../util/TemplateUtils';
-
-const defaultTemplate = createTemplate('theoplayer-radio-button', buttonTemplate('<slot></slot>'));
 
 /**
- * `<theoplayer-radio-button>` - A button that can be checked.
+ * A button that can be checked.
  *
  * When part of a {@link RadioGroup}, at most one button in the group can be checked.
- *
- * @group Components
  */
+@customElement('theoplayer-radio-button')
 export class RadioButton extends Button {
-    static get observedAttributes() {
-        return [...Button.observedAttributes, Attribute.ARIA_CHECKED, Attribute.VALUE];
-    }
-
-    private _value: any = undefined;
-
-    constructor(options?: ButtonOptions) {
-        super({ template: defaultTemplate(), ...options });
-        this._upgradeProperty('checked');
-    }
+    private _checked: boolean = false;
 
     override connectedCallback() {
         if (!this.hasAttribute('role')) {
@@ -41,46 +28,39 @@ export class RadioButton extends Button {
      * Whether this radio button is checked.
      */
     get checked(): boolean {
-        return this.getAttribute(Attribute.ARIA_CHECKED) === 'true';
+        return this._checked;
     }
 
+    @property({
+        reflect: true,
+        type: Boolean,
+        attribute: Attribute.ARIA_CHECKED,
+        converter: {
+            fromAttribute: (value: string | null) => value != null && value !== 'false',
+            toAttribute: (value: boolean) => String(value)
+        }
+    })
     set checked(checked: boolean) {
-        this.setAttribute(Attribute.ARIA_CHECKED, checked ? 'true' : 'false');
+        if (this._checked !== checked) {
+            this._checked = checked;
+            this.handleChange();
+            this.dispatchEvent(createEvent('change', { bubbles: true }));
+        }
     }
 
     /**
      * The value associated with this radio button.
      */
-    get value(): any {
-        return this._value;
-    }
-
-    set value(value: any) {
-        this._value = value;
-    }
+    @property({ attribute: Attribute.VALUE })
+    accessor value: any = undefined;
 
     protected handleClick(): void {
         this.checked = true;
         this.dispatchEvent(createEvent('input', { bubbles: true, composed: true }));
     }
 
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (newValue === oldValue) {
-            return;
-        }
-        if (attrName === Attribute.ARIA_CHECKED) {
-            this.dispatchEvent(createEvent('change', { bubbles: true }));
-        } else if (attrName === Attribute.VALUE) {
-            this.value = newValue;
-        }
-        if (RadioButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
-    }
+    protected handleChange(): void {}
 }
-
-customElements.define('theoplayer-radio-button', RadioButton);
 
 declare global {
     interface HTMLElementTagNameMap {

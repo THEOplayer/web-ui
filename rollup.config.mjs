@@ -2,14 +2,16 @@ import { defineConfig } from 'rollup';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import { minify, swc } from 'rollup-plugin-swc3';
 import { minifyHTML } from './scripts/minify-html.mjs';
+import minifyHtmlLiterals from 'rollup-plugin-minify-html-literals-v3';
 import postcss from 'rollup-plugin-postcss';
 import postcssPresetEnv from 'postcss-preset-env';
 import postcssMixins from 'postcss-mixins';
+import postcssLit from 'rollup-plugin-postcss-lit';
 import * as path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { string } from 'rollup-plugin-string';
+import replace from '@rollup/plugin-replace';
 import dts from 'rollup-plugin-dts';
-import inject from '@rollup/plugin-inject';
 import virtual from '@rollup/plugin-virtual';
 import json from '@rollup/plugin-json';
 
@@ -25,7 +27,11 @@ const banner = `/*!
  * License: ${license}
  */`;
 const theoplayerModule = 'theoplayer/chromeless';
-const domShimModule = '@lit-labs/ssr-dom-shim';
+const globals = {
+    [theoplayerModule]: 'THEOplayer'
+};
+const theoplayerExternals = [theoplayerModule];
+const litExternals = [/^lit/, /^@lit/];
 
 /**
  * @param {{configOutputDir?: string}} cliArgs
@@ -37,6 +43,18 @@ export default (cliArgs) => {
         ...jsConfig(outputDir, { es5: false, node: true, production, sourcemap: true }),
         ...jsConfig(outputDir, { es5: true, production, sourcemap: false }),
         {
+            input: './src/polyfills.ts',
+            output: {
+                file: path.join(outputDir, `${fileName}.polyfills.js`),
+                format: 'iife',
+                sourcemap: false,
+                indent: false,
+                banner
+            },
+            context: 'self',
+            plugins: jsPlugins({ es5: true, module: false, production: true, sourcemap: false })
+        },
+        {
             input: './src/index.ts',
             output: {
                 file: path.join(outputDir, `${fileName}.d.ts`),
@@ -45,7 +63,7 @@ export default (cliArgs) => {
                 banner,
                 footer: `export as namespace ${umdName};`
             },
-            external: [theoplayerModule],
+            external: [...theoplayerExternals, ...litExternals],
             plugins: [dts()]
         }
     ]);
@@ -65,12 +83,10 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
                 sourcemap,
                 indent: false,
                 banner,
-                globals: {
-                    [theoplayerModule]: 'THEOplayer'
-                }
+                globals
             },
             context: 'self',
-            external: [theoplayerModule],
+            external: theoplayerExternals,
             plugins: jsPlugins({ es5, module: false, production, sourcemap })
         },
         {
@@ -83,7 +99,7 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
                 banner
             },
             context: 'self',
-            external: [theoplayerModule],
+            external: es5 ? theoplayerExternals : [...theoplayerExternals, ...litExternals],
             plugins: jsPlugins({ es5, module: true, production, sourcemap })
         },
         node && {
@@ -96,7 +112,7 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
                 banner
             },
             context: 'globalThis',
-            external: [domShimModule],
+            external: litExternals,
             plugins: jsPlugins({ es5, node, module: true, production, sourcemap })
         }
     ]).filter(Boolean);
@@ -107,16 +123,27 @@ function jsConfig(outputDir, { es5 = false, node = false, production = false, so
  */
 function jsPlugins({ es5 = false, node = false, module = false, production = false, sourcemap = false }) {
     const browserslist = es5 ? browserslistLegacy : browserslistModern;
+    const ecmaVersion = es5 ? 5 : 2017;
+    const minifyHtmlOptions = {
+        removeComments: production,
+        removeRedundantAttributes: true,
+        sortClassName: true,
+        collapseWhitespace: production
+    };
     return [
-        nodeResolve(),
+        nodeResolve({
+            exportConditions: [
+                // Use Lit's Node entry point for SSR
+                node ? 'node' : 'browser',
+                production ? false : 'development'
+            ].filter(Boolean)
+        }),
         // For Node, stub out THEOplayer.
         node &&
             virtual({
                 include: './src/**',
                 // Remove THEOplayer altogether.
-                [theoplayerModule]: `export const ChromelessPlayer = undefined;`,
-                // Remove createTemplate() helper.
-                ['./src/util/TemplateUtils']: `export function createTemplate() { return () => undefined; }`
+                [theoplayerModule]: `export const ChromelessPlayer = undefined;`
             }),
         json(),
         // Run PostCSS on .css files.
@@ -133,21 +160,43 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
             ],
             minimize: production
         }),
+        postcssLit({
+            include: './src/**/*.css'
+        }),
         // Minify HTML and CSS.
         minifyHTML({
             include: ['./src/**/*.html'],
-            removeComments: production,
-            removeRedundantAttributes: true,
-            sortClassName: true,
-            collapseWhitespace: production
+            minifyOptions: minifyHtmlOptions
+        }),
+        minifyHtmlLiterals({
+            include: ['./src/**/*.ts'],
+            options: {
+                minifyOptions: minifyHtmlOptions
+            }
         }),
         // Import HTML and SVG as strings.
         string({
             include: ['./src/**/*.html', './src/**/*.svg']
         }),
+        es5 &&
+            replace({
+                include: ['./node_modules/lit/**', './node_modules/lit-html/**', './node_modules/@lit/**'],
+                preventAssignment: true,
+                delimiters: ['', ''],
+                values: {
+                    // Replace `globalThis` in lit-html.
+                    globalThis: 'self',
+                    // HACK: Fix lit-html for IE11.
+                    // d.createTreeWalker(d, 129 /* NodeFilter.SHOW_{ELEMENT|COMMENT} */)
+                    // ^ This needs additional arguments in IE11.
+                    [`129 /* NodeFilter.SHOW_{ELEMENT|COMMENT} */);`]: `129 /* NodeFilter.SHOW_{ELEMENT|COMMENT} */, null, false);`,
+                    [`129);`]: `129,null,false);`
+                }
+            }),
         // Transpile TypeScript.
         swc({
             include: './src/**',
+            extensions: ['.ts', '.js', '.html', '.css'],
             sourceMaps: sourcemap,
             tsconfig: false,
             env: {
@@ -158,35 +207,37 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
                 loose: true,
                 externalHelpers: true,
                 parser: {
-                    syntax: 'typescript'
+                    syntax: 'typescript',
+                    decorators: true
+                },
+                transform: {
+                    decoratorVersion: '2022-03'
                 }
             }
         }),
         // Transpile dependencies for older browsers.
         swc({
             include: './node_modules/**',
-            exclude: './src/**',
+            exclude: ['./src/**', './node_modules/@swc/helpers/**'],
             sourceMaps: sourcemap,
             tsconfig: false,
             env: {
-                loose: true,
+                loose: false,
                 targets: browserslist
             },
             jsc: {
-                loose: true,
-                externalHelpers: true
+                loose: false,
+                externalHelpers: true,
+                assumptions: {
+                    constantSuper: true,
+                    noDocumentAll: true,
+                    ignoreFunctionName: true,
+                    ignoreFunctionLength: true,
+                    ignoreToPrimitiveHint: true,
+                    iterableIsArray: false // must NEVER be true!
+                }
             }
         }),
-        // For Node, inject SSR shims for custom elements.
-        node &&
-            inject({
-                include: './src/**',
-                sourceMap: sourcemap,
-                modules: {
-                    HTMLElement: [domShimModule, 'HTMLElement'],
-                    customElements: [domShimModule, 'customElements']
-                }
-            }),
         // Minify production builds.
         production &&
             minify({
@@ -196,7 +247,7 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
                 },
                 toplevel: true,
                 module,
-                ecma: es5 ? 5 : 2017
+                ecma: ecmaVersion
             })
     ].filter(Boolean);
 }

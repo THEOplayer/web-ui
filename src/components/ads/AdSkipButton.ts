@@ -1,51 +1,35 @@
-import * as shadyCss from '@webcomponents/shadycss';
-import { Button, buttonTemplate } from '../Button';
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { Button } from '../Button';
 import adSkipButtonCss from './AdSkipButton.css';
 import skipNextIcon from '../../icons/skip-next.svg';
-import { StateReceiverMixin } from '../StateReceiverMixin';
+import { stateReceiver } from '../StateReceiverMixin';
 import { Attribute } from '../../util/Attribute';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
-import { arrayFind, setTextContent } from '../../util/CommonUtils';
+import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
-import { createTemplate } from '../../util/TemplateUtils';
-
-const template = createTemplate(
-    'theoplayer-ad-skip-button',
-    buttonTemplate(
-        `<span part="countdown">Skip in 0 seconds</span>` +
-            `<span part="skip">` +
-            `<span part="skip-text"><slot name="skip-text">Skip Ad</slot></span> ` +
-            `<span part="skip-icon"><slot name="skip-icon">${skipNextIcon}</slot></span>` +
-            `</span>`,
-        adSkipButtonCss
-    )
-);
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
 /**
- * `<theoplayer-ad-skip-button>` - A button that skips the current advertisement (if skippable).
+ * A button that skips the current advertisement (if skippable).
  * If the ad cannot be skipped yet, it shows the remaining time until it can be skipped.
- *
- * @group Components
  */
-export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
-    private readonly _countdownEl: HTMLElement;
-    private readonly _skipEl: HTMLElement;
+@customElement('theoplayer-ad-skip-button')
+@stateReceiver(['player'])
+export class AdSkipButton extends Button {
+    static styles = [...Button.styles, adSkipButtonCss];
+
     private _player: ChromelessPlayer | undefined;
     private _ads: Ads | undefined;
 
-    static get observedAttributes() {
-        return [...Button.observedAttributes];
-    }
+    @state()
+    private accessor _showCountdown: boolean = false;
 
-    constructor() {
-        super({ template: template() });
-        this._countdownEl = this.shadowRoot!.querySelector('[part="countdown"]')!;
-        this._skipEl = this.shadowRoot!.querySelector('[part="skip"]')!;
-
-        this._upgradeProperty('player');
-    }
+    @state()
+    private accessor _timeToSkip: number = 0;
 
     override connectedCallback(): void {
         super.connectedCallback();
@@ -56,6 +40,7 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -70,13 +55,6 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
 
     protected override handleClick(): void {
         this._player?.ads?.skip();
-    }
-
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (AdSkipButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
     }
 
     private readonly _onAdChange = () => {
@@ -116,27 +94,35 @@ export class AdSkipButton extends StateReceiverMixin(Button, ['player']) {
         const currentTime = this._player!.currentTime;
         if (currentTime < skipOffset) {
             // Show countdown.
-            const timeToSkip = Math.ceil(skipOffset - currentTime);
-            setTextContent(this._countdownEl, `Skip in ${timeToSkip}s`);
-            this._countdownEl.style.visibility = 'visible';
-            this._skipEl.style.visibility = 'hidden';
-            this._skipEl.style.pointerEvents = 'none';
+            this._showCountdown = true;
+            this._timeToSkip = Math.ceil(skipOffset - currentTime);
             this.style.display = '';
             this.setAttribute(Attribute.DISABLED, '');
             this.setAttribute(Attribute.ARIA_LIVE, 'off');
         } else {
             // Show skip button.
-            this._countdownEl.style.visibility = 'hidden';
-            this._skipEl.style.visibility = 'visible';
-            this._skipEl.style.pointerEvents = '';
+            this._showCountdown = false;
             this.style.display = '';
             this.removeAttribute(Attribute.DISABLED);
             this.setAttribute(Attribute.ARIA_LIVE, 'polite');
         }
     };
-}
 
-customElements.define('theoplayer-ad-skip-button', AdSkipButton);
+    protected override render(): HTMLTemplateResult {
+        const countdownStyles = {
+            visibility: this._showCountdown ? 'visible' : 'hidden'
+        };
+        const skipStyles = {
+            visibility: this._showCountdown ? 'hidden' : 'visible',
+            pointerEvents: this._showCountdown ? 'none' : ''
+        };
+        return html`<span part="countdown" style=${styleMap(countdownStyles)}>Skip in ${this._timeToSkip} seconds</span>
+            <span part="skip" style=${styleMap(skipStyles)}>
+                <span part="skip-text"><slot name="skip-text">Skip Ad</slot></span>
+                <span part="skip-icon"><slot name="skip-icon">${unsafeSVG(skipNextIcon)}</slot></span>
+            </span>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {

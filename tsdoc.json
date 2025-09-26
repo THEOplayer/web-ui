@@ -4,6 +4,10 @@
   "noStandardTags": false,
   "tagDefinitions": [
     {
+      "tagName": "@customElement",
+      "syntaxKind": "block"
+    },
+    {
       "tagName": "@attribute",
       "syntaxKind": "block",
       "allowMultiple": true

@@ -1,5 +1,6 @@
 declare module '*.css' {
-    const cssText: string;
+    import type { CSSResult } from 'lit';
+    const cssText: CSSResult;
     export default cssText;
 }
 
@@ -9,6 +10,6 @@ declare module '*.html' {
 }
 
 declare module '*.svg' {
-    const svg: string;
-    export default svg;
+    const svgText: string;
+    export default svgText;
 }

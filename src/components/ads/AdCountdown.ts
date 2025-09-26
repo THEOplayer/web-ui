@@ -1,51 +1,31 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 import textDisplayCss from '../TextDisplay.css';
 import adCountdownCss from './AdCountdown.css';
-import { StateReceiverMixin } from '../StateReceiverMixin';
+import { stateReceiver } from '../StateReceiverMixin';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
-import { setTextContent } from '../../util/CommonUtils';
-import { createTemplate } from '../../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-ad-countdown', `<style>${textDisplayCss}\n${adCountdownCss}</style><span></span>`);
 
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak'] as const;
 
 /**
- * `<theoplayer-ad-countdown>` - A control that displays the remaining time of the current ad break.
- *
- * @group Components
+ * A control that displays the remaining time of the current ad break.
  */
-export class AdCountdown extends StateReceiverMixin(HTMLElement, ['player']) {
-    private readonly _spanEl: HTMLElement;
+@customElement('theoplayer-ad-countdown')
+@stateReceiver(['player'])
+export class AdCountdown extends LitElement {
+    static override styles = [textDisplayCss, adCountdownCss];
+
     private _player: ChromelessPlayer | undefined;
     private _ads: Ads | undefined;
 
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-        this._spanEl = shadowRoot.querySelector('span')!;
-
-        this._upgradeProperty('player');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
-
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
-        this._update();
-    }
+    @state()
+    private accessor _maxRemainingDuration: number = 0;
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -72,17 +52,18 @@ export class AdCountdown extends StateReceiverMixin(HTMLElement, ['player']) {
         const ads = this._player?.ads;
         let maxRemainingDuration = ads?.currentAdBreak?.maxRemainingDuration;
         if (ads === undefined || !ads.playing || maxRemainingDuration === undefined || maxRemainingDuration < 0) {
-            setTextContent(this._spanEl, '');
+            this._maxRemainingDuration = 0;
             this.style.display = 'none';
-            return;
+        } else {
+            this._maxRemainingDuration = Math.ceil(maxRemainingDuration);
+            this.style.display = '';
         }
-        maxRemainingDuration = Math.ceil(maxRemainingDuration);
-        setTextContent(this._spanEl, `Content will resume in ${maxRemainingDuration}s`);
-        this.style.display = '';
     };
-}
 
-customElements.define('theoplayer-ad-countdown', AdCountdown);
+    protected override render(): HTMLTemplateResult {
+        return html`<span>Content will resume in ${this._maxRemainingDuration}s</span>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {

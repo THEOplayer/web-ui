@@ -1,48 +1,35 @@
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import './components/theolive/quality/BadNetworkModeButton';
 import './components/theolive/quality/BadNetworkModeMenu';
 import css from './THEOliveDefaultUI.css';
-import html from './THEOliveDefaultUI.html';
 import type { ErrorEvent, UIPlayerConfiguration } from 'theoplayer/chromeless';
 import { DefaultUI } from './DefaultUI';
-import { READY_EVENT } from './events/ReadyEvent';
-import { ErrorDisplay, PlayButton } from './components';
-import { createTemplate } from './util/TemplateUtils';
-
-const template = createTemplate('theolive-default-ui', `<style>${css}</style>${html}`);
+import { Attribute } from './util/Attribute';
 
 /**
  * `<theolive-default-ui>` - A default UI for THEOlive.
- *
- * @group Components
  */
+@customElement('theolive-default-ui')
 export class THEOliveDefaultUI extends DefaultUI {
-    private readonly _loading: HTMLParagraphElement;
-    private readonly _offline: HTMLParagraphElement;
-    private readonly _announcement: HTMLParagraphElement;
-    private readonly _errorDisplay: ErrorDisplay;
-    private readonly _playButton: PlayButton;
-    private readonly _root: HTMLElement;
+    static override styles = [css];
+
+    @state()
+    private accessor _announcementType: 'loading' | 'offline' | 'announcement' | '' = '';
+    @state()
+    private accessor _announcementMessage: string = '';
+    @state()
+    private accessor _hidePlayButton: boolean = false;
+    @state()
+    private accessor _hideErrorDisplay: boolean = false;
 
     constructor(configuration: UIPlayerConfiguration = {}) {
         super(configuration);
-        this._loading = this._shadowRoot.querySelector<HTMLParagraphElement>('#loading-announcement')!;
-        this._offline = this._shadowRoot.querySelector<HTMLParagraphElement>('#offline-announcement')!;
-        this._announcement = this._shadowRoot.querySelector<HTMLParagraphElement>('#announcement')!;
-        this._errorDisplay = this._shadowRoot.querySelector<ErrorDisplay>('theoplayer-error-display')!;
-        this._playButton = this._shadowRoot.querySelector<PlayButton>('theoplayer-play-button')!;
-        this._root = this._shadowRoot.querySelector<HTMLElement>('theoplayer-ui')!;
-
-        this._ui.addEventListener(READY_EVENT, this.onReady);
     }
 
-    protected initShadowRoot(): ShadowRoot {
-        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-        return shadowRoot;
-    }
-
-    private readonly onReady = () => {
-        this._ui.removeEventListener(READY_EVENT, this.onReady);
+    protected override _onUiReady() {
+        super._onUiReady();
         const player = this.player;
         if (player) {
             player.theoLive?.addEventListener('publicationloadstart', this.onLoadChannelStart);
@@ -50,7 +37,7 @@ export class THEOliveDefaultUI extends DefaultUI {
             player.theoLive?.addEventListener('publicationloaded', this.onChannelLoaded);
             player.addEventListener('error', this.onError);
         }
-    };
+    }
 
     private onLoadChannelStart = () => {
         this.showMessage_('loading', undefined);
@@ -76,48 +63,68 @@ export class THEOliveDefaultUI extends DefaultUI {
     };
 
     private hidePlayerError(): void {
-        this._root.removeAttribute('has-error');
-        this._errorDisplay.style.display = 'none';
+        this._uiRef.value?.removeAttribute(Attribute.HAS_ERROR);
+        this._hideErrorDisplay = true;
     }
 
     private stopHidingPlayerError(): void {
-        this._root.setAttribute('has-error', '');
-        this._errorDisplay.style.display = 'flex';
-    }
-
-    private hidePlayerPlayButton_(): void {
-        this._playButton.style.display = 'none';
-    }
-
-    private stopHidingPlayerPlayButton(): void {
-        this._playButton.style.display = 'inline-flex';
+        this._uiRef.value?.setAttribute(Attribute.HAS_ERROR, '');
+        this._hideErrorDisplay = false;
     }
 
     private showMessage_(type: 'offline' | 'loading' | 'announcement', text: string | undefined): void {
         this.hidePlayerError();
-        this._loading.style.display = 'none';
-        this._offline.style.display = 'none';
-        this._announcement.style.display = 'none';
-        if (type === 'loading') {
-            this._loading.style.display = 'block';
-        } else if (type === 'offline') {
-            this._offline.style.display = 'block';
-        } else {
-            this._announcement.textContent = text ?? '';
-            this._announcement.style.display = 'block';
-        }
-        this.hidePlayerPlayButton_();
+        this._announcementType = type;
+        this._announcementMessage = text ?? '';
+        this._hidePlayButton = true;
     }
 
     private hideMessage_(): void {
-        this._loading.style.display = 'none';
-        this._offline.style.display = 'none';
-        this._announcement.style.display = 'none';
-        this.stopHidingPlayerPlayButton();
+        this._announcementType = '';
+        this._announcementMessage = '';
+        this._hidePlayButton = false;
+    }
+
+    protected override renderUiContent(): HTMLTemplateResult {
+        const loadingStyles = { display: this._announcementType === 'loading' ? '' : 'none' };
+        const offlineStyles = { display: this._announcementType === 'offline' ? '' : 'none' };
+        const announcementStyles = { display: this._announcementType === 'announcement' ? '' : 'none' };
+        const playButtonStyles = { display: this._hidePlayButton ? 'none' : '' };
+        const errorDisplayStyles = { display: this._hideErrorDisplay ? 'none' : '' };
+        return html`
+            <p id="loading-announcement" no-auto-hide slot="centered-chrome" style=${styleMap(loadingStyles)}>
+                <slot name="loading-announcement">Loading...</slot>
+            </p>
+            <p id="offline-announcement" no-auto-hide slot="centered-chrome" style=${styleMap(offlineStyles)}>
+                <slot name="offline-announcement">The live stream hasn't started yet</slot>
+            </p>
+            <p id="announcement" no-auto-hide slot="centered-chrome" style=${styleMap(announcementStyles)}>${this._announcementMessage}</p>
+            <theoplayer-loading-indicator slot="centered-loading" no-auto-hide part="loading-indicator"></theoplayer-loading-indicator>
+            <div slot="centered-chrome" part="centered-chrome">
+                <theoplayer-play-button part="center-play-button" style=${styleMap(playButtonStyles)}></theoplayer-play-button>
+            </div>
+            <div part="bottom-chrome">
+                <theoplayer-control-bar>
+                    <theoplayer-play-button mobile-hidden part="play-button" style=${styleMap(playButtonStyles)}></theoplayer-play-button>
+                    <theoplayer-mute-button part="mute-button"></theoplayer-mute-button>
+                    <theoplayer-volume-range mobile-hidden part="volume-range"></theoplayer-volume-range>
+                    <theoplayer-live-button ad-hidden live-only part="live-button"></theoplayer-live-button>
+                    <span class="theoplayer-spacer"></span>
+                    <theoplayer-settings-menu-button ad-hidden menu="all-quality-menu" part="quality-button"></theoplayer-settings-menu-button>
+                    <theolive-bad-network-button ad-hidden menu="quality-menu" part="theolive-bad-network-button"></theolive-bad-network-button>
+                    <theoplayer-fullscreen-button part="fullscreen-button"></theoplayer-fullscreen-button>
+                </theoplayer-control-bar>
+            </div>
+            <theoplayer-menu id="quality-menu" slot="menu" menu-close-on-input hidden>
+                <theolive-bad-network-menu></theolive-bad-network-menu>
+            </theoplayer-menu>
+            <theoplayer-menu id="all-quality-menu" slot="menu" menu-close-on-input hidden>
+                <theoplayer-quality-radio-group></theoplayer-quality-radio-group>
+            </theoplayer-menu>
+            <theoplayer-error-display slot="error" part="error-display" style=${styleMap(errorDisplayStyles)}></theoplayer-error-display>
+        `;
     }
 }
-
-customElements.define('theolive-default-ui', THEOliveDefaultUI);
 
 declare global {
     interface HTMLElementTagNameMap {
