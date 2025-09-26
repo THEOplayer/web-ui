@@ -726,7 +726,10 @@ export class UIContainer extends HTMLElement {
         const event = rawEvent as EnterFullscreenEvent;
         event.stopPropagation();
         if (fullscreenAPI && document[fullscreenAPI.fullscreenEnabled_] && this[fullscreenAPI.requestFullscreen_]) {
-            const promise = this[fullscreenAPI.requestFullscreen_]();
+            const promise = this[fullscreenAPI.requestFullscreen_]({
+                navigationUI: 'hide',
+                ...this._configuration?.ui?.fullscreenOptions
+            });
             if (promise && promise.then) {
                 promise.then(noOp, noOp);
             }
