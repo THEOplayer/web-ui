@@ -2,7 +2,7 @@ import './components/theolive/quality/BadNetworkModeButton';
 import './components/theolive/quality/BadNetworkModeMenu';
 import css from './THEOliveDefaultUI.css';
 import html from './THEOliveDefaultUI.html';
-import type { ErrorEvent, PlayerConfiguration } from 'theoplayer/chromeless';
+import type { ErrorEvent, UIPlayerConfiguration } from 'theoplayer/chromeless';
 import { DefaultUI } from './DefaultUI';
 import { READY_EVENT } from './events/ReadyEvent';
 import { ErrorDisplay, PlayButton } from './components';
@@ -23,7 +23,7 @@ export class THEOliveDefaultUI extends DefaultUI {
     private readonly _playButton: PlayButton;
     private readonly _root: HTMLElement;
 
-    constructor(configuration: PlayerConfiguration = {}) {
+    constructor(configuration: UIPlayerConfiguration = {}) {
         super(configuration);
         this._loading = this._shadowRoot.querySelector<HTMLParagraphElement>('#loading-announcement')!;
         this._offline = this._shadowRoot.querySelector<HTMLParagraphElement>('#offline-announcement')!;
