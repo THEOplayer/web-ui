@@ -1,25 +1,16 @@
 import type { ChromelessPlayer, TheoLiveApi } from 'theoplayer/chromeless';
-import { type ButtonOptions } from '../../Button';
-import { StateReceiverMixin } from '../../StateReceiverMixin';
+import { stateReceiver } from '../../StateReceiverMixin';
 import { RadioButton } from '../../RadioButton';
-import { Attribute } from '../../../util/Attribute';
 
 /**
  * A radio button that shows the label of a given video quality, and switches the video track's
  * {@link theoplayer!MediaTrack.targetQuality | target quality} to that quality when clicked.
- *
- * @group Components
  */
-export abstract class AbstractQualitySelector extends StateReceiverMixin(RadioButton, ['player']) {
+@stateReceiver(['player'])
+export abstract class AbstractQualitySelector extends RadioButton {
     private _player: ChromelessPlayer | undefined;
     private _theoLive: TheoLiveApi | undefined;
-    protected _slotEl: HTMLSlotElement;
     protected _badNetworkMode: boolean = false;
-
-    protected constructor(options: ButtonOptions) {
-        super(options);
-        this._slotEl = this.shadowRoot!.querySelector('slot')!;
-    }
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
@@ -62,15 +53,4 @@ export abstract class AbstractQualitySelector extends StateReceiverMixin(RadioBu
     }
 
     protected abstract handlePlayer(): void;
-
-    protected abstract handleChecked(checked: boolean): void;
-
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (newValue === oldValue) {
-            return;
-        }
-        if (attrName === Attribute.ARIA_CHECKED && oldValue !== newValue) {
-            this.handleChecked(this.checked);
-        }
-    }
 }

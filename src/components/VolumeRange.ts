@@ -1,32 +1,32 @@
-import { Range, rangeTemplate } from './Range';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { Range } from './Range';
+import { customElement, property } from 'lit/decorators.js';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-volume-range', rangeTemplate(`<input type="range" min="0" max="1" step="any" value="0">`));
 
 function formatAsPercentString(value: number, max: number) {
     return `${Math.round((value / max) * 100)}%`;
 }
 
 /**
- * `<theoplayer-volume-range>` - A volume slider, showing the current audio volume of the player,
+ * A volume slider, showing the current audio volume of the player,
  * and which changes the volume when clicked or dragged.
- *
- * @group Components
  */
-export class VolumeRange extends StateReceiverMixin(Range, ['player', 'deviceType']) {
+@customElement('theoplayer-volume-range')
+@stateReceiver(['player', 'deviceType'])
+export class VolumeRange extends Range {
     private _player: ChromelessPlayer | undefined;
 
     constructor() {
-        super({ template: template() });
-        this._upgradeProperty('player');
+        super();
+        this.min = 0;
+        this.max = 1;
     }
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -62,8 +62,6 @@ export class VolumeRange extends StateReceiverMixin(Range, ['player', 'deviceTyp
         super.handleInput();
     }
 }
-
-customElements.define('theoplayer-volume-range', VolumeRange);
 
 declare global {
     interface HTMLElementTagNameMap {
