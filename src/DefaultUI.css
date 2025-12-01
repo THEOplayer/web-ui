@@ -212,7 +212,7 @@ theoplayer-ui:not([has-first-play]) [part='centered-chrome'] :not(theoplayer-pla
     display: none !important;
 }
 
-@container ui-container (width < 350px) {
+@container ui-container (width < 415px) {
     theoplayer-control-bar {
         display: none !important;
     }
