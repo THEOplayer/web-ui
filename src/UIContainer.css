@@ -3,8 +3,8 @@
     position: relative;
     display: inline-block;
     min-width: 300px;
-    height: 0;
-    padding-bottom: 56.25%;
+    height: var(--theoplayer-height, unset);
+    padding-bottom: var(--theoplayer-padding-bottom, calc(100% / var(--theoplayer-aspect-ratio, unset)));
     background: var(--theoplayer-background, #000);
 
     container-name: theoplayer-ui-container;
@@ -39,7 +39,7 @@
 }
 
 :host([fluid]) {
-    padding-bottom: calc(100% * var(--theoplayer-video-height, 9) / var(--theoplayer-video-width, 16));
+    --theoplayer-aspect-ratio: calc(var(--theoplayer-video-width, 16) / var(--theoplayer-video-height, 9));
 }
 
 [part~='chrome'] {
