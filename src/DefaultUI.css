@@ -213,7 +213,7 @@ theoplayer-ui:not([has-first-play]) [part='centered-chrome'] :not(theoplayer-pla
 }
 
 @container ui-container (width < 415px) {
-    theoplayer-control-bar {
+    :host(:not([mobile])) theoplayer-control-bar {
         display: none !important;
     }
 
