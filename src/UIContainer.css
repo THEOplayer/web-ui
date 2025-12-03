@@ -2,7 +2,7 @@
     box-sizing: border-box;
     position: relative;
     display: inline-block;
-    min-width: var(--theoplayer-ui-min-width, 300px);
+    min-width: var(--theoplayer-min-width, 300px);
     height: var(--theoplayer-height, unset);
     padding-bottom: var(--theoplayer-padding-bottom, calc(100% / ((var(--theoplayer-aspect-ratio)))));
     background: var(--theoplayer-background, #000);
