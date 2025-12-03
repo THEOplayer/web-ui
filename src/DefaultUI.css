@@ -2,6 +2,9 @@
     box-sizing: border-box;
     position: relative;
     display: inline-block;
+
+    container-name: theoplayer-default-ui-container;
+    container-type: inline-size;
 }
 
 :host([hidden]) {
@@ -9,8 +12,6 @@
 }
 
 theoplayer-ui {
-    container-type: inline-size;
-    container-name: ui-container;
     width: 100%;
     display: block;
 }
@@ -212,7 +213,7 @@ theoplayer-ui:not([has-first-play]) [part='centered-chrome'] :not(theoplayer-pla
     display: none !important;
 }
 
-@container ui-container (width < 415px) {
+@container theoplayer-default-ui-container (width < 415px) {
     :host(:not([mobile])) theoplayer-control-bar {
         display: none !important;
     }
