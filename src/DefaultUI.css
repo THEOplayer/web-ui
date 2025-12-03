@@ -2,6 +2,10 @@
     box-sizing: border-box;
     position: relative;
     display: inline-block;
+    min-width: var(--theoplayer-min-width, 300px);
+
+    container-name: theoplayer-default-ui-container;
+    container-type: inline-size;
 }
 
 :host([hidden]) {
@@ -35,6 +39,7 @@ theoplayer-ui {
 }
 
 [part='centered-chrome'] * {
+    --theoplayer-button-icon-width: var(--theoplayer-centered-chrome-button-icon-width, 48px);
     --theoplayer-control-height: var(--theoplayer-centered-chrome-control-height, 48px);
     --theoplayer-play-button-icon-color: var(--theoplayer-center-play-button-icon-color, unset);
 }
@@ -207,6 +212,19 @@ theoplayer-ui:not([has-first-play]) [part='centered-chrome'] :not(theoplayer-pla
  */
 :host(:not([mobile])) theoplayer-ui[has-first-play] [part='centered-chrome'] theoplayer-play-button {
     display: none !important;
+}
+
+/**
+ * When player is very small, show only center play button (on desktop)
+ */
+@container theoplayer-default-ui-container (max-width: 200px) {
+    :host(:not([mobile])) theoplayer-control-bar {
+        display: none !important;
+    }
+
+    :host(:not([mobile])) theoplayer-ui[has-first-play] [part='centered-chrome'] theoplayer-play-button {
+        display: inline-flex !important;
+    }
 }
 
 /*

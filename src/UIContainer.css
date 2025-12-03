@@ -2,9 +2,13 @@
     box-sizing: border-box;
     position: relative;
     display: inline-block;
-    min-width: 300px;
-    height: 0;
-    padding-bottom: 56.25%;
+    min-width: var(--theoplayer-min-width, 300px);
+    /**
+     * If --theoplayer-aspect-ratio is valid, then height must be 0.
+     * To disable aspect ratio, set --theoplayer-aspect-ratio: none (or any invalid <length>).
+     */
+    height: var(--theoplayer-height, calc(0 * (var(--theoplayer-aspect-ratio, 16 / 9))));
+    padding-bottom: calc(100% / (var(--theoplayer-aspect-ratio, 16 / 9)));
     background: var(--theoplayer-background, #000);
 
     container-name: theoplayer-ui-container;
@@ -39,7 +43,7 @@
 }
 
 :host([fluid]) {
-    padding-bottom: calc(100% * var(--theoplayer-video-height, 9) / var(--theoplayer-video-width, 16));
+    --theoplayer-aspect-ratio: var(--theoplayer-video-width, 16) / var(--theoplayer-video-height, 9);
 }
 
 [part~='chrome'] {
@@ -180,8 +184,8 @@
 }
 
 /* When player is small, make menu fill entire player */
-@container theoplayer-ui-container (max-width: 500px) {
-    :host(:not([mobile])) [part~='menu-layer'] {
+@container theoplayer-ui-container (max-width: 500px) or (max-height: 300px) {
+    :host(:not([mobile]):not([tv])) [part~='menu-layer'] {
         /* Reset styles from desktop */
         inset: 0;
         padding: 0;
