@@ -184,7 +184,7 @@
 }
 
 /* When player is small, make menu fill entire player */
-@container theoplayer-ui-container (max-width: 500px) {
+@container theoplayer-ui-container (max-width: 500px) or (max-height: 300px) {
     :host(:not([mobile]):not([tv])) [part~='menu-layer'] {
         /* Reset styles from desktop */
         inset: 0;
