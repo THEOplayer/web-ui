@@ -217,7 +217,7 @@ theoplayer-ui:not([has-first-play]) [part='centered-chrome'] :not(theoplayer-pla
 /**
  * When player is very small, show only center play button (on desktop)
  */
-@container theoplayer-default-ui-container (max-width: 400px) {
+@container theoplayer-default-ui-container (max-width: 200px) {
     :host(:not([mobile])) theoplayer-control-bar {
         display: none !important;
     }
