@@ -4,7 +4,7 @@
     display: inline-block;
     min-width: var(--theoplayer-min-width, 300px);
     height: var(--theoplayer-height, unset);
-    padding-bottom: var(--theoplayer-padding-bottom, calc(100% / ((var(--theoplayer-aspect-ratio)))));
+    padding-bottom: calc(100% / (var(--theoplayer-aspect-ratio)));
     background: var(--theoplayer-background, #000);
 
     container-name: theoplayer-ui-container;
