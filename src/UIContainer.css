@@ -185,7 +185,7 @@
 
 /* When player is small, make menu fill entire player */
 @container theoplayer-ui-container (max-width: 500px) {
-    :host(:not([mobile])) [part~='menu-layer'] {
+    :host(:not([mobile]):not([tv])) [part~='menu-layer'] {
         /* Reset styles from desktop */
         inset: 0;
         padding: 0;
