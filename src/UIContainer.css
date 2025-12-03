@@ -3,8 +3,12 @@
     position: relative;
     display: inline-block;
     min-width: var(--theoplayer-min-width, 300px);
-    height: var(--theoplayer-height, unset);
-    padding-bottom: calc(100% / (var(--theoplayer-aspect-ratio)));
+    /**
+     * If --theoplayer-aspect-ratio is valid, then height must be 0.
+     * To disable aspect ratio, set --theoplayer-aspect-ratio: none (or any invalid <length>).
+     */
+    height: var(--theoplayer-height, calc(0 * (var(--theoplayer-aspect-ratio, 16 / 9))));
+    padding-bottom: calc(100% / (var(--theoplayer-aspect-ratio, 16 / 9)));
     background: var(--theoplayer-background, #000);
 
     container-name: theoplayer-ui-container;
