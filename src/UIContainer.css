@@ -39,7 +39,7 @@
 }
 
 :host([fluid]) {
-    --theoplayer-aspect-ratio: calc(var(--theoplayer-video-width, 16) / var(--theoplayer-video-height, 9));
+    --theoplayer-aspect-ratio: var(--theoplayer-video-width, 16) / var(--theoplayer-video-height, 9);
 }
 
 [part~='chrome'] {
