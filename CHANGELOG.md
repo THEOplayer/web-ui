@@ -1,5 +1,19 @@
 # @theoplayer/web-ui
 
+## 1.14.0
+
+### ✨ Features
+
+- `<theoplayer-default-ui>` now hides all controls except the center play button when the player size is very small on desktop.
+- Add `--theoplayer-centered-chrome-button-icon-width` CSS property to change the icon width of _only_ the buttons in the center slot in a `<theoplayer-default-ui>`.
+- Add `--theoplayer-aspect-ratio` CSS property to change the aspect ratio of a `<theoplayer-default-ui>` or `<theoplayer-ui>`.
+- Add `--theoplayer-min-width` CSS property to override the `min-width` of a `<theoplayer-default-ui>` or `<theoplayer-ui>`.
+- Add `--theoplayer-height` CSS property to override the height of the inner `<theoplayer-ui>` within a `<theoplayer-default-ui>`.
+
+### 🐛 Issues
+
+- Fixed an issue where the menus didn't cover the entire player when the player is too small.
+
 ## 1.13.1
 
 ### 🐛 Issues
