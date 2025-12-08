@@ -82,7 +82,7 @@ export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player', 
     }
 
     handleMouseClick(_event: MouseEvent): void {
-        if (this.deviceType !== 'desktop') return
+        if (this.deviceType !== 'desktop') return;
         // Toggle play/pause.
         if (this._player !== undefined) {
             if (this._player.source === undefined) {
