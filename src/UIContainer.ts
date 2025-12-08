@@ -378,6 +378,9 @@ export class UIContainer extends HTMLElement {
         return (this.getAttribute(Attribute.STREAM_TYPE) as StreamType) || 'vod';
     }
 
+    /**
+     * @deprecated use {@link SourceDescription.streamType} instead.
+     */
     set streamType(streamType: StreamType) {
         this.setAttribute(Attribute.STREAM_TYPE, streamType);
     }
@@ -864,23 +867,50 @@ export class UIContainer extends HTMLElement {
         if (this._player === undefined) {
             return;
         }
-        const duration = this._player.duration;
-        if (isNaN(duration)) {
-            return;
-        }
-        let streamType: StreamType;
-        if (duration === Infinity) {
-            streamType = 'live';
-            const dvrThreshold = this.dvrThreshold;
-            const seekable = this._player.seekable;
-            if (dvrThreshold <= 0 || (seekable.length > 0 && seekable.end(seekable.length - 1) - seekable.start(0) >= dvrThreshold)) {
-                streamType = 'dvr';
-            }
-        } else {
-            streamType = 'vod';
-        }
-        this.streamType = streamType;
+        this.streamType = this.computeStreamType_();
     };
+
+    private computeStreamType_(): StreamType {
+        const source = this.source;
+        const streamType = source?.streamType ?? (this.getAttribute(Attribute.STREAM_TYPE) as StreamType | null);
+        const duration = this._player?.duration;
+        if (duration === undefined || isNaN(duration)) {
+            // No duration yet...
+            // Use hinted stream type if available.
+            if (streamType) {
+                return streamType;
+            }
+            if (source?.dvr) {
+                return 'dvr';
+            }
+            // Assume VOD.
+            return 'vod';
+        } else if (duration === Infinity) {
+            // It's a live stream.
+            if (streamType === 'live' || streamType === 'dvr') {
+                // Follow the hinted stream type.
+                return streamType;
+            } else {
+                const dvrThreshold = this.dvrThreshold;
+                if (dvrThreshold <= 0) {
+                    return 'dvr';
+                }
+                const seekable = this._player?.seekable;
+                if (seekable && seekable.length > 0) {
+                    // Check if the DVR window is large enough.
+                    const dvrWindow = seekable.end(seekable.length - 1) - seekable.start(0);
+                    if (dvrWindow >= dvrThreshold) {
+                        return 'dvr';
+                    }
+                }
+            }
+            // Otherwise, it's a regular live stream.
+            return 'live';
+        } else {
+            // It's a VOD.
+            return 'vod';
+        }
+    }
 
     private readonly _updatePlaybackRate = (): void => {
         if (this._player === undefined) {
