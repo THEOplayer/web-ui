@@ -45,9 +45,9 @@ export class THEOliveDefaultUI extends DefaultUI {
         this._ui.removeEventListener(READY_EVENT, this.onReady);
         const player = this.player;
         if (player) {
-            player.theoLive?.addEventListener('publicationloadstart', this.onLoadChannelStart);
-            player.theoLive?.addEventListener('publicationoffline', this.onChannelOffline);
-            player.theoLive?.addEventListener('publicationloaded', this.onChannelLoaded);
+            player.theoLive?.addEventListener(['distributionloadstart', 'publicationloadstart' as never], this.onLoadChannelStart);
+            player.theoLive?.addEventListener(['distributionoffline', 'publicationoffline' as never], this.onChannelOffline);
+            player.theoLive?.addEventListener(['endpointloaded', 'publicationloaded' as never], this.onChannelLoaded);
             player.addEventListener('error', this.onError);
         }
     };

@@ -1159,7 +1159,7 @@ export class UIContainer extends HTMLElement {
         player.addEventListener('sourcechange', this._onSourceChange);
         player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updatePlayingAd);
 
-        player.theoLive?.addEventListener('publicationloadstart', this._onSourceChange);
+        player.theoLive?.addEventListener(['distributionloadstart', 'publicationloadstart' as never], this._onSourceChange);
         player.videoTracks.addEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
         player.cast?.addEventListener('castingchange', this._updateCasting);
         player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
@@ -1179,7 +1179,7 @@ export class UIContainer extends HTMLElement {
         player.removeEventListener(['durationchange', 'sourcechange', 'emptied'], this._updatePlayingAd);
 
         try {
-            player.theoLive?.removeEventListener('publicationloadstart', this._onSourceChange);
+            player.theoLive?.removeEventListener(['distributionloadstart', 'publicationloadstart' as never], this._onSourceChange);
             player.videoTracks.removeEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
             player.cast?.removeEventListener('castingchange', this._updateCasting);
             player.ads?.removeEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
