@@ -27,6 +27,7 @@ import { PREVIEW_TIME_CHANGE_EVENT, type PreviewTimeChangeEvent } from './events
 import type { StreamType } from './util/StreamType';
 import type { StreamTypeChangeEvent } from './events/StreamTypeChangeEvent';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
+import { USER_IDLE_CHANGE_EVENT } from './events/UserIdleChangeEvent';
 import { createCustomEvent } from './util/EventUtils';
 import { getTargetQualities } from './util/TrackUtils';
 import { MenuGroup } from './components/MenuGroup';
@@ -328,6 +329,25 @@ export class UIContainer extends HTMLElement {
      */
     get casting(): boolean {
         return this.hasAttribute(Attribute.CASTING);
+    }
+
+    /**
+     * Whether the user has stopped interacting with the UI and is considered to be "idle".
+     */
+    get userIdle(): boolean {
+        return this.hasAttribute(Attribute.USER_IDLE);
+    }
+
+    private set userIdle(value: boolean) {
+        if (this.userIdle === value) {
+            return;
+        }
+        if (value) {
+            this.setAttribute(Attribute.USER_IDLE, '');
+        } else {
+            this.removeAttribute(Attribute.USER_IDLE);
+        }
+        this.dispatchEvent(createCustomEvent(USER_IDLE_CHANGE_EVENT));
     }
 
     /**
@@ -932,12 +952,12 @@ export class UIContainer extends HTMLElement {
 
     private isUserIdle_(): boolean {
         // Must match the auto-hide rule from the CSS
-        return this.hasAttribute(Attribute.USER_IDLE) && !this.paused && !this.casting && !this._menuGroup.hasCurrentMenu();
+        return this.userIdle && !this.paused && !this.casting && !this._menuGroup.hasCurrentMenu();
     }
 
     private setUserActive_(): void {
         clearTimeout(this._userIdleTimer);
-        this.removeAttribute(Attribute.USER_IDLE);
+        this.userIdle = false;
     }
 
     private readonly setUserIdle_ = (): void => {
@@ -947,7 +967,7 @@ export class UIContainer extends HTMLElement {
         if (this.userIdleTimeout < 0) {
             return;
         }
-        this.setAttribute(Attribute.USER_IDLE, '');
+        this.userIdle = true;
 
         if (this.deviceType == 'tv' && this.isUserIdle_()) {
             // Blur active element so that first key press on TV doesn't result in an action.
@@ -1018,7 +1038,7 @@ export class UIContainer extends HTMLElement {
         if (event.pointerType === 'touch') {
             // On mobile, when you tap the media while the controls are showing, immediately hide the controls.
             // Otherwise, show the controls (and schedule a timer to hide them again later on).
-            if (this.isPlayerOrMedia_(event.target! as Node) && !this.hasAttribute(Attribute.USER_IDLE)) {
+            if (this.isPlayerOrMedia_(event.target! as Node) && !this.userIdle) {
                 this.setUserIdle_();
             } else {
                 if (this.isUserIdle_()) {

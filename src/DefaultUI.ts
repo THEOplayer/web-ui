@@ -10,6 +10,7 @@ import type { DeviceType } from './util/DeviceType';
 import type { StreamType } from './util/StreamType';
 import type { TimeRange } from './components/TimeRange';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
+import { USER_IDLE_CHANGE_EVENT } from './events/UserIdleChangeEvent';
 import { READY_EVENT } from './events/ReadyEvent';
 import { toggleAttribute } from './util/CommonUtils';
 import { createCustomEvent } from './util/EventUtils';
@@ -108,6 +109,7 @@ export class DefaultUI extends HTMLElement {
 
         this._ui = this._shadowRoot.querySelector('theoplayer-ui')!;
         this._ui.addEventListener(READY_EVENT, this._dispatchReadyEvent);
+        this._ui.addEventListener(USER_IDLE_CHANGE_EVENT, this._dispatchUserIdleEvent);
         this._ui.addEventListener(STREAM_TYPE_CHANGE_EVENT, this._updateStreamType);
         this.setConfiguration_(configuration);
 
@@ -235,6 +237,13 @@ export class DefaultUI extends HTMLElement {
     }
 
     /**
+     * Whether the user has stopped interacting with the UI and is considered to be "idle".
+     */
+    get userIdle(): boolean {
+        return this._ui.userIdle;
+    }
+
+    /**
      * The timeout (in seconds) between when the user stops interacting with the UI,
      * and when the user is considered to be "idle".
      */
@@ -320,6 +329,10 @@ export class DefaultUI extends HTMLElement {
 
     private readonly _dispatchReadyEvent = () => {
         this.dispatchEvent(createCustomEvent(READY_EVENT));
+    };
+
+    private readonly _dispatchUserIdleEvent = () => {
+        this.dispatchEvent(createCustomEvent(USER_IDLE_CHANGE_EVENT));
     };
 
     private readonly _onTitleSlotChange = () => {
