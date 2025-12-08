@@ -93,6 +93,7 @@ export class DefaultUI extends HTMLElement {
     protected readonly _ui: UIContainer;
     private readonly _titleSlot: HTMLSlotElement | undefined;
     private readonly _timeRange: TimeRange | undefined;
+    private _timeRangeInertTimeout: number = 0;
     private _appliedExtensions: boolean = false;
 
     /**
@@ -109,7 +110,7 @@ export class DefaultUI extends HTMLElement {
 
         this._ui = this._shadowRoot.querySelector('theoplayer-ui')!;
         this._ui.addEventListener(READY_EVENT, this._dispatchReadyEvent);
-        this._ui.addEventListener(USER_IDLE_CHANGE_EVENT, this._dispatchUserIdleEvent);
+        this._ui.addEventListener(USER_IDLE_CHANGE_EVENT, this._updateUserIdle);
         this._ui.addEventListener(STREAM_TYPE_CHANGE_EVENT, this._updateStreamType);
         this.setConfiguration_(configuration);
 
@@ -285,7 +286,7 @@ export class DefaultUI extends HTMLElement {
     }
 
     disconnectedCallback(): void {
-        return;
+        clearTimeout(this._timeRangeInertTimeout);
     }
 
     attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
@@ -331,7 +332,20 @@ export class DefaultUI extends HTMLElement {
         this.dispatchEvent(createCustomEvent(READY_EVENT));
     };
 
-    private readonly _dispatchUserIdleEvent = () => {
+    private readonly _updateUserIdle = () => {
+        if (this._timeRange) {
+            clearTimeout(this._timeRangeInertTimeout);
+            if (this.userIdle) {
+                // Disable seekbar when user is idle
+                toggleAttribute(this._timeRange, Attribute.INERT, true);
+            } else {
+                // Re-enable seekbar when user is active,
+                // but wait a little bit to prevent accidentally clicking the seekbar.
+                this._timeRangeInertTimeout = setTimeout(() => {
+                    toggleAttribute(this._timeRange!, Attribute.INERT, false);
+                }, 10);
+            }
+        }
         this.dispatchEvent(createCustomEvent(USER_IDLE_CHANGE_EVENT));
     };
 
