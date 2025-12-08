@@ -190,6 +190,9 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
             // Already scrubbing.
             return;
         }
+        if (this.disabled || this.inert) {
+            return;
+        }
         if (this._player === undefined || this._player.paused) {
             // Player is already paused.
             return;
