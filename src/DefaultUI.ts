@@ -343,7 +343,7 @@ export class DefaultUI extends HTMLElement {
                 // but wait a little bit to prevent accidentally clicking the seekbar.
                 this._timeRangeInertTimeout = setTimeout(() => {
                     toggleAttribute(this._timeRange!, Attribute.INERT, false);
-                }, 10);
+                }, 50);
             }
         }
         this.dispatchEvent(createCustomEvent(USER_IDLE_CHANGE_EVENT));
