@@ -365,7 +365,7 @@ export class UIContainer extends HTMLElement {
      * The device type, either "desktop", "mobile" or "tv".
      */
     get deviceType(): DeviceType {
-        return (this.getAttribute(Attribute.DEVICE_TYPE) as DeviceType) || 'desktop';
+        return (this.getAttribute(Attribute.DEVICE_TYPE) || 'desktop') as DeviceType;
     }
 
     /**
@@ -375,7 +375,7 @@ export class UIContainer extends HTMLElement {
      * when the player switches between its VOD-specific and live-only controls.
      */
     get streamType(): StreamType {
-        return (this.getAttribute(Attribute.STREAM_TYPE) as StreamType) || 'vod';
+        return (this.getAttribute(Attribute.STREAM_TYPE) || 'vod') as StreamType;
     }
 
     /**
