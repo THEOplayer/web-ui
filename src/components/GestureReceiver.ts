@@ -14,7 +14,7 @@ const template = createTemplate('theoplayer-gesture-receiver', `<style>${gesture
  *
  * @group Components
  */
-export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player']) {
+export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player', 'deviceType']) {
     private _player: ChromelessPlayer | undefined;
     private _playerElement: HTMLElement | undefined;
     private _pointerType: string = '';
@@ -82,6 +82,7 @@ export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player'])
     }
 
     handleMouseClick(_event: MouseEvent): void {
+        if (this.deviceType !== 'desktop') return
         // Toggle play/pause.
         if (this._player !== undefined) {
             if (this._player.source === undefined) {
