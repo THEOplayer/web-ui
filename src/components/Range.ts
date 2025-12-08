@@ -20,12 +20,14 @@ export function rangeTemplate(range: string, extraCss: string = ''): string {
  *
  * @attribute `disabled` - Whether the range is disabled.
  *   When disabled, the slider value cannot be changed, and the slider thumb is hidden.
+ * @attribute `inert` - Whether the range is inert.
+ *   When inert, the slider value cannot be changed, but the slider thumb is still visible.
  *
  * @group Components
  */
 export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType']) {
     static get observedAttributes() {
-        return [Attribute.DISABLED, Attribute.HIDDEN];
+        return [Attribute.DISABLED, Attribute.HIDDEN, Attribute.INERT];
     }
 
     protected readonly _rangeEl: HTMLInputElement;
@@ -47,6 +49,7 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
         this._pointerEl = shadowRoot.querySelector('[part="pointer"]')!;
 
         this._upgradeProperty('disabled');
+        this._upgradeProperty('inert');
         this._upgradeProperty('value');
         this._upgradeProperty('min');
         this._upgradeProperty('max');
@@ -86,6 +89,19 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
 
     set disabled(disabled: boolean) {
         toggleAttribute(this, Attribute.DISABLED, disabled);
+    }
+
+    /**
+     * Whether the range is inert.
+     *
+     * When inert, the slider value cannot be changed, but the slider thumb is still visible.
+     */
+    get inert() {
+        return this.hasAttribute(Attribute.INERT);
+    }
+
+    set inert(inert: boolean) {
+        toggleAttribute(this, Attribute.INERT, inert);
     }
 
     /**
@@ -151,9 +167,9 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
             return;
         }
         const hasValue = newValue != null;
-        if (attrName === Attribute.DISABLED) {
-            this.setAttribute('aria-disabled', hasValue ? 'true' : 'false');
-            toggleAttribute(this._rangeEl, Attribute.DISABLED, hasValue);
+        if (attrName === Attribute.DISABLED || attrName === Attribute.INERT) {
+            this.setAttribute('aria-disabled', this.disabled ? 'true' : 'false');
+            toggleAttribute(this._rangeEl, Attribute.DISABLED, this.disabled || this.inert);
         } else if (attrName === Attribute.HIDDEN) {
             if (!hasValue) {
                 this.update();
@@ -257,7 +273,7 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
     }
 
     private readonly _updatePointerBar = (e: PointerEvent): void => {
-        if (this.disabled) {
+        if (this.disabled || this.inert) {
             return;
         }
         // Get mouse position percent

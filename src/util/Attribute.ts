@@ -18,6 +18,7 @@ export enum Attribute {
     USER_IDLE_TIMEOUT = 'user-idle-timeout',
     NO_AUTO_HIDE = 'no-auto-hide',
     DISABLED = 'disabled',
+    INERT = 'inert',
     HIDDEN = 'hidden',
     PAUSED = 'paused',
     ENDED = 'ended',
