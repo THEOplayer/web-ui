@@ -342,11 +342,7 @@ export class UIContainer extends HTMLElement {
         if (this.userIdle === value) {
             return;
         }
-        if (value) {
-            this.setAttribute(Attribute.USER_IDLE, '');
-        } else {
-            this.removeAttribute(Attribute.USER_IDLE);
-        }
+        toggleAttribute(this, Attribute.USER_IDLE, value);
         this.dispatchEvent(createCustomEvent(USER_IDLE_CHANGE_EVENT));
     }
 

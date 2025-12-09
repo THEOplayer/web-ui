@@ -337,12 +337,12 @@ export class DefaultUI extends HTMLElement {
             clearTimeout(this._timeRangeInertTimeout);
             if (this.userIdle) {
                 // Disable seekbar when user is idle
-                toggleAttribute(this._timeRange, Attribute.INERT, true);
+                this._timeRange.inert = true;
             } else {
                 // Re-enable seekbar when user is active,
                 // but wait a little bit to prevent accidentally clicking the seekbar.
                 this._timeRangeInertTimeout = setTimeout(() => {
-                    toggleAttribute(this._timeRange!, Attribute.INERT, false);
+                    this._timeRange!.inert = false;
                 }, 50);
             }
         }
