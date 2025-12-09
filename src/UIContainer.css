@@ -254,14 +254,14 @@ theoplayer-gesture-receiver {
 /*
  * Hide cursor when user is idle
  */
-:host([user-idle]:not([paused]):not([casting]):not([menu-opened])) {
+:host([user-idle]) {
     cursor: none;
 }
 
 /*
  * Auto-hide elements when user is idle
  */
-:host([user-idle]:not([paused]):not([casting]):not([menu-opened])) [part~='chrome'] ::slotted(:not([no-auto-hide])) {
+:host([user-idle]) [part~='chrome'] ::slotted(:not([no-auto-hide])) {
     opacity: 0;
     transition: opacity 1s;
 }
@@ -269,7 +269,7 @@ theoplayer-gesture-receiver {
 /*
  * Hide control background when user is idle
  */
-:host([user-idle]:not([paused]):not([casting]):not([menu-opened])) [part~='vertical-layer']::before {
+:host([user-idle]) [part~='vertical-layer']::before {
     opacity: 0;
     transition: opacity 1s;
 }
