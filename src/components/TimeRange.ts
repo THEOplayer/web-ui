@@ -65,7 +65,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
 
         this._rangeEl.setAttribute(Attribute.ARIA_LIVE, 'off');
         this._rangeEl.addEventListener('mousedown', this._pauseOnScrubStart);
-        this._rangeEl.addEventListener('touchstart', this._pauseOnScrubStart);
+        this._rangeEl.addEventListener('pointerdown', this._pauseOnScrubStart);
 
         this._upgradeProperty('player');
     }
@@ -190,6 +190,9 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
             // Already scrubbing.
             return;
         }
+        if (this.disabled || this.inert) {
+            return;
+        }
         if (this._player === undefined || this._player.paused) {
             // Player is already paused.
             return;
@@ -197,7 +200,8 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         this._pausedWhileScrubbing = true;
         this._player.pause();
         document.addEventListener('mouseup', this._playOnScrubEnd);
-        document.addEventListener('touchend', this._playOnScrubEnd);
+        document.addEventListener('pointerup', this._playOnScrubEnd);
+        document.addEventListener('pointercancel', this._playOnScrubEnd);
     };
 
     private readonly _playOnScrubEnd = () => {
@@ -206,7 +210,8 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         }
         this._pausedWhileScrubbing = false;
         document.removeEventListener('mouseup', this._playOnScrubEnd);
-        document.removeEventListener('touchend', this._playOnScrubEnd);
+        document.removeEventListener('pointerup', this._playOnScrubEnd);
+        document.removeEventListener('pointercancel', this._playOnScrubEnd);
         if (this._player !== undefined && this._player.paused) {
             this._player.play();
         }
