@@ -365,7 +365,7 @@ export class UIContainer extends HTMLElement {
      * The device type, either "desktop", "mobile" or "tv".
      */
     get deviceType(): DeviceType {
-        return (this.getAttribute(Attribute.DEVICE_TYPE) as DeviceType) || 'desktop';
+        return (this.getAttribute(Attribute.DEVICE_TYPE) || 'desktop') as DeviceType;
     }
 
     /**
@@ -375,9 +375,12 @@ export class UIContainer extends HTMLElement {
      * when the player switches between its VOD-specific and live-only controls.
      */
     get streamType(): StreamType {
-        return (this.getAttribute(Attribute.STREAM_TYPE) as StreamType) || 'vod';
+        return (this.getAttribute(Attribute.STREAM_TYPE) || 'vod') as StreamType;
     }
 
+    /**
+     * @deprecated use {@link SourceDescription.streamType} instead.
+     */
     set streamType(streamType: StreamType) {
         this.setAttribute(Attribute.STREAM_TYPE, streamType);
     }
@@ -864,23 +867,50 @@ export class UIContainer extends HTMLElement {
         if (this._player === undefined) {
             return;
         }
-        const duration = this._player.duration;
-        if (isNaN(duration)) {
-            return;
-        }
-        let streamType: StreamType;
-        if (duration === Infinity) {
-            streamType = 'live';
-            const dvrThreshold = this.dvrThreshold;
-            const seekable = this._player.seekable;
-            if (dvrThreshold <= 0 || (seekable.length > 0 && seekable.end(seekable.length - 1) - seekable.start(0) >= dvrThreshold)) {
-                streamType = 'dvr';
-            }
-        } else {
-            streamType = 'vod';
-        }
-        this.streamType = streamType;
+        this.streamType = this.computeStreamType_();
     };
+
+    private computeStreamType_(): StreamType {
+        const source = this.source;
+        const streamType = source?.streamType ?? (this.getAttribute(Attribute.STREAM_TYPE) as StreamType | null);
+        const duration = this._player?.duration;
+        if (duration === undefined || isNaN(duration)) {
+            // No duration yet...
+            // Use hinted stream type if available.
+            if (streamType) {
+                return streamType;
+            }
+            if (source?.dvr) {
+                return 'dvr';
+            }
+            // Assume VOD.
+            return 'vod';
+        } else if (duration === Infinity) {
+            // It's a live stream.
+            if (streamType === 'live' || streamType === 'dvr') {
+                // Follow the hinted stream type.
+                return streamType;
+            } else {
+                const dvrThreshold = this.dvrThreshold;
+                if (dvrThreshold <= 0) {
+                    return 'dvr';
+                }
+                const seekable = this._player?.seekable;
+                if (seekable && seekable.length > 0) {
+                    // Check if the DVR window is large enough.
+                    const dvrWindow = seekable.end(seekable.length - 1) - seekable.start(0);
+                    if (dvrWindow >= dvrThreshold) {
+                        return 'dvr';
+                    }
+                }
+            }
+            // Otherwise, it's a regular live stream.
+            return 'live';
+        } else {
+            // It's a VOD.
+            return 'vod';
+        }
+    }
 
     private readonly _updatePlaybackRate = (): void => {
         if (this._player === undefined) {
@@ -1129,7 +1159,7 @@ export class UIContainer extends HTMLElement {
         player.addEventListener('sourcechange', this._onSourceChange);
         player.addEventListener(['durationchange', 'sourcechange', 'emptied'], this._updatePlayingAd);
 
-        player.theoLive?.addEventListener('publicationloadstart', this._onSourceChange);
+        player.theoLive?.addEventListener(['distributionloadstart', 'publicationloadstart' as never], this._onSourceChange);
         player.videoTracks.addEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
         player.cast?.addEventListener('castingchange', this._updateCasting);
         player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
@@ -1149,7 +1179,7 @@ export class UIContainer extends HTMLElement {
         player.removeEventListener(['durationchange', 'sourcechange', 'emptied'], this._updatePlayingAd);
 
         try {
-            player.theoLive?.removeEventListener('publicationloadstart', this._onSourceChange);
+            player.theoLive?.removeEventListener(['distributionloadstart', 'publicationloadstart' as never], this._onSourceChange);
             player.videoTracks.removeEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
             player.cast?.removeEventListener('castingchange', this._updateCasting);
             player.ads?.removeEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
