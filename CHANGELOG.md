@@ -1,5 +1,16 @@
 # @theoplayer/web-ui
 
+## 1.15.0
+
+### ✨ Features
+
+- The UI now takes `SourceDescription.streamType` into account when computing its own `stream-type` attribute. This is now the preferred method of overriding the stream type.
+
+### 🐛 Issues
+
+- Fixed `<theolive-default-ui>` to stop using deprecated OptiView Live events.
+- Fixed an issue where the `<theoplayer-time-range>` inside the default UI could accidentally be clicked even when it was hidden because of user inactivity.
+
 ## 1.14.0
 
 ### ✨ Features
