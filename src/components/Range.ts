@@ -169,7 +169,7 @@ export abstract class Range extends StateReceiverMixin(HTMLElement, ['deviceType
         const hasValue = newValue != null;
         if (attrName === Attribute.DISABLED || attrName === Attribute.INERT) {
             this.setAttribute('aria-disabled', this.disabled ? 'true' : 'false');
-            toggleAttribute(this._rangeEl, Attribute.DISABLED, (this.disabled || this.inert) && !this.player?.paused && !this.player?.seeking);
+            toggleAttribute(this._rangeEl, Attribute.DISABLED, this.disabled || this.inert);
         } else if (attrName === Attribute.HIDDEN) {
             if (!hasValue) {
                 this.update();
