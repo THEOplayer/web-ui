@@ -1041,7 +1041,9 @@ export class UIContainer extends HTMLElement {
     };
 
     private readonly _onPointerUp = (event: PointerEvent): void => {
-        if (event.pointerType === 'touch') {
+        if (event.pointerType === 'mouse') {
+            this.scheduleUserIdle_();
+        } else if (event.pointerType === 'touch') {
             // On mobile, when you tap the media while the controls are showing, immediately hide the controls.
             // Otherwise, show the controls (and schedule a timer to hide them again later on).
             if (this.isPlayerOrMedia_(event.target! as Node) && this._isUserActive) {
