@@ -12,6 +12,7 @@ import type { TimeRange } from './components/TimeRange';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
 import { USER_IDLE_CHANGE_EVENT } from './events/UserIdleChangeEvent';
 import { READY_EVENT } from './events/ReadyEvent';
+import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
 import { toggleAttribute } from './util/CommonUtils';
 import { createCustomEvent } from './util/EventUtils';
 import { createTemplate } from './util/TemplateUtils';
@@ -343,7 +344,7 @@ export class DefaultUI extends HTMLElement {
                 // but wait a little bit to prevent accidentally clicking the seekbar.
                 this._timeRangeInertTimeout = setTimeout(() => {
                     this._timeRange!.inert = false;
-                }, 50);
+                }, ACCIDENTAL_CLICK_DELAY);
             }
         }
         this.dispatchEvent(createCustomEvent(USER_IDLE_CHANGE_EVENT));
