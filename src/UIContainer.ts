@@ -38,6 +38,7 @@ import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
 import { READY_EVENT } from './events/ReadyEvent';
 import { createTemplate } from './util/TemplateUtils';
 import { addGlobalStyles } from './Global';
+import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
 
 // Load components used in template
 import './components/GestureReceiver';
@@ -1092,7 +1093,7 @@ export class UIContainer extends HTMLElement {
 
     private readonly _onClickAfterPointerUp = (event: MouseEvent): void => {
         this.removeEventListener('click', this._onClickAfterPointerUp, true);
-        if (performance.now() - this._lastPointerUpTime < 40) {
+        if (performance.now() - this._lastPointerUpTime < ACCIDENTAL_CLICK_DELAY) {
             event.preventDefault();
             event.stopPropagation();
         }
