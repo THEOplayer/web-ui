@@ -1,5 +1,15 @@
 # @theoplayer/react-ui
 
+## 1.16.0
+
+### ✨ Features
+
+- Added `centeredChrome` slot to `DefaultUI` to replace all controls in the center of the player.
+
+### 📦 Dependency Updates
+
+- See changes to [Open Video UI for Web v1.16.0](https://github.com/THEOplayer/web-ui/blob/%40theoplayer%2Fweb-ui%401.16.0/CHANGELOG.md)
+
 ## 1.15.0
 
 ### 📦 Dependency Updates

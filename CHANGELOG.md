@@ -1,5 +1,15 @@
 # @theoplayer/web-ui
 
+## 1.16.0
+
+### ✨ Features
+
+- Added `centered-chrome` slot to `<theoplayer-default-ui>` to replace all controls in the center of the player.
+
+### 🐛 Issues
+
+- Fixed an issue where buttons inside the default UI could accidentally be clicked even when they were hidden because of user inactivity.
+
 ## 1.15.0
 
 ### ✨ Features
