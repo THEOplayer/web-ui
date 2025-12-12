@@ -1,4 +1,5 @@
 :host {
+    display: inline-flex; /* ignore --theoplayer-before-first-play-display */
     --theoplayer-icon-color: var(--theoplayer-play-button-icon-color, unset);
 }
 

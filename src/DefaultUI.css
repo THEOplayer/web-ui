@@ -206,11 +206,14 @@ theoplayer-ui:not([playing-ad]) theoplayer-control-bar ::slotted([ad-only]) {
 
 /*
  * Hide all controls before first play, except for the center play button
+ * (even when it's inside a slot).
  */
-theoplayer-ui:not([has-first-play]) theoplayer-control-bar,
-theoplayer-ui:not([has-first-play]) [part~='center-button']:not(theoplayer-play-button),
-theoplayer-ui:not([has-first-play]) [part='centered-chrome'] ::slotted(:not(theoplayer-play-button)) {
+theoplayer-ui:not([has-first-play]) theoplayer-control-bar {
     display: none !important;
+}
+theoplayer-ui:not([has-first-play]),
+theoplayer-ui:not([has-first-play]) ::slotted(*) {
+    --theoplayer-before-first-play-display: none;
 }
 
 /*
