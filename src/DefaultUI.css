@@ -38,7 +38,8 @@ theoplayer-ui {
     display: none;
 }
 
-[part='centered-chrome'] * {
+[part='centered-chrome'] *,
+[part='centered-chrome'] ::slotted(*) {
     --theoplayer-button-icon-width: var(--theoplayer-centered-chrome-button-icon-width, 48px);
     --theoplayer-control-height: var(--theoplayer-centered-chrome-control-height, 48px);
     --theoplayer-play-button-icon-color: var(--theoplayer-center-play-button-icon-color, unset);
@@ -203,14 +204,15 @@ theoplayer-ui:not([playing-ad]) theoplayer-control-bar ::slotted([ad-only]) {
  * Hide all controls before first play, except for the center play button
  */
 theoplayer-ui:not([has-first-play]) theoplayer-control-bar,
-theoplayer-ui:not([has-first-play]) [part='centered-chrome'] :not(theoplayer-play-button) {
+theoplayer-ui:not([has-first-play]) [part~='center-button']:not(theoplayer-play-button),
+theoplayer-ui:not([has-first-play]) [part='centered-chrome'] ::slotted(:not(theoplayer-play-button)) {
     display: none !important;
 }
 
 /*
  * Hide center play button on desktop after first play
  */
-:host(:not([mobile])) theoplayer-ui[has-first-play] [part='centered-chrome'] theoplayer-play-button {
+:host(:not([mobile])) theoplayer-ui[has-first-play] [part~='center-play-button'] {
     display: none !important;
 }
 
@@ -222,7 +224,7 @@ theoplayer-ui:not([has-first-play]) [part='centered-chrome'] :not(theoplayer-pla
         display: none !important;
     }
 
-    :host(:not([mobile])) theoplayer-ui[has-first-play] [part='centered-chrome'] theoplayer-play-button {
+    :host(:not([mobile])) theoplayer-ui[has-first-play] [part~='center-play-button'] {
         display: inline-flex !important;
     }
 }
