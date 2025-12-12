@@ -1092,7 +1092,7 @@ export class UIContainer extends HTMLElement {
 
     private readonly _onClickAfterPointerUp = (event: MouseEvent): void => {
         this.removeEventListener('click', this._onClickAfterPointerUp, true);
-        if (performance.now() - this._lastPointerUpTime < 10) {
+        if (performance.now() - this._lastPointerUpTime < 40) {
             event.preventDefault();
             event.stopPropagation();
         }
