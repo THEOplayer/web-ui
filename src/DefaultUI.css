@@ -38,6 +38,10 @@ theoplayer-ui {
     display: none;
 }
 
+[part='centered-chrome'] {
+    display: flex;
+}
+
 [part='centered-chrome'] *,
 [part='centered-chrome'] ::slotted(*) {
     --theoplayer-button-icon-width: var(--theoplayer-centered-chrome-button-icon-width, 48px);
