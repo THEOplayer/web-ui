@@ -10,7 +10,7 @@ describe('Server-side rendering (SSR)', () => {
     });
 
     it('can render <DefaultUI> to string', async () => {
-        const { DefaultUI, PlayButton, TimeRange } = await import('@theoplayer/react-ui');
+        const { DefaultUI, PlayButton, MuteButton, TimeRange } = await import('@theoplayer/react-ui');
         const actual = renderToString(
             React.createElement(DefaultUI, {
                 // Properties are ignored during SSR
@@ -18,13 +18,15 @@ describe('Server-side rendering (SSR)', () => {
                 onReady: () => console.log('ready!'),
                 // Slots are inserted as elements
                 topControlBar: React.createElement(PlayButton),
-                bottomControlBar: React.createElement(TimeRange)
+                bottomControlBar: React.createElement(TimeRange),
+                centeredChrome: React.createElement(MuteButton)
             })
         );
         const expected =
             '<theoplayer-default-ui>' +
             '<theoplayer-slot-container slot="top-control-bar"><theoplayer-play-button></theoplayer-play-button></theoplayer-slot-container>' +
             '<theoplayer-slot-container slot="bottom-control-bar"><theoplayer-time-range></theoplayer-time-range></theoplayer-slot-container>' +
+            '<theoplayer-slot-container slot="centered-chrome"><theoplayer-mute-button></theoplayer-mute-button></theoplayer-slot-container>' +
             '</theoplayer-default-ui>';
         assert.equal(actual, expected);
     });

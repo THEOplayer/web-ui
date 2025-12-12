@@ -27,6 +27,10 @@ theoplayer-menu::part(heading) {
     display: none !important;
 }
 
+[part='centered-chrome'] {
+    display: flex;
+}
+
 [part='centered-chrome'] * {
     --theoplayer-control-height: 48px;
 }

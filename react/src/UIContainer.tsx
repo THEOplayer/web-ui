@@ -35,11 +35,12 @@ export interface UIContainerProps extends PropsWithoutRef<WebComponentProps<UICo
      */
     bottomChrome?: ReactNode;
     /**
-     * A slot for controls centered on the player, on top of other controls.
+     * A slot for controls in the center of the player, layered on top of other controls.
      */
     centeredChrome?: ReactNode;
     /**
-     * A slot for a loading indicator centered on the player, on top of other controls but behind the centered chrome.
+     * A slot for a loading indicator in the center of the player, layered on top of other controls
+     * but behind the centered chrome.
      */
     centeredLoading?: ReactNode;
     /**

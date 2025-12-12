@@ -107,8 +107,8 @@ const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
  * @slot `top-chrome` - A slot for controls at the top of the player.
  *   Can be used to display the stream's title, or for a cast button ({@link ChromecastButton | `<theoplayer-chromecast-button>`}).
  * @slot `middle-chrome` - A slot for controls in the middle of the player (between the top and bottom chrome).
- * @slot `centered-chrome` - A slot for controls centered on the player, on top of other controls.
- * @slot `centered-loading` - A slot for a loading indicator centered on the player, on top of other controls
+ * @slot `centered-chrome` - A slot for controls in the center of the player, layered on top of other controls.
+ * @slot `centered-loading` - A slot for a loading indicator in the center of the player, layered on top of other controls
  *   but behind the centered chrome.
  * @slot `menu` - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
  * @slot `error` - A slot for an error display, to show when the player encounters a fatal error

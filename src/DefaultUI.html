@@ -13,9 +13,21 @@
     </theoplayer-control-bar>
     <theoplayer-loading-indicator slot="centered-loading" no-auto-hide></theoplayer-loading-indicator>
     <div slot="centered-chrome" part="centered-chrome">
-        <theoplayer-seek-button seek-offset="-10" mobile-only ad-hidden></theoplayer-seek-button>
-        <theoplayer-play-button></theoplayer-play-button>
-        <theoplayer-seek-button seek-offset="10" mobile-only ad-hidden></theoplayer-seek-button>
+        <slot name="centered-chrome">
+            <theoplayer-seek-button
+                part="seek-back-button seek-button center-button"
+                seek-offset="-10"
+                mobile-only
+                ad-hidden
+            ></theoplayer-seek-button>
+            <theoplayer-play-button part="center-play-button play-button center-button"></theoplayer-play-button>
+            <theoplayer-seek-button
+                part="seek-forward-button seek-button center-button"
+                seek-offset="10"
+                mobile-only
+                ad-hidden
+            ></theoplayer-seek-button>
+        </slot>
     </div>
     <div slot="middle-chrome" part="middle-chrome">
         <theoplayer-chromecast-display></theoplayer-chromecast-display>
@@ -28,17 +40,17 @@
             <theoplayer-ad-skip-button></theoplayer-ad-skip-button>
         </theoplayer-control-bar>
         <theoplayer-control-bar>
-            <theoplayer-play-button mobile-hidden ad-only class="theoplayer-ad-control"></theoplayer-play-button>
-            <theoplayer-mute-button ad-only class="theoplayer-ad-control"></theoplayer-mute-button>
-            <theoplayer-time-range show-ad-markers tv-focus class="theoplayer-ad-control"></theoplayer-time-range>
+            <theoplayer-play-button part="play-button" mobile-hidden ad-only class="theoplayer-ad-control"></theoplayer-play-button>
+            <theoplayer-mute-button part="mute-button" ad-only class="theoplayer-ad-control"></theoplayer-mute-button>
+            <theoplayer-time-range part="time-range" show-ad-markers tv-focus class="theoplayer-ad-control"></theoplayer-time-range>
             <theoplayer-chromecast-button tv-hidden ad-only class="theoplayer-ad-control"></theoplayer-chromecast-button>
             <theoplayer-fullscreen-button ad-only class="theoplayer-ad-control"></theoplayer-fullscreen-button>
         </theoplayer-control-bar>
         <theoplayer-control-bar ad-hidden>
-            <theoplayer-play-button mobile-hidden></theoplayer-play-button>
-            <theoplayer-mute-button tv-hidden></theoplayer-mute-button>
-            <theoplayer-volume-range mobile-hidden tv-hidden></theoplayer-volume-range>
-            <theoplayer-live-button live-only ad-hidden></theoplayer-live-button>
+            <theoplayer-play-button part="play-button" mobile-hidden></theoplayer-play-button>
+            <theoplayer-mute-button part="mute-button" tv-hidden></theoplayer-mute-button>
+            <theoplayer-volume-range part="volume-range" mobile-hidden tv-hidden></theoplayer-volume-range>
+            <theoplayer-live-button part="live-button" live-only ad-hidden></theoplayer-live-button>
             <theoplayer-time-display show-duration remaining-when-live></theoplayer-time-display>
             <span class="theoplayer-spacer" style="pointer-events: auto"></span>
             <theoplayer-language-menu-button menu="language-menu" mobile-hidden ad-hidden></theoplayer-language-menu-button>
@@ -46,7 +58,7 @@
             <theoplayer-chromecast-button tv-hidden mobile-hidden ad-hidden></theoplayer-chromecast-button>
             <slot name="bottom-control-bar"></slot>
             <theoplayer-settings-menu-button menu="settings-menu" mobile-hidden ad-hidden></theoplayer-settings-menu-button>
-            <theoplayer-fullscreen-button tv-hidden></theoplayer-fullscreen-button>
+            <theoplayer-fullscreen-button part="fullscreen-button" tv-hidden></theoplayer-fullscreen-button>
         </theoplayer-control-bar>
     </div>
     <theoplayer-language-menu id="language-menu" slot="menu" hidden></theoplayer-language-menu>

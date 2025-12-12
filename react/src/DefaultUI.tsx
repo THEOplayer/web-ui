@@ -31,6 +31,10 @@ export interface DefaultUIProps extends PropsWithoutRef<Omit<WebComponentProps<D
      */
     bottomControlBar?: ReactNode;
     /**
+     * A slot to replace the controls in the center of the player, layered on top of other controls.
+     */
+    centeredChrome?: ReactNode;
+    /**
      * A slot for extra menus (see {@link Menu}).
      */
     menu?: ReactNode;
@@ -91,7 +95,7 @@ export interface DefaultUIProps extends PropsWithoutRef<Omit<WebComponentProps<D
  * @group Components
  */
 export const DefaultUI = (props: DefaultUIProps) => {
-    const { title, topControlBar, bottomControlBar, menu, error, onReady, ...otherProps } = props;
+    const { title, topControlBar, bottomControlBar, centeredChrome, menu, error, onReady, ...otherProps } = props;
     const [ui, setUi] = useState<DefaultUIElement | null>(null);
     const player = usePlayer(ui, onReady);
     return (
@@ -100,6 +104,7 @@ export const DefaultUI = (props: DefaultUIProps) => {
                 {title && <SlotContainer slot="title">{title}</SlotContainer>}
                 {topControlBar && <SlotContainer slot="top-control-bar">{topControlBar}</SlotContainer>}
                 {bottomControlBar && <SlotContainer slot="bottom-control-bar">{bottomControlBar}</SlotContainer>}
+                {centeredChrome && <SlotContainer slot="centered-chrome">{centeredChrome}</SlotContainer>}
                 {menu && <SlotContainer slot="menu">{menu}</SlotContainer>}
                 {error && <SlotContainer slot="error">{error}</SlotContainer>}
             </PlayerContext.Provider>
