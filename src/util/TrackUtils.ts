@@ -27,19 +27,17 @@ export function formatQualityLabel(quality: VideoQuality | undefined): string | 
         return `${quality.height}p`;
     }
     if (quality.bandwidth) {
-        return formatBandwidth(quality);
+        return formatBandwidth(quality.bandwidth);
     }
     return undefined;
 }
 
-function formatBandwidth(quality: VideoQuality): string | undefined {
-    if (!quality.bandwidth) {
-        return undefined;
-    } else if (quality.bandwidth > 1e7) {
-        return `${(quality.bandwidth / 1e6).toFixed(0)}Mbps`;
-    } else if (quality.bandwidth > 1e6) {
-        return `${(quality.bandwidth / 1e6).toFixed(1)}Mbps`;
+export function formatBandwidth(bandwidth: number): string | undefined {
+    if (bandwidth > 1e7) {
+        return `${(bandwidth / 1e6).toFixed(0)}Mbps`;
+    } else if (bandwidth > 1e6) {
+        return `${(bandwidth / 1e6).toFixed(1)}Mbps`;
     } else {
-        return `${(quality.bandwidth / 1e3).toFixed(0)}kbps`;
+        return `${(bandwidth / 1e3).toFixed(0)}kbps`;
     }
 }
