@@ -40,16 +40,20 @@ export class DebugDisplay extends LitElement {
     }
 
     @state()
-    accessor currentSrc: string = '';
+    private accessor _currentSrc: string = '';
+
+    @state()
+    private accessor _activeVideoQuality: VideoQuality | undefined = undefined;
+    @state()
+    private accessor _activeAudioQuality: AudioQuality | undefined = undefined;
+    @state()
+    private accessor _activeSubtitleTrack: TextTrack | undefined = undefined;
 
     private _activeVideoTrack: MediaTrack | undefined = undefined;
-    private _activeVideoQuality: VideoQuality | undefined = undefined;
     private _activeAudioTrack: MediaTrack | undefined = undefined;
-    private _activeAudioQuality: AudioQuality | undefined = undefined;
-    private _activeSubtitleTrack: TextTrack | undefined = undefined;
 
     private readonly _onCurrentSourceChange = (event: CurrentSourceChangeEvent): void => {
-        this.currentSrc = event.currentSource?.src ?? '';
+        this._currentSrc = event.currentSource?.src ?? '';
     };
 
     private readonly _update = () => {
@@ -123,13 +127,10 @@ export class DebugDisplay extends LitElement {
 
     @state()
     private accessor sampleDate: string = '';
-
     @state()
     private accessor currentBandwidthEstimate: number = 0;
-
     @state()
     private accessor currentBufferHealth: number = 0;
-
     @state()
     private accessor currentLatency: number = 0;
 
@@ -170,7 +171,7 @@ export class DebugDisplay extends LitElement {
     protected override render(): unknown {
         return html`
             <div class="label">Selected source</div>
-            <div class="value"><a href=${this.currentSrc}>${this.currentSrc}</a></div>
+            <div class="value"><a href=${this._currentSrc}>${this._currentSrc}</a></div>
             <div class="label">Active quality</div>
             <div class="value">
                 ${this._activeVideoQuality
