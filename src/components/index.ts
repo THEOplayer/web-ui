@@ -46,6 +46,7 @@ export * from './PreviewTimeDisplay';
 export * from './PreviewThumbnail';
 export * from './LiveButton';
 export * from './DebugDisplay';
+export * from './RollingChart';
 export { SlotContainer } from './SlotContainer';
 export * from './ads/index';
 export { type StateReceiverElement, type StateReceiverPropertyMap, StateReceiverMixin, stateReceiver } from './StateReceiverMixin';
