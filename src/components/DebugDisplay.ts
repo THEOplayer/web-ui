@@ -145,7 +145,7 @@ export class DebugDisplay extends LitElement {
         const { currentBandwidthEstimate } = this._player.metrics;
         this.currentBandwidthEstimate = currentBandwidthEstimate;
         if (this._downloadSpeedRef.value) {
-            const sample = Math.floor(Math.min(Math.log10(currentBandwidthEstimate) / 8, 1) * 20);
+            const sample = Math.log10(currentBandwidthEstimate);
             this._downloadSpeedRef.value.addSample(sample);
         }
         let currentBufferHealth = 0;
@@ -163,14 +163,12 @@ export class DebugDisplay extends LitElement {
         }
         this.currentBufferHealth = currentBufferHealth;
         if (this._bufferHealthRef.value) {
-            const sample = Math.floor(Math.min(currentBufferHealth / 30, 1) * 20);
-            this._bufferHealthRef.value.addSample(sample);
+            this._bufferHealthRef.value.addSample(currentBufferHealth);
         }
-        const { currentLatency } = this._player.latency;
-        this.currentLatency = currentLatency ?? 0;
+        const currentLatency = this._player.latency.currentLatency ?? 0;
+        this.currentLatency = currentLatency;
         if (this._latencyRef.value) {
-            const sample = Math.floor(Math.min((currentLatency ?? 0) / 30, 1) * 20);
-            this._latencyRef.value.addSample(sample);
+            this._latencyRef.value.addSample(currentLatency);
         }
     }
 
@@ -207,6 +205,8 @@ export class DebugDisplay extends LitElement {
                 <theoplayer-rolling-chart
                     ${ref(this._downloadSpeedRef)}
                     max-samples="200"
+                    min-resolution="3"
+                    max-resolution="9"
                     height="20"
                     sample-color="#0080ff"
                 ></theoplayer-rolling-chart>
@@ -217,6 +217,8 @@ export class DebugDisplay extends LitElement {
                 <theoplayer-rolling-chart
                     ${ref(this._bufferHealthRef)}
                     max-samples="200"
+                    min-resolution="5"
+                    max-resolution="60"
                     height="20"
                     sample-color="#00ff00"
                 ></theoplayer-rolling-chart>
@@ -224,7 +226,14 @@ export class DebugDisplay extends LitElement {
             </div>
             <div class="label">Latency</div>
             <div class="value">
-                <theoplayer-rolling-chart ${ref(this._latencyRef)} max-samples="200" height="20" sample-color="#ff8000"></theoplayer-rolling-chart>
+                <theoplayer-rolling-chart
+                    ${ref(this._latencyRef)}
+                    max-samples="200"
+                    min-resolution="5"
+                    max-resolution="60"
+                    height="20"
+                    sample-color="#ff8000"
+                ></theoplayer-rolling-chart>
                 <span>${this.currentLatency.toFixed(3)}s</span>
             </div>
             <div class="label">Date</div>

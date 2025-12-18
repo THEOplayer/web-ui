@@ -12,6 +12,12 @@ export class RollingChart extends LitElement {
     @property({ reflect: true, type: Number, attribute: 'max-samples' })
     accessor maxSamples: number = 10;
 
+    @property({ reflect: true, type: Number, attribute: 'min-resolution' })
+    accessor minResolution: number = 10;
+
+    @property({ reflect: true, type: Number, attribute: 'max-resolution' })
+    accessor maxResolution: number = 100;
+
     @property({ reflect: true, type: Number, attribute: 'height' })
     accessor height: number = 100;
 
@@ -40,26 +46,28 @@ export class RollingChart extends LitElement {
     private renderSamples() {
         const context = (this._context ??= this._canvasRef.value?.getContext('2d') ?? undefined);
         if (!context) return;
+        if (this._samples.length === 0) return;
+        const maxSample = Math.max(...this._samples);
+        const resolution = Math.min(Math.max(maxSample, this.minResolution), this.maxResolution);
+        const scale = this.height / resolution;
         context.clearRect(0, 0, this.maxSamples, this.height);
         // Draw samples
         context.strokeStyle = this.sampleColor;
         for (let x = 0; x < this._samples.length; x++) {
-            const sample = this._samples[x];
+            const sample = this._samples[x] * scale;
             if (sample > 0) {
                 context.beginPath();
-                context.moveTo(x, this.height - sample);
+                context.moveTo(x, Math.max(0, this.height - sample));
                 context.lineTo(x, this.height - 1);
                 context.stroke();
             }
         }
         // Draw head
-        if (this._samples.length > 0) {
-            context.strokeStyle = this.headColor;
-            context.beginPath();
-            context.moveTo(this._sampleHead, 0);
-            context.lineTo(this._sampleHead, this.height - 1);
-            context.stroke();
-        }
+        context.strokeStyle = this.headColor;
+        context.beginPath();
+        context.moveTo(this._sampleHead, 0);
+        context.lineTo(this._sampleHead, this.height - 1);
+        context.stroke();
     }
 
     protected override render(): unknown {
