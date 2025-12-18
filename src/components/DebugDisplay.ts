@@ -168,6 +168,19 @@ export class DebugDisplay extends LitElement {
         return html`
             <div class="label">Selected source</div>
             <div class="value"><a href=${this.currentSrc}>${this.currentSrc}</a></div>
+            <div class="label">Active quality</div>
+            <div class="value">
+                ${this._activeVideoQuality
+                    ? html`<span title="video quality"
+                          >${this._activeVideoQuality.width}&times;${this._activeVideoQuality.height}${this._activeVideoQuality.frameRate
+                              ? html`@${this._activeVideoQuality.frameRate.toFixed(0)}fps`
+                              : ''}
+                          (${formatBandwidth(this._activeVideoQuality.bandwidth)})</span
+                      >`
+                    : this._activeAudioQuality
+                      ? html`<span title="audio quality">${formatBandwidth(this._activeAudioQuality.bandwidth)}</span>`
+                      : ''}
+            </div>
             <div class="label">Codecs</div>
             <div class="value">
                 ${join(
