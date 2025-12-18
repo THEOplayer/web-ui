@@ -117,6 +117,7 @@ export class DebugDisplay extends LitElement {
     private _graphTimer: number = 0;
     private _downloadSpeedRef: Ref<RollingChart> = createRef();
     private _bufferHealthRef: Ref<RollingChart> = createRef();
+    private _latencyRef: Ref<RollingChart> = createRef();
 
     override connectedCallback() {
         super.connectedCallback();
@@ -133,6 +134,9 @@ export class DebugDisplay extends LitElement {
 
     @state()
     private accessor currentBufferHealth: number = 0;
+
+    @state()
+    private accessor currentLatency: number = 0;
 
     private _addSample(): void {
         if (!this._player) return;
@@ -161,6 +165,12 @@ export class DebugDisplay extends LitElement {
         if (this._bufferHealthRef.value) {
             const sample = Math.floor(Math.min(currentBufferHealth / 30, 1) * 20);
             this._bufferHealthRef.value.addSample(sample);
+        }
+        const { currentLatency } = this._player.latency;
+        this.currentLatency = currentLatency ?? 0;
+        if (this._latencyRef.value) {
+            const sample = Math.floor(Math.min((currentLatency ?? 0) / 30, 1) * 20);
+            this._latencyRef.value.addSample(sample);
         }
     }
 
@@ -211,6 +221,11 @@ export class DebugDisplay extends LitElement {
                     sample-color="#00ff00"
                 ></theoplayer-rolling-chart>
                 <span>${this.currentBufferHealth.toFixed(3)}s</span>
+            </div>
+            <div class="label">Latency</div>
+            <div class="value">
+                <theoplayer-rolling-chart ${ref(this._latencyRef)} max-samples="200" height="20" sample-color="#ff8000"></theoplayer-rolling-chart>
+                <span>${this.currentLatency.toFixed(3)}s</span>
             </div>
             <div class="label">Date</div>
             <div class="value">${new Date().toISOString()}</div>
