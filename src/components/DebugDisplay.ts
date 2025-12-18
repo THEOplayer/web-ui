@@ -1,6 +1,7 @@
 import { html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
+import { join } from 'lit/directives/join.js';
 import debugDisplayCss from './DebugDisplay.css';
 import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer, CurrentSourceChangeEvent, MediaTrack, Quality, TextTrack, TrackChangeEvent } from 'theoplayer/chromeless';
@@ -178,8 +179,14 @@ export class DebugDisplay extends LitElement {
             <div class="value"><a href=${this.currentSrc}>${this.currentSrc}</a></div>
             <div class="label">Codecs</div>
             <div class="value">
-                <span title="video codec">${this.videoCodec}</span>
-                / <span title="audio codec">${this.audioCodec}</span> / <span title="subtitle codec">${this.subtitleCodec}</span>
+                ${join(
+                    [
+                        this.videoCodec && html`<span title="video codec">${this.videoCodec}</span>`,
+                        this.audioCodec && html`<span title="audio codec">${this.audioCodec}</span>`,
+                        this.subtitleCodec && html`<span title="subtitle codec">${this.subtitleCodec}</span>`
+                    ].filter(Boolean),
+                    html` / `
+                )}
             </div>
             <div class="label">Download speed</div>
             <div class="value">
