@@ -17,6 +17,20 @@ export class DebugDisplay extends LitElement {
     static override styles = [debugDisplayCss];
 
     private _player: ChromelessPlayer | undefined;
+    private _sampleTimer: number = 0;
+    private _downloadSpeedRef: Ref<RollingChart> = createRef();
+    private _bufferHealthRef: Ref<RollingChart> = createRef();
+    private _latencyRef: Ref<RollingChart> = createRef();
+
+    override connectedCallback() {
+        super.connectedCallback();
+        this._sampleTimer = setInterval(this.sample_.bind(this), 100);
+    }
+
+    override disconnectedCallback() {
+        super.disconnectedCallback();
+        clearInterval(this._sampleTimer);
+    }
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
@@ -45,6 +59,10 @@ export class DebugDisplay extends LitElement {
     @state()
     private accessor _currentSrc: string = '';
 
+    private readonly _onCurrentSourceChange = (event: CurrentSourceChangeEvent): void => {
+        this._currentSrc = event.currentSource?.src ?? '';
+    };
+
     @state()
     private accessor _activeVideoQuality: VideoQuality | undefined = undefined;
     @state()
@@ -54,14 +72,6 @@ export class DebugDisplay extends LitElement {
 
     private _activeVideoTrack: MediaTrack | undefined = undefined;
     private _activeAudioTrack: MediaTrack | undefined = undefined;
-
-    private readonly _onCurrentSourceChange = (event: CurrentSourceChangeEvent): void => {
-        this._currentSrc = event.currentSource?.src ?? '';
-    };
-
-    private readonly _update = () => {
-        this.requestUpdate();
-    };
 
     private readonly _updateVideoQuality = (): void => {
         const activeVideoQuality = this._activeVideoTrack?.activeQuality as VideoQuality | undefined;
@@ -113,21 +123,6 @@ export class DebugDisplay extends LitElement {
         this._update();
     };
 
-    private _sampleTimer: number = 0;
-    private _downloadSpeedRef: Ref<RollingChart> = createRef();
-    private _bufferHealthRef: Ref<RollingChart> = createRef();
-    private _latencyRef: Ref<RollingChart> = createRef();
-
-    override connectedCallback() {
-        super.connectedCallback();
-        this._sampleTimer = setInterval(this.sample_.bind(this), 100);
-    }
-
-    override disconnectedCallback() {
-        super.disconnectedCallback();
-        clearInterval(this._sampleTimer);
-    }
-
     @state()
     private accessor sampleDate: string = '';
     @state()
@@ -170,6 +165,10 @@ export class DebugDisplay extends LitElement {
             this._latencyRef.value.addSample(currentLatency);
         }
     }
+
+    private readonly _update = () => {
+        this.requestUpdate();
+    };
 
     protected override render(): unknown {
         return html`
