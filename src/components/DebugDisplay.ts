@@ -40,6 +40,7 @@ export class DebugDisplay extends LitElement {
         }
         if (this._player !== undefined) {
             this._player.removeEventListener('currentsourcechange', this._onCurrentSourceChange);
+            this._player.removeEventListener('durationchange', this._onDurationChange);
             this._player.audioTracks.removeEventListener(['change', 'removetrack'], this._onAudioTrackChange);
             this._player.videoTracks.removeEventListener(['change', 'removetrack'], this._onVideoTrackChange);
             this._player.textTracks.removeEventListener(['change', 'removetrack'], this._onTextTrackChange);
@@ -47,6 +48,7 @@ export class DebugDisplay extends LitElement {
         this._player = player;
         if (this._player !== undefined) {
             this._player.addEventListener('currentsourcechange', this._onCurrentSourceChange);
+            this._player.addEventListener('durationchange', this._onDurationChange);
             this._player.audioTracks.addEventListener(['change', 'removetrack'], this._onAudioTrackChange);
             this._player.videoTracks.addEventListener(['change', 'removetrack'], this._onVideoTrackChange);
             this._player.textTracks.addEventListener(['change', 'removetrack'], this._onTextTrackChange);
@@ -58,6 +60,13 @@ export class DebugDisplay extends LitElement {
 
     private readonly _onCurrentSourceChange = (event: CurrentSourceChangeEvent): void => {
         this._currentSrc = event.currentSource?.src ?? '';
+    };
+
+    @state()
+    private accessor _live: boolean = false;
+
+    private readonly _onDurationChange = (): void => {
+        this._live = this._player?.duration === Infinity;
     };
 
     @state()
@@ -219,8 +228,8 @@ export class DebugDisplay extends LitElement {
                 ></theoplayer-rolling-chart>
                 <span>${this.currentBufferHealth.toFixed(3)}s</span>
             </div>
-            <div class="label">Latency</div>
-            <div class="value">
+            <div class="label" ?hidden=${!this._live}>Latency</div>
+            <div class="value" ?hidden=${!this._live}>
                 <theoplayer-rolling-chart
                     ${ref(this._latencyRef)}
                     max-samples="200"
