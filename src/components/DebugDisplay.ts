@@ -3,7 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import debugDisplayCss from './DebugDisplay.css';
 import { stateReceiver } from './StateReceiverMixin';
-import type { ChromelessPlayer, CurrentSourceChangeEvent } from 'theoplayer/chromeless';
+import type { ChromelessPlayer, CurrentSourceChangeEvent, MediaTrack, Quality, TrackChangeEvent } from 'theoplayer/chromeless';
 import type { RollingChart } from './RollingChart';
 import { formatBandwidth } from '../util/TrackUtils';
 
@@ -25,18 +25,81 @@ export class DebugDisplay extends LitElement {
         }
         if (this._player !== undefined) {
             this._player.removeEventListener('currentsourcechange', this._onCurrentSourceChange);
+            this._player.audioTracks.removeEventListener('change', this._onAudioTrackChange);
+            this._player.videoTracks.removeEventListener('change', this._onVideoTrackChange);
         }
         this._player = player;
         if (this._player !== undefined) {
             this._player.addEventListener('currentsourcechange', this._onCurrentSourceChange);
+            this._player.audioTracks.addEventListener('change', this._onAudioTrackChange);
+            this._player.videoTracks.addEventListener('change', this._onVideoTrackChange);
         }
     }
 
     @state()
     accessor currentSrc: string = '';
 
+    private _activeVideoTrack: MediaTrack | undefined = undefined;
+    private _activeVideoQuality: Quality | undefined = undefined;
+    private _activeAudioTrack: MediaTrack | undefined = undefined;
+    private _activeAudioQuality: Quality | undefined = undefined;
+
+    @state()
+    private accessor videoCodec: string = '';
+
+    @state()
+    private accessor audioCodec: string = '';
+
     private readonly _onCurrentSourceChange = (event: CurrentSourceChangeEvent): void => {
         this.currentSrc = event.currentSource?.src ?? '';
+    };
+
+    private readonly _updateVideoCodec = () => {
+        this.videoCodec = this._activeVideoQuality?.codecs ?? '';
+    };
+
+    private readonly _updateAudioCodec = () => {
+        this.audioCodec = this._activeAudioQuality?.codecs ?? '';
+    };
+
+    private readonly _updateVideoQuality = (): void => {
+        const activeVideoQuality = this._activeVideoTrack?.activeQuality;
+        if (this._activeVideoQuality !== activeVideoQuality) {
+            this._activeVideoQuality?.removeEventListener('update', this._updateVideoCodec);
+            this._activeVideoQuality = activeVideoQuality;
+            this._activeVideoQuality?.addEventListener('update', this._updateVideoCodec);
+        }
+        this._updateVideoCodec();
+    };
+
+    private readonly _updateAudioQuality = (): void => {
+        const activeAudioQuality = this._activeAudioTrack?.activeQuality;
+        if (this._activeAudioQuality !== activeAudioQuality) {
+            this._activeAudioQuality?.removeEventListener('update', this._updateAudioCodec);
+            this._activeAudioQuality = activeAudioQuality;
+            this._activeAudioQuality?.addEventListener('update', this._updateAudioCodec);
+        }
+        this._updateAudioCodec();
+    };
+
+    private readonly _onVideoTrackChange = (event: TrackChangeEvent): void => {
+        const activeVideoTrack = event.track as MediaTrack;
+        if (this._activeVideoTrack !== activeVideoTrack) {
+            this._activeVideoTrack?.removeEventListener(['activequalitychanged', 'update'], this._updateVideoQuality);
+            this._activeVideoTrack = activeVideoTrack;
+            this._activeVideoTrack.addEventListener(['activequalitychanged', 'update'], this._updateVideoQuality);
+        }
+        this._updateVideoQuality();
+    };
+
+    private readonly _onAudioTrackChange = (event: TrackChangeEvent): void => {
+        const activeAudioTrack = event.track as MediaTrack;
+        if (this._activeAudioTrack !== activeAudioTrack) {
+            this._activeAudioTrack?.removeEventListener(['activequalitychanged', 'update'], this._updateAudioQuality);
+            this._activeAudioTrack = activeAudioTrack;
+            this._activeAudioTrack.addEventListener(['activequalitychanged', 'update'], this._updateAudioQuality);
+        }
+        this._updateAudioQuality();
     };
 
     private _graphTimer: number = 0;
@@ -93,6 +156,8 @@ export class DebugDisplay extends LitElement {
         return html`
             <div class="label">Selected source</div>
             <div class="value"><a href=${this.currentSrc}>${this.currentSrc}</a></div>
+            <div class="label">Codecs</div>
+            <div class="value">${this.videoCodec} / ${this.audioCodec}</div>
             <div class="label">Download speed</div>
             <div class="value">
                 <theoplayer-rolling-chart
