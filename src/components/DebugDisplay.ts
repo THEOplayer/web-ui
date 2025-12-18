@@ -106,20 +106,23 @@ export class DebugDisplay extends LitElement {
         this._update();
     };
 
-    private _graphTimer: number = 0;
+    private _sampleTimer: number = 0;
     private _downloadSpeedRef: Ref<RollingChart> = createRef();
     private _bufferHealthRef: Ref<RollingChart> = createRef();
     private _latencyRef: Ref<RollingChart> = createRef();
 
     override connectedCallback() {
         super.connectedCallback();
-        this._graphTimer = setInterval(this._addSample.bind(this), 100);
+        this._sampleTimer = setInterval(this.sample_.bind(this), 100);
     }
 
     override disconnectedCallback() {
         super.disconnectedCallback();
-        clearInterval(this._graphTimer);
+        clearInterval(this._sampleTimer);
     }
+
+    @state()
+    private accessor sampleDate: string = '';
 
     @state()
     private accessor currentBandwidthEstimate: number = 0;
@@ -130,8 +133,9 @@ export class DebugDisplay extends LitElement {
     @state()
     private accessor currentLatency: number = 0;
 
-    private _addSample(): void {
+    private sample_(): void {
         if (!this._player) return;
+        this.sampleDate = new Date().toISOString();
         const currentTime = this._player.currentTime;
         const buffered = this._player.buffered;
         const { currentBandwidthEstimate } = this._player.metrics;
@@ -228,7 +232,7 @@ export class DebugDisplay extends LitElement {
                 <span>${this.currentLatency.toFixed(3)}s</span>
             </div>
             <div class="label">Date</div>
-            <div class="value">${new Date().toISOString()}</div>
+            <div class="value">${this.sampleDate}</div>
         `;
     }
 }
