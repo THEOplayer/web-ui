@@ -9,6 +9,10 @@
     pointer-events: none;
 }
 
+:host([hidden]) {
+    display: none !important;
+}
+
 .label {
     grid-column: 1;
     white-space: nowrap;
