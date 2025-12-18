@@ -4,7 +4,15 @@ import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { join } from 'lit/directives/join.js';
 import debugDisplayCss from './DebugDisplay.css';
 import { stateReceiver } from './StateReceiverMixin';
-import type { ChromelessPlayer, CurrentSourceChangeEvent, MediaTrack, Quality, TextTrack, TrackChangeEvent } from 'theoplayer/chromeless';
+import type {
+    AudioQuality,
+    ChromelessPlayer,
+    CurrentSourceChangeEvent,
+    MediaTrack,
+    TextTrack,
+    TrackChangeEvent,
+    VideoQuality
+} from 'theoplayer/chromeless';
 import type { RollingChart } from './RollingChart';
 import { formatBandwidth, isSubtitleTrack } from '../util/TrackUtils';
 
@@ -43,54 +51,37 @@ export class DebugDisplay extends LitElement {
     accessor currentSrc: string = '';
 
     private _activeVideoTrack: MediaTrack | undefined = undefined;
-    private _activeVideoQuality: Quality | undefined = undefined;
+    private _activeVideoQuality: VideoQuality | undefined = undefined;
     private _activeAudioTrack: MediaTrack | undefined = undefined;
-    private _activeAudioQuality: Quality | undefined = undefined;
+    private _activeAudioQuality: AudioQuality | undefined = undefined;
     private _activeSubtitleTrack: TextTrack | undefined = undefined;
-
-    @state()
-    private accessor videoCodec: string = '';
-
-    @state()
-    private accessor audioCodec: string = '';
-
-    @state()
-    private accessor subtitleCodec: string = '';
 
     private readonly _onCurrentSourceChange = (event: CurrentSourceChangeEvent): void => {
         this.currentSrc = event.currentSource?.src ?? '';
     };
 
-    private readonly _updateVideoCodec = () => {
-        this.videoCodec = this._activeVideoQuality?.codecs ?? '';
-    };
-
-    private readonly _updateAudioCodec = () => {
-        this.audioCodec = this._activeAudioQuality?.codecs ?? '';
-    };
-
-    private readonly _updateSubtitleCodec = () => {
-        this.subtitleCodec = this._activeSubtitleTrack?.type ?? '';
+    private readonly _update = () => {
+        this.requestUpdate();
     };
 
     private readonly _updateVideoQuality = (): void => {
-        const activeVideoQuality = this._activeVideoTrack?.activeQuality;
+        const activeVideoQuality = this._activeVideoTrack?.activeQuality as VideoQuality | undefined;
         if (this._activeVideoQuality !== activeVideoQuality) {
-            this._activeVideoQuality?.removeEventListener('update', this._updateVideoCodec);
+            this._activeVideoQuality?.removeEventListener('update', this._update);
             this._activeVideoQuality = activeVideoQuality;
-            this._activeVideoQuality?.addEventListener('update', this._updateVideoCodec);
+            this._activeVideoQuality?.addEventListener('update', this._update);
         }
-        this._updateVideoCodec();
+        this._update();
     };
 
     private readonly _updateAudioQuality = (): void => {
-        const activeAudioQuality = this._activeAudioTrack?.activeQuality;
+        const activeAudioQuality = this._activeAudioTrack?.activeQuality as AudioQuality | undefined;
         if (this._activeAudioQuality !== activeAudioQuality) {
-            this._activeAudioQuality?.removeEventListener('update', this._updateAudioCodec);
+            this._activeAudioQuality?.removeEventListener('update', this._update);
             this._activeAudioQuality = activeAudioQuality;
-            this._activeAudioQuality?.addEventListener('update', this._updateAudioCodec);
+            this._activeAudioQuality?.addEventListener('update', this._update);
         }
-        this._updateAudioCodec();
+        this._update();
     };
 
     private readonly _onVideoTrackChange = (event: TrackChangeEvent): void => {
@@ -116,11 +107,11 @@ export class DebugDisplay extends LitElement {
     private readonly _onTextTrackChange = (): void => {
         const activeSubtitleTrack = this._player?.textTracks.find((track) => isSubtitleTrack(track) && track.mode === 'showing');
         if (this._activeSubtitleTrack !== activeSubtitleTrack) {
-            this._activeSubtitleTrack?.removeEventListener(['change', 'typechange'], this._onTextTrackChange);
+            this._activeSubtitleTrack?.removeEventListener(['change', 'typechange', 'update'], this._onTextTrackChange);
             this._activeSubtitleTrack = activeSubtitleTrack;
-            this._activeSubtitleTrack?.addEventListener(['change', 'typechange'], this._onTextTrackChange);
+            this._activeSubtitleTrack?.addEventListener(['change', 'typechange', 'update'], this._onTextTrackChange);
         }
-        this._updateSubtitleCodec();
+        this._update();
     };
 
     private _graphTimer: number = 0;
@@ -181,9 +172,9 @@ export class DebugDisplay extends LitElement {
             <div class="value">
                 ${join(
                     [
-                        this.videoCodec && html`<span title="video codec">${this.videoCodec}</span>`,
-                        this.audioCodec && html`<span title="audio codec">${this.audioCodec}</span>`,
-                        this.subtitleCodec && html`<span title="subtitle codec">${this.subtitleCodec}</span>`
+                        this._activeVideoQuality?.codecs && html`<span title="video codec">${this._activeVideoQuality?.codecs}</span>`,
+                        this._activeAudioQuality?.codecs && html`<span title="audio codec">${this._activeAudioQuality?.codecs}</span>`,
+                        this._activeSubtitleTrack?.type && html`<span title="subtitle codec">${this._activeSubtitleTrack?.type}</span>`
                     ].filter(Boolean),
                     html` / `
                 )}
