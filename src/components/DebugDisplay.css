@@ -6,7 +6,6 @@
     align-items: center;
     font-size: var(--theoplayer-text-font-size, 14px);
     line-height: 1em;
-    pointer-events: none;
 }
 
 :host([hidden]) {
@@ -16,6 +15,7 @@
 .label {
     grid-column: 1;
     white-space: nowrap;
+    user-select: none;
 }
 
 .value {
