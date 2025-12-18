@@ -36,6 +36,7 @@ export class RollingChart extends LitElement {
     clearSamples(): void {
         this._samples.length = 0;
         this._sampleHead = 0;
+        this.requestUpdate();
     }
 
     protected override firstUpdated(changedProperties: PropertyValues) {
@@ -46,11 +47,11 @@ export class RollingChart extends LitElement {
     private renderSamples() {
         const context = (this._context ??= this._canvasRef.value?.getContext('2d') ?? undefined);
         if (!context) return;
+        context.clearRect(0, 0, this.maxSamples, this.height);
         if (this._samples.length === 0) return;
         const maxSample = Math.max(...this._samples);
         const resolution = Math.min(Math.max(maxSample, this.minResolution), this.maxResolution);
         const scale = this.height / resolution;
-        context.clearRect(0, 0, this.maxSamples, this.height);
         // Draw samples
         context.strokeStyle = this.sampleColor;
         for (let x = 0; x < this._samples.length; x++) {
