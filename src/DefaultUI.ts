@@ -397,6 +397,7 @@ export class DefaultUI extends LitElement {
             <theoplayer-settings-menu id="settings-menu" slot="menu" hidden></theoplayer-settings-menu>
             <slot name="error" slot="error"><theoplayer-error-display></theoplayer-error-display></slot>
             <slot name="menu" slot="menu"></slot>
+            <slot name="overlay" slot="overlay"></slot>
         `;
     }
 }
