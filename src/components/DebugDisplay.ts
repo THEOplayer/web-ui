@@ -3,9 +3,9 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import debugDisplayCss from './DebugDisplay.css';
 import { stateReceiver } from './StateReceiverMixin';
-import type { ChromelessPlayer, CurrentSourceChangeEvent, MediaTrack, Quality, TrackChangeEvent } from 'theoplayer/chromeless';
+import type { ChromelessPlayer, CurrentSourceChangeEvent, MediaTrack, Quality, TextTrack, TrackChangeEvent } from 'theoplayer/chromeless';
 import type { RollingChart } from './RollingChart';
-import { formatBandwidth } from '../util/TrackUtils';
+import { formatBandwidth, isSubtitleTrack } from '../util/TrackUtils';
 
 @customElement('theoplayer-debug-display')
 @stateReceiver(['player'])
@@ -27,12 +27,14 @@ export class DebugDisplay extends LitElement {
             this._player.removeEventListener('currentsourcechange', this._onCurrentSourceChange);
             this._player.audioTracks.removeEventListener('change', this._onAudioTrackChange);
             this._player.videoTracks.removeEventListener('change', this._onVideoTrackChange);
+            this._player.textTracks.removeEventListener('change', this._onTextTrackChange);
         }
         this._player = player;
         if (this._player !== undefined) {
             this._player.addEventListener('currentsourcechange', this._onCurrentSourceChange);
             this._player.audioTracks.addEventListener('change', this._onAudioTrackChange);
             this._player.videoTracks.addEventListener('change', this._onVideoTrackChange);
+            this._player.textTracks.addEventListener('change', this._onTextTrackChange);
         }
     }
 
@@ -43,12 +45,16 @@ export class DebugDisplay extends LitElement {
     private _activeVideoQuality: Quality | undefined = undefined;
     private _activeAudioTrack: MediaTrack | undefined = undefined;
     private _activeAudioQuality: Quality | undefined = undefined;
+    private _activeSubtitleTrack: TextTrack | undefined = undefined;
 
     @state()
     private accessor videoCodec: string = '';
 
     @state()
     private accessor audioCodec: string = '';
+
+    @state()
+    private accessor subtitleCodec: string = '';
 
     private readonly _onCurrentSourceChange = (event: CurrentSourceChangeEvent): void => {
         this.currentSrc = event.currentSource?.src ?? '';
@@ -60,6 +66,10 @@ export class DebugDisplay extends LitElement {
 
     private readonly _updateAudioCodec = () => {
         this.audioCodec = this._activeAudioQuality?.codecs ?? '';
+    };
+
+    private readonly _updateSubtitleCodec = () => {
+        this.subtitleCodec = this._activeSubtitleTrack?.type ?? '';
     };
 
     private readonly _updateVideoQuality = (): void => {
@@ -100,6 +110,16 @@ export class DebugDisplay extends LitElement {
             this._activeAudioTrack.addEventListener(['activequalitychanged', 'update'], this._updateAudioQuality);
         }
         this._updateAudioQuality();
+    };
+
+    private readonly _onTextTrackChange = (): void => {
+        const activeSubtitleTrack = this._player?.textTracks.find((track) => isSubtitleTrack(track) && track.mode === 'showing');
+        if (this._activeSubtitleTrack !== activeSubtitleTrack) {
+            this._activeSubtitleTrack?.removeEventListener(['change', 'typechange'], this._onTextTrackChange);
+            this._activeSubtitleTrack = activeSubtitleTrack;
+            this._activeSubtitleTrack?.addEventListener(['change', 'typechange'], this._onTextTrackChange);
+        }
+        this._updateSubtitleCodec();
     };
 
     private _graphTimer: number = 0;
@@ -157,7 +177,10 @@ export class DebugDisplay extends LitElement {
             <div class="label">Selected source</div>
             <div class="value"><a href=${this.currentSrc}>${this.currentSrc}</a></div>
             <div class="label">Codecs</div>
-            <div class="value">${this.videoCodec} / ${this.audioCodec}</div>
+            <div class="value">
+                <span title="video codec">${this.videoCodec}</span>
+                / <span title="audio codec">${this.audioCodec}</span> / <span title="subtitle codec">${this.subtitleCodec}</span>
+            </div>
             <div class="label">Download speed</div>
             <div class="value">
                 <theoplayer-rolling-chart
