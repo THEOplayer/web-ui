@@ -145,8 +145,7 @@ export class DebugDisplay extends LitElement {
         const { currentBandwidthEstimate } = this._player.metrics;
         this.currentBandwidthEstimate = currentBandwidthEstimate;
         if (this._downloadSpeedRef.value) {
-            const sample = Math.log10(currentBandwidthEstimate);
-            this._downloadSpeedRef.value.addSample(sample);
+            this._downloadSpeedRef.value.addSample(currentBandwidthEstimate);
         }
         let currentBufferHealth = 0;
         if (buffered.length > 0) {
@@ -205,8 +204,8 @@ export class DebugDisplay extends LitElement {
                 <theoplayer-rolling-chart
                     ${ref(this._downloadSpeedRef)}
                     max-samples="200"
-                    min-resolution="3"
-                    max-resolution="9"
+                    min-resolution=${10e6}
+                    max-resolution=${100e6}
                     height="20"
                     sample-color="#0080ff"
                 ></theoplayer-rolling-chart>
