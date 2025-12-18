@@ -4,15 +4,7 @@ import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { join } from 'lit/directives/join.js';
 import debugDisplayCss from './DebugDisplay.css';
 import { stateReceiver } from './StateReceiverMixin';
-import type {
-    AudioQuality,
-    ChromelessPlayer,
-    CurrentSourceChangeEvent,
-    MediaTrack,
-    TextTrack,
-    TrackChangeEvent,
-    VideoQuality
-} from 'theoplayer/chromeless';
+import type { AudioQuality, ChromelessPlayer, CurrentSourceChangeEvent, MediaTrack, TextTrack, VideoQuality } from 'theoplayer/chromeless';
 import type { RollingChart } from './RollingChart';
 import { formatBandwidth, isSubtitleTrack } from '../util/TrackUtils';
 
@@ -34,16 +26,16 @@ export class DebugDisplay extends LitElement {
         }
         if (this._player !== undefined) {
             this._player.removeEventListener('currentsourcechange', this._onCurrentSourceChange);
-            this._player.audioTracks.removeEventListener('change', this._onAudioTrackChange);
-            this._player.videoTracks.removeEventListener('change', this._onVideoTrackChange);
-            this._player.textTracks.removeEventListener('change', this._onTextTrackChange);
+            this._player.audioTracks.removeEventListener(['change', 'removetrack'], this._onAudioTrackChange);
+            this._player.videoTracks.removeEventListener(['change', 'removetrack'], this._onVideoTrackChange);
+            this._player.textTracks.removeEventListener(['change', 'removetrack'], this._onTextTrackChange);
         }
         this._player = player;
         if (this._player !== undefined) {
             this._player.addEventListener('currentsourcechange', this._onCurrentSourceChange);
-            this._player.audioTracks.addEventListener('change', this._onAudioTrackChange);
-            this._player.videoTracks.addEventListener('change', this._onVideoTrackChange);
-            this._player.textTracks.addEventListener('change', this._onTextTrackChange);
+            this._player.audioTracks.addEventListener(['change', 'removetrack'], this._onAudioTrackChange);
+            this._player.videoTracks.addEventListener(['change', 'removetrack'], this._onVideoTrackChange);
+            this._player.textTracks.addEventListener(['change', 'removetrack'], this._onTextTrackChange);
         }
     }
 
@@ -84,22 +76,22 @@ export class DebugDisplay extends LitElement {
         this._update();
     };
 
-    private readonly _onVideoTrackChange = (event: TrackChangeEvent): void => {
-        const activeVideoTrack = event.track as MediaTrack;
+    private readonly _onVideoTrackChange = (): void => {
+        const activeVideoTrack = this._player?.videoTracks.find((track) => track.enabled);
         if (this._activeVideoTrack !== activeVideoTrack) {
             this._activeVideoTrack?.removeEventListener(['activequalitychanged', 'update'], this._updateVideoQuality);
             this._activeVideoTrack = activeVideoTrack;
-            this._activeVideoTrack.addEventListener(['activequalitychanged', 'update'], this._updateVideoQuality);
+            this._activeVideoTrack?.addEventListener(['activequalitychanged', 'update'], this._updateVideoQuality);
         }
         this._updateVideoQuality();
     };
 
-    private readonly _onAudioTrackChange = (event: TrackChangeEvent): void => {
-        const activeAudioTrack = event.track as MediaTrack;
+    private readonly _onAudioTrackChange = (): void => {
+        const activeAudioTrack = this._player?.audioTracks.find((track) => track.enabled);
         if (this._activeAudioTrack !== activeAudioTrack) {
             this._activeAudioTrack?.removeEventListener(['activequalitychanged', 'update'], this._updateAudioQuality);
             this._activeAudioTrack = activeAudioTrack;
-            this._activeAudioTrack.addEventListener(['activequalitychanged', 'update'], this._updateAudioQuality);
+            this._activeAudioTrack?.addEventListener(['activequalitychanged', 'update'], this._updateAudioQuality);
         }
         this._updateAudioQuality();
     };
