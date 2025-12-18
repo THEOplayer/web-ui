@@ -7,6 +7,7 @@ import { stateReceiver } from './StateReceiverMixin';
 import type { AudioQuality, ChromelessPlayer, CurrentSourceChangeEvent, MediaTrack, TextTrack, VideoQuality } from 'theoplayer/chromeless';
 import type { RollingChart } from './RollingChart';
 import { formatBandwidth, isSubtitleTrack } from '../util/TrackUtils';
+import { Attribute } from '../util/Attribute';
 
 @customElement('theoplayer-debug-display')
 @stateReceiver(['player'])
@@ -14,6 +15,7 @@ export class DebugDisplay extends LitElement {
     static override styles = [debugDisplayCss];
 
     private _player: ChromelessPlayer | undefined;
+    private _hidden: boolean = false;
     private _sampleTimer: number = 0;
     private _downloadSpeedRef: Ref<RollingChart> = createRef();
     private _bufferHealthRef: Ref<RollingChart> = createRef();
@@ -21,12 +23,22 @@ export class DebugDisplay extends LitElement {
 
     override connectedCallback() {
         super.connectedCallback();
-        this._sampleTimer = setInterval(this.sample_.bind(this), 100);
+        this.startOrStopSampling_();
     }
 
     override disconnectedCallback() {
         super.disconnectedCallback();
-        clearInterval(this._sampleTimer);
+        this.startOrStopSampling_();
+    }
+
+    get hidden(): boolean {
+        return this._hidden;
+    }
+
+    @property({ reflect: true, type: Boolean, attribute: Attribute.HIDDEN })
+    set hidden(hidden: boolean) {
+        this._hidden = hidden;
+        this.startOrStopSampling_();
     }
 
     get player(): ChromelessPlayer | undefined {
@@ -138,6 +150,17 @@ export class DebugDisplay extends LitElement {
     @state()
     private accessor currentLatency: number = 0;
 
+    private startOrStopSampling_() {
+        if (this.isConnected && !this.hidden) {
+            if (this._sampleTimer) return;
+            this._sampleTimer = setInterval(this.sample_.bind(this), 100);
+        } else {
+            clearInterval(this._sampleTimer);
+            this._sampleTimer = 0;
+            this.clearSamples_();
+        }
+    }
+
     private sample_(): void {
         if (!this._player) return;
         this.sampleDate = new Date().toISOString();
@@ -170,6 +193,12 @@ export class DebugDisplay extends LitElement {
         if (this._latencyRef.value) {
             this._latencyRef.value.addSample(currentLatency);
         }
+    }
+
+    private clearSamples_(): void {
+        this._downloadSpeedRef.value?.clearSamples();
+        this._bufferHealthRef.value?.clearSamples();
+        this._latencyRef.value?.clearSamples();
     }
 
     private readonly _update = () => {
