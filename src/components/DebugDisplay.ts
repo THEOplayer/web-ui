@@ -97,7 +97,7 @@ export class DebugDisplay extends LitElement {
             <div class="value">
                 <theoplayer-rolling-chart
                     ${ref(this._downloadSpeedRef)}
-                    max-samples="100"
+                    max-samples="200"
                     height="20"
                     sample-color="#0080ff"
                 ></theoplayer-rolling-chart>
@@ -107,7 +107,7 @@ export class DebugDisplay extends LitElement {
             <div class="value">
                 <theoplayer-rolling-chart
                     ${ref(this._bufferHealthRef)}
-                    max-samples="100"
+                    max-samples="200"
                     height="20"
                     sample-color="#00ff00"
                 ></theoplayer-rolling-chart>

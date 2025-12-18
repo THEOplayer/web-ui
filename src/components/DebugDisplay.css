@@ -1,14 +1,12 @@
 :host {
     display: grid;
     grid-template-columns: min-content 1fr;
-    pointer-events: none;
-}
-
-.label,
-.value {
+    grid-auto-rows: var(--theoplayer-debug-row-height, 20px);
+    column-gap: var(--theoplayer-debug-column-gap, 5px);
+    align-items: center;
     font-size: var(--theoplayer-text-font-size, 14px);
-    line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
-    padding: var(--theoplayer-control-padding, 10px);
+    line-height: 1em;
+    pointer-events: none;
 }
 
 .label {
