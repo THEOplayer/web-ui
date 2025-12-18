@@ -41,6 +41,7 @@ export class DebugDisplay extends LitElement {
 
     private _graphTimer: number = 0;
     private _downloadSpeedRef: Ref<RollingChart> = createRef();
+    private _bufferHealthRef: Ref<RollingChart> = createRef();
 
     override connectedCallback() {
         super.connectedCallback();
@@ -55,13 +56,36 @@ export class DebugDisplay extends LitElement {
     @state()
     private accessor currentBandwidthEstimate: number = 0;
 
+    @state()
+    private accessor currentBufferHealth: number = 0;
+
     private _addSample(): void {
         if (!this._player) return;
+        const currentTime = this._player.currentTime;
+        const buffered = this._player.buffered;
+        const { currentBandwidthEstimate } = this._player.metrics;
+        this.currentBandwidthEstimate = currentBandwidthEstimate;
         if (this._downloadSpeedRef.value) {
-            const { currentBandwidthEstimate } = this._player.metrics;
             const sample = Math.floor(Math.min(Math.log10(currentBandwidthEstimate) / 8, 1) * 20);
             this._downloadSpeedRef.value.addSample(sample);
-            this.currentBandwidthEstimate = currentBandwidthEstimate;
+        }
+        let currentBufferHealth = 0;
+        if (buffered.length > 0) {
+            let activeBufferIndex = -1;
+            for (let i = buffered.length - 1; i >= 0; i--) {
+                if (buffered.start(i) <= currentTime && currentTime <= buffered.end(i)) {
+                    activeBufferIndex = i;
+                    break;
+                }
+            }
+            if (activeBufferIndex >= 0) {
+                currentBufferHealth = buffered.end(activeBufferIndex) - currentTime;
+            }
+        }
+        this.currentBufferHealth = currentBufferHealth;
+        if (this._bufferHealthRef.value) {
+            const sample = Math.floor(Math.min(currentBufferHealth / 30, 1) * 20);
+            this._bufferHealthRef.value.addSample(sample);
         }
     }
 
@@ -75,9 +99,19 @@ export class DebugDisplay extends LitElement {
                     ${ref(this._downloadSpeedRef)}
                     max-samples="100"
                     height="20"
-                    sample-color="#ff0000"
+                    sample-color="#0080ff"
                 ></theoplayer-rolling-chart>
                 <span>${formatBandwidth(this.currentBandwidthEstimate)}</span>
+            </div>
+            <div class="label">Buffer health</div>
+            <div class="value">
+                <theoplayer-rolling-chart
+                    ${ref(this._bufferHealthRef)}
+                    max-samples="100"
+                    height="20"
+                    sample-color="#00ff00"
+                ></theoplayer-rolling-chart>
+                <span>${this.currentBufferHealth.toFixed(3)}s</span>
             </div>
         `;
     }
