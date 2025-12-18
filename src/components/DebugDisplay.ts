@@ -178,6 +178,8 @@ export class DebugDisplay extends LitElement {
                 ></theoplayer-rolling-chart>
                 <span>${this.currentBufferHealth.toFixed(3)}s</span>
             </div>
+            <div class="label">Date</div>
+            <div class="value">${new Date().toISOString()}</div>
         `;
     }
 }
