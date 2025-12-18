@@ -1,0 +1,24 @@
+:host {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    pointer-events: none;
+}
+
+.label,
+.value {
+    font-size: var(--theoplayer-text-font-size, 14px);
+    line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
+    padding: var(--theoplayer-control-padding, 10px);
+}
+
+.label {
+    grid-column: 1;
+    white-space: nowrap;
+}
+
+.value {
+    grid-column: 2;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

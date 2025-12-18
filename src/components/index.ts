@@ -45,6 +45,7 @@ export * from './GestureReceiver';
 export * from './PreviewTimeDisplay';
 export * from './PreviewThumbnail';
 export * from './LiveButton';
+export * from './DebugDisplay';
 export { SlotContainer } from './SlotContainer';
 export * from './ads/index';
 export { type StateReceiverElement, type StateReceiverPropertyMap, StateReceiverMixin, stateReceiver } from './StateReceiverMixin';
