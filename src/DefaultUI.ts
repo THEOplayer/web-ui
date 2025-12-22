@@ -1,26 +1,23 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
+import { createRef, ref, type Ref } from 'lit/directives/ref.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import type { ChromelessPlayer, SourceDescription, UIPlayerConfiguration } from 'theoplayer/chromeless';
-import type { UIContainer } from './UIContainer';
+import { DEFAULT_DVR_THRESHOLD, DEFAULT_TV_USER_IDLE_TIMEOUT, DEFAULT_USER_IDLE_TIMEOUT, type UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
-import defaultUiHtml from './DefaultUI.html';
 import { Attribute } from './util/Attribute';
 import { applyExtensions } from './extensions/ExtensionRegistry';
 import { isMobile, isTv } from './util/Environment';
 import type { DeviceType } from './util/DeviceType';
 import type { StreamType } from './util/StreamType';
-import type { TimeRange } from './components/TimeRange';
-import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
 import { USER_IDLE_CHANGE_EVENT } from './events/UserIdleChangeEvent';
 import { READY_EVENT } from './events/ReadyEvent';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
 import { toggleAttribute } from './util/CommonUtils';
 import { createCustomEvent } from './util/EventUtils';
-import { createTemplate } from './util/TemplateUtils';
-
-const template = createTemplate('theoplayer-default-ui', `<style>${defaultUiCss}</style>${defaultUiHtml}`);
 
 /**
- * `<theoplayer-default-ui>` - A default UI for THEOplayer.
+ * A default UI for THEOplayer.
  *
  * This default UI provides a great player experience out-of-the-box, that works well on all types of devices
  * and for all types of streams. It provides all the common playback controls for playing, seeking,
@@ -67,9 +64,15 @@ const template = createTemplate('theoplayer-default-ui', `<style>${defaultUiCss}
  * @slot `menu` - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
  * @slot `error` - A slot for an error display, to show when the player encounters a fatal error.
  *   By default, this shows an {@link ErrorDisplay | `<theoplayer-error-display>`}.
- * @group Components
  */
-export class DefaultUI extends HTMLElement {
+@customElement('theoplayer-default-ui')
+export class DefaultUI extends LitElement {
+    static override styles = [defaultUiCss];
+    static override shadowRootOptions: ShadowRootInit = {
+        ...LitElement.shadowRootOptions,
+        delegatesFocus: true
+    };
+
     /**
      * Fired when the backing player is created, and the {@link DefaultUI.player} property is set.
      *
@@ -77,27 +80,20 @@ export class DefaultUI extends HTMLElement {
      */
     static READY_EVENT: typeof READY_EVENT = READY_EVENT;
 
-    static get observedAttributes() {
-        return [
-            Attribute.CONFIGURATION,
-            Attribute.SOURCE,
-            Attribute.MUTED,
-            Attribute.AUTOPLAY,
-            Attribute.FLUID,
-            Attribute.DEVICE_TYPE,
-            Attribute.STREAM_TYPE,
-            Attribute.USER_IDLE_TIMEOUT,
-            Attribute.DVR_THRESHOLD,
-            Attribute.HAS_TITLE
-        ];
-    }
-
-    protected readonly _shadowRoot: ShadowRoot;
-    protected readonly _ui: UIContainer;
-    private readonly _titleSlot: HTMLSlotElement | undefined;
-    private readonly _timeRange: TimeRange | undefined;
+    protected readonly _uiRef: Ref<UIContainer> = createRef<UIContainer>();
+    @state()
+    private accessor _timeRangeInert: boolean = false;
     private _timeRangeInertTimeout: number = 0;
     private _appliedExtensions: boolean = false;
+
+    private _configuration: UIPlayerConfiguration = {};
+    private _source: SourceDescription | undefined = undefined;
+    private _userIdleTimeout: number | undefined = undefined;
+    private _deviceType: DeviceType = 'desktop';
+    private _dvrThreshold: number = DEFAULT_DVR_THRESHOLD;
+
+    @queryAssignedNodes({ slot: 'title', flatten: true })
+    private accessor titleSlotNodes!: Array<Node>;
 
     /**
      * Creates a new THEOplayer default UI.
@@ -109,41 +105,7 @@ export class DefaultUI extends HTMLElement {
      */
     constructor(configuration: UIPlayerConfiguration = {}) {
         super();
-        this._shadowRoot = this.initShadowRoot();
-
-        this._ui = this._shadowRoot.querySelector('theoplayer-ui')!;
-        this._ui.addEventListener(READY_EVENT, this._dispatchReadyEvent);
-        this._ui.addEventListener(USER_IDLE_CHANGE_EVENT, this._updateUserIdle);
-        this._ui.addEventListener(STREAM_TYPE_CHANGE_EVENT, this._updateStreamType);
-        this.setConfiguration_(configuration);
-
-        this._titleSlot = this._shadowRoot.querySelector<HTMLSlotElement>('slot[name="title"]') ?? undefined;
-        this._titleSlot?.addEventListener('slotchange', this._onTitleSlotChange);
-
-        this._timeRange = this._shadowRoot.querySelector('theoplayer-time-range') ?? undefined;
-
-        this._upgradeProperty('configuration');
-        this._upgradeProperty('source');
-        this._upgradeProperty('fluid');
-        this._upgradeProperty('muted');
-        this._upgradeProperty('autoplay');
-        this._upgradeProperty('streamType');
-        this._upgradeProperty('userIdleTimeout');
-        this._upgradeProperty('dvrThreshold');
-    }
-
-    protected initShadowRoot(): ShadowRoot {
-        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-        return shadowRoot;
-    }
-
-    private _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
+        this.configuration = configuration;
     }
 
     /**
@@ -152,7 +114,7 @@ export class DefaultUI extends HTMLElement {
      * This is constructed automatically as soon as a valid {@link configuration} is set.
      */
     get player(): ChromelessPlayer | undefined {
-        return this._ui.player;
+        return this._uiRef.value?.player;
     }
 
     /**
@@ -161,16 +123,18 @@ export class DefaultUI extends HTMLElement {
      * Used to create the underlying THEOplayer instance.
      */
     get configuration(): UIPlayerConfiguration {
-        return this._ui.configuration;
+        return this._configuration;
     }
 
+    @property({
+        reflect: false,
+        attribute: Attribute.CONFIGURATION,
+        converter: {
+            fromAttribute: (value: string | null) => (value ? (JSON.parse(value) as UIPlayerConfiguration) : {})
+        }
+    })
     set configuration(configuration: UIPlayerConfiguration) {
-        this.removeAttribute(Attribute.CONFIGURATION);
-        this.setConfiguration_(configuration);
-    }
-
-    private setConfiguration_(configuration: UIPlayerConfiguration) {
-        this._ui.configuration = {
+        this._configuration = {
             ...configuration,
             ads: {
                 ...(configuration.ads ?? {}),
@@ -184,47 +148,43 @@ export class DefaultUI extends HTMLElement {
     /**
      * The player's current source.
      */
-    get source(): SourceDescription | undefined {
-        return this._ui.source;
+    get source() {
+        return this._uiRef.value ? this._uiRef.value.source : this._source;
     }
 
-    set source(value: SourceDescription | undefined) {
-        this.removeAttribute(Attribute.SOURCE);
-        this._ui.source = value;
+    @property({
+        reflect: false,
+        attribute: Attribute.SOURCE,
+        converter: {
+            fromAttribute: (value: string | null) => (value ? (JSON.parse(value) as SourceDescription) : undefined)
+        }
+    })
+    set source(source: SourceDescription | undefined) {
+        if (this._uiRef.value) {
+            this._source = undefined;
+            this._uiRef.value.source = source;
+        } else {
+            this._source = source;
+        }
     }
 
     /**
-     * Whether to automatically adjusts the player's height to fit the video's aspect ratio.
+     * Whether to automatically adjust the player's height to fit the video's aspect ratio.
      */
-    get fluid(): boolean {
-        return this._ui.fluid;
-    }
-
-    set fluid(value: boolean) {
-        this._ui.fluid = value;
-    }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.FLUID })
+    accessor fluid: boolean = false;
 
     /**
      * Whether the player's audio is muted.
      */
-    get muted(): boolean {
-        return this._ui.muted;
-    }
-
-    set muted(value: boolean) {
-        this._ui.muted = value;
-    }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.MUTED })
+    accessor muted: boolean = false;
 
     /**
      * Whether the player should attempt to automatically start playback.
      */
-    get autoplay(): boolean {
-        return this._ui.autoplay;
-    }
-
-    set autoplay(value: boolean) {
-        this._ui.autoplay = value;
-    }
+    @property({ reflect: true, type: Boolean, attribute: Attribute.AUTOPLAY })
+    accessor autoplay: boolean = false;
 
     /**
      * The stream type, either "vod", "live" or "dvr".
@@ -232,19 +192,14 @@ export class DefaultUI extends HTMLElement {
      * If you know in advance that the source will be a livestream, you can set this property to avoid a screen flicker
      * when the player switches between its VOD-specific and live-only controls.
      */
-    get streamType(): StreamType {
-        return this._ui.streamType;
-    }
-
-    set streamType(value: StreamType) {
-        this._ui.streamType = value;
-    }
+    @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
+    accessor streamType: StreamType = 'vod';
 
     /**
      * Whether the user has stopped interacting with the UI and is considered to be "idle".
      */
     get userIdle(): boolean {
-        return this._ui.userIdle;
+        return this._uiRef.value ? this._uiRef.value.userIdle : false;
     }
 
     /**
@@ -252,11 +207,27 @@ export class DefaultUI extends HTMLElement {
      * and when the user is considered to be "idle".
      */
     get userIdleTimeout(): number {
-        return this._ui.userIdleTimeout;
+        return this._userIdleTimeout ?? (this.deviceType === 'tv' ? DEFAULT_TV_USER_IDLE_TIMEOUT : DEFAULT_USER_IDLE_TIMEOUT);
     }
 
-    set userIdleTimeout(value: number) {
-        this._ui.userIdleTimeout = value;
+    @property({ reflect: true, type: Number, attribute: Attribute.USER_IDLE_TIMEOUT, useDefault: true })
+    set userIdleTimeout(value: number | undefined) {
+        this._userIdleTimeout = value === undefined || isNaN(value) ? undefined : value;
+    }
+
+    /**
+     * The device type, either "desktop", "mobile" or "tv".
+     */
+    get deviceType(): DeviceType {
+        return this._deviceType;
+    }
+
+    @property({ reflect: true, type: String, attribute: Attribute.DEVICE_TYPE })
+    set deviceType(value: DeviceType) {
+        if (this._deviceType === value) return;
+        this._deviceType = value;
+        toggleAttribute(this, Attribute.MOBILE, value === 'mobile');
+        toggleAttribute(this, Attribute.TV, value === 'tv');
     }
 
     /**
@@ -264,25 +235,27 @@ export class DefaultUI extends HTMLElement {
      * and its stream type to be set to "dvr".
      */
     get dvrThreshold(): number {
-        return this._ui.dvrThreshold;
+        return this._dvrThreshold;
     }
 
+    @property({ reflect: true, type: Number, attribute: Attribute.DVR_THRESHOLD, useDefault: true })
     set dvrThreshold(value: number) {
-        this._ui.dvrThreshold = value;
+        this._dvrThreshold = isNaN(value) ? 0 : value;
     }
+
+    @state()
+    private accessor _hasTitle: boolean = false;
 
     connectedCallback(): void {
-        shadyCss.styleElement(this);
+        super.connectedCallback();
 
         if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {
-            const deviceType: DeviceType = isMobile() ? 'mobile' : isTv() ? 'tv' : 'desktop';
-            this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
+            this.deviceType = isMobile() ? 'mobile' : isTv() ? 'tv' : 'desktop';
         }
 
         if (!this._appliedExtensions) {
             this._appliedExtensions = true;
             applyExtensions(this);
-            shadyCss.styleSubtree(this);
         }
 
         this._onTitleSlotChange();
@@ -292,74 +265,141 @@ export class DefaultUI extends HTMLElement {
         clearTimeout(this._timeRangeInertTimeout);
     }
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
-        if (newValue === oldValue) {
-            return;
-        }
-        const hasValue = newValue != null;
-        if (attrName === Attribute.SOURCE) {
-            this._ui.source = newValue ? (JSON.parse(newValue) as SourceDescription) : undefined;
-        } else if (attrName === Attribute.CONFIGURATION) {
-            this.setConfiguration_(newValue ? (JSON.parse(newValue) as UIPlayerConfiguration) : {});
-        } else if (attrName === Attribute.MUTED) {
-            this.muted = hasValue;
-        } else if (attrName === Attribute.AUTOPLAY) {
-            this.autoplay = hasValue;
-        } else if (attrName === Attribute.FLUID) {
-            this.fluid = hasValue;
-        } else if (attrName === Attribute.DEVICE_TYPE) {
-            toggleAttribute(this, Attribute.MOBILE, newValue === 'mobile');
-            toggleAttribute(this, Attribute.TV, newValue === 'tv');
-            this._ui.setAttribute(Attribute.DEVICE_TYPE, newValue);
-        } else if (attrName === Attribute.STREAM_TYPE) {
-            this.streamType = newValue;
-        } else if (attrName === Attribute.USER_IDLE_TIMEOUT) {
-            this.userIdleTimeout = Number(newValue);
-        } else if (attrName === Attribute.DVR_THRESHOLD) {
-            this.dvrThreshold = Number(newValue);
-        }
-        if (DefaultUI.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
+    protected override firstUpdated() {
+        if (this._source) {
+            this._uiRef.value!.source = this._source;
+            this._source = undefined;
         }
     }
 
+    protected _onUiReady(): void {
+        this.dispatchEvent(createCustomEvent(READY_EVENT));
+    }
+
     private readonly _updateStreamType = () => {
-        this.setAttribute(Attribute.STREAM_TYPE, this.streamType);
-        if (this._timeRange) {
-            // Hide seekbar when stream is live with no DVR
-            toggleAttribute(this._timeRange, Attribute.HIDDEN, this.streamType === 'live');
+        if (this._uiRef.value) {
+            this.streamType = this._uiRef.value.streamType;
         }
     };
 
-    private readonly _dispatchReadyEvent = () => {
-        this.dispatchEvent(createCustomEvent(READY_EVENT));
-    };
-
     private readonly _updateUserIdle = () => {
-        if (this._timeRange) {
-            clearTimeout(this._timeRangeInertTimeout);
-            if (this.userIdle) {
-                // Disable seekbar when user is idle
-                this._timeRange.inert = true;
-            } else {
-                // Re-enable seekbar when user is active,
-                // but wait a little bit to prevent accidentally clicking the seekbar.
-                this._timeRangeInertTimeout = setTimeout(() => {
-                    this._timeRange!.inert = false;
-                }, ACCIDENTAL_CLICK_DELAY);
-            }
+        clearTimeout(this._timeRangeInertTimeout);
+        if (this.userIdle) {
+            // Disable seekbar when user is idle
+            this._timeRangeInert = true;
+        } else {
+            // Re-enable seekbar when user is active,
+            // but wait a little bit to prevent accidentally clicking the seekbar.
+            this._timeRangeInertTimeout = setTimeout(() => {
+                this._timeRangeInert = false;
+            }, ACCIDENTAL_CLICK_DELAY);
         }
         this.dispatchEvent(createCustomEvent(USER_IDLE_CHANGE_EVENT));
     };
 
     private readonly _onTitleSlotChange = () => {
-        if (this._titleSlot) {
-            toggleAttribute(this, Attribute.HAS_TITLE, this._titleSlot.assignedNodes().length > 0);
-        }
+        this._hasTitle = this.titleSlotNodes.length > 0;
     };
-}
 
-customElements.define('theoplayer-default-ui', DefaultUI);
+    protected override render(): HTMLTemplateResult {
+        return html`<theoplayer-ui
+            ${ref(this._uiRef)}
+            .configuration=${this.configuration}
+            .fluid=${this.fluid}
+            .muted=${this.muted}
+            .autoplay=${this.autoplay}
+            .deviceType=${this.deviceType}
+            .streamType=${this.streamType}
+            .userIdleTimeout=${this.userIdleTimeout}
+            .dvrThreshold=${this.dvrThreshold}
+            @theoplayerready=${this._onUiReady}
+            @theoplayeruseridlechange=${this._updateUserIdle}
+            @theoplayerstreamtypechange=${this._updateStreamType}
+            >${this.renderUiContent()}
+        </theoplayer-ui>`;
+    }
+
+    protected renderUiContent(): HTMLTemplateResult {
+        return html`
+            <theoplayer-control-bar slot="top-chrome" part="top-chrome">
+                <div part="title" ad-hidden style=${styleMap({ display: this._hasTitle ? '' : 'none' })}>
+                    <slot name="title" @slotchange=${this._onTitleSlotChange}></slot>
+                </div>
+                <span class="theoplayer-spacer"></span>
+                <theoplayer-language-menu-button menu="language-menu" mobile-only ad-hidden></theoplayer-language-menu-button>
+                <theoplayer-airplay-button mobile-only ad-hidden></theoplayer-airplay-button>
+                <theoplayer-chromecast-button mobile-only ad-hidden></theoplayer-chromecast-button>
+                <slot name="top-control-bar"></slot>
+                <theoplayer-settings-menu-button menu="settings-menu" mobile-only ad-hidden></theoplayer-settings-menu-button>
+                <theoplayer-ad-clickthrough-button ad-only></theoplayer-ad-clickthrough-button>
+            </theoplayer-control-bar>
+            <theoplayer-loading-indicator slot="centered-loading" no-auto-hide></theoplayer-loading-indicator>
+            <div slot="centered-chrome" part="centered-chrome">
+                <slot name="centered-chrome">
+                    <theoplayer-seek-button
+                        part="seek-back-button seek-button center-button"
+                        seek-offset="-10"
+                        mobile-only
+                        ad-hidden
+                    ></theoplayer-seek-button>
+                    <theoplayer-play-button part="center-play-button play-button center-button"></theoplayer-play-button>
+                    <theoplayer-seek-button
+                        part="seek-forward-button seek-button center-button"
+                        seek-offset="10"
+                        mobile-only
+                        ad-hidden
+                    ></theoplayer-seek-button>
+                </slot>
+            </div>
+            <div slot="middle-chrome" part="middle-chrome">
+                <theoplayer-chromecast-display></theoplayer-chromecast-display>
+            </div>
+            <div part="bottom-chrome">
+                <theoplayer-control-bar part="ad-chrome" ad-only>
+                    <theoplayer-ad-display></theoplayer-ad-display>
+                    <theoplayer-ad-countdown></theoplayer-ad-countdown>
+                    <span class="theoplayer-spacer"></span>
+                    <theoplayer-ad-skip-button></theoplayer-ad-skip-button>
+                </theoplayer-control-bar>
+                <theoplayer-control-bar>
+                    <theoplayer-play-button part="play-button" mobile-hidden ad-only class="theoplayer-ad-control"></theoplayer-play-button>
+                    <theoplayer-mute-button part="mute-button" ad-only class="theoplayer-ad-control"></theoplayer-mute-button>
+                    <theoplayer-time-range
+                        part="time-range"
+                        show-ad-markers
+                        tv-focus
+                        .inert=${this._timeRangeInert}
+                        class="theoplayer-ad-control"
+                        style=${styleMap({
+                            // Hide seekbar when stream is live with no DVR
+                            display: this.streamType === 'live' ? 'none' : ''
+                        })}
+                    ></theoplayer-time-range>
+                    <theoplayer-chromecast-button tv-hidden ad-only class="theoplayer-ad-control"></theoplayer-chromecast-button>
+                    <theoplayer-fullscreen-button ad-only class="theoplayer-ad-control"></theoplayer-fullscreen-button>
+                </theoplayer-control-bar>
+                <theoplayer-control-bar ad-hidden>
+                    <theoplayer-play-button part="play-button" mobile-hidden></theoplayer-play-button>
+                    <theoplayer-mute-button part="mute-button" tv-hidden></theoplayer-mute-button>
+                    <theoplayer-volume-range part="volume-range" mobile-hidden tv-hidden></theoplayer-volume-range>
+                    <theoplayer-live-button part="live-button" live-only ad-hidden></theoplayer-live-button>
+                    <theoplayer-time-display show-duration remaining-when-live></theoplayer-time-display>
+                    <span class="theoplayer-spacer" style="pointer-events: auto"></span>
+                    <theoplayer-language-menu-button menu="language-menu" mobile-hidden ad-hidden></theoplayer-language-menu-button>
+                    <theoplayer-airplay-button tv-hidden mobile-hidden ad-hidden></theoplayer-airplay-button>
+                    <theoplayer-chromecast-button tv-hidden mobile-hidden ad-hidden></theoplayer-chromecast-button>
+                    <slot name="bottom-control-bar"></slot>
+                    <theoplayer-settings-menu-button menu="settings-menu" mobile-hidden ad-hidden></theoplayer-settings-menu-button>
+                    <theoplayer-fullscreen-button part="fullscreen-button" tv-hidden></theoplayer-fullscreen-button>
+                </theoplayer-control-bar>
+            </div>
+            <theoplayer-language-menu id="language-menu" slot="menu" hidden></theoplayer-language-menu>
+            <theoplayer-settings-menu id="settings-menu" slot="menu" hidden></theoplayer-settings-menu>
+            <slot name="error" slot="error"><theoplayer-error-display></theoplayer-error-display></slot>
+            <slot name="menu" slot="menu"></slot>
+        `;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {

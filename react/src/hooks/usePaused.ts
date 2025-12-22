@@ -1,6 +1,6 @@
 import { useCallback, useContext, useSyncExternalStore } from 'react';
 import { PlayerContext } from '../context';
-import type { PlayerEventMap } from 'theoplayer';
+import type { PlayerEventMap } from 'theoplayer/chromeless';
 
 const PAUSED_CHANGE_EVENTS = ['play', 'pause'] satisfies ReadonlyArray<keyof PlayerEventMap>;
 
