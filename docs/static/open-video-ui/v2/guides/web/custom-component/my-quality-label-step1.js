@@ -1,33 +1,25 @@
-// This <template> contains the content of our custom label.
-// Its contents will be cloned into every <my-quality-label>.
-const template = document.createElement('template');
-template.innerHTML = `
-<style>
-/* This rule targets the element itself, i.e. <my-quality-label> */
-:host {
-    /* Use the same text and background color as the rest of the UI controls */
-    color: var(--theoplayer-text-color, #fff);
-    background: var(--theoplayer-control-background, transparent);
-    
-    /* Add some padding */
-    padding: var(--theoplayer-control-padding, 10px);
-}
-</style>
-<span></span>
+import { css, html, LitElement } from 'lit';
+
+// This style will be applied to every <my-quality-label>.
+const myQualityLabelStyle = css`
+    /* This rule targets the element itself, i.e. <my-quality-label> */
+    :host {
+        /* Use the same text and background color as the rest of the UI controls */
+        color: var(--theoplayer-text-color, #fff);
+        background: var(--theoplayer-control-background, transparent);
+
+        /* Add some padding */
+        padding: var(--theoplayer-control-padding, 10px);
+    }
 `;
 
 // Define a new class for our custom element.
-export class MyQualityLabel extends HTMLElement {
-    constructor() {
-        super();
+export class MyQualityLabel extends LitElement {
+    static styles = [myQualityLabelStyle];
 
-        // Create a shadow root, and clone our template into it
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
-
+    render() {
         // Show something (for testing)
-        this._labelSpan = shadowRoot.querySelector('span');
-        this._labelSpan.textContent = '1080p';
+        return html`1080p`;
     }
 }
 
