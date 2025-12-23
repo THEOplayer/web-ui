@@ -1,24 +1,27 @@
 import { StateReceiverMixin } from '@theoplayer/web-ui';
+import { css, html, LitElement } from 'lit';
 
-const template = document.createElement('template');
-template.innerHTML = `
-<style>
-:host {
-    color: var(--theoplayer-text-color, #fff);
-    background: var(--theoplayer-control-background, transparent);
-    padding: var(--theoplayer-control-padding, 10px);
-}
-</style>
-<span></span>
+const myQualityLabelStyle = css`
+    :host {
+        color: var(--theoplayer-text-color, #fff);
+        background: var(--theoplayer-control-background, transparent);
+        padding: var(--theoplayer-control-padding, 10px);
+    }
 `;
 
-export class MyQualityLabel extends StateReceiverMixin(HTMLElement, ['player']) {
+export class MyQualityLabel extends StateReceiverMixin(LitElement, ['player']) {
+    static styles = [myQualityLabelStyle];
+    // highlight-start
+    static properties = {
+        _activeVideoQuality: { state: true }
+    };
+    // highlight-end
+
     constructor() {
         super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template.content.cloneNode(true));
-        this._labelSpan = shadowRoot.querySelector('span');
-        this._labelSpan.textContent = '';
+        this._player = undefined;
+        this._activeVideoTrack = undefined;
+        this._activeVideoQuality = undefined;
     }
 
     get player() {
@@ -60,7 +63,7 @@ export class MyQualityLabel extends StateReceiverMixin(HTMLElement, ['player']) 
             // If the track already has an active quality,
             // start using it right away!
             if (this._activeVideoTrack.activeQuality) {
-                this.updateActiveTrack(this._activeVideoTrack.activeQuality);
+                this.updateActiveQuality(this._activeVideoTrack.activeQuality);
             }
             // highlight-end
         }
@@ -71,12 +74,19 @@ export class MyQualityLabel extends StateReceiverMixin(HTMLElement, ['player']) 
     };
     updateActiveQuality(quality) {
         // highlight-start
-        if (quality) {
+        // Update our (reactive) internal state, which will trigger a re-render.
+        this._activeVideoQuality = quality;
+        // highlight-end
+    }
+
+    render() {
+        // highlight-start
+        if (this._activeVideoQuality) {
             // Show the quality's height in our <span>
-            this._labelSpan.textContent = `${quality.height}p`;
+            return html`${this._activeVideoQuality.height}p`;
         } else {
             // No active quality yet...
-            this._labelSpan.textContent = '';
+            return html``;
         }
         // highlight-end
     }
