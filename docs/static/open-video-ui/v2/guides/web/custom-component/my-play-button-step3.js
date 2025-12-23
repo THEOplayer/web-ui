@@ -40,14 +40,12 @@ export class MyPlayButton extends StateReceiverMixin(Button, ['player']) {
         // and update our paused state to trigger a re-render.
         if (this._player.paused) {
             this._player.play();
-            // highlight-start
+            // highlight-next-line
             this._paused = false;
-            // highlight-end
         } else {
             this._player.pause();
-            // highlight-start
+            // highlight-next-line
             this._paused = true;
-            // highlight-end
         }
     }
 }
