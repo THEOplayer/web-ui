@@ -1,16 +1,16 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { createRef, ref, type Ref } from 'lit/directives/ref.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import previewThumbnailCss from './PreviewThumbnail.css';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer, TextTrack, TextTrackCue, TextTrackCueList, TextTracksList } from 'theoplayer/chromeless';
 import { arrayFind, noOp } from '../util/CommonUtils';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-preview-thumbnail', `<style>${previewThumbnailCss}</style><canvas></canvas>`);
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 /**
- * `<theoplayer-preview-thumbnail>` - A display that shows the thumbnail image at the current preview time
+ * A display that shows the thumbnail image at the current preview time
  * of a {@link TimeRange | `<theoplayer-time-range>`}.
  *
  * The first `metadata` text track whose label equals `"thumbnails"` is used as source for the thumbnails.
@@ -19,11 +19,14 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  * (e.g. `#xywh=180,80,60,40`), then the thumbnail is clipped to the rectangle defined by that fragment.
  *
  * If the stream does not contain thumbnails, then this display shows nothing.
- * @group Components
  */
-export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player', 'previewTime']) {
-    private readonly _canvasEl: HTMLCanvasElement;
-    private readonly _canvasContext: CanvasRenderingContext2D;
+@customElement('theoplayer-preview-thumbnail')
+@stateReceiver(['player', 'previewTime'])
+export class PreviewThumbnail extends LitElement {
+    static override styles = [previewThumbnailCss];
+
+    private readonly _canvasRef: Ref<HTMLCanvasElement> = createRef<HTMLCanvasElement>();
+    private _canvasContext: CanvasRenderingContext2D | undefined;
     private readonly _thumbnailImageSource: HTMLImageElement;
 
     private _player: ChromelessPlayer | undefined;
@@ -32,37 +35,21 @@ export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player',
     private _thumbnailTextTrack: TextTrack | undefined;
     private _lastLoadedThumbnailUrl: string | undefined;
 
+    @state()
+    private accessor _thumbnailVisible: boolean = false;
+
     constructor() {
         super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-
-        this._canvasEl = shadowRoot.querySelector('canvas')!;
-        this._canvasContext = this._canvasEl.getContext('2d')!;
 
         this._thumbnailImageSource = document.createElement('img');
         this._thumbnailImageSource.decoding = 'async';
-
-        this._upgradeProperty('previewTime');
-        this._upgradeProperty('player');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
-
-    connectedCallback(): void {
-        shadyCss.styleElement(this);
     }
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -78,6 +65,7 @@ export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player',
         return this._previewTime;
     }
 
+    @state()
     set previewTime(previewTime: number) {
         this._previewTime = previewTime;
         this.updateThumbnail_();
@@ -143,26 +131,33 @@ export class PreviewThumbnail extends StateReceiverMixin(HTMLElement, ['player',
     }
 
     private showThumbnail_(sprite: Sprite | undefined): void {
+        const canvas = this._canvasRef.value;
+        if (!canvas) return;
+        this._canvasContext ??= canvas.getContext('2d') ?? undefined;
+        if (!this._canvasContext) return;
         if (sprite) {
             // Draw part of image
-            this._canvasEl.width = sprite.w;
-            this._canvasEl.height = sprite.h;
+            canvas.width = sprite.w;
+            canvas.height = sprite.h;
             this._canvasContext.drawImage(this._thumbnailImageSource, sprite.x, sprite.y, sprite.w, sprite.h, 0, 0, sprite.w, sprite.h);
         } else {
             // Draw entire image
-            this._canvasEl.width = this._thumbnailImageSource.naturalWidth;
-            this._canvasEl.height = this._thumbnailImageSource.naturalHeight;
+            canvas.width = this._thumbnailImageSource.naturalWidth;
+            canvas.height = this._thumbnailImageSource.naturalHeight;
             this._canvasContext.drawImage(this._thumbnailImageSource, 0, 0);
         }
-        this._canvasEl.style.display = 'block';
+        this._thumbnailVisible = true;
     }
 
     private hideThumbnail_(): void {
-        this._canvasEl.style.display = 'none';
+        this._thumbnailVisible = false;
+    }
+
+    protected override render(): HTMLTemplateResult {
+        const canvasStyle = { display: this._thumbnailVisible ? 'block' : 'none' };
+        return html`<canvas ${ref(this._canvasRef)} style=${styleMap(canvasStyle)}></canvas>`;
     }
 }
-
-customElements.define('theoplayer-preview-thumbnail', PreviewThumbnail);
 
 declare global {
     interface HTMLElementTagNameMap {

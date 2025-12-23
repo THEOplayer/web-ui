@@ -1,8 +1,10 @@
-import * as shadyCss from '@webcomponents/shadycss';
-import { Range, rangeTemplate } from './Range';
-import timeRangeHtml from './TimeRange.html';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { createRef, type Ref, ref } from 'lit/directives/ref.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { Range } from './Range';
 import timeRangeCss from './TimeRange.css';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { Ads, ChromelessPlayer, TimeRanges } from 'theoplayer/chromeless';
 import { formatAsTimePhrase } from '../util/TimeUtils';
 import { createCustomEvent } from '../util/EventUtils';
@@ -13,13 +15,10 @@ import type { StreamType } from '../util/StreamType';
 import { isLinearAd } from '../util/AdUtils';
 import type { ColorStops } from '../util/ColorStops';
 import { KeyCode } from '../util/KeyCode';
-import { createTemplate } from '../util/TemplateUtils';
 
 // Load components used in template
 import './PreviewThumbnail';
 import './PreviewTimeDisplay';
-
-const template = createTemplate('theoplayer-time-range', rangeTemplate(timeRangeHtml, timeRangeCss));
 
 const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 'seeked'] as const;
 const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'durationchange', 'readystatechange', 'error'] as const;
@@ -32,23 +31,23 @@ const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 const AD_MARKER_WIDTH = 1;
 
 /**
- * `<theoplayer-time-range>` - A seek bar, showing the current time of the player,
+ * A seek bar, showing the current time of the player,
  * and which seeks the player when clicked or dragged.
  *
  * @slot `preview` - A slot holding a preview of the seek time, shown while hovering the seek bar.
  *   By default, this shows the {@link PreviewTimeDisplay | preview time} and
  *   the {@link PreviewThumbnail | preview thumbnail}.
- * @group Components
  */
-export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType', 'deviceType']) {
-    static get observedAttributes() {
-        return [...Range.observedAttributes, Attribute.SHOW_AD_MARKERS];
-    }
+@customElement('theoplayer-time-range')
+@stateReceiver(['player', 'streamType', 'deviceType'])
+export class TimeRange extends Range {
+    static override styles = [...Range.styles, timeRangeCss];
 
-    private readonly _previewRailEl: HTMLElement;
-    private readonly _previewBoxEl: HTMLElement;
+    private readonly _previewBoxEl: Ref<HTMLElement> = createRef<HTMLElement>();
 
     private _player: ChromelessPlayer | undefined;
+    private _streamType: StreamType = 'vod';
+    private _showAdMarkers: boolean = false;
     private _ads: Ads | undefined;
     private _pausedWhileScrubbing: boolean = false;
 
@@ -58,25 +57,36 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
     private _lastPlaybackRate: number = 0;
 
     constructor() {
-        super({ template: template() });
-
-        this._previewRailEl = this.shadowRoot!.querySelector('.theoplayer-time-range-preview-rail')!;
-        this._previewBoxEl = this._previewRailEl.querySelector('[part~="preview-box"]')!;
-
-        this._rangeEl.setAttribute(Attribute.ARIA_LIVE, 'off');
-        this._rangeEl.addEventListener('mousedown', this._pauseOnScrubStart);
-        this._rangeEl.addEventListener('pointerdown', this._pauseOnScrubStart);
-
-        this._upgradeProperty('player');
+        super();
     }
 
     override connectedCallback(): void {
         super.connectedCallback();
+
+        if (!this.hasAttribute('min')) {
+            this.min = 0;
+        }
+        if (!this.hasAttribute('max')) {
+            this.max = 1000;
+        }
+        if (!this.hasAttribute(Attribute.ARIA_LIVE)) {
+            this.ariaLive = 'off';
+        }
+
         this._toggleAutoAdvance();
+    }
+
+    protected override firstUpdated(_changedProperties: PropertyValues) {
+        this._rangeRef.value?.addEventListener('mousedown', this._pauseOnScrubStart);
+        this._rangeRef.value?.addEventListener('pointerdown', this._pauseOnScrubStart);
     }
 
     override disconnectedCallback(): void {
         super.disconnectedCallback();
+
+        this._rangeRef.value?.removeEventListener('mousedown', this._pauseOnScrubStart);
+        this._rangeRef.value?.removeEventListener('pointerdown', this._pauseOnScrubStart);
+
         this._toggleAutoAdvance();
     }
 
@@ -84,6 +94,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -105,11 +116,23 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
     }
 
     get streamType(): StreamType {
-        return (this.getAttribute(Attribute.STREAM_TYPE) || 'vod') as StreamType;
+        return this._streamType;
     }
 
+    @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
     set streamType(streamType: StreamType) {
-        this.setAttribute(Attribute.STREAM_TYPE, streamType);
+        this._streamType = streamType;
+        this.updateDisabled_();
+    }
+
+    get showAdMarkers(): boolean {
+        return this._showAdMarkers;
+    }
+
+    @property({ reflect: true, type: Boolean, attribute: Attribute.SHOW_AD_MARKERS })
+    set showAdMarkers(showAdMarkers: boolean) {
+        this._showAdMarkers = showAdMarkers;
+        this._updateRange();
     }
 
     private readonly _updateFromPlayer = () => {
@@ -122,6 +145,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         const seekable = this._player.seekable;
         let min: number;
         let max: number;
+        let value: number = this._lastCurrentTime;
         if (seekable.length !== 0) {
             min = seekable.start(0);
             max = seekable.end(0);
@@ -131,12 +155,11 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         }
         if (!isFinite(this._lastCurrentTime)) {
             const isLive = this._player.duration === Infinity;
-            this._lastCurrentTime = isLive ? max : min;
+            value = isLive ? max : min;
         }
-        this._rangeEl.min = String(min);
-        this._rangeEl.max = String(max);
-        this._rangeEl.valueAsNumber = this._lastCurrentTime;
-        this.update();
+        this.min = min;
+        this.max = max;
+        this.value = value;
         this.updateDisabled_(seekable);
     };
 
@@ -145,9 +168,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         if (seekable !== undefined) {
             disabled ||= seekable.length === 0;
         }
-        if (this.disabled !== disabled) {
-            this.disabled = disabled;
-        }
+        this.disabled = disabled;
     }
 
     protected override getAriaLabel(): string {
@@ -161,21 +182,6 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
             return `${currentTimePhrase} of ${totalTimePhrase}`;
         }
         return DEFAULT_MISSING_TIME_PHRASE;
-    }
-
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (newValue === oldValue) {
-            return;
-        }
-        if (attrName === Attribute.STREAM_TYPE) {
-            this.updateDisabled_();
-        } else if (attrName === Attribute.SHOW_AD_MARKERS) {
-            this.update();
-        }
-        if (TimeRange.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
     }
 
     protected override handleInput(): void {
@@ -225,6 +231,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
             !this._player.ended &&
             !this._player.errorObject &&
             this._player.readyState >= 3 &&
+            isFinite(this._lastCurrentTime) &&
             this.needToUpdateEveryFrame_()
         );
     }
@@ -262,26 +269,32 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
         const delta = (performance.now() - this._lastUpdateTime) / 1000;
         const newValue = this._lastCurrentTime + delta * this._lastPlaybackRate;
         if (Math.abs(newValue - this.value) >= this.getMinimumStepForVisibleChange_()) {
-            this._rangeEl.valueAsNumber = newValue;
+            this.value = newValue;
 
             // Use cached width to avoid synchronous layout
-            this.update(/* useCachedWidth = */ true);
+            this._updateRange(/* useCachedWidth = */ true);
         }
 
         this._autoAdvanceId = requestAnimationFrame(this._autoAdvanceWhilePlaying);
     };
+
+    @state()
+    private accessor _previewRailTransform: string = '';
 
     protected override updatePointer_(mousePercent: number, rangeRect: DOMRectReadOnly): void {
         super.updatePointer_(mousePercent, rangeRect);
 
         // Update preview rail, keeping the preview box within bounds
         let previewPos = rangeRect.left + mousePercent * rangeRect.width;
-        const previewBoxRect = this._previewBoxEl.getBoundingClientRect();
-        const minPreviewPos = rangeRect.left + previewBoxRect.width / 2;
-        const maxPreviewPos = rangeRect.right - previewBoxRect.width / 2;
-        previewPos = Math.max(minPreviewPos, Math.min(maxPreviewPos, previewPos));
-        const previewPosFraction = (previewPos - rangeRect.left) / rangeRect.width;
-        this._previewRailEl.style.transform = `translateX(${(previewPosFraction * 100 * 100).toFixed(6)}%)`;
+        const previewBoxEl = this._previewBoxEl.value;
+        if (previewBoxEl) {
+            const previewBoxRect = previewBoxEl.getBoundingClientRect();
+            const minPreviewPos = rangeRect.left + previewBoxRect.width / 2;
+            const maxPreviewPos = rangeRect.right - previewBoxRect.width / 2;
+            previewPos = Math.max(minPreviewPos, Math.min(maxPreviewPos, previewPos));
+            const previewPosFraction = (previewPos - rangeRect.left) / rangeRect.width;
+            this._previewRailTransform = `translateX(${(previewPosFraction * 100 * 100).toFixed(6)}%)`;
+        }
 
         // Propagate preview time to parent
         if (this._player === undefined) {
@@ -299,7 +312,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
 
     protected override getBarColors(): ColorStops {
         const colorStops = super.getBarColors();
-        if (!this.hasAttribute(Attribute.SHOW_AD_MARKERS) || !this._player || !this._player.ads) {
+        if (!this.showAdMarkers || !this._player || !this._player.ads) {
             return colorStops;
         }
         if (this._player.ads.playing) {
@@ -335,7 +348,7 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
     }
 
     private readonly _onAdChange = () => {
-        this.update();
+        this._updateRange();
     };
 
     protected override handleKeyDown_(e: KeyboardEvent) {
@@ -350,9 +363,20 @@ export class TimeRange extends StateReceiverMixin(Range, ['player', 'streamType'
             }
         }
     }
-}
 
-customElements.define('theoplayer-time-range', TimeRange);
+    protected override renderRangeExtras(): HTMLTemplateResult {
+        return html`
+            <div class="theoplayer-time-range-preview-rail" style=${styleMap({ transform: this._previewRailTransform })}>
+                <div part="box preview-box" ${ref(this._previewBoxEl)}>
+                    <slot name="preview">
+                        <theoplayer-preview-thumbnail></theoplayer-preview-thumbnail>
+                        <theoplayer-preview-time-display remaining-when-live></theoplayer-preview-time-display>
+                    </slot>
+                </div>
+            </div>
+        `;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {
