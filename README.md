@@ -137,7 +137,7 @@ By default, Open Video UI for Web targets modern browsers that support modern Ja
 On older browsers (such as Internet Explorer 11 and older smart TVs), you need to load a different version of the Open Video UI that uses older JavaScript syntax. You also need to load additional polyfills for missing features such as `Promise`, `Symbol.iterator` or Custom Elements:
 
 - For ES2015 features like `Promise` and `Symbol.iterator`, we recommend [the Cloudflare mirror of Polyfill.io](https://cdnjs.cloudflare.com/polyfill/).
-- For Custom Elements, we recommend loading our polyfill bundle from `@theoplayer/web-ui/polyfills`. Alternatively, you can load the [Web Components Polyfills](https://github.com/webcomponents/polyfills).
+- For Custom Elements, we recommend loading our polyfill bundle from `@theoplayer/web-ui/polyfills`. Alternatively, you can load the [Web Components Polyfills](https://github.com/webcomponents/polyfills) along with [Lit's `polyfill-support` module](https://lit.dev/docs/v2/tools/requirements/#polyfills).
 
 * Option 1: in your HTML. This uses [differential serving](https://css-tricks.com/differential-serving/) so modern browsers will load the modern build (with `type="module"`), while legacy browsers will load the legacy build (with `nomodule`).
 
