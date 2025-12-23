@@ -278,7 +278,9 @@ Right now, the quality label is static, it doesn't actually update when the play
    so we'll be notified when the video track becomes available.
 3. We register an `activequalitychanged` event listener on that video track,
    so we can respond when the active video quality changes.
-4. When our `activequalitychanged` listener fires, we update the contents of our `<span>` with the quality's height.
+4. When our `activequalitychanged` listener fires, we update the reactive property `this._activeVideoQuality`,
+   which will trigger a re-render when changed.
+5. When we re-render the component, we return an HTML template containing the active quality's height.
 
 <CodeBlock
     language="js"
