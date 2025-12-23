@@ -18,8 +18,17 @@ export class VolumeRange extends Range {
 
     constructor() {
         super();
-        this.min = 0;
-        this.max = 1;
+    }
+
+    override connectedCallback(): void {
+        super.connectedCallback();
+
+        if (!this.hasAttribute('min')) {
+            this.min = 0;
+        }
+        if (!this.hasAttribute('max')) {
+            this.max = 1;
+        }
     }
 
     get player(): ChromelessPlayer | undefined {

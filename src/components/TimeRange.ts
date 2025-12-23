@@ -58,13 +58,21 @@ export class TimeRange extends Range {
 
     constructor() {
         super();
-        this.min = 0;
-        this.max = 1000;
-        this.ariaLive = 'off';
     }
 
     override connectedCallback(): void {
         super.connectedCallback();
+
+        if (!this.hasAttribute('min')) {
+            this.min = 0;
+        }
+        if (!this.hasAttribute('max')) {
+            this.max = 1000;
+        }
+        if (!this.hasAttribute(Attribute.ARIA_LIVE)) {
+            this.ariaLive = 'off';
+        }
+
         this._toggleAutoAdvance();
     }
 
