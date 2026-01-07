@@ -1,9 +1,12 @@
 import { html, LitElement, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
+import rollingChartCss from './RollingChart.css';
 
 @customElement('theoplayer-rolling-chart')
 export class RollingChart extends LitElement {
+    static override styles = [rollingChartCss];
+
     private _canvasRef: Ref<HTMLCanvasElement> = createRef();
     private _context: CanvasRenderingContext2D | undefined = undefined;
     private readonly _samples: number[] = [];
