@@ -11,6 +11,7 @@ import { isMobile, isTv } from './util/Environment';
 import type { DeviceType } from './util/DeviceType';
 import type { StreamType } from './util/StreamType';
 import { USER_IDLE_CHANGE_EVENT } from './events/UserIdleChangeEvent';
+import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
 import { READY_EVENT } from './events/ReadyEvent';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
 import { toggleAttribute } from './util/CommonUtils';
@@ -243,6 +244,13 @@ export class DefaultUI extends LitElement {
         this._dvrThreshold = isNaN(value) ? 0 : value;
     }
 
+    /**
+     * Whether a menu is currently open.
+     */
+    get menuOpened(): boolean {
+        return this._uiRef.value ? this._uiRef.value.menuOpened : false;
+    }
+
     @state()
     private accessor _hasTitle: boolean = false;
 
@@ -282,6 +290,11 @@ export class DefaultUI extends LitElement {
         }
     };
 
+    private readonly _updateMenuOpened = () => {
+        toggleAttribute(this, Attribute.MENU_OPENED, this.menuOpened);
+        this.dispatchEvent(createCustomEvent(MENU_CHANGE_EVENT));
+    };
+
     private readonly _updateUserIdle = () => {
         clearTimeout(this._timeRangeInertTimeout);
         if (this.userIdle) {
@@ -315,6 +328,7 @@ export class DefaultUI extends LitElement {
             @theoplayerready=${this._onUiReady}
             @theoplayeruseridlechange=${this._updateUserIdle}
             @theoplayerstreamtypechange=${this._updateStreamType}
+            @theoplayermenuchange=${this._updateMenuOpened}
             >${this.renderUiContent()}
         </theoplayer-ui>`;
     }
