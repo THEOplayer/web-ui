@@ -1,13 +1,15 @@
 :host {
     display: grid;
     grid-template-columns: min-content 1fr;
-    grid-auto-rows: var(--theoplayer-debug-row-height, 20px);
+    grid-auto-rows: min-content;
     column-gap: var(--theoplayer-debug-column-gap, 5px);
+    row-gap: var(--theoplayer-debug-column-row, 2px);
     align-items: center;
-    font-size: var(--theoplayer-text-font-size, 14px);
-    line-height: 1em;
+    font-size: var(--theoplayer-debug-font-size, 12px);
+    line-height: var(--theoplayer-debug-row-height, 16px);
 }
 
+[hidden],
 :host([hidden]) {
     display: none !important;
 }
@@ -20,7 +22,21 @@
 
 .value {
     grid-column: 2;
-    overflow: hidden;
+    overflow-x: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.value a {
+    color: inherit;
+}
+
+.value-chart {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.value-chart theoplayer-rolling-chart {
+    height: var(--theoplayer-debug-row-height, 16px);
 }

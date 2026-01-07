@@ -237,7 +237,7 @@ export class DebugDisplay extends LitElement {
                 )}
             </div>
             <div class="label">Download speed</div>
-            <div class="value">
+            <div class="value value-chart">
                 <theoplayer-rolling-chart
                     ${ref(this._downloadSpeedRef)}
                     max-samples="200"
@@ -249,7 +249,7 @@ export class DebugDisplay extends LitElement {
                 <span>${formatBandwidth(this.currentBandwidthEstimate)}</span>
             </div>
             <div class="label">Buffer health</div>
-            <div class="value">
+            <div class="value value-chart">
                 <theoplayer-rolling-chart
                     ${ref(this._bufferHealthRef)}
                     max-samples="200"
@@ -261,7 +261,7 @@ export class DebugDisplay extends LitElement {
                 <span>${this.currentBufferHealth.toFixed(3)}s</span>
             </div>
             <div class="label" ?hidden=${!this._live}>Latency</div>
-            <div class="value" ?hidden=${!this._live}>
+            <div class="value value-chart" ?hidden=${!this._live}>
                 <theoplayer-rolling-chart
                     ${ref(this._latencyRef)}
                     max-samples="200"
