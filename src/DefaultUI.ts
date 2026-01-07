@@ -297,7 +297,9 @@ export class DefaultUI extends LitElement {
 
     private readonly _updateUserIdle = () => {
         clearTimeout(this._timeRangeInertTimeout);
-        if (this.userIdle) {
+        const userIdle = this.userIdle;
+        toggleAttribute(this, Attribute.USER_IDLE, userIdle);
+        if (userIdle) {
             // Disable seekbar when user is idle
             this._timeRangeInert = true;
         } else {
