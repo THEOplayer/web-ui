@@ -1,0 +1,8 @@
+:host {
+    box-sizing: border-box;
+    display: inline-flex;
+}
+
+:host([hidden]) {
+    display: none !important;
+}
