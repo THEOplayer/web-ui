@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 1.16.1
+
+### 🐛 Issues
+
+- Fixed a regression where menus would always fill the entire player on desktop (rather than opening as a small popup in the bottom right corner).
+
 ## 1.16.0
 
 ### ✨ Features
