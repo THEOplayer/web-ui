@@ -4,6 +4,7 @@ import { templateContent } from 'lit/directives/template-content.js';
 import buttonCss from './Button.css';
 import { Attribute } from '../util/Attribute';
 import { isActivationKey } from '../util/KeyCode';
+import { createCustomEvent } from '../util/EventUtils';
 
 /** @deprecated */
 export interface ButtonOptions {
@@ -92,6 +93,52 @@ export class Button extends LitElement {
         }
     }
 
+    /**
+     * Specifies the action to be performed on an element being controlled via the `commandfor` attribute.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button#command
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/command
+     */
+    @property({ reflect: true, type: String, attribute: Attribute.COMMAND })
+    accessor command: string | null = null;
+
+    private _commandForAttribute: string | null = null;
+    private _explicitCommandForElement: HTMLElement | null = null;
+
+    @property({ reflect: true, state: true, type: String, attribute: Attribute.COMMAND_FOR })
+    private set commandFor_(commandFor: string | null) {
+        this._commandForAttribute = commandFor;
+        this._explicitCommandForElement = null;
+    }
+
+    /**
+     * Turns the `<theoplayer-button>` element into a command button, controlling a given interactive element
+     * by issuing the command specified in the button's {@link command |`command`} attribute.
+     *
+     * The `commandfor` attribute takes the ID of the element to control as its value.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button#commandfor
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/commandForElement
+     */
+    get commandForElement(): HTMLElement | null {
+        // https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#attr-associated-element
+        if (this._explicitCommandForElement) return this._explicitCommandForElement;
+        const commandFor = this._commandForAttribute;
+        if (!commandFor) return null;
+        const root = this.getRootNode() as Document | ShadowRoot | null;
+        return root?.getElementById?.(commandFor) ?? null;
+    }
+
+    set commandForElement(element: HTMLElement | null) {
+        if (!element) {
+            this.commandFor_ = null;
+            this._explicitCommandForElement = null;
+        } else {
+            this.commandFor_ = '';
+            this._explicitCommandForElement = element;
+        }
+    }
+
     private _enable(): void {
         this.removeEventListener('click', this._onClick);
         this.removeEventListener('keydown', this._onKeyDown);
@@ -119,8 +166,8 @@ export class Button extends LitElement {
         this.blur();
     }
 
-    private readonly _onClick = () => {
-        this.handleClick();
+    private readonly _onClick = (e: Event) => {
+        this.handleClick(e);
     };
 
     protected readonly _onKeyDown = (e: KeyboardEvent) => {
@@ -134,7 +181,7 @@ export class Button extends LitElement {
     protected readonly _onKeyUp = (e: KeyboardEvent) => {
         this.removeEventListener('keyup', this._onKeyUp);
         if (isActivationKey(e.keyCode)) {
-            this.handleClick();
+            this.handleClick(e);
         }
     };
 
@@ -150,7 +197,64 @@ export class Button extends LitElement {
      *
      * By default, this does nothing. Subclasses can override this method to add behavior to the button.
      */
-    protected handleClick(): void {}
+    protected handleClick(event: Event): void {
+        // https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element:activation-behaviour
+        if (event.defaultPrevented || this.disabled) return;
+        const command = this.command;
+        if (!command) return;
+        const target = this.commandForElement;
+        if (!target) return;
+        const commandEvent =
+            typeof CommandEvent === 'function'
+                ? new CommandEvent('command', { source: this, command, cancelable: true })
+                : createCustomEvent('command', {
+                      detail: { source: this, command } satisfies CommandEventInit,
+                      cancelable: true
+                  });
+        const continueCommand = target.dispatchEvent(commandEvent);
+        if (!continueCommand) return;
+        switch (command) {
+            case 'toggle-popover':
+                target.togglePopover?.();
+                break;
+            case 'show-popover':
+                target.showPopover?.();
+                break;
+            case 'hide-popover':
+                target.hidePopover?.();
+                break;
+            case 'close': {
+                const dialog = target as HTMLDialogElement;
+                dialog.close?.();
+                break;
+            }
+            case 'request-close': {
+                const dialog = target as HTMLDialogElement;
+                dialog.requestClose?.();
+                break;
+            }
+            case 'show-modal': {
+                const dialog = target as HTMLDialogElement;
+                dialog.showModal?.();
+                break;
+            }
+            case 'show': {
+                const dialog = target as HTMLDialogElement;
+                dialog.show?.();
+                break;
+            }
+            case 'toggle-modal': {
+                const dialog = target as HTMLDialogElement;
+                dialog.open ? dialog.close?.() : dialog.showModal?.();
+                break;
+            }
+            case 'toggle': {
+                const targetDialog = target as HTMLDialogElement;
+                targetDialog.open ? targetDialog.close?.() : targetDialog.show?.();
+                break;
+            }
+        }
+    }
 }
 
 declare global {
