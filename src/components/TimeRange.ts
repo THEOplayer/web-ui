@@ -15,6 +15,7 @@ import type { StreamType } from '../util/StreamType';
 import { isLinearAd } from '../util/AdUtils';
 import type { ColorStops } from '../util/ColorStops';
 import { KeyCode } from '../util/KeyCode';
+import { getLocale } from '../i18n';
 
 // Load components used in template
 import './PreviewThumbnail';
@@ -118,6 +119,9 @@ export class TimeRange extends Range {
         this._ads?.addEventListener(AD_EVENTS, this._onAdChange);
     }
 
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
     /**
      * The stream type, either "vod", "live" or "dvr".
      */
@@ -182,12 +186,13 @@ export class TimeRange extends Range {
     }
 
     protected override getAriaLabel(): string {
-        return 'seek';
+        return getLocale(this.lang).seekAria;
     }
 
     protected override getAriaValueText(): string {
-        const currentTimePhrase = formatAsTimePhrase(this.value);
-        const totalTimePhrase = formatAsTimePhrase(this.max);
+        const locale = getLocale(this.lang);
+        const currentTimePhrase = formatAsTimePhrase(locale, this.value);
+        const totalTimePhrase = formatAsTimePhrase(locale, this.max);
         if (currentTimePhrase && totalTimePhrase) {
             return `${currentTimePhrase} of ${totalTimePhrase}`;
         }

@@ -6,6 +6,7 @@ export interface Locale {
     playAria: string;
     pauseAria: string;
     replayAria: string;
+    seekAria: string;
     formatDuration: (duration: Duration) => string;
     formatRemainingDuration: (duration: string) => string;
 }
@@ -23,6 +24,7 @@ const defaultLocale: Locale = {
     playAria: 'play',
     pauseAria: 'pause',
     replayAria: 'replay',
+    seekAria: 'seek',
     formatDuration: durationFormatterForLocale(defaultLocaleName),
     formatRemainingDuration: (duration: string) => `${duration} remaining`
 };
