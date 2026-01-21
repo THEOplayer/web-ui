@@ -7,6 +7,18 @@ export function noOp(): void {
     return;
 }
 
+export function lazy<T>(fn: () => T): () => T {
+    let value: T | undefined;
+    return () => {
+        if (fn !== undefined) {
+            value = fn();
+            // Allow the producer to be garbage collected.
+            fn = undefined!;
+        }
+        return value!;
+    };
+}
+
 export function isElement(node: Node): node is Element {
     return node.nodeType === Node.ELEMENT_NODE;
 }
