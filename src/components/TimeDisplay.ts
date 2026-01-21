@@ -6,6 +6,7 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { formatAsTimePhrase, formatTime } from '../util/TimeUtils';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
+import { getLocale } from '../i18n';
 
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as const;
 
@@ -20,7 +21,7 @@ const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
  *   (until the live point) of the stream.
  */
 @customElement('theoplayer-time-display')
-@stateReceiver(['player', 'streamType'])
+@stateReceiver(['player', 'streamType', 'lang'])
 export class TimeDisplay extends LitElement {
     static override styles = [textDisplayCss];
 
@@ -71,6 +72,9 @@ export class TimeDisplay extends LitElement {
     @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
     accessor streamType: StreamType = 'vod';
 
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
     @state()
     private accessor _currentTime: number = 0;
 
@@ -91,6 +95,7 @@ export class TimeDisplay extends LitElement {
     };
 
     protected override render(): HTMLTemplateResult {
+        const locale = getLocale(this.lang);
         const remaining = this.remaining || (this.remainingWhenLive && this.streamType !== 'vod');
         let time = this._currentTime;
         const endTime = this._endTime;
@@ -108,9 +113,9 @@ export class TimeDisplay extends LitElement {
         if (isNaN(this._duration)) {
             ariaValueText = DEFAULT_MISSING_TIME_PHRASE;
         } else if (this.showDuration) {
-            ariaValueText = `${formatAsTimePhrase(time, remaining)} of ${formatAsTimePhrase(endTime)}`;
+            ariaValueText = `${formatAsTimePhrase(locale, time, remaining)} of ${formatAsTimePhrase(locale, endTime)}`;
         } else {
-            ariaValueText = formatAsTimePhrase(time, remaining);
+            ariaValueText = formatAsTimePhrase(locale, time, remaining);
         }
         this.setAttribute('aria-valuetext', ariaValueText);
 
