@@ -1,3 +1,5 @@
+import type { Locale } from '../i18n';
+
 function isValidNumber(x: number): boolean {
     return !isNaN(x) && isFinite(x);
 }
@@ -33,18 +35,7 @@ export function formatTime(time: number, guide: number = 0, preferNegative?: boo
     return `${negative ? '-' : ''}${timePhrase}`;
 }
 
-const timeUnitLabels = [
-    ['hour', 'hours'],
-    ['minute', 'minutes'],
-    ['second', 'seconds']
-] as const;
-
-export function toTimeUnitPhrase(timeUnitValue: number, unitIndex: 0 | 1 | 2): string {
-    const unitLabel = timeUnitLabels[unitIndex][timeUnitValue === 1 ? 0 : 1];
-    return `${timeUnitValue} ${unitLabel}`;
-}
-
-export function formatAsTimePhrase(time: number, preferNegative?: boolean): string {
+export function formatAsTimePhrase(locale: Locale, time: number, preferNegative?: boolean): string {
     if (!isValidNumber(time)) return '';
     const negative = time < 0 || (preferNegative && time === 0);
     time = Math.abs(time);
@@ -53,16 +44,8 @@ export function formatAsTimePhrase(time: number, preferNegative?: boolean): stri
     const minutes = Math.floor(time / 60) % 60;
     const hours = Math.floor(time / 3600);
 
-    const timePhrase = [
-        hours === 0 ? '' : toTimeUnitPhrase(hours, 0),
-        minutes === 0 ? '' : toTimeUnitPhrase(minutes, 1),
-        seconds === 0 && (hours > 0 || minutes > 0) ? '' : toTimeUnitPhrase(seconds, 2)
-    ]
-        .filter((part) => part !== '')
-        .join(', ');
+    const duration = locale.formatDuration({ hours, minutes, seconds });
 
     // If the time was negative, assume it represents some remaining amount of time/"count down".
-    const negativeSuffix = negative ? ' remaining' : '';
-
-    return `${timePhrase}${negativeSuffix}`;
+    return negative ? locale.formatRemainingDuration(duration) : duration;
 }
