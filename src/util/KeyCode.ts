@@ -12,7 +12,13 @@ export enum KeyCode {
     // https://suite.st/docs/faq/tv-specific-keys-in-browser/
     BACK_SAMSUNG = 88,
     BACK_WEBOS = 461,
-    BACK_TIZEN = 10009
+    BACK_TIZEN = 10009,
+    // https://forum.webostv.developer.lge.com/t/keycodes-for-lg-webos-standard-and-magic-remote/239/4
+    PAUSE_WEBOS = 411,
+    PLAY_WEBOS = 415,
+    FAST_FORWARD_WEBOS = 417,
+    REWIND_WEBOS = 412,
+    STOP_WEBOS = 413
 }
 
 export type ArrowKeyCode = KeyCode.LEFT | KeyCode.UP | KeyCode.RIGHT | KeyCode.DOWN;
@@ -29,4 +35,12 @@ export function isBackKey(keyCode: number): keyCode is BackKeyCode {
 
 export function isActivationKey(keyCode: number): keyCode is ActivationKeyCode {
     return keyCode === KeyCode.ENTER || keyCode === KeyCode.SPACE;
+}
+
+export function isPlayKey(event: KeyboardEvent): boolean {
+    return event.code === 'Play' || event.keyCode === KeyCode.PLAY_WEBOS;
+}
+
+export function isPauseKey(event: KeyboardEvent): boolean {
+    return event.code === 'Pause' || event.keyCode === KeyCode.PAUSE_WEBOS;
 }
