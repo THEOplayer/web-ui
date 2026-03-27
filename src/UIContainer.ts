@@ -1088,11 +1088,12 @@ export class UIContainer extends LitElement {
             }
         }
 
+        // First button press should only make the UI visible.
         if (this.isUserIdle_()) {
-            // First button press should only make the UI visible
             return;
         }
 
+        // Navigate by arrow keys.
         if (isArrowKey(event.keyCode) && navigateByArrowKey(this, focusableChildren, event.keyCode)) {
             event.preventDefault();
             event.stopPropagation();
