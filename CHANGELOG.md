@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 1.16.2
+
+### 🐛 Issues
+
+- Language names in the language menu are now capitalized according to that language's case mappings.
+
 ## 1.16.1
 
 ### 🐛 Issues
