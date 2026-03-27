@@ -352,7 +352,10 @@ export class DefaultUI extends LitElement {
                         mobile-only
                         ad-hidden
                     ></theoplayer-seek-button>
-                    <theoplayer-play-button part="center-play-button play-button center-button"></theoplayer-play-button>
+                    <theoplayer-play-button
+                        part="center-play-button play-button center-button"
+                        ?tv-focus=${!this.hasFirstPlay}
+                    ></theoplayer-play-button>
                     <theoplayer-seek-button
                         part="seek-forward-button seek-button center-button"
                         seek-offset="10"
@@ -377,7 +380,7 @@ export class DefaultUI extends LitElement {
                     <theoplayer-time-range
                         part="time-range"
                         show-ad-markers
-                        tv-focus
+                        ?tv-focus=${this.hasFirstPlay}
                         .inert=${this._timeRangeInert}
                         class="theoplayer-ad-control"
                         style=${styleMap({
