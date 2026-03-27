@@ -106,7 +106,9 @@ export const localizeLanguageName: (languageCode: string) => string | undefined 
               const displayNames = new Intl.DisplayNames([languageCode, 'en'], { type: 'language', fallback: 'none' });
               const localName = displayNames.of(languageCode);
               if (localName) {
-                  return localName.slice(0, 1).toUpperCase() + localName.slice(1);
+                  const locale = displayNames.resolvedOptions().locale;
+                  const [first] = localName;
+                  return first.toLocaleUpperCase(locale) + localName.slice(first.length);
               }
           }
         : (_languageCode) => undefined;
