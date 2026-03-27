@@ -1074,14 +1074,17 @@ export class UIContainer extends LitElement {
             }
         }
 
+        // Try to focus the first focusable child.
         const tvFocusChildren = getTvFocusChildren(this);
         const focusableChildren = getFocusableChildren(this);
         let focusedChild = getFocusedChild();
         if (!focusedChild) {
             const children = tvFocusChildren ?? focusableChildren;
             if (children.length > 0) {
-                children[0].focus();
                 focusedChild = children[0];
+                event.preventDefault();
+                focusedChild.focus();
+                return;
             }
         }
 
