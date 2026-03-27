@@ -1,5 +1,11 @@
 # @theoplayer/react-ui
 
+## 1.16.2
+
+### 📦 Dependency Updates
+
+- See changes to [Open Video UI for Web v1.16.2](https://github.com/THEOplayer/web-ui/blob/%40theoplayer%2Fweb-ui%401.16.2/CHANGELOG.md)
+
 ## 1.16.1
 
 ### 📦 Dependency Updates
