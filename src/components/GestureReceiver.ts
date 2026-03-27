@@ -1,42 +1,27 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import gestureReceiverCss from './GestureReceiver.css';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-gesture-receiver', `<style>${gestureReceiverCss}</style>`);
+import type { DeviceType } from '../util/DeviceType';
 
 /**
- * `<theoplayer-gesture-receiver>` - An overlay that receives and handles gestures on the player.
+ * An overlay that receives and handles gestures on the player.
  *
  * On desktop devices, this plays or pauses the player whenever it is clicked.
  * On mobile devices, this currently does nothing.
- *
- * @group Components
  */
-export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player', 'deviceType']) {
+@customElement('theoplayer-gesture-receiver')
+@stateReceiver(['player', 'deviceType'])
+export class GestureReceiver extends LitElement {
+    static override styles = [gestureReceiverCss];
+
     private _player: ChromelessPlayer | undefined;
     private _playerElement: HTMLElement | undefined;
     private _pointerType: string = '';
 
-    constructor() {
-        super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-
-        this._upgradeProperty('player');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
-    }
-
     connectedCallback(): void {
-        shadyCss.styleElement(this);
+        super.connectedCallback();
 
         this.setAttribute('tabindex', '-1');
         this.setAttribute('aria-hidden', 'true');
@@ -46,6 +31,7 @@ export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player', 
         return this._player;
     }
 
+    @property({ reflect: false, attribute: false })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -62,12 +48,15 @@ export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player', 
         }
     }
 
+    @property({ reflect: false, attribute: false })
+    accessor deviceType: DeviceType = 'desktop';
+
     private readonly _onPointerDown = (event: PointerEvent) => {
         this._pointerType = event.pointerType;
     };
 
     private readonly _onClick = (event: MouseEvent) => {
-        // If the browser doesn't support yet `pointerType` on `click` events,
+        // If the browser doesn't yet support `pointerType` on `click` events,
         // we use the type from the previous `pointerdown` event.
         const pointerType = (event as PointerEvent).pointerType ?? this._pointerType;
         if (pointerType === 'touch') {
@@ -100,9 +89,11 @@ export class GestureReceiver extends StateReceiverMixin(HTMLElement, ['player', 
             }
         }
     }
-}
 
-customElements.define('theoplayer-gesture-receiver', GestureReceiver);
+    protected override render(): HTMLTemplateResult {
+        return html``;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {

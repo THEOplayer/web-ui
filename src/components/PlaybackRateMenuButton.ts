@@ -1,22 +1,17 @@
-import { buttonTemplate } from './Button';
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { MenuButton } from './MenuButton';
 import speedIcon from '../icons/speed.svg';
 import { Attribute } from '../util/Attribute';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-playback-rate-button', buttonTemplate(`<span part="icon"><slot>${speedIcon}</slot></span>`));
 
 /**
- * `<theoplayer-playback-rate-menu-button>` - A menu button that opens a [playback rate menu]{@link PlaybackRateMenu}.
+ * A menu button that opens a [playback rate menu]{@link PlaybackRateMenu}.
  *
  * @attribute menu - The ID of the playback rate menu.
- * @group Components
  */
+@customElement('theoplayer-playback-rate-menu-button')
 export class PlaybackRateMenuButton extends MenuButton {
-    constructor() {
-        super({ template: template() });
-    }
-
     override connectedCallback() {
         super.connectedCallback();
 
@@ -24,9 +19,11 @@ export class PlaybackRateMenuButton extends MenuButton {
             this.setAttribute(Attribute.ARIA_LABEL, 'open playback speed menu');
         }
     }
-}
 
-customElements.define('theoplayer-playback-rate-menu-button', PlaybackRateMenuButton);
+    protected override render(): HTMLTemplateResult {
+        return html`<span part="icon"><slot>${unsafeSVG(speedIcon)}</slot></span>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {

@@ -1,4 +1,5 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, LitElement, type TemplateResult } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
 import menuGroupCss from './MenuGroup.css';
 import { Attribute } from '../util/Attribute';
 import {
@@ -6,9 +7,9 @@ import {
     arrayFindIndex,
     fromArrayLike,
     getSlottedElements,
-    isElement,
     isHTMLElement,
     noOp,
+    toggleAttribute,
     upgradeCustomElementIfNeeded
 } from '../util/CommonUtils';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
@@ -18,17 +19,22 @@ import { createCustomEvent } from '../util/EventUtils';
 import type { MenuChangeEvent } from '../events/MenuChangeEvent';
 import { MENU_CHANGE_EVENT } from '../events/MenuChangeEvent';
 import { Menu } from './Menu';
-import { createTemplate } from '../util/TemplateUtils';
+import { templateContent } from 'lit/directives/template-content.js';
 
+/** @deprecated */
 export interface MenuGroupOptions {
+    /**
+     * @deprecated Override {@link MenuGroup.render} instead.
+     */
     template?: HTMLTemplateElement;
 }
 
+/**
+ * @deprecated Override {@link MenuGroup.render} instead.
+ */
 export function menuGroupTemplate(content: string, extraCss: string = ''): string {
-    return `<style>${menuGroupCss}${extraCss}</style>${content}`;
+    return `<style>${extraCss}</style>${content}`;
 }
-
-const defaultTemplate = createTemplate('theoplayer-menu-group', menuGroupTemplate(`<slot></slot>`));
 
 interface OpenMenuEntry {
     menu: Menu | MenuGroup;
@@ -36,83 +42,86 @@ interface OpenMenuEntry {
 }
 
 /**
- * `<theoplayer-menu-group>` - A group of {@link Menu}s.
+ * A group of {@link Menu}s.
  *
- * This can contain multiple other menus, which can be opened with {@link MenuGroup.openMenu}.
+ * This can contain multiple other menus, which can be opened with {@link openMenu}.
  * When a {@link MenuButton} in one menu opens another menu in this group, it is opened as a "submenu".
  * When a submenu is closed, the menu that originally opened it is shown again.
  *
  * @attribute `menu-opened` (readonly) - Whether any menu in the group is currently open.
- * @group Components
  */
-export class MenuGroup extends HTMLElement {
-    static get observedAttributes() {
-        return [Attribute.MENU_OPENED];
-    }
+@customElement('theoplayer-menu-group')
+export class MenuGroup extends LitElement {
+    static styles = [menuGroupCss];
+    static override shadowRootOptions: ShadowRootInit = {
+        ...LitElement.shadowRootOptions,
+        delegatesFocus: true
+    };
 
-    private readonly _menuSlot: HTMLSlotElement | null;
-    private _menus: Array<Menu | MenuGroup> = [];
-    private readonly _openMenuStack: OpenMenuEntry[] = [];
+    private readonly _template: HTMLTemplateElement | undefined;
 
     constructor(options?: MenuGroupOptions) {
         super();
-        const template = options?.template ?? defaultTemplate();
-        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template.content.cloneNode(true));
-
-        this._menuSlot = shadowRoot.querySelector('slot');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
+        this._template = options?.template;
+        if (this._template) {
+            // Render immediately to populate the shadow DOM.
+            this.performUpdate();
         }
     }
+
+    private _menuOpened: boolean = false;
+
+    private get menuOpened_(): boolean {
+        return this._menuOpened;
+    }
+
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.MENU_OPENED })
+    private set menuOpened_(menuOpened: boolean) {
+        if (this._menuOpened === menuOpened) return;
+        this._menuOpened = menuOpened;
+        toggleAttribute(this, Attribute.MENU_OPENED, menuOpened);
+        if (menuOpened) {
+            this.removeAttribute(Attribute.HIDDEN);
+            this.removeEventListener('keydown', this._onKeyDown);
+            this.addEventListener('keydown', this._onKeyDown);
+        } else {
+            this.setAttribute(Attribute.HIDDEN, '');
+            this.removeEventListener('keydown', this._onKeyDown);
+        }
+        const changeEvent: MenuChangeEvent = createCustomEvent(MENU_CHANGE_EVENT, { bubbles: true });
+        this.dispatchEvent(changeEvent);
+    }
+
+    @query('slot')
+    private accessor _menuSlot: HTMLSlotElement | null = null;
+    private _menus: Array<Menu | MenuGroup> = [];
+    private readonly _openMenuStack: OpenMenuEntry[] = [];
 
     connectedCallback(): void {
-        shadyCss.styleElement(this);
+        super.connectedCallback();
 
-        if (!this.hasAttribute(Attribute.MENU_OPENED)) {
-            this.setAttribute('hidden', '');
+        if (!this.menuOpened_) {
+            this.setAttribute(Attribute.HIDDEN, '');
         }
+    }
 
+    protected createRenderRoot() {
+        const root = super.createRenderRoot();
+        root.addEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
+        root.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
+        root.addEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
+        return root;
+    }
+
+    protected render(): TemplateResult {
+        if (this._template) {
+            return html`${templateContent(this._template)}`;
+        }
+        return html`<slot @slotchange=${this._onMenuListChange}></slot>`;
+    }
+
+    protected override firstUpdated(): void {
         this._onMenuListChange();
-
-        this.shadowRoot!.addEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
-        this.shadowRoot!.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
-        this.shadowRoot!.addEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
-        this._menuSlot?.addEventListener('slotchange', this._onMenuListChange);
-    }
-
-    disconnectedCallback(): void {
-        this.shadowRoot!.removeEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
-        this.shadowRoot!.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
-        this.shadowRoot!.removeEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
-        this._menuSlot?.removeEventListener('slotchange', this._onMenuListChange);
-    }
-
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        if (newValue === oldValue) {
-            return;
-        }
-        if (attrName === Attribute.MENU_OPENED) {
-            const hasValue = newValue != null;
-            if (hasValue) {
-                this.removeAttribute('hidden');
-                this.removeEventListener('keydown', this._onKeyDown);
-                this.addEventListener('keydown', this._onKeyDown);
-            } else {
-                this.setAttribute('hidden', '');
-                this.removeEventListener('keydown', this._onKeyDown);
-            }
-            const changeEvent: MenuChangeEvent = createCustomEvent(MENU_CHANGE_EVENT, { bubbles: true });
-            this.dispatchEvent(changeEvent);
-        }
-        if (MenuGroup.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
     }
 
     /**
@@ -163,7 +172,7 @@ export class MenuGroup extends HTMLElement {
             previousEntry.menu.closeMenu();
         }
         menuToOpen.openMenu();
-        this.setAttribute(Attribute.MENU_OPENED, '');
+        this.menuOpened_ = true;
 
         menuToOpen.focus();
         return true;
@@ -200,7 +209,7 @@ export class MenuGroup extends HTMLElement {
         const nextEntry = this.getCurrentMenu_();
         if (nextEntry !== undefined) {
             nextEntry.menu.openMenu();
-            this.setAttribute(Attribute.MENU_OPENED, '');
+            this.menuOpened_ = true;
             if (oldEntry.opener && nextEntry.menu.contains(oldEntry.opener)) {
                 oldEntry.opener.focus();
             } else {
@@ -209,7 +218,7 @@ export class MenuGroup extends HTMLElement {
             return true;
         }
 
-        this.removeAttribute(Attribute.MENU_OPENED);
+        this.menuOpened_ = false;
         oldEntry.opener?.focus();
         return true;
     }
@@ -338,8 +347,6 @@ export class MenuGroup extends HTMLElement {
         }
     };
 }
-
-customElements.define('theoplayer-menu-group', MenuGroup);
 
 declare global {
     interface HTMLElementTagNameMap {

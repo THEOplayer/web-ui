@@ -1,47 +1,37 @@
-import { MenuGroup, menuGroupTemplate } from './MenuGroup';
-import * as shadyCss from '@webcomponents/shadycss';
-import languageMenuHtml from './LanguageMenu.html';
+import { html, type TemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { MenuGroup } from './MenuGroup';
 import languageMenuCss from './LanguageMenu.css';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer/chromeless';
 import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
-import { toggleAttribute } from '../util/CommonUtils';
-import { createTemplate } from '../util/TemplateUtils';
 
 // Load components used in template
 import './TrackRadioGroup';
 import './TextTrackStyleMenu';
 
-const template = createTemplate('theoplayer-language-menu', menuGroupTemplate(languageMenuHtml, languageMenuCss));
-
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
 /**
- * `<theoplayer-language-menu>` - A menu to change the spoken language and subtitles of the stream.
+ * A menu to change the spoken language and subtitles of the stream.
  *
  * @slot `heading` - A slot for the menu's heading.
- *
- * @group Components
  */
-export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
+@customElement('theoplayer-language-menu')
+@stateReceiver(['player'])
+export class LanguageMenu extends MenuGroup {
+    static styles = [...MenuGroup.styles, languageMenuCss];
+
     private _player: ChromelessPlayer | undefined;
     private _audioTrackList: MediaTrackList | undefined;
     private _textTrackList: TextTracksList | undefined;
-
-    static get observedAttributes() {
-        return [...MenuGroup.observedAttributes, Attribute.HAS_AUDIO, Attribute.HAS_SUBTITLES];
-    }
-
-    constructor() {
-        super({ template: template() });
-        this._upgradeProperty('player');
-    }
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
     }
 
+    @property({ state: true })
     set player(player: ChromelessPlayer | undefined) {
         if (this._player === player) {
             return;
@@ -57,27 +47,48 @@ export class LanguageMenu extends StateReceiverMixin(MenuGroup, ['player']) {
         this._textTrackList?.addEventListener(TRACK_EVENTS, this._updateTextTracks);
     }
 
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_AUDIO })
+    private accessor _hasAudioTracks: boolean = false;
+
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_SUBTITLES })
+    private accessor _hasSubtitles: boolean = false;
+
     private readonly _updateAudioTracks = (): void => {
         const newAudioTracks: readonly MediaTrack[] = this._player?.audioTracks ?? [];
         // Hide audio track selection if there's only one track.
-        toggleAttribute(this, Attribute.HAS_AUDIO, newAudioTracks.length > 1);
+        this._hasAudioTracks = newAudioTracks.length > 1;
     };
 
     private readonly _updateTextTracks = (): void => {
         const newSubtitleTracks: readonly TextTrack[] = this._player?.textTracks.filter(isNonForcedSubtitleTrack) ?? [];
         // Hide subtitle track selection if there are no tracks. If there's one, we still show an "off" option.
-        toggleAttribute(this, Attribute.HAS_SUBTITLES, newSubtitleTracks.length > 0);
+        this._hasSubtitles = newSubtitleTracks.length > 0;
     };
 
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (LanguageMenu.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
+    protected override render(): TemplateResult {
+        return html`
+            <theoplayer-menu>
+                <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">Language</slot></span>
+                <theoplayer-settings-menu-button
+                    class="theoplayer-menu-heading-button"
+                    menu="subtitle-options-menu"
+                    slot="heading"
+                ></theoplayer-settings-menu-button>
+                <div part="content">
+                    <div part="audio">
+                        <h2>Audio</h2>
+                        <theoplayer-track-radio-group track-type="audio"></theoplayer-track-radio-group>
+                    </div>
+                    <div part="subtitles">
+                        <h2>Subtitles</h2>
+                        <theoplayer-track-radio-group track-type="subtitles" show-off></theoplayer-track-radio-group>
+                    </div>
+                </div>
+            </theoplayer-menu>
+            <theoplayer-text-track-style-menu id="subtitle-options-menu"></theoplayer-text-track-style-menu>
+        `;
     }
 }
-
-customElements.define('theoplayer-language-menu', LanguageMenu);
 
 declare global {
     interface HTMLElementTagNameMap {

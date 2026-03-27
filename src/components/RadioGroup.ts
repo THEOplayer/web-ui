@@ -1,18 +1,17 @@
-import * as shadyCss from '@webcomponents/shadycss';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { isArrowKey, KeyCode } from '../util/KeyCode';
 import { RadioButton } from './RadioButton';
 import { createEvent } from '../util/EventUtils';
-import { arrayFind, getSlottedElements, isElement, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
-import { StateReceiverMixin } from './StateReceiverMixin';
+import { arrayFind, getSlottedElements, noOp, upgradeCustomElementIfNeeded } from '../util/CommonUtils';
+import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import type { DeviceType } from '../util/DeviceType';
 import { navigateByArrowKey } from '../util/KeyboardNavigation';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-radio-group', `<slot></slot>`);
 
 /**
- * `<theoplayer-radio-group>` - A group of {@link RadioButton}s. At most one button in the group can be checked.
+ * A group of {@link RadioButton}s. At most one button in the group can be checked.
  *
  * ## Behavior
  * This radio group implements the [roving tabindex](https://www.w3.org/WAI/ARIA/apg/example-index/radio/radio.html) pattern.
@@ -21,61 +20,70 @@ const template = createTemplate('theoplayer-radio-group', `<slot></slot>`);
  *  - `Down`/`Right` arrow moves focus to the next radio button.
  *  - `Home` moves focus to the first radio button.
  *  - `End` moves focus to the last radio button.
- *
- * @group Components
  */
 // Based on howto-radio-group
 // https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-radio-group/howto-radio-group.js
-export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) {
-    private _slot: HTMLSlotElement;
+@customElement('theoplayer-radio-group')
+@stateReceiver(['deviceType'])
+export class RadioGroup extends LitElement {
+    private readonly _slotRef: Ref<HTMLSlotElement> = createRef<HTMLSlotElement>();
     private _radioButtons: RadioButton[] = [];
+    private _value: any = undefined;
 
     constructor() {
         super();
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-
-        this._slot = shadowRoot.querySelector('slot')!;
-        this._upgradeProperty('deviceType');
-    }
-
-    protected _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
     }
 
     connectedCallback(): void {
-        shadyCss.styleElement(this);
+        super.connectedCallback();
 
         if (!this.hasAttribute('role')) {
             this.setAttribute('role', 'radiogroup');
         }
 
         this.addEventListener('keydown', this._onKeyDown);
-        this.shadowRoot!.addEventListener('change', this._onButtonChange);
-        this._slot.addEventListener('slotchange', this._onSlotChange);
         this._onSlotChange();
     }
 
     disconnectedCallback(): void {
+        super.disconnectedCallback();
         this.removeEventListener('keydown', this._onKeyDown);
-        this.shadowRoot!.removeEventListener('change', this._onButtonChange);
-        this._slot.removeEventListener('slotchange', this._onSlotChange);
     }
 
-    get deviceType(): DeviceType {
-        return (this.getAttribute(Attribute.DEVICE_TYPE) || 'desktop') as DeviceType;
+    protected override firstUpdated(): void {
+        this._onSlotChange();
     }
 
-    set deviceType(deviceType: DeviceType) {
-        this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
+    protected override createRenderRoot(): HTMLElement | DocumentFragment {
+        const root = super.createRenderRoot();
+        root.addEventListener('change', this._onButtonChange);
+        return root;
+    }
+
+    @property({ reflect: true, type: String, attribute: Attribute.DEVICE_TYPE })
+    accessor deviceType: DeviceType = 'desktop';
+
+    /**
+     * The selected value.
+     */
+    get value(): any {
+        return this._value;
+    }
+
+    @property({ attribute: Attribute.VALUE })
+    set value(value: any) {
+        if (this._value === value) {
+            return;
+        }
+        this._value = value;
+        this.updateCheckedButton();
+        this.dispatchEvent(createEvent('change', { bubbles: true }));
     }
 
     private readonly _onSlotChange = () => {
-        const children = getSlottedElements(this._slot);
+        const slot = this._slotRef.value;
+        if (!slot) return;
+        const children = getSlottedElements(slot);
         const upgradePromises: Array<Promise<unknown>> = [];
         for (const child of children) {
             if (!isRadioButton(child)) {
@@ -95,6 +103,8 @@ export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) 
         if (!firstFocusedButton) {
             this.firstRadioButton?.setAttribute('tabindex', '0');
         }
+
+        this.updateCheckedButton();
     };
 
     private readonly _onKeyDown = (event: KeyboardEvent) => {
@@ -199,7 +209,7 @@ export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) 
         return true;
     }
 
-    setFocusedRadioButton(button: RadioButton | null): void {
+    private setFocusedRadioButton(button: RadioButton | null): void {
         this._unfocusAll();
         if (button) {
             button.tabIndex = 0;
@@ -213,22 +223,31 @@ export class RadioGroup extends StateReceiverMixin(HTMLElement, ['deviceType']) 
         }
     }
 
-    setCheckedRadioButton(checkedButton: RadioButton | null): void {
+    private setCheckedRadioButton(checkedButton: RadioButton | null): void {
         for (const button of this.allRadioButtons()) {
             button.checked = button === checkedButton;
         }
-        this.dispatchEvent(createEvent('change', { bubbles: true }));
+    }
+
+    private updateCheckedButton(): void {
+        const button = this.allRadioButtons().find((button) => {
+            // Allow '1' == 1
+            return button.value == this.value;
+        });
+        this.setCheckedRadioButton(button ?? null);
     }
 
     private readonly _onButtonChange = (event: Event) => {
         const button = event.target as RadioButton | null;
         if (button !== null && button.checked) {
-            this.setCheckedRadioButton(event.target as RadioButton);
+            this.value = button.value;
         }
     };
-}
 
-customElements.define('theoplayer-radio-group', RadioGroup);
+    protected override render(): HTMLTemplateResult {
+        return html`<slot ${ref(this._slotRef)} @slotchange=${this._onSlotChange}></slot>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {

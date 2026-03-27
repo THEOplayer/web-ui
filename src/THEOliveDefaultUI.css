@@ -197,18 +197,6 @@ p {
     font-size: var(--theoplayer-text-font-size, 20px);
 }
 
-#loading-announcement {
-    display: none;
-}
-
-#offline-announcement {
-    display: none;
-}
-
-#announcement {
-    display: none;
-}
-
 theolive-bad-network-button {
     display: var(--theolive-bad-network-button-display, none);
 }

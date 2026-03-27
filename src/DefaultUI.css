@@ -34,10 +34,6 @@ theoplayer-ui {
     line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
 }
 
-:host(:not([has-title])) [part='title'] {
-    display: none;
-}
-
 [part='centered-chrome'] {
     display: flex;
 }
