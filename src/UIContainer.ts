@@ -34,7 +34,7 @@ import { getTargetQualities } from './util/TrackUtils';
 import { MenuGroup } from './components/MenuGroup';
 import type { DeviceType } from './util/DeviceType';
 import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
-import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
+import { isArrowKey, isBackKey, isPauseKey, isPlayKey, KeyCode } from './util/KeyCode';
 import { READY_EVENT } from './events/ReadyEvent';
 import { addGlobalStyles } from './Global';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
@@ -1060,6 +1060,20 @@ export class UIContainer extends LitElement {
             this.setUserIdle_();
             return;
         }
+
+        // Handle playback buttons on TV remote.
+        if (this._player !== undefined) {
+            if (isPlayKey(event)) {
+                event.preventDefault();
+                this._player.play();
+                return;
+            } else if (isPauseKey(event)) {
+                event.preventDefault();
+                this._player.pause();
+                return;
+            }
+        }
+
         const tvFocusChildren = getTvFocusChildren(this);
         const focusableChildren = getFocusableChildren(this);
         let focusedChild = getFocusedChild();
