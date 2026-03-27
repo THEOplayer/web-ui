@@ -91,6 +91,7 @@ export class DefaultUI extends LitElement {
     private _userIdleTimeout: number | undefined = undefined;
     private _deviceType: DeviceType = 'desktop';
     private _dvrThreshold: number = DEFAULT_DVR_THRESHOLD;
+    private _hasFirstPlay: boolean = false;
 
     @queryAssignedNodes({ slot: 'title', flatten: true })
     private accessor titleSlotNodes!: Array<Node>;
@@ -250,7 +251,12 @@ export class DefaultUI extends LitElement {
      * and is reset to `false` when changing to a different (non-autoplaying) source.
      */
     get hasFirstPlay(): boolean {
-        return this._uiRef.value ? this._uiRef.value.hasFirstPlay : false;
+        return this._hasFirstPlay;
+    }
+
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_FIRST_PLAY })
+    private set hasFirstPlay(hasFirstPlay: boolean) {
+        this._hasFirstPlay = hasFirstPlay;
     }
 
     @state()
@@ -269,10 +275,14 @@ export class DefaultUI extends LitElement {
         }
 
         this._onTitleSlotChange();
+
+        this._updateFirstPlay();
+        this._addPlayerListeners();
     }
 
     disconnectedCallback(): void {
         clearTimeout(this._timeRangeInertTimeout);
+        this._removePlayerListeners();
     }
 
     protected override firstUpdated() {
@@ -282,9 +292,37 @@ export class DefaultUI extends LitElement {
         }
     }
 
+    private _addPlayerListeners() {
+        const player = this._uiRef.value?.player;
+        if (player === undefined) {
+            return;
+        }
+
+        this._removePlayerListeners();
+        player.addEventListener(['play', 'sourcechange'], this._updateFirstPlay);
+    }
+
+    private _removePlayerListeners() {
+        const player = this._uiRef.value?.player;
+        if (player === undefined) {
+            return;
+        }
+
+        player.removeEventListener(['play', 'sourcechange'], this._updateFirstPlay);
+    }
+
     protected _onUiReady(): void {
+        this._updateFirstPlay();
+        this._addPlayerListeners();
+
         this.dispatchEvent(createCustomEvent(READY_EVENT));
     }
+
+    private readonly _updateFirstPlay = () => {
+        if (this._uiRef.value) {
+            this.hasFirstPlay = this._uiRef.value.hasFirstPlay;
+        }
+    };
 
     private readonly _updateStreamType = () => {
         if (this._uiRef.value) {
