@@ -10,11 +10,7 @@ export function getFocusedChild(): HTMLElement | null {
     return focusedChild;
 }
 
-export function navigateByArrowKey(container: HTMLElement, children: HTMLElement[], key: ArrowKeyCode): boolean {
-    const focusedChild = getFocusedChild();
-    if (focusedChild === null) {
-        return false;
-    }
+export function navigateByArrowKey(container: HTMLElement, focusedChild: HTMLElement, children: HTMLElement[], key: ArrowKeyCode): boolean {
     const containerRect = Rectangle.fromRect(container.getBoundingClientRect()).snapToPixels();
     const focusedRect = Rectangle.fromRect(focusedChild.getBoundingClientRect()).snapToPixels();
     const childrenWithRects = children

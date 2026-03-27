@@ -109,7 +109,8 @@ export class RadioGroup extends LitElement {
 
     private readonly _onKeyDown = (event: KeyboardEvent) => {
         if (this.deviceType === 'tv' && isArrowKey(event.keyCode)) {
-            if (navigateByArrowKey(this, this._radioButtons, event.keyCode)) {
+            const focusedRadioButton = this.focusedRadioButton;
+            if (focusedRadioButton && navigateByArrowKey(this, focusedRadioButton, this._radioButtons, event.keyCode)) {
                 event.preventDefault();
                 event.stopPropagation();
             }

@@ -1075,11 +1075,9 @@ export class UIContainer extends LitElement {
         }
 
         // Try to focus the first focusable child.
-        const tvFocusChildren = getTvFocusChildren(this);
-        const focusableChildren = getFocusableChildren(this);
         let focusedChild = getFocusedChild();
         if (!focusedChild) {
-            const children = tvFocusChildren ?? focusableChildren;
+            const children = getTvFocusChildren(this) ?? getFocusableChildren(this);
             if (children.length > 0) {
                 focusedChild = children[0];
                 event.preventDefault();
@@ -1094,7 +1092,7 @@ export class UIContainer extends LitElement {
         }
 
         // Navigate by arrow keys.
-        if (isArrowKey(event.keyCode) && navigateByArrowKey(this, focusableChildren, event.keyCode)) {
+        if (isArrowKey(event.keyCode) && focusedChild && navigateByArrowKey(this, focusedChild, getFocusableChildren(this), event.keyCode)) {
             event.preventDefault();
             event.stopPropagation();
         }
