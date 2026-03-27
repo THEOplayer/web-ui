@@ -158,6 +158,7 @@ export class UIContainer extends LitElement {
     private _ended: boolean = false;
     private _casting: boolean = false;
     private _dvrThreshold: number = DEFAULT_DVR_THRESHOLD;
+    private _hasFirstPlay: boolean = false;
     private _previewTime: number = NaN;
     private _activeVideoTrack: MediaTrack | undefined = undefined;
 
@@ -441,8 +442,20 @@ export class UIContainer extends LitElement {
         this._updateStreamType();
     }
 
+    /**
+     * Whether the player has already started playing for the first time.
+     *
+     * This is set to `true` on the first play,
+     * and is reset to `false` when changing to a different (non-autoplaying) source.
+     */
+    get hasFirstPlay(): boolean {
+        return this._hasFirstPlay;
+    }
+
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_FIRST_PLAY })
-    private accessor _hasFirstPlay: boolean = false;
+    private set hasFirstPlay(hasFirstPlay: boolean) {
+        this._hasFirstPlay = hasFirstPlay;
+    }
 
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.PLAYING_AD })
     private accessor _isPlayingAd: boolean = false;
@@ -868,7 +881,7 @@ export class UIContainer extends LitElement {
     };
 
     private readonly _onPlay = (): void => {
-        this._hasFirstPlay = true;
+        this.hasFirstPlay = true;
         this.paused = false;
         this._updateEnded();
     };
@@ -999,7 +1012,7 @@ export class UIContainer extends LitElement {
 
     private readonly _onSourceChange = (): void => {
         this.closeMenu_();
-        this._hasFirstPlay = this._player !== undefined && !this._player.paused;
+        this.hasFirstPlay = this._player !== undefined && !this._player.paused;
     };
 
     private isUserIdle_(): boolean {

@@ -243,6 +243,16 @@ export class DefaultUI extends LitElement {
         this._dvrThreshold = isNaN(value) ? 0 : value;
     }
 
+    /**
+     * Whether the player has already started playing for the first time.
+     *
+     * This is set to `true` on the first play,
+     * and is reset to `false` when changing to a different (non-autoplaying) source.
+     */
+    get hasFirstPlay(): boolean {
+        return this._uiRef.value ? this._uiRef.value.hasFirstPlay : false;
+    }
+
     @state()
     private accessor _hasTitle: boolean = false;
 
