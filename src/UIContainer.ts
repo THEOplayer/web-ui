@@ -1092,12 +1092,8 @@ export class UIContainer extends LitElement {
             // First button press should only make the UI visible
             return;
         }
-        if (event.keyCode === KeyCode.ENTER) {
-            if (focusedChild !== null) {
-                event.preventDefault();
-                focusedChild.click();
-            }
-        } else if (isArrowKey(event.keyCode) && navigateByArrowKey(this, focusableChildren, event.keyCode)) {
+
+        if (isArrowKey(event.keyCode) && navigateByArrowKey(this, focusableChildren, event.keyCode)) {
             event.preventDefault();
             event.stopPropagation();
         }
