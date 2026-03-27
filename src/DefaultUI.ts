@@ -296,6 +296,18 @@ export class DefaultUI extends LitElement {
         this._dvrThreshold = isNaN(value) ? 0 : value;
     }
 
+    /**
+     * Whether the player has (previously) started playback for this stream.
+     *
+     * This is set to `true` on the first play,
+     * and is reset to `false` when changing to a different (non-autoplaying) source.
+     *
+     * Can be used to show/hide certain initial controls, such as a poster image or a centered play button.
+     */
+    get hasFirstPlay(): boolean {
+        return this._uiRef.value ? this._uiRef.value.hasFirstPlay : false;
+    }
+
     @state()
     private accessor _hasTitle: boolean = false;
 

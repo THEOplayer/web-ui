@@ -1,4 +1,4 @@
-import { html, type HTMLTemplateResult, LitElement, type PropertyValues } from 'lit';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import * as shadyCss from '@webcomponents/shadycss';
@@ -151,6 +151,7 @@ export class UIContainer extends LitElement {
     private _ended: boolean = false;
     private _casting: boolean = false;
     private _dvrThreshold: number = DEFAULT_DVR_THRESHOLD;
+    private _hasFirstPlay: boolean = false;
     private _previewTime: number = NaN;
     private _activeVideoTrack: MediaTrack | undefined = undefined;
 
@@ -476,10 +477,19 @@ export class UIContainer extends LitElement {
     /**
      * Whether the player has (previously) started playback for this stream.
      *
-     * Can be used in CSS to show/hide certain initial controls, such as a poster image or a centered play button.
+     * This is set to `true` on the first play,
+     * and is reset to `false` when changing to a different (non-autoplaying) source.
+     *
+     * Can be used to show/hide certain initial controls, such as a poster image or a centered play button.
      */
+    get hasFirstPlay(): boolean {
+        return this._hasFirstPlay;
+    }
+
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_FIRST_PLAY })
-    private accessor _hasFirstPlay: boolean = false;
+    private set hasFirstPlay(hasFirstPlay: boolean) {
+        this._hasFirstPlay = hasFirstPlay;
+    }
 
     /**
      * Whether the player is playing a linear ad.
@@ -968,7 +978,7 @@ export class UIContainer extends LitElement {
     };
 
     private readonly _onPlay = (): void => {
-        this._hasFirstPlay = true;
+        this.hasFirstPlay = true;
         this.paused = false;
         this._updateEnded();
     };
@@ -1096,7 +1106,7 @@ export class UIContainer extends LitElement {
 
     private readonly _onSourceChange = (): void => {
         this.closeMenu_();
-        this._hasFirstPlay = this._player !== undefined && !this._player.paused;
+        this.hasFirstPlay = this._player !== undefined && !this._player.paused;
     };
 
     private isUserIdle_(): boolean {
