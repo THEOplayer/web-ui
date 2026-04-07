@@ -74,10 +74,10 @@ function getTrackLabel(track: TextTrack): string {
         return label;
     }
     let languageCode = track.language;
-    if (!languageCode) {
-        return '';
+    if (languageCode) {
+        return localizeLanguageName(languageCode) || languageCode;
     }
-    return localizeLanguageName(languageCode) || languageCode || '';
+    return label || '';
 }
 
 customElements.define('theoplayer-text-track-radio-button', TextTrackRadioButton);
