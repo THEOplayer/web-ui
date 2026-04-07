@@ -71,7 +71,11 @@ export class TextTrackRadioButton extends RadioButton {
 function getTrackLabel(track: TextTrack): string {
     let label = track.label;
     if (label) {
-        return label;
+        if (track.type === 'cea608' && /^CC\d+$/.test(track.label)) {
+            // Ignore default label for CEA-608 tracks.
+        } else {
+            return label;
+        }
     }
     let languageCode = track.language;
     if (languageCode) {
