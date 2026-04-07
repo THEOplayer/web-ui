@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 1.16.3
+
+### 🐛 Issues
+
+- Improve labels for text tracks and audio tracks in the `<theoplayer-language-menu>`.
+
 ## 1.16.2
 
 ### 🐛 Issues
