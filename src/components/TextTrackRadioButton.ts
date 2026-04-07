@@ -79,7 +79,7 @@ function getTrackLabel(track: TextTrack): string {
     let label = track.label;
     let languageCode = track.language;
     if (label) {
-        if (languageCode && label === languageCode) {
+        if (label === languageCode) {
             // Ignore default label with just the language code.
         } else if (track.type === 'cea608' && /^CC\d+$/.test(track.label)) {
             // Ignore default label with just the caption channel.

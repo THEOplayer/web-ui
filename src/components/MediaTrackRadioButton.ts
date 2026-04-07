@@ -74,7 +74,7 @@ function getTrackLabel(track: MediaTrack): string {
     let label = track.label;
     let languageCode = track.language;
     if (label) {
-        if (languageCode && label === languageCode) {
+        if (label === languageCode) {
             // Ignore default label with just the language code.
         } else {
             return label;
