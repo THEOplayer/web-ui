@@ -5,6 +5,13 @@ import { localizeLanguageName, setTextContent } from '../util/CommonUtils';
 import { Attribute } from '../util/Attribute';
 import { createTemplate } from '../util/TemplateUtils';
 
+declare module 'theoplayer/chromeless' {
+    interface TextTrack {
+        // TODO Remove after updating to THEOplayer 10.14.0.
+        captionChannel?: number;
+    }
+}
+
 const template = createTemplate('theoplayer-text-track-radio-button', buttonTemplate(`<slot></slot>`));
 
 const TRACK_EVENTS = ['change', 'update'] as const;
@@ -81,6 +88,9 @@ function getTrackLabel(track: TextTrack): string {
     let localizedLanguageName = languageCode && localizeLanguageName(languageCode);
     if (localizedLanguageName) {
         return localizedLanguageName;
+    }
+    if (track.type === 'cea608' && typeof track.captionChannel === 'number') {
+        return `CC${track.captionChannel}`;
     }
     return languageCode || label || '';
 }
