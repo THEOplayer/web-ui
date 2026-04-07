@@ -65,14 +65,19 @@ export class MediaTrackRadioButton extends RadioButton {
 
 function getTrackLabel(track: MediaTrack): string {
     let label = track.label;
-    if (label) {
-        return label;
-    }
     let languageCode = track.language;
-    if (!languageCode) {
-        return '';
+    if (label) {
+        if (label === languageCode) {
+            // Ignore default label with just the language code.
+        } else {
+            return label;
+        }
     }
-    return localizeLanguageName(languageCode) || languageCode || '';
+    let localizedLanguageName = languageCode && localizeLanguageName(languageCode);
+    if (localizedLanguageName) {
+        return localizedLanguageName;
+    }
+    return languageCode || label || '';
 }
 
 declare global {
