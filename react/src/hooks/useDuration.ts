@@ -1,6 +1,6 @@
 import { useCallback, useContext, useSyncExternalStore } from 'react';
 import { PlayerContext } from '../context';
-import type { PlayerEventMap } from 'theoplayer';
+import type { PlayerEventMap } from 'theoplayer/chromeless';
 
 const DURATION_CHANGE_EVENTS = ['durationchange', 'emptied'] satisfies ReadonlyArray<keyof PlayerEventMap>;
 

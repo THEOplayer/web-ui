@@ -1,7 +1,9 @@
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type MediaTrack, type SourceDescription, type UIPlayerConfiguration, type VideoQuality } from 'theoplayer/chromeless';
 import elementCss from './UIContainer.css';
-import elementHtml from './UIContainer.html';
 import {
     arrayFind,
     arrayRemove,
@@ -16,7 +18,6 @@ import {
 } from './util/CommonUtils';
 import { forEachStateReceiverElement, type StateReceiverElement, StateReceiverProps } from './components/StateReceiverMixin';
 import { TOGGLE_MENU_EVENT, type ToggleMenuEvent } from './events/ToggleMenuEvent';
-import { CLOSE_MENU_EVENT } from './events/CloseMenuEvent';
 import { ENTER_FULLSCREEN_EVENT, type EnterFullscreenEvent } from './events/EnterFullscreenEvent';
 import { EXIT_FULLSCREEN_EVENT, type ExitFullscreenEvent } from './events/ExitFullscreenEvent';
 import { fullscreenAPI } from './util/FullscreenUtils';
@@ -31,27 +32,23 @@ import { USER_IDLE_CHANGE_EVENT } from './events/UserIdleChangeEvent';
 import { createCustomEvent } from './util/EventUtils';
 import { getTargetQualities } from './util/TrackUtils';
 import { MenuGroup } from './components/MenuGroup';
-import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
 import type { DeviceType } from './util/DeviceType';
 import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
 import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
 import { READY_EVENT } from './events/ReadyEvent';
-import { createTemplate } from './util/TemplateUtils';
 import { addGlobalStyles } from './Global';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
 
 // Load components used in template
 import './components/GestureReceiver';
 
-const template = createTemplate('theoplayer-ui', `<style>${elementCss}</style>${elementHtml}`);
-
-const DEFAULT_USER_IDLE_TIMEOUT = 2;
-const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
-const DEFAULT_DVR_THRESHOLD = 60;
-const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
+export const DEFAULT_USER_IDLE_TIMEOUT = 2;
+export const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
+export const DEFAULT_DVR_THRESHOLD = 60;
+export const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
 
 /**
- * `<theoplayer-ui>` - The container element for a THEOplayer UI.
+ * The container element for a THEOplayer UI.
  *
  * This element provides a basic layout structure for a general player UI, and handles the creation and management
  * of a {@link theoplayer!ChromelessPlayer | THEOplayer player instance} for this UI.
@@ -113,9 +110,15 @@ const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
  * @slot `menu` - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
  * @slot `error` - A slot for an error display, to show when the player encounters a fatal error
  *   (see {@link ErrorDisplay | `<theoplayer-error-display>`}).
- * @group Components
  */
-export class UIContainer extends HTMLElement {
+@customElement('theoplayer-ui')
+export class UIContainer extends LitElement {
+    static override styles = [elementCss];
+    static override shadowRootOptions: ShadowRootInit = {
+        ...LitElement.shadowRootOptions,
+        delegatesFocus: true
+    };
+
     /**
      * Fired when the backing player is created, and the {@link UIContainer.player} property is set.
      *
@@ -123,37 +126,16 @@ export class UIContainer extends HTMLElement {
      */
     static READY_EVENT: typeof READY_EVENT = READY_EVENT;
 
-    static get observedAttributes() {
-        return [
-            Attribute.CONFIGURATION,
-            Attribute.SOURCE,
-            Attribute.MUTED,
-            Attribute.AUTOPLAY,
-            Attribute.FULLSCREEN,
-            Attribute.FLUID,
-            Attribute.DEVICE_TYPE,
-            Attribute.PAUSED,
-            Attribute.ENDED,
-            Attribute.CASTING,
-            Attribute.PLAYING_AD,
-            Attribute.HAS_ERROR,
-            Attribute.HAS_FIRST_PLAY,
-            Attribute.STREAM_TYPE,
-            Attribute.DVR_THRESHOLD,
-            Attribute.USER_IDLE,
-            Attribute.USER_IDLE_TIMEOUT
-        ];
-    }
-
     private _configuration: UIPlayerConfiguration = {};
-    private readonly _playerEl: HTMLElement;
-    private readonly _menuEl: HTMLElement;
-    private readonly _menuGroup: MenuGroup;
+    private readonly _playerRef: Ref<HTMLElement> = createRef<HTMLElement>();
+    private readonly _menuRef: Ref<HTMLElement> = createRef<HTMLElement>();
+    private readonly _menuGroupRef: Ref<MenuGroup> = createRef<MenuGroup>();
+    private _menuOpened: boolean = false;
     private _menuOpener: HTMLElement | undefined;
-    private readonly _topChromeEl: HTMLElement;
-    private readonly _topChromeSlot: HTMLSlotElement;
-    private readonly _bottomChromeEl: HTMLElement;
-    private readonly _bottomChromeSlot: HTMLSlotElement;
+    private readonly _topChromeRef: Ref<HTMLElement> = createRef<HTMLElement>();
+    private readonly _topChromeSlotRef: Ref<HTMLSlotElement> = createRef<HTMLSlotElement>();
+    private readonly _bottomChromeRef: Ref<HTMLElement> = createRef<HTMLElement>();
+    private readonly _bottomChromeSlotRef: Ref<HTMLSlotElement> = createRef<HTMLSlotElement>();
 
     private _pointerType: string = '';
     private _lastPointerUpTime: number = 0;
@@ -162,8 +144,20 @@ export class UIContainer extends HTMLElement {
     private readonly _stateReceivers: StateReceiverElement[] = [];
     private _player: ChromelessPlayer | undefined = undefined;
     private _source: SourceDescription | undefined = undefined;
+    private _muted: boolean = false;
+    private _autoplay: boolean = false;
+    private _fullscreen: boolean = false;
+    private _deviceType: DeviceType = 'desktop';
+    private _streamType: StreamType = 'vod';
+    private _fluid: boolean = false;
+    private _userIdle: boolean = false;
+    private _userIdleTimeout: number | undefined = undefined;
     private _isUserActive: boolean = false;
     private _userIdleTimer: number = 0;
+    private _paused: boolean = false;
+    private _ended: boolean = false;
+    private _casting: boolean = false;
+    private _dvrThreshold: number = DEFAULT_DVR_THRESHOLD;
     private _previewTime: number = NaN;
     private _activeVideoTrack: MediaTrack | undefined = undefined;
 
@@ -177,51 +171,14 @@ export class UIContainer extends HTMLElement {
      */
     constructor(configuration: UIPlayerConfiguration = {}) {
         super();
-        const shadowRoot = this.attachShadow({ mode: 'open', delegatesFocus: true });
-        shadowRoot.appendChild(template().content.cloneNode(true));
-
         this._configuration = configuration;
-
-        this._playerEl = shadowRoot.querySelector('[part~="media-layer"]')!;
-        this._menuEl = shadowRoot.querySelector('[part~="menu-layer"]')!;
-        this._menuGroup = shadowRoot.querySelector('theoplayer-menu-group')!;
-        this._topChromeEl = shadowRoot.querySelector('[part~="top"]')!;
-        this._topChromeSlot = shadowRoot.querySelector('slot[name="top-chrome"]')!;
-        this._bottomChromeEl = shadowRoot.querySelector('[part~="bottom"]')!;
-        this._bottomChromeSlot = shadowRoot.querySelector('slot:not([name])')!;
 
         this._mutationObserver = new MutationObserver(this._onMutation);
         if (typeof ResizeObserver !== 'undefined') {
             this._resizeObserver = new ResizeObserver(this._updateTextTrackMargins);
         }
 
-        shadowRoot.addEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
-        shadowRoot.addEventListener(ENTER_FULLSCREEN_EVENT, this._onEnterFullscreen);
-        shadowRoot.addEventListener(EXIT_FULLSCREEN_EVENT, this._onExitFullscreen);
-        shadowRoot.addEventListener(PREVIEW_TIME_CHANGE_EVENT, this._onPreviewTimeChange);
-
-        this._topChromeSlot.addEventListener('transitionstart', this._onChromeSlotTransition);
-        this._topChromeSlot.addEventListener('transitionend', this._onChromeSlotTransition);
-        this._bottomChromeSlot.addEventListener('transitionstart', this._onChromeSlotTransition);
-        this._bottomChromeSlot.addEventListener('transitionend', this._onChromeSlotTransition);
-
-        this._upgradeProperty('configuration');
-        this._upgradeProperty('source');
-        this._upgradeProperty('fluid');
-        this._upgradeProperty('muted');
-        this._upgradeProperty('autoplay');
-        this._upgradeProperty('userIdleTimeout');
-        this._upgradeProperty('streamType');
-
         this.tryInitializePlayer_();
-    }
-
-    private _upgradeProperty(prop: keyof this) {
-        if (this.hasOwnProperty(prop)) {
-            let value = this[prop];
-            delete this[prop];
-            this[prop] = value;
-        }
     }
 
     /**
@@ -242,8 +199,14 @@ export class UIContainer extends HTMLElement {
         return this._configuration;
     }
 
+    @property({
+        reflect: false,
+        attribute: Attribute.CONFIGURATION,
+        converter: {
+            fromAttribute: (value: string | null) => (value ? (JSON.parse(value) as UIPlayerConfiguration) : {})
+        }
+    })
     set configuration(playerConfiguration: UIPlayerConfiguration) {
-        this.removeAttribute(Attribute.CONFIGURATION);
         this._setConfiguration(playerConfiguration);
     }
 
@@ -259,8 +222,14 @@ export class UIContainer extends HTMLElement {
         return this._player ? this._player.source : this._source;
     }
 
+    @property({
+        reflect: false,
+        attribute: Attribute.SOURCE,
+        converter: {
+            fromAttribute: (value: string | null) => (value ? (JSON.parse(value) as SourceDescription) : undefined)
+        }
+    })
     set source(value: SourceDescription | undefined) {
-        this.removeAttribute(Attribute.SOURCE);
         this._setSource(value);
     }
 
@@ -276,75 +245,115 @@ export class UIContainer extends HTMLElement {
      * Whether to automatically adjusts the player's height to fit the video's aspect ratio.
      */
     get fluid(): boolean {
-        return this.hasAttribute(Attribute.FLUID);
+        return this._fluid;
     }
 
+    @property({ reflect: true, type: Boolean, attribute: Attribute.FLUID })
     set fluid(value: boolean) {
-        toggleAttribute(this, Attribute.FLUID, value);
+        this._fluid = value;
+        this._updateAspectRatio();
     }
 
     /**
      * Whether the player's audio is muted.
      */
     get muted(): boolean {
-        return this.hasAttribute(Attribute.MUTED);
+        return this._muted;
     }
 
+    @property({ reflect: true, type: Boolean, attribute: Attribute.MUTED })
     set muted(value: boolean) {
-        toggleAttribute(this, Attribute.MUTED, value);
+        this._muted = value;
+        if (this._player) {
+            this._player.muted = value;
+        }
     }
 
     /**
      * Whether the player should attempt to automatically start playback.
      */
     get autoplay(): boolean {
-        return this.hasAttribute(Attribute.AUTOPLAY);
+        return this._autoplay;
     }
 
+    @property({ reflect: true, type: Boolean, attribute: Attribute.AUTOPLAY })
     set autoplay(value: boolean) {
-        toggleAttribute(this, Attribute.AUTOPLAY, value);
+        this._autoplay = value;
+        if (this._player) {
+            this._player.autoplay = value;
+        }
     }
 
     /**
      * Whether the UI is in fullscreen mode.
      */
     get fullscreen(): boolean {
-        return this.hasAttribute(Attribute.FULLSCREEN);
+        return this._fullscreen;
+    }
+
+    @property({ reflect: true, type: Boolean, attribute: Attribute.FULLSCREEN })
+    private set fullscreen(value: boolean) {
+        if (this._fullscreen === value) return;
+        this._fullscreen = value;
+        for (const receiver of this._stateReceivers) {
+            if (receiver[StateReceiverProps].indexOf('fullscreen') >= 0) {
+                receiver.fullscreen = value;
+            }
+        }
     }
 
     /**
      * Whether the player is paused.
      */
     get paused(): boolean {
-        return this.hasAttribute(Attribute.PAUSED);
+        return this._paused;
+    }
+
+    @property({ reflect: true, type: Boolean, attribute: Attribute.PAUSED })
+    private set paused(value: boolean) {
+        this._paused = value;
+        this._updateTextTrackMargins();
+        this.updateUserIdle_();
     }
 
     /**
      * Whether the player is ended.
      */
     get ended(): boolean {
-        return this.hasAttribute(Attribute.ENDED);
+        return this._ended;
+    }
+
+    @property({ reflect: true, type: Boolean, attribute: Attribute.ENDED })
+    private set ended(value: boolean) {
+        this._ended = value;
     }
 
     /**
      * Whether the player is casting to a remote receiver.
      */
     get casting(): boolean {
-        return this.hasAttribute(Attribute.CASTING);
+        return this._casting;
+    }
+
+    @property({ reflect: true, type: Boolean, attribute: Attribute.CASTING })
+    private set casting(value: boolean) {
+        this._casting = value;
+        this._updateTextTrackMargins();
+        this.updateUserIdle_();
     }
 
     /**
      * Whether the user has stopped interacting with the UI and is considered to be "idle".
      */
     get userIdle(): boolean {
-        return this.hasAttribute(Attribute.USER_IDLE);
+        return this._userIdle;
     }
 
+    @property({ reflect: true, type: Boolean, attribute: Attribute.USER_IDLE })
     private set userIdle(value: boolean) {
-        if (this.userIdle === value) {
-            return;
-        }
-        toggleAttribute(this, Attribute.USER_IDLE, value);
+        if (this._userIdle === value) return;
+        this._userIdle = value;
+        this._updateTextTrackMargins();
         this.dispatchEvent(createCustomEvent(USER_IDLE_CHANGE_EVENT));
     }
 
@@ -353,20 +362,39 @@ export class UIContainer extends HTMLElement {
      * and when the user is considered to be "idle".
      */
     get userIdleTimeout(): number {
-        const defaultTimeout = this.deviceType === 'tv' ? DEFAULT_TV_USER_IDLE_TIMEOUT : DEFAULT_USER_IDLE_TIMEOUT;
-        return Number(this.getAttribute(Attribute.USER_IDLE_TIMEOUT) ?? defaultTimeout);
+        return this._userIdleTimeout ?? (this.deviceType === 'tv' ? DEFAULT_TV_USER_IDLE_TIMEOUT : DEFAULT_USER_IDLE_TIMEOUT);
     }
 
-    set userIdleTimeout(value: number) {
-        value = Number(value);
-        this.setAttribute(Attribute.USER_IDLE_TIMEOUT, String(isNaN(value) ? 0 : value));
+    @property({ reflect: true, type: Number, attribute: Attribute.USER_IDLE_TIMEOUT, useDefault: true })
+    set userIdleTimeout(value: number | undefined) {
+        this._userIdleTimeout = value === undefined || isNaN(value) ? undefined : value;
     }
 
     /**
      * The device type, either "desktop", "mobile" or "tv".
      */
     get deviceType(): DeviceType {
-        return (this.getAttribute(Attribute.DEVICE_TYPE) || 'desktop') as DeviceType;
+        return this._deviceType;
+    }
+
+    @property({ reflect: true, type: String, attribute: Attribute.DEVICE_TYPE })
+    set deviceType(value: DeviceType) {
+        if (this._deviceType === value) return;
+        this._deviceType = value;
+
+        toggleAttribute(this, Attribute.MOBILE, value === 'mobile');
+        toggleAttribute(this, Attribute.TV, value === 'tv');
+
+        window.removeEventListener('keydown', this._onTvKeyDown);
+        if (value === 'tv') {
+            window.addEventListener('keydown', this._onTvKeyDown);
+        }
+
+        for (const receiver of this._stateReceivers) {
+            if (receiver[StateReceiverProps].indexOf('deviceType') >= 0) {
+                receiver.deviceType = value;
+            }
+        }
     }
 
     /**
@@ -376,14 +404,27 @@ export class UIContainer extends HTMLElement {
      * when the player switches between its VOD-specific and live-only controls.
      */
     get streamType(): StreamType {
-        return (this.getAttribute(Attribute.STREAM_TYPE) || 'vod') as StreamType;
+        return this._streamType;
     }
 
     /**
      * @deprecated use {@link SourceDescription.streamType} instead.
      */
+    @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
     set streamType(streamType: StreamType) {
-        this.setAttribute(Attribute.STREAM_TYPE, streamType);
+        if (this._streamType === streamType) return;
+        this._streamType = streamType;
+        for (const receiver of this._stateReceivers) {
+            if (receiver[StateReceiverProps].indexOf('streamType') >= 0) {
+                receiver.streamType = streamType;
+            }
+        }
+        const streamTypeChangeEvent: StreamTypeChangeEvent = createCustomEvent(STREAM_TYPE_CHANGE_EVENT, {
+            bubbles: true,
+            composed: true,
+            detail: { streamType: streamType }
+        });
+        this.dispatchEvent(streamTypeChangeEvent);
     }
 
     /**
@@ -391,28 +432,36 @@ export class UIContainer extends HTMLElement {
      * and its stream type to be set to "dvr".
      */
     get dvrThreshold(): number {
-        return Number(this.getAttribute(Attribute.DVR_THRESHOLD) ?? DEFAULT_DVR_THRESHOLD);
+        return this._dvrThreshold;
     }
 
+    @property({ reflect: true, type: Number, attribute: Attribute.DVR_THRESHOLD, useDefault: true })
     set dvrThreshold(value: number) {
-        value = Number(value);
-        this.setAttribute(Attribute.DVR_THRESHOLD, String(isNaN(value) ? 0 : value));
+        this._dvrThreshold = isNaN(value) ? 0 : value;
+        this._updateStreamType();
     }
+
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_FIRST_PLAY })
+    private accessor _hasFirstPlay: boolean = false;
+
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.PLAYING_AD })
+    private accessor _isPlayingAd: boolean = false;
+
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_ERROR })
+    private accessor _hasError: boolean = false;
+
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.FULLWINDOW })
+    private accessor _isFullWindow: boolean = false;
 
     connectedCallback(): void {
-        shadyCss.styleElement(this);
+        super.connectedCallback();
         addGlobalStyles();
 
-        if (!(this._menuGroup instanceof MenuGroup)) {
-            customElements.upgrade(this._menuGroup);
-        }
-
         if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {
-            const deviceType: DeviceType = isMobile() ? 'mobile' : isTv() ? 'tv' : 'desktop';
-            this.setAttribute(Attribute.DEVICE_TYPE, deviceType);
+            this.deviceType = isMobile() ? 'mobile' : isTv() ? 'tv' : 'desktop';
         }
         if (!this.hasAttribute(Attribute.PAUSED)) {
-            this.setAttribute(Attribute.PAUSED, '');
+            this.paused = true;
         }
 
         this.tryInitializePlayer_();
@@ -420,15 +469,11 @@ export class UIContainer extends HTMLElement {
         for (const receiver of this._stateReceivers) {
             this.propagateStateToReceiver_(receiver);
         }
-        void forEachStateReceiverElement(this, this._playerEl, this.registerStateReceiver_);
         this._mutationObserver.observe(this, { childList: true, subtree: true });
         this.shadowRoot!.addEventListener('slotchange', this._onSlotChange);
 
         this._resizeObserver?.observe(this);
         this._updateTextTrackMargins();
-
-        this._menuGroup.addEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
-        this._menuGroup.addEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
 
         if (fullscreenAPI !== undefined) {
             document.addEventListener(fullscreenAPI.fullscreenchange_, this._onFullscreenChange);
@@ -440,7 +485,7 @@ export class UIContainer extends HTMLElement {
         if (this.deviceType === 'tv') {
             window.addEventListener('keydown', this._onTvKeyDown);
         }
-        if (this.hasAttribute(Attribute.FULLWINDOW)) {
+        if (this._isFullWindow) {
             window.addEventListener('keydown', this._exitFullscreenOnEsc);
         }
         this.addEventListener('keyup', this._onKeyUp);
@@ -453,11 +498,14 @@ export class UIContainer extends HTMLElement {
         if (this._player !== undefined) {
             return;
         }
+        if (this._playerRef.value === undefined) {
+            return;
+        }
         if (this._configuration.license === undefined && this._configuration.licenseUrl === undefined) {
             return;
         }
 
-        this._player = new ChromelessPlayer(this._playerEl, this._configuration);
+        this._player = new ChromelessPlayer(this._playerRef.value, this._configuration);
         if (this._source) {
             this._player.source = this._source;
             this._source = undefined;
@@ -475,13 +523,33 @@ export class UIContainer extends HTMLElement {
         this.dispatchEvent(createCustomEvent(READY_EVENT));
     }
 
+    protected override createRenderRoot(): HTMLElement | DocumentFragment {
+        const root = super.createRenderRoot();
+        root.addEventListener(TOGGLE_MENU_EVENT, this._onToggleMenu);
+        root.addEventListener(ENTER_FULLSCREEN_EVENT, this._onEnterFullscreen);
+        root.addEventListener(EXIT_FULLSCREEN_EVENT, this._onExitFullscreen);
+        root.addEventListener(PREVIEW_TIME_CHANGE_EVENT, this._onPreviewTimeChange);
+        return root;
+    }
+
+    protected override firstUpdated() {
+        if (this._menuGroupRef.value && !(this._menuGroupRef instanceof MenuGroup)) {
+            customElements.upgrade(this._menuGroupRef.value);
+        }
+
+        this.tryInitializePlayer_();
+
+        if (this._playerRef.value) {
+            void forEachStateReceiverElement(this, this._playerRef.value, this.registerStateReceiver_);
+        }
+    }
+
     disconnectedCallback(): void {
+        super.disconnectedCallback();
+
         this._resizeObserver?.disconnect();
         this._mutationObserver.disconnect();
         this.shadowRoot!.removeEventListener('slotchange', this._onSlotChange);
-
-        this._menuGroup.removeEventListener(CLOSE_MENU_EVENT, this._onCloseMenu);
-        this._menuGroup.removeEventListener(MENU_CHANGE_EVENT, this._onMenuChange);
 
         if (fullscreenAPI !== undefined) {
             document.removeEventListener(fullscreenAPI.fullscreenchange_, this._onFullscreenChange);
@@ -506,82 +574,22 @@ export class UIContainer extends HTMLElement {
         this._stateReceivers.length = 0;
     }
 
-    attributeChangedCallback(attrName: string, oldValue: any, newValue: any): void {
-        if (newValue === oldValue) {
-            return;
-        }
-        const hasValue = newValue != null;
-        if (attrName === Attribute.CONFIGURATION) {
-            this._setConfiguration(newValue ? (JSON.parse(newValue) as UIPlayerConfiguration) : {});
-        } else if (attrName === Attribute.SOURCE) {
-            this._setSource(newValue ? (JSON.parse(newValue) as SourceDescription) : undefined);
-        } else if (attrName === Attribute.MUTED) {
-            if (this._player) {
-                this._player.muted = hasValue;
-            }
-        } else if (attrName === Attribute.AUTOPLAY) {
-            if (this._player) {
-                this._player.autoplay = hasValue;
-            }
-        } else if (attrName === Attribute.FULLSCREEN) {
-            for (const receiver of this._stateReceivers) {
-                if (receiver[StateReceiverProps].indexOf('fullscreen') >= 0) {
-                    receiver.fullscreen = hasValue;
-                }
-            }
-        } else if (attrName === Attribute.DEVICE_TYPE) {
-            toggleAttribute(this, Attribute.MOBILE, newValue === 'mobile');
-            toggleAttribute(this, Attribute.TV, newValue === 'tv');
-            window.removeEventListener('keydown', this._onTvKeyDown);
-            if (newValue === 'tv') {
-                window.addEventListener('keydown', this._onTvKeyDown);
-            }
-            for (const receiver of this._stateReceivers) {
-                if (receiver[StateReceiverProps].indexOf('deviceType') >= 0) {
-                    receiver.deviceType = newValue;
-                }
-            }
-        } else if (attrName === Attribute.STREAM_TYPE) {
-            for (const receiver of this._stateReceivers) {
-                if (receiver[StateReceiverProps].indexOf('streamType') >= 0) {
-                    receiver.streamType = newValue;
-                }
-            }
-            const streamTypeChangeEvent: StreamTypeChangeEvent = createCustomEvent(STREAM_TYPE_CHANGE_EVENT, {
-                bubbles: true,
-                composed: true,
-                detail: { streamType: newValue }
-            });
-            this.dispatchEvent(streamTypeChangeEvent);
-        } else if (attrName === Attribute.FLUID) {
-            this._updateAspectRatio();
-        } else if (attrName === Attribute.USER_IDLE) {
-            this._updateTextTrackMargins();
-        } else if (attrName === Attribute.PAUSED || attrName === Attribute.CASTING) {
-            this._updateTextTrackMargins();
-            this.updateUserIdle_();
-        } else if (attrName === Attribute.DVR_THRESHOLD) {
-            this._updateStreamType();
-        }
-        if (UIContainer.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            shadyCss.styleSubtree(this);
-        }
-    }
-
     private readonly _onMutation = (mutations: MutationRecord[]): void => {
+        const playerElement = this._playerRef.value;
+        if (!playerElement) return;
         for (const mutation of mutations) {
             if (mutation.type === 'childList') {
                 const { addedNodes, removedNodes } = mutation;
                 for (let i = 0; i < addedNodes.length; i++) {
                     const node = addedNodes[i];
                     if (isElement(node)) {
-                        void forEachStateReceiverElement(node, this._playerEl, this.registerStateReceiver_);
+                        void forEachStateReceiverElement(node, playerElement, this.registerStateReceiver_);
                     }
                 }
                 for (let i = 0; i < removedNodes.length; i++) {
                     const node = removedNodes[i];
                     if (isElement(node)) {
-                        void forEachStateReceiverElement(node, this._playerEl, this.unregisterStateReceiver_);
+                        void forEachStateReceiverElement(node, playerElement, this.unregisterStateReceiver_);
                     }
                 }
             }
@@ -589,7 +597,9 @@ export class UIContainer extends HTMLElement {
     };
 
     private readonly _onSlotChange = (): void => {
-        void forEachStateReceiverElement(this, this._playerEl, this.registerStateReceiver_);
+        if (this._playerRef.value) {
+            void forEachStateReceiverElement(this, this._playerRef.value, this.registerStateReceiver_);
+        }
         this._updateTextTrackMargins();
     };
 
@@ -657,9 +667,21 @@ export class UIContainer extends HTMLElement {
         }
     }
 
+    private get menuOpened_(): boolean {
+        return this._menuOpened;
+    }
+
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.MENU_OPENED })
+    private set menuOpened_(menuOpened: boolean) {
+        if (this._menuOpened === menuOpened) return;
+        this._menuOpened = menuOpened;
+        // Toggle manually, so the menu layer immediately becomes visible and can receive focus.
+        toggleAttribute(this, Attribute.MENU_OPENED, menuOpened);
+    }
+
     private openMenu_(menuToOpen: string, opener: HTMLElement | undefined): void {
-        const topChromeRect = Rectangle.fromRect(this._topChromeEl.getBoundingClientRect());
-        const bottomChromeRect = Rectangle.fromRect(this._bottomChromeEl.getBoundingClientRect());
+        const topChromeRect = Rectangle.fromRect(this._topChromeRef.value!.getBoundingClientRect());
+        const bottomChromeRect = Rectangle.fromRect(this._bottomChromeRef.value!.getBoundingClientRect());
 
         // Open menu in same quadrant as its opener
         // If there's no opener, open in bottom right corner by default
@@ -674,7 +696,7 @@ export class UIContainer extends HTMLElement {
             }
         }
 
-        this._menuGroup.openMenu(menuToOpen, opener);
+        this._menuGroupRef.value!.openMenu(menuToOpen, opener);
         this._menuOpener = opener;
 
         const props = {
@@ -690,7 +712,7 @@ export class UIContainer extends HTMLElement {
 
     private closeMenu_(): void {
         // Menu group might not be upgraded yet
-        this._menuGroup.closeMenu?.();
+        this._menuGroupRef.value?.closeMenu?.();
         this._menuOpener?.focus();
         this._menuOpener = undefined;
     }
@@ -699,12 +721,14 @@ export class UIContainer extends HTMLElement {
         const event = rawEvent as ToggleMenuEvent;
         event.stopPropagation();
         const menuId = event.detail.menu;
-        if (!this._menuGroup.getMenuById(menuId)) {
+        const menuGroup = this._menuGroupRef.value;
+        if (!menuGroup) return;
+        if (!menuGroup.getMenuById(menuId)) {
             console.error(`<theoplayer-ui>: cannot find menu with ID "${menuId}"`);
             return;
         }
         const opener = isHTMLElement(event.target) ? event.target : undefined;
-        if (this._menuGroup.isMenuOpen(menuId)) {
+        if (menuGroup.isMenuOpen(menuId)) {
             this.closeMenu_();
         } else {
             // Always close the previous menu first
@@ -719,14 +743,15 @@ export class UIContainer extends HTMLElement {
     };
 
     private readonly _onMenuChange = (): void => {
-        this._menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
-        this._menuEl.removeEventListener('click', this._onMenuClick);
-        if (this._menuGroup.hasCurrentMenu()) {
-            this._menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
-            this._menuEl.addEventListener('click', this._onMenuClick);
-            this.setAttribute(Attribute.MENU_OPENED, '');
+        const menuEl = this._menuRef.value!;
+        menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
+        menuEl.removeEventListener('click', this._onMenuClick);
+        if (this._menuGroupRef.value!.hasCurrentMenu()) {
+            menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
+            menuEl.addEventListener('click', this._onMenuClick);
+            this.menuOpened_ = true;
         } else {
-            this.removeAttribute(Attribute.MENU_OPENED);
+            this.menuOpened_ = false;
         }
         this.updateUserIdle_();
     };
@@ -739,9 +764,9 @@ export class UIContainer extends HTMLElement {
         // If the browser doesn't support yet `pointerType` on `click` events,
         // we use the type from the previous `pointerdown` event.
         const pointerType = (event as PointerEvent).pointerType ?? this._pointerType;
-        if (event.target === this._menuEl && pointerType === 'mouse') {
+        if (event.target === this._menuRef.value && pointerType === 'mouse') {
             // Close menu when clicking (with mouse) on menu backdrop
-            if (this._menuGroup.closeCurrentMenu()) {
+            if (this._menuGroupRef.value!.closeCurrentMenu()) {
                 event.preventDefault();
             }
         }
@@ -760,8 +785,8 @@ export class UIContainer extends HTMLElement {
             }
         } else if (this._player && this._player.presentation.supportsMode('fullscreen')) {
             this._player.presentation.requestMode('fullscreen');
-        } else if (!this.hasAttribute(Attribute.FULLWINDOW)) {
-            toggleAttribute(this, Attribute.FULLWINDOW, true);
+        } else if (!this._isFullWindow) {
+            this._isFullWindow = true;
             document.documentElement.classList.add(FULL_WINDOW_ROOT_CLASS);
             window.addEventListener('keydown', this._exitFullscreenOnEsc);
             this._onFullscreenChange();
@@ -780,8 +805,8 @@ export class UIContainer extends HTMLElement {
         if (this._player && this._player.presentation.currentMode === 'fullscreen') {
             this._player.presentation.requestMode('inline');
         }
-        if (this.hasAttribute(Attribute.FULLWINDOW)) {
-            toggleAttribute(this, Attribute.FULLWINDOW, false);
+        if (this._isFullWindow) {
+            this._isFullWindow = false;
             document.documentElement.classList.remove(FULL_WINDOW_ROOT_CLASS);
             window.removeEventListener('keydown', this._exitFullscreenOnEsc);
             this._onFullscreenChange();
@@ -802,10 +827,10 @@ export class UIContainer extends HTMLElement {
         if (!isFullscreen && this._player !== undefined && this._player.presentation.currentMode === 'fullscreen') {
             isFullscreen = true;
         }
-        if (this.hasAttribute(Attribute.FULLWINDOW)) {
+        if (this._isFullWindow) {
             isFullscreen = true;
         }
-        toggleAttribute(this, Attribute.FULLSCREEN, isFullscreen);
+        this.fullscreen = isFullscreen;
     };
 
     private readonly _exitFullscreenOnEsc = (event: KeyboardEvent): void => {
@@ -834,7 +859,7 @@ export class UIContainer extends HTMLElement {
 
     private readonly _updateError = (): void => {
         const error = this._player?.errorObject;
-        toggleAttribute(this, Attribute.HAS_ERROR, error !== undefined);
+        this._hasError = error !== undefined;
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('error') >= 0) {
                 receiver.error = error;
@@ -843,25 +868,23 @@ export class UIContainer extends HTMLElement {
     };
 
     private readonly _onPlay = (): void => {
-        this.setAttribute(Attribute.HAS_FIRST_PLAY, '');
-        this.removeAttribute(Attribute.PAUSED);
+        this._hasFirstPlay = true;
+        this.paused = false;
         this._updateEnded();
     };
 
     private readonly _onPause = (): void => {
-        this.setAttribute(Attribute.PAUSED, '');
+        this.paused = true;
         this._updateEnded();
     };
 
     private readonly _updatePausedAndEnded = (): void => {
-        const paused = this._player ? this._player.paused : true;
-        toggleAttribute(this, Attribute.PAUSED, paused);
+        this.paused = this._player ? this._player.paused : true;
         this._updateEnded();
     };
 
     private readonly _updateEnded = (): void => {
-        const ended = this._player ? this._player.ended : false;
-        toggleAttribute(this, Attribute.ENDED, ended);
+        this.ended = this._player ? this._player.ended : false;
     };
 
     private readonly _updateStreamType = (): void => {
@@ -967,23 +990,22 @@ export class UIContainer extends HTMLElement {
     };
 
     private readonly _updateCasting = (): void => {
-        const casting = this._player?.cast?.casting ?? false;
-        toggleAttribute(this, Attribute.CASTING, casting);
+        this.casting = this._player?.cast?.casting ?? false;
     };
 
     private readonly _updatePlayingAd = (): void => {
-        const playingAd = this._player?.ads?.playing ?? false;
-        toggleAttribute(this, Attribute.PLAYING_AD, playingAd);
+        this._isPlayingAd = this._player?.ads?.playing ?? false;
     };
 
     private readonly _onSourceChange = (): void => {
         this.closeMenu_();
-        const isPlaying = this._player !== undefined && !this._player.paused;
-        toggleAttribute(this, Attribute.HAS_FIRST_PLAY, isPlaying);
+        this._hasFirstPlay = this._player !== undefined && !this._player.paused;
     };
 
     private isUserIdle_(): boolean {
-        return !this._isUserActive && !this.paused && !this.casting && !this._menuGroup.hasCurrentMenu();
+        return (
+            !this._isUserActive && !this.paused && !this.casting && (this._menuGroupRef.value ? !this._menuGroupRef.value.hasCurrentMenu() : false)
+        );
     }
 
     private setUserActive_(): void {
@@ -1030,7 +1052,7 @@ export class UIContainer extends HTMLElement {
     }
 
     private isPlayerOrMedia_(node: Node): boolean {
-        return node === this || this._playerEl.contains(node);
+        return node === this || this._playerRef.value!.contains(node);
     }
 
     private readonly _onTvKeyDown = (event: KeyboardEvent): void => {
@@ -1130,8 +1152,8 @@ export class UIContainer extends HTMLElement {
         if (player === undefined) {
             return;
         }
-        const topChromeRect = getVisibleRect(this._topChromeSlot);
-        const bottomChromeRect = getVisibleRect(this._bottomChromeSlot);
+        const topChromeRect = this._topChromeSlotRef.value && getVisibleRect(this._topChromeSlotRef.value);
+        const bottomChromeRect = this._bottomChromeSlotRef.value && getVisibleRect(this._bottomChromeSlotRef.value);
         player.textTrackStyle.marginTop = topChromeRect?.height;
         player.textTrackStyle.marginBottom = bottomChromeRect?.height;
     };
@@ -1196,9 +1218,56 @@ export class UIContainer extends HTMLElement {
             this.propagatePlayerToAllReceivers_();
         }
     };
-}
 
-customElements.define('theoplayer-ui', UIContainer);
+    protected override render(): HTMLTemplateResult {
+        return html`
+            <div part="layer media-layer" ${ref(this._playerRef)}></div>
+            <div part="layer gesture-layer">
+                <theoplayer-gesture-receiver></theoplayer-gesture-receiver>
+            </div>
+            <div part="layer vertical-layer">
+                <div part="top chrome" ${ref(this._topChromeRef)}>
+                    <slot
+                        name="top-chrome"
+                        ${ref(this._topChromeSlotRef)}
+                        @transitionstart=${this._onChromeSlotTransition}
+                        @transitionend=${this._onChromeSlotTransition}
+                    ></slot>
+                </div>
+                <div part="middle chrome">
+                    <slot name="middle-chrome"></slot>
+                </div>
+                <div part="layer centered-layer centered loading">
+                    <slot name="centered-loading"></slot>
+                </div>
+                <div part="layer centered-layer centered chrome">
+                    <slot name="centered-chrome"></slot>
+                </div>
+                <div part="bottom chrome" ${ref(this._bottomChromeRef)}>
+                    <slot
+                        ${ref(this._bottomChromeSlotRef)}
+                        @transitionstart=${this._onChromeSlotTransition}
+                        @transitionend=${this._onChromeSlotTransition}
+                        ><!-- default, effectively "bottom-chrome" --></slot
+                    >
+                </div>
+            </div>
+            <div part="layer menu-layer" ${ref(this._menuRef)}>
+                <theoplayer-menu-group
+                    ${ref(this._menuGroupRef)}
+                    part="menu"
+                    @theoplayermenuclose=${this._onCloseMenu}
+                    @theoplayermenuchange=${this._onMenuChange}
+                >
+                    <slot name="menu"></slot>
+                </theoplayer-menu-group>
+            </div>
+            <div part="layer error-layer">
+                <slot name="error"></slot>
+            </div>
+        `;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {

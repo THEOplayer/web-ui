@@ -1,22 +1,17 @@
+import { html, type HTMLTemplateResult } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { MenuButton } from './MenuButton';
-import { buttonTemplate } from './Button';
 import settingsIcon from '../icons/settings.svg';
 import { Attribute } from '../util/Attribute';
-import { createTemplate } from '../util/TemplateUtils';
-
-const template = createTemplate('theoplayer-settings-menu-button', buttonTemplate(`<span part="icon"><slot>${settingsIcon}</slot></span>`));
 
 /**
- * `<theoplayer-settings-menu-button>` - A menu button that opens a {@link SettingsMenu}.
+ * A menu button that opens a {@link SettingsMenu}.
  *
  * @attribute `menu` - The ID of the settings menu.
- * @group Components
  */
+@customElement('theoplayer-settings-menu-button')
 export class SettingsMenuButton extends MenuButton {
-    constructor() {
-        super({ template: template() });
-    }
-
     override connectedCallback() {
         super.connectedCallback();
 
@@ -24,9 +19,11 @@ export class SettingsMenuButton extends MenuButton {
             this.setAttribute(Attribute.ARIA_LABEL, 'open settings menu');
         }
     }
-}
 
-customElements.define('theoplayer-settings-menu-button', SettingsMenuButton);
+    protected override render(): HTMLTemplateResult {
+        return html`<span part="icon"><slot>${unsafeSVG(settingsIcon)}</slot></span>`;
+    }
+}
 
 declare global {
     interface HTMLElementTagNameMap {
