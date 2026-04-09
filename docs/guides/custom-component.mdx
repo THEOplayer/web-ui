@@ -1,5 +1,5 @@
 ---
-description: Build a custom button component that integrates with the player, and which you can use in your own custom UI.
+description: Build custom components that integrate with the player, and which you can use in your own custom UI.
 sidebar_position: 2
 ---
 
@@ -10,10 +10,25 @@ import CodeBlock from '@theme/CodeBlock';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './shared.module.css';
-import playButtonStep1 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-play-button-step1.js';
-import playButtonStep2 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-play-button-step2.js';
-import qualityLabelStep1 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-quality-label-step1.js';
-import qualityLabelStep2 from '!!raw-loader!../static/open-video-ui/v1/guides/web/custom-component/my-quality-label-step2.js';
+import playButtonStep1 from '!!raw-loader!../static/open-video-ui/v2/guides/web/custom-component/my-play-button-step1.js';
+import playButtonStep2 from '!!raw-loader!../static/open-video-ui/v2/guides/web/custom-component/my-play-button-step2.js';
+import playButtonStep3 from '!!raw-loader!../static/open-video-ui/v2/guides/web/custom-component/my-play-button-step3.js';
+import qualityLabelStep1 from '!!raw-loader!../static/open-video-ui/v2/guides/web/custom-component/my-quality-label-step1.js';
+import qualityLabelStep2 from '!!raw-loader!../static/open-video-ui/v2/guides/web/custom-component/my-quality-label-step2.js';
+
+This guide demonstrates how to make your own custom components that integrate with the player,
+and which you can use in your own custom UI.
+
+:::note
+
+We use [Lit](https://lit.dev/) to build all components in Open Video UI for Web,
+and we highly recommend it for your own custom components.
+
+You can also use a different library (like [Svelte](https://svelte.dev/docs/svelte/custom-elements)),
+or you can use the [Custom Element](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements)
+and [Shadow DOM](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM) APIs directly.
+
+:::
 
 ## A custom play button
 
@@ -35,7 +50,7 @@ Create a new JavaScript file called `my-play-button.js` with the following code:
     language="js"
     showLineNumbers
     title={
-        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/guides/web/custom-component/my-play-button-step1.js">
+        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/guides/web/custom-component/my-play-button-step1.js">
             my-play-button.js (step 1)
         </Link>
     }
@@ -61,7 +76,7 @@ It should look something like this:
 
 <Example
     className={styles.player}
-    src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-play-button-step1.html')}
+    src={useBaseUrl('/open-video-ui/v2/guides/web/custom-component/my-play-button-step1.html')}
     hideDeviceType
     hideSource
 />
@@ -83,12 +98,27 @@ First, the UI component needs to opt into this mechanism by [mixing in](https://
 This mixin takes the original superclass, and an array of dependencies which need to be injected:
 
 ```js
-import { Button, buttonTemplate, StateReceiverMixin } from '@theoplayer/web-ui';
+import { Button, StateReceiverMixin } from '@theoplayer/web-ui';
 
 export class MyPlayButton extends StateReceiverMixin(Button, ['player']) {
     // ...
 }
 ```
+
+:::tip For TypeScript users
+
+If you're using TypeScript, you can also use the `@stateReceiver` decorator instead.
+
+```typescript
+import { Button, stateReceiver } from '@theoplayer/web-ui';
+
+@stateReceiver(['player'])
+export class MyPlayButton extends Button {
+    // ...
+}
+```
+
+:::
 
 Once this button is added to a `<theoplayer-ui>`, it'll automatically receive the backing THEOplayer instance in its `player` property.
 If you want to do some custom logic when this happens, you can implement a setter for this property:
@@ -102,14 +132,13 @@ export class MyPlayButton extends StateReceiverMixin(Button, ['player']) {
 }
 ```
 
-Change your `handleClick()` method to call `play()` or `pause()` on the player.
-You can also update the text content of your button to reflect the new state:
+Change your `handleClick()` method to call `play()` or `pause()` on the player:
 
 <CodeBlock
     language="js"
     showLineNumbers
     title={
-        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/guides/web/custom-component/my-play-button-step2.js">
+        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/guides/web/custom-component/my-play-button-step2.js">
             my-play-button.js (step 2)
         </Link>
     }
@@ -121,13 +150,56 @@ It should look something like this:
 
 <Example
     className={styles.player}
-    src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-play-button-step2.html')}
+    src={useBaseUrl('/open-video-ui/v2/guides/web/custom-component/my-play-button-step2.html')}
     hideDeviceType
     hideSource
 />
 
 Try clicking the "Play" button in the middle of the screen. The player starts playing!<br/>
 Clicking it again should pause the player.
+
+### Step 3: Update the button text
+
+Notice that the button text always says "Play", even when the player is already playing.
+To fix this, we will need to add a [reactive property](https://lit.dev/docs/components/properties/)
+that we can use inside our `render()` method.
+
+<CodeBlock
+    language="js"
+    showLineNumbers
+    title={
+        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/guides/web/custom-component/my-play-button-step3.js">
+            my-play-button.js (step 3)
+        </Link>
+    }
+>
+    {playButtonStep3}
+</CodeBlock>
+
+:::tip For TypeScript users
+
+If you're using TypeScript, you can also use the `@state` decorator instead.
+
+```typescript
+import { Button } from '@theoplayer/web-ui';
+import { state } from 'lit';
+
+export class MyPlayButton extends Button {
+    @state()
+    private accessor _paused: boolean = true;
+}
+```
+
+:::
+
+It should look something like this:
+
+<Example
+    className={styles.player}
+    src={useBaseUrl('/open-video-ui/v2/guides/web/custom-component/my-play-button-step3.html')}
+    hideDeviceType
+    hideSource
+/>
 
 Congratulations, you've built your very own play button! 🎉
 
@@ -149,7 +221,7 @@ Create a new JavaScript file called `my-quality-label.js` with the following cod
     language="js"
     showLineNumbers
     title={
-        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/guides/web/custom-component/my-quality-label-step1.js">
+        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/guides/web/custom-component/my-quality-label-step1.js">
             my-quality-label.js (step 1)
         </Link>
     }
@@ -192,7 +264,7 @@ It should look something like this:
 
 <Example
     className={styles.player}
-    src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-quality-label-step1.html')}
+    src={useBaseUrl('/open-video-ui/v2/guides/web/custom-component/my-quality-label-step1.html')}
     hideDeviceType
     hideSource
 />
@@ -206,13 +278,15 @@ Right now, the quality label is static, it doesn't actually update when the play
    so we'll be notified when the video track becomes available.
 3. We register an `activequalitychanged` event listener on that video track,
    so we can respond when the active video quality changes.
-4. When our `activequalitychanged` listener fires, we update the contents of our `<span>` with the quality's height.
+4. When our `activequalitychanged` listener fires, we update the reactive property `this._activeVideoQuality`,
+   which will trigger a re-render when changed.
+5. When we re-render the component, we return an HTML template containing the active quality's height.
 
 <CodeBlock
     language="js"
     showLineNumbers
     title={
-        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/guides/web/custom-component/my-quality-label-step2.js">
+        <Link href="https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/guides/web/custom-component/my-quality-label-step2.js">
             my-quality-label.js (step 2)
         </Link>
     }
@@ -224,7 +298,7 @@ It should look something like this:
 
 <Example
     className={styles.player}
-    src={useBaseUrl('/open-video-ui/v1/guides/web/custom-component/my-quality-label-step2.html')}
+    src={useBaseUrl('/open-video-ui/v2/guides/web/custom-component/my-quality-label-step2.html')}
     hideDeviceType
     hideSource
 />
@@ -233,3 +307,9 @@ Try changing the active quality by clicking the ⚙️ (Settings) button, and ch
 You should see your custom label update to show the height of the new quality.
 
 That's it! You now have your very own active quality label! 🥳
+
+## Further reading
+
+- [Intro to Lit](https://lit.dev/tutorials/intro-to-lit/)
+- [Lit documentation](https://lit.dev/docs/)
+- [Web components guide on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_components)
