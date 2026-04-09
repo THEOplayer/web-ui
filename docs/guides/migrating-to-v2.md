@@ -30,7 +30,7 @@ As of version 2, Open Video UI for Web ships its own polyfill bundle, which incl
 - [Lit's `polyfill-support` module](https://lit.dev/docs/v2/tools/requirements/#polyfills)
 
 We recommend switching to our polyfill bundle, so you'll always have all the necessary polyfills needed
-to support legacy browsers. Alternatively, [you can load these polyfills manually](https://github.com/THEOplayer/web-ui/blob/%40theoplayer/web-ui%402.0.0-beta.0/src/polyfills.ts).
+to support legacy browsers. Alternatively, [you can load these polyfills manually](https://github.com/THEOplayer/web-ui/blob/%40theoplayer/web-ui%402.0.0/src/polyfills.ts).
 
 ```diff
 - import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js';
