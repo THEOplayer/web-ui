@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 2.1.0
+
+### ✨ Features
+
+- Added support for THEOplayer 11.x.
+
 ## 2.0.0
 
 ### 💥 Breaking Changes

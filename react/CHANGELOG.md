@@ -1,5 +1,16 @@
 # @theoplayer/react-ui
 
+## 2.1.0
+
+### ✨ Features
+
+- Added support for React 19.
+- Added support for THEOplayer 11.x.
+
+### 📦 Dependency Updates
+
+- See changes to [Open Video UI for Web v2.1.0](https://github.com/THEOplayer/web-ui/blob/%40theoplayer%2Fweb-ui%402.1.0/CHANGELOG.md)
+
 ## 2.0.0
 
 ### 💥 Breaking Changes
