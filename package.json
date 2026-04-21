@@ -59,7 +59,7 @@
     "lit": "^3.3.2"
   },
   "peerDependencies": {
-    "theoplayer": "^7 || ^8 || ^9 || ^10"
+    "theoplayer": "^7 || ^8 || ^9 || ^10 || ^11"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
@@ -88,7 +88,7 @@
     "rollup-plugin-string": "^3.0.0",
     "rollup-plugin-swc3": "^0.12.1",
     "serve": "^14.2.4",
-    "theoplayer": "^10.13.0",
+    "theoplayer": "^11.0.0",
     "tslib": "^2.8.1",
     "typedoc": "^0.28.14",
     "typedoc-plugin-mdn-links": "^5.0.9",
