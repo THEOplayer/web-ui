@@ -4,13 +4,6 @@ import { localizeLanguageName } from '../util/CommonUtils';
 import { customElement, property, state } from 'lit/decorators.js';
 import { html, type HTMLTemplateResult } from 'lit';
 
-declare module 'theoplayer/chromeless' {
-    interface TextTrack {
-        // TODO Remove after updating to THEOplayer 10.14.0.
-        captionChannel?: number;
-    }
-}
-
 const TRACK_EVENTS = ['change', 'update'] as const;
 
 /**
