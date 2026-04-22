@@ -297,7 +297,7 @@ export abstract class Range extends LitElement {
                 .min=${this.min}
                 .max=${this.max}
                 .step=${this.step}
-                .value=${this.value}
+                .valueAsNumber=${this.value}
                 .disabled=${this.disabled || this.inert}
                 aria-label="${this.getAriaLabel()}"
                 aria-valuetext=${this.getAriaValueText()}
