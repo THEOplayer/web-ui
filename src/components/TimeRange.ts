@@ -159,7 +159,7 @@ export class TimeRange extends Range {
         }
         this.min = min;
         this.max = max;
-        this.value = value;
+        this.updateValue(value);
         this.updateDisabled_(seekable);
     };
 
@@ -269,7 +269,7 @@ export class TimeRange extends Range {
         const delta = (performance.now() - this._lastUpdateTime) / 1000;
         const newValue = this._lastCurrentTime + delta * this._lastPlaybackRate;
         if (Math.abs(newValue - this.value) >= this.getMinimumStepForVisibleChange_()) {
-            this.value = newValue;
+            this.updateValue(newValue);
 
             // Use cached width to avoid synchronous layout
             this._updateRange(/* useCachedWidth = */ true);

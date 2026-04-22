@@ -28,7 +28,8 @@ export abstract class Range extends LitElement {
 
     private _min: number = 0;
     private _max: number = 100;
-    private _value: number = 0;
+    @state()
+    private accessor _value: number = 0;
     private _disabled: boolean = false;
     private _hidden: boolean = false;
     private _inert: boolean = false;
@@ -111,8 +112,18 @@ export abstract class Range extends LitElement {
             newValue = Math.min(this.max, newValue);
         }
         if (this._value === newValue) return;
-        this._value = newValue;
+        this.updateValue(newValue);
         this.handleInput();
+    }
+
+    /**
+     * Update the current value *without* triggering {@link handleInput}.
+     *
+     * This should be used when synchronizing the range with external state,
+     * e.g. when updating the value of a time range with the player's current time.
+     */
+    protected updateValue(value: number) {
+        this._value = value;
     }
 
     /**

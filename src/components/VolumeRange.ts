@@ -52,7 +52,7 @@ export class VolumeRange extends Range {
 
     private readonly _updateFromPlayer = () => {
         if (this._player !== undefined) {
-            this.value = this._player.volume;
+            this.updateValue(this._player.volume);
         }
     };
 
