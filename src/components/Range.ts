@@ -98,7 +98,7 @@ export abstract class Range extends LitElement {
      * The current value.
      */
     get value(): number {
-        return this._value;
+        return this.rawValue;
     }
 
     @property({ reflect: false, attribute: false })
@@ -110,9 +110,25 @@ export abstract class Range extends LitElement {
         if (!isNaN(this.max)) {
             newValue = Math.min(this.max, newValue);
         }
-        if (this._value === newValue) return;
-        this._value = newValue;
+        if (this.rawValue === newValue) return;
+        this.rawValue = newValue;
         this.handleInput();
+    }
+
+    /**
+     * The current value.
+     *
+     * Setting this property does *not* trigger {@link handleInput}.
+     * This should be used when synchronizing the range with external state,
+     * e.g. when updating the value of a time range with the player's current time.
+     */
+    protected get rawValue() {
+        return this._value;
+    }
+
+    @state()
+    protected set rawValue(value: number) {
+        this._value = value;
     }
 
     /**
@@ -297,7 +313,7 @@ export abstract class Range extends LitElement {
                 .min=${this.min}
                 .max=${this.max}
                 .step=${this.step}
-                .value=${this.value}
+                .valueAsNumber=${this.rawValue}
                 .disabled=${this.disabled || this.inert}
                 aria-label="${this.getAriaLabel()}"
                 aria-valuetext=${this.getAriaValueText()}
