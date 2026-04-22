@@ -161,6 +161,7 @@ export class TimeRange extends Range {
         this.max = max;
         this.rawValue = value;
         this.updateDisabled_(seekable);
+        this._updateRange();
     };
 
     private updateDisabled_(seekable: TimeRanges | undefined = this._player?.seekable) {
