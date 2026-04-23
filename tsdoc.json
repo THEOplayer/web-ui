@@ -16,6 +16,11 @@
       "tagName": "@slot",
       "syntaxKind": "block",
       "allowMultiple": true
+    },
+    {
+      "tagName": "@cssproperty",
+      "syntaxKind": "block",
+      "allowMultiple": true
     }
   ]
 }
