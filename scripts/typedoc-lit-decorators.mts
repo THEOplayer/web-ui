@@ -81,10 +81,24 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
                     console.warn(`Unexpected attribute in @property: ${attributeInitializer.getText()}`);
                     continue;
                 }
-                const comment = (refl.comment ??= new typedoc.Comment([]));
-                comment.blockTags.unshift(new typedoc.CommentTag(`@attribute`, [attributeNamePart]));
+                // Add as an `@attribute` comment on the parent class.
+                const parentClass = getParentClass(refl);
+                if (!parentClass) {
+                    console.warn(`Cannot find parent class of @property in reflection: ${refl.toString()}`);
+                    continue;
+                }
+                const comment = (parentClass.comment ??= new typedoc.Comment([]));
+                comment.blockTags.push(new typedoc.CommentTag(`@attribute`, [attributeNamePart]));
                 break;
             }
         }
     }
+}
+
+function getParentClass(refl: typedoc.Reflection): typedoc.Reflection | undefined {
+    let current: typedoc.Reflection | undefined = refl;
+    while (current !== undefined && current.kind !== typedoc.ReflectionKind.Class) {
+        current = current.parent;
+    }
+    return current;
 }
