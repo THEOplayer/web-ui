@@ -89,11 +89,21 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
                 }
                 const attributeComment = new typedoc.CommentTag(`@attribute`, [attributeNamePart]);
                 // Append summary.
-                if (refl.comment?.summary) {
+                let summary = refl.comment?.summary;
+                if (!summary && ts.isSetAccessorDeclaration(declaration)) {
+                    // @property() must appear on the setter, but the documentation is usually on the getter.
+                    const symbol = context.getSymbolFromReflection(refl)!;
+                    const getter = symbol.declarations?.find(ts.isGetAccessorDeclaration);
+                    if (getter) {
+                        const getterComment = context.getNodeComment(getter, false);
+                        summary = getterComment?.summary;
+                    }
+                }
+                if (summary) {
                     if (attributeComment.content.length < 2) {
                         attributeComment.content.push({ kind: 'text', text: ' - ' });
                     }
-                    attributeComment.content.push(...refl.comment.summary);
+                    attributeComment.content.push(...summary);
                 }
                 const comment = (parentClass.comment ??= new typedoc.Comment([]));
                 comment.blockTags.push(attributeComment);
