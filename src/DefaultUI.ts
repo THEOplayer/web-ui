@@ -13,7 +13,6 @@ import type { StreamType } from './util/StreamType';
 import { USER_IDLE_CHANGE_EVENT } from './events/UserIdleChangeEvent';
 import { READY_EVENT } from './events/ReadyEvent';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
-import { toggleAttribute } from './util/CommonUtils';
 import { createCustomEvent } from './util/EventUtils';
 
 /**
@@ -252,9 +251,25 @@ export class DefaultUI extends LitElement {
     set deviceType(value: DeviceType) {
         if (this._deviceType === value) return;
         this._deviceType = value;
-        toggleAttribute(this, Attribute.MOBILE, value === 'mobile');
-        toggleAttribute(this, Attribute.TV, value === 'tv');
+        this.mobile = value === 'mobile';
+        this.tv = value === 'tv';
     }
+
+    /**
+     * Whether the user is on a mobile device.
+     *
+     * Equivalent to `deviceType == "mobile"`.
+     */
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.MOBILE })
+    private accessor mobile: boolean = false;
+
+    /**
+     * Whether the user is on a TV device.
+     *
+     * Equivalent to `deviceType == "tv"`.
+     */
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.TV })
+    private accessor tv: boolean = false;
 
     /**
      * The minimum length (in seconds) of a livestream's sliding window for the stream to be DVR
