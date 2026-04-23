@@ -1,4 +1,7 @@
 import { Application, type CommentDisplayPart, CommentTag, DefaultThemeRenderContext, i18n, JSX, translateTagName } from 'typedoc';
+import htm from 'htm';
+
+const html = htm.bind(JSX.createElement);
 
 type CollapsibleTag = { tag: `@${string}`; heading: string; columnHeading: string };
 
@@ -14,48 +17,34 @@ const collapsibleTags: ReadonlyArray<CollapsibleTag> = [
 function commentTagTable(context: DefaultThemeRenderContext, tag: CollapsibleTag, commentTags: CommentTag[]) {
     const tagName = translateTagName(tag.tag);
     const anchor = context.slugger.slug(tagName);
-    // Using JSX.createElement directly just to avoid needing a compilation step to run TypeDoc.
-    return JSX.createElement(
-        'div',
-        { class: `tsd-tag-${tag.tag.substring(1)}` },
-        JSX.createElement('h4', { class: 'tsd-anchor-link', id: anchor }, tag.heading, anchorIcon(context, anchor)),
-        JSX.createElement(
-            'table',
-            null,
-            JSX.createElement(
-                'thead',
-                null,
-                JSX.createElement('tr', null, JSX.createElement('th', null, tag.columnHeading), JSX.createElement('th', null, 'Description'))
-            ),
-            JSX.createElement(
-                'tbody',
-                null,
-                commentTags.map((t) => {
+    return html`<div class=${`tsd-tag-${tag.tag.substring(1)}`}>
+        <h4 class="tsd-anchor-link" id="${anchor}">${tag.heading} ${anchorIcon(context, anchor)}</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>${tag.columnHeading}</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${commentTags.map((t) => {
                     const { name, description } = parseNamedRow(t.content);
-                    return JSX.createElement(
-                        'tr',
-                        null,
-                        JSX.createElement('td', null, JSX.createElement(JSX.Raw, { html: context.markdown(name) })),
-                        JSX.createElement('td', null, JSX.createElement(JSX.Raw, { html: context.markdown(description) }))
-                    );
-                })
-            )
-        )
-    );
+                    return html`
+                        <tr>
+                            <td><${JSX.Raw} html=${context.markdown(name)} /></td>
+                            <td><${JSX.Raw} html=${context.markdown(description)} /></td>
+                        </tr>
+                    `;
+                })}
+            </tbody>
+        </table>
+    </div>`;
 }
 
 // https://github.com/TypeStrong/typedoc/blob/v0.28.19/src/lib/output/themes/default/partials/anchor-icon.tsx
 function anchorIcon(context: DefaultThemeRenderContext, anchor: string | undefined) {
-    if (!anchor) return JSX.createElement(JSX.Fragment, null);
-    return JSX.createElement(
-        'a',
-        {
-            href: `#${anchor}`,
-            'aria-label': i18n.theme_permalink(),
-            class: 'tsd-anchor-icon'
-        },
-        context.icons.anchor()
-    );
+    if (!anchor) return html``;
+    return html`<a href=${`#${anchor}`} aria-label=${i18n.theme_permalink()} class="tsd-anchor-icon">${context.icons.anchor()}</a>`;
 }
 
 /**
