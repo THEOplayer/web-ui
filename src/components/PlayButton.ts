@@ -17,6 +17,9 @@ const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied', 'sourcechange'] 
  *
  * @attribute `paused` (readonly) - Whether the player is paused. Reflects `ui.player.paused`.
  * @attribute `ended` (readonly) - Whether the player is ended. Reflects `ui.player.ended`.
+ *
+ * @cssproperty `--theoplayer-play-button-icon-color` - The icon color of the play button.
+ *   Overrides `--theoplayer-icon-color` for this button. Defaults to `unset`.
  */
 @customElement('theoplayer-play-button')
 @stateReceiver(['player'])

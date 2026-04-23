@@ -9,6 +9,17 @@ import { Attribute } from '../util/Attribute';
 
 /**
  * A screen that shows the details of a fatal player error.
+ *
+ * @cssproperty `--theoplayer-error-icon-color` - The color of the error icon. Defaults to `--theoplayer-icon-color`.
+ * @cssproperty `--theoplayer-error-icon-width` - The width of the error icon. Defaults to `48px`.
+ * @cssproperty `--theoplayer-error-icon-height` - The height of the error icon. Defaults to `48px`.
+ * @cssproperty `--theoplayer-error-icon-gap` - The gap between the error icon and the text. Defaults to `10px`.
+ * @cssproperty `--theoplayer-error-heading-color` - The text color of the error heading. Defaults to `#fff`.
+ * @cssproperty `--theoplayer-error-heading-margin` - The margin around the error heading. Defaults to `0 0 10px`.
+ * @cssproperty `--theoplayer-error-message-color` - The text color of the error message. Defaults to `#fff`.
+ * @cssproperty `--theoplayer-error-message-margin` - The margin around the error message. Defaults to `0`.
+ * @cssproperty `--theoplayer-error-min-width` - The minimum width of the error display. Defaults to `0`.
+ * @cssproperty `--theoplayer-error-max-width` - The maximum width of the error display. Defaults to `80%`.
  */
 @customElement('theoplayer-error-display')
 @stateReceiver(['error', 'fullscreen'])

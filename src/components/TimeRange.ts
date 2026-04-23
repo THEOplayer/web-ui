@@ -37,6 +37,9 @@ const AD_MARKER_WIDTH = 1;
  * @slot `preview` - A slot holding a preview of the seek time, shown while hovering the seek bar.
  *   By default, this shows the {@link PreviewTimeDisplay | preview time} and
  *   the {@link PreviewThumbnail | preview thumbnail}.
+ *
+ * @cssproperty `--theoplayer-preview-text-shadow` - The text shadow applied to the preview box shown while hovering the seek bar.
+ *   Defaults to `0 0 4px rgba(0, 0, 0, 0.75)`.
  */
 @customElement('theoplayer-time-range')
 @stateReceiver(['player', 'streamType', 'deviceType'])

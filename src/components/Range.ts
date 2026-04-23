@@ -18,6 +18,33 @@ import { styleMap } from 'lit/directives/style-map.js';
  * @attribute `inert` - Whether the range is inert.
  *   When inert, the slider value cannot be changed, but the slider thumb is still visible.
  *
+ * @cssproperty `--theoplayer-range-bar-color` - The color of the filled portion of the range track. Defaults to `#fff`.
+ * @cssproperty `--theoplayer-range-track-height` - The height of the range track. Defaults to `4px`.
+ * @cssproperty `--theoplayer-range-track-width` - The width of the range track. Defaults to `100%`.
+ * @cssproperty `--theoplayer-range-track-background` - The background of the unfilled portion of the track. Defaults to `rgba(255, 255, 255, 0.2)`.
+ * @cssproperty `--theoplayer-range-track-border` - The border of the track. Defaults to `none`.
+ * @cssproperty `--theoplayer-range-track-border-radius` - The border radius of the track. Defaults to `0`.
+ * @cssproperty `--theoplayer-range-track-box-shadow` - The box-shadow of the track. Defaults to `none`.
+ * @cssproperty `--theoplayer-range-track-transition` - The CSS transition applied to the track. Defaults to `none`.
+ * @cssproperty `--theoplayer-range-track-translate-x` - Horizontal translation of the track. Defaults to `0`.
+ * @cssproperty `--theoplayer-range-track-translate-y` - Vertical translation of the track. Defaults to `0`.
+ * @cssproperty `--theoplayer-range-track-outline` - The outline of the track.
+ * @cssproperty `--theoplayer-range-track-outline-offset` - The outline offset of the track.
+ * @cssproperty `--theoplayer-range-track-pointer-background` - The background of the hover/preview pointer indicator on the track. Defaults to `transparent`.
+ * @cssproperty `--theoplayer-range-track-pointer-border-right` - The right border of the pointer indicator. Defaults to `none`.
+ * @cssproperty `--theoplayer-range-thumb-width` - The width of the slider thumb. Defaults to `10px`.
+ * @cssproperty `--theoplayer-range-thumb-height` - The height of the slider thumb. Defaults to `10px`.
+ * @cssproperty `--theoplayer-range-thumb-background` - The background of the slider thumb. Defaults to `#fff`.
+ * @cssproperty `--theoplayer-range-thumb-border` - The border of the slider thumb. Defaults to `none`.
+ * @cssproperty `--theoplayer-range-thumb-border-radius` - The border radius of the slider thumb. Defaults to `10px`.
+ * @cssproperty `--theoplayer-range-thumb-box-shadow` - The box-shadow of the slider thumb. Defaults to `1px 1px 1px transparent`.
+ * @cssproperty `--theoplayer-range-thumb-transition` - The CSS transition applied to the slider thumb. Defaults to `none`.
+ * @cssproperty `--theoplayer-range-thumb-transform` - The CSS transform applied to the slider thumb. Defaults to `none`.
+ * @cssproperty `--theoplayer-range-thumb-opacity` - The opacity of the slider thumb. Defaults to `1`.
+ * @cssproperty `--theoplayer-range-padding` - The padding around the range. Defaults to `--theoplayer-control-padding`.
+ * @cssproperty `--theoplayer-range-padding-left` - The left padding around the range. Defaults to `--theoplayer-range-padding`.
+ * @cssproperty `--theoplayer-range-padding-right` - The right padding around the range. Defaults to `--theoplayer-range-padding`.
+ *
  * @group Components
  */
 @stateReceiver(['deviceType'])

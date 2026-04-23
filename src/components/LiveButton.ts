@@ -21,6 +21,9 @@ const DEFAULT_LIVE_THRESHOLD = 10;
  * @attribute `live-threshold` - The maximum distance (in seconds) from the live point that the player's current time
  *   can be for it to still be considered "at the live point". If unset, defaults to 10 seconds.
  * @attribute `live` (readonly) - Whether the player is considered to be playing at the live point.
+ *
+ * @cssproperty `--theoplayer-live-button-color` - The color of the live indicator when not at the live point. Defaults to `rgb(140, 140, 140)`.
+ * @cssproperty `--theoplayer-live-button-active-color` - The color of the live indicator when playing at the live point. Defaults to `red`.
  */
 @customElement('theoplayer-live-button')
 @stateReceiver(['player', 'streamType'])
