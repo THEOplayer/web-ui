@@ -41,6 +41,7 @@ export function menuTemplate(heading: string, content: string, extraCss: string 
  * @cssproperty `--theoplayer-menu-color` - The text color of menu items. Defaults to `#fff`.
  * @cssproperty `--theoplayer-menu-control-hover-background` - The background of a menu item when hovered. Defaults to `rgba(255, 255, 255, 0.3)`.
  * @cssproperty `--theoplayer-menu-margin` - The margin around the menu. Defaults to `10px`.
+ * @cssproperty `--theoplayer-menu-min-width` - The minimum width of the menu. Defaults to `80%`.
  * @cssproperty `--theoplayer-menu-max-width` - The maximum width of the menu. Defaults to `100%`.
  */
 @customElement('theoplayer-menu')
