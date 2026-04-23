@@ -87,7 +87,6 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
                     console.warn(`Cannot find parent class of @property in reflection: ${refl.toString()}`);
                     continue;
                 }
-                const attributeComment = new typedoc.CommentTag(`@attribute`, [attributeNamePart]);
                 // Append summary.
                 let summary = refl.comment?.summary;
                 if (!summary && ts.isSetAccessorDeclaration(declaration)) {
@@ -99,10 +98,17 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
                         summary = getterComment?.summary;
                     }
                 }
-                if (summary) {
-                    if (attributeComment.content.length < 2) {
-                        attributeComment.content.push({ kind: 'text', text: ' - ' });
+                if (!summary) {
+                    if (declaration.modifiers?.some((m) => ts.isModifier(m) && m.kind === ts.SyntaxKind.PrivateKeyword)) {
+                        // Private property without documentation, skip.
+                        continue;
+                    } else {
+                        console.warn(`Missing documentation for @property: ${refl.toString()}`);
                     }
+                }
+                const attributeComment = new typedoc.CommentTag(`@attribute`, [attributeNamePart]);
+                if (summary) {
+                    attributeComment.content.push({ kind: 'text', text: ' - ' });
                     attributeComment.content.push(...summary);
                 }
                 const comment = (parentClass.comment ??= new typedoc.Comment([]));
