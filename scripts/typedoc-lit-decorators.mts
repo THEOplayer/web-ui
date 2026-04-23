@@ -52,18 +52,19 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
                 break;
             }
             case 'property': {
-                // Look for `attributeValue` in `@property({ attribute: attributeValue })`
+                // Look for `attributeName` in `@property({ attribute: attributeName })`
                 if (!ts.isObjectLiteralExpression(callArgument)) continue;
                 const propertyAttribute = callArgument.properties.find(
                     (p): p is ts.PropertyAssignment => ts.isPropertyAssignment(p) && ts.isIdentifier(p.name) && p.name.text === 'attribute'
                 );
                 if (!propertyAttribute) continue;
                 const attributeInitializer = propertyAttribute.initializer;
-                let commentPart: typedoc.CommentDisplayPart;
+                let attributeNamePart: typedoc.CommentDisplayPart;
                 if (ts.isLiteralTypeLiteral(attributeInitializer)) {
                     if (ts.isStringLiteral(attributeInitializer)) {
                         // e.g. `@property({ attribute: "fluid" })`
-                        commentPart = { kind: 'text', text: attributeInitializer.text };
+                        const attributeName = attributeInitializer.text;
+                        attributeNamePart = { kind: 'text', text: `\`${attributeName}\`` };
                     } else if (attributeInitializer.kind === ts.SyntaxKind.FalseKeyword) {
                         // e.g. `@property({ attribute: false })`
                         continue;
@@ -73,13 +74,15 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
                     }
                 } else if (ts.isPropertyAccessExpression(attributeInitializer)) {
                     // e.g. `@property({ attribute: Attribute.FLUID })`
-                    commentPart = { kind: 'inline-tag', tag: '@link', text: attributeInitializer.getText() };
+                    const attributeLink = attributeInitializer.getText();
+                    const attributeName = attributeInitializer.name.text.toLowerCase().replace(/_/g, '-');
+                    attributeNamePart = { kind: 'inline-tag', tag: '@link', text: `${attributeLink} | \`${attributeName}\`` };
                 } else {
                     console.warn(`Unexpected attribute in @property: ${attributeInitializer.getText()}`);
                     continue;
                 }
                 const comment = (refl.comment ??= new typedoc.Comment([]));
-                comment.blockTags.unshift(new typedoc.CommentTag(`@attribute`, [commentPart]));
+                comment.blockTags.unshift(new typedoc.CommentTag(`@attribute`, [attributeNamePart]));
                 break;
             }
         }
