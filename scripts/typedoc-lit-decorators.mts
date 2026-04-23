@@ -87,8 +87,16 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
                     console.warn(`Cannot find parent class of @property in reflection: ${refl.toString()}`);
                     continue;
                 }
+                const attributeComment = new typedoc.CommentTag(`@attribute`, [attributeNamePart]);
+                // Append summary.
+                if (refl.comment?.summary) {
+                    if (attributeComment.content.length < 2) {
+                        attributeComment.content.push({ kind: 'text', text: ' - ' });
+                    }
+                    attributeComment.content.push(...refl.comment.summary);
+                }
                 const comment = (parentClass.comment ??= new typedoc.Comment([]));
-                comment.blockTags.push(new typedoc.CommentTag(`@attribute`, [attributeNamePart]));
+                comment.blockTags.push(attributeComment);
                 break;
             }
         }
