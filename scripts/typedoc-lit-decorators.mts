@@ -88,15 +88,28 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
                     (p): p is ts.PropertyAssignment => ts.isPropertyAssignment(p) && ts.isIdentifier(p.name) && p.name.text === 'attribute'
                 );
                 if (!propertyAttribute) continue;
-                const attributeValue = propertyAttribute.initializer;
-                if (ts.isLiteralTypeLiteral(attributeValue)) {
-                    // e.g. `@property({ attribute: false })`
+                const attributeInitializer = propertyAttribute.initializer;
+                let commentPart: typedoc.CommentDisplayPart;
+                if (ts.isLiteralTypeLiteral(attributeInitializer)) {
+                    if (ts.isStringLiteral(attributeInitializer)) {
+                        // e.g. `@property({ attribute: "fluid" })`
+                        commentPart = { kind: 'text', text: attributeInitializer.text };
+                    } else if (attributeInitializer.kind === ts.SyntaxKind.FalseKeyword) {
+                        // e.g. `@property({ attribute: false })`
+                        continue;
+                    } else {
+                        console.warn(`Unexpected attribute in @property: ${attributeInitializer.getText()}`);
+                        continue;
+                    }
+                } else if (ts.isPropertyAccessExpression(attributeInitializer)) {
+                    // e.g. `@property({ attribute: Attribute.FLUID })`
+                    commentPart = { kind: 'inline-tag', tag: '@link', text: attributeInitializer.getText() };
+                } else {
+                    console.warn(`Unexpected attribute in @property: ${attributeInitializer.getText()}`);
                     continue;
                 }
                 const comment = (refl.comment ??= new typedoc.Comment([]));
-                comment.blockTags.unshift(
-                    new typedoc.CommentTag(`@attribute`, [{ kind: 'inline-tag', tag: '@link', text: attributeValue.getText() }])
-                );
+                comment.blockTags.unshift(new typedoc.CommentTag(`@attribute`, [commentPart]));
                 break;
             }
         }
