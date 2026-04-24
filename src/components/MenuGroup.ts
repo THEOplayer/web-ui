@@ -24,13 +24,13 @@ import { templateContent } from 'lit/directives/template-content.js';
 /** @deprecated */
 export interface MenuGroupOptions {
     /**
-     * @deprecated Override {@link MenuGroup.render} instead.
+     * @deprecated Override `MenuGroup.render` instead.
      */
     template?: HTMLTemplateElement;
 }
 
 /**
- * @deprecated Override {@link MenuGroup.render} instead.
+ * @deprecated Override `MenuGroup.render` instead.
  */
 export function menuGroupTemplate(content: string, extraCss: string = ''): string {
     return `<style>${extraCss}</style>${content}`;

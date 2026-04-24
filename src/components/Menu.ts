@@ -11,13 +11,13 @@ import { templateContent } from 'lit/directives/template-content.js';
 /** @deprecated */
 export interface MenuOptions {
     /**
-     * @deprecated Override {@link Menu.render} instead.
+     * @deprecated Override `Menu.render` instead.
      */
     template?: HTMLTemplateElement;
 }
 
 /**
- * @deprecated Override {@link Menu.render} instead.
+ * @deprecated Override `Menu.render` instead.
  */
 export function menuTemplate(heading: string, content: string, extraCss: string = ''): string {
     return (

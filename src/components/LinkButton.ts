@@ -8,7 +8,7 @@ import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { type ButtonOptions, buttonTemplate } from './Button';
 
 /**
- * @deprecated Override {@link LinkButton.render} instead.
+ * @deprecated Override `LinkButton.render` instead.
  */
 export function linkButtonTemplate(button: string, extraCss: string = ''): string {
     return buttonTemplate(`<a>${button}</a>`, extraCss);

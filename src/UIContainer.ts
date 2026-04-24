@@ -419,7 +419,7 @@ export class UIContainer extends LitElement {
     }
 
     /**
-     * @deprecated use {@link SourceDescription.streamType} instead.
+     * @deprecated use `SourceDescription.streamType` instead.
      */
     @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
     set streamType(streamType: StreamType) {

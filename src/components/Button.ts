@@ -8,13 +8,13 @@ import { isActivationKey } from '../util/KeyCode';
 /** @deprecated */
 export interface ButtonOptions {
     /**
-     * @deprecated Override {@link Button.render} instead.
+     * @deprecated Override `Button.render` instead.
      */
     template?: HTMLTemplateElement;
 }
 
 /**
- * @deprecated Override {@link Button.render} instead.
+ * @deprecated Override `Button.render` instead.
  */
 export function buttonTemplate(button: string, extraCss: string = ''): string {
     return `<style>${extraCss}</style>${button}`;

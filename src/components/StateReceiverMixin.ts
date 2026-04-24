@@ -71,7 +71,7 @@ export const stateReceiver =
  * @param props - The names of the properties this element will receive.
  * @returns A class constructor that extends `base` and implements {@link StateReceiverElement}.
  * @see {@link StateReceiverElement}
- * @deprecated Use {@link stateReceiver} decorator instead.
+ * @deprecated Use `stateReceiver` decorator instead.
  */
 export function StateReceiverMixin<T extends Constructor<Element>>(
     base: T,
