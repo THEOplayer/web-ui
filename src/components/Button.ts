@@ -45,7 +45,8 @@ export function buttonTemplate(button: string, extraCss: string = ''): string {
  * @cssproperty `--theoplayer-button-checked-color` - The color of a toggled-on button. Defaults to `#000`.
  * @cssproperty `--theoplayer-button-disabled-text-color` - The text color of a disabled button. Defaults to `#ccc`.
  * @cssproperty `--theoplayer-before-first-play-display` - The CSS `display` of the button before first play.
- *   Set to `none` to hide the button until playback begins. Defaults to `inline-flex`.
+ *   The {@link UIContainer | `<theoplayer-ui>`} will set this to `none` to hide all buttons until playback begins,
+ *   after which this becomes `unset` and the button reverts back to its initial CSS `display`.
  */
 // Based on howto-toggle-button
 // https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-toggle-button/howto-toggle-button.js

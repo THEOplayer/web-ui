@@ -79,7 +79,7 @@ import { createCustomEvent } from './util/EventUtils';
  * @cssproperty `--theoplayer-centered-chrome-control-height` - The control height of elements in the centered
  *   chrome slot. Defaults to `48px`.
  * @cssproperty `--theoplayer-center-play-button-icon-color` - The icon color of the centered play button.
- *   Defaults to `unset`.
+ *   Overrides `--theoplayer-play-button-icon-color` for this button. Defaults to `unset`.
  * @cssproperty `--theoplayer-time-range-control-height` - The control height of the time range (seek bar).
  *   Defaults to `12px`.
  * @cssproperty `--theoplayer-time-range-track-pointer-background` - The background of the hover/preview pointer
