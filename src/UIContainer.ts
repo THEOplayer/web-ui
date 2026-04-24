@@ -126,12 +126,6 @@ export const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
  * @cssproperty `--theoplayer-control-backdrop-background` - The background shown behind all controls. Defaults to `transparent`.
  * @cssproperty `--theoplayer-menu-backdrop-background` - The background of the menu layer. Defaults to `rgba(0, 0, 0, 0.5)`.
  * @cssproperty `--theoplayer-menu-layer-padding` - Padding of the menu layer. Defaults to `10px`.
- * @cssproperty `--theoplayer-menu-offset-top` - Top offset of the menu layer. Defaults to `0`.
- * @cssproperty `--theoplayer-menu-offset-bottom` - Bottom offset of the menu layer. Defaults to `0`.
- * @cssproperty `--theoplayer-menu-margin-top` - Menu top margin (desktop). Defaults to `auto`.
- * @cssproperty `--theoplayer-menu-margin-bottom` - Menu bottom margin (desktop). Defaults to `0`.
- * @cssproperty `--theoplayer-menu-margin-left` - Menu left margin (desktop). Defaults to `auto`.
- * @cssproperty `--theoplayer-menu-margin-right` - Menu right margin (desktop). Defaults to `0`.
  * @cssproperty `--theoplayer-menu-min-width` - Minimum width of the menu (desktop). Defaults to `200px`.
  * @cssproperty `--theoplayer-error-background` - The background of the error layer shown when the player has a fatal error. Defaults to `rgba(0, 0, 0, 0.5)`.
  */
