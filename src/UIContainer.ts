@@ -116,6 +116,9 @@ export const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
  * @cssproperty `--theoplayer-aspect-ratio` - The aspect ratio of the player. Defaults to `16 / 9`.
  *   Set to `none` (or any invalid `<length>`) to disable.
  * @cssproperty `--theoplayer-background` - The background color of the player. Defaults to `#000`.
+ * @cssproperty `--theoplayer-text-font-size` - The font size of any text inside a control. Defaults to `14px`.
+ * @cssproperty `--theoplayer-control-height` - The height of a control. Defaults to `24px`.
+ * @cssproperty `--theoplayer-control-padding` - The padding around a control. Defaults to `10px`.
  * @cssproperty `--theoplayer-video-border-radius` - The border radius of the `<video>` element. Defaults to `0`.
  * @cssproperty `--theoplayer-video-object-fit` - The `object-fit` of the `<video>` element. Defaults to `contain`.
  * @cssproperty `--theoplayer-video-width` - Used with `fluid` attribute to compute aspect ratio. Defaults to `16`.
