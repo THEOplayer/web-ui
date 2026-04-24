@@ -65,6 +65,7 @@ import { createCustomEvent } from './util/EventUtils';
  * @slot `error` - A slot for an error display, to show when the player encounters a fatal error.
  *   By default, this shows an {@link ErrorDisplay | `<theoplayer-error-display>`}.
  *
+ * @cssproperty `--theoplayer-text-color` - The text color of a control. Defaults to `#fff`.
  * @cssproperty `--theoplayer-text-font-size` - The font size of any text inside a control. Defaults to `14px`.
  * @cssproperty `--theoplayer-control-height` - The height of a control. Defaults to `24px`.
  * @cssproperty `--theoplayer-control-padding` - The padding around a control. Defaults to `10px`.

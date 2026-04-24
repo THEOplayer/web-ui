@@ -118,6 +118,7 @@ export const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
  *   When {@link fluid} is set, this is automatically set to the video's natural aspect ratio.
  *   Set this to `none` (or any invalid `<length>`) to disable, for example when you want to use `--theoplayer-height` instead.
  * @cssproperty `--theoplayer-background` - The background color of the player. Defaults to `#000`.
+ * @cssproperty `--theoplayer-text-color` - The text color of a control. Defaults to `#fff`.
  * @cssproperty `--theoplayer-text-font-size` - The font size of any text inside a control. Defaults to `14px`.
  * @cssproperty `--theoplayer-control-height` - The height of a control. Defaults to `24px`.
  * @cssproperty `--theoplayer-control-padding` - The padding around a control. Defaults to `10px`.
