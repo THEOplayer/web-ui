@@ -85,9 +85,7 @@ export function load(app: Application) {
         const tables: JSX.Element[] = [];
         for (const tag of collapsibleTags) {
             const commentTags = comment.blockTags.filter((t) => t.tag === tag.tag);
-            if (commentTags.length < 2) {
-                // Keep single entries as-is for simplicity.
-            } else {
+            if (commentTags.length > 0) {
                 // Take over rendering for these tags.
                 commentTags.forEach((t) => (t.skipRendering = true));
                 // Render them all as a single table.
