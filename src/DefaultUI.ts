@@ -64,6 +64,32 @@ import { createCustomEvent } from './util/EventUtils';
  * @slot `menu` - A slot for extra menus (see {@link Menu | `<theoplayer-menu>`}).
  * @slot `error` - A slot for an error display, to show when the player encounters a fatal error.
  *   By default, this shows an {@link ErrorDisplay | `<theoplayer-error-display>`}.
+ *
+ * @cssproperty `--theoplayer-text-color` - The text color of a control. Defaults to `#fff`.
+ * @cssproperty `--theoplayer-text-font-size` - The font size of any text inside a control. Defaults to `14px`.
+ * @cssproperty `--theoplayer-control-height` - The height of a control. Defaults to `24px`.
+ * @cssproperty `--theoplayer-control-padding` - The padding around a control. Defaults to `10px`.
+ * @cssproperty `--theoplayer-control-background-gradient-stops` - The gradient stops used for the subtle
+ *   backdrop gradient behind the top and bottom control bars on desktop. Defaults to a smooth
+ *   transparent-to-black gradient.
+ * @cssproperty `--theoplayer-mobile-control-backdrop-background` - The background applied to the entire player
+ *   on mobile when the controls are shown. Defaults to `rgba(0, 0, 0, 0.5)`.
+ * @cssproperty `--theoplayer-centered-chrome-button-icon-width` - The icon width of buttons in the centered
+ *   chrome slot. Defaults to `48px`.
+ * @cssproperty `--theoplayer-centered-chrome-control-height` - The control height of elements in the centered
+ *   chrome slot. Defaults to `48px`.
+ * @cssproperty `--theoplayer-center-play-button-icon-color` - The icon color of the centered play button.
+ *   Overrides `--theoplayer-play-button-icon-color` for this button. Defaults to `unset`.
+ * @cssproperty `--theoplayer-time-range-control-height` - The control height of the time range (seek bar).
+ *   Defaults to `12px`.
+ * @cssproperty `--theoplayer-time-range-track-pointer-background` - The background of the hover/preview pointer
+ *   on the time range. Defaults to `rgba(255, 255, 255, 0.5)`.
+ * @cssproperty `--theoplayer-volume-range-track-width` - The width of the volume range track when expanded on hover.
+ *   Defaults to `70px`.
+ * @cssproperty `--theoplayer-ad-chrome-control-height` - The control height for elements inside the ad chrome.
+ *   Defaults to `12px`.
+ * @cssproperty `--theoplayer-ad-control-height` - The control height of playback controls while an ad is playing.
+ *   Defaults to `16px`.
  */
 @customElement('theoplayer-default-ui')
 export class DefaultUI extends LitElement {

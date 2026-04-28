@@ -24,6 +24,29 @@ export function buttonTemplate(button: string, extraCss: string = ''): string {
  * A basic button.
  *
  * @attribute `disabled` - Whether the button is disabled. When disabled, the button cannot be clicked.
+ *
+ * @cssproperty `--theoplayer-control-height` - The height of the button's control area (and default icon size). Defaults to `24px`.
+ * @cssproperty `--theoplayer-control-padding` - The padding around the button's content. Defaults to `10px`.
+ * @cssproperty `--theoplayer-control-background` - The background of the button. Defaults to `transparent`.
+ * @cssproperty `--theoplayer-control-hover-background` - The background of the button when hovered.
+ *   Defaults to `--theoplayer-control-background`.
+ * @cssproperty `--theoplayer-text-color` - The text color of the button. Defaults to `#fff`.
+ * @cssproperty `--theoplayer-text-font-size` - The font size of the button's text. Defaults to `14px`.
+ * @cssproperty `--theoplayer-text-content-height` - The line-height of the button's text. Defaults to `--theoplayer-control-height`.
+ * @cssproperty `--theoplayer-icon-color` - The color of the button's icon. Defaults to `#fff`.
+ * @cssproperty `--theoplayer-focus-ring-color` - The color of the focus ring around focused buttons. Defaults to `rgba(27, 127, 204, 0.9)`.
+ * @cssproperty `--theoplayer-button-text-color` - The text color of the button. Defaults to `--theoplayer-text-color`.
+ * @cssproperty `--theoplayer-button-icon-width` - The width of the button's icon. Defaults to `--theoplayer-control-height`.
+ * @cssproperty `--theoplayer-button-icon-height` - The height of the button's icon. Defaults to `--theoplayer-control-height`.
+ * @cssproperty `--theoplayer-button-icon-transition` - The CSS transition applied to the button's icon. Defaults to `none`.
+ * @cssproperty `--theoplayer-button-icon-shadow` - A drop-shadow applied to the icon. Defaults to `none`.
+ * @cssproperty `--theoplayer-button-hover-icon-shadow` - A drop-shadow applied to the icon on hover. Defaults to `0 0 4px rgba(255, 255, 255, 0.5)`.
+ * @cssproperty `--theoplayer-button-checked-background` - The background of a toggled-on button (e.g. mute, fullscreen). Defaults to `#fff`.
+ * @cssproperty `--theoplayer-button-checked-color` - The color of a toggled-on button. Defaults to `#000`.
+ * @cssproperty `--theoplayer-button-disabled-text-color` - The text color of a disabled button. Defaults to `#ccc`.
+ * @cssproperty `--theoplayer-before-first-play-display` - The CSS `display` of the button before first play.
+ *   The {@link UIContainer | `<theoplayer-ui>`} will set this to `none` to hide all buttons until playback begins,
+ *   after which this becomes `unset` and the button reverts back to its initial CSS `display`.
  */
 // Based on howto-toggle-button
 // https://github.com/GoogleChromeLabs/howto-components/blob/079d0fa34ff9038b26ea8883b1db5dd6b677d7ba/elements/howto-toggle-button/howto-toggle-button.js

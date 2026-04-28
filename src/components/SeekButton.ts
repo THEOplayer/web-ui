@@ -14,6 +14,8 @@ const DEFAULT_SEEK_OFFSET = 10;
  * A button that seeks forward or backward by a fixed offset.
  *
  * @attribute `seek-offset` - The offset (in seconds) by which to seek forward (if positive) or backward (if negative).
+ *
+ * @cssproperty `--theoplayer-seek-button-font-size` - The font size of the offset number rendered inside the seek icon. Defaults to `calc(0.3 * --theoplayer-button-icon-height)`.
  */
 @customElement('theoplayer-seek-button')
 @stateReceiver(['player'])

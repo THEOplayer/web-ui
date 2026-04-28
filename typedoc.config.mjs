@@ -8,7 +8,8 @@ export default {
         'typedoc-plugin-external-resolver',
         'typedoc-plugin-mdn-links',
         import.meta.resolve('./scripts/typedoc-lit-decorators.mts'),
-        import.meta.resolve('./scripts/typedoc-symbol-resolver.mts')
+        import.meta.resolve('./scripts/typedoc-symbol-resolver.mts'),
+        import.meta.resolve('./scripts/typedoc-collapsible-tags.mts')
     ],
     navigationLinks: {
         GitHub: 'https://github.com/THEOplayer/web-ui'

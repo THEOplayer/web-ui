@@ -16,6 +16,20 @@ const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as cons
 /**
  * A button that skips the current advertisement (if skippable).
  * If the ad cannot be skipped yet, it shows the remaining time until it can be skipped.
+ *
+ * @cssproperty `--theoplayer-ad-skip-background` - The background of the skip button. Defaults to `rgba(0, 0, 0, 0.7)`.
+ * @cssproperty `--theoplayer-ad-skip-color` - The text color of the skip button. Defaults to `#fff`.
+ * @cssproperty `--theoplayer-ad-skip-border` - The border of the skip button. Defaults to `1px solid rgba(255, 255, 255, 0.5)`.
+ * @cssproperty `--theoplayer-ad-skip-hover-background` - The background of the skip button when hovered. Defaults to `rgba(0, 0, 0, 0.9)`.
+ * @cssproperty `--theoplayer-ad-skip-hover-color` - The text color of the skip button when hovered. Defaults to `--theoplayer-ad-skip-color`.
+ * @cssproperty `--theoplayer-ad-skip-hover-border` - The border of the skip button when hovered. Defaults to `1px solid #fff`.
+ * @cssproperty `--theoplayer-ad-skip-countdown-background` - The background of the countdown shown before the ad is skippable. Defaults to `transparent`.
+ * @cssproperty `--theoplayer-ad-skip-countdown-color` - The text color of the countdown. Defaults to `--theoplayer-ad-skip-color`.
+ * @cssproperty `--theoplayer-ad-skip-countdown-border` - The border of the countdown. Defaults to `1px solid transparent`.
+ * @cssproperty `--theoplayer-ad-skip-font-size` - The font size of the skip button text. Defaults to `--theoplayer-text-font-size`.
+ * @cssproperty `--theoplayer-ad-skip-line-height` - The line height of the skip button text. Defaults to `--theoplayer-text-content-height`.
+ * @cssproperty `--theoplayer-ad-skip-icon-width` - The width of the skip button icon. Defaults to `--theoplayer-control-height`.
+ * @cssproperty `--theoplayer-ad-skip-icon-height` - The height of the skip button icon. Defaults to `--theoplayer-control-height`.
  */
 @customElement('theoplayer-ad-skip-button')
 @stateReceiver(['player'])

@@ -12,6 +12,11 @@ const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak
 /**
  * A control that shows when an advertisement is playing,
  * and the number of the current ad in the ad break (if the break has multiple ads).
+ *
+ * @cssproperty `--theoplayer-ad-display-background` - The background of the ad display. Defaults to `#ffc50f`.
+ * @cssproperty `--theoplayer-ad-display-border-radius` - The border radius of the ad display. Defaults to `2px`.
+ * @cssproperty `--theoplayer-ad-display-padding` - The padding of the ad display. Defaults to `--theoplayer-control-padding`.
+ * @cssproperty `--theoplayer-ad-display-text-color` - The text color of the ad display. Defaults to `#000`.
  */
 @customElement('theoplayer-ad-display')
 @stateReceiver(['player'])
