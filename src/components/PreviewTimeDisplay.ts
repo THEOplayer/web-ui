@@ -39,6 +39,9 @@ export class PreviewTimeDisplay extends LitElement {
     @property({ reflect: true, type: Boolean, attribute: Attribute.REMAINING_WHEN_LIVE })
     accessor remainingWhenLive: boolean = false;
 
+    /**
+     * The stream type, either "vod", "live" or "dvr".
+     */
     @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
     accessor streamType: StreamType = 'vod';
 

@@ -36,6 +36,9 @@ export class ErrorDisplay extends LitElement {
     @property({ reflect: false, attribute: false })
     accessor error: THEOplayerError | undefined;
 
+    /**
+     * Whether the player is in fullscreen mode.
+     */
     @property({ reflect: true, type: Boolean, attribute: Attribute.FULLSCREEN })
     accessor fullscreen: boolean = false;
 

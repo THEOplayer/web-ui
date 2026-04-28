@@ -60,6 +60,9 @@ export class RadioGroup extends LitElement {
         return root;
     }
 
+    /**
+     * The device type, either "desktop", "mobile" or "tv".
+     */
     @property({ reflect: true, type: String, attribute: Attribute.DEVICE_TYPE })
     accessor deviceType: DeviceType = 'desktop';
 

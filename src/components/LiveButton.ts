@@ -37,9 +37,15 @@ export class LiveButton extends Button {
         }
     }
 
+    /**
+     * Whether the player is paused.
+     */
     @property({ reflect: true, type: Boolean, attribute: Attribute.PAUSED })
     accessor paused: boolean = false;
 
+    /**
+     * The stream type, either "vod", "live" or "dvr".
+     */
     @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
     accessor streamType: StreamType = 'vod';
 

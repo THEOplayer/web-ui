@@ -73,6 +73,9 @@ export class TimeDisplay extends LitElement {
     @property({ reflect: true, type: Boolean, attribute: Attribute.SHOW_DURATION })
     accessor showDuration: boolean = false;
 
+    /**
+     * The stream type, either "vod", "live" or "dvr".
+     */
     @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
     accessor streamType: StreamType = 'vod';
 

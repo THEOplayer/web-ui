@@ -193,6 +193,9 @@ export abstract class Range extends LitElement {
     })
     accessor step: number | 'any' = 'any';
 
+    /**
+     * The device type, either "desktop", "mobile" or "tv".
+     */
     @property({ reflect: true, type: String, attribute: Attribute.DEVICE_TYPE })
     accessor deviceType: DeviceType = 'desktop';
 

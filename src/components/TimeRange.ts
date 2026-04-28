@@ -118,6 +118,9 @@ export class TimeRange extends Range {
         this._ads?.addEventListener(AD_EVENTS, this._onAdChange);
     }
 
+    /**
+     * The stream type, either "vod", "live" or "dvr".
+     */
     get streamType(): StreamType {
         return this._streamType;
     }
@@ -128,6 +131,9 @@ export class TimeRange extends Range {
         this.updateDisabled_();
     }
 
+    /**
+     * Whether to show markers for advertisements on the seek bar.
+     */
     get showAdMarkers(): boolean {
         return this._showAdMarkers;
     }
