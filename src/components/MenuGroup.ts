@@ -47,8 +47,6 @@ interface OpenMenuEntry {
  * This can contain multiple other menus, which can be opened with {@link openMenu}.
  * When a {@link MenuButton} in one menu opens another menu in this group, it is opened as a "submenu".
  * When a submenu is closed, the menu that originally opened it is shown again.
- *
- * @attribute `menu-opened` (readonly) - Whether any menu in the group is currently open.
  */
 @customElement('theoplayer-menu-group')
 export class MenuGroup extends LitElement {
@@ -71,6 +69,9 @@ export class MenuGroup extends LitElement {
 
     private _menuOpened: boolean = false;
 
+    /**
+     * Whether any menu in the group is currently open.
+     */
     private get menuOpened_(): boolean {
         return this._menuOpened;
     }

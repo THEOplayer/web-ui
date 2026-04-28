@@ -13,11 +13,6 @@ const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
 /**
  * A control that displays the current time of the stream.
- *
- * @attribute `show-duration` - If set, also shows the duration of the stream.
- * @attribute `remaining` - If set, shows the remaining time of the stream. Not compatible with `show-duration`.
- * @attribute `remaining-when-live` - If set, and the stream is a livestream, shows the remaining time
- *   (until the live point) of the stream.
  */
 @customElement('theoplayer-time-display')
 @stateReceiver(['player', 'streamType'])
@@ -59,12 +54,22 @@ export class TimeDisplay extends LitElement {
             this._player.addEventListener(PLAYER_EVENTS, this._updateFromPlayer);
         }
     }
+
+    /**
+     * If set, shows the remaining time of the stream. Not compatible with {@link showDuration}.
+     */
     @property({ reflect: true, type: Boolean, attribute: Attribute.REMAINING })
     accessor remaining: boolean = false;
 
+    /**
+     * If set, and the stream is a livestream, shows the remaining time (until the live point) of the stream.
+     */
     @property({ reflect: true, type: Boolean, attribute: Attribute.REMAINING_WHEN_LIVE })
     accessor remainingWhenLive: boolean = false;
 
+    /**
+     * If set, also shows the duration of the stream.
+     */
     @property({ reflect: true, type: Boolean, attribute: Attribute.SHOW_DURATION })
     accessor showDuration: boolean = false;
 

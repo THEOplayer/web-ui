@@ -13,11 +13,6 @@ import { styleMap } from 'lit/directives/style-map.js';
 /**
  * A slider to select a value from a range.
  *
- * @attribute `disabled` - Whether the range is disabled.
- *   When disabled, the slider value cannot be changed, and the slider thumb is hidden.
- * @attribute `inert` - Whether the range is inert.
- *   When inert, the slider value cannot be changed, but the slider thumb is still visible.
- *
  * @cssproperty `--theoplayer-range-bar-color` - The color of the filled portion of the range track. Defaults to `#fff`.
  * @cssproperty `--theoplayer-range-track-height` - The height of the range track. Defaults to `4px`.
  * @cssproperty `--theoplayer-range-track-width` - The width of the range track. Defaults to `100%`.

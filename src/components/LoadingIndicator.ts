@@ -11,8 +11,6 @@ const PLAYER_EVENTS = ['readystatechange', 'play', 'pause', 'playing', 'seeking'
 /**
  * An indicator that shows whether the player is currently waiting for more data to resume playback.
  *
- * @attribute `loading` (readonly) - Whether the player is waiting for more data. If set, the indicator is shown.
- *
  * @cssproperty `--theoplayer-loading-delay` - The delay before the loading spinner is shown. Defaults to `0.5s`.
  * @cssproperty `--theoplayer-loading-icon-color` - The color of the loading spinner. Defaults to `--theoplayer-icon-color`.
  * @cssproperty `--theoplayer-loading-icon-width` - The width of the loading spinner. Defaults to `48px`.
@@ -44,6 +42,9 @@ export class LoadingIndicator extends LitElement {
         }
     }
 
+    /**
+     * Whether the player is waiting for more data. If set, the indicator is shown.
+     */
     @property({ reflect: true, type: Boolean, attribute: Attribute.LOADING })
     accessor loading: boolean = false;
 

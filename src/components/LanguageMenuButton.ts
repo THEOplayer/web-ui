@@ -15,8 +15,6 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  * A menu button that opens a {@link LanguageMenu}.
  *
  * When there are no alternative audio languages or subtitles, this button automatically hides itself.
- *
- * @attribute `menu` - The ID of the language menu.
  */
 @customElement('theoplayer-language-menu-button')
 @stateReceiver(['player'])

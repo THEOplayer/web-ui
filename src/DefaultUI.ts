@@ -36,25 +36,6 @@ import { createCustomEvent } from './util/EventUtils';
  * For more extensive customizations, we recommend defining your own custom UI using
  * a {@link UIContainer | `<theoplayer-ui>`}.
  *
- * @attribute `configuration` - The THEOplayer {@link theoplayer!UIPlayerConfiguration | UIPlayerConfiguration}, as a JSON string.
- * @attribute `source` - The THEOplayer {@link theoplayer!SourceDescription | SourceDescription}, as a JSON string.
- * @attribute `fluid` - If set, the player automatically adjusts its height to fit the video's aspect ratio.
- * @attribute `muted` - If set, the player starts out as muted. Reflects `ui.player.muted`.
- * @attribute `autoplay` - If set, the player attempts to automatically start playing (if allowed).
- * @attribute `device-type` - The device type, either "desktop", "mobile" or "tv".
- *   Can be used in CSS to show/hide certain device-specific UI controls.
- * @attribute `mobile` - Whether the user is on a mobile device. Equivalent to `device-type == "mobile"`.
- * @attribute `tv` - Whether the user is on a TV device. Equivalent to `device-type == "tv"`.
- * @attribute `stream-type` - The stream type, either "vod", "live" or "dvr".
- *   Can be used to show/hide certain UI controls specific for livestreams, such as
- *   a {@link LiveButton | `<theoplayer-live-button>`}.
- *   If you know in advance that the source will be a livestream, you can set this attribute to avoid a screen flicker
- *   when the player switches between its VOD-specific and live-only controls.
- * @attribute `user-idle-timeout` - The timeout (in seconds) between when the user stops interacting with the UI,
- *   and when the user is considered to be "idle".
- * @attribute `dvr-threshold` - The minimum length (in seconds) of a livestream's sliding window for the stream to be DVR
- *   and its stream type to be set to "dvr".
- *
  * @slot `title` - A slot for the stream's title in the top control bar.
  * @slot `top-control-bar` - A slot for extra UI controls in the top control bar.
  * @slot `centered-chrome` - A slot to replace the controls in the center of the player,
@@ -143,9 +124,10 @@ export class DefaultUI extends LitElement {
     }
 
     /**
-     * The player configuration.
+     * The player's {@link theoplayer!UIPlayerConfiguration | configuration}.
      *
      * Used to create the underlying THEOplayer instance.
+     * When set as an attribute, this must be a JSON string.
      */
     get configuration(): UIPlayerConfiguration {
         return this._configuration;
@@ -171,7 +153,9 @@ export class DefaultUI extends LitElement {
     }
 
     /**
-     * The player's current source.
+     * The player's {@link theoplayer!SourceDescription | current source}.
+     *
+     * When set as an attribute, this must be a JSON string.
      */
     get source() {
         return this._uiRef.value ? this._uiRef.value.source : this._source;
@@ -201,6 +185,8 @@ export class DefaultUI extends LitElement {
 
     /**
      * Whether the player's audio is muted.
+     *
+     * This reflects `player.muted`.
      */
     @property({ reflect: true, type: Boolean, attribute: Attribute.MUTED })
     accessor muted: boolean = false;
@@ -216,6 +202,9 @@ export class DefaultUI extends LitElement {
      *
      * If you know in advance that the source will be a livestream, you can set this property to avoid a screen flicker
      * when the player switches between its VOD-specific and live-only controls.
+     *
+     * Can be used to show/hide certain UI controls specific for livestreams, such as
+     * a {@link LiveButton | `<theoplayer-live-button>`}.
      */
     @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
     accessor streamType: StreamType = 'vod';
@@ -242,6 +231,8 @@ export class DefaultUI extends LitElement {
 
     /**
      * The device type, either "desktop", "mobile" or "tv".
+     *
+     * This attribute can be used in CSS to show/hide certain device-specific UI controls.
      */
     get deviceType(): DeviceType {
         return this._deviceType;
