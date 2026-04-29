@@ -69,35 +69,6 @@ export const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
  *
  * The styling can be controlled using CSS custom properties (see below).
  *
- * @attribute `configuration` - The THEOplayer {@link theoplayer!UIPlayerConfiguration | UIPlayerConfiguration}, as a JSON string.
- * @attribute `source` - The THEOplayer {@link theoplayer!SourceDescription | SourceDescription}, as a JSON string.
- * @attribute `fluid` - If set, the player automatically adjusts its height to fit the video's aspect ratio.
- * @attribute `muted` - If set, the player starts out as muted. Reflects `ui.player.muted`.
- * @attribute `autoplay` - If set, the player attempts to automatically start playing (if allowed).
- * @attribute `device-type` - The device type, either "desktop", "mobile" or "tv".
- *   Can be used in CSS to show/hide certain device-specific UI controls.
- * @attribute `mobile` - Whether the user is on a mobile device. Equivalent to `device-type == "mobile"`.
- * @attribute `tv` - Whether the user is on a TV device. Equivalent to `device-type == "tv"`.
- * @attribute `stream-type` - The stream type, either "vod", "live" or "dvr".
- *   Can be used to show/hide certain UI controls specific for livestreams, such as
- *   a {@link LiveButton | `<theoplayer-live-button>`}.
- *   If you know in advance that the source will be a livestream, you can set this attribute to avoid a screen flicker
- *   when the player switches between its VOD-specific and live-only controls.
- * @attribute `user-idle` (readonly) - Whether the user is considered to be "idle".
- *   When the user is idle and the video is playing, all slotted UI elements will be hidden
- *   (unless they have the `no-auto-hide` attribute).
- * @attribute `user-idle-timeout` - The timeout (in seconds) between when the user stops interacting with the UI,
- *   and when the user is considered to be "idle".
- * @attribute `dvr-threshold` - The minimum length (in seconds) of a livestream's sliding window for the stream to be DVR
- *   and its stream type to be set to "dvr".
- * @attribute `paused` (readonly) - Whether the player is paused. Reflects `ui.player.paused`.
- * @attribute `ended` (readonly) - Whether the player is ended. Reflects `ui.player.ended`.
- * @attribute `casting` (readonly) - Whether the player is casting. Reflects `ui.player.cast.casting`.
- * @attribute `playing-ad` (readonly) - Whether the player is playing a linear ad. Reflects `ui.player.ads.playing`.
- * @attribute `has-error` (readonly) - Whether the player has encountered a fatal error.
- * @attribute `has-first-play` (readonly) - Whether the player has (previously) started playback for this stream.
- *   Can be used in CSS to show/hide certain initial controls, such as a poster image or a centered play button.
- *
  * @slot `(no` name, default slot) - A slot for controls at the bottom of the player.
  *   Can be used for controls such as a play button ({@link PlayButton | `<theoplayer-play-button>`}) or a seek bar
  *   ({@link TimeRange | `<theoplayer-time-range>`}).
@@ -323,6 +294,8 @@ export class UIContainer extends LitElement {
 
     /**
      * Whether the player is paused.
+     *
+     * This reflects `player.paused`
      */
     get paused(): boolean {
         return this._paused;
@@ -337,6 +310,8 @@ export class UIContainer extends LitElement {
 
     /**
      * Whether the player is ended.
+     *
+     * This reflects `player.ended`
      */
     get ended(): boolean {
         return this._ended;
@@ -349,6 +324,8 @@ export class UIContainer extends LitElement {
 
     /**
      * Whether the player is casting to a remote receiver.
+     *
+     * This reflects `player.cast.casting`
      */
     get casting(): boolean {
         return this._casting;
@@ -400,9 +377,8 @@ export class UIContainer extends LitElement {
     set deviceType(value: DeviceType) {
         if (this._deviceType === value) return;
         this._deviceType = value;
-
-        toggleAttribute(this, Attribute.MOBILE, value === 'mobile');
-        toggleAttribute(this, Attribute.TV, value === 'tv');
+        this.mobile = value === 'mobile';
+        this.tv = value === 'tv';
 
         window.removeEventListener('keydown', this._onTvKeyDown);
         if (value === 'tv') {
@@ -415,6 +391,22 @@ export class UIContainer extends LitElement {
             }
         }
     }
+
+    /**
+     * Whether the user is on a mobile device.
+     *
+     * Equivalent to `deviceType == "mobile"`.
+     */
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.MOBILE })
+    private accessor mobile: boolean = false;
+
+    /**
+     * Whether the user is on a TV device.
+     *
+     * Equivalent to `deviceType == "tv"`.
+     */
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.TV })
+    private accessor tv: boolean = false;
 
     /**
      * The stream type, either "vod", "live" or "dvr".
@@ -460,15 +452,32 @@ export class UIContainer extends LitElement {
         this._updateStreamType();
     }
 
+    /**
+     * Whether the player has (previously) started playback for this stream.
+     *
+     * Can be used in CSS to show/hide certain initial controls, such as a poster image or a centered play button.
+     */
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_FIRST_PLAY })
     private accessor _hasFirstPlay: boolean = false;
 
+    /**
+     * Whether the player is playing a linear ad.
+     *
+     * This reflects `player.ads.playing`.
+     */
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.PLAYING_AD })
     private accessor _isPlayingAd: boolean = false;
 
+    /**
+     * Whether the player has encountered a fatal error.
+     */
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_ERROR })
     private accessor _hasError: boolean = false;
 
+    /**
+     * Whether the player is in "full window" mode,
+     * as a fallback when the player cannot use the "native" fullscreen mode.
+     */
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.FULLWINDOW })
     private accessor _isFullWindow: boolean = false;
 
@@ -686,6 +695,9 @@ export class UIContainer extends LitElement {
         }
     }
 
+    /**
+     * Whether any {@link Menu | menu} is currently open.
+     */
     private get menuOpened_(): boolean {
         return this._menuOpened;
     }

@@ -16,9 +16,6 @@ const PLAYER_EVENTS = ['volumechange'] as const;
 
 /**
  * A button that toggles whether audio is muted or not.
- *
- * @attribute `volume-level` (readonly) - The volume level of the player.
- *   Can be "off" (muted), "low" (volume < 50%) or "high" (volume >= 50%).
  */
 @customElement('theoplayer-mute-button')
 @stateReceiver(['player'])
@@ -35,6 +32,8 @@ export class MuteButton extends Button {
 
     /**
      * The volume level of the player.
+     *
+     * Can be "off" (muted), "low" (volume < 50%) or "high" (volume >= 50%).
      */
     @property({ reflect: true, state: true, type: String, attribute: Attribute.VOLUME_LEVEL })
     accessor volumeLevel: VolumeLevel = 'off';

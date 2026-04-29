@@ -23,8 +23,6 @@ export function buttonTemplate(button: string, extraCss: string = ''): string {
 /**
  * A basic button.
  *
- * @attribute `disabled` - Whether the button is disabled. When disabled, the button cannot be clicked.
- *
  * @cssproperty `--theoplayer-control-height` - The height of the button's control area (and default icon size). Defaults to `24px`.
  * @cssproperty `--theoplayer-control-padding` - The padding around the button's content. Defaults to `10px`.
  * @cssproperty `--theoplayer-control-background` - The background of the button. Defaults to `transparent`.

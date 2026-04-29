@@ -32,10 +32,6 @@ export function menuTemplate(heading: string, content: string, extraCss: string 
  *
  * The menu has a heading at the top, with a {@link CloseMenuButton | close button} and a heading text.
  *
- * @attribute `menu-close-on-input` - Whether to automatically close the menu whenever one of its controls
- *   receives an input (e.g. when a radio button is clicked).
- * @attribute `menu-opened` (readonly) - Whether the menu is currently open.
- *
  * @slot `heading` - A slot for the menu's heading.
  *
  * @cssproperty `--theoplayer-menu-color` - The text color of menu items. Defaults to `#fff`.
@@ -85,6 +81,9 @@ export class Menu extends LitElement {
     @property({ reflect: true, type: Boolean, attribute: Attribute.MENU_CLOSE_ON_INPUT })
     accessor closeOnInput: boolean = false;
 
+    /**
+     * Whether the menu is currently open.
+     */
     private get menuOpened_(): boolean {
         return this._menuOpened;
     }

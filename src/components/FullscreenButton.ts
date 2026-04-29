@@ -24,6 +24,9 @@ export class FullscreenButton extends Button {
         this._updateAriaLabel();
     }
 
+    /**
+     * Whether the player is in fullscreen mode.
+     */
     @property({ reflect: true, type: Boolean, attribute: Attribute.FULLSCREEN })
     accessor fullscreen: boolean = false;
 

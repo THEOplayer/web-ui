@@ -48,6 +48,9 @@ export class GestureReceiver extends LitElement {
         }
     }
 
+    /**
+     * The device type, either "desktop", "mobile" or "tv".
+     */
     @property({ reflect: false, attribute: false })
     accessor deviceType: DeviceType = 'desktop';
 

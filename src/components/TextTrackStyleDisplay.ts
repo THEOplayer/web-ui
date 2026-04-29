@@ -11,8 +11,6 @@ import { knownColors, knownEdgeStyles, knownFontFamilies } from '../util/TextTra
 /**
  * A control that displays the value of a single text track style option
  * in a human-readable format.
- *
- * @attribute `property` - The property name of the text track style option. One of {@link TextTrackStyleOption}.
  */
 @customElement('theoplayer-text-track-style-display')
 @stateReceiver(['player'])
@@ -23,6 +21,8 @@ export class TextTrackStyleDisplay extends LitElement {
 
     /**
      * The property name of the text track style option.
+     *
+     * One of {@link TextTrackStyleOption}.
      */
     get property(): TextTrackStyleOption {
         return this._property;

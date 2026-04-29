@@ -6,7 +6,6 @@ import { TypeScript as ts } from 'typedoc';
  */
 export function load(app: typedoc.Application) {
     app.converter.on(typedoc.Converter.EVENT_CREATE_DECLARATION, onDeclaration);
-    app.converter.on(typedoc.Converter.EVENT_CREATE_SIGNATURE, onSignature);
 }
 
 function onDeclaration(context: typedoc.Context, refl: typedoc.DeclarationReflection) {
@@ -17,35 +16,6 @@ function onDeclaration(context: typedoc.Context, refl: typedoc.DeclarationReflec
     for (const declaration of declarations) {
         extractDecoratorInfo(context, refl, declaration);
     }
-}
-
-function onSignature(context: typedoc.Context, refl: typedoc.SignatureReflection) {
-    const symbol = context.getSymbolFromReflection(refl.parent);
-    if (!symbol) return;
-    const declarations = symbol.declarations;
-    if (!declarations) return;
-    let declaration: ts.Declaration | undefined;
-    switch (refl.kind) {
-        case typedoc.ReflectionKind.GetSignature:
-            declaration = declarations.find(ts.isGetAccessorDeclaration);
-            break;
-        case typedoc.ReflectionKind.SetSignature:
-            declaration = declarations.find(ts.isSetAccessorDeclaration);
-            break;
-        case typedoc.ReflectionKind.IndexSignature:
-            declaration = declarations.find(ts.isIndexSignatureDeclaration);
-            break;
-        case typedoc.ReflectionKind.CallSignature:
-            declaration = declarations.find(ts.isCallSignatureDeclaration);
-            break;
-        case typedoc.ReflectionKind.ConstructorSignature:
-            declaration = declarations.find(ts.isConstructSignatureDeclaration);
-            break;
-        default:
-            return;
-    }
-    if (!declaration) return;
-    extractDecoratorInfo(context, refl, declaration);
 }
 
 function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection, declaration: ts.Declaration) {
@@ -82,23 +52,77 @@ function extractDecoratorInfo(context: typedoc.Context, refl: typedoc.Reflection
                 break;
             }
             case 'property': {
-                // Look for `attributeValue` in `@property({ attribute: attributeValue })`
+                // Look for `attributeName` in `@property({ attribute: attributeName })`
                 if (!ts.isObjectLiteralExpression(callArgument)) continue;
                 const propertyAttribute = callArgument.properties.find(
                     (p): p is ts.PropertyAssignment => ts.isPropertyAssignment(p) && ts.isIdentifier(p.name) && p.name.text === 'attribute'
                 );
                 if (!propertyAttribute) continue;
-                const attributeValue = propertyAttribute.initializer;
-                if (ts.isLiteralTypeLiteral(attributeValue)) {
-                    // e.g. `@property({ attribute: false })`
+                const attributeInitializer = propertyAttribute.initializer;
+                let attributeNamePart: typedoc.CommentDisplayPart;
+                if (ts.isLiteralTypeLiteral(attributeInitializer)) {
+                    if (ts.isStringLiteral(attributeInitializer)) {
+                        // e.g. `@property({ attribute: "fluid" })`
+                        const attributeName = attributeInitializer.text;
+                        attributeNamePart = { kind: 'text', text: `\`${attributeName}\`` };
+                    } else if (attributeInitializer.kind === ts.SyntaxKind.FalseKeyword) {
+                        // e.g. `@property({ attribute: false })`
+                        continue;
+                    } else {
+                        console.warn(`Unexpected attribute in @property: ${attributeInitializer.getText()}`);
+                        continue;
+                    }
+                } else if (ts.isPropertyAccessExpression(attributeInitializer)) {
+                    // e.g. `@property({ attribute: Attribute.FLUID })`
+                    const attributeLink = attributeInitializer.getText();
+                    const attributeName = attributeInitializer.name.text.toLowerCase().replace(/_/g, '-');
+                    attributeNamePart = { kind: 'inline-tag', tag: '@link', text: `${attributeLink} | \`${attributeName}\`` };
+                } else {
+                    console.warn(`Unexpected attribute in @property: ${attributeInitializer.getText()}`);
                     continue;
                 }
-                const comment = (refl.comment ??= new typedoc.Comment([]));
-                comment.blockTags.unshift(
-                    new typedoc.CommentTag(`@attribute`, [{ kind: 'inline-tag', tag: '@link', text: attributeValue.getText() }])
-                );
+                // Add as an `@attribute` comment on the parent class.
+                const parentClass = getParentClass(refl);
+                if (!parentClass) {
+                    console.warn(`Cannot find parent class of @property in reflection: ${refl.toString()}`);
+                    continue;
+                }
+                // Append summary.
+                let summary = refl.comment?.summary;
+                if (!summary && ts.isSetAccessorDeclaration(declaration)) {
+                    // @property() must appear on the setter, but the documentation is usually on the getter.
+                    const symbol = context.getSymbolFromReflection(refl)!;
+                    const getter = symbol.declarations?.find(ts.isGetAccessorDeclaration);
+                    if (getter) {
+                        const getterComment = context.getNodeComment(getter, false);
+                        summary = getterComment?.summary;
+                    }
+                }
+                if (!summary) {
+                    if (declaration.modifiers?.some((m) => ts.isModifier(m) && m.kind === ts.SyntaxKind.PrivateKeyword)) {
+                        // Private property without documentation, skip.
+                        continue;
+                    } else {
+                        console.warn(`Missing documentation for @property: ${refl.toString()}`);
+                    }
+                }
+                const attributeComment = new typedoc.CommentTag(`@attribute`, [attributeNamePart]);
+                if (summary) {
+                    attributeComment.content.push({ kind: 'text', text: ' - ' });
+                    attributeComment.content.push(...summary);
+                }
+                const comment = (parentClass.comment ??= new typedoc.Comment([]));
+                comment.blockTags.push(attributeComment);
                 break;
             }
         }
     }
+}
+
+function getParentClass(refl: typedoc.Reflection): typedoc.Reflection | undefined {
+    let current: typedoc.Reflection | undefined = refl;
+    while (current !== undefined && current.kind !== typedoc.ReflectionKind.Class) {
+        current = current.parent;
+    }
+    return current;
 }

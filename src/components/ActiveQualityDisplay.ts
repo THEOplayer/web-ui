@@ -10,9 +10,15 @@ import { formatQualityLabel } from '../util/TrackUtils';
 @customElement('theoplayer-active-quality-display')
 @stateReceiver(['activeVideoQuality', 'targetVideoQualities'])
 export class ActiveQualityDisplay extends LitElement {
+    /**
+     * The currently active video quality.
+     */
     @property({ reflect: false, attribute: false })
     accessor activeVideoQuality: VideoQuality | undefined = undefined;
 
+    /**
+     * The list of target video qualities.
+     */
     @property({ reflect: false, attribute: false })
     accessor targetVideoQualities: VideoQuality[] | undefined = undefined;
 

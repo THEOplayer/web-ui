@@ -15,9 +15,6 @@ const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied', 'sourcechange'] 
 /**
  * A button that toggles whether the player is playing or paused.
  *
- * @attribute `paused` (readonly) - Whether the player is paused. Reflects `ui.player.paused`.
- * @attribute `ended` (readonly) - Whether the player is ended. Reflects `ui.player.ended`.
- *
  * @cssproperty `--theoplayer-play-button-icon-color` - The icon color of the play button.
  *   Overrides `--theoplayer-icon-color` for this button. Defaults to `unset`.
  */
@@ -34,9 +31,19 @@ export class PlayButton extends Button {
         this._updateAriaLabel();
     }
 
+    /**
+     * Whether the player is paused.
+     *
+     * This reflects `player.paused`.
+     */
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.PAUSED })
     accessor paused: boolean = false;
 
+    /**
+     * Whether the player is ended.
+     *
+     * This reflects `player.ended`.
+     */
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.ENDED })
     accessor ended: boolean = false;
 

@@ -33,6 +33,9 @@ export class AdClickThroughButton extends LinkButton {
         }
     }
 
+    /**
+     * The click-through URL of the advertisement.
+     */
     get clickThrough(): string | null {
         return this._clickThrough;
     }

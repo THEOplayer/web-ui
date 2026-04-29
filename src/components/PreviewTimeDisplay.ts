@@ -11,10 +11,6 @@ const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as c
 
 /**
  * A display that shows the current preview time of a {@link TimeRange | `<theoplayer-time-range>`}.
- *
- * @attribute `remaining` - If set, shows the remaining time of the stream.
- * @attribute `remaining-when-live` - If set, and the stream is a livestream, shows the remaining time
- *   (until the live point) of the stream.
  */
 @customElement('theoplayer-preview-time-display')
 @stateReceiver(['player', 'previewTime', 'streamType'])
@@ -31,12 +27,21 @@ export class PreviewTimeDisplay extends LitElement {
     @state()
     accessor previewTime: number = NaN;
 
+    /**
+     * If set, shows the remaining time of the stream.
+     */
     @property({ reflect: true, type: Boolean, attribute: Attribute.REMAINING })
     accessor remaining: boolean = false;
 
+    /**
+     * If set, and the stream is a livestream, shows the remaining time (until the live point) of the stream.
+     */
     @property({ reflect: true, type: Boolean, attribute: Attribute.REMAINING_WHEN_LIVE })
     accessor remainingWhenLive: boolean = false;
 
+    /**
+     * The stream type, either "vod", "live" or "dvr".
+     */
     @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
     accessor streamType: StreamType = 'vod';
 
