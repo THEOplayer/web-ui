@@ -6,6 +6,7 @@
     vertical-align: middle;
     pointer-events: auto;
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
 
     background: var(--theoplayer-control-background, transparent);
     color: var(--theoplayer-button-text-color, var(--theoplayer-text-color, #fff));
