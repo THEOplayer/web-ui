@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 2.1.2
+
+### 🐛 Issues
+
+- Fixed a brief tap highlight appearing behind button icons on iOS Safari.
+
 ## 2.1.1
 
 ### 🐛 Issues
