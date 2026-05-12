@@ -4,6 +4,7 @@ import type {
     BadNetworkModeButton,
     ChromecastButton,
     CloseMenuButton,
+    FullscreenButton,
     LanguageMenuButton,
     LiveButton,
     PlaybackRateMenuButton,
@@ -40,6 +41,14 @@ export interface Locale {
      * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link LiveButton}.
      */
     seekToLiveAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link FullscreenButton}.
+     */
+    fullscreenAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link FullscreenButton} when in fullscreen mode.
+     */
+    fullscreenExitAria: string;
     /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link AirPlayButton}.
      */
@@ -116,6 +125,8 @@ export const defaultLocale: Locale = {
     seekAria: 'seek',
     live: 'LIVE',
     seekToLiveAria: 'seek to live',
+    fullscreenAria: 'enter fullscreen',
+    fullscreenExitAria: 'exit fullscreen',
     airplayAria: 'start playing on AirPlay',
     airplayConnectedAria: 'stop playing on AirPlay',
     chromecastAria: 'start casting to Chromecast',

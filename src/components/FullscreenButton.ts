@@ -10,6 +10,7 @@ import { createCustomEvent } from '../util/EventUtils';
 import { ENTER_FULLSCREEN_EVENT, type EnterFullscreenEvent } from '../events/EnterFullscreenEvent';
 import { EXIT_FULLSCREEN_EVENT, type ExitFullscreenEvent } from '../events/ExitFullscreenEvent';
 import { Attribute } from '../util/Attribute';
+import { getLocale } from '../i18n';
 
 /**
  * A button that toggles fullscreen.
@@ -52,7 +53,8 @@ export class FullscreenButton extends Button {
     }
 
     private _updateAriaLabel(): void {
-        this.ariaLabel = this.fullscreen ? 'exit fullscreen' : 'enter fullscreen';
+        const locale = getLocale(this.lang);
+        this.ariaLabel = this.fullscreen ? locale.fullscreenExitAria : locale.fullscreenAria;
     }
 
     protected override render(): HTMLTemplateResult {
