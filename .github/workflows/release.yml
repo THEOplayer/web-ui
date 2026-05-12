@@ -15,13 +15,13 @@ jobs:
       id-token: write
     steps:
       - name: Create app token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1
         id: app-token
         with:
           app-id: ${{ vars.THEOPLAYER_BOT_APP_ID }}
           private-key: ${{ secrets.THEOPLAYER_BOT_PRIVATE_KEY }}
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           token: ${{ steps.app-token.outputs.token }}
       - name: Configure Git user
@@ -29,11 +29,12 @@ jobs:
           git config user.name 'theoplayer-bot[bot]'
           git config user.email '873105+theoplayer-bot[bot]@users.noreply.github.com'
       - name: Use Node.js 22
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
+          # Never trust the cache for release builds!
+          cache: ''
       - name: Use npm 11
         run: npm install -g npm@11.6.4
       - name: Install dependencies
@@ -42,7 +43,7 @@ jobs:
         run: npm run build --workspaces
       - name: Create release PR or publish to npm
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@63a615b9cd06ba9a3e6d13796c7fbcb080a60a0b # v1
         with:
           commit: 'Release'
           title: 'Release'
