@@ -1,4 +1,4 @@
-import { html, type HTMLTemplateResult } from 'lit';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { Button } from './Button';
@@ -8,6 +8,7 @@ import liveIcon from '../icons/live.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
+import { getLocale } from '../i18n';
 
 const PAUSED_EVENTS = ['play', 'pause', 'playing', 'emptied'] as const;
 const LIVE_EVENTS = ['seeking', 'seeked', 'timeupdate', 'durationchange', 'emptied'] as const;
@@ -28,14 +29,6 @@ export class LiveButton extends Button {
 
     private _player: ChromelessPlayer | undefined;
     private _liveThreshold: number = DEFAULT_LIVE_THRESHOLD;
-
-    connectedCallback() {
-        super.connectedCallback();
-
-        if (this.ariaLabel == null) {
-            this.ariaLabel = 'seek to live';
-        }
-    }
 
     /**
      * Whether the player is paused.
@@ -113,9 +106,20 @@ export class LiveButton extends Button {
         }
     }
 
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
+    }
+
+    private _updateAriaLabel(): void {
+        const locale = getLocale(this.lang);
+        this.ariaLabel = locale.seekToLiveAria;
+    }
+
     protected override render(): HTMLTemplateResult {
+        const locale = getLocale(this.lang);
         return html`<span part="icon"><slot name="icon">${unsafeSVG(liveIcon)}</slot></span
-            ><slot name="spacer"> </slot><span part="text"><slot name="text">LIVE</slot></span>`;
+            ><slot name="spacer"> </slot><span part="text"><slot name="text">${locale.live}</slot></span>`;
     }
 }
 

@@ -5,6 +5,7 @@ import type {
     ChromecastButton,
     CloseMenuButton,
     LanguageMenuButton,
+    LiveButton,
     PlaybackRateMenuButton,
     PlayButton,
     SettingsMenuButton,
@@ -31,6 +32,14 @@ export interface Locale {
      * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link TimeRange}.
      */
     seekAria: string;
+    /**
+     * The text on a {@link LiveButton}, e.g. "LIVE".
+     */
+    live: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link LiveButton}.
+     */
+    seekToLiveAria: string;
     /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link AirPlayButton}.
      */
@@ -105,6 +114,8 @@ export const defaultLocale: Locale = {
     pauseAria: 'pause',
     replayAria: 'replay',
     seekAria: 'seek',
+    live: 'LIVE',
+    seekToLiveAria: 'seek to live',
     airplayAria: 'start playing on AirPlay',
     airplayConnectedAria: 'stop playing on AirPlay',
     chromecastAria: 'start casting to Chromecast',
