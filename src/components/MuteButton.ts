@@ -9,6 +9,7 @@ import lowIcon from '../icons/volume-low.svg';
 import highIcon from '../icons/volume-high.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
+import { getLocale } from '../i18n';
 
 export type VolumeLevel = 'off' | 'low' | 'high';
 
@@ -86,7 +87,8 @@ export class MuteButton extends Button {
     }
 
     private _updateAriaLabel(): void {
-        this.ariaLabel = this.volumeLevel === 'off' ? 'unmute' : 'mute';
+        const locale = getLocale(this.lang);
+        this.ariaLabel = this.volumeLevel === 'off' ? locale.unmuteAria : locale.muteAria;
     }
 
     protected override render(): HTMLTemplateResult {

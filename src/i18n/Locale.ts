@@ -7,6 +7,7 @@ import type {
     FullscreenButton,
     LanguageMenuButton,
     LiveButton,
+    MuteButton,
     PlaybackRateMenuButton,
     PlayButton,
     SettingsMenuButton,
@@ -29,6 +30,14 @@ export interface Locale {
      * i.e. when the player is paused at the end of the stream.
      */
     replayAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link MuteButton} when it is showing a "mute" button.
+     */
+    muteAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link MuteButton} when it is showing an "unmute" button.
+     */
+    unmuteAria: string;
     /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link TimeRange}.
      */
@@ -122,6 +131,8 @@ export const defaultLocale: Locale = {
     playAria: 'play',
     pauseAria: 'pause',
     replayAria: 'replay',
+    muteAria: 'mute',
+    unmuteAria: 'unmute',
     seekAria: 'seek',
     live: 'LIVE',
     seekToLiveAria: 'seek to live',
