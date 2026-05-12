@@ -33,7 +33,8 @@ jobs:
         with:
           node-version: 22
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
+          # Never trust the cache for release builds!
+          cache: ''
       - name: Use npm 11
         run: npm install -g npm@11.6.4
       - name: Install dependencies
