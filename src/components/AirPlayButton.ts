@@ -5,6 +5,7 @@ import { stateReceiver } from './StateReceiverMixin';
 import { CastButton } from './CastButton';
 import airPlayButtonHtml from './AirPlayButton.html';
 import airPlayButtonCss from './AirPlayButton.css';
+import { getLocale } from '../i18n';
 
 /**
  * A button to start and stop casting using AirPlay.
@@ -36,7 +37,8 @@ export class AirPlayButton extends CastButton {
     }
 
     private _updateAriaLabel(): void {
-        this.ariaLabel = this.castState === 'connecting' || this.castState === 'connected' ? 'stop playing on AirPlay' : 'start playing on AirPlay';
+        const locale = getLocale(this.lang);
+        this.ariaLabel = this.castState === 'connecting' || this.castState === 'connected' ? locale.airplayConnectedAria : locale.airplayAria;
     }
 
     protected override render() {

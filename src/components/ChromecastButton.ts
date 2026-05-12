@@ -5,6 +5,7 @@ import { CastButton } from './CastButton';
 import chromecastButtonHtml from './ChromecastButton.html';
 import chromecastButtonCss from './ChromecastButton.css';
 import { customElement } from 'lit/decorators.js';
+import { getLocale } from '../i18n';
 
 let chromecastButtonId = 0;
 
@@ -43,8 +44,8 @@ export class ChromecastButton extends CastButton {
     }
 
     private _updateAriaLabel(): void {
-        this.ariaLabel =
-            this.castState === 'connecting' || this.castState === 'connected' ? 'stop casting to Chromecast' : 'start casting to Chromecast';
+        const locale = getLocale(this.lang);
+        this.ariaLabel = this.castState === 'connecting' || this.castState === 'connected' ? locale.chromecastConnectedAria : locale.chromecastAria;
     }
 
     protected override render() {

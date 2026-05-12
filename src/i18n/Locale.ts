@@ -1,5 +1,5 @@
 import { durationFormatterForLocale } from './DurationFormatter';
-import type { PlayButton, TimeRange } from '../components';
+import type { AirPlayButton, ChromecastButton, PlayButton, TimeRange } from '../components';
 
 export interface Locale {
     /**
@@ -21,6 +21,22 @@ export interface Locale {
      * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link TimeRange}.
      */
     seekAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link AirPlayButton}.
+     */
+    airplayAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link AirPlayButton} when it is connected to AirPlay.
+     */
+    airplayConnectedAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link ChromecastButton}.
+     */
+    chromecastAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link ChromecastButton} when it is connected to Chromecast.
+     */
+    chromecastConnectedAria: string;
     /**
      * Formats the given time duration as a human-readable string.
      *
@@ -59,6 +75,10 @@ export const defaultLocale: Locale = {
     pauseAria: 'pause',
     replayAria: 'replay',
     seekAria: 'seek',
+    airplayAria: 'start playing on AirPlay',
+    airplayConnectedAria: 'stop playing on AirPlay',
+    chromecastAria: 'start casting to Chromecast',
+    chromecastConnectedAria: 'stop casting to Chromecast',
     formatDuration: durationFormatterForLocale(defaultLocaleName),
     formatRemainingDuration: (duration: string) => `${duration} remaining`
 };
