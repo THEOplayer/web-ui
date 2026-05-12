@@ -8,11 +8,12 @@ import settingsIcon from '../../../icons/settings.svg';
 import warningIcon from '../../../icons/warning.svg';
 import { stateReceiver } from '../../StateReceiverMixin';
 import { MenuButton } from '../../MenuButton';
+import type { BadNetworkModeMenu } from './BadNetworkModeMenu';
 
 /**
- * A menu button that opens a settings menu.
+ * A menu button that opens a {@link BadNetworkModeMenu}.
  *
- * @attribute `menu` - The ID of the settings menu.
+ * @attribute `menu` - The ID of the bad network menu.
  */
 @customElement('theolive-bad-network-button')
 @stateReceiver(['player'])
@@ -29,7 +30,7 @@ export class BadNetworkModeButton extends MenuButton {
         super.connectedCallback();
 
         if (this.ariaLabel == null) {
-            this.ariaLabel = 'open settings menu';
+            this.ariaLabel = 'open bad network mode menu';
         }
     }
 
