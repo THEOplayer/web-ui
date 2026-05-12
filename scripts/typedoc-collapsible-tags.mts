@@ -92,8 +92,6 @@ export function load(app: Application) {
                 tables.push(commentTagTable(context, tag, commentTags));
             }
         }
-        return tables.length === 0
-            ? JSX.createElement(JSX.Fragment, null)
-            : JSX.createElement('div', { class: 'tsd-comment tsd-typography' }, tables);
+        return tables.length === 0 ? html` <${JSX.Fragment} />` : html`<div class="tsd-comment tsd-typography">${tables}</div>`;
     });
 }
