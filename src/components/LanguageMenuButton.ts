@@ -26,8 +26,8 @@ export class LanguageMenuButton extends MenuButton {
     override connectedCallback() {
         super.connectedCallback();
 
-        if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
-            this.setAttribute(Attribute.ARIA_LABEL, 'open language menu');
+        if (this.ariaLabel == null) {
+            this.ariaLabel = 'open language menu';
         }
     }
 

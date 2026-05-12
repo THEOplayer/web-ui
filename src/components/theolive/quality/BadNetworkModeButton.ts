@@ -8,7 +8,6 @@ import settingsIcon from '../../../icons/settings.svg';
 import warningIcon from '../../../icons/warning.svg';
 import { stateReceiver } from '../../StateReceiverMixin';
 import { MenuButton } from '../../MenuButton';
-import { Attribute } from '../../../util/Attribute';
 
 /**
  * A menu button that opens a settings menu.
@@ -29,8 +28,8 @@ export class BadNetworkModeButton extends MenuButton {
     override connectedCallback() {
         super.connectedCallback();
 
-        if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
-            this.setAttribute(Attribute.ARIA_LABEL, 'open settings menu');
+        if (this.ariaLabel == null) {
+            this.ariaLabel = 'open settings menu';
         }
     }
 

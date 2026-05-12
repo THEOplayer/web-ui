@@ -4,7 +4,6 @@ import { stateReceiver } from './StateReceiverMixin';
 import { CastButton } from './CastButton';
 import chromecastButtonHtml from './ChromecastButton.html';
 import chromecastButtonCss from './ChromecastButton.css';
-import { Attribute } from '../util/Attribute';
 import { customElement } from 'lit/decorators.js';
 
 let chromecastButtonId = 0;
@@ -44,9 +43,8 @@ export class ChromecastButton extends CastButton {
     }
 
     private _updateAriaLabel(): void {
-        const label =
+        this.ariaLabel =
             this.castState === 'connecting' || this.castState === 'connected' ? 'stop casting to Chromecast' : 'start casting to Chromecast';
-        this.setAttribute(Attribute.ARIA_LABEL, label);
     }
 
     protected override render() {

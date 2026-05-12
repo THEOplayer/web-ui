@@ -28,8 +28,8 @@ export class TimeDisplay extends LitElement {
         if (!this.hasAttribute('role')) {
             this.setAttribute('role', 'progressbar');
         }
-        if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
-            this.setAttribute(Attribute.ARIA_LABEL, 'playback time');
+        if (this.ariaLabel == null) {
+            this.ariaLabel = 'playback time';
         }
         if (!this.hasAttribute(Attribute.ARIA_LIVE)) {
             // Tell screen readers not to automatically read the time as it changes

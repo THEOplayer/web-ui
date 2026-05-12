@@ -113,6 +113,9 @@ export class Button extends LitElement {
         }
     }
 
+    @property({ reflect: true, state: true, type: String, attribute: Attribute.ARIA_LABEL })
+    override accessor ariaLabel: string | null = null;
+
     private _enable(): void {
         this.removeEventListener('click', this._onClick);
         this.removeEventListener('keydown', this._onKeyDown);

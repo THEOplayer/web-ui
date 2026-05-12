@@ -60,8 +60,7 @@ export class SeekButton extends Button {
 
     private _updateAriaLabel(): void {
         const seekOffset = this.seekOffset;
-        const label = seekOffset >= 0 ? `seek forward by ${seekOffset} seconds` : `seek backward by ${-seekOffset} seconds`;
-        this.setAttribute(Attribute.ARIA_LABEL, label);
+        this.ariaLabel = seekOffset >= 0 ? `seek forward by ${seekOffset} seconds` : `seek backward by ${-seekOffset} seconds`;
     }
 
     protected override render() {

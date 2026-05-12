@@ -5,7 +5,6 @@ import { Button } from './Button';
 import backIcon from '../icons/back.svg';
 import { createCustomEvent } from '../util/EventUtils';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
-import { Attribute } from '../util/Attribute';
 
 /**
  * A button that closes its parent menu.
@@ -17,8 +16,8 @@ export class CloseMenuButton extends Button {
     override connectedCallback() {
         super.connectedCallback();
 
-        if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
-            this.setAttribute(Attribute.ARIA_LABEL, 'close menu');
+        if (this.ariaLabel == null) {
+            this.ariaLabel = 'close menu';
         }
     }
 

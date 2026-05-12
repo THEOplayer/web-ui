@@ -86,8 +86,7 @@ export class MuteButton extends Button {
     }
 
     private _updateAriaLabel(): void {
-        const label = this.volumeLevel === 'off' ? 'unmute' : 'mute';
-        this.setAttribute(Attribute.ARIA_LABEL, label);
+        this.ariaLabel = this.volumeLevel === 'off' ? 'unmute' : 'mute';
     }
 
     protected override render(): HTMLTemplateResult {

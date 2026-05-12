@@ -52,8 +52,7 @@ export class FullscreenButton extends Button {
     }
 
     private _updateAriaLabel(): void {
-        const label = this.fullscreen ? 'exit fullscreen' : 'enter fullscreen';
-        this.setAttribute(Attribute.ARIA_LABEL, label);
+        this.ariaLabel = this.fullscreen ? 'exit fullscreen' : 'enter fullscreen';
     }
 
     protected override render(): HTMLTemplateResult {

@@ -32,8 +32,8 @@ export class LiveButton extends Button {
     connectedCallback() {
         super.connectedCallback();
 
-        if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
-            this.setAttribute(Attribute.ARIA_LABEL, 'seek to live');
+        if (this.ariaLabel == null) {
+            this.ariaLabel = 'seek to live';
         }
     }
 

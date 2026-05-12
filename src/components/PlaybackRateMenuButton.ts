@@ -3,7 +3,6 @@ import { customElement } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { MenuButton } from './MenuButton';
 import speedIcon from '../icons/speed.svg';
-import { Attribute } from '../util/Attribute';
 
 /**
  * A menu button that opens a [playback rate menu]{@link PlaybackRateMenu}.
@@ -15,8 +14,8 @@ export class PlaybackRateMenuButton extends MenuButton {
     override connectedCallback() {
         super.connectedCallback();
 
-        if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
-            this.setAttribute(Attribute.ARIA_LABEL, 'open playback speed menu');
+        if (this.ariaLabel == null) {
+            this.ariaLabel = 'open playback speed menu';
         }
     }
 

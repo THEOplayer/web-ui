@@ -118,8 +118,7 @@ export class PlayButton extends Button {
 
     private _updateAriaLabel(): void {
         const locale = getLocale(this.lang);
-        const label = this.ended ? locale.replayAria : this.paused ? locale.playAria : locale.pauseAria;
-        this.setAttribute(Attribute.ARIA_LABEL, label);
+        this.ariaLabel = this.ended ? locale.replayAria : this.paused ? locale.playAria : locale.pauseAria;
     }
 
     protected override render(): HTMLTemplateResult {
