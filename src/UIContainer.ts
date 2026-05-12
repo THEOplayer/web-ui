@@ -254,7 +254,7 @@ export class UIContainer extends LitElement {
     @property({ reflect: true, type: Boolean, attribute: Attribute.MUTED })
     set muted(value: boolean) {
         this._muted = value;
-        if (this._player) {
+        if (this._player && this._player.muted !== value) {
             this._player.muted = value;
         }
     }
