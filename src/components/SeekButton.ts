@@ -7,6 +7,7 @@ import seekForwardIcon from '../icons/seek-forward.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import { getLocale } from '../i18n';
 
 const DEFAULT_SEEK_OFFSET = 10;
 
@@ -21,11 +22,6 @@ export class SeekButton extends Button {
     static styles = [...Button.styles, seekButtonCss];
 
     private _player: ChromelessPlayer | undefined;
-
-    override connectedCallback() {
-        super.connectedCallback();
-        this._updateAriaLabel();
-    }
 
     /**
      * The offset (in seconds) by which to seek forward (if positive) or backward (if negative).
@@ -59,8 +55,10 @@ export class SeekButton extends Button {
     }
 
     private _updateAriaLabel(): void {
+        const locale = getLocale(this.lang);
         const seekOffset = this.seekOffset;
-        this.ariaLabel = seekOffset >= 0 ? `seek forward by ${seekOffset} seconds` : `seek backward by ${-seekOffset} seconds`;
+        const duration = locale.formatDuration({ hours: 0, minutes: 0, seconds: Math.abs(seekOffset) });
+        this.ariaLabel = seekOffset >= 0 ? locale.seekForwardAria(duration) : locale.seekBackwardAria(duration);
     }
 
     protected override render() {

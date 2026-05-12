@@ -10,6 +10,7 @@ import type {
     MuteButton,
     PlaybackRateMenuButton,
     PlayButton,
+    SeekButton,
     SettingsMenuButton,
     TimeRange
 } from '../components';
@@ -42,6 +43,18 @@ export interface Locale {
      * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link TimeRange}.
      */
     seekAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link SeekButton} with a positive {@link SeekButton.seekOffset}.
+     *
+     * @param offset An offset that was formatted with {@link formatDuration}.
+     */
+    seekForwardAria(offset: string): string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link SeekButton} with a negative {@link SeekButton.seekOffset}.
+     *
+     * @param offset An offset that was formatted with {@link formatDuration}.
+     */
+    seekBackwardAria(offset: string): string;
     /**
      * The text on a {@link LiveButton}, e.g. "LIVE".
      */
@@ -134,6 +147,8 @@ export const defaultLocale: Locale = {
     muteAria: 'mute',
     unmuteAria: 'unmute',
     seekAria: 'seek',
+    seekForwardAria: (offset) => `seek forward by ${offset}`,
+    seekBackwardAria: (offset) => `seek backward by ${offset}`,
     live: 'LIVE',
     seekToLiveAria: 'seek to live',
     fullscreenAria: 'enter fullscreen',
