@@ -1,5 +1,15 @@
 import { durationFormatterForLocale } from './DurationFormatter';
-import type { AirPlayButton, ChromecastButton, PlayButton, TimeRange } from '../components';
+import type {
+    AirPlayButton,
+    BadNetworkModeButton,
+    ChromecastButton,
+    CloseMenuButton,
+    LanguageMenuButton,
+    PlaybackRateMenuButton,
+    PlayButton,
+    SettingsMenuButton,
+    TimeRange
+} from '../components';
 
 export interface Locale {
     /**
@@ -37,6 +47,26 @@ export interface Locale {
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link ChromecastButton} when it is connected to Chromecast.
      */
     chromecastConnectedAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link CloseMenuButton}.
+     */
+    closeMenuAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link LanguageMenuButton}.
+     */
+    openLanguageMenuAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link PlaybackRateMenuButton}.
+     */
+    openPlaybackRateMenuAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link SettingsMenuButton}.
+     */
+    openSettingsMenuAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link BadNetworkModeButton}.
+     */
+    openBadNetworkModeMenuAria: string;
     /**
      * Formats the given time duration as a human-readable string.
      *
@@ -79,6 +109,11 @@ export const defaultLocale: Locale = {
     airplayConnectedAria: 'stop playing on AirPlay',
     chromecastAria: 'start casting to Chromecast',
     chromecastConnectedAria: 'stop casting to Chromecast',
+    closeMenuAria: 'close menu',
+    openLanguageMenuAria: 'open language menu',
+    openPlaybackRateMenuAria: 'open playback speed menu',
+    openSettingsMenuAria: 'open settings menu',
+    openBadNetworkModeMenuAria: 'open bad network mode menu',
     formatDuration: durationFormatterForLocale(defaultLocaleName),
     formatRemainingDuration: (duration: string) => `${duration} remaining`
 };

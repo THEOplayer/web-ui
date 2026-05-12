@@ -1,10 +1,11 @@
-import { html, type HTMLTemplateResult } from 'lit';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { Button } from './Button';
 import backIcon from '../icons/back.svg';
 import { createCustomEvent } from '../util/EventUtils';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
+import { getLocale } from '../i18n';
 
 /**
  * A button that closes its parent menu.
@@ -13,20 +14,22 @@ import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent'
  */
 @customElement('theoplayer-menu-close-button')
 export class CloseMenuButton extends Button {
-    override connectedCallback() {
-        super.connectedCallback();
-
-        if (this.ariaLabel == null) {
-            this.ariaLabel = 'close menu';
-        }
-    }
-
     protected override handleClick() {
         const event: CloseMenuEvent = createCustomEvent(CLOSE_MENU_EVENT, {
             bubbles: true,
             composed: true
         });
         this.dispatchEvent(event);
+    }
+
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
+    }
+
+    private _updateAriaLabel(): void {
+        const locale = getLocale(this.lang);
+        this.ariaLabel = locale.closeMenuAria;
     }
 
     protected override render(): HTMLTemplateResult {

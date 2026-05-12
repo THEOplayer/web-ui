@@ -1,8 +1,9 @@
-import { html, type HTMLTemplateResult } from 'lit';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { MenuButton } from './MenuButton';
 import speedIcon from '../icons/speed.svg';
+import { getLocale } from '../i18n';
 
 /**
  * A menu button that opens a [playback rate menu]{@link PlaybackRateMenu}.
@@ -11,12 +12,14 @@ import speedIcon from '../icons/speed.svg';
  */
 @customElement('theoplayer-playback-rate-menu-button')
 export class PlaybackRateMenuButton extends MenuButton {
-    override connectedCallback() {
-        super.connectedCallback();
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
+    }
 
-        if (this.ariaLabel == null) {
-            this.ariaLabel = 'open playback speed menu';
-        }
+    private _updateAriaLabel(): void {
+        const locale = getLocale(this.lang);
+        this.ariaLabel = locale.openPlaybackRateMenuAria;
     }
 
     protected override render(): HTMLTemplateResult {

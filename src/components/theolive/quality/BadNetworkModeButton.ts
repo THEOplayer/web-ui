@@ -1,4 +1,4 @@
-import { html, type HTMLTemplateResult } from 'lit';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
@@ -9,6 +9,7 @@ import warningIcon from '../../../icons/warning.svg';
 import { stateReceiver } from '../../StateReceiverMixin';
 import { MenuButton } from '../../MenuButton';
 import type { BadNetworkModeMenu } from './BadNetworkModeMenu';
+import { getLocale } from '../../../i18n';
 
 /**
  * A menu button that opens a {@link BadNetworkModeMenu}.
@@ -25,14 +26,6 @@ export class BadNetworkModeButton extends MenuButton {
 
     @state()
     private accessor _inBadNetworkMode = false;
-
-    override connectedCallback() {
-        super.connectedCallback();
-
-        if (this.ariaLabel == null) {
-            this.ariaLabel = 'open bad network mode menu';
-        }
-    }
 
     private readonly handleEnterBadNetworkMode_ = () => {
         this._inBadNetworkMode = true;
@@ -61,6 +54,16 @@ export class BadNetworkModeButton extends MenuButton {
             this._theoLive.addEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
             this._theoLive.addEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
         }
+    }
+
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
+    }
+
+    private _updateAriaLabel(): void {
+        const locale = getLocale(this.lang);
+        this.ariaLabel = locale.openBadNetworkModeMenuAria;
     }
 
     protected override render(): HTMLTemplateResult {

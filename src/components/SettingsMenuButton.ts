@@ -1,8 +1,9 @@
-import { html, type HTMLTemplateResult } from 'lit';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { MenuButton } from './MenuButton';
 import settingsIcon from '../icons/settings.svg';
+import { getLocale } from '../i18n';
 
 /**
  * A menu button that opens a {@link SettingsMenu}.
@@ -11,12 +12,14 @@ import settingsIcon from '../icons/settings.svg';
  */
 @customElement('theoplayer-settings-menu-button')
 export class SettingsMenuButton extends MenuButton {
-    override connectedCallback() {
-        super.connectedCallback();
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
+    }
 
-        if (this.ariaLabel == null) {
-            this.ariaLabel = 'open settings menu';
-        }
+    private _updateAriaLabel(): void {
+        const locale = getLocale(this.lang);
+        this.ariaLabel = locale.openSettingsMenuAria;
     }
 
     protected override render(): HTMLTemplateResult {
