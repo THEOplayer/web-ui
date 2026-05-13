@@ -23,7 +23,7 @@ const DEFAULT_LIVE_THRESHOLD = 10;
  * @cssproperty `--theoplayer-live-button-active-color` - The color of the live indicator when playing at the live point. Defaults to `red`.
  */
 @customElement('theoplayer-live-button')
-@stateReceiver(['player', 'streamType'])
+@stateReceiver(['player', 'streamType', 'lang'])
 export class LiveButton extends Button {
     static styles = [...Button.styles, liveButtonCss];
 
@@ -63,6 +63,9 @@ export class LiveButton extends Button {
      */
     @property({ reflect: true, type: Boolean, attribute: Attribute.LIVE })
     accessor live: boolean = false;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {
         return this._player;

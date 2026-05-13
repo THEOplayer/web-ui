@@ -1,17 +1,18 @@
 import { type PropertyValues } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { stateReceiver } from './StateReceiverMixin';
 import { CastButton } from './CastButton';
 import airPlayButtonHtml from './AirPlayButton.html';
 import airPlayButtonCss from './AirPlayButton.css';
 import { getLocale } from '../i18n';
+import { Attribute } from '../util/Attribute';
 
 /**
  * A button to start and stop casting using AirPlay.
  */
 @customElement('theoplayer-airplay-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class AirPlayButton extends CastButton {
     static styles = [...CastButton.styles, airPlayButtonCss];
 
@@ -30,6 +31,9 @@ export class AirPlayButton extends CastButton {
         this._player = player;
         this.castApi = player?.cast?.airplay;
     }
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     override willUpdate(changedProperties: PropertyValues) {
         super.willUpdate(changedProperties);

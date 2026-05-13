@@ -1,9 +1,11 @@
 import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { MenuButton } from './MenuButton';
 import speedIcon from '../icons/speed.svg';
 import { getLocale } from '../i18n';
+import { stateReceiver } from './StateReceiverMixin';
+import { Attribute } from '../util/Attribute';
 
 /**
  * A menu button that opens a [playback rate menu]{@link PlaybackRateMenu}.
@@ -11,7 +13,11 @@ import { getLocale } from '../i18n';
  * @attribute menu - The ID of the playback rate menu.
  */
 @customElement('theoplayer-playback-rate-menu-button')
+@stateReceiver(['lang'])
 export class PlaybackRateMenuButton extends MenuButton {
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
     override willUpdate(changedProperties: PropertyValues) {
         super.willUpdate(changedProperties);
         this._updateAriaLabel();

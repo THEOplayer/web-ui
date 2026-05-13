@@ -10,6 +10,7 @@ import { stateReceiver } from '../../StateReceiverMixin';
 import { MenuButton } from '../../MenuButton';
 import type { BadNetworkModeMenu } from './BadNetworkModeMenu';
 import { getLocale } from '../../../i18n';
+import { Attribute } from '../../../util/Attribute';
 
 /**
  * A menu button that opens a {@link BadNetworkModeMenu}.
@@ -17,7 +18,7 @@ import { getLocale } from '../../../i18n';
  * @attribute `menu` - The ID of the bad network menu.
  */
 @customElement('theolive-bad-network-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class BadNetworkModeButton extends MenuButton {
     static styles = [...MenuButton.styles, badNetworkModeButtonCss];
 
@@ -34,6 +35,9 @@ export class BadNetworkModeButton extends MenuButton {
     private readonly handleExitBadNetworkMode_ = () => {
         this._inBadNetworkMode = false;
     };
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     get player(): TheoPlayer | undefined {
         return this._player;

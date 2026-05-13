@@ -14,7 +14,7 @@ const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as cons
  * A button to open the advertisement's click-through webpage.
  */
 @customElement('theoplayer-ad-clickthrough-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class AdClickThroughButton extends LinkButton {
     private _player: ChromelessPlayer | undefined;
     private _ads: Ads | undefined;
@@ -52,6 +52,9 @@ export class AdClickThroughButton extends LinkButton {
         this.disabled = clickThrough == null;
         this.style.display = clickThrough != null ? '' : 'none';
     }
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {
         return this._player;

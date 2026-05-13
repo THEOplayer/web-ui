@@ -34,7 +34,7 @@ const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as cons
  * @cssproperty `--theoplayer-ad-skip-icon-height` - The height of the skip button icon. Defaults to `--theoplayer-control-height`.
  */
 @customElement('theoplayer-ad-skip-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class AdSkipButton extends Button {
     static styles = [...Button.styles, adSkipButtonCss];
 
@@ -46,6 +46,9 @@ export class AdSkipButton extends Button {
 
     @state()
     private accessor _timeToSkip: number = 0;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     override connectedCallback(): void {
         super.connectedCallback();

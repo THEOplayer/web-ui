@@ -43,7 +43,7 @@ const AD_MARKER_WIDTH = 1;
  *   Defaults to `0 0 4px rgba(0, 0, 0, 0.75)`.
  */
 @customElement('theoplayer-time-range')
-@stateReceiver(['player', 'streamType', 'deviceType'])
+@stateReceiver(['player', 'streamType', 'deviceType', 'lang'])
 export class TimeRange extends Range {
     static override styles = [...Range.styles, timeRangeCss];
 

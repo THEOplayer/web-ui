@@ -4,8 +4,9 @@ import { stateReceiver } from './StateReceiverMixin';
 import { CastButton } from './CastButton';
 import chromecastButtonHtml from './ChromecastButton.html';
 import chromecastButtonCss from './ChromecastButton.css';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { getLocale } from '../i18n';
+import { Attribute } from '../util/Attribute';
 
 let chromecastButtonId = 0;
 
@@ -13,7 +14,7 @@ let chromecastButtonId = 0;
  * A button to start and stop casting using Chromecast.
  */
 @customElement('theoplayer-chromecast-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class ChromecastButton extends CastButton {
     static styles = [...CastButton.styles, chromecastButtonCss];
 
@@ -37,6 +38,9 @@ export class ChromecastButton extends CastButton {
         this._player = player;
         this.castApi = player?.cast?.chromecast;
     }
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     override willUpdate(changedProperties: PropertyValues) {
         super.willUpdate(changedProperties);

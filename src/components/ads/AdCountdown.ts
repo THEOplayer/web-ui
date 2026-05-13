@@ -6,6 +6,7 @@ import { stateReceiver } from '../StateReceiverMixin';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { getLocale } from '../../i18n';
 import { toDuration } from '../../util/TimeUtils';
+import { Attribute } from '../../util/Attribute';
 
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak'] as const;
 
@@ -13,7 +14,7 @@ const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak
  * A control that displays the remaining time of the current ad break.
  */
 @customElement('theoplayer-ad-countdown')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class AdCountdown extends LitElement {
     static override styles = [textDisplayCss, adCountdownCss];
 
@@ -22,6 +23,9 @@ export class AdCountdown extends LitElement {
 
     @state()
     private accessor _maxRemainingDuration: number = 0;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {
         return this._player;

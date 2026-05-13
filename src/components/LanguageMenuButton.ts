@@ -18,7 +18,7 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  * When there are no alternative audio languages or subtitles, this button automatically hides itself.
  */
 @customElement('theoplayer-language-menu-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class LanguageMenuButton extends MenuButton {
     private _player: ChromelessPlayer | undefined;
     private _audioTrackList: MediaTrackList | undefined;
@@ -42,6 +42,9 @@ export class LanguageMenuButton extends MenuButton {
         this._audioTrackList?.addEventListener(TRACK_EVENTS, this._updateTracks);
         this._textTrackList?.addEventListener(TRACK_EVENTS, this._updateTracks);
     }
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     private readonly _updateTracks = (): void => {
         const hasTracks =

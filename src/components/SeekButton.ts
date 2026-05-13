@@ -18,7 +18,7 @@ const DEFAULT_SEEK_OFFSET = 10;
  * @cssproperty `--theoplayer-seek-button-font-size` - The font size of the offset number rendered inside the seek icon. Defaults to `calc(0.3 * --theoplayer-button-icon-height)`.
  */
 @customElement('theoplayer-seek-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class SeekButton extends Button {
     static styles = [...Button.styles, seekButtonCss];
 
@@ -29,6 +29,9 @@ export class SeekButton extends Button {
      */
     @property({ reflect: true, type: Number, attribute: Attribute.SEEK_OFFSET })
     accessor seekOffset: number = DEFAULT_SEEK_OFFSET;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {
         return this._player;

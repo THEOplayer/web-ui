@@ -16,7 +16,7 @@ import { getLocale } from '../i18n';
  * A button that toggles fullscreen.
  */
 @customElement('theoplayer-fullscreen-button')
-@stateReceiver(['fullscreen'])
+@stateReceiver(['fullscreen', 'lang'])
 export class FullscreenButton extends Button {
     static styles = [...Button.styles, fullscreenButtonCss];
 
@@ -30,6 +30,9 @@ export class FullscreenButton extends Button {
      */
     @property({ reflect: true, type: Boolean, attribute: Attribute.FULLSCREEN })
     accessor fullscreen: boolean = false;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     protected override handleClick(): void {
         if (!this.fullscreen) {
