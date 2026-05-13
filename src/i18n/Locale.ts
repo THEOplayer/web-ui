@@ -16,7 +16,8 @@ import type {
     PlayButton,
     SeekButton,
     SettingsMenuButton,
-    TimeRange
+    TimeRange,
+    VolumeRange
 } from '../components';
 
 export interface Locale {
@@ -43,6 +44,10 @@ export interface Locale {
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link MuteButton} when it is showing an "unmute" button.
      */
     unmuteAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link VolumeRange}.
+     */
+    volumeAria: string;
     /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link TimeRange}.
      */
@@ -193,6 +198,7 @@ export const defaultLocale: Locale = {
     replayAria: 'replay',
     muteAria: 'mute',
     unmuteAria: 'unmute',
+    volumeAria: 'volume',
     seekAria: 'seek',
     seekForwardAria: (offset) => `seek forward by ${offset}`,
     seekBackwardAria: (offset) => `seek backward by ${offset}`,
