@@ -8,5 +8,5 @@ export { type DeviceType } from './util/DeviceType';
 export { type StreamType } from './util/StreamType';
 export { type Constructor } from './util/CommonUtils';
 export { ColorStops } from './util/ColorStops';
-export { type Locale, type Duration, type DurationFormatter, addLocale } from './i18n/index';
+export { type Locale, type Duration, addLocale } from './i18n/index';
 export * from './version';
