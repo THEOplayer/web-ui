@@ -8,6 +8,7 @@ import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { getLocale } from '../i18n';
+import { toDuration } from '../util/TimeUtils';
 
 const DEFAULT_SEEK_OFFSET = 10;
 
@@ -57,7 +58,7 @@ export class SeekButton extends Button {
     private _updateAriaLabel(): void {
         const locale = getLocale(this.lang);
         const seekOffset = this.seekOffset;
-        const duration = locale.formatDuration({ hours: 0, minutes: 0, seconds: Math.abs(seekOffset) });
+        const duration = locale.formatDuration(toDuration(Math.abs(seekOffset)));
         this.ariaLabel = seekOffset >= 0 ? locale.seekForwardAria(duration) : locale.seekBackwardAria(duration);
     }
 

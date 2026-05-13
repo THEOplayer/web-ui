@@ -1,4 +1,4 @@
-import type { Locale } from '../i18n';
+import { type Duration, type Locale } from '../i18n';
 
 function isValidNumber(x: number): boolean {
     return !isNaN(x) && isFinite(x);
@@ -35,16 +35,18 @@ export function formatTime(time: number, guide: number = 0, preferNegative?: boo
     return `${negative ? '-' : ''}${timePhrase}`;
 }
 
+export function toDuration(seconds: number): Duration {
+    return {
+        hours: Math.floor(seconds / 3600),
+        minutes: Math.floor(seconds / 60) % 60,
+        seconds: Math.floor(seconds % 60)
+    };
+}
+
 export function formatAsTimePhrase(locale: Locale, time: number, preferNegative?: boolean): string {
     if (!isValidNumber(time)) return '';
     const negative = time < 0 || (preferNegative && time === 0);
-    time = Math.abs(time);
-
-    const seconds = Math.floor(time % 60);
-    const minutes = Math.floor(time / 60) % 60;
-    const hours = Math.floor(time / 3600);
-
-    const duration = locale.formatDuration({ hours, minutes, seconds });
+    const duration = locale.formatDuration(toDuration(Math.abs(time)));
 
     // If the time was negative, assume it represents some remaining amount of time/"count down".
     return negative ? locale.formatRemainingDuration(duration) : duration;

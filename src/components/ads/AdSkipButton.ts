@@ -11,6 +11,7 @@ import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
 import { getLocale } from '../../i18n';
+import { toDuration } from '../../util/TimeUtils';
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
@@ -132,7 +133,7 @@ export class AdSkipButton extends Button {
             visibility: this._showCountdown ? 'hidden' : 'visible',
             pointerEvents: this._showCountdown ? 'none' : ''
         };
-        const timeToSkip = locale.formatNarrowDuration({ hours: 0, minutes: 0, seconds: this._timeToSkip });
+        const timeToSkip = locale.formatNarrowDuration(toDuration(this._timeToSkip));
         return html`<span part="countdown" style=${styleMap(countdownStyles)}>${locale.adSkipCountdownText(timeToSkip)}</span>
             <span part="skip" style=${styleMap(skipStyles)}>
                 <span part="skip-text"><slot name="skip-text">${locale.adSkipButtonText}</slot></span>
