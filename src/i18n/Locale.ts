@@ -1,4 +1,5 @@
 import { durationFormatterForLocale } from './DurationFormatter';
+import { percentageFormatterForLocale } from './PercentageFormatter';
 import type {
     AdClickThroughButton,
     AdCountdown,
@@ -181,9 +182,22 @@ export interface Locale {
      * @param duration A duration that was formatted with {@link formatDuration}.
      */
     formatRemainingDuration(duration: string): string;
+    /**
+     * Formats the given percentage as a human-readable string.
+     *
+     * This is optional. If not provided, a default {@link Intl.NumberFormat} with the {@link Intl.NumberFormatOptions.style | `"percent"` style} is used.
+     *
+     * Examples:
+     * - `0.75` &rarr; "75%"
+     * - `1.0` &rarr; "100%"
+     *
+     * @param percentage A percentage, between `0.0` and `1.0`.
+     */
+    formatPercentage(percentage: number): string;
 }
 
 export type DurationFormatter = (duration: Duration) => string;
+export type PercentageFormatter = (percentage: number) => string;
 
 export interface Duration {
     hours: number;
@@ -223,5 +237,6 @@ export const defaultLocale: Locale = {
     openBadNetworkModeMenuAria: 'open bad network mode menu',
     formatDuration: durationFormatterForLocale(defaultLocaleName, 'long'),
     formatNarrowDuration: durationFormatterForLocale(defaultLocaleName, 'narrow'),
-    formatRemainingDuration: (duration: string) => `${duration} remaining`
+    formatRemainingDuration: (duration: string) => `${duration} remaining`,
+    formatPercentage: percentageFormatterForLocale(defaultLocaleName)
 };

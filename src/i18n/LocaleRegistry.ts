@@ -1,5 +1,6 @@
 import { defaultLocale, type Locale } from './Locale';
 import { durationFormatterForLocale } from './DurationFormatter';
+import { percentageFormatterForLocale } from './PercentageFormatter';
 
 const localesByName: Record<string, Required<Locale>> = {};
 
@@ -23,6 +24,7 @@ export function addLocale(name: string, locale: Partial<Locale>) {
         ...defaultLocale,
         ...locale,
         formatDuration: locale.formatDuration ?? durationFormatterForLocale(name, 'long'),
-        formatNarrowDuration: locale.formatNarrowDuration ?? durationFormatterForLocale(name, 'narrow')
+        formatNarrowDuration: locale.formatNarrowDuration ?? durationFormatterForLocale(name, 'narrow'),
+        formatPercentage: locale.formatPercentage ?? percentageFormatterForLocale(name)
     };
 }

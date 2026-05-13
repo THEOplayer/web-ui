@@ -5,10 +5,6 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
 import { getLocale } from '../i18n';
 
-function formatAsPercentString(value: number, max: number) {
-    return `${Math.round((value / max) * 100)}%`;
-}
-
 /**
  * A volume slider, showing the current audio volume of the player,
  * and which changes the volume when clicked or dragged.
@@ -67,7 +63,7 @@ export class VolumeRange extends Range {
     }
 
     protected override getAriaValueText(): string {
-        return formatAsPercentString(this.value, this.max);
+        return getLocale(this.lang).formatPercentage(this.value / this.max);
     }
 
     protected override handleInput(): void {
