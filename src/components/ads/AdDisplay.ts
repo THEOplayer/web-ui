@@ -28,7 +28,10 @@ export class AdDisplay extends LitElement {
     private _ads: Ads | undefined;
 
     @state()
-    private accessor _text: string = '';
+    private accessor _currentAd: number = 0;
+
+    @state()
+    private accessor _totalAds: number = 0;
 
     connectedCallback(): void {
         super.connectedCallback();
@@ -52,32 +55,34 @@ export class AdDisplay extends LitElement {
     }
 
     private readonly _updateFromPlayer = () => {
-        const locale = getLocale(this.lang);
         const ads = this._player?.ads;
         const linearAds = (ads?.currentAdBreak?.ads ?? []).filter(isLinearAd);
         if (ads === undefined || !ads.playing || linearAds.length === 0) {
-            this._text = '';
+            this._currentAd = 0;
+            this._totalAds = 0;
             this.style.display = 'none';
             return;
         }
+        let currentAd = 0;
         if (linearAds.length > 1) {
             const currentAds = this._player!.ads!.currentAds || [];
             const currentLinearAd = arrayFind(currentAds, isLinearAd);
             if (currentLinearAd) {
                 const currentAdIndex = linearAds.indexOf(currentLinearAd);
                 if (currentAdIndex >= 0) {
-                    this._text = locale.adBreakText(currentAdIndex + 1, linearAds.length);
-                    this.style.display = '';
-                    return;
+                    currentAd = currentAdIndex + 1;
                 }
             }
         }
-        this._text = locale.adText;
+        this._currentAd = currentAd;
+        this._totalAds = linearAds.length;
         this.style.display = '';
     };
 
     protected override render(): HTMLTemplateResult {
-        return html`<span>${this._text}</span>`;
+        const locale = getLocale(this.lang);
+        const text = this._totalAds > 1 ? locale.adBreakText(this._currentAd, this._totalAds) : locale.adText;
+        return html`<span>${text}</span>`;
     }
 }
 
