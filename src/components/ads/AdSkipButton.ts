@@ -132,7 +132,7 @@ export class AdSkipButton extends Button {
             visibility: this._showCountdown ? 'hidden' : 'visible',
             pointerEvents: this._showCountdown ? 'none' : ''
         };
-        const timeToSkip = locale.formatDuration({ hours: 0, minutes: 0, seconds: this._timeToSkip });
+        const timeToSkip = locale.formatNarrowDuration({ hours: 0, minutes: 0, seconds: this._timeToSkip });
         return html`<span part="countdown" style=${styleMap(countdownStyles)}>${locale.adSkipCountdownText(timeToSkip)}</span>
             <span part="skip" style=${styleMap(skipStyles)}>
                 <span part="skip-text"><slot name="skip-text">${locale.adSkipButtonText}</slot></span>

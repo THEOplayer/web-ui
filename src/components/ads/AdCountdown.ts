@@ -63,7 +63,7 @@ export class AdCountdown extends LitElement {
 
     protected override render(): HTMLTemplateResult {
         const locale = getLocale(this.lang);
-        const remainingDuration = locale.formatDuration({ hours: 0, minutes: 0, seconds: this._maxRemainingDuration });
+        const remainingDuration = locale.formatNarrowDuration({ hours: 0, minutes: 0, seconds: this._maxRemainingDuration });
         return html`<span>${locale.adCountdownText(remainingDuration)}</span>`;
     }
 }

@@ -109,7 +109,7 @@ export interface Locale {
     /**
      * The text on an {@link AdCountdown}, e.g. "Content will resume in X seconds".
      *
-     * @param remainingDuration The remaining time until the content can be resumed, after being formatted with {@link formatDuration}.
+     * @param remainingDuration The remaining time until the content can be resumed, after being formatted with {@link formatNarrowDuration}.
      */
     adCountdownText(remainingDuration: string): string;
     /**
@@ -119,7 +119,7 @@ export interface Locale {
     /**
      * The text on an {@link AdSkipButton} when it is showing a countdown.
      *
-     * @param remainingDuration The remaining time until the ad can be skipped, after being formatted with {@link formatDuration}.
+     * @param remainingDuration The remaining time until the ad can be skipped, after being formatted with {@link formatNarrowDuration}.
      */
     adSkipCountdownText(remainingDuration: string): string;
     /**
@@ -154,6 +154,18 @@ export interface Locale {
      * @param duration A duration, compatible with {@link Intl.DurationFormat.format}.
      */
     formatDuration(duration: Duration): string;
+    /**
+     * Formats the given time duration as a narrow human-readable string.
+     *
+     * This is optional. If not provided, a default {@link Intl.DurationFormat} with the {@link Intl.DurationFormatStyle | `"narrow"` style} is used.
+     *
+     * Examples:
+     * - `{ seconds: 5 }` &rarr; "5s"
+     * - `{ minutes: 2, seconds: 10 }` &rarr; "2m 10s"
+     *
+     * @param duration A duration, compatible with {@link Intl.DurationFormat.format}.
+     */
+    formatNarrowDuration(duration: Duration): string;
     /**
      * Formats the given remaining time duration as a human-readable string.
      *
@@ -203,6 +215,7 @@ export const defaultLocale: Locale = {
     openPlaybackRateMenuAria: 'open playback speed menu',
     openSettingsMenuAria: 'open settings menu',
     openBadNetworkModeMenuAria: 'open bad network mode menu',
-    formatDuration: durationFormatterForLocale(defaultLocaleName),
+    formatDuration: durationFormatterForLocale(defaultLocaleName, 'long'),
+    formatNarrowDuration: durationFormatterForLocale(defaultLocaleName, 'narrow'),
     formatRemainingDuration: (duration: string) => `${duration} remaining`
 };

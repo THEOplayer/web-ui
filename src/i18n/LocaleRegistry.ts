@@ -21,6 +21,7 @@ export function addLocale(name: string, locale: Partial<Locale>) {
     localesByName[name] = {
         ...defaultLocale,
         ...locale,
-        formatDuration: locale.formatDuration ?? durationFormatterForLocale(name)
+        formatDuration: locale.formatDuration ?? durationFormatterForLocale(name, 'long'),
+        formatNarrowDuration: locale.formatNarrowDuration ?? durationFormatterForLocale(name, 'narrow')
     };
 }
