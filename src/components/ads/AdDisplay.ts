@@ -6,6 +6,7 @@ import { stateReceiver } from '../StateReceiverMixin';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
+import { getLocale } from '../../i18n';
 
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'adskip', 'addad', 'updatead'] as const;
 
@@ -51,6 +52,7 @@ export class AdDisplay extends LitElement {
     }
 
     private readonly _updateFromPlayer = () => {
+        const locale = getLocale(this.lang);
         const ads = this._player?.ads;
         const linearAds = (ads?.currentAdBreak?.ads ?? []).filter(isLinearAd);
         if (ads === undefined || !ads.playing || linearAds.length === 0) {
@@ -64,13 +66,13 @@ export class AdDisplay extends LitElement {
             if (currentLinearAd) {
                 const currentAdIndex = linearAds.indexOf(currentLinearAd);
                 if (currentAdIndex >= 0) {
-                    this._text = `Ad ${currentAdIndex + 1} of ${linearAds.length}`;
+                    this._text = locale.adBreakText(currentAdIndex + 1, linearAds.length);
                     this.style.display = '';
                     return;
                 }
             }
         }
-        this._text = 'Ad';
+        this._text = locale.adText;
         this.style.display = '';
     };
 

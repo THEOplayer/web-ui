@@ -4,6 +4,7 @@ import textDisplayCss from '../TextDisplay.css';
 import adCountdownCss from './AdCountdown.css';
 import { stateReceiver } from '../StateReceiverMixin';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
+import { getLocale } from '../../i18n';
 
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak'] as const;
 
@@ -61,7 +62,9 @@ export class AdCountdown extends LitElement {
     };
 
     protected override render(): HTMLTemplateResult {
-        return html`<span>Content will resume in ${this._maxRemainingDuration}s</span>`;
+        const locale = getLocale(this.lang);
+        const remainingDuration = locale.formatDuration({ hours: 0, minutes: 0, seconds: this._maxRemainingDuration });
+        return html`<span>${locale.adCountdownText(remainingDuration)}</span>`;
     }
 }
 

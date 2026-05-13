@@ -10,6 +10,7 @@ import { Attribute } from '../../util/Attribute';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
+import { getLocale } from '../../i18n';
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
@@ -123,6 +124,7 @@ export class AdSkipButton extends Button {
     };
 
     protected override render(): HTMLTemplateResult {
+        const locale = getLocale(this.lang);
         const countdownStyles = {
             visibility: this._showCountdown ? 'visible' : 'hidden'
         };
@@ -130,9 +132,10 @@ export class AdSkipButton extends Button {
             visibility: this._showCountdown ? 'hidden' : 'visible',
             pointerEvents: this._showCountdown ? 'none' : ''
         };
-        return html`<span part="countdown" style=${styleMap(countdownStyles)}>Skip in ${this._timeToSkip} seconds</span>
+        const timeToSkip = locale.formatDuration({ hours: 0, minutes: 0, seconds: this._timeToSkip });
+        return html`<span part="countdown" style=${styleMap(countdownStyles)}>${locale.adSkipCountdownText(timeToSkip)}</span>
             <span part="skip" style=${styleMap(skipStyles)}>
-                <span part="skip-text"><slot name="skip-text">Skip Ad</slot></span>
+                <span part="skip-text"><slot name="skip-text">${locale.adSkipButtonText}</slot></span>
                 <span part="skip-icon"><slot name="skip-icon">${unsafeSVG(skipNextIcon)}</slot></span>
             </span>`;
     }

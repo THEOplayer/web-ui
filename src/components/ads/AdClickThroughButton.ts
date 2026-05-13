@@ -6,6 +6,7 @@ import { Attribute } from '../../util/Attribute';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
+import { getLocale } from '../../i18n';
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
@@ -100,7 +101,8 @@ export class AdClickThroughButton extends LinkButton {
     }
 
     protected override renderLinkContent(): HTMLTemplateResult {
-        return html`<slot>Visit Advertiser</slot>`;
+        const locale = getLocale(this.lang);
+        return html`<slot>${locale.adClickThroughText}</slot>`;
     }
 }
 

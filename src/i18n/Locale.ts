@@ -1,5 +1,9 @@
 import { durationFormatterForLocale } from './DurationFormatter';
 import type {
+    AdClickThroughButton,
+    AdCountdown,
+    AdDisplay,
+    AdSkipButton,
     AirPlayButton,
     BadNetworkModeButton,
     ChromecastButton,
@@ -88,6 +92,37 @@ export interface Locale {
      */
     chromecastConnectedAria: string;
     /**
+     * The text on an {@link AdDisplay}, e.g. "Ad".
+     */
+    adText: string;
+    /**
+     * The text on an {@link AdDisplay} when playing multiple ads in an ad break, e.g. "Ad X of Y".
+     *
+     * @param currentAd The number of the currently playing ad.
+     * @param totalAds The total number of ads in the current ad break.
+     */
+    adBreakText(currentAd: number, totalAds: number): string;
+    /**
+     * The text on an {@link AdClickThroughButton}, e.g. "Visit Advertiser".
+     */
+    adClickThroughText: string;
+    /**
+     * The text on an {@link AdCountdown}, e.g. "Content will resume in X seconds".
+     *
+     * @param remainingDuration The remaining time until the content can be resumed, after being formatted with {@link formatDuration}.
+     */
+    adCountdownText(remainingDuration: string): string;
+    /**
+     * The text on an {@link AdSkipButton}, e.g. "Skip Ad".
+     */
+    adSkipButtonText: string;
+    /**
+     * The text on an {@link AdSkipButton} when it is showing a countdown.
+     *
+     * @param remainingDuration The remaining time until the ad can be skipped, after being formatted with {@link formatDuration}.
+     */
+    adSkipCountdownText(remainingDuration: string): string;
+    /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link CloseMenuButton}.
      */
     closeMenuAria: string;
@@ -157,6 +192,12 @@ export const defaultLocale: Locale = {
     airplayConnectedAria: 'stop playing on AirPlay',
     chromecastAria: 'start casting to Chromecast',
     chromecastConnectedAria: 'stop casting to Chromecast',
+    adText: 'Ad',
+    adBreakText: (currentAd: number, totalAds: number) => `Ad ${currentAd} of ${totalAds}`,
+    adClickThroughText: 'Visit Advertiser',
+    adCountdownText: (remainingDuration: string) => `Content will resume in ${remainingDuration}`,
+    adSkipButtonText: 'Skip Ad',
+    adSkipCountdownText: (remainingDuration: string) => `Skip in ${remainingDuration}`,
     closeMenuAria: 'close menu',
     openLanguageMenuAria: 'open language menu',
     openPlaybackRateMenuAria: 'open playback speed menu',
