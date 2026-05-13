@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 2.1.3
+
+### 🐛 Issues
+
+- Fixed infinite `SET_VOLUME` loop when casting to receivers that don't support master volume control.
+
 ## 2.1.2
 
 ### 🐛 Issues
