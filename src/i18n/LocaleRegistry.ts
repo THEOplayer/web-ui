@@ -18,6 +18,7 @@ export function getLocale(name: string): Locale {
  * @param locale The locale.
  */
 export function addLocale(name: string, locale: Partial<Locale>) {
+    // TODO Re-render all components that use this locale?
     localesByName[name] = {
         ...defaultLocale,
         ...locale,
