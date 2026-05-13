@@ -16,17 +16,33 @@ export function durationFormatterForLocale(locale: string, style: 'long' | 'narr
 }
 
 export function defaultFormatDuration({ hours, minutes, seconds }: Duration): string {
-    return [
-        hours === 0 ? '' : `${hours} hour${hours === 1 ? '' : 's'}`,
-        minutes === 0 ? '' : `${minutes} minute${minutes === 1 ? '' : 's'}`,
-        seconds === 0 && (hours > 0 || minutes > 0) ? '' : `${seconds} second${seconds === 1 ? '' : 's'}`
-    ]
-        .filter((part) => part !== '')
-        .join(', ');
+    let s = '';
+    if (hours !== 0) {
+        s += `${hours} hour${hours === 1 ? '' : 's'}`;
+    }
+    if (minutes !== 0) {
+        if (s !== '') s += ', ';
+        s += `${minutes} minute${minutes === 1 ? '' : 's'}`;
+    }
+    if (seconds !== 0 || s === '') {
+        if (s !== '') s += ', ';
+        s += `${seconds} second${seconds === 1 ? '' : 's'}`;
+    }
+    return s;
 }
 
 export function defaultNarrowFormatDuration({ hours, minutes, seconds }: Duration): string {
-    return [hours === 0 ? '' : `${hours}h`, minutes === 0 ? '' : `${minutes}m`, seconds === 0 && (hours > 0 || minutes > 0) ? '' : `${seconds}s`]
-        .filter((part) => part !== '')
-        .join(' ');
+    let s = '';
+    if (hours !== 0) {
+        s += `${hours}h`;
+    }
+    if (minutes !== 0) {
+        if (s !== '') s += ' ';
+        s += `${minutes}m`;
+    }
+    if (seconds !== 0 || s === '') {
+        if (s !== '') s += ' ';
+        s += `${seconds}s`;
+    }
+    return s;
 }
