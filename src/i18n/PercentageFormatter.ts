@@ -1,4 +1,4 @@
-import type { PercentageFormatter } from './Locale';
+export type PercentageFormatter = (percentage: number) => string;
 
 export function percentageFormatterForLocale(locale: string): PercentageFormatter {
     try {

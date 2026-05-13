@@ -196,9 +196,6 @@ export interface Locale {
     formatPercentage(percentage: number): string;
 }
 
-export type DurationFormatter = (duration: Duration) => string;
-export type PercentageFormatter = (percentage: number) => string;
-
 export interface Duration {
     hours: number;
     minutes: number;

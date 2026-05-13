@@ -1,4 +1,6 @@
-import type { Duration, DurationFormatter } from './Locale';
+import type { Duration } from './Locale';
+
+export type DurationFormatter = (duration: Duration) => string;
 
 export function durationFormatterForLocale(locale: string, style: 'long' | 'narrow'): DurationFormatter {
     try {
