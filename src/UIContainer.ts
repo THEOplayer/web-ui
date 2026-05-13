@@ -269,7 +269,7 @@ export class UIContainer extends LitElement {
     @property({ reflect: true, type: Boolean, attribute: Attribute.AUTOPLAY })
     set autoplay(value: boolean) {
         this._autoplay = value;
-        if (this._player) {
+        if (this._player && this._player.autoplay !== value) {
             this._player.autoplay = value;
         }
     }
@@ -538,8 +538,12 @@ export class UIContainer extends LitElement {
             this._player.source = this._source;
             this._source = undefined;
         }
-        this._player.muted = this.muted;
-        this._player.autoplay = this.autoplay;
+        if (this._player.muted !== this.muted) {
+            this._player.muted = this.muted;
+        }
+        if (this._player.autoplay !== this.autoplay) {
+            this._player.autoplay = this.autoplay;
+        }
 
         this._updateAspectRatio();
         this._updateError();

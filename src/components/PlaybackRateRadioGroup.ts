@@ -47,7 +47,7 @@ export class PlaybackRateRadioGroup extends LitElement {
             return;
         }
         this._value = value;
-        if (this._player !== undefined) {
+        if (this._player !== undefined && this._player.playbackRate !== value) {
             this._player.playbackRate = value;
         }
         const radioGroup = this._radioGroupRef.value;
