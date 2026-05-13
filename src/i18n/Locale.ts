@@ -196,6 +196,9 @@ export interface Locale {
     formatPercentage(percentage: number): string;
 }
 
+/**
+ * A duration, compatible with {@link Intl.DurationFormat.format} and {@link Temporal.Duration}.
+ */
 export interface Duration {
     hours: number;
     minutes: number;
