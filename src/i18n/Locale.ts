@@ -10,6 +10,7 @@ import type {
     ChromecastButton,
     CloseMenuButton,
     FullscreenButton,
+    LanguageMenu,
     LanguageMenuButton,
     LiveButton,
     MuteButton,
@@ -139,6 +140,18 @@ export interface Locale {
      */
     openLanguageMenuAria: string;
     /**
+     * The heading for a {@link LanguageMenu}.
+     */
+    languageMenuHeading: string;
+    /**
+     * The section header for audio tracks in a {@link LanguageMenu}.
+     */
+    audioMenuHeading: string;
+    /**
+     * The section header for subtitle tracks in a {@link LanguageMenu}.
+     */
+    subtitleMenuHeading: string;
+    /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link PlaybackRateMenuButton}.
      */
     openPlaybackRateMenuAria: string;
@@ -248,6 +261,9 @@ export const defaultLocale: Locale = {
     adSkipCountdownText: (remainingDuration: string) => `Skip in ${remainingDuration}`,
     closeMenuAria: 'close menu',
     openLanguageMenuAria: 'open language menu',
+    languageMenuHeading: 'Language',
+    audioMenuHeading: 'Audio',
+    subtitleMenuHeading: 'Subtitles',
     openPlaybackRateMenuAria: 'open playback speed menu',
     playbackRateMenuHeading: 'Playback speed',
     formatPlaybackRate: (rate: number) => (rate === 1 ? 'Normal' : `${rate}x`),
