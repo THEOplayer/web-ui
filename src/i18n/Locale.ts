@@ -13,6 +13,8 @@ import type {
     LanguageMenuButton,
     LiveButton,
     MuteButton,
+    PlaybackRateDisplay,
+    PlaybackRateMenu,
     PlaybackRateMenuButton,
     PlayButton,
     SeekButton,
@@ -141,6 +143,20 @@ export interface Locale {
      */
     openPlaybackRateMenuAria: string;
     /**
+     * The heading for a {@link PlaybackRateMenu}.
+     */
+    playbackRateMenuHeading: string;
+    /**
+     * Formats the given playback rate for a {@link PlaybackRateMenu} and {@link PlaybackRateDisplay}.
+     *
+     * Examples:
+     * - `1` &rarr; "Normal"
+     * - `1.5` &rarr; "1.5x"
+     *
+     * @param rate The playback rate.
+     */
+    formatPlaybackRate(rate: number): string;
+    /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link SettingsMenuButton}.
      */
     openSettingsMenuAria: string;
@@ -233,6 +249,8 @@ export const defaultLocale: Locale = {
     closeMenuAria: 'close menu',
     openLanguageMenuAria: 'open language menu',
     openPlaybackRateMenuAria: 'open playback speed menu',
+    playbackRateMenuHeading: 'Playback speed',
+    formatPlaybackRate: (rate: number) => (rate === 1 ? 'Normal' : `${rate}x`),
     openSettingsMenuAria: 'open settings menu',
     openBadNetworkModeMenuAria: 'open bad network mode menu',
     formatDuration: durationFormatterForLocale(defaultLocaleName, 'long'),

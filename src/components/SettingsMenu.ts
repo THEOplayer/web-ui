@@ -45,9 +45,7 @@ export class SettingsMenu extends MenuGroup {
                 <span slot="heading">Quality</span>
                 <theoplayer-quality-radio-group></theoplayer-quality-radio-group>
             </theoplayer-menu>
-            <theoplayer-playback-rate-menu id="playback-rate-menu" menu-close-on-input hidden>
-                <span slot="heading">Playback speed</span>
-            </theoplayer-playback-rate-menu>
+            <theoplayer-playback-rate-menu id="playback-rate-menu" menu-close-on-input hidden></theoplayer-playback-rate-menu>
         `;
     }
 }

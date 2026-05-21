@@ -3,12 +3,7 @@ import { customElement, property, queryAssignedNodes, state } from 'lit/decorato
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import type { ChromelessPlayer, SourceDescription, UIPlayerConfiguration } from 'theoplayer/chromeless';
-import {
-    DEFAULT_DVR_THRESHOLD,
-    DEFAULT_TV_USER_IDLE_TIMEOUT,
-    DEFAULT_USER_IDLE_TIMEOUT,
-    type UIContainer
-} from './UIContainer';
+import { DEFAULT_DVR_THRESHOLD, DEFAULT_TV_USER_IDLE_TIMEOUT, DEFAULT_USER_IDLE_TIMEOUT, type UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
 import { Attribute } from './util/Attribute';
 import { applyExtensions } from './extensions/ExtensionRegistry';
