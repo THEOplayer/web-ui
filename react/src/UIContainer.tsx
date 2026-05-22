@@ -6,6 +6,7 @@ import { createComponent, type WebComponentProps } from '@lit/react';
 import { usePlayer } from './util';
 import { PlayerContext } from './context';
 import { type ChromecastButton, type ErrorDisplay, type Menu, type PlayButton, SlotContainer, type TimeRange } from './components';
+import { type addLocale, type Locale } from './i18n';
 
 const RawUIContainer = createComponent({
     tagName: 'theoplayer-ui',
@@ -51,6 +52,14 @@ export interface UIContainerProps extends PropsWithoutRef<WebComponentProps<UICo
      * A slot for an error display, to show when the player encounters a fatal error (see {@link ErrorDisplay}).
      */
     error?: ReactNode;
+    /**
+     * The language of the UI.
+     *
+     * When set, this also updates the {@link Locale} of the UI if one is registered with {@link addLocale}.
+     *
+     * @see {@link HTMLElement.lang}
+     */
+    lang?: string;
     /**
      * Use a named slot instead, such as:
      *  - {@link topChrome}

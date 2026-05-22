@@ -252,7 +252,7 @@ export class UIContainer extends LitElement {
      *
      * When set, this also updates the {@link Locale} of the UI if one is registered with {@link addLocale}.
      *
-     * @see HTMLElement.lang
+     * @see {@link HTMLElement.lang}
      */
     get lang(): string {
         return this._language;

@@ -6,6 +6,7 @@ import { createComponent, type WebComponentProps } from '@lit/react';
 import { usePlayer } from './util';
 import { PlayerContext } from './context';
 import { type Menu, SlotContainer } from './components';
+import { type addLocale, type Locale } from './i18n';
 
 const RawDefaultUI = createComponent({
     tagName: 'theoplayer-default-ui',
@@ -51,6 +52,14 @@ export interface DefaultUIProps extends PropsWithoutRef<Omit<WebComponentProps<D
      *  - {@link menu}
      */
     children?: never;
+    /**
+     * The language of the UI.
+     *
+     * When set, this also updates the {@link Locale} of the UI if one is registered with {@link addLocale}.
+     *
+     * @see {@link HTMLElement.lang}
+     */
+    lang?: string;
     /**
      * Called when the backing player is created.
      *
