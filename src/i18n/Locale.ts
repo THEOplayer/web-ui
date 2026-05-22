@@ -22,6 +22,7 @@ import type {
     SeekButton,
     SettingsMenu,
     SettingsMenuButton,
+    TextTrackOffRadioButton,
     TextTrackStyleDisplay,
     TextTrackStyleMenu,
     TextTrackStyleRadioGroup,
@@ -156,6 +157,10 @@ export interface Locale {
      * The section header for subtitle tracks in a {@link LanguageMenu}.
      */
     subtitleMenuHeading: string;
+    /**
+     * The label for a {@link TextTrackOffRadioButton} to disable the active subtitle track.
+     */
+    subtitleOff: string;
     /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link PlaybackRateMenuButton}.
      */
@@ -360,6 +365,7 @@ export const defaultLocale: Locale = {
     languageMenuHeading: 'Language',
     audioMenuHeading: 'Audio',
     subtitleMenuHeading: 'Subtitles',
+    subtitleOff: 'Off',
     openPlaybackRateMenuAria: 'open playback speed menu',
     playbackRateMenuHeading: 'Playback speed',
     formatPlaybackRate: (rate: number) => (rate === 1 ? 'Normal' : `${rate}x`),
