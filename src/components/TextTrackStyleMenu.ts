@@ -3,34 +3,14 @@ import { customElement, property } from 'lit/decorators.js';
 import { MenuGroup } from './MenuGroup';
 import textTrackStyleMenuCss from './TextTrackStyleMenu.css';
 import menuTableCss from './MenuTable.css';
-import type { EdgeStyle } from 'theoplayer/chromeless';
-import { getLocale, type KnownColor, type KnownFontFamily } from '../i18n';
+import { colorOptions, edgeStyleOptions, fontFamilyOptions, opacityOptions, sizeOptions } from '../util/TextTrackStylePresets';
+import { getLocale } from '../i18n';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 
 // Load components used in template
 import './TextTrackStyleDisplay';
 import './TextTrackStyleRadioGroup';
-
-const colorOptions: ReadonlyArray<{ label: KnownColor; value: `rgb(${number},${number},${number})` | '' }> = [
-    { label: 'White', value: 'rgb(255,255,255)' },
-    { label: 'Yellow', value: 'rgb(255,255,0)' },
-    { label: 'Green', value: 'rgb(0,255,0)' },
-    { label: 'Cyan', value: 'rgb(0,255,255)' },
-    { label: 'Blue', value: 'rgb(0,0,255)' },
-    { label: 'Magenta', value: 'rgb(255,0,255)' },
-    { label: 'Red', value: 'rgb(255,0,0)' },
-    { label: 'Black', value: 'rgb(0,0,0)' }
-];
-const fontFamilyOptions: ReadonlyArray<{ label: KnownFontFamily; value: string }> = [
-    { label: 'Monospace Serif', value: '"Courier New", Courier, "Nimbus Mono L", "Cutive Mono", monospace' },
-    { label: 'Proportional Serif', value: '"Times New Roman", Times, Georgia, Cambria, "PT Serif Caption", serif' },
-    { label: 'Monospace Sans', value: '"Deja Vu Sans Mono", "Lucida Console", Monaco, Consolas, "PT Mono", monospace' },
-    { label: 'Proportional Sans', value: 'Arial, Helvetica, Verdana, "PT Sans Caption", sans-serif' }
-];
-const sizeOptions: ReadonlyArray<number> = [0.5, 0.75, 1.0, 1.5, 2.0];
-const opacityOptions: ReadonlyArray<number> = [0.25, 0.5, 0.75, 1.0];
-const edgeStyleOptions: ReadonlyArray<EdgeStyle> = ['none', 'dropshadow', 'raised', 'depressed', 'uniform'];
 
 /**
  * A menu to change the {@link theoplayer!TextTrackStyle | text track style} of the player.

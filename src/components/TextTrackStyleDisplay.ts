@@ -6,7 +6,7 @@ import { Attribute } from '../util/Attribute';
 import { parseColor, toRgb } from '../util/ColorUtils';
 import type { TextTrackStyleOption } from './TextTrackStyleRadioGroup';
 import { arrayFind } from '../util/CommonUtils';
-import { knownColors, knownFontFamilies } from '../util/TextTrackStylePresets';
+import { colorOptions, fontFamilyOptions } from '../util/TextTrackStylePresets';
 import { getLocale, type Locale } from '../i18n';
 
 /**
@@ -105,9 +105,9 @@ function getFontFamilyLabel(fontFamily: string | null | undefined, locale: Local
     if (!fontFamily) {
         return locale.textTrackStyleDefaultLabel;
     }
-    const knownFontFamily = arrayFind(knownFontFamilies, ([_, value]) => value === fontFamily)?.[0];
+    const knownFontFamily = arrayFind(fontFamilyOptions, ({ value }) => value === fontFamily);
     if (knownFontFamily) {
-        return locale.fontFamilyLabels[knownFontFamily] ?? knownFontFamily;
+        return locale.fontFamilyLabels[knownFontFamily.label] ?? knownFontFamily.label;
     }
     return locale.textTrackStyleCustomLabel;
 }
@@ -119,9 +119,9 @@ function getColorLabel(color: string | null | undefined, locale: Locale): string
     const parsedColor = parseColor(color);
     if (parsedColor) {
         const colorRgb = toRgb(parsedColor);
-        const knownColor = arrayFind(knownColors, ([_, value]) => value === colorRgb)?.[0];
+        const knownColor = arrayFind(colorOptions, ({ value }) => value === colorRgb);
         if (knownColor) {
-            return locale.colorLabels[knownColor] ?? knownColor;
+            return locale.colorLabels[knownColor.label] ?? knownColor.label;
         }
     }
     return locale.textTrackStyleCustomLabel;
