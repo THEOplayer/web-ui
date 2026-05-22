@@ -21,6 +21,7 @@ import type {
     SeekButton,
     SettingsMenu,
     SettingsMenuButton,
+    TextTrackStyleMenu,
     TimeRange,
     VolumeRange
 } from '../components';
@@ -183,6 +184,46 @@ export interface Locale {
      */
     qualityMenuHeading: string;
     /**
+     * The heading for a {@link TextTrackStyleMenu}.
+     */
+    textTrackStyleMenuHeading: string;
+    /**
+     * The heading for the font family style option in a {@link TextTrackStyleMenu}.
+     */
+    textTrackStyleFontFamily: string;
+    /**
+     * The heading for the font color style option in a {@link TextTrackStyleMenu}.
+     */
+    textTrackStyleFontColor: string;
+    /**
+     * The heading for the font opacity style option in a {@link TextTrackStyleMenu}.
+     */
+    textTrackStyleFontOpacity: string;
+    /**
+     * The heading for the font size style option in a {@link TextTrackStyleMenu}.
+     */
+    textTrackStyleFontSize: string;
+    /**
+     * The heading for the background color style option in a {@link TextTrackStyleMenu}.
+     */
+    textTrackStyleBackgroundColor: string;
+    /**
+     * The heading for the background opacity style option in a {@link TextTrackStyleMenu}.
+     */
+    textTrackStyleBackgroundOpacity: string;
+    /**
+     * The heading for the window color style option in a {@link TextTrackStyleMenu}.
+     */
+    textTrackStyleWindowColor: string;
+    /**
+     * The heading for the window opacity style option in a {@link TextTrackStyleMenu}.
+     */
+    textTrackStyleWindowOpacity: string;
+    /**
+     * The heading for the edge style option in a {@link TextTrackStyleMenu}.
+     */
+    textTrackStyleEdgeStyle: string;
+    /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link BadNetworkModeButton}.
      */
     openBadNetworkModeMenuAria: string;
@@ -279,6 +320,16 @@ export const defaultLocale: Locale = {
     openSettingsMenuAria: 'open settings menu',
     settingsMenuHeading: 'Settings',
     qualityMenuHeading: 'Quality',
+    textTrackStyleMenuHeading: 'Subtitle options',
+    textTrackStyleFontFamily: 'Font family',
+    textTrackStyleFontColor: 'Font color',
+    textTrackStyleFontOpacity: 'Font opacity',
+    textTrackStyleFontSize: 'Font size',
+    textTrackStyleBackgroundColor: 'Background color',
+    textTrackStyleBackgroundOpacity: 'Background opacity',
+    textTrackStyleWindowColor: 'Window color',
+    textTrackStyleWindowOpacity: 'Window opacity',
+    textTrackStyleEdgeStyle: 'Character edge style',
     openBadNetworkModeMenuAria: 'open bad network mode menu',
     formatDuration: durationFormatterForLocale(defaultLocaleName, 'long'),
     formatNarrowDuration: durationFormatterForLocale(defaultLocaleName, 'narrow'),
