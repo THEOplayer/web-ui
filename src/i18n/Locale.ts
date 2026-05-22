@@ -56,11 +56,11 @@ export interface Locale {
      */
     replayAria: string;
     /**
-     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link MuteButton} when it is showing a "mute" button.
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link MuteButton} when it is showing a "mute" button.
      */
     muteAria: string;
     /**
-     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link MuteButton} when it is showing an "unmute" button.
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link MuteButton} when it is showing an "unmute" button.
      */
     unmuteAria: string;
     /**
@@ -92,11 +92,11 @@ export interface Locale {
      */
     seekToLiveAria: string;
     /**
-     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link FullscreenButton}.
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link FullscreenButton}.
      */
     fullscreenAria: string;
     /**
-     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link FullscreenButton} when in fullscreen mode.
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link FullscreenButton} when in fullscreen mode.
      */
     fullscreenExitAria: string;
     /**
@@ -108,11 +108,11 @@ export interface Locale {
      */
     airplayConnectedAria: string;
     /**
-     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link ChromecastButton}.
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link ChromecastButton}.
      */
     chromecastAria: string;
     /**
-     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link ChromecastButton} when it is connected to Chromecast.
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link ChromecastButton} when it is connected to Chromecast.
      */
     chromecastConnectedAria: string;
     /**
@@ -163,11 +163,11 @@ export interface Locale {
      */
     adSkipCountdownText(remainingDuration: string): string;
     /**
-     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link CloseMenuButton}.
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link CloseMenuButton}.
      */
     closeMenuAria: string;
     /**
-     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link LanguageMenuButton}.
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link LanguageMenuButton}.
      */
     openLanguageMenuAria: string;
     /**
@@ -187,7 +187,7 @@ export interface Locale {
      */
     subtitleOff: string;
     /**
-     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link PlaybackRateMenuButton}.
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link PlaybackRateMenuButton}.
      */
     openPlaybackRateMenuAria: string;
     /**
@@ -205,7 +205,7 @@ export interface Locale {
      */
     formatPlaybackRate(rate: number): string;
     /**
-     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link SettingsMenuButton}.
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link SettingsMenuButton}.
      */
     openSettingsMenuAria: string;
     /**
@@ -306,7 +306,7 @@ export interface Locale {
      */
     errorHeading: string;
     /**
-     * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link BadNetworkModeButton}.
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link BadNetworkModeButton}.
      */
     openBadNetworkModeMenuAria: string;
     /**
