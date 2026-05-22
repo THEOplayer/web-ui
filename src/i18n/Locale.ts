@@ -19,6 +19,7 @@ import type {
     PlaybackRateMenu,
     PlaybackRateMenuButton,
     PlayButton,
+    QualityRadioButton,
     SeekButton,
     SettingsMenu,
     SettingsMenuButton,
@@ -261,6 +262,10 @@ export interface Locale {
      */
     edgeStyleLabels: Record<EdgeStyle, string>;
     /**
+     * The label for a {@link QualityRadioButton} when it is showing the "Automatic" quality selection option.
+     */
+    automaticQualityLabel: string;
+    /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link BadNetworkModeButton}.
      */
     openBadNetworkModeMenuAria: string;
@@ -413,6 +418,7 @@ export const defaultLocale: Locale = {
         depressed: 'Depressed',
         uniform: 'Uniform'
     },
+    automaticQualityLabel: 'Automatic',
     openBadNetworkModeMenuAria: 'open bad network mode menu',
     formatDuration: durationFormatterForLocale(defaultLocaleName, 'long'),
     formatNarrowDuration: durationFormatterForLocale(defaultLocaleName, 'narrow'),
