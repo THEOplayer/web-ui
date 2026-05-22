@@ -23,6 +23,18 @@ export function addLocale(name: string, locale: PartialLocale) {
     localesByName[name] = {
         ...defaultLocale,
         ...locale,
+        fontFamilyLabels: {
+            ...defaultLocale.fontFamilyLabels,
+            ...locale.fontFamilyLabels
+        },
+        colorLabels: {
+            ...defaultLocale.colorLabels,
+            ...locale.colorLabels
+        },
+        edgeStyleLabels: {
+            ...defaultLocale.edgeStyleLabels,
+            ...locale.edgeStyleLabels
+        },
         formatDuration: locale.formatDuration ?? durationFormatterForLocale(name, 'long'),
         formatNarrowDuration: locale.formatNarrowDuration ?? durationFormatterForLocale(name, 'narrow'),
         formatPercentage: locale.formatPercentage ?? percentageFormatterForLocale(name)

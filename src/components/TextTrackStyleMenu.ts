@@ -4,7 +4,7 @@ import { MenuGroup } from './MenuGroup';
 import textTrackStyleMenuCss from './TextTrackStyleMenu.css';
 import menuTableCss from './MenuTable.css';
 import type { EdgeStyle } from 'theoplayer/chromeless';
-import { getLocale } from '../i18n';
+import { getLocale, type KnownColor, type KnownFontFamily } from '../i18n';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 
@@ -12,8 +12,7 @@ import { Attribute } from '../util/Attribute';
 import './TextTrackStyleDisplay';
 import './TextTrackStyleRadioGroup';
 
-const colorOptions: ReadonlyArray<{ label: string; value: `rgb(${number},${number},${number})` | '' }> = [
-    { label: 'Default', value: '' },
+const colorOptions: ReadonlyArray<{ label: KnownColor; value: `rgb(${number},${number},${number})` | '' }> = [
     { label: 'White', value: 'rgb(255,255,255)' },
     { label: 'Yellow', value: 'rgb(255,255,0)' },
     { label: 'Green', value: 'rgb(0,255,0)' },
@@ -23,36 +22,15 @@ const colorOptions: ReadonlyArray<{ label: string; value: `rgb(${number},${numbe
     { label: 'Red', value: 'rgb(255,0,0)' },
     { label: 'Black', value: 'rgb(0,0,0)' }
 ];
-const fontFamilyOptions: ReadonlyArray<{ label: string; value: string }> = [
-    { label: 'Default', value: '' },
+const fontFamilyOptions: ReadonlyArray<{ label: KnownFontFamily; value: string }> = [
     { label: 'Monospace Serif', value: '"Courier New", Courier, "Nimbus Mono L", "Cutive Mono", monospace' },
     { label: 'Proportional Serif', value: '"Times New Roman", Times, Georgia, Cambria, "PT Serif Caption", serif' },
     { label: 'Monospace Sans', value: '"Deja Vu Sans Mono", "Lucida Console", Monaco, Consolas, "PT Mono", monospace' },
     { label: 'Proportional Sans', value: 'Arial, Helvetica, Verdana, "PT Sans Caption", sans-serif' }
 ];
-const sizeOptions: ReadonlyArray<{ label: string; value: `${number}%` | '' }> = [
-    { label: 'Default', value: '' },
-    { label: '50%', value: '50%' },
-    { label: '75%', value: '75%' },
-    { label: '100%', value: '100%' },
-    { label: '150%', value: '150%' },
-    { label: '200%', value: '200%' }
-];
-const opacityOptions: ReadonlyArray<{ label: string; value: `${number}` | '' }> = [
-    { label: 'Default', value: '' },
-    { label: '25%', value: '25' },
-    { label: '50%', value: '50' },
-    { label: '75%', value: '75' },
-    { label: '100%', value: '100' }
-];
-const edgeStyleOptions: ReadonlyArray<{ label: string; value: EdgeStyle | '' }> = [
-    { label: 'Default', value: '' },
-    { label: 'None', value: 'none' },
-    { label: 'Drop shadow', value: 'dropshadow' },
-    { label: 'Raised', value: 'raised' },
-    { label: 'Depressed', value: 'depressed' },
-    { label: 'Uniform', value: 'uniform' }
-];
+const sizeOptions: ReadonlyArray<number> = [0.5, 0.75, 1.0, 1.5, 2.0];
+const opacityOptions: ReadonlyArray<number> = [0.25, 0.5, 0.75, 1.0];
+const edgeStyleOptions: ReadonlyArray<EdgeStyle> = ['none', 'dropshadow', 'raised', 'depressed', 'uniform'];
 
 /**
  * A menu to change the {@link theoplayer!TextTrackStyle | text track style} of the player.
@@ -154,55 +132,86 @@ export class TextTrackStyleMenu extends MenuGroup {
             <theoplayer-menu id="font-family-menu" menu-close-on-input hidden>
                 <span slot="heading">${locale.textTrackStyleFontFamily}</span>
                 <theoplayer-text-track-style-radio-group property="fontFamily">
-                    ${fontFamilyOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                    <theoplayer-radio-button value="">${locale.textTrackStyleDefaultLabel}</theoplayer-radio-button>
+                    ${fontFamilyOptions.map(
+                        ({ label, value }) =>
+                            html`<theoplayer-radio-button value=${value}>${locale.fontFamilyLabels[label] ?? label}</theoplayer-radio-button> `
+                    )}
                 </theoplayer-text-track-style-radio-group>
             </theoplayer-menu>
             <theoplayer-menu id="font-color-menu" menu-close-on-input hidden>
                 <span slot="heading">${locale.textTrackStyleFontColor}</span>
                 <theoplayer-text-track-style-radio-group property="fontColor">
-                    ${colorOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                    <theoplayer-radio-button value="">${locale.textTrackStyleDefaultLabel}</theoplayer-radio-button>
+                    ${colorOptions.map(
+                        ({ label, value }) =>
+                            html`<theoplayer-radio-button value=${value}>${locale.colorLabels[label] ?? label}</theoplayer-radio-button> `
+                    )}
                 </theoplayer-text-track-style-radio-group>
             </theoplayer-menu>
             <theoplayer-menu id="font-opacity-menu" menu-close-on-input hidden>
                 <span slot="heading">${locale.textTrackStyleFontOpacity}</span>
                 <theoplayer-text-track-style-radio-group property="fontOpacity">
-                    ${opacityOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                    <theoplayer-radio-button value="">${locale.textTrackStyleDefaultLabel}</theoplayer-radio-button>
+                    ${opacityOptions.map(
+                        (value) => html`<theoplayer-radio-button value=${value * 100}>${locale.formatPercentage(value)}</theoplayer-radio-button> `
+                    )}
                 </theoplayer-text-track-style-radio-group>
             </theoplayer-menu>
             <theoplayer-menu id="font-size-menu" menu-close-on-input hidden>
                 <span slot="heading">${locale.textTrackStyleFontSize}</span>
                 <theoplayer-text-track-style-radio-group property="fontSize">
-                    ${sizeOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                    <theoplayer-radio-button value="">${locale.textTrackStyleDefaultLabel}</theoplayer-radio-button>
+                    ${sizeOptions.map(
+                        (value) => html`<theoplayer-radio-button value=${value * 100}>${locale.formatPercentage(value)}</theoplayer-radio-button> `
+                    )}
                 </theoplayer-text-track-style-radio-group>
             </theoplayer-menu>
             <theoplayer-menu id="background-color-menu" menu-close-on-input hidden>
                 <span slot="heading">${locale.textTrackStyleBackgroundColor}</span>
                 <theoplayer-text-track-style-radio-group property="backgroundColor">
-                    ${colorOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                    <theoplayer-radio-button value="">${locale.textTrackStyleDefaultLabel}</theoplayer-radio-button>
+                    ${colorOptions.map(
+                        ({ label, value }) =>
+                            html`<theoplayer-radio-button value=${value}>${locale.colorLabels[label] ?? label}</theoplayer-radio-button> `
+                    )}
                 </theoplayer-text-track-style-radio-group>
             </theoplayer-menu>
             <theoplayer-menu id="background-opacity-menu" menu-close-on-input hidden>
                 <span slot="heading">${locale.textTrackStyleBackgroundOpacity}</span>
                 <theoplayer-text-track-style-radio-group property="backgroundOpacity">
-                    ${opacityOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                    <theoplayer-radio-button value="">${locale.textTrackStyleDefaultLabel}</theoplayer-radio-button>
+                    ${opacityOptions.map(
+                        (value) => html`<theoplayer-radio-button value=${value * 100}>${locale.formatPercentage(value)}</theoplayer-radio-button> `
+                    )}
                 </theoplayer-text-track-style-radio-group>
             </theoplayer-menu>
             <theoplayer-menu id="window-color-menu" menu-close-on-input hidden>
                 <span slot="heading">${locale.textTrackStyleWindowColor}</span>
                 <theoplayer-text-track-style-radio-group property="windowColor">
-                    ${colorOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                    <theoplayer-radio-button value="">${locale.textTrackStyleDefaultLabel}</theoplayer-radio-button>
+                    ${colorOptions.map(
+                        ({ label, value }) =>
+                            html`<theoplayer-radio-button value=${value}>${locale.colorLabels[label] ?? label}</theoplayer-radio-button> `
+                    )}
                 </theoplayer-text-track-style-radio-group>
             </theoplayer-menu>
             <theoplayer-menu id="window-opacity-menu" menu-close-on-input hidden>
                 <span slot="heading">${locale.textTrackStyleWindowOpacity}</span>
                 <theoplayer-text-track-style-radio-group property="windowOpacity">
-                    ${opacityOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                    <theoplayer-radio-button value="">${locale.textTrackStyleDefaultLabel}</theoplayer-radio-button>
+                    ${opacityOptions.map(
+                        (value) => html`<theoplayer-radio-button value=${value * 100}>${locale.formatPercentage(value)}</theoplayer-radio-button> `
+                    )}
                 </theoplayer-text-track-style-radio-group>
             </theoplayer-menu>
             <theoplayer-menu id="edge-style-menu" menu-close-on-input hidden>
                 <span slot="heading">${locale.textTrackStyleEdgeStyle}</span>
                 <theoplayer-text-track-style-radio-group property="edgeStyle">
-                    ${edgeStyleOptions.map(({ label, value }) => html`<theoplayer-radio-button value=${value}>${label}</theoplayer-radio-button> `)}
+                    <theoplayer-radio-button value="">${locale.textTrackStyleDefaultLabel}</theoplayer-radio-button>
+                    ${edgeStyleOptions.map(
+                        (value) => html`<theoplayer-radio-button value=${value}>${locale.edgeStyleLabels[value] ?? value}</theoplayer-radio-button> `
+                    )}
                 </theoplayer-text-track-style-radio-group>
             </theoplayer-menu>
         `;

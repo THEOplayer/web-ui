@@ -1,5 +1,6 @@
 import { durationFormatterForLocale } from './DurationFormatter';
 import { percentageFormatterForLocale } from './PercentageFormatter';
+import type { EdgeStyle } from 'theoplayer/chromeless';
 import type {
     AdClickThroughButton,
     AdCountdown,
@@ -21,7 +22,9 @@ import type {
     SeekButton,
     SettingsMenu,
     SettingsMenuButton,
+    TextTrackStyleDisplay,
     TextTrackStyleMenu,
+    TextTrackStyleRadioGroup,
     TimeRange,
     VolumeRange
 } from '../components';
@@ -224,6 +227,30 @@ export interface Locale {
      */
     textTrackStyleEdgeStyle: string;
     /**
+     * The label for the default style option in a {@link TextTrackStyleRadioGroup}.
+     */
+    textTrackStyleDefaultLabel: string;
+    /**
+     * The label for a {@link TextTrackStyleDisplay} when it is showing a style option
+     * that does not match any predefined values.
+     */
+    textTrackStyleCustomLabel: string;
+    /**
+     * The labels for font family style options in a {@link TextTrackStyleRadioGroup},
+     * keyed by the original English label (e.g. "Default" or "Monospace Serif").
+     */
+    fontFamilyLabels: Record<KnownFontFamily, string>;
+    /**
+     * The labels for color style options in a {@link TextTrackStyleRadioGroup},
+     * keyed by the original English label (e.g. "White", "Black" or "Red").
+     */
+    colorLabels: Record<KnownColor, string>;
+    /**
+     * The labels for edge style options in a {@link TextTrackStyleRadioGroup},
+     * keyed by an {@link EdgeStyle} value.
+     */
+    edgeStyleLabels: Record<EdgeStyle, string>;
+    /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link BadNetworkModeButton}.
      */
     openBadNetworkModeMenuAria: string;
@@ -285,9 +312,23 @@ export interface Duration {
 }
 
 /**
+ * The known font families for a {@link TextTrackStyleRadioGroup}.
+ */
+export type KnownFontFamily = 'Monospace Serif' | 'Proportional Serif' | 'Monospace Sans' | 'Proportional Sans';
+
+/**
+ * The known colors for a {@link TextTrackStyleRadioGroup}.
+ */
+export type KnownColor = 'White' | 'Yellow' | 'Green' | 'Cyan' | 'Blue' | 'Magenta' | 'Red' | 'Black';
+
+/**
  * A partial {@link Locale}.
  */
-export interface PartialLocale extends Partial<Locale> {}
+export type PartialLocale = Partial<Locale> & {
+    fontFamilyLabels?: Partial<Locale['fontFamilyLabels']>;
+    colorLabels?: Partial<Locale['colorLabels']>;
+    edgeStyleLabels?: Partial<Locale['edgeStyleLabels']>;
+};
 
 export const defaultLocaleName = 'en';
 export const defaultLocale: Locale = {
@@ -335,6 +376,31 @@ export const defaultLocale: Locale = {
     textTrackStyleWindowColor: 'Window color',
     textTrackStyleWindowOpacity: 'Window opacity',
     textTrackStyleEdgeStyle: 'Character edge style',
+    textTrackStyleDefaultLabel: 'Default',
+    textTrackStyleCustomLabel: 'Custom',
+    fontFamilyLabels: {
+        'Monospace Serif': 'Monospace Serif',
+        'Proportional Serif': 'Proportional Serif',
+        'Monospace Sans': 'Monospace Sans',
+        'Proportional Sans': 'Proportional Sans'
+    },
+    colorLabels: {
+        White: 'White',
+        Yellow: 'Yellow',
+        Green: 'Green',
+        Cyan: 'Cyan',
+        Blue: 'Blue',
+        Magenta: 'Magenta',
+        Red: 'Red',
+        Black: 'Black'
+    },
+    edgeStyleLabels: {
+        none: 'None',
+        dropshadow: 'Drop shadow',
+        raised: 'Raised',
+        depressed: 'Depressed',
+        uniform: 'Uniform'
+    },
     openBadNetworkModeMenuAria: 'open bad network mode menu',
     formatDuration: durationFormatterForLocale(defaultLocaleName, 'long'),
     formatNarrowDuration: durationFormatterForLocale(defaultLocaleName, 'narrow'),

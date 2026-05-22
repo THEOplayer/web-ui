@@ -6,15 +6,19 @@ import { Attribute } from '../util/Attribute';
 import { parseColor, toRgb } from '../util/ColorUtils';
 import type { TextTrackStyleOption } from './TextTrackStyleRadioGroup';
 import { arrayFind } from '../util/CommonUtils';
-import { knownColors, knownEdgeStyles, knownFontFamilies } from '../util/TextTrackStylePresets';
+import { knownColors, knownFontFamilies } from '../util/TextTrackStylePresets';
+import { getLocale, type Locale } from '../i18n';
 
 /**
  * A control that displays the value of a single text track style option
  * in a human-readable format.
  */
 @customElement('theoplayer-text-track-style-display')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class TextTrackStyleDisplay extends LitElement {
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
     private _player: ChromelessPlayer | undefined;
     private _property: TextTrackStyleOption = 'fontColor';
     private _textTrackStyle: TextTrackStyle | undefined;
@@ -53,38 +57,39 @@ export class TextTrackStyleDisplay extends LitElement {
     private readonly _updateFromPlayer = () => this.requestUpdate();
 
     protected override render(): HTMLTemplateResult {
-        return html`<span>${this.renderValue()}</span>`;
+        const locale = getLocale(this.lang);
+        return html`<span>${this.renderValue(locale)}</span>`;
     }
 
-    private renderValue(): string {
+    private renderValue(locale: Locale): string {
         if (this._player === undefined) {
             return '';
         }
         const property = this.property;
         switch (property) {
             case 'fontFamily': {
-                return getFontFamilyLabel(this._player.textTrackStyle.fontFamily);
+                return getFontFamilyLabel(this._player.textTrackStyle.fontFamily, locale);
             }
             case 'fontColor':
             case 'backgroundColor':
             case 'windowColor': {
-                return getColorLabel(this._player.textTrackStyle[property]);
+                return getColorLabel(this._player.textTrackStyle[property], locale);
             }
             case 'fontOpacity': {
-                return getOpacityLabel(this._player.textTrackStyle.fontColor);
+                return getOpacityLabel(this._player.textTrackStyle.fontColor, locale);
             }
             case 'backgroundOpacity': {
-                return getOpacityLabel(this._player.textTrackStyle.backgroundColor);
+                return getOpacityLabel(this._player.textTrackStyle.backgroundColor, locale);
             }
             case 'windowOpacity': {
-                return getOpacityLabel(this._player.textTrackStyle.windowColor);
+                return getOpacityLabel(this._player.textTrackStyle.windowColor, locale);
             }
             case 'edgeStyle': {
-                return getEdgeStyleLabel(this._player.textTrackStyle.edgeStyle);
+                return getEdgeStyleLabel(this._player.textTrackStyle.edgeStyle, locale);
             }
             default: {
                 const value = this._player.textTrackStyle[property];
-                return value ? value : 'Default';
+                return value ? value : locale.textTrackStyleDefaultLabel;
             }
         }
     }
@@ -96,50 +101,46 @@ declare global {
     }
 }
 
-function getFontFamilyLabel(fontFamily: string | null | undefined): string {
+function getFontFamilyLabel(fontFamily: string | null | undefined, locale: Locale): string {
     if (!fontFamily) {
-        return 'Default';
+        return locale.textTrackStyleDefaultLabel;
     }
-    const knownFontFamily = arrayFind(knownFontFamilies, ([_, value]) => value === fontFamily);
+    const knownFontFamily = arrayFind(knownFontFamilies, ([_, value]) => value === fontFamily)?.[0];
     if (knownFontFamily) {
-        return knownFontFamily[0];
+        return locale.fontFamilyLabels[knownFontFamily] ?? knownFontFamily;
     }
-    return 'Custom';
+    return locale.textTrackStyleCustomLabel;
 }
 
-function getColorLabel(color: string | null | undefined): string {
+function getColorLabel(color: string | null | undefined, locale: Locale): string {
     if (!color) {
-        return 'Default';
+        return locale.textTrackStyleDefaultLabel;
     }
     const parsedColor = parseColor(color);
     if (parsedColor) {
         const colorRgb = toRgb(parsedColor);
-        const knownColor = arrayFind(knownColors, ([_, value]) => value === colorRgb);
+        const knownColor = arrayFind(knownColors, ([_, value]) => value === colorRgb)?.[0];
         if (knownColor) {
-            return knownColor[0];
+            return locale.colorLabels[knownColor] ?? knownColor;
         }
     }
-    return 'Custom';
+    return locale.textTrackStyleCustomLabel;
 }
 
-function getOpacityLabel(color: string | null | undefined): string {
+function getOpacityLabel(color: string | null | undefined, locale: Locale): string {
     if (!color) {
-        return 'Default';
+        return locale.textTrackStyleDefaultLabel;
     }
     const parsedColor = parseColor(color);
     if (parsedColor) {
-        return `${parsedColor.a_ * 100}%`;
+        return locale.formatPercentage(parsedColor.a_);
     }
-    return 'Custom';
+    return locale.textTrackStyleCustomLabel;
 }
 
-function getEdgeStyleLabel(edgeStyle: EdgeStyle | null | undefined): string {
+function getEdgeStyleLabel(edgeStyle: EdgeStyle | null | undefined, locale: Locale): string {
     if (!edgeStyle) {
-        return 'Default';
+        return locale.textTrackStyleDefaultLabel;
     }
-    const knownEdgeStyle = arrayFind(knownEdgeStyles, ([_, value]) => value === edgeStyle);
-    if (knownEdgeStyle) {
-        return knownEdgeStyle[0];
-    }
-    return 'Custom';
+    return locale.edgeStyleLabels[edgeStyle] ?? locale.textTrackStyleCustomLabel;
 }
