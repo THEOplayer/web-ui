@@ -1,15 +1,20 @@
 import { html, type HTMLTemplateResult } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { Button } from './Button';
 import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import { getLocale } from '../i18n';
+import { Attribute } from '../util/Attribute';
 
 /**
  * A button that resets the text track style.
  */
 @customElement('theoplayer-text-track-style-reset-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class TextTrackStyleResetButton extends Button {
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
     private _player: ChromelessPlayer | undefined;
 
     get player(): ChromelessPlayer | undefined {
@@ -34,7 +39,8 @@ export class TextTrackStyleResetButton extends Button {
     }
 
     protected override render(): HTMLTemplateResult {
-        return html`<slot>Reset</slot>`;
+        const locale = getLocale(this.lang);
+        return html`<slot>${locale.textTrackStyleResetLabel}</slot>`;
     }
 }
 

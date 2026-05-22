@@ -26,6 +26,7 @@ import type {
     TextTrackStyleDisplay,
     TextTrackStyleMenu,
     TextTrackStyleRadioGroup,
+    TextTrackStyleResetButton,
     TimeRange,
     VolumeRange
 } from '../components';
@@ -241,6 +242,10 @@ export interface Locale {
      */
     textTrackStyleCustomLabel: string;
     /**
+     * The label for a {@link TextTrackStyleResetButton} to reset the text track style.
+     */
+    textTrackStyleResetLabel: string;
+    /**
      * The labels for font family style options in a {@link TextTrackStyleRadioGroup},
      * keyed by the original English label (e.g. "Default" or "Monospace Serif").
      */
@@ -384,6 +389,7 @@ export const defaultLocale: Locale = {
     textTrackStyleEdgeStyle: 'Character edge style',
     textTrackStyleDefaultLabel: 'Default',
     textTrackStyleCustomLabel: 'Custom',
+    textTrackStyleResetLabel: 'Reset',
     fontFamilyLabels: {
         'Monospace Serif': 'Monospace Serif',
         'Proportional Serif': 'Proportional Serif',
