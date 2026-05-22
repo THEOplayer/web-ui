@@ -15,6 +15,7 @@ import type {
     BadNetworkModeSelector,
     ChromecastButton,
     CloseMenuButton,
+    ErrorDisplay,
     FullscreenButton,
     LanguageMenu,
     LanguageMenuButton,
@@ -284,6 +285,10 @@ export interface Locale {
      */
     lowQualityLabel: string;
     /**
+     * The heading for an {@link ErrorDisplay}.
+     */
+    errorHeading: string;
+    /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link BadNetworkModeButton}.
      */
     openBadNetworkModeMenuAria: string;
@@ -453,6 +458,7 @@ export const defaultLocale: Locale = {
     unknownQualityLabel: 'Unknown',
     highQualityLabel: 'High Quality',
     lowQualityLabel: 'Low Quality',
+    errorHeading: 'An error occurred',
     openBadNetworkModeMenuAria: 'open bad network mode menu',
     formatDuration: durationFormatterForLocale(defaultLocaleName, 'long'),
     formatNarrowDuration: durationFormatterForLocale(defaultLocaleName, 'narrow'),
