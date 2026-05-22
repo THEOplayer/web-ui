@@ -30,6 +30,7 @@ export default {
     externalSymbolLinkMappings: {
         typescript: {
             'ARIAMixin.ariaLabel': 'https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-label',
+            'ARIAMixin.ariaValueText': 'https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-valuetext',
             'Intl.DurationFormatStyle':
                 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/DurationFormat#style',
             'Intl.NumberFormatOptions.style':

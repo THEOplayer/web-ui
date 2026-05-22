@@ -1,3 +1,5 @@
+import webConfig from '../typedoc.config.mjs';
+
 /** @type {import('typedoc').TypeDocOptions} */
 export default {
     extends: ['../typedoc.config.mjs'],
@@ -21,6 +23,7 @@ export default {
         }
     },
     externalSymbolLinkMappings: {
+        ...webConfig.externalSymbolLinkMappings,
         react: {
             '*': 'https://react.dev/reference/react'
         }
