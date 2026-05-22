@@ -1,7 +1,9 @@
 import { durationFormatterForLocale } from './DurationFormatter';
 import { percentageFormatterForLocale } from './PercentageFormatter';
+import { bandwidthFormatterForLocale } from './BandwidthFormatter';
 import type { EdgeStyle } from 'theoplayer/chromeless';
 import type {
+    ActiveQualityDisplay,
     AdClickThroughButton,
     AdCountdown,
     AdDisplay,
@@ -265,9 +267,14 @@ export interface Locale {
      */
     edgeStyleLabels: Record<EdgeStyle, string>;
     /**
-     * The label for a {@link QualityRadioButton} when it is showing the "Automatic" quality selection option.
+     * The label for an {@link ActiveQualityDisplay} or {@link QualityRadioButton} when it is showing the "Automatic" quality selection option.
      */
     automaticQualityLabel: string;
+    /**
+     * The label for a {@link ActiveQualityDisplay} when it is showing a quality selection option
+     * without any usable label.
+     */
+    unknownQualityLabel: string;
     /**
      * The label for an {@link AutomaticQualitySelector} for THEOlive's {@link BadNetworkModeMenu}.
      */
@@ -326,6 +333,19 @@ export interface Locale {
      * @param percentage A percentage, between `0.0` and `1.0`.
      */
     formatPercentage(percentage: number): string;
+    /**
+     * Formats a bandwidth value.
+     *
+     * This is optional. If not provided, a default {@link Intl.NumberFormat} with the {@link Intl.NumberFormatOptions.style | `"unit"` style} is used
+     * that dynamically picks between the `"kilobit-per-second"` or `"megabit-per-second"` {@link Intl.NumberFormatOptions.unit | unit}s.
+     *
+     * Examples:
+     * - `150_000` &rarr; "150kb/s"
+     * - `2_500_000` &rarr; "2.5Mb/s"
+     *
+     * @param bandwidth A bandwidth value, in bits per second.
+     */
+    formatBandwidth(bandwidth: number): string;
 }
 
 /**
@@ -430,11 +450,13 @@ export const defaultLocale: Locale = {
         uniform: 'Uniform'
     },
     automaticQualityLabel: 'Automatic',
+    unknownQualityLabel: 'Unknown',
     highQualityLabel: 'High Quality',
     lowQualityLabel: 'Low Quality',
     openBadNetworkModeMenuAria: 'open bad network mode menu',
     formatDuration: durationFormatterForLocale(defaultLocaleName, 'long'),
     formatNarrowDuration: durationFormatterForLocale(defaultLocaleName, 'narrow'),
     formatRemainingDuration: (duration: string) => `${duration} remaining`,
-    formatPercentage: percentageFormatterForLocale(defaultLocaleName)
+    formatPercentage: percentageFormatterForLocale(defaultLocaleName),
+    formatBandwidth: bandwidthFormatterForLocale(defaultLocaleName)
 };
