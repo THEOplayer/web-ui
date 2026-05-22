@@ -7,7 +7,10 @@ import type {
     AdDisplay,
     AdSkipButton,
     AirPlayButton,
+    AutomaticQualitySelector,
     BadNetworkModeButton,
+    BadNetworkModeMenu,
+    BadNetworkModeSelector,
     ChromecastButton,
     CloseMenuButton,
     FullscreenButton,
@@ -266,6 +269,14 @@ export interface Locale {
      */
     automaticQualityLabel: string;
     /**
+     * The label for an {@link AutomaticQualitySelector} for THEOlive's {@link BadNetworkModeMenu}.
+     */
+    highQualityLabel: string;
+    /**
+     * The label for a {@link BadNetworkModeSelector} for THEOlive's {@link BadNetworkModeMenu}.
+     */
+    lowQualityLabel: string;
+    /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link BadNetworkModeButton}.
      */
     openBadNetworkModeMenuAria: string;
@@ -419,6 +430,8 @@ export const defaultLocale: Locale = {
         uniform: 'Uniform'
     },
     automaticQualityLabel: 'Automatic',
+    highQualityLabel: 'High Quality',
+    lowQualityLabel: 'Low Quality',
     openBadNetworkModeMenuAria: 'open bad network mode menu',
     formatDuration: durationFormatterForLocale(defaultLocaleName, 'long'),
     formatNarrowDuration: durationFormatterForLocale(defaultLocaleName, 'narrow'),

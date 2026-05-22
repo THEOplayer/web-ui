@@ -1,6 +1,7 @@
 import { AbstractQualitySelector } from './AbstractQualitySelector';
 import { html, type HTMLTemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { getLocale } from '../../../i18n';
 
 @customElement('theolive-bad-network-quality-selector')
 export class BadNetworkModeSelector extends AbstractQualitySelector {
@@ -30,6 +31,7 @@ export class BadNetworkModeSelector extends AbstractQualitySelector {
     }
 
     protected override render(): HTMLTemplateResult {
-        return html`<slot>Low Quality</slot>`;
+        const locale = getLocale(this.lang);
+        return html`<slot>${locale.lowQualityLabel}</slot>`;
     }
 }
