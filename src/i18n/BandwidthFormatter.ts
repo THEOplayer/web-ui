@@ -12,21 +12,16 @@ export function bandwidthFormatterForLocale(locale: string): BandwidthFormatter 
             unit: 'kilobit-per-second',
             maximumFractionDigits: 0
         });
-        const oneMbpsFormatter = new Intl.NumberFormat(locale, {
+        const mbpsFormatter = new Intl.NumberFormat(locale, {
             ...options,
             unit: 'megabit-per-second',
-            maximumFractionDigits: 1
-        });
-        const tenMbpsFormatter = new Intl.NumberFormat(locale, {
-            ...options,
-            unit: 'megabit-per-second',
-            maximumFractionDigits: 0
+            minimumSignificantDigits: 2,
+            maximumFractionDigits: 1,
+            roundingPriority: 'lessPrecision'
         });
         return (bandwidth) => {
-            if (bandwidth > 1e7) {
-                return tenMbpsFormatter.format(bandwidth / 1e6);
-            } else if (bandwidth > 1e6) {
-                return oneMbpsFormatter.format(bandwidth / 1e6);
+            if (bandwidth > 1e6) {
+                return mbpsFormatter.format(bandwidth / 1e6);
             } else {
                 return kbpsFormatter.format(bandwidth / 1e3);
             }
