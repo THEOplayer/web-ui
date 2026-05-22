@@ -1,7 +1,10 @@
 import { html, type TemplateResult } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { MenuGroup } from './MenuGroup';
 import menuTableCss from './MenuTable.css';
+import { stateReceiver } from './StateReceiverMixin';
+import { getLocale } from '../i18n';
+import { Attribute } from '../util/Attribute';
 
 // Load components used in template
 import './ActiveQualityDisplay';
@@ -15,16 +18,21 @@ import './PlaybackRateMenu';
  * @slot `heading` - A slot for the menu's heading.
  */
 @customElement('theoplayer-settings-menu')
+@stateReceiver(['lang'])
 export class SettingsMenu extends MenuGroup {
     static styles = [...MenuGroup.styles, menuTableCss];
 
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
     protected override render(): TemplateResult {
+        const locale = getLocale(this.lang);
         return html`
             <theoplayer-menu>
-                <span slot="heading"><slot name="heading">Settings</slot></span>
+                <span slot="heading"><slot name="heading">${locale.settingsMenuHeading}</slot></span>
                 <table>
                     <tr>
-                        <td><span>Quality</span></td>
+                        <td><span>${locale.qualityMenuHeading}</span></td>
                         <td>
                             <theoplayer-menu-button menu="quality-menu">
                                 <theoplayer-active-quality-display></theoplayer-active-quality-display>
@@ -32,7 +40,7 @@ export class SettingsMenu extends MenuGroup {
                         </td>
                     </tr>
                     <tr>
-                        <td><span>Playback speed</span></td>
+                        <td><span>${locale.playbackRateMenuHeading}</span></td>
                         <td>
                             <theoplayer-menu-button menu="playback-rate-menu">
                                 <theoplayer-playback-rate-display></theoplayer-playback-rate-display>
@@ -42,7 +50,7 @@ export class SettingsMenu extends MenuGroup {
                 </table>
             </theoplayer-menu>
             <theoplayer-menu id="quality-menu" menu-close-on-input hidden>
-                <span slot="heading">Quality</span>
+                <span slot="heading">${locale.qualityMenuHeading}</span>
                 <theoplayer-quality-radio-group></theoplayer-quality-radio-group>
             </theoplayer-menu>
             <theoplayer-playback-rate-menu id="playback-rate-menu" menu-close-on-input hidden></theoplayer-playback-rate-menu>

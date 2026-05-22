@@ -19,6 +19,7 @@ import type {
     PlaybackRateMenuButton,
     PlayButton,
     SeekButton,
+    SettingsMenu,
     SettingsMenuButton,
     TimeRange,
     VolumeRange
@@ -174,6 +175,14 @@ export interface Locale {
      */
     openSettingsMenuAria: string;
     /**
+     * The heading for a {@link SettingsMenu}.
+     */
+    settingsMenuHeading: string;
+    /**
+     * The text for the quality option in a {@link SettingsMenu}.
+     */
+    qualityMenuHeading: string;
+    /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link BadNetworkModeButton}.
      */
     openBadNetworkModeMenuAria: string;
@@ -268,6 +277,8 @@ export const defaultLocale: Locale = {
     playbackRateMenuHeading: 'Playback speed',
     formatPlaybackRate: (rate: number) => (rate === 1 ? 'Normal' : `${rate}x`),
     openSettingsMenuAria: 'open settings menu',
+    settingsMenuHeading: 'Settings',
+    qualityMenuHeading: 'Quality',
     openBadNetworkModeMenuAria: 'open bad network mode menu',
     formatDuration: durationFormatterForLocale(defaultLocaleName, 'long'),
     formatNarrowDuration: durationFormatterForLocale(defaultLocaleName, 'narrow'),
