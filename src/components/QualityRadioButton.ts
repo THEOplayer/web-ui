@@ -102,7 +102,8 @@ export class QualityRadioButton extends RadioButton {
 
     protected override render(): HTMLTemplateResult {
         const locale = getLocale(this.lang);
-        const label = formatQualityLabel(this._quality) ?? locale.automaticQualityLabel;
+        const label =
+            this._quality === undefined ? locale.automaticQualityLabel : (formatQualityLabel(locale, this._quality) ?? locale.unknownQualityLabel);
         return html`<slot>${label}</slot>`;
     }
 }
