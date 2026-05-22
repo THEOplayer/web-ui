@@ -10,8 +10,6 @@ import { getLocale } from '../i18n';
 
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as const;
 
-const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
-
 /**
  * A control that displays the current time of the stream.
  */
@@ -119,9 +117,9 @@ export class TimeDisplay extends LitElement {
 
         let ariaValueText: string;
         if (isNaN(this._duration)) {
-            ariaValueText = DEFAULT_MISSING_TIME_PHRASE;
+            ariaValueText = locale.unknownTimeAria;
         } else if (this.showDuration) {
-            ariaValueText = `${formatAsTimePhrase(locale, time, remaining)} of ${formatAsTimePhrase(locale, endTime)}`;
+            ariaValueText = locale.timeOfTotalAria(formatAsTimePhrase(locale, time, remaining), formatAsTimePhrase(locale, endTime));
         } else {
             ariaValueText = formatAsTimePhrase(locale, time, remaining);
         }

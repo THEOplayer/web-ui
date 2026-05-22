@@ -34,6 +34,7 @@ import type {
     TextTrackStyleMenu,
     TextTrackStyleRadioGroup,
     TextTrackStyleResetButton,
+    TimeDisplay,
     TimeRange,
     VolumeRange
 } from '../components';
@@ -114,6 +115,22 @@ export interface Locale {
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link ChromecastButton} when it is connected to Chromecast.
      */
     chromecastConnectedAria: string;
+    /**
+     * The {@link HTMLElement.ariaValueText | `aria-valuetext`} for a {@link TimeDisplay} and {@link TimeRange}
+     * when it has both a valid time and duration to display.
+     *
+     * Examples:
+     * - "5 seconds" and "10 seconds" &rarr; "5 seconds of 10 seconds"
+     *
+     * @param time A time duration that was formatted with {@link formatDuration} or {@link formatRemainingDuration}.
+     * @param totalDuration A total duration that was formatted with {@link formatDuration} or {@link formatRemainingDuration}.
+     */
+    timeOfTotalAria(time: string, totalDuration: string): string;
+    /**
+     * The {@link HTMLElement.ariaValueText | `aria-valuetext`} for a {@link TimeDisplay} and {@link TimeRange}
+     * when it does not have a valid time to display.
+     */
+    unknownTimeAria: string;
     /**
      * The text on an {@link AdDisplay}, e.g. "Ad".
      */
@@ -400,6 +417,8 @@ export const defaultLocale: Locale = {
     airplayConnectedAria: 'stop playing on AirPlay',
     chromecastAria: 'start casting to Chromecast',
     chromecastConnectedAria: 'stop casting to Chromecast',
+    timeOfTotalAria: (currentTime: string, totalDuration: string) => `${currentTime} of ${totalDuration}`,
+    unknownTimeAria: 'video not loaded, unknown time',
     adText: 'Ad',
     adBreakText: (currentAd: number, totalAds: number) => `Ad ${currentAd} of ${totalAds}`,
     adClickThroughText: 'Visit Advertiser',

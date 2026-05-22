@@ -24,7 +24,6 @@ import './PreviewTimeDisplay';
 const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 'seeked'] as const;
 const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'durationchange', 'readystatechange', 'error'] as const;
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'adskip', 'addad', 'updatead'] as const;
-const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
 /**
  * Width of an ad marker on the progress bar, in percent of the total bar width.
@@ -194,9 +193,9 @@ export class TimeRange extends Range {
         const currentTimePhrase = formatAsTimePhrase(locale, this.value);
         const totalTimePhrase = formatAsTimePhrase(locale, this.max);
         if (currentTimePhrase && totalTimePhrase) {
-            return `${currentTimePhrase} of ${totalTimePhrase}`;
+            return locale.timeOfTotalAria(currentTimePhrase, totalTimePhrase);
         }
-        return DEFAULT_MISSING_TIME_PHRASE;
+        return locale.unknownTimeAria;
     }
 
     protected override handleInput(): void {
