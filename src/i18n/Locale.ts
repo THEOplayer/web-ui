@@ -284,6 +284,11 @@ export interface Duration {
     seconds: number;
 }
 
+/**
+ * A partial {@link Locale}.
+ */
+export interface PartialLocale extends Partial<Locale> {}
+
 export const defaultLocaleName = 'en';
 export const defaultLocale: Locale = {
     playAria: 'play',

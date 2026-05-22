@@ -1,8 +1,8 @@
-import { defaultLocale, type Locale } from './Locale';
+import { defaultLocale, type Locale, type PartialLocale } from './Locale';
 import { durationFormatterForLocale } from './DurationFormatter';
 import { percentageFormatterForLocale } from './PercentageFormatter';
 
-const localesByName: Record<string, Required<Locale>> = {};
+const localesByName: Record<string, Locale> = {};
 
 export function getLocale(name: string): Locale {
     return localesByName[name] ?? defaultLocale;
@@ -18,7 +18,7 @@ export function getLocale(name: string): Locale {
  * @param name The name of the locale.
  * @param locale The locale.
  */
-export function addLocale(name: string, locale: Partial<Locale>) {
+export function addLocale(name: string, locale: PartialLocale) {
     // TODO Re-render all components that use this locale?
     localesByName[name] = {
         ...defaultLocale,
