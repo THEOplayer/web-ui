@@ -27,6 +27,7 @@ export class SettingsMenu extends MenuGroup {
 
     protected override render(): TemplateResult {
         const locale = getLocale(this.lang);
+        // FIXME: UIContainer doesn't push `lang` through shadow DOM children?
         return html`
             <theoplayer-menu>
                 <span slot="heading"><slot name="heading">${locale.settingsMenuHeading}</slot></span>
@@ -35,7 +36,7 @@ export class SettingsMenu extends MenuGroup {
                         <td><span>${locale.qualityMenuHeading}</span></td>
                         <td>
                             <theoplayer-menu-button menu="quality-menu">
-                                <theoplayer-active-quality-display></theoplayer-active-quality-display>
+                                <theoplayer-active-quality-display lang=${this.lang}></theoplayer-active-quality-display>
                             </theoplayer-menu-button>
                         </td>
                     </tr>
@@ -43,7 +44,7 @@ export class SettingsMenu extends MenuGroup {
                         <td><span>${locale.playbackRateMenuHeading}</span></td>
                         <td>
                             <theoplayer-menu-button menu="playback-rate-menu">
-                                <theoplayer-playback-rate-display></theoplayer-playback-rate-display>
+                                <theoplayer-playback-rate-display lang=${this.lang}></theoplayer-playback-rate-display>
                             </theoplayer-menu-button>
                         </td>
                     </tr>
@@ -51,9 +52,9 @@ export class SettingsMenu extends MenuGroup {
             </theoplayer-menu>
             <theoplayer-menu id="quality-menu" menu-close-on-input hidden>
                 <span slot="heading">${locale.qualityMenuHeading}</span>
-                <theoplayer-quality-radio-group></theoplayer-quality-radio-group>
+                <theoplayer-quality-radio-group lang=${this.lang}></theoplayer-quality-radio-group>
             </theoplayer-menu>
-            <theoplayer-playback-rate-menu id="playback-rate-menu" menu-close-on-input hidden></theoplayer-playback-rate-menu>
+            <theoplayer-playback-rate-menu id="playback-rate-menu" lang=${this.lang} menu-close-on-input hidden></theoplayer-playback-rate-menu>
         `;
     }
 }

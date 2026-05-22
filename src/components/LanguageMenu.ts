@@ -71,6 +71,7 @@ export class LanguageMenu extends MenuGroup {
 
     protected override render(): TemplateResult {
         const locale = getLocale(this.lang);
+        // FIXME: UIContainer doesn't push `lang` through shadow DOM children?
         return html`
             <theoplayer-menu>
                 <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">${locale.languageMenuHeading}</slot></span>
@@ -78,6 +79,7 @@ export class LanguageMenu extends MenuGroup {
                     class="theoplayer-menu-heading-button"
                     menu="subtitle-options-menu"
                     slot="heading"
+                    lang=${this.lang}
                 ></theoplayer-settings-menu-button>
                 <div part="content">
                     <div part="audio">
@@ -90,7 +92,7 @@ export class LanguageMenu extends MenuGroup {
                     </div>
                 </div>
             </theoplayer-menu>
-            <theoplayer-text-track-style-menu id="subtitle-options-menu"></theoplayer-text-track-style-menu>
+            <theoplayer-text-track-style-menu id="subtitle-options-menu" lang=${this.lang}></theoplayer-text-track-style-menu>
         `;
     }
 }
