@@ -15,6 +15,7 @@ import type {
     BadNetworkModeMenu,
     BadNetworkModeSelector,
     ChromecastButton,
+    ChromecastDisplay,
     CloseMenuButton,
     ErrorDisplay,
     FullscreenButton,
@@ -117,6 +118,16 @@ export interface Locale {
      * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link ChromecastButton} when it is connected to Chromecast.
      */
     chromecastConnectedAria: string;
+    /**
+     * The heading for a {@link ChromecastDisplay} when playing on Chromecast.
+     * This heading precedes the name of the connected Chromecast receiver.
+     */
+    chromecastHeading: string;
+    /**
+     * The default receiver name for a {@link ChromecastDisplay} when playing on a Chromecast receiver with an unknown name.
+     * This follows the {@link chromecastHeading}.
+     */
+    chromecastDefaultReceiverName: string;
     /**
      * The {@link HTMLElement.ariaValueText | `aria-valuetext`} for a {@link TimeDisplay} and {@link TimeRange}
      * when it has both a valid time and duration to display.
@@ -446,6 +457,8 @@ export const defaultLocale: Locale = {
     airplayConnectedAria: 'stop playing on AirPlay',
     chromecastAria: 'start casting to Chromecast',
     chromecastConnectedAria: 'stop casting to Chromecast',
+    chromecastHeading: 'Playing on',
+    chromecastDefaultReceiverName: 'Chromecast',
     timeOfTotalAria: (currentTime: string, totalDuration: string) => `${currentTime} of ${totalDuration}`,
     unknownTimeAria: 'video not loaded, unknown time',
     adText: 'Ad',

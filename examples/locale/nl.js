@@ -21,6 +21,8 @@ addLocale('nl', {
     airplayConnectedAria: 'stop met afspelen op AirPlay',
     chromecastAria: 'start met afspelen op Chromecast',
     chromecastConnectedAria: 'stop met afspelen op Chromecast',
+    chromecastHeading: 'Aan het afspelen op',
+    chromecastDefaultReceiverName: 'Chromecast',
     timeOfTotalAria: (currentTime, totalDuration) => `${currentTime} van ${totalDuration}`,
     unknownTimeAria: 'video niet ingeladen, onbekende tijd',
     adText: 'Advertentie',
