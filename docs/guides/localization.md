@@ -53,7 +53,7 @@ The UI automatically selects the locale based on the `lang` attribute of the `<t
 The value of the `lang` attribute must exactly match the locale name as it was passed to `addLocale`.
 
 ```html title="Setting the language on the UI"
-<theoplayer-default-ui lang="fr" source='{"sources":{"src":"https://example.com/stream.m3u8"}}'> </theoplayer-default-ui>
+<theoplayer-default-ui lang="fr" source='{"sources":{"src":"https://example.com/stream.m3u8"}}'></theoplayer-default-ui>
 ```
 
 You can also put the `lang` attribute on any parent element. For example, if the entire page is in French, you could put
