@@ -83,7 +83,7 @@ function formatMediaTrackLabel(locale: Locale, track: MediaTrack): string {
     if (localizedLanguageName) {
         return localizedLanguageName;
     }
-    return languageCode || label || '';
+    return label || languageCode || '';
 }
 
 declare global {

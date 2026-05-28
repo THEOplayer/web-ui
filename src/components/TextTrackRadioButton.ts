@@ -87,7 +87,7 @@ function formatTextTrackLabel(locale: Locale, track: TextTrack): string {
     if (track.type === 'cea608' && typeof track.captionChannel === 'number') {
         return `CC${track.captionChannel}`;
     }
-    return languageCode || label || '';
+    return label || languageCode || '';
 }
 
 declare global {
