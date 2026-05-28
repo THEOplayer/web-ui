@@ -1,5 +1,5 @@
 import { html, type HTMLTemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { RadioButton } from './RadioButton';
 import type { MediaTrack, VideoQuality } from 'theoplayer/chromeless';
 import { formatQualityLabel } from '../util/TrackUtils';
@@ -18,7 +18,9 @@ const QUALITY_EVENTS = ['update'] as const;
 @stateReceiver(['lang'])
 export class QualityRadioButton extends RadioButton {
     private _track: MediaTrack | undefined = undefined;
-    private _quality: VideoQuality | undefined = undefined;
+
+    @state()
+    private accessor _quality: VideoQuality | undefined = undefined;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
     accessor lang: string = '';

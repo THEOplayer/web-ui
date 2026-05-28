@@ -15,13 +15,11 @@ const TRACK_EVENTS = ['change', 'update'] as const;
 @customElement('theoplayer-media-track-radio-button')
 @stateReceiver(['lang'])
 export class MediaTrackRadioButton extends RadioButton {
-    private _track: MediaTrack | undefined = undefined;
+    @state()
+    private accessor _track: MediaTrack | undefined = undefined;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
     accessor lang: string = '';
-
-    @state()
-    private accessor _trackLabel = '';
 
     /**
      * The media track that is controlled by this radio button.
@@ -46,9 +44,8 @@ export class MediaTrackRadioButton extends RadioButton {
     }
 
     private _updateFromTrack(): void {
-        const locale = getLocale(this.lang);
-        this._trackLabel = this._track ? formatMediaTrackLabel(locale, this._track) : '';
         this.checked = this._track ? this._track.enabled : false;
+        this.requestUpdate();
     }
 
     private _updateTrack(): void {
@@ -66,7 +63,9 @@ export class MediaTrackRadioButton extends RadioButton {
     }
 
     protected override render(): HTMLTemplateResult {
-        return html`<slot>${this._trackLabel}</slot>`;
+        const locale = getLocale(this.lang);
+        const label = this._track ? formatMediaTrackLabel(locale, this._track) : '';
+        return html`<slot>${label}</slot>`;
     }
 }
 
