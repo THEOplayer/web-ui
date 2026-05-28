@@ -60,6 +60,7 @@ You can also put the `lang` attribute on any parent element. For example, if the
 the attribute on the `<html>` element:
 
 ```html title="Setting the language on the HTML document"
+<!doctype html>
 <html lang="fr">
     <head>
         <title>Ma page</title>
