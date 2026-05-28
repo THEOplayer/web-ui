@@ -72,7 +72,7 @@ function formatTextTrackLabel(locale: Locale, track: TextTrack): string {
     let label = track.label;
     let languageCode = track.language;
     if (label) {
-        if (label === languageCode || label === defaultLocale.formatLanguage(languageCode)) {
+        if (languageCode && (label === languageCode || label === defaultLocale.formatLanguage(languageCode))) {
             // Ignore default label with just the language code or non-localized language name.
         } else if (track.type === 'cea608' && /^CC\d+$/.test(track.label)) {
             // Ignore default label with just the caption channel.
