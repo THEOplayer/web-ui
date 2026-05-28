@@ -1,6 +1,7 @@
 import { durationFormatterForLocale } from './DurationFormatter';
 import { percentageFormatterForLocale } from './PercentageFormatter';
 import { bandwidthFormatterForLocale } from './BandwidthFormatter';
+import { languageFormatterForLocale } from './LanguageFormatter';
 import type { EdgeStyle } from 'theoplayer/chromeless';
 import type {
     ActiveQualityDisplay,
@@ -368,6 +369,25 @@ export interface Locale {
      * @param bandwidth A bandwidth value, in bits per second.
      */
     formatBandwidth(bandwidth: number): string;
+    /**
+     * Formats a language name.
+     *
+     * This is optional. If not provided, a default {@link Intl.DisplayNames} with the {@link Intl.DisplayNamesOptions.type | `"language"` type} is used.
+     *
+     * Examples for an English locale:
+     * - `"en"` &rarr; "English"
+     * - `"fr"` &rarr; "French"
+     * - `"pt-BR"` &rarr; "Brazilian Portuguese"
+     *
+     * Examples for a French locale:
+     * - `"en"` &rarr; "anglais"
+     * - `"fr"` &rarr; "français"
+     * - `"pt-BR"` &rarr; "portugais brésilien"
+     *
+     * @param languageCode
+     * @return A localized language name, or `undefined` if the language code is unknown.
+     */
+    formatLanguage(languageCode: string): string | undefined;
 }
 
 /**
@@ -483,5 +503,6 @@ export const defaultLocale: Locale = {
     formatNarrowDuration: durationFormatterForLocale(defaultLocaleName, 'narrow'),
     formatRemainingDuration: (duration: string) => `${duration} remaining`,
     formatPercentage: percentageFormatterForLocale(defaultLocaleName),
-    formatBandwidth: bandwidthFormatterForLocale(defaultLocaleName)
+    formatBandwidth: bandwidthFormatterForLocale(defaultLocaleName),
+    formatLanguage: languageFormatterForLocale(defaultLocaleName)
 };

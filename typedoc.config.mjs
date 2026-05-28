@@ -36,7 +36,9 @@ export default {
             'Intl.NumberFormatOptions.style':
                 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#style',
             'Intl.NumberFormatOptions.unit':
-                'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#unit_2'
+                'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#unit_2',
+            'Intl.DisplayNamesOptions.type':
+                'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/DisplayNames#type'
         },
         'lit-element': {
             LitElement: 'https://lit.dev/docs/api/LitElement/',

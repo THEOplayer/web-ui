@@ -2,7 +2,9 @@ import { html, type HTMLTemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { RadioButton } from './RadioButton';
 import type { MediaTrack } from 'theoplayer/chromeless';
-import { localizeLanguageName } from '../util/CommonUtils';
+import { Attribute } from '../util/Attribute';
+import { stateReceiver } from './StateReceiverMixin';
+import { getLocale, type Locale } from '../i18n';
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
@@ -11,8 +13,12 @@ const TRACK_EVENTS = ['change', 'update'] as const;
  * and switches to that track when clicked.
  */
 @customElement('theoplayer-media-track-radio-button')
+@stateReceiver(['lang'])
 export class MediaTrackRadioButton extends RadioButton {
     private _track: MediaTrack | undefined = undefined;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     @state()
     private accessor _trackLabel = '';
@@ -40,7 +46,8 @@ export class MediaTrackRadioButton extends RadioButton {
     }
 
     private _updateFromTrack(): void {
-        this._trackLabel = this._track ? getTrackLabel(this._track) : '';
+        const locale = getLocale(this.lang);
+        this._trackLabel = this._track ? formatMediaTrackLabel(locale, this._track) : '';
         this.checked = this._track ? this._track.enabled : false;
     }
 
@@ -63,7 +70,7 @@ export class MediaTrackRadioButton extends RadioButton {
     }
 }
 
-function getTrackLabel(track: MediaTrack): string {
+function formatMediaTrackLabel(locale: Locale, track: MediaTrack): string {
     let label = track.label;
     let languageCode = track.language;
     if (label) {
@@ -73,7 +80,7 @@ function getTrackLabel(track: MediaTrack): string {
             return label;
         }
     }
-    let localizedLanguageName = languageCode && localizeLanguageName(languageCode);
+    let localizedLanguageName = languageCode && locale.formatLanguage(languageCode);
     if (localizedLanguageName) {
         return localizedLanguageName;
     }

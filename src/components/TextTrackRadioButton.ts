@@ -1,8 +1,10 @@
 import { RadioButton } from './RadioButton';
 import type { TextTrack } from 'theoplayer/chromeless';
-import { localizeLanguageName } from '../util/CommonUtils';
 import { customElement, property, state } from 'lit/decorators.js';
 import { html, type HTMLTemplateResult } from 'lit';
+import { Attribute } from '../util/Attribute';
+import { stateReceiver } from './StateReceiverMixin';
+import { getLocale, type Locale } from '../i18n';
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
@@ -10,8 +12,12 @@ const TRACK_EVENTS = ['change', 'update'] as const;
  * `<theoplayer-text-track-radio-button>` -A radio button that shows the label of a given text track, and switches to that track when clicked.
  */
 @customElement('theoplayer-text-track-radio-button')
+@stateReceiver(['lang'])
 export class TextTrackRadioButton extends RadioButton {
     private _track: TextTrack | undefined = undefined;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     @state()
     private accessor _trackLabel = '';
@@ -39,7 +45,8 @@ export class TextTrackRadioButton extends RadioButton {
     }
 
     private _updateFromTrack(): void {
-        this._trackLabel = this._track ? getTrackLabel(this._track) : '';
+        const locale = getLocale(this.lang);
+        this._trackLabel = this._track ? formatTextTrackLabel(locale, this._track) : '';
         this.checked = this._track ? this._track.mode === 'showing' : false;
     }
 
@@ -62,7 +69,7 @@ export class TextTrackRadioButton extends RadioButton {
     }
 }
 
-function getTrackLabel(track: TextTrack): string {
+function formatTextTrackLabel(locale: Locale, track: TextTrack): string {
     let label = track.label;
     let languageCode = track.language;
     if (label) {
@@ -74,7 +81,7 @@ function getTrackLabel(track: TextTrack): string {
             return label;
         }
     }
-    let localizedLanguageName = languageCode && localizeLanguageName(languageCode);
+    let localizedLanguageName = languageCode && locale.formatLanguage(languageCode);
     if (localizedLanguageName) {
         return localizedLanguageName;
     }

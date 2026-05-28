@@ -2,6 +2,7 @@ import { defaultLocale, type Locale, type PartialLocale } from './Locale';
 import { durationFormatterForLocale } from './DurationFormatter';
 import { percentageFormatterForLocale } from './PercentageFormatter';
 import { bandwidthFormatterForLocale } from './BandwidthFormatter';
+import { languageFormatterForLocale } from './LanguageFormatter';
 
 const localesByName: Record<string, Locale> = {};
 
@@ -39,6 +40,7 @@ export function addLocale(name: string, locale: PartialLocale) {
         formatDuration: locale.formatDuration ?? durationFormatterForLocale(name, 'long'),
         formatNarrowDuration: locale.formatNarrowDuration ?? durationFormatterForLocale(name, 'narrow'),
         formatPercentage: locale.formatPercentage ?? percentageFormatterForLocale(name),
-        formatBandwidth: locale.formatBandwidth ?? bandwidthFormatterForLocale(name)
+        formatBandwidth: locale.formatBandwidth ?? bandwidthFormatterForLocale(name),
+        formatLanguage: locale.formatLanguage ?? languageFormatterForLocale(name)
     };
 }

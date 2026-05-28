@@ -84,11 +84,11 @@ export class LanguageMenu extends MenuGroup {
                 <div part="content">
                     <div part="audio">
                         <h2>${locale.audioMenuHeading}</h2>
-                        <theoplayer-track-radio-group track-type="audio"></theoplayer-track-radio-group>
+                        <theoplayer-track-radio-group track-type="audio" lang=${this.lang}></theoplayer-track-radio-group>
                     </div>
                     <div part="subtitles">
                         <h2>${locale.subtitleMenuHeading}</h2>
-                        <theoplayer-track-radio-group track-type="subtitles" show-off></theoplayer-track-radio-group>
+                        <theoplayer-track-radio-group track-type="subtitles" show-off lang=${this.lang}></theoplayer-track-radio-group>
                     </div>
                 </div>
             </theoplayer-menu>
