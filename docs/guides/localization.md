@@ -19,12 +19,12 @@ A locale is a JavaScript object mapping translation IDs to translated messages.
 You can register a locale with the `addLocale` function:
 
 ```javascript title="French locale"
-import {addLocale} from "@theoplayer/web-ui";
+import { addLocale } from '@theoplayer/web-ui';
 
 addLocale('fr', {
     playAria: 'lire',
     pauseAria: 'pauser',
-    replayAria: 'revoir',
+    replayAria: 'revoir'
     // ...
 });
 ```
@@ -37,7 +37,7 @@ and returns the formatted translation.
 addLocale('fr', {
     // ...
     seekForwardAria: (offset) => `avancer de ${offset}`,
-    seekBackwardAria: (offset) => `reculer de ${offset}`,
+    seekBackwardAria: (offset) => `reculer de ${offset}`
     // ...
 });
 ```
@@ -53,8 +53,7 @@ The UI automatically selects the locale based on the `lang` attribute of the `<t
 The value of the `lang` attribute must exactly match the locale name as it was passed to `addLocale`.
 
 ```html title="Setting the language on the UI"
-<theoplayer-default-ui lang="fr" source='{"sources":{"src":"https://example.com/stream.m3u8"}}'>
-</theoplayer-default-ui>
+<theoplayer-default-ui lang="fr" source='{"sources":{"src":"https://example.com/stream.m3u8"}}'> </theoplayer-default-ui>
 ```
 
 You can also put the `lang` attribute on any parent element. For example, if the entire page is in French, you could put
@@ -62,9 +61,11 @@ the attribute on the `<html>` element:
 
 ```html title="Setting the language on the HTML document"
 <html lang="fr">
-<head><title>Ma page</title></head>
-<body>
-<theoplayer-default-ui source='{"sources":{"src":"https://example.com/stream.m3u8"}}'></theoplayer-default-ui>
-</body>
+    <head>
+        <title>Ma page</title>
+    </head>
+    <body>
+        <theoplayer-default-ui source='{"sources":{"src":"https://example.com/stream.m3u8"}}'></theoplayer-default-ui>
+    </body>
 </html>
 ```
