@@ -71,3 +71,26 @@ the attribute on the `<html>` element:
     </body>
 </html>
 ```
+
+## Remarks
+
+### Update translations when upgrading Open Video UI
+
+Newer versions of the Open Video UI for Web may add new messages that need to be translated.
+We follow [semantic versioning](https://semver.org/), so new messages can only be added in _major_ or _minor_ versions.
+
+When using custom translations in your app, we recommend pinning the `@theoplayer/web-ui` dependency
+in your app's `package.json` to a specific minor version using a tilde constraint (`~`).
+Avoid using a caret constraint (`^`), since this may cause upgrading past your currently selected minor version.
+
+```json title="package.json"
+{
+    "dependencies": {
+        "@theoplayer/web-ui": "~2.2.0"
+    }
+}
+```
+
+When you decide to upgrade Open Video UI to the latest version, make sure to also update your translations.
+Check the history for [`i18n/Locale.ts`](https://github.com/THEOplayer/web-ui/commits/main/src/i18n/Locale.ts)
+to see whether any messages were added or changed since the previous version.
