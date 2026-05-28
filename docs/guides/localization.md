@@ -4,6 +4,7 @@ title: Localization
 permalink: /guides/localization
 description: Localize your UI to support different languages.
 sidebar_position: 3
+sidebar_custom_props: { 'icon': '🌍' }
 ---
 
 The Open Video UI for Web can be localized to different languages,
