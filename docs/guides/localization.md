@@ -61,6 +61,7 @@ the attribute on the `<html>` element:
 
 ```html title="Setting the language on the HTML document"
 <!doctype html>
+<!-- highlight-next-line -->
 <html lang="fr">
     <head>
         <title>Ma page</title>
