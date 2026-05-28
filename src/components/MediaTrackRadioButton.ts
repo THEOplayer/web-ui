@@ -4,7 +4,7 @@ import { RadioButton } from './RadioButton';
 import type { MediaTrack } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
 import { stateReceiver } from './StateReceiverMixin';
-import { getLocale, type Locale } from '../i18n';
+import { defaultLocale, getLocale, type Locale } from '../i18n';
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
@@ -73,8 +73,8 @@ function formatMediaTrackLabel(locale: Locale, track: MediaTrack): string {
     let label = track.label;
     let languageCode = track.language;
     if (label) {
-        if (label === languageCode) {
-            // Ignore default label with just the language code.
+        if (label === languageCode || label === defaultLocale.formatLanguage(languageCode)) {
+            // Ignore default label with just the language code or non-localized language name.
         } else {
             return label;
         }
