@@ -110,6 +110,10 @@
                     poster: 'https://cdn.theoplayer.com/video/star_wars_episode_vii-the_force_awakens_official_comic-con_2015_reel_(2015)/poster.jpg'
                 }
             };
+            const languages = {
+                en: 'English',
+                nl: 'Nederlands (Dutch)'
+            };
 
             // A custom React component using THEOplayer.
             const MyTimeDisplay = () => {
@@ -119,6 +123,7 @@
 
             const App = () => {
                 const [sourceId, setSourceId] = React.useState('bigBuckBunny');
+                const [lang, setLang] = React.useState('en');
                 const source = sources[sourceId];
                 return (
                     <>
@@ -127,6 +132,7 @@
                             configuration={configuration}
                             source={source}
                             title={<span>{source.metadata.title}</span>}
+                            lang={lang}
                             bottomControlBar={<MyTimeDisplay />}
                         />
                         <div>
@@ -136,6 +142,18 @@
                                     {Object.entries(sources).map(([id, value]) => (
                                         <option key={id} value={id}>
                                             {value.metadata.title}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                        </div>
+                        <div>
+                            <label style={{ userSelect: 'none' }}>
+                                Language:{' '}
+                                <select value={lang} onChange={(e) => setLang(e.target.value)}>
+                                    {Object.entries(languages).map(([id, label]) => (
+                                        <option key={id} value={id}>
+                                            {label}
                                         </option>
                                     ))}
                                 </select>

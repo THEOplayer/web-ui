@@ -72,6 +72,15 @@
                 </select>
             </label>
         </div>
+        <div>
+            <label style="user-select: none">
+                Language:
+                <select id="language-select">
+                    <option value="en" selected>English</option>
+                    <option value="nl">Nederlands (Dutch)</option>
+                </select>
+            </label>
+        </div>
         <script>
             const ui = document.querySelector('theoplayer-default-ui');
             const sources = {
@@ -113,6 +122,9 @@
             ui.source = sources.bigBuckBunny;
             document.querySelector('#source-select').addEventListener('change', (e) => {
                 ui.source = sources[e.target.value];
+            });
+            document.querySelector('#language-select').addEventListener('change', (e) => {
+                ui.lang = e.target.value;
             });
         </script>
     </body>
