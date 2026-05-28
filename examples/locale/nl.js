@@ -29,6 +29,8 @@ addLocale('nl', {
     adCountdownText: (remainingDuration) => `Video wordt hervat in ${remainingDuration}`,
     adSkipButtonText: 'Overslaan',
     adSkipCountdownText: (remainingDuration) => `Overslaan in ${remainingDuration}`,
+    liveStreamLoading: 'Laden...',
+    liveStreamOffline: `De livestream is nog niet gestart`,
     closeMenuAria: 'menu sluiten',
     openLanguageMenuAria: 'taalmenu openen',
     languageMenuHeading: 'Taal',

@@ -39,6 +39,7 @@ import type {
     TimeRange,
     VolumeRange
 } from '../components';
+import type { THEOliveDefaultUI } from '../THEOliveDefaultUI';
 
 export interface Locale {
     /**
@@ -163,6 +164,14 @@ export interface Locale {
      * @param remainingDuration The remaining time until the ad can be skipped, after being formatted with {@link formatNarrowDuration}.
      */
     adSkipCountdownText(remainingDuration: string): string;
+    /**
+     * The announcement message on a {@link THEOliveDefaultUI} when the stream is loading.
+     */
+    liveStreamLoading: string;
+    /**
+     * The announcement message on a {@link THEOliveDefaultUI} when the stream is offline and hasn't started yet.
+     */
+    liveStreamOffline: string;
     /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link CloseMenuButton}.
      */
@@ -445,6 +454,8 @@ export const defaultLocale: Locale = {
     adCountdownText: (remainingDuration: string) => `Content will resume in ${remainingDuration}`,
     adSkipButtonText: 'Skip Ad',
     adSkipCountdownText: (remainingDuration: string) => `Skip in ${remainingDuration}`,
+    liveStreamLoading: 'Loading...',
+    liveStreamOffline: `The live stream hasn't started yet`,
     closeMenuAria: 'close menu',
     openLanguageMenuAria: 'open language menu',
     languageMenuHeading: 'Language',
