@@ -11,7 +11,7 @@ The Open Video UI for React can be localized to different languages,
 enabling you to reach audiences from different regions of the world.
 
 Localization works by [registering one or more locales](#register-a-locale)
-and then [selecting one of the registered locales using the `lang` property](#select-a-language).
+and then [selecting one of the registered locales using the `lang` prop](#select-a-language).
 
 ## Register a locale
 
@@ -47,9 +47,9 @@ in the API references for the complete list of translatable messages.
 
 ## Select a language
 
-The UI automatically selects the locale based on the `lang` attribute of the `<UIContainer>` (or `<DefaultUI>`) component.
+The UI automatically selects the locale based on the `lang` prop of the `<UIContainer>` (or `<DefaultUI>`) component.
 
-The value of the `lang` attribute must exactly match the locale name as it was passed to `addLocale`.
+The value of the `lang` prop must exactly match the locale name as it was passed to `addLocale`.
 
 ```jsx title="Setting the language on the UI"
 <DefaultUI lang="fr" source={{ sources: { src: 'https://example.com/stream.m3u8' } }} />
