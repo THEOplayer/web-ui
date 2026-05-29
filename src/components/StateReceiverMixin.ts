@@ -2,6 +2,7 @@ import { type Constructor, fromArrayLike, getChildren, isArray } from '../util/C
 import type { ChromelessPlayer, THEOplayerError, VideoQuality } from 'theoplayer/chromeless';
 import type { DeviceType } from '../util/DeviceType';
 import type { StreamType } from '../util/StreamType';
+import type { languageContext } from '../i18n';
 
 /** @internal */
 export const StateReceiverProps = 'theoplayerUiObservedProperties' as const;
@@ -16,6 +17,10 @@ export interface StateReceiverPropertyMap {
     targetVideoQualities: VideoQuality[] | undefined;
     error: THEOplayerError | undefined;
     previewTime: number;
+    /**
+     * @deprecated Use {@link languageContext} instead.
+     */
+    // TODO(major): Remove language property in state receivers in favor for language context.
     lang: string;
 }
 

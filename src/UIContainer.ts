@@ -264,6 +264,7 @@ export class UIContainer extends LitElement {
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
     set lang(value: string | null) {
         this._language = value ?? '';
+        // TODO(major): Remove language property in state receivers in favor for language context.
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('lang') >= 0) {
                 receiver.lang = this._language;
@@ -686,6 +687,7 @@ export class UIContainer extends LitElement {
             receiver.player = this._player;
         }
         if (receiverProps.indexOf('lang') >= 0) {
+            // TODO(major): Remove language property in state receivers in favor for language context.
             receiver.lang = this.lang;
         }
         if (receiverProps.indexOf('fullscreen') >= 0) {
