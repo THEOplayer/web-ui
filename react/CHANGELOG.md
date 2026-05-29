@@ -1,5 +1,15 @@
 # @theoplayer/react-ui
 
+## 2.2.0
+
+### ✨ Features
+
+- Added localization support. Use `addLocale()` to register a locale, and set the `lang` attribute on the UI to apply it.
+
+### 📦 Dependency Updates
+
+- See changes to [Open Video UI for Web v2.2.0](https://github.com/THEOplayer/web-ui/blob/%40theoplayer%2Fweb-ui%402.2.0/CHANGELOG.md)
+
 ## 2.1.3
 
 ### 📦 Dependency Updates
