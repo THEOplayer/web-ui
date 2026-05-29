@@ -84,7 +84,7 @@ addLocale('nl', {
     automaticQualityLabel: 'Automatisch',
     unknownQualityLabel: 'Onbekend',
     highQualityLabel: 'Hoge kwaliteit',
-    lowQualityLabel: 'Loge kwaliteit',
+    lowQualityLabel: 'Lage kwaliteit',
     errorHeading: 'Er is een fout opgetreden',
     openBadNetworkModeMenuAria: 'menu voor slecht netwerk openen',
     formatRemainingDuration: (duration) => `${duration} resterend`
