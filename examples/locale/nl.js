@@ -24,6 +24,7 @@ addLocale('nl', {
     chromecastHeading: 'Aan het afspelen op',
     chromecastDefaultReceiverName: 'Chromecast',
     timeOfTotalAria: (currentTime, totalDuration) => `${currentTime} van ${totalDuration}`,
+    playbackTimeAria: 'afspeeltijd',
     unknownTimeAria: 'video niet ingeladen, onbekende tijd',
     adText: 'Advertentie',
     adBreakText: (currentAd, totalAds) => `Advertentie ${currentAd} van ${totalAds}`,

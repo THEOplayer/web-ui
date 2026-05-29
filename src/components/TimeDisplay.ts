@@ -26,9 +26,6 @@ export class TimeDisplay extends LitElement {
         if (!this.hasAttribute('role')) {
             this.setAttribute('role', 'progressbar');
         }
-        if (this.ariaLabel == null) {
-            this.ariaLabel = 'playback time';
-        }
         if (!this.hasAttribute(Attribute.ARIA_LIVE)) {
             // Tell screen readers not to automatically read the time as it changes
             this.setAttribute(Attribute.ARIA_LIVE, 'off');
@@ -123,6 +120,7 @@ export class TimeDisplay extends LitElement {
         } else {
             ariaValueText = formatAsTimePhrase(locale, time, remaining);
         }
+        this.setAttribute('aria-label', locale.playbackTimeAria);
         this.setAttribute('aria-valuetext', ariaValueText);
 
         return html`<span>${text}</span>`;

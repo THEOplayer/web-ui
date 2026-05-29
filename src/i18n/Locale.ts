@@ -140,6 +140,10 @@ export interface Locale {
      */
     timeOfTotalAria(time: string, totalDuration: string): string;
     /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link TimeDisplay}.
+     */
+    playbackTimeAria: string;
+    /**
      * The {@link HTMLElement.ariaValueText | `aria-valuetext`} for a {@link TimeDisplay} and {@link TimeRange}
      * when it does not have a valid time to display.
      */
@@ -460,6 +464,7 @@ export const defaultLocale: Locale = {
     chromecastHeading: 'Playing on',
     chromecastDefaultReceiverName: 'Chromecast',
     timeOfTotalAria: (currentTime: string, totalDuration: string) => `${currentTime} of ${totalDuration}`,
+    playbackTimeAria: 'playback time',
     unknownTimeAria: 'video not loaded, unknown time',
     adText: 'Ad',
     adBreakText: (currentAd: number, totalAds: number) => `Ad ${currentAd} of ${totalAds}`,
