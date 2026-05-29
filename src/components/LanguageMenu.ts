@@ -6,6 +6,7 @@ import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer/chromeless';
 import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
+import { getLocale } from '../i18n';
 
 // Load components used in template
 import './TrackRadioGroup';
@@ -19,9 +20,12 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  * @slot `heading` - A slot for the menu's heading.
  */
 @customElement('theoplayer-language-menu')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class LanguageMenu extends MenuGroup {
     static styles = [...MenuGroup.styles, languageMenuCss];
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     private _player: ChromelessPlayer | undefined;
     private _audioTrackList: MediaTrackList | undefined;
@@ -66,26 +70,29 @@ export class LanguageMenu extends MenuGroup {
     };
 
     protected override render(): TemplateResult {
+        const locale = getLocale(this.lang);
+        // FIXME: UIContainer doesn't push `lang` through shadow DOM children?
         return html`
             <theoplayer-menu>
-                <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">Language</slot></span>
+                <span class="theoplayer-menu-heading" slot="heading"><slot name="heading">${locale.languageMenuHeading}</slot></span>
                 <theoplayer-settings-menu-button
                     class="theoplayer-menu-heading-button"
                     menu="subtitle-options-menu"
                     slot="heading"
+                    lang=${this.lang}
                 ></theoplayer-settings-menu-button>
                 <div part="content">
                     <div part="audio">
-                        <h2>Audio</h2>
-                        <theoplayer-track-radio-group track-type="audio"></theoplayer-track-radio-group>
+                        <h2>${locale.audioMenuHeading}</h2>
+                        <theoplayer-track-radio-group track-type="audio" lang=${this.lang}></theoplayer-track-radio-group>
                     </div>
                     <div part="subtitles">
-                        <h2>Subtitles</h2>
-                        <theoplayer-track-radio-group track-type="subtitles" show-off></theoplayer-track-radio-group>
+                        <h2>${locale.subtitleMenuHeading}</h2>
+                        <theoplayer-track-radio-group track-type="subtitles" show-off lang=${this.lang}></theoplayer-track-radio-group>
                     </div>
                 </div>
             </theoplayer-menu>
-            <theoplayer-text-track-style-menu id="subtitle-options-menu"></theoplayer-text-track-style-menu>
+            <theoplayer-text-track-style-menu id="subtitle-options-menu" lang=${this.lang}></theoplayer-text-track-style-menu>
         `;
     }
 }

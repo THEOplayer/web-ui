@@ -15,6 +15,7 @@ import type { StreamType } from '../util/StreamType';
 import { isLinearAd } from '../util/AdUtils';
 import type { ColorStops } from '../util/ColorStops';
 import { KeyCode } from '../util/KeyCode';
+import { getLocale } from '../i18n';
 
 // Load components used in template
 import './PreviewThumbnail';
@@ -23,7 +24,6 @@ import './PreviewTimeDisplay';
 const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 'seeked'] as const;
 const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'durationchange', 'readystatechange', 'error'] as const;
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'adskip', 'addad', 'updatead'] as const;
-const DEFAULT_MISSING_TIME_PHRASE = 'video not loaded, unknown time';
 
 /**
  * Width of an ad marker on the progress bar, in percent of the total bar width.
@@ -42,7 +42,7 @@ const AD_MARKER_WIDTH = 1;
  *   Defaults to `0 0 4px rgba(0, 0, 0, 0.75)`.
  */
 @customElement('theoplayer-time-range')
-@stateReceiver(['player', 'streamType', 'deviceType'])
+@stateReceiver(['player', 'streamType', 'deviceType', 'lang'])
 export class TimeRange extends Range {
     static override styles = [...Range.styles, timeRangeCss];
 
@@ -118,6 +118,9 @@ export class TimeRange extends Range {
         this._ads?.addEventListener(AD_EVENTS, this._onAdChange);
     }
 
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
     /**
      * The stream type, either "vod", "live" or "dvr".
      */
@@ -182,16 +185,17 @@ export class TimeRange extends Range {
     }
 
     protected override getAriaLabel(): string {
-        return 'seek';
+        return getLocale(this.lang).seekAria;
     }
 
     protected override getAriaValueText(): string {
-        const currentTimePhrase = formatAsTimePhrase(this.value);
-        const totalTimePhrase = formatAsTimePhrase(this.max);
+        const locale = getLocale(this.lang);
+        const currentTimePhrase = formatAsTimePhrase(locale, this.value);
+        const totalTimePhrase = formatAsTimePhrase(locale, this.max);
         if (currentTimePhrase && totalTimePhrase) {
-            return `${currentTimePhrase} of ${totalTimePhrase}`;
+            return locale.timeOfTotalAria(currentTimePhrase, totalTimePhrase);
         }
-        return DEFAULT_MISSING_TIME_PHRASE;
+        return locale.unknownTimeAria;
     }
 
     protected override handleInput(): void {

@@ -7,6 +7,7 @@ import css from './THEOliveDefaultUI.css';
 import type { ErrorEvent, UIPlayerConfiguration } from 'theoplayer/chromeless';
 import { DefaultUI } from './DefaultUI';
 import { Attribute } from './util/Attribute';
+import { getLocale } from './i18n';
 
 /**
  * `<theolive-default-ui>` - A default UI for THEOlive.
@@ -86,6 +87,7 @@ export class THEOliveDefaultUI extends DefaultUI {
     }
 
     protected override renderUiContent(): HTMLTemplateResult {
+        const locale = getLocale(this.lang);
         const loadingStyles = { display: this._announcementType === 'loading' ? '' : 'none' };
         const offlineStyles = { display: this._announcementType === 'offline' ? '' : 'none' };
         const announcementStyles = { display: this._announcementType === 'announcement' ? '' : 'none' };
@@ -93,10 +95,10 @@ export class THEOliveDefaultUI extends DefaultUI {
         const errorDisplayStyles = { display: this._hideErrorDisplay ? 'none' : '' };
         return html`
             <p id="loading-announcement" no-auto-hide slot="centered-chrome" style=${styleMap(loadingStyles)}>
-                <slot name="loading-announcement">Loading...</slot>
+                <slot name="loading-announcement">${locale.liveStreamLoading}</slot>
             </p>
             <p id="offline-announcement" no-auto-hide slot="centered-chrome" style=${styleMap(offlineStyles)}>
-                <slot name="offline-announcement">The live stream hasn't started yet</slot>
+                <slot name="offline-announcement">${locale.liveStreamOffline}</slot>
             </p>
             <p id="announcement" no-auto-hide slot="centered-chrome" style=${styleMap(announcementStyles)}>${this._announcementMessage}</p>
             <theoplayer-loading-indicator slot="centered-loading" no-auto-hide part="loading-indicator"></theoplayer-loading-indicator>

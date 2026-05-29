@@ -2,6 +2,8 @@
 layout: page
 title: Migrating to Open Video UI for React 2.x
 slug: /react/guides/migrating-to-v2
+sidebar_position: 10
+sidebar_custom_props: { 'icon': '⬆️' }
 ---
 
 This article will guide you through updating to Open Video UI for React version 2 (from version 1),

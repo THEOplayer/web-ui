@@ -1,16 +1,18 @@
-import { customElement } from 'lit/decorators.js';
+import { type PropertyValues } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { stateReceiver } from './StateReceiverMixin';
 import { CastButton } from './CastButton';
 import airPlayButtonHtml from './AirPlayButton.html';
 import airPlayButtonCss from './AirPlayButton.css';
+import { getLocale } from '../i18n';
 import { Attribute } from '../util/Attribute';
 
 /**
  * A button to start and stop casting using AirPlay.
  */
 @customElement('theoplayer-airplay-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class AirPlayButton extends CastButton {
     static styles = [...CastButton.styles, airPlayButtonCss];
 
@@ -30,16 +32,17 @@ export class AirPlayButton extends CastButton {
         this.castApi = player?.cast?.airplay;
     }
 
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (AirPlayButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            this._updateAriaLabel();
-        }
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
     }
 
     private _updateAriaLabel(): void {
-        const label = this.castState === 'connecting' || this.castState === 'connected' ? 'stop playing on AirPlay' : 'start playing on AirPlay';
-        this.setAttribute(Attribute.ARIA_LABEL, label);
+        const locale = getLocale(this.lang);
+        this.ariaLabel = this.castState === 'connecting' || this.castState === 'connected' ? locale.airplayConnectedAria : locale.airplayAria;
     }
 
     protected override render() {

@@ -47,4 +47,5 @@ export * from './PreviewThumbnail';
 export * from './LiveButton';
 export { SlotContainer } from './SlotContainer';
 export * from './ads/index';
+export * from './theolive/quality/index';
 export { type StateReceiverElement, type StateReceiverPropertyMap, StateReceiverMixin, stateReceiver } from './StateReceiverMixin';

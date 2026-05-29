@@ -1,4 +1,4 @@
-import { html, type HTMLTemplateResult } from 'lit';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { Button } from './Button';
@@ -10,12 +10,13 @@ import { createCustomEvent } from '../util/EventUtils';
 import { ENTER_FULLSCREEN_EVENT, type EnterFullscreenEvent } from '../events/EnterFullscreenEvent';
 import { EXIT_FULLSCREEN_EVENT, type ExitFullscreenEvent } from '../events/ExitFullscreenEvent';
 import { Attribute } from '../util/Attribute';
+import { getLocale } from '../i18n';
 
 /**
  * A button that toggles fullscreen.
  */
 @customElement('theoplayer-fullscreen-button')
-@stateReceiver(['fullscreen'])
+@stateReceiver(['fullscreen', 'lang'])
 export class FullscreenButton extends Button {
     static styles = [...Button.styles, fullscreenButtonCss];
 
@@ -29,6 +30,9 @@ export class FullscreenButton extends Button {
      */
     @property({ reflect: true, type: Boolean, attribute: Attribute.FULLSCREEN })
     accessor fullscreen: boolean = false;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     protected override handleClick(): void {
         if (!this.fullscreen) {
@@ -46,16 +50,14 @@ export class FullscreenButton extends Button {
         }
     }
 
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (FullscreenButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            this._updateAriaLabel();
-        }
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
     }
 
     private _updateAriaLabel(): void {
-        const label = this.fullscreen ? 'exit fullscreen' : 'enter fullscreen';
-        this.setAttribute(Attribute.ARIA_LABEL, label);
+        const locale = getLocale(this.lang);
+        this.ariaLabel = this.fullscreen ? locale.fullscreenExitAria : locale.fullscreenAria;
     }
 
     protected override render(): HTMLTemplateResult {

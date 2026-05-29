@@ -3,6 +3,7 @@ layout: page
 title: Migrating to Open Video UI for Web 2.x
 permalink: /guides/migrating-to-v2
 sidebar_position: 10
+sidebar_custom_props: { 'icon': '⬆️' }
 ---
 
 This article will guide you through updating to Open Video UI for Web version 2 (from version 1),

@@ -3,6 +3,9 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { RadioButton } from './RadioButton';
 import type { MediaTrack, VideoQuality } from 'theoplayer/chromeless';
 import { formatQualityLabel } from '../util/TrackUtils';
+import { getLocale } from '../i18n';
+import { stateReceiver } from './StateReceiverMixin';
+import { Attribute } from '../util/Attribute';
 
 const TRACK_EVENTS = ['activequalitychanged', 'targetqualitychanged'] as const;
 const QUALITY_EVENTS = ['update'] as const;
@@ -12,12 +15,15 @@ const QUALITY_EVENTS = ['update'] as const;
  * and switches the video track's {@link theoplayer!MediaTrack.targetQuality | target quality} to that quality when clicked.
  */
 @customElement('theoplayer-quality-radio-button')
+@stateReceiver(['lang'])
 export class QualityRadioButton extends RadioButton {
     private _track: MediaTrack | undefined = undefined;
-    private _quality: VideoQuality | undefined = undefined;
 
     @state()
-    private accessor _qualityLabel = '';
+    private accessor _quality: VideoQuality | undefined = undefined;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     /**
      * The video track containing the quality being controlled.
@@ -83,7 +89,7 @@ export class QualityRadioButton extends RadioButton {
     };
 
     private readonly _updateFromQuality = () => {
-        this._qualityLabel = formatQualityLabel(this._quality) ?? 'Automatic';
+        this.requestUpdate();
     };
 
     protected override handleChange(): void {
@@ -97,7 +103,10 @@ export class QualityRadioButton extends RadioButton {
     }
 
     protected override render(): HTMLTemplateResult {
-        return html`<slot>${this._qualityLabel}</slot>`;
+        const locale = getLocale(this.lang);
+        const label =
+            this._quality === undefined ? locale.automaticQualityLabel : (formatQualityLabel(locale, this._quality) ?? locale.unknownQualityLabel);
+        return html`<slot>${label}</slot>`;
     }
 }
 

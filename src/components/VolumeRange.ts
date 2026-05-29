@@ -2,17 +2,15 @@ import { Range } from './Range';
 import { customElement, property } from 'lit/decorators.js';
 import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
-
-function formatAsPercentString(value: number, max: number) {
-    return `${Math.round((value / max) * 100)}%`;
-}
+import { Attribute } from '../util/Attribute';
+import { getLocale } from '../i18n';
 
 /**
  * A volume slider, showing the current audio volume of the player,
  * and which changes the volume when clicked or dragged.
  */
 @customElement('theoplayer-volume-range')
-@stateReceiver(['player', 'deviceType'])
+@stateReceiver(['player', 'deviceType', 'lang'])
 export class VolumeRange extends Range {
     private _player: ChromelessPlayer | undefined;
 
@@ -30,6 +28,9 @@ export class VolumeRange extends Range {
             this.max = 1;
         }
     }
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
@@ -58,11 +59,11 @@ export class VolumeRange extends Range {
     };
 
     protected override getAriaLabel(): string {
-        return 'volume';
+        return getLocale(this.lang).volumeAria;
     }
 
     protected override getAriaValueText(): string {
-        return formatAsPercentString(this.value, this.max);
+        return getLocale(this.lang).formatPercentage(this.value / this.max);
     }
 
     protected override handleInput(): void {

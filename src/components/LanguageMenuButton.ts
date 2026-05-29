@@ -1,4 +1,4 @@
-import { html, type HTMLTemplateResult } from 'lit';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { MenuButton } from './MenuButton';
@@ -8,6 +8,7 @@ import type { ChromelessPlayer, MediaTrackList, TextTracksList } from 'theoplaye
 import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
+import { getLocale } from '../i18n';
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
@@ -17,19 +18,11 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  * When there are no alternative audio languages or subtitles, this button automatically hides itself.
  */
 @customElement('theoplayer-language-menu-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class LanguageMenuButton extends MenuButton {
     private _player: ChromelessPlayer | undefined;
     private _audioTrackList: MediaTrackList | undefined;
     private _textTrackList: TextTracksList | undefined;
-
-    override connectedCallback() {
-        super.connectedCallback();
-
-        if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
-            this.setAttribute(Attribute.ARIA_LABEL, 'open language menu');
-        }
-    }
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
@@ -50,11 +43,24 @@ export class LanguageMenuButton extends MenuButton {
         this._textTrackList?.addEventListener(TRACK_EVENTS, this._updateTracks);
     }
 
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
     private readonly _updateTracks = (): void => {
         const hasTracks =
             this._player !== undefined && (this._player.audioTracks.length >= 2 || this._player.textTracks.some(isNonForcedSubtitleTrack));
         toggleAttribute(this, Attribute.HIDDEN, !hasTracks);
     };
+
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
+    }
+
+    private _updateAriaLabel(): void {
+        const locale = getLocale(this.lang);
+        this.ariaLabel = locale.openLanguageMenuAria;
+    }
 
     protected override render(): HTMLTemplateResult {
         return html`<span part="icon"><slot>${unsafeSVG(languageIcon)}</slot></span>`;

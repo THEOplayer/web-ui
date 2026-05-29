@@ -6,6 +6,8 @@ import { stateReceiver } from '../StateReceiverMixin';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
+import { getLocale } from '../../i18n';
+import { Attribute } from '../../util/Attribute';
 
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'adskip', 'addad', 'updatead'] as const;
 
@@ -19,7 +21,7 @@ const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak
  * @cssproperty `--theoplayer-ad-display-text-color` - The text color of the ad display. Defaults to `#000`.
  */
 @customElement('theoplayer-ad-display')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class AdDisplay extends LitElement {
     static styles = [textDisplayCss, adDisplayCss];
 
@@ -27,7 +29,13 @@ export class AdDisplay extends LitElement {
     private _ads: Ads | undefined;
 
     @state()
-    private accessor _text: string = '';
+    private accessor _currentAd: number = 0;
+
+    @state()
+    private accessor _totalAds: number = 0;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     connectedCallback(): void {
         super.connectedCallback();
@@ -54,28 +62,31 @@ export class AdDisplay extends LitElement {
         const ads = this._player?.ads;
         const linearAds = (ads?.currentAdBreak?.ads ?? []).filter(isLinearAd);
         if (ads === undefined || !ads.playing || linearAds.length === 0) {
-            this._text = '';
+            this._currentAd = 0;
+            this._totalAds = 0;
             this.style.display = 'none';
             return;
         }
+        let currentAd = 0;
         if (linearAds.length > 1) {
             const currentAds = this._player!.ads!.currentAds || [];
             const currentLinearAd = arrayFind(currentAds, isLinearAd);
             if (currentLinearAd) {
                 const currentAdIndex = linearAds.indexOf(currentLinearAd);
                 if (currentAdIndex >= 0) {
-                    this._text = `Ad ${currentAdIndex + 1} of ${linearAds.length}`;
-                    this.style.display = '';
-                    return;
+                    currentAd = currentAdIndex + 1;
                 }
             }
         }
-        this._text = 'Ad';
+        this._currentAd = currentAd;
+        this._totalAds = linearAds.length;
         this.style.display = '';
     };
 
     protected override render(): HTMLTemplateResult {
-        return html`<span>${this._text}</span>`;
+        const locale = getLocale(this.lang);
+        const text = this._totalAds > 1 ? locale.adBreakText(this._currentAd, this._totalAds) : locale.adText;
+        return html`<span>${text}</span>`;
     }
 }
 

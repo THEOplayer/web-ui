@@ -1,11 +1,13 @@
-import { html, type HTMLTemplateResult } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { Button } from './Button';
 import backIcon from '../icons/back.svg';
 import { createCustomEvent } from '../util/EventUtils';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
+import { getLocale } from '../i18n';
 import { Attribute } from '../util/Attribute';
+import { stateReceiver } from './StateReceiverMixin';
 
 /**
  * A button that closes its parent menu.
@@ -13,21 +15,27 @@ import { Attribute } from '../util/Attribute';
  * This button must be placed inside a {@link Menu | `<theoplayer-menu>`}.
  */
 @customElement('theoplayer-menu-close-button')
+@stateReceiver(['lang'])
 export class CloseMenuButton extends Button {
-    override connectedCallback() {
-        super.connectedCallback();
-
-        if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
-            this.setAttribute(Attribute.ARIA_LABEL, 'close menu');
-        }
-    }
-
     protected override handleClick() {
         const event: CloseMenuEvent = createCustomEvent(CLOSE_MENU_EVENT, {
             bubbles: true,
             composed: true
         });
         this.dispatchEvent(event);
+    }
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
+    }
+
+    private _updateAriaLabel(): void {
+        const locale = getLocale(this.lang);
+        this.ariaLabel = locale.closeMenuAria;
     }
 
     protected override render(): HTMLTemplateResult {

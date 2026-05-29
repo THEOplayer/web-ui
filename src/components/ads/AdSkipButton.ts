@@ -10,6 +10,8 @@ import { Attribute } from '../../util/Attribute';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
+import { getLocale } from '../../i18n';
+import { toDuration } from '../../util/TimeUtils';
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
@@ -32,7 +34,7 @@ const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as cons
  * @cssproperty `--theoplayer-ad-skip-icon-height` - The height of the skip button icon. Defaults to `--theoplayer-control-height`.
  */
 @customElement('theoplayer-ad-skip-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class AdSkipButton extends Button {
     static styles = [...Button.styles, adSkipButtonCss];
 
@@ -44,6 +46,9 @@ export class AdSkipButton extends Button {
 
     @state()
     private accessor _timeToSkip: number = 0;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     override connectedCallback(): void {
         super.connectedCallback();
@@ -123,6 +128,7 @@ export class AdSkipButton extends Button {
     };
 
     protected override render(): HTMLTemplateResult {
+        const locale = getLocale(this.lang);
         const countdownStyles = {
             visibility: this._showCountdown ? 'visible' : 'hidden'
         };
@@ -130,9 +136,10 @@ export class AdSkipButton extends Button {
             visibility: this._showCountdown ? 'hidden' : 'visible',
             pointerEvents: this._showCountdown ? 'none' : ''
         };
-        return html`<span part="countdown" style=${styleMap(countdownStyles)}>Skip in ${this._timeToSkip} seconds</span>
+        const timeToSkip = locale.formatNarrowDuration(toDuration(this._timeToSkip));
+        return html`<span part="countdown" style=${styleMap(countdownStyles)}>${locale.adSkipCountdownText(timeToSkip)}</span>
             <span part="skip" style=${styleMap(skipStyles)}>
-                <span part="skip-text"><slot name="skip-text">Skip Ad</slot></span>
+                <span part="skip-text"><slot name="skip-text">${locale.adSkipButtonText}</slot></span>
                 <span part="skip-icon"><slot name="skip-icon">${unsafeSVG(skipNextIcon)}</slot></span>
             </span>`;
     }

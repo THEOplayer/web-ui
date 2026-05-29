@@ -1,4 +1,5 @@
 import type { MediaTrack, Quality, TextTrack, VideoQuality } from 'theoplayer/chromeless';
+import type { Locale } from '../i18n';
 
 export function isSubtitleTrack(track: TextTrack): boolean {
     return track.kind === 'subtitles' || track.kind === 'captions';
@@ -16,7 +17,7 @@ export function getTargetQualities(videoTrack: MediaTrack | undefined): Quality[
     return targetQualities;
 }
 
-export function formatQualityLabel(quality: VideoQuality | undefined): string | undefined {
+export function formatQualityLabel(locale: Locale, quality: VideoQuality | undefined): string | undefined {
     if (!quality) {
         return undefined;
     }
@@ -27,19 +28,7 @@ export function formatQualityLabel(quality: VideoQuality | undefined): string | 
         return `${quality.height}p`;
     }
     if (quality.bandwidth) {
-        return formatBandwidth(quality);
+        return locale.formatBandwidth(quality.bandwidth);
     }
     return undefined;
-}
-
-function formatBandwidth(quality: VideoQuality): string | undefined {
-    if (!quality.bandwidth) {
-        return undefined;
-    } else if (quality.bandwidth > 1e7) {
-        return `${(quality.bandwidth / 1e6).toFixed(0)}Mbps`;
-    } else if (quality.bandwidth > 1e6) {
-        return `${(quality.bandwidth / 1e6).toFixed(1)}Mbps`;
-    } else {
-        return `${(quality.bandwidth / 1e3).toFixed(0)}kbps`;
-    }
 }

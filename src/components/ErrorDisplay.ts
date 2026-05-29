@@ -6,6 +6,7 @@ import errorIcon from '../icons/error.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import type { THEOplayerError } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
+import { getLocale } from '../i18n';
 
 /**
  * A screen that shows the details of a fatal player error.
@@ -22,7 +23,7 @@ import { Attribute } from '../util/Attribute';
  * @cssproperty `--theoplayer-error-max-width` - The maximum width of the error display. Defaults to `80%`.
  */
 @customElement('theoplayer-error-display')
-@stateReceiver(['error', 'fullscreen'])
+@stateReceiver(['error', 'fullscreen', 'lang'])
 export class ErrorDisplay extends LitElement {
     static override styles = [errorDisplayCss];
     static override shadowRootOptions: ShadowRootInit = {
@@ -42,10 +43,14 @@ export class ErrorDisplay extends LitElement {
     @property({ reflect: true, type: Boolean, attribute: Attribute.FULLSCREEN })
     accessor fullscreen: boolean = false;
 
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
     protected override render() {
+        const locale = getLocale(this.lang);
         return html`<div part="icon"><slot name="icon">${unsafeSVG(errorIcon)}</slot></div>
             <div part="text">
-                <h1 part="heading"><slot name="heading">An error occurred</slot></h1>
+                <h1 part="heading"><slot name="heading">${locale.errorHeading}</slot></h1>
                 <p part="message"><slot name="message">${this.error?.message ?? ''}</slot></p>
             </div>
             <div part="fullscreen-controls">

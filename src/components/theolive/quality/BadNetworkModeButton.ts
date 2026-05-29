@@ -1,4 +1,4 @@
-import { html, type HTMLTemplateResult } from 'lit';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
@@ -8,15 +8,17 @@ import settingsIcon from '../../../icons/settings.svg';
 import warningIcon from '../../../icons/warning.svg';
 import { stateReceiver } from '../../StateReceiverMixin';
 import { MenuButton } from '../../MenuButton';
+import type { BadNetworkModeMenu } from './BadNetworkModeMenu';
+import { getLocale } from '../../../i18n';
 import { Attribute } from '../../../util/Attribute';
 
 /**
- * A menu button that opens a settings menu.
+ * A menu button that opens a {@link BadNetworkModeMenu}.
  *
- * @attribute `menu` - The ID of the settings menu.
+ * @attribute `menu` - The ID of the bad network menu.
  */
 @customElement('theolive-bad-network-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class BadNetworkModeButton extends MenuButton {
     static styles = [...MenuButton.styles, badNetworkModeButtonCss];
 
@@ -26,14 +28,6 @@ export class BadNetworkModeButton extends MenuButton {
     @state()
     private accessor _inBadNetworkMode = false;
 
-    override connectedCallback() {
-        super.connectedCallback();
-
-        if (!this.hasAttribute(Attribute.ARIA_LABEL)) {
-            this.setAttribute(Attribute.ARIA_LABEL, 'open settings menu');
-        }
-    }
-
     private readonly handleEnterBadNetworkMode_ = () => {
         this._inBadNetworkMode = true;
     };
@@ -41,6 +35,9 @@ export class BadNetworkModeButton extends MenuButton {
     private readonly handleExitBadNetworkMode_ = () => {
         this._inBadNetworkMode = false;
     };
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     get player(): TheoPlayer | undefined {
         return this._player;
@@ -61,6 +58,16 @@ export class BadNetworkModeButton extends MenuButton {
             this._theoLive.addEventListener('enterbadnetworkmode', this.handleEnterBadNetworkMode_);
             this._theoLive.addEventListener('exitbadnetworkmode', this.handleExitBadNetworkMode_);
         }
+    }
+
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
+    }
+
+    private _updateAriaLabel(): void {
+        const locale = getLocale(this.lang);
+        this.ariaLabel = locale.openBadNetworkModeMenuAria;
     }
 
     protected override render(): HTMLTemplateResult {

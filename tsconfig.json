@@ -12,7 +12,7 @@
     "useDefineForClassFields": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "lib": ["dom", "es2015", "es2020.intl"],
+    "lib": ["dom", "es2015", "es2020.intl", "es2023.intl", "es2025.intl", "esnext.temporal"],
     "types": []
   },
   "include": ["src/**/*"]

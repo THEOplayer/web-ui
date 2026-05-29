@@ -1,10 +1,12 @@
+import { type PropertyValues } from 'lit';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { stateReceiver } from './StateReceiverMixin';
 import { CastButton } from './CastButton';
 import chromecastButtonHtml from './ChromecastButton.html';
 import chromecastButtonCss from './ChromecastButton.css';
+import { customElement, property } from 'lit/decorators.js';
+import { getLocale } from '../i18n';
 import { Attribute } from '../util/Attribute';
-import { customElement } from 'lit/decorators.js';
 
 let chromecastButtonId = 0;
 
@@ -12,7 +14,7 @@ let chromecastButtonId = 0;
  * A button to start and stop casting using Chromecast.
  */
 @customElement('theoplayer-chromecast-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class ChromecastButton extends CastButton {
     static styles = [...CastButton.styles, chromecastButtonCss];
 
@@ -37,17 +39,17 @@ export class ChromecastButton extends CastButton {
         this.castApi = player?.cast?.chromecast;
     }
 
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (ChromecastButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            this._updateAriaLabel();
-        }
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
     }
 
     private _updateAriaLabel(): void {
-        const label =
-            this.castState === 'connecting' || this.castState === 'connected' ? 'stop casting to Chromecast' : 'start casting to Chromecast';
-        this.setAttribute(Attribute.ARIA_LABEL, label);
+        const locale = getLocale(this.lang);
+        this.ariaLabel = this.castState === 'connecting' || this.castState === 'connected' ? locale.chromecastConnectedAria : locale.chromecastAria;
     }
 
     protected override render() {

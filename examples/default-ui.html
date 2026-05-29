@@ -46,6 +46,8 @@
         <script async src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js" crossorigin="anonymous"></script>
         <script type="module">
             import * as THEOplayerUI from '@theoplayer/web-ui';
+            import './locale/nl.js';
+
             self.THEOplayerUI = THEOplayerUI;
         </script>
         <!-- Legacy browsers -->
@@ -67,6 +69,15 @@
                     <option value="bigBuckBunny" selected>Big Buck Bunny</option>
                     <option value="elephantsDream">Elephant's Dream</option>
                     <option value="starWarsTrailer">Star Wars Episode VII Trailer</option>
+                </select>
+            </label>
+        </div>
+        <div>
+            <label style="user-select: none">
+                Language:
+                <select id="language-select">
+                    <option value="en" selected>English</option>
+                    <option value="nl">Nederlands (Dutch)</option>
                 </select>
             </label>
         </div>
@@ -111,6 +122,9 @@
             ui.source = sources.bigBuckBunny;
             document.querySelector('#source-select').addEventListener('change', (e) => {
                 ui.source = sources[e.target.value];
+            });
+            document.querySelector('#language-select').addEventListener('change', (e) => {
+                ui.lang = e.target.value;
             });
         </script>
     </body>

@@ -3,6 +3,9 @@ import { customElement, property } from 'lit/decorators.js';
 import { RadioButton } from './RadioButton';
 import type { TextTracksList } from 'theoplayer/chromeless';
 import { isNonForcedSubtitleTrack, isSubtitleTrack } from '../util/TrackUtils';
+import { getLocale } from '../i18n';
+import { stateReceiver } from './StateReceiverMixin';
+import { Attribute } from '../util/Attribute';
 
 const TRACK_EVENTS = ['change'] as const;
 
@@ -10,7 +13,11 @@ const TRACK_EVENTS = ['change'] as const;
  * A radio button that disables the active subtitle track when clicked.
  */
 @customElement('theoplayer-text-track-off-radio-button')
+@stateReceiver(['lang'])
 export class TextTrackOffRadioButton extends RadioButton {
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
     private _trackList: TextTracksList | undefined = undefined;
 
     get trackList(): TextTracksList | undefined {
@@ -48,7 +55,8 @@ export class TextTrackOffRadioButton extends RadioButton {
     }
 
     protected override render(): HTMLTemplateResult {
-        return html`<slot>Off</slot>`;
+        const locale = getLocale(this.lang);
+        return html`<slot>${locale.subtitleOff}</slot>`;
     }
 }
 

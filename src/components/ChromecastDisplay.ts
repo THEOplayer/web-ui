@@ -1,11 +1,12 @@
 import { html, type HTMLTemplateResult, LitElement } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import chromecastDisplayCss from './ChromecastDisplay.css';
 import chromecastIcon from '../icons/chromecast-48px.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import type { Chromecast, ChromelessPlayer } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
+import { getLocale } from '../i18n';
 
 const CAST_EVENTS = ['statechange'] as const;
 
@@ -24,15 +25,18 @@ const CAST_EVENTS = ['statechange'] as const;
  * @cssproperty `--theoplayer-chromecast-display-receiver-margin` - The margin around the receiver name text. Defaults to `0`.
  */
 @customElement('theoplayer-chromecast-display')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class ChromecastDisplay extends LitElement {
     static styles = [chromecastDisplayCss];
 
     private _player: ChromelessPlayer | undefined;
     private _castApi: Chromecast | undefined;
 
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
+
     @state()
-    private accessor _receiverName: string = 'Chromecast';
+    private accessor _receiverName: string = '';
 
     connectedCallback(): void {
         super.connectedCallback();
@@ -66,16 +70,17 @@ export class ChromecastDisplay extends LitElement {
         if (chromecast === undefined || chromecast.state !== 'connected') {
             this.setAttribute(Attribute.HIDDEN, '');
         } else {
-            this._receiverName = chromecast.receiverName || 'Chromecast';
+            this._receiverName = chromecast.receiverName || '';
             this.removeAttribute(Attribute.HIDDEN);
         }
     };
 
     protected override render(): HTMLTemplateResult {
+        const locale = getLocale(this.lang);
         return html`<div part="icon"><slot name="icon">${unsafeSVG(chromecastIcon)}</slot></div>
             <div part="text">
-                <p part="heading"><slot name="heading">Playing on</slot></p>
-                <p part="receiver">${this._receiverName}</p>
+                <p part="heading"><slot name="heading">${locale.chromecastHeading}</slot></p>
+                <p part="receiver">${this._receiverName || locale.chromecastDefaultReceiverName}</p>
             </div>`;
     }
 }

@@ -1,4 +1,4 @@
-import { html, type HTMLTemplateResult } from 'lit';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { Button } from './Button';
@@ -9,6 +9,7 @@ import pauseIcon from '../icons/pause.svg';
 import replayIcon from '../icons/replay.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
+import { getLocale } from '../i18n';
 
 const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied', 'sourcechange'] as const;
 
@@ -19,7 +20,7 @@ const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied', 'sourcechange'] 
  *   Overrides `--theoplayer-icon-color` for this button. Defaults to `unset`.
  */
 @customElement('theoplayer-play-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class PlayButton extends Button {
     static styles = [...Button.styles, playButtonCss];
 
@@ -46,6 +47,9 @@ export class PlayButton extends Button {
      */
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.ENDED })
     accessor ended: boolean = false;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
@@ -107,16 +111,14 @@ export class PlayButton extends Button {
         }
     }
 
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (PlayButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            this._updateAriaLabel();
-        }
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
     }
 
     private _updateAriaLabel(): void {
-        const label = this.ended ? 'replay' : this.paused ? 'play' : 'pause';
-        this.setAttribute(Attribute.ARIA_LABEL, label);
+        const locale = getLocale(this.lang);
+        this.ariaLabel = this.ended ? locale.replayAria : this.paused ? locale.playAria : locale.pauseAria;
     }
 
     protected override render(): HTMLTemplateResult {

@@ -100,19 +100,6 @@ export const stringStartsWith: (string: string, search: string) => boolean =
         ? (string, search) => string.startsWith(search)
         : (string, search) => string.substring(0, search.length) === search;
 
-export const localizeLanguageName: (languageCode: string) => string | undefined =
-    typeof Intl !== 'undefined' && Intl.DisplayNames
-        ? (languageCode) => {
-              const displayNames = new Intl.DisplayNames([languageCode, 'en'], { type: 'language', fallback: 'none' });
-              const localName = displayNames.of(languageCode);
-              if (localName) {
-                  const locale = displayNames.resolvedOptions().locale;
-                  const [first] = localName;
-                  return first.toLocaleUpperCase(locale) + localName.slice(first.length);
-              }
-          }
-        : (_languageCode) => undefined;
-
 export function setTextContent(el: HTMLElement, text: string): void {
     if (typeof el.textContent === 'undefined') {
         el.innerText = text;
@@ -258,4 +245,13 @@ export function upgradeCustomElementIfNeeded(element: Element): Promise<unknown>
         }
     }
     return undefined;
+}
+
+export function closestRecursive<E extends Element>(element: Element, selector: string): E | null {
+    if (!element.closest) return null;
+    const closest = element.closest<E>(selector);
+    if (closest) return closest;
+    const host = (element.getRootNode?.() as ShadowRoot | null)?.host;
+    if (host) return closestRecursive<E>(host, selector);
+    return null;
 }

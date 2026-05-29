@@ -1,11 +1,12 @@
 import { html, type HTMLTemplateResult, LitElement } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import verticalRadioGroupCss from './VerticalRadioGroup.css';
 import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, Quality, VideoQuality } from 'theoplayer/chromeless';
 import { arrayFind } from '../util/CommonUtils';
 import { createEvent } from '../util/EventUtils';
 import { repeat } from 'lit/directives/repeat.js';
+import { Attribute } from '../util/Attribute';
 
 const TRACK_EVENTS = ['addtrack', 'removetrack', 'change'] as const;
 
@@ -14,7 +15,7 @@ const TRACK_EVENTS = ['addtrack', 'removetrack', 'change'] as const;
  * from which the user can choose a desired target quality.
  */
 @customElement('theoplayer-quality-radio-group')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class QualityRadioGroup extends LitElement {
     static override styles = [verticalRadioGroupCss];
 
@@ -23,6 +24,9 @@ export class QualityRadioGroup extends LitElement {
 
     @state()
     private accessor _track: MediaTrack | undefined;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     protected override firstUpdated(): void {
         this._updateTrack();
@@ -63,9 +67,10 @@ export class QualityRadioGroup extends LitElement {
 
     protected override render(): HTMLTemplateResult {
         const qualities: VideoQuality[] = this._track ? (this._track.qualities as Quality[] as VideoQuality[]) : [];
+        // FIXME: UIContainer doesn't push `lang` through shadow DOM children?
         return html`
             <theoplayer-radio-group @change=${this._onChange}>
-                <theoplayer-quality-radio-button .track=${this._track} .quality=${undefined}></theoplayer-quality-radio-button>
+                <theoplayer-quality-radio-button lang=${this.lang} .track=${this._track} .quality=${undefined}></theoplayer-quality-radio-button>
                 ${
                     /* If there is only one available quality, *only* show the "Automatic" option (without the single quality). */
                     qualities.length !== 1 &&
@@ -73,7 +78,11 @@ export class QualityRadioGroup extends LitElement {
                         qualities,
                         (quality) => quality.uid,
                         (quality) =>
-                            html`<theoplayer-quality-radio-button .track=${this._track} .quality=${quality}></theoplayer-quality-radio-button>`
+                            html`<theoplayer-quality-radio-button
+                                lang=${this.lang}
+                                .track=${this._track}
+                                .quality=${quality}
+                            ></theoplayer-quality-radio-button>`
                     )
                 }
             </theoplayer-radio-group>

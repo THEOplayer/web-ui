@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { Button } from './Button';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
@@ -7,6 +7,8 @@ import seekForwardIcon from '../icons/seek-forward.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import { getLocale } from '../i18n';
+import { toDuration } from '../util/TimeUtils';
 
 const DEFAULT_SEEK_OFFSET = 10;
 
@@ -16,22 +18,20 @@ const DEFAULT_SEEK_OFFSET = 10;
  * @cssproperty `--theoplayer-seek-button-font-size` - The font size of the offset number rendered inside the seek icon. Defaults to `calc(0.3 * --theoplayer-button-icon-height)`.
  */
 @customElement('theoplayer-seek-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class SeekButton extends Button {
     static styles = [...Button.styles, seekButtonCss];
 
     private _player: ChromelessPlayer | undefined;
-
-    override connectedCallback() {
-        super.connectedCallback();
-        this._updateAriaLabel();
-    }
 
     /**
      * The offset (in seconds) by which to seek forward (if positive) or backward (if negative).
      */
     @property({ reflect: true, type: Number, attribute: Attribute.SEEK_OFFSET })
     accessor seekOffset: number = DEFAULT_SEEK_OFFSET;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
@@ -53,17 +53,16 @@ export class SeekButton extends Button {
         this._player.currentTime = Math.max(0, Math.min(duration, this._player.currentTime + this.seekOffset));
     }
 
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (SeekButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            this._updateAriaLabel();
-        }
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
     }
 
     private _updateAriaLabel(): void {
+        const locale = getLocale(this.lang);
         const seekOffset = this.seekOffset;
-        const label = seekOffset >= 0 ? `seek forward by ${seekOffset} seconds` : `seek backward by ${-seekOffset} seconds`;
-        this.setAttribute(Attribute.ARIA_LABEL, label);
+        const duration = locale.formatDuration(toDuration(Math.abs(seekOffset)));
+        this.ariaLabel = seekOffset >= 0 ? locale.seekForwardAria(duration) : locale.seekBackwardAria(duration);
     }
 
     protected override render() {

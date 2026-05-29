@@ -1,16 +1,21 @@
 import type { ChromelessPlayer, TheoLiveApi } from 'theoplayer/chromeless';
 import { stateReceiver } from '../../StateReceiverMixin';
 import { RadioButton } from '../../RadioButton';
+import { property } from 'lit/decorators.js';
+import { Attribute } from '../../../util/Attribute';
 
 /**
  * A radio button that shows the label of a given video quality, and switches the video track's
  * {@link theoplayer!MediaTrack.targetQuality | target quality} to that quality when clicked.
  */
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export abstract class AbstractQualitySelector extends RadioButton {
     private _player: ChromelessPlayer | undefined;
     private _theoLive: TheoLiveApi | undefined;
     protected _badNetworkMode: boolean = false;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {
         return this._player;

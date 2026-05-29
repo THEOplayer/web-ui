@@ -1,4 +1,4 @@
-import { html, type HTMLTemplateResult } from 'lit';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { Button } from './Button';
@@ -9,6 +9,7 @@ import lowIcon from '../icons/volume-low.svg';
 import highIcon from '../icons/volume-high.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
+import { getLocale } from '../i18n';
 
 export type VolumeLevel = 'off' | 'low' | 'high';
 
@@ -18,7 +19,7 @@ const PLAYER_EVENTS = ['volumechange'] as const;
  * A button that toggles whether audio is muted or not.
  */
 @customElement('theoplayer-mute-button')
-@stateReceiver(['player'])
+@stateReceiver(['player', 'lang'])
 export class MuteButton extends Button {
     static styles = [...Button.styles, muteButtonCss];
 
@@ -37,6 +38,9 @@ export class MuteButton extends Button {
      */
     @property({ reflect: true, state: true, type: String, attribute: Attribute.VOLUME_LEVEL })
     accessor volumeLevel: VolumeLevel = 'off';
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
@@ -80,16 +84,14 @@ export class MuteButton extends Button {
         }
     }
 
-    override attributeChangedCallback(attrName: string, oldValue: any, newValue: any) {
-        super.attributeChangedCallback(attrName, oldValue, newValue);
-        if (MuteButton.observedAttributes.indexOf(attrName as Attribute) >= 0) {
-            this._updateAriaLabel();
-        }
+    override willUpdate(changedProperties: PropertyValues) {
+        super.willUpdate(changedProperties);
+        this._updateAriaLabel();
     }
 
     private _updateAriaLabel(): void {
-        const label = this.volumeLevel === 'off' ? 'unmute' : 'mute';
-        this.setAttribute(Attribute.ARIA_LABEL, label);
+        const locale = getLocale(this.lang);
+        this.ariaLabel = this.volumeLevel === 'off' ? locale.unmuteAria : locale.muteAria;
     }
 
     protected override render(): HTMLTemplateResult {

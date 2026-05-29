@@ -1,8 +1,10 @@
 import { RadioButton } from './RadioButton';
 import type { TextTrack } from 'theoplayer/chromeless';
-import { localizeLanguageName } from '../util/CommonUtils';
 import { customElement, property, state } from 'lit/decorators.js';
 import { html, type HTMLTemplateResult } from 'lit';
+import { Attribute } from '../util/Attribute';
+import { stateReceiver } from './StateReceiverMixin';
+import { defaultLocale, getLocale, type Locale } from '../i18n';
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
@@ -10,11 +12,13 @@ const TRACK_EVENTS = ['change', 'update'] as const;
  * `<theoplayer-text-track-radio-button>` -A radio button that shows the label of a given text track, and switches to that track when clicked.
  */
 @customElement('theoplayer-text-track-radio-button')
+@stateReceiver(['lang'])
 export class TextTrackRadioButton extends RadioButton {
-    private _track: TextTrack | undefined = undefined;
-
     @state()
-    private accessor _trackLabel = '';
+    private accessor _track: TextTrack | undefined = undefined;
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    accessor lang: string = '';
 
     /**
      * The text track that is controlled by this radio button.
@@ -39,8 +43,8 @@ export class TextTrackRadioButton extends RadioButton {
     }
 
     private _updateFromTrack(): void {
-        this._trackLabel = this._track ? getTrackLabel(this._track) : '';
         this.checked = this._track ? this._track.mode === 'showing' : false;
+        this.requestUpdate();
     }
 
     private _updateTrack(): void {
@@ -58,30 +62,32 @@ export class TextTrackRadioButton extends RadioButton {
     }
 
     protected override render(): HTMLTemplateResult {
-        return html`<slot>${this._trackLabel}</slot>`;
+        const locale = getLocale(this.lang);
+        const label = this._track ? formatTextTrackLabel(locale, this._track) : '';
+        return html`<slot>${label}</slot>`;
     }
 }
 
-function getTrackLabel(track: TextTrack): string {
+function formatTextTrackLabel(locale: Locale, track: TextTrack): string {
     let label = track.label;
     let languageCode = track.language;
     if (label) {
-        if (label === languageCode) {
-            // Ignore default label with just the language code.
+        if (languageCode && (label === languageCode || label === defaultLocale.formatLanguage(languageCode))) {
+            // Ignore default label with just the language code or non-localized language name.
         } else if (track.type === 'cea608' && /^CC\d+$/.test(track.label)) {
             // Ignore default label with just the caption channel.
         } else {
             return label;
         }
     }
-    let localizedLanguageName = languageCode && localizeLanguageName(languageCode);
+    let localizedLanguageName = languageCode && locale.formatLanguage(languageCode);
     if (localizedLanguageName) {
         return localizedLanguageName;
     }
     if (track.type === 'cea608' && typeof track.captionChannel === 'number') {
         return `CC${track.captionChannel}`;
     }
-    return languageCode || label || '';
+    return label || languageCode || '';
 }
 
 declare global {

@@ -13,6 +13,7 @@ import type { StreamType } from './util/StreamType';
 import { USER_IDLE_CHANGE_EVENT } from './events/UserIdleChangeEvent';
 import { READY_EVENT } from './events/ReadyEvent';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
+import { closestRecursive } from './util/CommonUtils';
 import { createCustomEvent } from './util/EventUtils';
 
 /**
@@ -94,6 +95,7 @@ export class DefaultUI extends LitElement {
 
     private _configuration: UIPlayerConfiguration = {};
     private _source: SourceDescription | undefined = undefined;
+    private _language: string = '';
     private _userIdleTimeout: number | undefined = undefined;
     private _deviceType: DeviceType = 'desktop';
     private _dvrThreshold: number = DEFAULT_DVR_THRESHOLD;
@@ -182,6 +184,25 @@ export class DefaultUI extends LitElement {
      */
     @property({ reflect: true, type: Boolean, attribute: Attribute.FLUID })
     accessor fluid: boolean = false;
+
+    /**
+     * The language of this element.
+     *
+     * When set, this also updates the {@link Locale} of the UI if one is registered with {@link addLocale}.
+     *
+     * @see {@link HTMLElement.lang}
+     */
+    get lang(): string {
+        return this._uiRef.value?.lang ?? this._language;
+    }
+
+    @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    set lang(value: string | null) {
+        this._language = value ?? '';
+        if (this._uiRef.value) {
+            this._uiRef.value.lang = this._language;
+        }
+    }
 
     /**
      * Whether the player's audio is muted.
@@ -281,6 +302,9 @@ export class DefaultUI extends LitElement {
     connectedCallback(): void {
         super.connectedCallback();
 
+        if (!this.hasAttribute(Attribute.LANG)) {
+            this.lang = closestRecursive<HTMLElement>(this, '[lang]')?.lang ?? '';
+        }
         if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {
             this.deviceType = isMobile() ? 'mobile' : isTv() ? 'tv' : 'desktop';
         }
@@ -337,6 +361,7 @@ export class DefaultUI extends LitElement {
         return html`<theoplayer-ui
             ${ref(this._uiRef)}
             .configuration=${this.configuration}
+            .lang=${this.lang}
             .fluid=${this.fluid}
             .muted=${this.muted}
             .autoplay=${this.autoplay}
