@@ -3,8 +3,8 @@ import type { TextTrack } from 'theoplayer/chromeless';
 import { customElement, property, state } from 'lit/decorators.js';
 import { html, type HTMLTemplateResult } from 'lit';
 import { Attribute } from '../util/Attribute';
-import { stateReceiver } from './StateReceiverMixin';
-import { defaultLocale, getLocale, type Locale } from '../i18n';
+import { defaultLocale, getLocale, languageContext, type Locale } from '../i18n';
+import { consume } from '@lit/context';
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
@@ -12,12 +12,12 @@ const TRACK_EVENTS = ['change', 'update'] as const;
  * `<theoplayer-text-track-radio-button>` -A radio button that shows the label of a given text track, and switches to that track when clicked.
  */
 @customElement('theoplayer-text-track-radio-button')
-@stateReceiver(['lang'])
 export class TextTrackRadioButton extends RadioButton {
     @state()
     private accessor _track: TextTrack | undefined = undefined;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     /**

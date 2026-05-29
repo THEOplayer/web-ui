@@ -9,7 +9,8 @@ import lowIcon from '../icons/volume-low.svg';
 import highIcon from '../icons/volume-high.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 export type VolumeLevel = 'off' | 'low' | 'high';
 
@@ -19,7 +20,7 @@ const PLAYER_EVENTS = ['volumechange'] as const;
  * A button that toggles whether audio is muted or not.
  */
 @customElement('theoplayer-mute-button')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class MuteButton extends Button {
     static styles = [...Button.styles, muteButtonCss];
 
@@ -40,6 +41,7 @@ export class MuteButton extends Button {
     accessor volumeLevel: VolumeLevel = 'off';
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {

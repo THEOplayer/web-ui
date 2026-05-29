@@ -3,14 +3,15 @@ import { customElement, property } from 'lit/decorators.js';
 import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 /**
  * A volume slider, showing the current audio volume of the player,
  * and which changes the volume when clicked or dragged.
  */
 @customElement('theoplayer-volume-range')
-@stateReceiver(['player', 'deviceType', 'lang'])
+@stateReceiver(['player', 'deviceType'])
 export class VolumeRange extends Range {
     private _player: ChromelessPlayer | undefined;
 
@@ -30,6 +31,7 @@ export class VolumeRange extends Range {
     }
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {

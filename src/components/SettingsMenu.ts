@@ -2,8 +2,8 @@ import { html, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { MenuGroup } from './MenuGroup';
 import menuTableCss from './MenuTable.css';
-import { stateReceiver } from './StateReceiverMixin';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 import { Attribute } from '../util/Attribute';
 
 // Load components used in template
@@ -18,11 +18,11 @@ import './PlaybackRateMenu';
  * @slot `heading` - A slot for the menu's heading.
  */
 @customElement('theoplayer-settings-menu')
-@stateReceiver(['lang'])
 export class SettingsMenu extends MenuGroup {
     static styles = [...MenuGroup.styles, menuTableCss];
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     protected override render(): TemplateResult {

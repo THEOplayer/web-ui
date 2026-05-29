@@ -5,14 +5,15 @@ import { stateReceiver } from './StateReceiverMixin';
 import { CastButton } from './CastButton';
 import airPlayButtonHtml from './AirPlayButton.html';
 import airPlayButtonCss from './AirPlayButton.css';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 import { Attribute } from '../util/Attribute';
 
 /**
  * A button to start and stop casting using AirPlay.
  */
 @customElement('theoplayer-airplay-button')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class AirPlayButton extends CastButton {
     static styles = [...CastButton.styles, airPlayButtonCss];
 
@@ -33,6 +34,7 @@ export class AirPlayButton extends CastButton {
     }
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     override willUpdate(changedProperties: PropertyValues) {

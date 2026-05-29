@@ -7,6 +7,8 @@ import { arrayFind } from '../util/CommonUtils';
 import { createEvent } from '../util/EventUtils';
 import { repeat } from 'lit/directives/repeat.js';
 import { Attribute } from '../util/Attribute';
+import { languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 const TRACK_EVENTS = ['addtrack', 'removetrack', 'change'] as const;
 
@@ -15,7 +17,7 @@ const TRACK_EVENTS = ['addtrack', 'removetrack', 'change'] as const;
  * from which the user can choose a desired target quality.
  */
 @customElement('theoplayer-quality-radio-group')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class QualityRadioGroup extends LitElement {
     static override styles = [verticalRadioGroupCss];
 
@@ -26,6 +28,7 @@ export class QualityRadioGroup extends LitElement {
     private accessor _track: MediaTrack | undefined;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     protected override firstUpdated(): void {

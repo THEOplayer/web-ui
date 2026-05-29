@@ -6,7 +6,8 @@ import chromecastIcon from '../icons/chromecast-48px.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import type { Chromecast, ChromelessPlayer } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 const CAST_EVENTS = ['statechange'] as const;
 
@@ -25,7 +26,7 @@ const CAST_EVENTS = ['statechange'] as const;
  * @cssproperty `--theoplayer-chromecast-display-receiver-margin` - The margin around the receiver name text. Defaults to `0`.
  */
 @customElement('theoplayer-chromecast-display')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class ChromecastDisplay extends LitElement {
     static styles = [chromecastDisplayCss];
 
@@ -33,6 +34,7 @@ export class ChromecastDisplay extends LitElement {
     private _castApi: Chromecast | undefined;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     @state()

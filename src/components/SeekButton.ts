@@ -7,7 +7,8 @@ import seekForwardIcon from '../icons/seek-forward.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 import { toDuration } from '../util/TimeUtils';
 
 const DEFAULT_SEEK_OFFSET = 10;
@@ -18,7 +19,7 @@ const DEFAULT_SEEK_OFFSET = 10;
  * @cssproperty `--theoplayer-seek-button-font-size` - The font size of the offset number rendered inside the seek icon. Defaults to `calc(0.3 * --theoplayer-button-icon-height)`.
  */
 @customElement('theoplayer-seek-button')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class SeekButton extends Button {
     static styles = [...Button.styles, seekButtonCss];
 
@@ -31,6 +32,7 @@ export class SeekButton extends Button {
     accessor seekOffset: number = DEFAULT_SEEK_OFFSET;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {

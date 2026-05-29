@@ -3,8 +3,8 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { RadioButton } from './RadioButton';
 import type { MediaTrack } from 'theoplayer/chromeless';
 import { Attribute } from '../util/Attribute';
-import { stateReceiver } from './StateReceiverMixin';
-import { defaultLocale, getLocale, type Locale } from '../i18n';
+import { defaultLocale, getLocale, languageContext, type Locale } from '../i18n';
+import { consume } from '@lit/context';
 
 const TRACK_EVENTS = ['change', 'update'] as const;
 
@@ -13,12 +13,12 @@ const TRACK_EVENTS = ['change', 'update'] as const;
  * and switches to that track when clicked.
  */
 @customElement('theoplayer-media-track-radio-button')
-@stateReceiver(['lang'])
 export class MediaTrackRadioButton extends RadioButton {
     @state()
     private accessor _track: MediaTrack | undefined = undefined;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     /**

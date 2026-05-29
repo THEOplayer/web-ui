@@ -3,8 +3,8 @@ import { customElement, property } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { MenuButton } from './MenuButton';
 import settingsIcon from '../icons/settings.svg';
-import { getLocale } from '../i18n';
-import { stateReceiver } from './StateReceiverMixin';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 import { Attribute } from '../util/Attribute';
 
 /**
@@ -13,9 +13,9 @@ import { Attribute } from '../util/Attribute';
  * @attribute `menu` - The ID of the settings menu.
  */
 @customElement('theoplayer-settings-menu-button')
-@stateReceiver(['lang'])
 export class SettingsMenuButton extends MenuButton {
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     override willUpdate(changedProperties: PropertyValues) {

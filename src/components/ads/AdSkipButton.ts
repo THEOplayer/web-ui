@@ -10,7 +10,8 @@ import { Attribute } from '../../util/Attribute';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
-import { getLocale } from '../../i18n';
+import { getLocale, languageContext } from '../../i18n';
+import { consume } from '@lit/context';
 import { toDuration } from '../../util/TimeUtils';
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
@@ -34,7 +35,7 @@ const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as cons
  * @cssproperty `--theoplayer-ad-skip-icon-height` - The height of the skip button icon. Defaults to `--theoplayer-control-height`.
  */
 @customElement('theoplayer-ad-skip-button')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class AdSkipButton extends Button {
     static styles = [...Button.styles, adSkipButtonCss];
 
@@ -48,6 +49,7 @@ export class AdSkipButton extends Button {
     private accessor _timeToSkip: number = 0;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     override connectedCallback(): void {

@@ -6,7 +6,8 @@ import { Attribute } from '../../util/Attribute';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
-import { getLocale } from '../../i18n';
+import { getLocale, languageContext } from '../../i18n';
+import { consume } from '@lit/context';
 
 const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as const;
 
@@ -14,7 +15,7 @@ const AD_EVENTS = ['adbegin', 'adend', 'adloaded', 'updatead', 'adskip'] as cons
  * A button to open the advertisement's click-through webpage.
  */
 @customElement('theoplayer-ad-clickthrough-button')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class AdClickThroughButton extends LinkButton {
     private _player: ChromelessPlayer | undefined;
     private _ads: Ads | undefined;
@@ -54,6 +55,7 @@ export class AdClickThroughButton extends LinkButton {
     }
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {

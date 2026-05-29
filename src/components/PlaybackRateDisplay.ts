@@ -1,16 +1,18 @@
 import { html, type HTMLTemplateResult, LitElement } from 'lit';
 import { stateReceiver } from './StateReceiverMixin';
 import { customElement, property, state } from 'lit/decorators.js';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
 import { Attribute } from '../util/Attribute';
+import { consume } from '@lit/context';
 
 /**
  * A control that displays the current playback rate of the player.
  */
 @customElement('theoplayer-playback-rate-display')
-@stateReceiver(['playbackRate', 'lang'])
+@stateReceiver(['playbackRate'])
 export class PlaybackRateDisplay extends LitElement {
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     /**

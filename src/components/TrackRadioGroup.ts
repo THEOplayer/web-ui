@@ -7,6 +7,8 @@ import { Attribute } from '../util/Attribute';
 import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
 import { createEvent } from '../util/EventUtils';
 import { repeat } from 'lit/directives/repeat.js';
+import { languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
@@ -17,7 +19,7 @@ export type TrackType = 'audio' | 'video' | 'subtitles';
  * from which the user can choose an active track.
  */
 @customElement('theoplayer-track-radio-group')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class TrackRadioGroup extends LitElement {
     static override styles = [verticalRadioGroupCss];
 
@@ -51,6 +53,7 @@ export class TrackRadioGroup extends LitElement {
     accessor showOffButton: boolean = false;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {

@@ -9,7 +9,8 @@ import warningIcon from '../../../icons/warning.svg';
 import { stateReceiver } from '../../StateReceiverMixin';
 import { MenuButton } from '../../MenuButton';
 import type { BadNetworkModeMenu } from './BadNetworkModeMenu';
-import { getLocale } from '../../../i18n';
+import { getLocale, languageContext } from '../../../i18n';
+import { consume } from '@lit/context';
 import { Attribute } from '../../../util/Attribute';
 
 /**
@@ -18,7 +19,7 @@ import { Attribute } from '../../../util/Attribute';
  * @attribute `menu` - The ID of the bad network menu.
  */
 @customElement('theolive-bad-network-button')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class BadNetworkModeButton extends MenuButton {
     static styles = [...MenuButton.styles, badNetworkModeButtonCss];
 
@@ -37,6 +38,7 @@ export class BadNetworkModeButton extends MenuButton {
     };
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     get player(): TheoPlayer | undefined {

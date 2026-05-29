@@ -6,7 +6,8 @@ import { stateReceiver } from '../StateReceiverMixin';
 import type { Ads, ChromelessPlayer } from 'theoplayer/chromeless';
 import { arrayFind } from '../../util/CommonUtils';
 import { isLinearAd } from '../../util/AdUtils';
-import { getLocale } from '../../i18n';
+import { getLocale, languageContext } from '../../i18n';
+import { consume } from '@lit/context';
 import { Attribute } from '../../util/Attribute';
 
 const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak', 'adbegin', 'adend', 'adskip', 'addad', 'updatead'] as const;
@@ -21,7 +22,7 @@ const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak
  * @cssproperty `--theoplayer-ad-display-text-color` - The text color of the ad display. Defaults to `#000`.
  */
 @customElement('theoplayer-ad-display')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class AdDisplay extends LitElement {
     static styles = [textDisplayCss, adDisplayCss];
 
@@ -35,6 +36,7 @@ export class AdDisplay extends LitElement {
     private accessor _totalAds: number = 0;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     connectedCallback(): void {

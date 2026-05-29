@@ -4,7 +4,8 @@ import { stateReceiver } from './StateReceiverMixin';
 import type { VideoQuality } from 'theoplayer/chromeless';
 import { formatQualityLabel } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 /**
  * A control that displays the name of the active video quality.
@@ -25,6 +26,7 @@ export class ActiveQualityDisplay extends LitElement {
     accessor targetVideoQualities: VideoQuality[] | undefined = undefined;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     protected override render(): HTMLTemplateResult {

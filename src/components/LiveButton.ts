@@ -8,7 +8,8 @@ import liveIcon from '../icons/live.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 const PAUSED_EVENTS = ['play', 'pause', 'playing', 'emptied'] as const;
 const LIVE_EVENTS = ['seeking', 'seeked', 'timeupdate', 'durationchange', 'emptied'] as const;
@@ -23,7 +24,7 @@ const DEFAULT_LIVE_THRESHOLD = 10;
  * @cssproperty `--theoplayer-live-button-active-color` - The color of the live indicator when playing at the live point. Defaults to `red`.
  */
 @customElement('theoplayer-live-button')
-@stateReceiver(['player', 'streamType', 'lang'])
+@stateReceiver(['player', 'streamType'])
 export class LiveButton extends Button {
     static styles = [...Button.styles, liveButtonCss];
 
@@ -65,6 +66,7 @@ export class LiveButton extends Button {
     accessor live: boolean = false;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {

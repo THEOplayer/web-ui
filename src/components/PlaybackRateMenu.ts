@@ -1,8 +1,8 @@
 import { html, type HTMLTemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { Menu } from './Menu';
-import { getLocale } from '../i18n';
-import { stateReceiver } from './StateReceiverMixin';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 import { Attribute } from '../util/Attribute';
 
 // Load components used in template
@@ -16,9 +16,9 @@ const PLAYBACK_RATES = [0.25, 0.5, 1, 1.25, 1.5, 2];
  * @slot `heading` - A slot for the menu's heading.
  */
 @customElement('theoplayer-playback-rate-menu')
-@stateReceiver(['lang'])
 export class PlaybackRateMenu extends Menu {
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     protected override renderMenuHeading(): HTMLTemplateResult {

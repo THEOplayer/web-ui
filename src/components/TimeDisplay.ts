@@ -6,7 +6,8 @@ import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { formatAsTimePhrase, formatTime } from '../util/TimeUtils';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as const;
 
@@ -14,7 +15,7 @@ const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked', 'durationchange'] as c
  * A control that displays the current time of the stream.
  */
 @customElement('theoplayer-time-display')
-@stateReceiver(['player', 'streamType', 'lang'])
+@stateReceiver(['player', 'streamType'])
 export class TimeDisplay extends LitElement {
     static override styles = [textDisplayCss];
 
@@ -76,6 +77,7 @@ export class TimeDisplay extends LitElement {
     accessor streamType: StreamType = 'vod';
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     @state()

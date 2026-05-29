@@ -10,13 +10,14 @@ import { createCustomEvent } from '../util/EventUtils';
 import { ENTER_FULLSCREEN_EVENT, type EnterFullscreenEvent } from '../events/EnterFullscreenEvent';
 import { EXIT_FULLSCREEN_EVENT, type ExitFullscreenEvent } from '../events/ExitFullscreenEvent';
 import { Attribute } from '../util/Attribute';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 /**
  * A button that toggles fullscreen.
  */
 @customElement('theoplayer-fullscreen-button')
-@stateReceiver(['fullscreen', 'lang'])
+@stateReceiver(['fullscreen'])
 export class FullscreenButton extends Button {
     static styles = [...Button.styles, fullscreenButtonCss];
 
@@ -32,6 +33,7 @@ export class FullscreenButton extends Button {
     accessor fullscreen: boolean = false;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     protected override handleClick(): void {

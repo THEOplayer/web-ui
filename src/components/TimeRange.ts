@@ -15,7 +15,8 @@ import type { StreamType } from '../util/StreamType';
 import { isLinearAd } from '../util/AdUtils';
 import type { ColorStops } from '../util/ColorStops';
 import { KeyCode } from '../util/KeyCode';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 // Load components used in template
 import './PreviewThumbnail';
@@ -42,7 +43,7 @@ const AD_MARKER_WIDTH = 1;
  *   Defaults to `0 0 4px rgba(0, 0, 0, 0.75)`.
  */
 @customElement('theoplayer-time-range')
-@stateReceiver(['player', 'streamType', 'deviceType', 'lang'])
+@stateReceiver(['player', 'streamType', 'deviceType'])
 export class TimeRange extends Range {
     static override styles = [...Range.styles, timeRangeCss];
 
@@ -119,6 +120,7 @@ export class TimeRange extends Range {
     }
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     /**

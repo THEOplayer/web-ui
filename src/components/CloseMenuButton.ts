@@ -5,9 +5,9 @@ import { Button } from './Button';
 import backIcon from '../icons/back.svg';
 import { createCustomEvent } from '../util/EventUtils';
 import { CLOSE_MENU_EVENT, type CloseMenuEvent } from '../events/CloseMenuEvent';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
 import { Attribute } from '../util/Attribute';
-import { stateReceiver } from './StateReceiverMixin';
+import { consume } from '@lit/context';
 
 /**
  * A button that closes its parent menu.
@@ -15,7 +15,6 @@ import { stateReceiver } from './StateReceiverMixin';
  * This button must be placed inside a {@link Menu | `<theoplayer-menu>`}.
  */
 @customElement('theoplayer-menu-close-button')
-@stateReceiver(['lang'])
 export class CloseMenuButton extends Button {
     protected override handleClick() {
         const event: CloseMenuEvent = createCustomEvent(CLOSE_MENU_EVENT, {
@@ -26,6 +25,7 @@ export class CloseMenuButton extends Button {
     }
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     override willUpdate(changedProperties: PropertyValues) {

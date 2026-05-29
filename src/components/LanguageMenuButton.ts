@@ -8,7 +8,8 @@ import type { ChromelessPlayer, MediaTrackList, TextTracksList } from 'theoplaye
 import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
 import { toggleAttribute } from '../util/CommonUtils';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
@@ -18,7 +19,7 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  * When there are no alternative audio languages or subtitles, this button automatically hides itself.
  */
 @customElement('theoplayer-language-menu-button')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class LanguageMenuButton extends MenuButton {
     private _player: ChromelessPlayer | undefined;
     private _audioTrackList: MediaTrackList | undefined;
@@ -44,6 +45,7 @@ export class LanguageMenuButton extends MenuButton {
     }
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     private readonly _updateTracks = (): void => {

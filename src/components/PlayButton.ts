@@ -9,7 +9,8 @@ import pauseIcon from '../icons/pause.svg';
 import replayIcon from '../icons/replay.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied', 'sourcechange'] as const;
 
@@ -20,7 +21,7 @@ const PLAYER_EVENTS = ['seeking', 'seeked', 'ended', 'emptied', 'sourcechange'] 
  *   Overrides `--theoplayer-icon-color` for this button. Defaults to `unset`.
  */
 @customElement('theoplayer-play-button')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class PlayButton extends Button {
     static styles = [...Button.styles, playButtonCss];
 
@@ -49,6 +50,7 @@ export class PlayButton extends Button {
     accessor ended: boolean = false;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {

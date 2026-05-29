@@ -4,8 +4,8 @@ import { MenuGroup } from './MenuGroup';
 import textTrackStyleMenuCss from './TextTrackStyleMenu.css';
 import menuTableCss from './MenuTable.css';
 import { colorOptions, edgeStyleOptions, fontFamilyOptions, opacityOptions, sizeOptions } from '../util/TextTrackStylePresets';
-import { getLocale } from '../i18n';
-import { stateReceiver } from './StateReceiverMixin';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 import { Attribute } from '../util/Attribute';
 
 // Load components used in template
@@ -18,11 +18,11 @@ import './TextTrackStyleRadioGroup';
  * @slot `heading` - A slot for the menu's heading.
  */
 @customElement('theoplayer-text-track-style-menu')
-@stateReceiver(['lang'])
 export class TextTrackStyleMenu extends MenuGroup {
     static styles = [...MenuGroup.styles, menuTableCss, textTrackStyleMenuCss];
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     protected override render(): TemplateResult {

@@ -3,8 +3,8 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { RadioButton } from './RadioButton';
 import type { MediaTrack, VideoQuality } from 'theoplayer/chromeless';
 import { formatQualityLabel } from '../util/TrackUtils';
-import { getLocale } from '../i18n';
-import { stateReceiver } from './StateReceiverMixin';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 import { Attribute } from '../util/Attribute';
 
 const TRACK_EVENTS = ['activequalitychanged', 'targetqualitychanged'] as const;
@@ -15,7 +15,6 @@ const QUALITY_EVENTS = ['update'] as const;
  * and switches the video track's {@link theoplayer!MediaTrack.targetQuality | target quality} to that quality when clicked.
  */
 @customElement('theoplayer-quality-radio-button')
-@stateReceiver(['lang'])
 export class QualityRadioButton extends RadioButton {
     private _track: MediaTrack | undefined = undefined;
 
@@ -23,6 +22,7 @@ export class QualityRadioButton extends RadioButton {
     private accessor _quality: VideoQuality | undefined = undefined;
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     /**

@@ -7,16 +7,18 @@ import { parseColor, toRgb } from '../util/ColorUtils';
 import type { TextTrackStyleOption } from './TextTrackStyleRadioGroup';
 import { arrayFind } from '../util/CommonUtils';
 import { colorOptions, fontFamilyOptions } from '../util/TextTrackStylePresets';
-import { getLocale, type Locale } from '../i18n';
+import { getLocale, languageContext, type Locale } from '../i18n';
+import { consume } from '@lit/context';
 
 /**
  * A control that displays the value of a single text track style option
  * in a human-readable format.
  */
 @customElement('theoplayer-text-track-style-display')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class TextTrackStyleDisplay extends LitElement {
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     private _player: ChromelessPlayer | undefined;

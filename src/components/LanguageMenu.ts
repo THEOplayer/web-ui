@@ -6,7 +6,8 @@ import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer, MediaTrack, MediaTrackList, TextTrack, TextTracksList } from 'theoplayer/chromeless';
 import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
 import { Attribute } from '../util/Attribute';
-import { getLocale } from '../i18n';
+import { getLocale, languageContext } from '../i18n';
+import { consume } from '@lit/context';
 
 // Load components used in template
 import './TrackRadioGroup';
@@ -20,11 +21,12 @@ const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
  * @slot `heading` - A slot for the menu's heading.
  */
 @customElement('theoplayer-language-menu')
-@stateReceiver(['player', 'lang'])
+@stateReceiver(['player'])
 export class LanguageMenu extends MenuGroup {
     static styles = [...MenuGroup.styles, languageMenuCss];
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
+    @consume({ context: languageContext, subscribe: true })
     accessor lang: string = '';
 
     private _player: ChromelessPlayer | undefined;
