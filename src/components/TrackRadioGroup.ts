@@ -7,8 +7,6 @@ import { Attribute } from '../util/Attribute';
 import { isNonForcedSubtitleTrack } from '../util/TrackUtils';
 import { createEvent } from '../util/EventUtils';
 import { repeat } from 'lit/directives/repeat.js';
-import { languageContext } from '../i18n';
-import { consume } from '@lit/context';
 
 const TRACK_EVENTS = ['addtrack', 'removetrack'] as const;
 
@@ -51,10 +49,6 @@ export class TrackRadioGroup extends LitElement {
      */
     @property({ reflect: true, type: Boolean, attribute: Attribute.SHOW_OFF })
     accessor showOffButton: boolean = false;
-
-    @property({ reflect: true, type: String, attribute: Attribute.LANG })
-    @consume({ context: languageContext, subscribe: true })
-    accessor lang: string = '';
 
     get player(): ChromelessPlayer | undefined {
         return this._player;
@@ -120,15 +114,11 @@ export class TrackRadioGroup extends LitElement {
     protected override render(): HTMLTemplateResult {
         const tracks = this._getTracks();
         const isSubtitles = this.trackType === 'subtitles';
-        // FIXME: UIContainer doesn't push `lang` through shadow DOM children?
         return html`<theoplayer-radio-group @change=${this._onChange}>
             ${
                 /* "Off" button */
                 this.showOffButton && isSubtitles
-                    ? html`<theoplayer-text-track-off-radio-button
-                          .trackList=${this._tracksList}
-                          lang=${this.lang}
-                      ></theoplayer-text-track-off-radio-button>`
+                    ? html`<theoplayer-text-track-off-radio-button .trackList=${this._tracksList}></theoplayer-text-track-off-radio-button>`
                     : undefined
             }
             ${
@@ -138,8 +128,8 @@ export class TrackRadioGroup extends LitElement {
                     (track) => track.uid,
                     (track) =>
                         isSubtitles
-                            ? html`<theoplayer-text-track-radio-button .track=${track} lang=${this.lang}></theoplayer-text-track-radio-button>`
-                            : html`<theoplayer-media-track-radio-button .track=${track} lang=${this.lang}></theoplayer-media-track-radio-button>`
+                            ? html`<theoplayer-text-track-radio-button .track=${track}></theoplayer-text-track-radio-button>`
+                            : html`<theoplayer-media-track-radio-button .track=${track}></theoplayer-media-track-radio-button>`
                 )
             }
         </theoplayer-radio-group>`;
