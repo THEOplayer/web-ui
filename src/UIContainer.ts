@@ -1,6 +1,7 @@
 import { html, type HTMLTemplateResult, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
+import { provide } from '@lit/context';
 import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type MediaTrack, type SourceDescription, type UIPlayerConfiguration, type VideoQuality } from 'theoplayer/chromeless';
 import elementCss from './UIContainer.css';
@@ -39,7 +40,7 @@ import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
 import { READY_EVENT } from './events/ReadyEvent';
 import { addGlobalStyles } from './Global';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
-import { type addLocale, type Locale } from './i18n';
+import { type addLocale, languageContext, type Locale } from './i18n';
 
 // Load components used in template
 import './components/GestureReceiver';
@@ -142,7 +143,6 @@ export class UIContainer extends LitElement {
     private _deviceType: DeviceType = 'desktop';
     private _streamType: StreamType = 'vod';
     private _fluid: boolean = false;
-    private _language: string = '';
     private _userIdle: boolean = false;
     private _userIdleTimeout: number | undefined = undefined;
     private _isUserActive: boolean = false;
@@ -153,6 +153,9 @@ export class UIContainer extends LitElement {
     private _dvrThreshold: number = DEFAULT_DVR_THRESHOLD;
     private _previewTime: number = NaN;
     private _activeVideoTrack: MediaTrack | undefined = undefined;
+
+    @provide({ context: languageContext })
+    private accessor _language: string = '';
 
     /**
      * Creates a new THEOplayer UI container element.
@@ -509,7 +512,7 @@ export class UIContainer extends LitElement {
         super.connectedCallback();
         addGlobalStyles();
 
-        if (!this.hasAttribute(Attribute.LANG)) {
+        if (!this.lang) {
             this.lang = closestRecursive<HTMLElement>(this, '[lang]')?.lang ?? '';
         }
         if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {

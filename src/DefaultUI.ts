@@ -2,6 +2,7 @@ import { html, type HTMLTemplateResult, LitElement } from 'lit';
 import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { styleMap } from 'lit/directives/style-map.js';
+import { provide } from '@lit/context';
 import type { ChromelessPlayer, SourceDescription, UIPlayerConfiguration } from 'theoplayer/chromeless';
 import { DEFAULT_DVR_THRESHOLD, DEFAULT_TV_USER_IDLE_TIMEOUT, DEFAULT_USER_IDLE_TIMEOUT, type UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
@@ -15,6 +16,7 @@ import { READY_EVENT } from './events/ReadyEvent';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
 import { closestRecursive } from './util/CommonUtils';
 import { createCustomEvent } from './util/EventUtils';
+import { languageContext } from './i18n';
 
 /**
  * A default UI for THEOplayer.
@@ -95,10 +97,12 @@ export class DefaultUI extends LitElement {
 
     private _configuration: UIPlayerConfiguration = {};
     private _source: SourceDescription | undefined = undefined;
-    private _language: string = '';
     private _userIdleTimeout: number | undefined = undefined;
     private _deviceType: DeviceType = 'desktop';
     private _dvrThreshold: number = DEFAULT_DVR_THRESHOLD;
+
+    @provide({ context: languageContext })
+    private accessor _language: string = '';
 
     @queryAssignedNodes({ slot: 'title', flatten: true })
     private accessor titleSlotNodes!: Array<Node>;
@@ -302,7 +306,7 @@ export class DefaultUI extends LitElement {
     connectedCallback(): void {
         super.connectedCallback();
 
-        if (!this.hasAttribute(Attribute.LANG)) {
+        if (!this.lang) {
             this.lang = closestRecursive<HTMLElement>(this, '[lang]')?.lang ?? '';
         }
         if (!this.hasAttribute(Attribute.DEVICE_TYPE)) {
