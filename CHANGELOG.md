@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 2.2.0
+
+### ✨ Features
+
+- Added localization support. Use `addLocale()` to register a locale, and set the `lang` attribute on the UI to apply it.
+
 ## 2.1.3
 
 ### 🐛 Issues
