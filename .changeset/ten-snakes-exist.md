@@ -3,4 +3,4 @@
 '@theoplayer/web-ui': minor
 ---
 
-Added 360°/VR support: `<theoplayer-vr-button>`, `<theoplayer-vr-compass>` and `<theoplayer-vr-ios-fullscreen>`, included by default in `<theoplayer-default-ui>`.
+Added 360°/VR support: `<theoplayer-vr-button>` and `<theoplayer-vr-compass>`, included by default in `<theoplayer-default-ui>`.
