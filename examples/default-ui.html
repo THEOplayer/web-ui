@@ -21,6 +21,11 @@
                 background: #000;
             }
         </style>
+        <!-- WebXR polyfill: enables Cardboard VR on desktop and older mobile devices. -->
+        <script src="https://cdn.theoplayer.com/webxr/webxr-polyfill-patched.js"></script>
+        <script>
+            new WebXRPolyfill({ allowCardboardOnDesktop: true });
+        </script>
         <!-- Modern browsers -->
         <script type="importmap">
             {
@@ -69,6 +74,7 @@
                     <option value="bigBuckBunny" selected>Big Buck Bunny</option>
                     <option value="elephantsDream">Elephant's Dream</option>
                     <option value="starWarsTrailer">Star Wars Episode VII Trailer</option>
+                    <option value="vr">National Geographic (VR)</option>
                 </select>
             </label>
         </div>
@@ -116,6 +122,15 @@
                         title: 'Star Wars Episode VII Trailer'
                     },
                     poster: 'https://cdn.theoplayer.com/video/star_wars_episode_vii-the_force_awakens_official_comic-con_2015_reel_(2015)/poster.jpg'
+                },
+                vr: {
+                    sources: {
+                        src: 'https://demo.theoplayer.com/hubfs/videos/natgeo/playlist.m3u8'
+                    },
+                    vr: {
+                        360: true
+                    },
+                    poster: 'https://demo.theoplayer.com/hubfs/videos/natgeo/poster.jpg'
                 }
             };
 
