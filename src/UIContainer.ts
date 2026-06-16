@@ -969,9 +969,6 @@ export class UIContainer extends LitElement {
             if (streamType) {
                 return streamType;
             }
-            if (source?.dvr) {
-                return 'dvr';
-            }
             // Assume VOD.
             return 'vod';
         } else if (duration === Infinity) {
