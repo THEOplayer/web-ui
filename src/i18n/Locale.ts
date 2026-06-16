@@ -38,7 +38,8 @@ import type {
     TextTrackStyleResetButton,
     TimeDisplay,
     TimeRange,
-    VolumeRange
+    VolumeRange,
+    VRButton
 } from '../components';
 import type { THEOliveDefaultUI } from '../THEOliveDefaultUI';
 
