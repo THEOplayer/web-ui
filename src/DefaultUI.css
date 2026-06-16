@@ -55,6 +55,15 @@ theoplayer-ui {
     pointer-events: none;
 }
 
+/* Place the VR compass in the top-right corner by default (can be overridden). */
+[part='middle-chrome'] theoplayer-vr-compass {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    margin: 0.5em;
+}
+
 [part='bottom-chrome'] {
     position: relative;
     display: flex;
