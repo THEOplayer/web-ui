@@ -411,7 +411,6 @@ export class DefaultUI extends LitElement {
             <div slot="middle-chrome" part="middle-chrome">
                 <theoplayer-chromecast-display></theoplayer-chromecast-display>
                 <theoplayer-vr-compass></theoplayer-vr-compass>
-                <theoplayer-vr-ios-fullscreen></theoplayer-vr-ios-fullscreen>
             </div>
             <div part="bottom-chrome">
                 <theoplayer-control-bar part="ad-chrome" ad-only>

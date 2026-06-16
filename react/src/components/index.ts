@@ -34,7 +34,6 @@ export * from './SettingsMenuButton';
 export * from './FullscreenButton';
 export * from './VRButton';
 export * from './VRCompass';
-export * from './VRIOSFullscreen';
 export * from './Range';
 export * from './TimeRange';
 export * from './VolumeRange';
