@@ -1,0 +1,10 @@
+/*
+ * When no VR capable device is available, the button is disabled/greyed out.
+ */
+:host([disabled]) svg,
+:host([disabled]) img,
+:host([disabled]) ::slotted(svg),
+:host([disabled]) ::slotted(img) {
+    color: var(--theoplayer-button-disabled-text-color, #ccc);
+    opacity: var(--theoplayer-vr-button-disabled-icon-opacity, 0.5);
+}
