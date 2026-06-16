@@ -1,4 +1,5 @@
 import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { stateReceiver } from './StateReceiverMixin';
@@ -62,8 +63,10 @@ export class VRCompass extends LitElement {
     protected override render(): HTMLTemplateResult {
         const transformAngle = -this._yaw + FOV_SLICE_ANGLE / 2;
         const transformSkew = FOV_SLICE_ANGLE - 90;
-        const transform = `scale(0.875) rotate(${transformAngle}deg) skew(${transformSkew}deg)`;
-        return html`<div part="dial"><div part="fov" style="transform: ${transform};"></div></div>`;
+        const fovStyles = {
+            transform: `scale(0.875) rotate(${transformAngle}deg) skew(${transformSkew}deg)`
+        };
+        return html`<div part="dial"><div part="fov" style=${styleMap(fovStyles)}></div></div>`;
     }
 }
 
