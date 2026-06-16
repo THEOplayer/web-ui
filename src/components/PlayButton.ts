@@ -108,6 +108,10 @@ export class PlayButton extends Button {
             } else {
                 this._player.pause();
             }
+            const vr = this._player.vr;
+            if (vr !== undefined && vr.state !== 'unavailable') {
+                vr.useDeviceMotionControls = true;
+            }
         }
     }
 
