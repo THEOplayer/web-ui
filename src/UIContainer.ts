@@ -600,11 +600,9 @@ export class UIContainer extends LitElement {
         }
     }
 
-    protected override updated(changedProperties: PropertyValues): void {
+    protected override updated(): void {
         // Update the text track margins after the relevant attributes have been reflected to the DOM.
-        if (changedProperties.has('paused') || changedProperties.has('casting') || changedProperties.has('userIdle')) {
-            this._updateTextTrackMargins();
-        }
+        this._updateTextTrackMargins();
     }
 
     disconnectedCallback(): void {
