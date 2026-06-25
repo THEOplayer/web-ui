@@ -3,7 +3,6 @@ import { customElement, property } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { Button } from './Button';
-import vrButtonCss from './VRButton.css';
 import vrIcon from '../icons/vr.svg';
 import { stateReceiver } from './StateReceiverMixin';
 import { Attribute } from '../util/Attribute';
@@ -20,8 +19,6 @@ const VR_EVENTS = ['statechange', 'stereochange'] as const;
 @customElement('theoplayer-vr-button')
 @stateReceiver(['player', 'lang'])
 export class VRButton extends Button {
-    static styles = [...Button.styles, vrButtonCss];
-
     private _player: ChromelessPlayer | undefined;
 
     override connectedCallback() {
