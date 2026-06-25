@@ -1,5 +1,15 @@
 # @theoplayer/web-ui
 
+## 2.3.0
+
+### ✨ Features
+
+- Added 360°/VR support: `<theoplayer-vr-button>` and `<theoplayer-vr-compass>`, included by default in `<theoplayer-default-ui>`.
+
+### 🐛 Issues
+
+- Fixed an issue where the subtitles were briefly overlapping the control bar.
+
 ## 2.2.0
 
 ### ✨ Features

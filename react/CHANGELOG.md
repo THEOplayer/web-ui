@@ -1,5 +1,15 @@
 # @theoplayer/react-ui
 
+## 2.3.0
+
+### ✨ Features
+
+- Added 360°/VR support: `<theoplayer-vr-button>` and `<theoplayer-vr-compass>`, included by default in `<theoplayer-default-ui>`.
+
+### 📦 Dependency Updates
+
+- See changes to [Open Video UI for Web v2.3.0](https://github.com/THEOplayer/web-ui/blob/%40theoplayer%2Fweb-ui%402.3.0/CHANGELOG.md)
+
 ## 2.2.0
 
 ### ✨ Features
