@@ -1,4 +1,4 @@
-import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { html, type HTMLTemplateResult, LitElement, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import * as shadyCss from '@webcomponents/shadycss';
@@ -328,7 +328,6 @@ export class UIContainer extends LitElement {
     @property({ reflect: true, type: Boolean, attribute: Attribute.PAUSED })
     private set paused(value: boolean) {
         this._paused = value;
-        this._updateTextTrackMargins();
         this.updateUserIdle_();
     }
 
@@ -358,7 +357,6 @@ export class UIContainer extends LitElement {
     @property({ reflect: true, type: Boolean, attribute: Attribute.CASTING })
     private set casting(value: boolean) {
         this._casting = value;
-        this._updateTextTrackMargins();
         this.updateUserIdle_();
     }
 
@@ -373,7 +371,6 @@ export class UIContainer extends LitElement {
     private set userIdle(value: boolean) {
         if (this._userIdle === value) return;
         this._userIdle = value;
-        this._updateTextTrackMargins();
         this.dispatchEvent(createCustomEvent(USER_IDLE_CHANGE_EVENT));
     }
 
@@ -601,6 +598,11 @@ export class UIContainer extends LitElement {
         if (this._playerRef.value) {
             void forEachStateReceiverElement(this, this._playerRef.value, this.registerStateReceiver_);
         }
+    }
+
+    protected override updated(): void {
+        // Update the text track margins after the relevant attributes have been reflected to the DOM.
+        this._updateTextTrackMargins();
     }
 
     disconnectedCallback(): void {
