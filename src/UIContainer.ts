@@ -23,7 +23,7 @@ import { ENTER_FULLSCREEN_EVENT, type EnterFullscreenEvent } from './events/Ente
 import { EXIT_FULLSCREEN_EVENT, type ExitFullscreenEvent } from './events/ExitFullscreenEvent';
 import { fullscreenAPI } from './util/FullscreenUtils';
 import { Attribute } from './util/Attribute';
-import { isMobile, isTv } from './util/Environment';
+import { isIOS, isMobile, isTv } from './util/Environment';
 import { Rectangle } from './util/GeometryUtils';
 import { PREVIEW_TIME_CHANGE_EVENT, type PreviewTimeChangeEvent } from './events/PreviewTimeChangeEvent';
 import type { StreamType } from './util/StreamType';
@@ -842,6 +842,10 @@ export class UIContainer extends LitElement {
     private readonly _onEnterFullscreen = (rawEvent: Event): void => {
         const event = rawEvent as EnterFullscreenEvent;
         event.stopPropagation();
+        this._enterFullscreen();
+    };
+
+    private _enterFullscreen(): void {
         if (fullscreenAPI && document[fullscreenAPI.fullscreenEnabled_] && this[fullscreenAPI.requestFullscreen_]) {
             const promise = this[fullscreenAPI.requestFullscreen_]({
                 navigationUI: 'hide',
@@ -858,11 +862,15 @@ export class UIContainer extends LitElement {
             window.addEventListener('keydown', this._exitFullscreenOnEsc);
             this._onFullscreenChange();
         }
-    };
+    }
 
     private readonly _onExitFullscreen = (rawEvent: Event): void => {
         const event = rawEvent as ExitFullscreenEvent;
         event.stopPropagation();
+        this._exitFullscreen();
+    };
+
+    private _exitFullscreen(): void {
         if (fullscreenAPI) {
             const promise = document[fullscreenAPI.exitFullscreen_]();
             if (promise && promise.then) {
@@ -877,6 +885,31 @@ export class UIContainer extends LitElement {
             document.documentElement.classList.remove(FULL_WINDOW_ROOT_CLASS);
             window.removeEventListener('keydown', this._exitFullscreenOnEsc);
             this._onFullscreenChange();
+        }
+    }
+
+    /**
+     * On iOS, presenting stereoscopic VR requires the player to fill the screen.
+     */
+    private _vrFullscreen: boolean = false;
+    private _vrWasFullscreen: boolean = false;
+
+    private readonly _onVrStateChange = (): void => {
+        if (!isIOS()) {
+            return;
+        }
+        const presenting = this._player?.vr?.state === 'presenting';
+        if (presenting && !this._vrFullscreen) {
+            this._vrFullscreen = true;
+            this._vrWasFullscreen = this.fullscreen;
+            if (!this.fullscreen) {
+                this._enterFullscreen();
+            }
+        } else if (!presenting && this._vrFullscreen) {
+            this._vrFullscreen = false;
+            if (!this._vrWasFullscreen) {
+                this._exitFullscreen();
+            }
         }
     };
 
@@ -970,9 +1003,6 @@ export class UIContainer extends LitElement {
             // Use hinted stream type if available.
             if (streamType) {
                 return streamType;
-            }
-            if (source?.dvr) {
-                return 'dvr';
             }
             // Assume VOD.
             return 'vod';
@@ -1253,6 +1283,7 @@ export class UIContainer extends LitElement {
         player.videoTracks.addEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
         player.cast?.addEventListener('castingchange', this._updateCasting);
         player.ads?.addEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
+        player.vr?.addEventListener('statechange', this._onVrStateChange);
     }
 
     private removePlayerListeners_(player: ChromelessPlayer): void {
@@ -1273,6 +1304,7 @@ export class UIContainer extends LitElement {
             player.videoTracks.removeEventListener(['addtrack', 'removetrack', 'change'], this._updateActiveVideoTrack);
             player.cast?.removeEventListener('castingchange', this._updateCasting);
             player.ads?.removeEventListener(['adbreakbegin', 'adbreakend', 'adbegin', 'adend', 'adskip'], this._updatePlayingAd);
+            player.vr?.removeEventListener('statechange', this._onVrStateChange);
         } catch {
             // Ignore errors from accessing player.ads when the player is already destroyed.
         }

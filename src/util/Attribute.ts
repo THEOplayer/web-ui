@@ -34,6 +34,7 @@ export enum Attribute {
     REMAINING = 'remaining',
     REMAINING_WHEN_LIVE = 'remaining-when-live',
     SHOW_DURATION = 'show-duration',
+    STEREO = 'stereo',
     SEEK_OFFSET = 'seek-offset',
     MENU = 'menu',
     MENU_OPENED = 'menu-opened',

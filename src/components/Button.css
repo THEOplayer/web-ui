@@ -96,3 +96,10 @@ svg,
 :host(:hover:not([disabled])) ::slotted(svg) {
     filter: drop-shadow(var(--theoplayer-button-hover-icon-shadow, 0 0 4px rgba(255, 255, 255, 0.5)));
 }
+
+:host([disabled]) svg,
+:host([disabled]) img,
+:host([disabled]) ::slotted(svg),
+:host([disabled]) ::slotted(img) {
+    color: var(--theoplayer-button-disabled-icon-color, rgba(204, 204, 204, 0.5));
+}

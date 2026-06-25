@@ -29,6 +29,11 @@
                 line-height: 24px;
             }
         </style>
+        <!-- WebXR polyfill: enables Cardboard VR on desktop and older mobile devices. -->
+        <script src="https://cdn.theoplayer.com/webxr/webxr-polyfill-patched.js"></script>
+        <script>
+            new WebXRPolyfill({ allowCardboardOnDesktop: true });
+        </script>
         <script type="importmap">
             {
                 "imports": {
@@ -108,6 +113,16 @@
                         title: 'Star Wars Episode VII Trailer'
                     },
                     poster: 'https://cdn.theoplayer.com/video/star_wars_episode_vii-the_force_awakens_official_comic-con_2015_reel_(2015)/poster.jpg'
+                },
+                vr: {
+                    sources: {
+                        src: 'https://demo.theoplayer.com/hubfs/videos/natgeo/playlist.m3u8'
+                    },
+                    metadata: { title: 'VR' },
+                    vr: {
+                        360: true
+                    },
+                    poster: 'https://demo.theoplayer.com/hubfs/videos/natgeo/poster.jpg'
                 }
             };
             const languages = {

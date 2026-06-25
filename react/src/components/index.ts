@@ -32,6 +32,8 @@ export * from './TextTrackStyleMenu';
 export * from './SettingsMenu';
 export * from './SettingsMenuButton';
 export * from './FullscreenButton';
+export * from './VRButton';
+export * from './VRCompass';
 export * from './Range';
 export * from './TimeRange';
 export * from './VolumeRange';

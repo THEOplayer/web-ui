@@ -38,7 +38,8 @@ import type {
     TextTrackStyleResetButton,
     TimeDisplay,
     TimeRange,
-    VolumeRange
+    VolumeRange,
+    VRButton
 } from '../components';
 import type { THEOliveDefaultUI } from '../THEOliveDefaultUI';
 
@@ -102,6 +103,18 @@ export interface Locale {
      * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link FullscreenButton} when in fullscreen mode.
      */
     fullscreenExitAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link VRButton}.
+     */
+    vrAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link VRButton} when VR (stereo) mode is active.
+     */
+    vrExitAria: string;
+    /**
+     * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link VRButton} when no VR capable device is available.
+     */
+    vrUnavailableAria: string;
     /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for an {@link AirPlayButton}.
      */
@@ -457,6 +470,9 @@ export const defaultLocale: Locale = {
     seekToLiveAria: 'seek to live',
     fullscreenAria: 'enter fullscreen',
     fullscreenExitAria: 'exit fullscreen',
+    vrAria: 'watch in VR',
+    vrExitAria: 'stop watching in VR',
+    vrUnavailableAria: 'no VR capable device found',
     airplayAria: 'start playing on AirPlay',
     airplayConnectedAria: 'stop playing on AirPlay',
     chromecastAria: 'start casting to Chromecast',

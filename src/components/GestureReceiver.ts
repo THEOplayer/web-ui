@@ -85,6 +85,11 @@ export class GestureReceiver extends LitElement {
                 // Clicking during a linear ad should open the ad's clickthrough URL instead.
                 return;
             }
+            if (this._player.vr && this._player.vr.state !== 'unavailable') {
+                // While VR is active, mouse drags are used to look around the 360° video,
+                // so a click should not toggle play/pause.
+                return;
+            }
             if (this._player.paused) {
                 this._player.play();
             } else {

@@ -1,0 +1,72 @@
+:host {
+    display: inline-block;
+    box-sizing: border-box;
+    vertical-align: middle;
+    pointer-events: none;
+}
+
+:host([hidden]) {
+    display: none !important;
+}
+
+[part='dial'] {
+    position: relative;
+    box-sizing: border-box;
+    font-size: var(--theoplayer-vr-compass-size, 26px);
+    width: 1em;
+    height: 1em;
+    border: 0.025em solid var(--theoplayer-vr-compass-color, #fff);
+    border-radius: 100%;
+}
+
+[part='dial']::before,
+[part='dial']::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+/* Filled circle in center of compass */
+[part='dial']::before {
+    top: 50%;
+    left: 50%;
+    border: 0.075em solid var(--theoplayer-vr-compass-color, #fff);
+    border-radius: 100%;
+    transform: translate(-50%, -50%);
+}
+
+/* Pointy arrow above compass */
+[part='dial']::after {
+    top: 0;
+    left: 50%;
+    border-left: 0.1em solid transparent;
+    border-right: 0.1em solid transparent;
+    border-bottom: 0.1em solid var(--theoplayer-vr-compass-color, #fff);
+    transform: translate(-50%, -100%);
+    transform-origin: 50% 100%;
+}
+
+/* Field of view indicator */
+[part='fov'] {
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50%;
+    height: 50%;
+    transform-origin: 100% 100%;
+}
+
+[part='fov']::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    border: 0.35em solid var(--theoplayer-vr-compass-fov-color, rgba(255, 255, 255, 0.75));
+    box-sizing: border-box;
+    border-radius: 100%;
+    transform: skew(10deg);
+}
