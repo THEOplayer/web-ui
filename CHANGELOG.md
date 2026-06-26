@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 2.3.1
+
+### 🐛 Issues
+
+- Added support for localizing the error message in `<theoplayer-error-display>`.
+
 ## 2.3.0
 
 ### ✨ Features
