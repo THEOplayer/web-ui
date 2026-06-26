@@ -48,10 +48,12 @@ export class ErrorDisplay extends LitElement {
 
     protected override render() {
         const locale = getLocale(this.lang);
+        const error = this.error;
+        const message = error ? locale.errorMessage(error) : '';
         return html`<div part="icon"><slot name="icon">${unsafeSVG(errorIcon)}</slot></div>
             <div part="text">
                 <h1 part="heading"><slot name="heading">${locale.errorHeading}</slot></h1>
-                <p part="message"><slot name="message">${this.error?.message ?? ''}</slot></p>
+                <p part="message"><slot name="message">${message}</slot></p>
             </div>
             <div part="fullscreen-controls">
                 <slot name="fullscreen-controls"><theoplayer-fullscreen-button></theoplayer-fullscreen-button></slot>
