@@ -2,7 +2,7 @@ import { durationFormatterForLocale } from './DurationFormatter';
 import { percentageFormatterForLocale } from './PercentageFormatter';
 import { bandwidthFormatterForLocale } from './BandwidthFormatter';
 import { languageFormatterForLocale } from './LanguageFormatter';
-import type { EdgeStyle } from 'theoplayer/chromeless';
+import type { EdgeStyle, THEOplayerError } from 'theoplayer/chromeless';
 import type {
     ActiveQualityDisplay,
     AdClickThroughButton,
@@ -344,6 +344,14 @@ export interface Locale {
      */
     errorHeading: string;
     /**
+     * The error message for an {@link ErrorDisplay}.
+     *
+     * This is optional. If not provided, the original `error.message` is used.
+     *
+     * @param error A player error.
+     */
+    errorMessage(error: THEOplayerError): string;
+    /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link BadNetworkModeButton}.
      */
     openBadNetworkModeMenuAria: string;
@@ -543,6 +551,7 @@ export const defaultLocale: Locale = {
     highQualityLabel: 'High Quality',
     lowQualityLabel: 'Low Quality',
     errorHeading: 'An error occurred',
+    errorMessage: (error) => error.message,
     openBadNetworkModeMenuAria: 'open bad network mode menu',
     formatDuration: durationFormatterForLocale(defaultLocaleName, 'long'),
     formatNarrowDuration: durationFormatterForLocale(defaultLocaleName, 'narrow'),
