@@ -59,7 +59,7 @@ export default function Example({ hideSource, hideDeviceType, languages, ref, ..
         <>
             <iframe ref={iframeRef} {...props}></iframe>
             {showOptions && (
-                <p>
+                <div>
                     {languages && (
                         <div>
                             <label style={{ userSelect: 'none' }}>
@@ -101,7 +101,7 @@ export default function Example({ hideSource, hideDeviceType, languages, ref, ..
                             </label>
                         </div>
                     )}
-                </p>
+                </div>
             )}
         </>
     );
