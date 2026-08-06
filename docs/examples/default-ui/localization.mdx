@@ -1,0 +1,60 @@
+---
+sidebar_position: 5
+sidebar_custom_props: { 'icon': '🌍' }
+slug: /web/examples/localization
+---
+
+# Localization
+
+import Example from '../../components/Example';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from '../shared.module.css';
+
+<Example
+    className={styles.player}
+    src={useBaseUrl('/open-video-ui/v2/examples/web/localization/demo.html')}
+    hideSource
+    hideDeviceType
+    languages={{ en: 'English', nl: 'Nederlands (Dutch)' }}
+/>
+
+This sample demonstrates localizing the UI and switching language at runtime. A locale is registered with `addLocale`, and the language is selected through the `lang` attribute. Use the dropdown below the player to switch between English and Dutch. See also the [localization guide](../../guides/localization.md).
+
+<details>
+    <summary>Code</summary>
+    ```html showLineNumbers
+    <script type="module">
+        import { addLocale } from '@theoplayer/web-ui';
+
+        addLocale('nl', {
+            playAria: 'afspelen',
+            pauseAria: 'pauzeren',
+            languageMenuHeading: 'Taal',
+            subtitleMenuHeading: 'Ondertitels',
+            subtitleOff: 'Uit',
+            settingsMenuHeading: 'Instellingen'
+        });
+    </script>
+
+    <theoplayer-default-ui
+        id="ui"
+        lang="en"
+        configuration='{"libraryLocation":"/path/to/theoplayer/","license":"your_theoplayer_license"}'
+        source='{"sources":{"src":"https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8"}}'
+    ></theoplayer-default-ui>
+
+    <select id="lang-select">
+        <option value="en">English</option>
+        <option value="nl">Nederlands (Dutch)</option>
+    </select>
+
+    <script>
+        document.querySelector('#lang-select').addEventListener('change', (event) => {
+            document.querySelector('#ui').setAttribute('lang', event.target.value);
+        });
+    </script>
+    ```
+
+    [📜 View full source on GitHub](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/examples/web/localization/demo.html)
+
+</details>
