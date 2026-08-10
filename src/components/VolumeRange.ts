@@ -53,7 +53,8 @@ export class VolumeRange extends Range {
 
     private readonly _updateFromPlayer = () => {
         if (this._player !== undefined) {
-            this.rawValue = this._player.volume;
+            // When the player is muted, show the bar at its minimum value.
+            this.rawValue = this._player.muted ? this.min : this._player.volume;
             this._updateRange();
         }
     };
