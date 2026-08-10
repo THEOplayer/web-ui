@@ -1,0 +1,71 @@
+---
+sidebar_position: 6
+sidebar_custom_props: { 'icon': '⏯️' }
+slug: /web/examples/custom-play-button
+---
+
+# Custom play button
+
+import Example from '../../components/Example';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from '../shared.module.css';
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v2/examples/web/custom-play-button/demo.html')} hideDeviceType />
+
+This sample demonstrates a custom, animated play button.
+
+<details>
+    <summary>Code</summary>
+    ```html showLineNumbers
+    <style>
+        .big-play {
+            color: #fff;
+            background: rgba(124, 58, 237, 0.45);
+            backdrop-filter: blur(6px);
+            border-radius: 50%;
+            padding: 32px;
+            transition: transform 0.4s ease;
+        }
+        .big-play svg {
+            width: 64px;
+            height: 64px;
+        }
+        /* Only pulse while hovered. */
+        .big-play:hover {
+            animation: pulse 3s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+    </style>
+
+    <theoplayer-ui
+        configuration='{"libraryLocation":"/path/to/theoplayer/","license":"your_theoplayer_license"}'
+        source='{"sources":{"src":"https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8"}}'
+    >
+        <div slot="centered-chrome">
+            <theoplayer-play-button class="big-play">
+                <svg slot="play-icon" viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+                <svg slot="pause-icon" viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"></path></svg>
+            </theoplayer-play-button>
+        </div>
+        <div class="bottom-chrome">
+            <theoplayer-control-bar>
+                <theoplayer-time-range></theoplayer-time-range>
+            </theoplayer-control-bar>
+            <theoplayer-control-bar>
+                <theoplayer-play-button></theoplayer-play-button>
+                <theoplayer-mute-button></theoplayer-mute-button>
+                <theoplayer-volume-range></theoplayer-volume-range>
+                <theoplayer-time-display show-duration></theoplayer-time-display>
+                <theoplayer-fullscreen-button></theoplayer-fullscreen-button>
+            </theoplayer-control-bar>
+        </div>
+        <theoplayer-error-display slot="error"></theoplayer-error-display>
+    </theoplayer-ui>
+    ```
+
+    [📜 View full source on GitHub](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/examples/web/custom-play-button/demo.html)
+
+</details>

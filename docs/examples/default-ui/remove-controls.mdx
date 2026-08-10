@@ -1,0 +1,36 @@
+---
+sidebar_position: 4
+sidebar_custom_props: { 'icon': '✂️' }
+slug: /web/examples/remove-controls
+---
+
+# Removing controls
+
+import Example from '../../components/Example';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from '../shared.module.css';
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v2/examples/web/remove-controls/demo.html')}></Example>
+
+This sample demonstrates how to remove a specific control from the default UI. The default UI exposes its internal controls as [CSS shadow parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part), so you can hide any of them with `::part()`. Here, we hide the seek bar and keep the rest.
+
+<details>
+    <summary>Code</summary>
+    ```html showLineNumbers
+    <style>
+        /* Hide the seek bar. */
+        theoplayer-default-ui::part(time-range) {
+            display: none;
+        }
+    </style>
+
+    <theoplayer-default-ui
+        configuration='{"libraryLocation":"/path/to/theoplayer/","license":"your_theoplayer_license"}'
+        source='{"sources":{"src":"https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8"}}'
+        fluid
+    ></theoplayer-default-ui>
+    ```
+
+    [📜 View full source on GitHub](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/examples/web/remove-controls/demo.html)
+
+</details>

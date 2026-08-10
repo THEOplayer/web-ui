@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Default UI with React</title>
+        <title>Localization with React</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,10 +27,6 @@
                 width: 100%;
             }
         </style>
-        <!--
-          JSPM Generator Import Map
-          Edit URL: https://generator.jspm.io/#VYxLDkBAEAV7IW5iqRkR7PQlHMCnE5M0I6NF3J4gEduqei8KAMK6mdWq8AAkVhPPba9kMMUcSEd2i7QH+4fHm71UidlP7dx94ukGN5GpMMM06cXyrPD+3gy+MRVo7mr0bmLhdT0BSwPyx5UA
-        -->
         <script type="importmap">
             {
                 "imports": {
@@ -71,14 +67,14 @@
             import * as React from 'react';
             import { createRoot } from 'react-dom/client';
             import * as THEOplayerReactUI from '@theoplayer/react-ui';
-            import { useDeviceTypeFromParent, useSourceFromParent } from '../utils.js';
+            import { useDeviceTypeFromParent, useLanguageFromParent, useSourceFromParent } from '../utils.js';
 
             const configuration = {
                 /**
                  * libraryLocation: For demonstration purposes, we use the free unpkg.com CDN.
                  * For production use, we recommend hosting THEOplayer yourself
                  * and changing this (as well as the <script> and <link> tags above)
-                 * to point to THEOplayer"s location on your own website.
+                 * to point to THEOplayer's location on your own website.
                  */
                 libraryLocation: 'https://cdn.theoplayer.com/dash/theoplayer/',
                 /**
@@ -92,27 +88,51 @@
                 sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
                 metadata: {
                     title: 'Big Buck Bunny'
-                },
-                textTracks: [
-                    {
-                        default: true,
-                        src: 'https://cdn.theoplayer.com/video/big_buck_bunny/thumbnails.vtt',
-                        label: 'thumbnails',
-                        kind: 'metadata'
-                    }
-                ]
+                }
             };
+
+            // Register the Dutch locale. Untranslated messages fall back to the built-in English defaults.
+            THEOplayerReactUI.addLocale('nl', {
+                playAria: 'afspelen',
+                pauseAria: 'pauzeren',
+                replayAria: 'opnieuw afspelen',
+                muteAria: 'dempen',
+                unmuteAria: 'dempen opheffen',
+                volumeAria: 'volume',
+                seekAria: 'zoeken',
+                seekForwardAria: (offset) => `spring voorwaarts met ${offset}`,
+                seekBackwardAria: (offset) => `spring achterwaarts met ${offset}`,
+                live: 'LIVE',
+                seekToLiveAria: 'spring naar live',
+                fullscreenAria: 'volledig scherm',
+                fullscreenExitAria: 'volledig scherm sluiten',
+                closeMenuAria: 'menu sluiten',
+                openLanguageMenuAria: 'taalmenu openen',
+                languageMenuHeading: 'Taal',
+                audioMenuHeading: 'Audio',
+                subtitleMenuHeading: 'Ondertitels',
+                subtitleOff: 'Uit',
+                openSettingsMenuAria: 'instellingenmenu openen',
+                settingsMenuHeading: 'Instellingen',
+                qualityMenuHeading: 'Kwaliteit',
+                playbackRateMenuHeading: 'Afspeelsnelheid',
+                formatPlaybackRate: (rate) => (rate === 1 ? 'Normaal' : `${rate}x`),
+                automaticQualityLabel: 'Automatisch',
+                errorHeading: 'Er is een fout opgetreden'
+            });
 
             const App = () => {
                 const source = useSourceFromParent() || defaultSource;
                 const deviceType = useDeviceTypeFromParent() || null;
-                const title = source.metadata.title;
+                // The language is selected through the dropdown rendered below the player.
+                const lang = useLanguageFromParent() || 'en';
                 return (
                     <THEOplayerReactUI.DefaultUI
                         configuration={configuration}
                         source={source}
                         device-type={deviceType}
-                        title={<span>{title}</span>}
+                        lang={lang}
+                        title={<span>{source.metadata.title}</span>}
                     />
                 );
             };

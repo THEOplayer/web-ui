@@ -1,0 +1,7 @@
+{
+  "label": "Default UI",
+  "position": 10,
+  "collapsible": true,
+  "collapsed": true,
+  "description": "Samples demonstrating how to modify the default styling of the player."
+}

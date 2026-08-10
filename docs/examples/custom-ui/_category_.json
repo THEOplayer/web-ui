@@ -1,0 +1,7 @@
+{
+  "label": "Custom UI",
+  "position": 20,
+  "collapsible": true,
+  "collapsed": true,
+  "description": "Samples demonstrating how to implement a custom UI and modify different components."
+}

@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Custom UI with React</title>
+        <title>Text Tracks with React</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,8 +27,7 @@
                 width: 100%;
             }
 
-            .my-title,
-            .my-time-display {
+            .my-title {
                 color: white;
                 padding: 10px;
                 font-size: 14px;
@@ -38,7 +37,6 @@
             .my-menu-table {
                 display: grid;
                 grid-template-columns: max-content 1fr;
-                grid-template-rows: auto auto;
             }
 
             .my-menu-table > * {
@@ -94,7 +92,7 @@
 
         <script type="text/babel" data-type="module">
             import * as React from 'react';
-            import { useCallback, useContext, useState, useSyncExternalStore } from 'react';
+            import { useContext, useEffect, useState } from 'react';
             import { createRoot } from 'react-dom/client';
             import * as THEOplayerReactUI from '@theoplayer/react-ui';
             import { useDeviceTypeFromParent, useSourceFromParent } from '../utils.js';
@@ -114,47 +112,12 @@
                 licenseUrl: '../../../../../theoplayer-license.txt'
             };
 
+            // Elephant's Dream has in-stream subtitle tracks (Chinese & French) and multiple audio tracks.
             const defaultSource = {
-                sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
+                sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
                 metadata: {
-                    title: 'Big Buck Bunny'
-                },
-                textTracks: [
-                    {
-                        default: true,
-                        src: 'https://cdn.theoplayer.com/video/big_buck_bunny/thumbnails.vtt',
-                        label: 'thumbnails',
-                        kind: 'metadata'
-                    }
-                ]
-            };
-
-            // A custom React hook using THEOplayer.
-            // This hook returns the player's current time, automatically updating whenever it changes.
-            // (Alternatively, you can use the built-in `useCurrentTime` hook.)
-            const useCurrentTime = () => {
-                // Retrieve the THEOplayer instance.
-                // This will become available as soon as this component is mounted
-                // inside a THEOplayer <DefauLtUI> or <UIContainer>.
-                const player = useContext(THEOplayerReactUI.PlayerContext);
-                // Keep track of the player's current time.
-                const [currentTime, setCurrentTime] = useState(player?.currentTime ?? 0);
-                const subscribe = useCallback(
-                    (callback) => {
-                        const listener = () => {
-                            setCurrentTime(player.currentTime);
-                            callback();
-                        };
-                        player?.addEventListener(['timeupdate', 'seeking', 'seeked'], listener);
-                        return () => player?.removeEventListener(['timeupdate', 'seeking', 'seeked'], listener);
-                    },
-                    [player]
-                );
-                return useSyncExternalStore(
-                    subscribe,
-                    () => currentTime,
-                    () => currentTime
-                );
+                    title: "Elephant's Dream"
+                }
             };
 
             // Returns whether the player has (previously) started playback for this stream.
@@ -187,19 +150,58 @@
                 return firstPlay ? null : children;
             };
 
-            // A custom React component using THEOplayer.
-            const MyTimeDisplay = () => {
-                const time = useCurrentTime();
-                return <span className="my-time-display">{time.toFixed(3)}</span>;
-            };
-
             const Spacer = () => {
                 const styles = { flexGrow: 1 };
                 return <span style={styles}></span>;
             };
 
-            // A custom player UI.
-            const MyCustomUI = ({ configuration, source, deviceType, title }) => {
+            // A hook returning the player's subtitle text tracks.
+            const useSubtitleTracks = () => {
+                const player = useContext(THEOplayerReactUI.PlayerContext);
+                const [tracks, setTracks] = useState([]);
+
+                useEffect(() => {
+                    if (!player) return;
+                    const textTracks = player.textTracks;
+                    const update = () => {
+                        setTracks(textTracks.filter((track) => track.kind === 'subtitles' || track.kind === 'captions'));
+                    };
+                    update();
+                    textTracks.addEventListener(['addtrack', 'removetrack'], update);
+                    return () => textTracks.removeEventListener(['addtrack', 'removetrack'], update);
+                }, [player]);
+
+                return { player, tracks };
+            };
+
+            // A subtitle picker built from the low-level TextTrackOffRadioButton and TextTrackRadioButton.
+            // In practice, prefer <TrackRadioGroup trackType="subtitles" show-off />, which composes these for you.
+            const CustomSubtitlePicker = () => {
+                const { player, tracks } = useSubtitleTracks();
+                return (
+                    <THEOplayerReactUI.RadioGroup>
+                        <THEOplayerReactUI.TextTrackOffRadioButton trackList={player?.textTracks} />
+                        {tracks.map((track) => (
+                            <THEOplayerReactUI.TextTrackRadioButton key={track.uid} track={track} />
+                        ))}
+                    </THEOplayerReactUI.RadioGroup>
+                );
+            };
+
+            const FONT_COLORS = [
+                { label: 'Default', value: '' },
+                { label: 'White', value: 'rgb(255,255,255)' },
+                { label: 'Yellow', value: 'rgb(255,255,0)' },
+                { label: 'Green', value: 'rgb(0,255,0)' },
+                { label: 'Cyan', value: 'rgb(0,255,255)' },
+                { label: 'Blue', value: 'rgb(0,0,255)' },
+                { label: 'Magenta', value: 'rgb(255,0,255)' },
+                { label: 'Red', value: 'rgb(255,0,0)' },
+                { label: 'Black', value: 'rgb(0,0,0)' }
+            ];
+
+            // A custom player UI demonstrating text track components.
+            const MyTextTracksUI = ({ configuration, source, deviceType, title }) => {
                 return (
                     <THEOplayerReactUI.UIContainer
                         configuration={configuration}
@@ -234,10 +236,10 @@
                                     <THEOplayerReactUI.PlayButton />
                                     <THEOplayerReactUI.MuteButton />
                                     <THEOplayerReactUI.VolumeRange />
-                                    <MyTimeDisplay />
+                                    <THEOplayerReactUI.TimeDisplay />
                                     <Spacer />
                                     <THEOplayerReactUI.LanguageMenuButton menu="language-menu" />
-                                    <THEOplayerReactUI.SettingsMenuButton menu="settings-menu" />
+                                    <THEOplayerReactUI.MenuButton menu="settings-menu">CC</THEOplayerReactUI.MenuButton>
                                     <THEOplayerReactUI.FullscreenButton />
                                 </THEOplayerReactUI.ControlBar>
                             </ShowOnFirstPlay>
@@ -246,22 +248,56 @@
                             <>
                                 <THEOplayerReactUI.LanguageMenu id="language-menu" />
                                 <THEOplayerReactUI.MenuGroup id="settings-menu">
-                                    <THEOplayerReactUI.Menu heading="My custom settings">
+                                    <THEOplayerReactUI.Menu heading="Subtitles & captions">
                                         <div className="my-menu-table">
-                                            <span>Quality</span>
-                                            <THEOplayerReactUI.MenuButton menu="quality-menu">
-                                                <THEOplayerReactUI.ActiveQualityDisplay />
+                                            <span>Subtitles</span>
+                                            <THEOplayerReactUI.MenuButton menu="subtitle-menu">
+                                                <span>Select</span>
                                             </THEOplayerReactUI.MenuButton>
-                                            <span>Playback speed</span>
-                                            <THEOplayerReactUI.MenuButton menu="playback-rate-menu">
-                                                <THEOplayerReactUI.PlaybackRateDisplay />
+                                            <span>Subtitles (custom)</span>
+                                            <THEOplayerReactUI.MenuButton menu="subtitle-custom-menu">
+                                                <span>Select</span>
+                                            </THEOplayerReactUI.MenuButton>
+                                            <span>Subtitle appearance</span>
+                                            <THEOplayerReactUI.MenuButton menu="subtitle-style-menu">
+                                                <THEOplayerReactUI.TextTrackStyleDisplay property="fontColor" />
+                                            </THEOplayerReactUI.MenuButton>
+                                            <span>Font color (custom)</span>
+                                            <THEOplayerReactUI.MenuButton menu="font-color-menu">
+                                                <THEOplayerReactUI.TextTrackStyleDisplay property="fontColor" />
                                             </THEOplayerReactUI.MenuButton>
                                         </div>
                                     </THEOplayerReactUI.Menu>
-                                    <THEOplayerReactUI.Menu id="quality-menu" closeOnInput hidden heading="Quality">
-                                        <THEOplayerReactUI.QualityRadioGroup />
+
+                                    {/* Idiomatic subtitle picker using TrackRadioGroup. */}
+                                    <THEOplayerReactUI.Menu id="subtitle-menu" closeOnInput hidden heading="Subtitles">
+                                        <THEOplayerReactUI.TrackRadioGroup trackType="subtitles" show-off />
                                     </THEOplayerReactUI.Menu>
-                                    <THEOplayerReactUI.PlaybackRateMenu id="playback-rate-menu" closeOnInput hidden heading="Playback speed" />
+
+                                    {/* Manual subtitle picker using TextTrackOffRadioButton and TextTrackRadioButton. */}
+                                    <THEOplayerReactUI.Menu id="subtitle-custom-menu" closeOnInput hidden heading="Subtitles (custom)">
+                                        <CustomSubtitlePicker />
+                                    </THEOplayerReactUI.Menu>
+
+                                    {/* Pre-built subtitle style menu. */}
+                                    <THEOplayerReactUI.TextTrackStyleMenu
+                                        id="subtitle-style-menu"
+                                        closeOnInput
+                                        hidden
+                                        heading="Subtitle appearance"
+                                    />
+
+                                    {/* Manual font color submenu using TextTrackStyleRadioGroup and TextTrackStyleResetButton. */}
+                                    <THEOplayerReactUI.Menu id="font-color-menu" closeOnInput hidden heading="Font color (custom)">
+                                        <THEOplayerReactUI.TextTrackStyleResetButton slot="heading" />
+                                        <THEOplayerReactUI.TextTrackStyleRadioGroup property="fontColor">
+                                            {FONT_COLORS.map(({ label, value }) => (
+                                                <THEOplayerReactUI.RadioButton key={value} value={value}>
+                                                    {label}
+                                                </THEOplayerReactUI.RadioButton>
+                                            ))}
+                                        </THEOplayerReactUI.TextTrackStyleRadioGroup>
+                                    </THEOplayerReactUI.Menu>
                                 </THEOplayerReactUI.MenuGroup>
                             </>
                         }
@@ -274,7 +310,7 @@
                 const source = useSourceFromParent() || defaultSource;
                 const deviceType = useDeviceTypeFromParent() || null;
                 const title = source.metadata.title;
-                return <MyCustomUI configuration={configuration} source={source} deviceType={deviceType} title={title} />;
+                return <MyTextTracksUI configuration={configuration} source={source} deviceType={deviceType} title={title} />;
             };
 
             const root = createRoot(document.getElementById('app'));

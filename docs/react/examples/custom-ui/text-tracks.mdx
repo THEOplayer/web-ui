@@ -1,0 +1,153 @@
+---
+sidebar_position: 2
+sidebar_custom_props: { 'icon': '💬' }
+slug: /react/examples/text-tracks
+---
+
+# Text tracks and subtitles
+
+import Example from '../../../components/Example';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from '../shared.module.css';
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v2/examples/react/text-tracks/demo.html')} hideSource hideDeviceType />
+
+This example demonstrates the text track components for subtitle selection and styling.
+
+The settings menu contains four submenus:
+
+- **Subtitles**: the idiomatic `TrackRadioGroup` with `trackType="subtitles"` and `show-off`, which composes `TextTrackOffRadioButton` and `TextTrackRadioButton` for you.
+- **Subtitles (custom)**: the same picker built manually from `TextTrackOffRadioButton` and `TextTrackRadioButton`.
+- **Subtitle appearance**: the pre-built `TextTrackStyleMenu`, which composes `TextTrackStyleDisplay`, `TextTrackStyleRadioGroup` and `TextTrackStyleResetButton`.
+- **Font color (custom)**: a single style option built manually from `TextTrackStyleRadioGroup` and `TextTrackStyleResetButton`.
+
+<details>
+    <summary>Code</summary>
+
+    ```jsx
+    import * as THEOplayerReactUI from '@theoplayer/react-ui';
+    import { useContext, useEffect, useState } from 'react';
+
+    const configuration = {
+        libraryLocation: '/path/to/theoplayer/',
+        license: 'your_theoplayer_license'
+    };
+
+    const source = {
+        sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
+        metadata: { title: "Elephant's Dream" }
+    };
+
+    // A hook returning the player's subtitle text tracks.
+    const useSubtitleTracks = () => {
+        const player = useContext(THEOplayerReactUI.PlayerContext);
+        const [tracks, setTracks] = useState([]);
+        useEffect(() => {
+            if (!player) return;
+            const textTracks = player.textTracks;
+            const update = () => {
+                setTracks(textTracks.filter((t) => t.kind === 'subtitles' || t.kind === 'captions'));
+            };
+            update();
+            textTracks.addEventListener(['addtrack', 'removetrack'], update);
+            return () => textTracks.removeEventListener(['addtrack', 'removetrack'], update);
+        }, [player]);
+        return { player, tracks };
+    };
+
+    // A subtitle picker built from the low-level TextTrackOffRadioButton and TextTrackRadioButton.
+    // In practice, prefer <TrackRadioGroup trackType="subtitles" show-off />, which composes these for you.
+    const CustomSubtitlePicker = () => {
+        const { player, tracks } = useSubtitleTracks();
+        return (
+            <THEOplayerReactUI.RadioGroup>
+                <THEOplayerReactUI.TextTrackOffRadioButton trackList={player?.textTracks} />
+                {tracks.map((track) => (
+                    <THEOplayerReactUI.TextTrackRadioButton key={track.uid} track={track} />
+                ))}
+            </THEOplayerReactUI.RadioGroup>
+        );
+    };
+
+    const FONT_COLORS = [
+        { label: 'Default', value: '' },
+        { label: 'White', value: 'rgb(255,255,255)' },
+        { label: 'Yellow', value: 'rgb(255,255,0)' },
+        { label: 'Green', value: 'rgb(0,255,0)' },
+        { label: 'Cyan', value: 'rgb(0,255,255)' },
+        { label: 'Blue', value: 'rgb(0,0,255)' },
+        { label: 'Magenta', value: 'rgb(255,0,255)' },
+        { label: 'Red', value: 'rgb(255,0,0)' },
+        { label: 'Black', value: 'rgb(0,0,0)' }
+    ];
+
+    const App = () => {
+        return (
+            <THEOplayerReactUI.UIContainer
+                configuration={configuration}
+                source={source}
+                bottomChrome={
+                    <THEOplayerReactUI.ControlBar>
+                        <THEOplayerReactUI.PlayButton />
+                        <THEOplayerReactUI.MuteButton />
+                        <THEOplayerReactUI.VolumeRange />
+                        <THEOplayerReactUI.TimeDisplay />
+                        <THEOplayerReactUI.LanguageMenuButton menu="language-menu" />
+                        <THEOplayerReactUI.MenuButton menu="settings-menu">CC</THEOplayerReactUI.MenuButton>
+                        <THEOplayerReactUI.FullscreenButton />
+                    </THEOplayerReactUI.ControlBar>
+                }
+                menu={
+                    <>
+                        <THEOplayerReactUI.LanguageMenu id="language-menu" />
+                        <THEOplayerReactUI.MenuGroup id="settings-menu">
+                            <THEOplayerReactUI.Menu heading="Subtitles & captions">
+                                <THEOplayerReactUI.MenuButton menu="subtitle-menu">
+                                    <span>Select</span>
+                                </THEOplayerReactUI.MenuButton>
+                                <THEOplayerReactUI.MenuButton menu="subtitle-style-menu">
+                                    <THEOplayerReactUI.TextTrackStyleDisplay property="fontColor" />
+                                </THEOplayerReactUI.MenuButton>
+                            </THEOplayerReactUI.Menu>
+
+                            {/* Idiomatic subtitle picker using TrackRadioGroup. */}
+                            <THEOplayerReactUI.Menu id="subtitle-menu" closeOnInput hidden heading="Subtitles">
+                                <THEOplayerReactUI.TrackRadioGroup trackType="subtitles" show-off />
+                            </THEOplayerReactUI.Menu>
+
+                            {/* Manual subtitle picker using TextTrackOffRadioButton and TextTrackRadioButton. */}
+                            <THEOplayerReactUI.Menu id="subtitle-custom-menu" closeOnInput hidden heading="Subtitles (custom)">
+                                <CustomSubtitlePicker />
+                            </THEOplayerReactUI.Menu>
+
+                            {/* Pre-built subtitle style menu. */}
+                            <THEOplayerReactUI.TextTrackStyleMenu
+                                id="subtitle-style-menu"
+                                closeOnInput
+                                hidden
+                                heading="Subtitle appearance"
+                            />
+
+                            {/* Manual font color submenu using TextTrackStyleRadioGroup and TextTrackStyleResetButton. */}
+                            <THEOplayerReactUI.Menu id="font-color-menu" closeOnInput hidden heading="Font color (custom)">
+                                <THEOplayerReactUI.TextTrackStyleResetButton slot="heading" />
+                                <THEOplayerReactUI.TextTrackStyleRadioGroup property="fontColor">
+                                    {FONT_COLORS.map(({ label, value }) => (
+                                        <THEOplayerReactUI.RadioButton key={value} value={value}>
+                                            {label}
+                                        </THEOplayerReactUI.RadioButton>
+                                    ))}
+                                </THEOplayerReactUI.TextTrackStyleRadioGroup>
+                            </THEOplayerReactUI.Menu>
+                        </THEOplayerReactUI.MenuGroup>
+                    </>
+                }
+                error={<THEOplayerReactUI.ErrorDisplay />}
+            />
+        );
+    };
+    ```
+
+    [📜 View full source on GitHub](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/examples/react/text-tracks/demo.html)
+
+</details>

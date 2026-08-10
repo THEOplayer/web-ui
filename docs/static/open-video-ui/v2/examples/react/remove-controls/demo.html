@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Default UI with React</title>
+        <title>Removing controls with React</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,11 +26,12 @@
                 font-family: 'Noto Sans', sans-serif;
                 width: 100%;
             }
+
+            /* Hide the seek bar by targeting its shadow part, keeping all other controls. */
+            theoplayer-default-ui::part(time-range) {
+                display: none;
+            }
         </style>
-        <!--
-          JSPM Generator Import Map
-          Edit URL: https://generator.jspm.io/#VYxLDkBAEAV7IW5iqRkR7PQlHMCnE5M0I6NF3J4gEduqei8KAMK6mdWq8AAkVhPPba9kMMUcSEd2i7QH+4fHm71UidlP7dx94ukGN5GpMMM06cXyrPD+3gy+MRVo7mr0bmLhdT0BSwPyx5UA
-        -->
         <script type="importmap">
             {
                 "imports": {
@@ -78,7 +79,7 @@
                  * libraryLocation: For demonstration purposes, we use the free unpkg.com CDN.
                  * For production use, we recommend hosting THEOplayer yourself
                  * and changing this (as well as the <script> and <link> tags above)
-                 * to point to THEOplayer"s location on your own website.
+                 * to point to THEOplayer's location on your own website.
                  */
                 libraryLocation: 'https://cdn.theoplayer.com/dash/theoplayer/',
                 /**
