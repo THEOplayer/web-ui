@@ -68,7 +68,9 @@ export class VolumeRange extends Range {
     }
 
     protected override handleInput(): void {
-        if (this._player !== undefined && this._player.volume !== this.value) {
+        if (this._player !== undefined) {
+            // Interacting with the volume bar unmutes the player.
+            this._player.muted = false;
             this._player.volume = this.value;
         }
         super.handleInput();
