@@ -54,6 +54,7 @@ export class Button extends LitElement {
 
     private readonly _template: HTMLTemplateElement | undefined;
     private _disabled: boolean = false;
+    private _clickedDuringKeyPress: boolean = false;
 
     /**
      * Creates a basic button.
@@ -144,11 +145,13 @@ export class Button extends LitElement {
     }
 
     private readonly _onClick = () => {
+        this._clickedDuringKeyPress = true;
         this.handleClick();
     };
 
     protected readonly _onKeyDown = (e: KeyboardEvent) => {
         if (isActivationKey(e.keyCode) && !e.metaKey && !e.altKey) {
+            this._clickedDuringKeyPress = false;
             this.addEventListener('keyup', this._onKeyUp);
         } else {
             this.removeEventListener('keyup', this._onKeyUp);
@@ -157,7 +160,9 @@ export class Button extends LitElement {
 
     protected readonly _onKeyUp = (e: KeyboardEvent) => {
         this.removeEventListener('keyup', this._onKeyUp);
-        if (isActivationKey(e.keyCode)) {
+        // Some environments already turn the key press into a click, such as a browser's own
+        // default action for Enter, or a TV remote's OK button. Don't activate twice.
+        if (isActivationKey(e.keyCode) && !this._clickedDuringKeyPress) {
             this.handleClick();
         }
     };
