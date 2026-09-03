@@ -18,7 +18,7 @@
       "import": "./dist/THEOplayerUI.es5.mjs",
       "default": "./dist/THEOplayerUI.es5.js"
     },
-    "./polyfills": "./dist/THEOplayerUI-polyfills.js",
+    "./polyfills": "./dist/THEOplayerUI.polyfills.js",
     "./dist/*": "./dist/*",
     "./package": "./package.json",
     "./package.json": "./package.json"
