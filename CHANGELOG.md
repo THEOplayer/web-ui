@@ -1,5 +1,12 @@
 # @theoplayer/web-ui
 
+## 2.3.2
+
+### 🐛 Issues
+
+- Fixed a brief tap highlight appearing on the seek bar on iOS Safari when tapping or scrubbing.
+- When the player is muted, the volume bar now shows its minimum value, and dragging the volume bar now unmutes the player.
+
 ## 2.3.1
 
 ### 🐛 Issues
