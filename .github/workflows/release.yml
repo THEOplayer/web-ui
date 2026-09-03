@@ -43,15 +43,15 @@ jobs:
         run: npm run build --workspaces
       - name: Create release PR or publish to npm
         id: changesets
-        uses: changesets/action@8488615a623b1b9c987934bb89eae8af6a946ac1 # v1
+        uses: changesets/action@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
         with:
-          commit: 'Release'
-          title: 'Release'
-          version: npm run changeset:version
-          publish: npx changeset publish
-          createGithubReleases: true
+          github-token: ${{ steps.app-token.outputs.token }}
+          commit-message: 'Release'
+          pr-title: 'Release'
+          version-script: npm run changeset:version
+          publish-script: npx changeset publish
+          create-github-releases: true
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           # see https://github.com/changesets/changesets/issues/1152#issuecomment-3190884868
           NPM_TOKEN: ''
           NPM_CONFIG_PROVENANCE: true
