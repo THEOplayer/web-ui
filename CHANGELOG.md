@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 2.3.3
+
+### 🐛 Issues
+
+- Fixed the `@theoplayer/web-ui/polyfills` export, which pointed to a non-existent file.
+
 ## 2.3.2
 
 ### 🐛 Issues
