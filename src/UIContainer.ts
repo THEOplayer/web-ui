@@ -1,4 +1,4 @@
-import { html, type HTMLTemplateResult, LitElement, type PropertyValues } from 'lit';
+import { html, type HTMLTemplateResult, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import * as shadyCss from '@webcomponents/shadycss';
@@ -35,7 +35,7 @@ import { getTargetQualities } from './util/TrackUtils';
 import { MenuGroup } from './components/MenuGroup';
 import type { DeviceType } from './util/DeviceType';
 import { getFocusedChild, navigateByArrowKey } from './util/KeyboardNavigation';
-import { isArrowKey, isBackKey, KeyCode } from './util/KeyCode';
+import { isArrowKey, isBackKey, isPauseKey, isPlayKey, KeyCode } from './util/KeyCode';
 import { READY_EVENT } from './events/ReadyEvent';
 import { addGlobalStyles } from './Global';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
@@ -151,6 +151,7 @@ export class UIContainer extends LitElement {
     private _ended: boolean = false;
     private _casting: boolean = false;
     private _dvrThreshold: number = DEFAULT_DVR_THRESHOLD;
+    private _hasFirstPlay: boolean = false;
     private _previewTime: number = NaN;
     private _activeVideoTrack: MediaTrack | undefined = undefined;
 
@@ -476,10 +477,19 @@ export class UIContainer extends LitElement {
     /**
      * Whether the player has (previously) started playback for this stream.
      *
-     * Can be used in CSS to show/hide certain initial controls, such as a poster image or a centered play button.
+     * This is set to `true` on the first play,
+     * and is reset to `false` when changing to a different (non-autoplaying) source.
+     *
+     * Can be used to show/hide certain initial controls, such as a poster image or a centered play button.
      */
+    get hasFirstPlay(): boolean {
+        return this._hasFirstPlay;
+    }
+
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_FIRST_PLAY })
-    private accessor _hasFirstPlay: boolean = false;
+    private set hasFirstPlay(hasFirstPlay: boolean) {
+        this._hasFirstPlay = hasFirstPlay;
+    }
 
     /**
      * Whether the player is playing a linear ad.
@@ -968,7 +978,7 @@ export class UIContainer extends LitElement {
     };
 
     private readonly _onPlay = (): void => {
-        this._hasFirstPlay = true;
+        this.hasFirstPlay = true;
         this.paused = false;
         this._updateEnded();
     };
@@ -1096,7 +1106,7 @@ export class UIContainer extends LitElement {
 
     private readonly _onSourceChange = (): void => {
         this.closeMenu_();
-        this._hasFirstPlay = this._player !== undefined && !this._player.paused;
+        this.hasFirstPlay = this._player !== undefined && !this._player.paused;
     };
 
     private isUserIdle_(): boolean {
@@ -1157,27 +1167,39 @@ export class UIContainer extends LitElement {
             this.setUserIdle_();
             return;
         }
-        const tvFocusChildren = getTvFocusChildren(this);
-        const focusableChildren = getFocusableChildren(this);
-        let focusedChild = getFocusedChild();
-        if (!focusedChild) {
-            const children = tvFocusChildren ?? focusableChildren;
-            if (children.length > 0) {
-                children[0].focus();
-                focusedChild = children[0];
+
+        // Handle playback buttons on TV remote.
+        if (this._player !== undefined) {
+            if (isPlayKey(event)) {
+                event.preventDefault();
+                this._player.play();
+                return;
+            } else if (isPauseKey(event)) {
+                event.preventDefault();
+                this._player.pause();
+                return;
             }
         }
 
+        // Try to focus the first focusable child.
+        let focusedChild = getFocusedChild();
+        if (!focusedChild) {
+            const children = getTvFocusChildren(this) ?? getFocusableChildren(this);
+            if (children.length > 0) {
+                focusedChild = children[0];
+                event.preventDefault();
+                focusedChild.focus();
+                return;
+            }
+        }
+
+        // First button press should only make the UI visible.
         if (this.isUserIdle_()) {
-            // First button press should only make the UI visible
             return;
         }
-        if (event.keyCode === KeyCode.ENTER) {
-            if (focusedChild !== null) {
-                event.preventDefault();
-                focusedChild.click();
-            }
-        } else if (isArrowKey(event.keyCode) && navigateByArrowKey(this, focusableChildren, event.keyCode)) {
+
+        // Navigate by arrow keys.
+        if (isArrowKey(event.keyCode) && focusedChild && navigateByArrowKey(this, focusedChild, getFocusableChildren(this), event.keyCode)) {
             event.preventDefault();
             event.stopPropagation();
         }
