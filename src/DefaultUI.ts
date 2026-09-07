@@ -99,6 +99,7 @@ export class DefaultUI extends LitElement {
     private _userIdleTimeout: number | undefined = undefined;
     private _deviceType: DeviceType = 'desktop';
     private _dvrThreshold: number = DEFAULT_DVR_THRESHOLD;
+    private _hasFirstPlay: boolean = false;
 
     @queryAssignedNodes({ slot: 'title', flatten: true })
     private accessor titleSlotNodes!: Array<Node>;
@@ -296,6 +297,23 @@ export class DefaultUI extends LitElement {
         this._dvrThreshold = isNaN(value) ? 0 : value;
     }
 
+    /**
+     * Whether the player has (previously) started playback for this stream.
+     *
+     * This is set to `true` on the first play,
+     * and is reset to `false` when changing to a different (non-autoplaying) source.
+     *
+     * Can be used to show/hide certain initial controls, such as a poster image or a centered play button.
+     */
+    get hasFirstPlay(): boolean {
+        return this._hasFirstPlay;
+    }
+
+    @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.HAS_FIRST_PLAY })
+    private set hasFirstPlay(hasFirstPlay: boolean) {
+        this._hasFirstPlay = hasFirstPlay;
+    }
+
     @state()
     private accessor _hasTitle: boolean = false;
 
@@ -315,10 +333,14 @@ export class DefaultUI extends LitElement {
         }
 
         this._onTitleSlotChange();
+
+        this._updateFirstPlay();
+        this._addPlayerListeners();
     }
 
     disconnectedCallback(): void {
         clearTimeout(this._timeRangeInertTimeout);
+        this._removePlayerListeners();
     }
 
     protected override firstUpdated() {
@@ -328,9 +350,37 @@ export class DefaultUI extends LitElement {
         }
     }
 
+    private _addPlayerListeners() {
+        const player = this._uiRef.value?.player;
+        if (player === undefined) {
+            return;
+        }
+
+        this._removePlayerListeners();
+        player.addEventListener(['play', 'sourcechange'], this._updateFirstPlay);
+    }
+
+    private _removePlayerListeners() {
+        const player = this._uiRef.value?.player;
+        if (player === undefined) {
+            return;
+        }
+
+        player.removeEventListener(['play', 'sourcechange'], this._updateFirstPlay);
+    }
+
     protected _onUiReady(): void {
+        this._updateFirstPlay();
+        this._addPlayerListeners();
+
         this.dispatchEvent(createCustomEvent(READY_EVENT));
     }
+
+    private readonly _updateFirstPlay = () => {
+        if (this._uiRef.value) {
+            this.hasFirstPlay = this._uiRef.value.hasFirstPlay;
+        }
+    };
 
     private readonly _updateStreamType = () => {
         if (this._uiRef.value) {
@@ -399,7 +449,10 @@ export class DefaultUI extends LitElement {
                         mobile-only
                         ad-hidden
                     ></theoplayer-seek-button>
-                    <theoplayer-play-button part="center-play-button play-button center-button"></theoplayer-play-button>
+                    <theoplayer-play-button
+                        part="center-play-button play-button center-button"
+                        ?tv-focus=${!this.hasFirstPlay}
+                    ></theoplayer-play-button>
                     <theoplayer-seek-button
                         part="seek-forward-button seek-button center-button"
                         seek-offset="10"
@@ -425,7 +478,7 @@ export class DefaultUI extends LitElement {
                     <theoplayer-time-range
                         part="time-range"
                         show-ad-markers
-                        tv-focus
+                        ?tv-focus=${this.hasFirstPlay}
                         .inert=${this._timeRangeInert}
                         class="theoplayer-ad-control"
                         style=${styleMap({
