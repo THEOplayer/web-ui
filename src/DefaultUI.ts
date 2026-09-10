@@ -5,7 +5,6 @@ import { styleMap } from 'lit/directives/style-map.js';
 import type { ChromelessPlayer, SourceDescription, UIPlayerConfiguration } from 'theoplayer/chromeless';
 import { DEFAULT_DVR_THRESHOLD, DEFAULT_TV_USER_IDLE_TIMEOUT, DEFAULT_USER_IDLE_TIMEOUT, type UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
-import streamTypeVisibilityCss from './StreamTypeVisibility.css';
 import { Attribute } from './util/Attribute';
 import { applyExtensions } from './extensions/ExtensionRegistry';
 import { isMobile, isTv } from './util/Environment';
@@ -75,7 +74,7 @@ import { createCustomEvent } from './util/EventUtils';
  */
 @customElement('theoplayer-default-ui')
 export class DefaultUI extends LitElement {
-    static override styles = [defaultUiCss, streamTypeVisibilityCss];
+    static override styles = [defaultUiCss];
     static override shadowRootOptions: ShadowRootInit = {
         ...LitElement.shadowRootOptions,
         delegatesFocus: true

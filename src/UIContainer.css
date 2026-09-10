@@ -243,9 +243,11 @@ theoplayer-gesture-receiver {
 }
 
 /*
- * Stream-type-specific elements (live-only, live-hidden, dvr-only, dvr-hidden,
- * stream-type-only and stream-type-hidden) are handled by StreamTypeVisibility.css
+ * Stream-type-specific elements
+ * (live-only, live-hidden, dvr-only, dvr-hidden, stream-type-only and stream-type-hidden)
  */
+/* prettier-ignore */
+@mixin stream-type-visibility-slotted [part~='chrome'];
 
 /*
  * Ad-only and ad-hidden elements

@@ -2,7 +2,7 @@ import { html, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { MenuGroup } from './MenuGroup';
 import menuTableCss from './MenuTable.css';
-import streamTypeVisibilityCss from '../StreamTypeVisibility.css';
+import settingsMenuCss from './SettingsMenu.css';
 import { stateReceiver } from './StateReceiverMixin';
 import { getLocale } from '../i18n';
 import { Attribute } from '../util/Attribute';
@@ -22,7 +22,7 @@ import './PlaybackRateMenu';
 @customElement('theoplayer-settings-menu')
 @stateReceiver(['lang', 'streamType'])
 export class SettingsMenu extends MenuGroup {
-    static styles = [...MenuGroup.styles, menuTableCss, streamTypeVisibilityCss];
+    static styles = [...MenuGroup.styles, menuTableCss, settingsMenuCss];
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
     accessor lang: string = '';

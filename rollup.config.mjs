@@ -156,7 +156,7 @@ function jsPlugins({ es5 = false, node = false, module = false, production = fal
                     autoprefixer: { grid: 'no-autoplace' },
                     enableClientSidePolyfills: false
                 }),
-                postcssMixins()
+                postcssMixins({ mixinsDir: './src/mixins' })
             ],
             minimize: production
         }),

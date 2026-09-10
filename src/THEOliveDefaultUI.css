@@ -122,9 +122,11 @@ theoplayer-time-range {
 }
 
 /*
- * Stream-type-specific elements (live-only, live-hidden, dvr-only, dvr-hidden,
- * stream-type-only and stream-type-hidden) are handled by StreamTypeVisibility.css
+ * Stream-type-specific elements
+ * (live-only, live-hidden, dvr-only, dvr-hidden, stream-type-only and stream-type-hidden)
  */
+@mixin stream-type-visibility;
+@mixin stream-type-visibility-slotted theoplayer-control-bar;
 
 /*
  * Ad-only and ad-hidden elements
