@@ -5,6 +5,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import type { ChromelessPlayer, SourceDescription, UIPlayerConfiguration } from 'theoplayer/chromeless';
 import { DEFAULT_DVR_THRESHOLD, DEFAULT_TV_USER_IDLE_TIMEOUT, DEFAULT_USER_IDLE_TIMEOUT, type UIContainer } from './UIContainer';
 import defaultUiCss from './DefaultUI.css';
+import streamTypeVisibilityCss from './StreamTypeVisibility.css';
 import { Attribute } from './util/Attribute';
 import { applyExtensions } from './extensions/ExtensionRegistry';
 import { isMobile, isTv } from './util/Environment';
@@ -74,7 +75,7 @@ import { createCustomEvent } from './util/EventUtils';
  */
 @customElement('theoplayer-default-ui')
 export class DefaultUI extends LitElement {
-    static override styles = [defaultUiCss];
+    static override styles = [defaultUiCss, streamTypeVisibilityCss];
     static override shadowRootOptions: ShadowRootInit = {
         ...LitElement.shadowRootOptions,
         delegatesFocus: true
@@ -448,6 +449,7 @@ export class DefaultUI extends LitElement {
                         seek-offset="-10"
                         mobile-only
                         ad-hidden
+                        stream-type-hidden="live"
                     ></theoplayer-seek-button>
                     <theoplayer-play-button
                         part="center-play-button play-button center-button"
@@ -458,6 +460,7 @@ export class DefaultUI extends LitElement {
                         seek-offset="10"
                         mobile-only
                         ad-hidden
+                        stream-type-hidden="live"
                     ></theoplayer-seek-button>
                 </slot>
             </div>
@@ -481,10 +484,7 @@ export class DefaultUI extends LitElement {
                         ?tv-focus=${this.hasFirstPlay}
                         .inert=${this._timeRangeInert}
                         class="theoplayer-ad-control"
-                        style=${styleMap({
-                            // Hide seekbar when stream is live with no DVR
-                            display: this.streamType === 'live' ? 'none' : ''
-                        })}
+                        stream-type-hidden="live"
                     ></theoplayer-time-range>
                     <theoplayer-chromecast-button tv-hidden ad-only class="theoplayer-ad-control"></theoplayer-chromecast-button>
                     <theoplayer-fullscreen-button ad-only class="theoplayer-ad-control"></theoplayer-fullscreen-button>

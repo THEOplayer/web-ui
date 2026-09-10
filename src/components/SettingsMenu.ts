@@ -2,9 +2,11 @@ import { html, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { MenuGroup } from './MenuGroup';
 import menuTableCss from './MenuTable.css';
+import streamTypeVisibilityCss from '../StreamTypeVisibility.css';
 import { stateReceiver } from './StateReceiverMixin';
 import { getLocale } from '../i18n';
 import { Attribute } from '../util/Attribute';
+import type { StreamType } from '../util/StreamType';
 
 // Load components used in template
 import './ActiveQualityDisplay';
@@ -18,12 +20,15 @@ import './PlaybackRateMenu';
  * @slot `heading` - A slot for the menu's heading.
  */
 @customElement('theoplayer-settings-menu')
-@stateReceiver(['lang'])
+@stateReceiver(['lang', 'streamType'])
 export class SettingsMenu extends MenuGroup {
-    static styles = [...MenuGroup.styles, menuTableCss];
+    static styles = [...MenuGroup.styles, menuTableCss, streamTypeVisibilityCss];
 
     @property({ reflect: true, type: String, attribute: Attribute.LANG })
     accessor lang: string = '';
+
+    @property({ reflect: true, type: String, attribute: Attribute.STREAM_TYPE })
+    accessor streamType: StreamType = 'vod';
 
     protected override render(): TemplateResult {
         const locale = getLocale(this.lang);
@@ -40,7 +45,7 @@ export class SettingsMenu extends MenuGroup {
                             </theoplayer-menu-button>
                         </td>
                     </tr>
-                    <tr>
+                    <tr stream-type-hidden="live">
                         <td><span>${locale.playbackRateMenuHeading}</span></td>
                         <td>
                             <theoplayer-menu-button menu="playback-rate-menu">

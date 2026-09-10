@@ -4,6 +4,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import './components/theolive/quality/BadNetworkModeButton';
 import './components/theolive/quality/BadNetworkModeMenu';
 import css from './THEOliveDefaultUI.css';
+import streamTypeVisibilityCss from './StreamTypeVisibility.css';
 import type { ErrorEvent, UIPlayerConfiguration } from 'theoplayer/chromeless';
 import { DefaultUI } from './DefaultUI';
 import { Attribute } from './util/Attribute';
@@ -14,7 +15,7 @@ import { getLocale } from './i18n';
  */
 @customElement('theolive-default-ui')
 export class THEOliveDefaultUI extends DefaultUI {
-    static override styles = [css];
+    static override styles = [css, streamTypeVisibilityCss];
 
     @state()
     private accessor _announcementType: 'loading' | 'offline' | 'announcement' | '' = '';

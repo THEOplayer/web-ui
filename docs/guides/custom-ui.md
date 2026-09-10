@@ -114,6 +114,48 @@ theoplayer-ui:not([mobile]) [mobile-only] {
 | :-------------------------------------------------------: | :-----------------------------------------------------: |
 |                          Desktop                          |                         Mobile                          |
 
+## A player for livestreams
+
+Not every control makes sense for every stream. A livestream without a DVR window cannot be seeked, so a seek bar or a playback speed setting would be useless. Conversely, a button to seek back to the live point is only useful for a livestream.
+
+`<theoplayer-ui>` detects the stream type of its current source, and reflects it as a `stream-type` attribute with value `"vod"`, `"live"` (a livestream without DVR) or `"dvr"` (a livestream with a DVR window). Elements can declare in which stream types they want to be shown using the `stream-type-only` and `stream-type-hidden` attributes, which take a space-separated list of stream types:
+
+```html
+<theoplayer-ui configuration="..." source="...">
+    <theoplayer-control-bar>
+        <!-- The seek bar is only useful if there's something to seek through -->
+        <theoplayer-time-range stream-type-hidden="live"></theoplayer-time-range>
+    </theoplayer-control-bar>
+    <theoplayer-control-bar>
+        <theoplayer-play-button></theoplayer-play-button>
+        <!-- This button seeks back to the live point, so only show it for livestreams -->
+        <theoplayer-live-button stream-type-only="live dvr"></theoplayer-live-button>
+        <theoplayer-time-display show-duration stream-type-hidden="live"></theoplayer-time-display>
+    </theoplayer-control-bar>
+</theoplayer-ui>
+```
+
+For the most common cases, there are shorthand boolean attributes:
+
+| Attribute     | Equivalent to                   | Element is hidden for           |
+| ------------- | ------------------------------- | ------------------------------- |
+| `live-only`   | `stream-type-only="live dvr"`   | VOD streams                     |
+| `live-hidden` | `stream-type-hidden="live dvr"` | all livestreams                 |
+| `dvr-only`    | `stream-type-only="dvr"`        | VOD and livestreams without DVR |
+| `dvr-hidden`  | `stream-type-hidden="dvr"`      | livestreams with DVR            |
+
+An element is hidden as soon as one of its attributes says it should be hidden, so combining attributes narrows down the stream types in which the element is shown. For example, `live-only dvr-hidden` shows the element for livestreams without DVR only. (Note that `live-hidden dvr-only` therefore hides the element for _every_ stream type. To show an element for VOD and DVR streams only, use `stream-type-hidden="live"` instead.)
+
+As with `mobile-hidden` and `mobile-only`, you need to copy these rules into your own CSS if you use them on elements nested inside a slotted element, such as a control bar:
+
+```css
+/* Hide elements which are not meant for the current stream type */
+theoplayer-ui[stream-type='live'] [stream-type-hidden~='live'],
+theoplayer-ui[stream-type='live'] [stream-type-only]:not([stream-type-only~='live']) {
+    display: none !important;
+}
+```
+
 ## More examples
 
 ### Default UI

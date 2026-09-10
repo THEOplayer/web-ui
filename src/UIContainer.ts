@@ -4,6 +4,7 @@ import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import * as shadyCss from '@webcomponents/shadycss';
 import { ChromelessPlayer, type MediaTrack, type SourceDescription, type UIPlayerConfiguration, type VideoQuality } from 'theoplayer/chromeless';
 import elementCss from './UIContainer.css';
+import streamTypeVisibilityCss from './StreamTypeVisibility.css';
 import {
     arrayFind,
     arrayRemove,
@@ -105,7 +106,7 @@ export const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
  */
 @customElement('theoplayer-ui')
 export class UIContainer extends LitElement {
-    static override styles = [elementCss];
+    static override styles = [elementCss, streamTypeVisibilityCss];
     static override shadowRootOptions: ShadowRootInit = {
         ...LitElement.shadowRootOptions,
         delegatesFocus: true

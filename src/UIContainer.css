@@ -243,12 +243,9 @@ theoplayer-gesture-receiver {
 }
 
 /*
- * Live-only and live-hidden elements
+ * Stream-type-specific elements (live-only, live-hidden, dvr-only, dvr-hidden,
+ * stream-type-only and stream-type-hidden) are handled by StreamTypeVisibility.css
  */
-:host(:not([stream-type='vod'])) [part~='chrome'] ::slotted([live-hidden]),
-:host([stream-type='vod']) [part~='chrome'] ::slotted([live-only]) {
-    display: none !important;
-}
 
 /*
  * Ad-only and ad-hidden elements
