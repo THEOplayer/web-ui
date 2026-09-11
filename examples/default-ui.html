@@ -76,6 +76,7 @@
                     <option value="starWarsTrailer">Star Wars Episode VII Trailer</option>
                     <option value="vr">National Geographic (VR)</option>
                     <option value="optiViewLive">OptiView Live demo</option>
+                    <option value="optiViewRealtime">OptiView Real-time demo</option>
                 </select>
             </label>
         </div>
@@ -139,6 +140,14 @@
                         type: 'theolive'
                     },
                     metadata: { title: 'OptiView Live demo' }
+                },
+                optiViewRealtime: {
+                    sources: {
+                        src: 'multiview',
+                        streamAccountId: 'k9Mwad',
+                        type: 'millicast'
+                    },
+                    metadata: { title: 'OptiView Realtime demo' }
                 }
             };
 
