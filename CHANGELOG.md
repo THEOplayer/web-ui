@@ -1,5 +1,21 @@
 # @theoplayer/web-ui
 
+## 2.4.0
+
+### ✨ Features
+
+- Improved support for TV remote controls.
+- Added `stream-type-only` and `stream-type-hidden` attributes to show or hide UI elements for specific stream types.
+  Both attributes take a space-separated list of stream types, for example `stream-type-hidden="live"` hides an element
+  for livestreams without DVR, while keeping it for VOD streams and for livestreams with DVR.
+  The existing `live-only` and `live-hidden` attributes are now shorthands for `stream-type-only="live dvr"`
+  and `stream-type-hidden="live dvr"`, and are complemented with new `dvr-only` and `dvr-hidden` attributes.
+
+### 🐛 Issues
+
+- `<theoplayer-default-ui>` no longer shows the seek buttons and the playback speed setting when playing
+  a livestream without DVR.
+
 ## 2.3.3
 
 ### 🐛 Issues
