@@ -1,0 +1,46 @@
+---
+sidebar_position: 2
+sidebar_custom_props: { 'icon': '✂️' }
+slug: /react/examples/remove-controls
+---
+
+# Removing controls
+
+import Example from '../../../components/Example';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from '../shared.module.css';
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v2/examples/react/remove-controls/demo.html')} />
+
+This sample demonstrates how to remove a specific control from the default UI. The default UI exposes its internal controls as [CSS shadow parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part), so you can hide any of them with `::part()` — here we hide the seek bar and keep the rest.
+
+<details>
+    <summary>Code</summary>
+
+    ```jsx
+    import { DefaultUI } from '@theoplayer/react-ui';
+
+    // In your stylesheet, hide the seek bar by targeting its shadow part:
+    //
+    //   theoplayer-default-ui::part(time-range) {
+    //       display: none;
+    //   }
+
+    const configuration = {
+        libraryLocation: '/path/to/theoplayer/',
+        license: 'your_theoplayer_license'
+    };
+
+    const source = {
+        sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
+        metadata: { title: 'Big Buck Bunny' }
+    };
+
+    const App = () => {
+        return <DefaultUI configuration={configuration} source={source} />;
+    };
+    ```
+
+    [📜 View full source on GitHub](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/examples/react/remove-controls/demo.html)
+
+</details>

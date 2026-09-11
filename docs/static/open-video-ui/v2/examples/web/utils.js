@@ -12,6 +12,8 @@
  *   Changes the player's source.
  * - `{ type: "style", style: string }`
  *   Updates the custom CSS style.
+ * - `{ type: "language", language: string }`
+ *   Sets the UI language (the `lang` attribute).
  */
 window.addEventListener('message', (event) => {
     if (event.origin !== location.origin) return;
@@ -35,6 +37,11 @@ window.addEventListener('message', (event) => {
             if (styleEl) {
                 styleEl.textContent = data.style;
             }
+            break;
+        }
+        case 'language': {
+            const ui = document.querySelector('theoplayer-default-ui, theoplayer-ui');
+            ui?.setAttribute('lang', data.language);
             break;
         }
     }

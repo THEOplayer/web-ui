@@ -1,0 +1,79 @@
+---
+sidebar_position: 3
+sidebar_custom_props: { 'icon': '✨' }
+slug: /react/examples/modern
+---
+
+# Modern UI
+
+import Example from '../../../components/Example';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from '../shared.module.css';
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v2/examples/react/modern/demo.html')} hideDeviceType />
+
+This sample demonstrates a modern, streaming-service style custom UI: a centered playback pill with rewind, play/pause and forward, a full-width seek bar, and rounded translucent control clusters.
+
+<details>
+    <summary>Code</summary>
+
+    ```jsx
+    import * as THEOplayerReactUI from '@theoplayer/react-ui';
+
+    const configuration = {
+        libraryLocation: '/path/to/theoplayer/',
+        license: 'your_theoplayer_license'
+    };
+
+    const source = {
+        sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
+        metadata: { title: 'Big Buck Bunny' }
+    };
+
+    const Spacer = () => <span className="spacer" />;
+
+    const App = () => {
+        return (
+            <THEOplayerReactUI.UIContainer
+                configuration={configuration}
+                source={source}
+                centeredChrome={
+                    <div className="pill center-pill">
+                        <THEOplayerReactUI.SeekButton seekOffset={-10} />
+                        <THEOplayerReactUI.PlayButton />
+                        <THEOplayerReactUI.SeekButton seekOffset={10} />
+                    </div>
+                }
+                centeredLoading={<THEOplayerReactUI.LoadingIndicator />}
+                bottomChrome={
+                    <div className="bottom-chrome">
+                        <THEOplayerReactUI.ControlBar>
+                            <THEOplayerReactUI.TimeRange />
+                        </THEOplayerReactUI.ControlBar>
+                        <div className="bottom-row">
+                            <span className="pill">
+                                <THEOplayerReactUI.PlayButton />
+                                <span className="volume">
+                                    <THEOplayerReactUI.MuteButton />
+                                    <THEOplayerReactUI.VolumeRange />
+                                </span>
+                                <THEOplayerReactUI.TimeDisplay showDuration />
+                            </span>
+                            <Spacer />
+                            <span className="pill">
+                                <THEOplayerReactUI.LanguageMenuButton menu="language-menu" />
+                                <THEOplayerReactUI.FullscreenButton />
+                            </span>
+                        </div>
+                    </div>
+                }
+                menu={<THEOplayerReactUI.LanguageMenu id="language-menu" />}
+                error={<THEOplayerReactUI.ErrorDisplay />}
+            />
+        );
+    };
+    ```
+
+    [📜 View full source on GitHub](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/examples/react/modern/demo.html)
+
+</details>

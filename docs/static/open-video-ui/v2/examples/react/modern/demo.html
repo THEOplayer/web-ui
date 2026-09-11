@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Default UI with React</title>
+        <title>Modern UI with React</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,7 +14,7 @@
                 padding: 0;
             }
 
-            theoplayer-default-ui:not(:defined) {
+            theoplayer-ui:not(:defined) {
                 display: inline-block;
                 box-sizing: border-box;
                 width: 100%;
@@ -22,15 +22,82 @@
                 background: #000;
             }
 
-            theoplayer-default-ui {
-                font-family: 'Noto Sans', sans-serif;
+            theoplayer-ui {
                 width: 100%;
+                font-family: 'Noto Sans', sans-serif;
+
+                /* Dolby OptiView purple accent. */
+                --theoplayer-range-bar-color: #a855f7;
+                --theoplayer-range-thumb-background: radial-gradient(circle, #c084fc, #7c3aed);
+                --theoplayer-control-background-gradient-stops: transparent 0%, rgba(46, 16, 101, 0.85) 100%;
+            }
+
+            .title {
+                user-select: none;
+                color: #fff;
+                text-shadow: 0 0 4px rgba(0, 0, 0, 0.75);
+                font-size: 14px;
+                line-height: 24px;
+                padding: 10px;
+            }
+
+            .spacer {
+                flex-grow: 1;
+            }
+
+            .bottom-row {
+                display: flex;
+                flex-flow: row nowrap;
+                align-items: center;
+                gap: 8px;
+                padding: 0 8px 8px;
+            }
+
+            .bottom-chrome {
+                position: relative;
+                display: flex;
+                flex-flow: column nowrap;
+                align-items: stretch;
+            }
+
+            .pill {
+                display: inline-flex;
+                align-items: center;
+                border-radius: 999px;
+                background: linear-gradient(135deg, rgba(109, 40, 217, 0.55), rgba(168, 85, 247, 0.45));
+                backdrop-filter: blur(3px);
+            }
+
+            .bottom-row .pill {
+                height: 44px;
+            }
+
+            .volume {
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .volume-slider {
+                display: inline-flex;
+                align-items: center;
+                width: 0;
+                overflow: hidden;
+                transition: width 0.2s ease;
+            }
+
+            .volume:hover .volume-slider {
+                width: 100px;
+            }
+
+            .center-pill {
+                padding: 4px 10px;
+                gap: 8px;
+            }
+
+            .center-pill * {
+                --theoplayer-control-height: 48px;
             }
         </style>
-        <!--
-          JSPM Generator Import Map
-          Edit URL: https://generator.jspm.io/#VYxLDkBAEAV7IW5iqRkR7PQlHMCnE5M0I6NF3J4gEduqei8KAMK6mdWq8AAkVhPPba9kMMUcSEd2i7QH+4fHm71UidlP7dx94ukGN5GpMMM06cXyrPD+3gy+MRVo7mr0bmLhdT0BSwPyx5UA
-        -->
         <script type="importmap">
             {
                 "imports": {
@@ -78,7 +145,7 @@
                  * libraryLocation: For demonstration purposes, we use the free unpkg.com CDN.
                  * For production use, we recommend hosting THEOplayer yourself
                  * and changing this (as well as the <script> and <link> tags above)
-                 * to point to THEOplayer"s location on your own website.
+                 * to point to THEOplayer's location on your own website.
                  */
                 libraryLocation: 'https://cdn.theoplayer.com/dash/theoplayer/',
                 /**
@@ -92,27 +159,60 @@
                 sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
                 metadata: {
                     title: 'Big Buck Bunny'
-                },
-                textTracks: [
-                    {
-                        default: true,
-                        src: 'https://cdn.theoplayer.com/video/big_buck_bunny/thumbnails.vtt',
-                        label: 'thumbnails',
-                        kind: 'metadata'
-                    }
-                ]
+                }
             };
+
+            const Spacer = () => <span className="spacer" />;
 
             const App = () => {
                 const source = useSourceFromParent() || defaultSource;
                 const deviceType = useDeviceTypeFromParent() || null;
                 const title = source.metadata.title;
                 return (
-                    <THEOplayerReactUI.DefaultUI
+                    <THEOplayerReactUI.UIContainer
                         configuration={configuration}
                         source={source}
                         device-type={deviceType}
-                        title={<span>{title}</span>}
+                        topChrome={
+                            <THEOplayerReactUI.ControlBar>
+                                <span className="title">{title}</span>
+                                <Spacer />
+                            </THEOplayerReactUI.ControlBar>
+                        }
+                        centeredChrome={
+                            <div className="pill center-pill">
+                                <THEOplayerReactUI.SeekButton seekOffset={-10} />
+                                <THEOplayerReactUI.PlayButton />
+                                <THEOplayerReactUI.SeekButton seekOffset={10} />
+                            </div>
+                        }
+                        centeredLoading={<THEOplayerReactUI.LoadingIndicator />}
+                        bottomChrome={
+                            <div className="bottom-chrome">
+                                <THEOplayerReactUI.ControlBar>
+                                    <THEOplayerReactUI.TimeRange />
+                                </THEOplayerReactUI.ControlBar>
+                                <div className="bottom-row">
+                                    <span className="pill">
+                                        <THEOplayerReactUI.PlayButton />
+                                        <span className="volume">
+                                            <THEOplayerReactUI.MuteButton />
+                                            <span className="volume-slider">
+                                                <THEOplayerReactUI.VolumeRange />
+                                            </span>
+                                        </span>
+                                        <THEOplayerReactUI.TimeDisplay showDuration />
+                                    </span>
+                                    <Spacer />
+                                    <span className="pill">
+                                        <THEOplayerReactUI.LanguageMenuButton menu="language-menu" />
+                                        <THEOplayerReactUI.FullscreenButton />
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                        menu={<THEOplayerReactUI.LanguageMenu id="language-menu" />}
+                        error={<THEOplayerReactUI.ErrorDisplay />}
                     />
                 );
             };

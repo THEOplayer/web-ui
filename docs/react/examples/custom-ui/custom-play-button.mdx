@@ -1,0 +1,70 @@
+---
+sidebar_position: 4
+sidebar_custom_props: { 'icon': '⏯️' }
+slug: /react/examples/custom-play-button
+---
+
+# Custom play button
+
+import Example from '../../../components/Example';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from '../shared.module.css';
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v2/examples/react/custom-play-button/demo.html')} hideDeviceType />
+
+This sample demonstrates a custom, animated play button. The play/pause icons are overridden through the button's named slots, and the button is styled as a circular badge that gently pulses while the player is paused (the play button reflects its paused state as a `paused` attribute, which we target with CSS).
+
+<details>
+    <summary>Code</summary>
+
+    ```jsx
+    import * as THEOplayerReactUI from '@theoplayer/react-ui';
+
+    // In your stylesheet:
+    //   .big-play { border-radius: 50%; padding: 32px; background: rgba(124, 58, 237, 0.45); backdrop-filter: blur(6px); }
+    //   .big-play svg { width: 64px; height: 64px; }
+    //   .big-play:hover { animation: pulse 3s ease-in-out infinite; }  /* only pulse on hover */
+    //   @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+
+    const configuration = {
+        libraryLocation: '/path/to/theoplayer/',
+        license: 'your_theoplayer_license'
+    };
+
+    const source = {
+        sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
+        metadata: { title: 'Big Buck Bunny' }
+    };
+
+    const App = () => {
+        return (
+            <THEOplayerReactUI.UIContainer
+                configuration={configuration}
+                source={source}
+                centeredChrome={
+                    <THEOplayerReactUI.PlayButton className="big-play">
+                        <svg slot="play-icon" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <svg slot="pause-icon" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                            <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+                        </svg>
+                    </THEOplayerReactUI.PlayButton>
+                }
+                bottomChrome={
+                    <THEOplayerReactUI.ControlBar>
+                        <THEOplayerReactUI.PlayButton />
+                        <THEOplayerReactUI.MuteButton />
+                        <THEOplayerReactUI.TimeDisplay showDuration />
+                        <THEOplayerReactUI.FullscreenButton />
+                    </THEOplayerReactUI.ControlBar>
+                }
+                error={<THEOplayerReactUI.ErrorDisplay />}
+            />
+        );
+    };
+    ```
+
+    [📜 View full source on GitHub](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/examples/react/custom-play-button/demo.html)
+
+</details>

@@ -1,0 +1,67 @@
+---
+sidebar_position: 3
+sidebar_custom_props: { 'icon': '🌍' }
+slug: /react/examples/localization
+---
+
+# Localization
+
+import Example from '../../../components/Example';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from '../shared.module.css';
+
+<Example
+    className={styles.player}
+    src={useBaseUrl('/open-video-ui/v2/examples/react/localization/demo.html')}
+    hideSource
+    hideDeviceType
+    languages={{ en: 'English', nl: 'Nederlands (Dutch)' }}
+/>
+
+This sample demonstrates localizing the UI and switching language at runtime. A locale is registered with `addLocale`, and the language is selected through the `lang` prop. Use the dropdown below the player to switch between English and Dutch. See also the [localization guide](../../guides/localization.md).
+
+<details>
+    <summary>Code</summary>
+
+    ```jsx
+    import { useState } from 'react';
+    import { DefaultUI, addLocale } from '@theoplayer/react-ui';
+
+    const configuration = {
+        libraryLocation: '/path/to/theoplayer/',
+        license: 'your_theoplayer_license'
+    };
+
+    const source = {
+        sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
+        metadata: { title: 'Big Buck Bunny' }
+    };
+
+    // Register the Dutch locale. Untranslated messages fall back to the built-in English defaults.
+    addLocale('nl', {
+        playAria: 'afspelen',
+        pauseAria: 'pauzeren',
+        languageMenuHeading: 'Taal',
+        subtitleMenuHeading: 'Ondertitels',
+        subtitleOff: 'Uit',
+        settingsMenuHeading: 'Instellingen'
+        // ...
+    });
+
+    const App = () => {
+        const [lang, setLang] = useState('en');
+        return (
+            <>
+                <DefaultUI configuration={configuration} source={source} lang={lang} />
+                <select value={lang} onChange={(event) => setLang(event.target.value)}>
+                    <option value="en">English</option>
+                    <option value="nl">Nederlands (Dutch)</option>
+                </select>
+            </>
+        );
+    };
+    ```
+
+    [📜 View full source on GitHub](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/examples/react/localization/demo.html)
+
+</details>

@@ -1,0 +1,81 @@
+---
+sidebar_position: 4
+sidebar_custom_props: { 'icon': '💬' }
+slug: /web/examples/text-tracks
+---
+
+# Text tracks and subtitles
+
+import Example from '../../components/Example';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from '../shared.module.css';
+
+<Example className={styles.player} src={useBaseUrl('/open-video-ui/v2/examples/web/text-tracks/demo.html')} hideSource hideDeviceType />
+
+This example demonstrates the text track components for subtitle selection and styling.
+
+The settings menu contains four submenus:
+
+- **Subtitles**: the idiomatic `<theoplayer-track-radio-group track-type="subtitles" show-off>`, which composes `<theoplayer-text-track-off-radio-button>` and `<theoplayer-text-track-radio-button>` for you.
+- **Subtitles (custom)**: the same picker built manually from `<theoplayer-text-track-off-radio-button>` and `<theoplayer-text-track-radio-button>`.
+- **Subtitle appearance**: the pre-built `<theoplayer-text-track-style-menu>`, which composes `<theoplayer-text-track-style-display>`, `<theoplayer-text-track-style-radio-group>` and `<theoplayer-text-track-style-reset-button>`.
+- **Font color (custom)**: a single style option built manually from `<theoplayer-text-track-style-radio-group>` and `<theoplayer-text-track-style-reset-button>`.
+
+<details>
+    <summary>Code</summary>
+    ```html showLineNumbers
+    <theoplayer-ui
+        configuration='{"libraryLocation":"/path/to/theoplayer/","license":"your_theoplayer_license"}'
+        source='{"sources":{"src":"https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"},"metadata":{"title":"Elephant&apos;s Dream"}}'
+    >
+        <theoplayer-control-bar>
+            <theoplayer-play-button></theoplayer-play-button>
+            <theoplayer-mute-button></theoplayer-mute-button>
+            <theoplayer-volume-range></theoplayer-volume-range>
+            <theoplayer-time-display show-duration></theoplayer-time-display>
+            <theoplayer-language-menu-button menu="language-menu"></theoplayer-language-menu-button>
+            <theoplayer-menu-button menu="settings-menu">CC</theoplayer-menu-button>
+            <theoplayer-fullscreen-button></theoplayer-fullscreen-button>
+        </theoplayer-control-bar>
+
+        <theoplayer-language-menu id="language-menu" slot="menu" hidden></theoplayer-language-menu>
+
+        <theoplayer-menu-group id="settings-menu" slot="menu" hidden>
+            <theoplayer-menu>
+                <span slot="heading">Subtitles &amp; captions</span>
+                <theoplayer-menu-button menu="subtitle-menu"><span>Select</span></theoplayer-menu-button>
+                <theoplayer-menu-button menu="subtitle-style-menu">
+                    <theoplayer-text-track-style-display property="fontColor"></theoplayer-text-track-style-display>
+                </theoplayer-menu-button>
+            </theoplayer-menu>
+
+            <!-- Idiomatic subtitle picker (composes TextTrackOffRadioButton + TextTrackRadioButton). -->
+            <theoplayer-menu id="subtitle-menu" menu-close-on-input hidden>
+                <span slot="heading">Subtitles</span>
+                <theoplayer-track-radio-group track-type="subtitles" show-off></theoplayer-track-radio-group>
+            </theoplayer-menu>
+
+            <!-- Pre-built subtitle style menu. -->
+            <theoplayer-text-track-style-menu id="subtitle-style-menu" menu-close-on-input hidden>
+                <span slot="heading">Subtitle appearance</span>
+            </theoplayer-text-track-style-menu>
+
+            <!-- Manual font color submenu (TextTrackStyleRadioGroup + TextTrackStyleResetButton). -->
+            <theoplayer-menu id="font-color-menu" menu-close-on-input hidden>
+                <theoplayer-text-track-style-reset-button slot="heading"></theoplayer-text-track-style-reset-button>
+                <span slot="heading">Font color (custom)</span>
+                <theoplayer-text-track-style-radio-group property="fontColor">
+                    <theoplayer-radio-button value="">Default</theoplayer-radio-button>
+                    <theoplayer-radio-button value="rgb(255,255,0)">Yellow</theoplayer-radio-button>
+                    <theoplayer-radio-button value="rgb(0,255,255)">Cyan</theoplayer-radio-button>
+                </theoplayer-text-track-style-radio-group>
+            </theoplayer-menu>
+        </theoplayer-menu-group>
+
+        <theoplayer-error-display slot="error"></theoplayer-error-display>
+    </theoplayer-ui>
+    ```
+
+    [📜 View full source on GitHub](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v2/examples/web/text-tracks/demo.html)
+
+</details>

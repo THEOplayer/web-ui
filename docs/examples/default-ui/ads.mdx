@@ -1,22 +1,21 @@
 ---
-sidebar_position: 11
+sidebar_position: 2
 sidebar_custom_props: { 'icon': '💰' }
+slug: /web/examples/ads
 ---
 
 # Advertisements
 
-The default UI has full support for advertisements.
-
-During playback, it shows yellow ad markers on the seek bar to indicate the times when the content will be interrupted by an ad.
-
-While playing an ad, the UI shows ad-specific controls such as a skip button and a countdown. These controls are also mobile-aware, for example a
-dedicated clickthrough button replaces the regular clickthrough behavior on desktop.
-
-import Example from '../components/Example';
+import Example from '../../components/Example';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import styles from './shared.module.css';
+import styles from '../shared.module.css';
 
 <Example className={styles.player} hideSource src={useBaseUrl('/open-video-ui/v2/examples/web/ads/demo.html')}></Example>
+
+The default UI has full support for advertisements.
+
+During playback, it shows yellow ad markers on the seek bar to indicate the times when the content will be interrupted by an ad. While playing an ad, the UI shows ad-specific controls such as a skip button and a countdown. These controls are also mobile-aware, for example a
+dedicated clickthrough button replaces the regular clickthrough behavior on desktop.
 
 <details>
     <summary>Code</summary>

@@ -5,6 +5,7 @@ import { useSyncExternalStore } from 'react';
 
 let source = null;
 let deviceType = null;
+let language = null;
 const listeners = [];
 
 function subscribe(cb) {
@@ -23,6 +24,8 @@ function subscribe(cb) {
  *   Overrides the player's device type.
  * - `{ type: "source", source: SourceDescription }`
  *   Changes the player's source.
+ * - `{ type: "language", language: string }`
+ *   Sets the UI language.
  */
 window.addEventListener('message', (event) => {
     if (event.origin !== location.origin) return;
@@ -36,6 +39,11 @@ window.addEventListener('message', (event) => {
         }
         case 'source': {
             source = data.source;
+            listeners.forEach((listener) => listener());
+            break;
+        }
+        case 'language': {
+            language = data.language;
             listeners.forEach((listener) => listener());
             break;
         }
@@ -60,6 +68,17 @@ export function useSourceFromParent() {
     return useSyncExternalStore(
         subscribe,
         () => source,
+        () => undefined
+    );
+}
+
+/**
+ * Returns the UI language given by the <iframe>'s parent window (if any).
+ */
+export function useLanguageFromParent() {
+    return useSyncExternalStore(
+        subscribe,
+        () => language,
         () => undefined
     );
 }

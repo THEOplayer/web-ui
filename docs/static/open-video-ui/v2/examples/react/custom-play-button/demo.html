@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Default UI with React</title>
+        <title>Custom play button with React</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,7 +14,7 @@
                 padding: 0;
             }
 
-            theoplayer-default-ui:not(:defined) {
+            theoplayer-ui:not(:defined) {
                 display: inline-block;
                 box-sizing: border-box;
                 width: 100%;
@@ -22,15 +22,58 @@
                 background: #000;
             }
 
-            theoplayer-default-ui {
-                font-family: 'Noto Sans', sans-serif;
+            theoplayer-ui {
                 width: 100%;
+                font-family: 'Noto Sans', sans-serif;
+            }
+
+            .spacer {
+                flex-grow: 1;
+            }
+
+            .bottom-chrome {
+                position: relative;
+                display: flex;
+                flex-flow: column nowrap;
+                align-items: stretch;
+            }
+
+            .big-play {
+                color: #fff;
+                background: rgba(124, 58, 237, 0.45);
+                backdrop-filter: blur(6px);
+                border-radius: 50%;
+                padding: 32px;
+                box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+                transition:
+                    transform 0.4s ease,
+                    box-shadow 0.4s ease,
+                    background 0.4s ease;
+            }
+
+            .big-play svg {
+                width: 64px;
+                height: 64px;
+            }
+
+            /* Only animate while hovered; the transition smoothly returns it when the pointer leaves. */
+            .big-play:hover {
+                background: rgba(139, 92, 246, 0.55);
+                animation: pulse 3s ease-in-out infinite;
+            }
+
+            @keyframes pulse {
+                0%,
+                100% {
+                    transform: scale(1);
+                    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.35);
+                }
+                50% {
+                    transform: scale(1.06);
+                    box-shadow: 0 6px 26px rgba(124, 58, 237, 0.6);
+                }
             }
         </style>
-        <!--
-          JSPM Generator Import Map
-          Edit URL: https://generator.jspm.io/#VYxLDkBAEAV7IW5iqRkR7PQlHMCnE5M0I6NF3J4gEduqei8KAMK6mdWq8AAkVhPPba9kMMUcSEd2i7QH+4fHm71UidlP7dx94ukGN5GpMMM06cXyrPD+3gy+MRVo7mr0bmLhdT0BSwPyx5UA
-        -->
         <script type="importmap">
             {
                 "imports": {
@@ -78,7 +121,7 @@
                  * libraryLocation: For demonstration purposes, we use the free unpkg.com CDN.
                  * For production use, we recommend hosting THEOplayer yourself
                  * and changing this (as well as the <script> and <link> tags above)
-                 * to point to THEOplayer"s location on your own website.
+                 * to point to THEOplayer's location on your own website.
                  */
                 libraryLocation: 'https://cdn.theoplayer.com/dash/theoplayer/',
                 /**
@@ -92,27 +135,46 @@
                 sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
                 metadata: {
                     title: 'Big Buck Bunny'
-                },
-                textTracks: [
-                    {
-                        default: true,
-                        src: 'https://cdn.theoplayer.com/video/big_buck_bunny/thumbnails.vtt',
-                        label: 'thumbnails',
-                        kind: 'metadata'
-                    }
-                ]
+                }
             };
+
+            const Spacer = () => <span className="spacer" />;
 
             const App = () => {
                 const source = useSourceFromParent() || defaultSource;
                 const deviceType = useDeviceTypeFromParent() || null;
-                const title = source.metadata.title;
                 return (
-                    <THEOplayerReactUI.DefaultUI
+                    <THEOplayerReactUI.UIContainer
                         configuration={configuration}
                         source={source}
                         device-type={deviceType}
-                        title={<span>{title}</span>}
+                        centeredLoading={<THEOplayerReactUI.LoadingIndicator />}
+                        centeredChrome={
+                            <THEOplayerReactUI.PlayButton className="big-play">
+                                <svg slot="play-icon" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                                <svg slot="pause-icon" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                                    <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+                                </svg>
+                            </THEOplayerReactUI.PlayButton>
+                        }
+                        bottomChrome={
+                            <div className="bottom-chrome">
+                                <THEOplayerReactUI.ControlBar>
+                                    <THEOplayerReactUI.TimeRange />
+                                </THEOplayerReactUI.ControlBar>
+                                <THEOplayerReactUI.ControlBar>
+                                    <THEOplayerReactUI.PlayButton />
+                                    <THEOplayerReactUI.MuteButton />
+                                    <THEOplayerReactUI.VolumeRange />
+                                    <THEOplayerReactUI.TimeDisplay showDuration />
+                                    <Spacer />
+                                    <THEOplayerReactUI.FullscreenButton />
+                                </THEOplayerReactUI.ControlBar>
+                            </div>
+                        }
+                        error={<THEOplayerReactUI.ErrorDisplay />}
                     />
                 );
             };
