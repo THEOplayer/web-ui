@@ -1,0 +1,81 @@
+/*
+ * Mixins to show or hide elements based on the stream type of the current source,
+ * which is reflected as a `stream-type` attribute ("vod", "live" or "dvr") on the host element.
+ *
+ * There are two ways for an element to declare in which stream types it wants to be shown:
+ *
+ *  - The `stream-type-only` and `stream-type-hidden` attributes take a space-separated list
+ *    of stream types. For example, `stream-type-hidden="live"` hides the element for livestreams
+ *    without DVR, but keeps it for VOD streams and for livestreams with DVR.
+ *  - The `live-only`, `live-hidden`, `dvr-only` and `dvr-hidden` boolean attributes are shorthands:
+ *      live-only    ==  stream-type-only="live dvr"
+ *      live-hidden  ==  stream-type-hidden="live dvr"
+ *      dvr-only     ==  stream-type-only="dvr"
+ *      dvr-hidden   ==  stream-type-hidden="dvr"
+ *
+ * An element is hidden as soon as one of its attributes says it should be hidden,
+ * so combining multiple attributes narrows down the stream types in which the element is shown.
+ * For example, `live-only dvr-hidden` shows the element only for livestreams without DVR.
+ * (Conversely, `live-hidden dvr-only` would hide the element for *every* stream type.
+ * To show an element for VOD and DVR streams only, use `stream-type-hidden="live"` instead.)
+ *
+ * Note that an unknown stream type is treated as a livestream by `live-hidden`,
+ * to preserve backwards compatibility from before `stream-type` was always reflected.
+ * The other attributes only take effect once the stream type is known.
+ *
+ * These mixins are available in every stylesheet in this project (see `mixinsDir` in rollup.config.mjs).
+ */
+
+/*
+ * Hides elements inside the shadow DOM of the UI which are not meant for the current stream type.
+ *
+ * Usage: `@mixin stream-type-visibility;`
+ */
+@define-mixin stream-type-visibility {
+    /* VOD streams */
+    :host([stream-type='vod']) [live-only],
+    :host([stream-type='vod']) [dvr-only],
+    :host([stream-type='vod']) [stream-type-hidden~='vod'],
+    :host([stream-type='vod']) [stream-type-only]:not([stream-type-only~='vod']),
+    /* Livestreams without DVR */
+    :host([stream-type='live']) [dvr-only],
+    :host([stream-type='live']) [stream-type-hidden~='live'],
+    :host([stream-type='live']) [stream-type-only]:not([stream-type-only~='live']),
+    /* Livestreams with DVR */
+    :host([stream-type='dvr']) [dvr-hidden],
+    :host([stream-type='dvr']) [stream-type-hidden~='dvr'],
+    :host([stream-type='dvr']) [stream-type-only]:not([stream-type-only~='dvr']),
+    /* Livestreams, with or without DVR */
+    :host(:not([stream-type='vod'])) [live-hidden] {
+        display: none !important;
+    }
+}
+
+/*
+ * Hides elements slotted into `$scope` which are not meant for the current stream type,
+ * where `$scope` is a selector for an element in the shadow DOM containing a `<slot>`.
+ *
+ * Usage: `@mixin stream-type-visibility-slotted [part~='chrome'];`
+ *
+ * Note that, due to limitations of the `::slotted()` selector, this only affects *directly*
+ * slotted elements. Descendants of a slotted element must be handled by the app's own CSS.
+ */
+@define-mixin stream-type-visibility-slotted $scope {
+    /* VOD streams */
+    :host([stream-type='vod']) $(scope) ::slotted([live-only]),
+    :host([stream-type='vod']) $(scope) ::slotted([dvr-only]),
+    :host([stream-type='vod']) $(scope) ::slotted([stream-type-hidden~='vod']),
+    :host([stream-type='vod']) $(scope) ::slotted([stream-type-only]:not([stream-type-only~='vod'])),
+    /* Livestreams without DVR */
+    :host([stream-type='live']) $(scope) ::slotted([dvr-only]),
+    :host([stream-type='live']) $(scope) ::slotted([stream-type-hidden~='live']),
+    :host([stream-type='live']) $(scope) ::slotted([stream-type-only]:not([stream-type-only~='live'])),
+    /* Livestreams with DVR */
+    :host([stream-type='dvr']) $(scope) ::slotted([dvr-hidden]),
+    :host([stream-type='dvr']) $(scope) ::slotted([stream-type-hidden~='dvr']),
+    :host([stream-type='dvr']) $(scope) ::slotted([stream-type-only]:not([stream-type-only~='dvr'])),
+    /* Livestreams, with or without DVR */
+    :host(:not([stream-type='vod'])) $(scope) ::slotted([live-hidden]) {
+        display: none !important;
+    }
+}

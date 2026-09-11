@@ -122,14 +122,11 @@ theoplayer-time-range {
 }
 
 /*
- * Live-only and live-hidden elements
+ * Stream-type-specific elements
+ * (live-only, live-hidden, dvr-only, dvr-hidden, stream-type-only and stream-type-hidden)
  */
-:host(:not([stream-type='vod'])) [live-hidden],
-:host(:not([stream-type='vod'])) theoplayer-control-bar ::slotted([live-hidden]),
-:host([stream-type='vod']) [live-only],
-:host([stream-type='vod']) theoplayer-control-bar ::slotted([live-only]) {
-    display: none !important;
-}
+@mixin stream-type-visibility;
+@mixin stream-type-visibility-slotted theoplayer-control-bar;
 
 /*
  * Ad-only and ad-hidden elements

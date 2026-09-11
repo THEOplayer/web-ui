@@ -448,6 +448,7 @@ export class DefaultUI extends LitElement {
                         seek-offset="-10"
                         mobile-only
                         ad-hidden
+                        stream-type-hidden="live"
                     ></theoplayer-seek-button>
                     <theoplayer-play-button
                         part="center-play-button play-button center-button"
@@ -458,6 +459,7 @@ export class DefaultUI extends LitElement {
                         seek-offset="10"
                         mobile-only
                         ad-hidden
+                        stream-type-hidden="live"
                     ></theoplayer-seek-button>
                 </slot>
             </div>
@@ -481,10 +483,7 @@ export class DefaultUI extends LitElement {
                         ?tv-focus=${this.hasFirstPlay}
                         .inert=${this._timeRangeInert}
                         class="theoplayer-ad-control"
-                        style=${styleMap({
-                            // Hide seekbar when stream is live with no DVR
-                            display: this.streamType === 'live' ? 'none' : ''
-                        })}
+                        stream-type-hidden="live"
                     ></theoplayer-time-range>
                     <theoplayer-chromecast-button tv-hidden ad-only class="theoplayer-ad-control"></theoplayer-chromecast-button>
                     <theoplayer-fullscreen-button ad-only class="theoplayer-ad-control"></theoplayer-fullscreen-button>

@@ -1,0 +1,5 @@
+/*
+ * Hide settings which do not apply to the current stream,
+ * such as the playback speed for a livestream without DVR.
+ */
+@mixin stream-type-visibility;
