@@ -8,7 +8,6 @@ export interface Controller {
 export interface Props extends ComponentPropsWithoutRef<'iframe'> {
     hideSource?: boolean;
     hideDeviceType?: boolean;
-    // This is for the language selector on the Localization example.
     languages?: Record<string, string>;
     ref?: Ref<Controller> | undefined;
 }
