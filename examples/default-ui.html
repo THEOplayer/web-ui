@@ -91,6 +91,9 @@
         </div>
         <script>
             const ui = document.querySelector('theoplayer-default-ui');
+            ui.addEventListener('theoplayerready', () => {
+                self.player = ui.player;
+            });
             const sources = {
                 bigBuckBunny: {
                     sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },

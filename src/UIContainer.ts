@@ -49,6 +49,11 @@ export const DEFAULT_TV_USER_IDLE_TIMEOUT = 5;
 export const DEFAULT_DVR_THRESHOLD = 60;
 export const FULL_WINDOW_ROOT_CLASS = 'theoplayer-ui-full-window';
 
+interface TextTrackMargins {
+    marginTop: number | undefined;
+    marginBottom: number | undefined;
+}
+
 /**
  * The container element for a THEOplayer UI.
  *
@@ -154,6 +159,9 @@ export class UIContainer extends LitElement {
     private _hasFirstPlay: boolean = false;
     private _previewTime: number = NaN;
     private _activeVideoTrack: MediaTrack | undefined = undefined;
+    // Track user margins separately so temporary UI margins can be restored.
+    private _userTextTrackMargins: TextTrackMargins = { marginTop: undefined, marginBottom: undefined };
+    private _appliedTextTrackMargins: TextTrackMargins = { marginTop: undefined, marginBottom: undefined };
 
     /**
      * Creates a new THEOplayer UI container element.
@@ -568,6 +576,9 @@ export class UIContainer extends LitElement {
         }
 
         this._player = new ChromelessPlayer(this._playerRef.value, this._configuration);
+        const { marginTop, marginBottom } = this._player.textTrackStyle;
+        this._userTextTrackMargins = { marginTop, marginBottom };
+        this._appliedTextTrackMargins = { marginTop, marginBottom };
         if (this._source) {
             this._player.source = this._source;
             this._source = undefined;
@@ -1271,10 +1282,32 @@ export class UIContainer extends LitElement {
         if (player === undefined) {
             return;
         }
+        const textTrackStyle = player.textTrackStyle;
+        const userMargins = this._userTextTrackMargins;
+        const appliedMargins = this._appliedTextTrackMargins;
+        // A value different from the last UI update was set by the user.
+        if (textTrackStyle.marginTop !== appliedMargins.marginTop) {
+            userMargins.marginTop = textTrackStyle.marginTop;
+        }
+        if (textTrackStyle.marginBottom !== appliedMargins.marginBottom) {
+            userMargins.marginBottom = textTrackStyle.marginBottom;
+        }
+
         const topChromeRect = this._topChromeSlotRef.value && getVisibleRect(this._topChromeSlotRef.value);
         const bottomChromeRect = this._bottomChromeSlotRef.value && getVisibleRect(this._bottomChromeSlotRef.value);
-        player.textTrackStyle.marginTop = topChromeRect?.height;
-        player.textTrackStyle.marginBottom = bottomChromeRect?.height;
+        // Keep cues clear of visible chrome without reducing user margins.
+        const margins: TextTrackMargins = {
+            marginTop: maxMargin(userMargins.marginTop, topChromeRect?.height),
+            marginBottom: maxMargin(userMargins.marginBottom, bottomChromeRect?.height)
+        };
+
+        if (textTrackStyle.marginTop !== margins.marginTop) {
+            textTrackStyle.marginTop = margins.marginTop;
+        }
+        if (textTrackStyle.marginBottom !== margins.marginBottom) {
+            textTrackStyle.marginBottom = margins.marginBottom;
+        }
+        this._appliedTextTrackMargins = margins;
     };
 
     private readonly _onPreviewTimeChange = (rawEvent: Event): void => {
@@ -1394,6 +1427,12 @@ declare global {
     interface HTMLElementTagNameMap {
         'theoplayer-ui': UIContainer;
     }
+}
+
+function maxMargin(first: number | undefined, second: number | undefined): number | undefined {
+    if (first === undefined) return second;
+    if (second === undefined) return first;
+    return Math.max(first, second);
 }
 
 function getVisibleRect(slot: HTMLSlotElement): Rectangle | undefined {
