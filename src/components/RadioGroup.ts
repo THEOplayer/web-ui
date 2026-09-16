@@ -234,6 +234,10 @@ export class RadioGroup extends LitElement {
     }
 
     private updateCheckedButton(): void {
+        // Buttons without a value (such as track buttons) manage their own checked state.
+        if (this._value === undefined) {
+            return;
+        }
         const button = this.allRadioButtons().find((button) => {
             // Allow '1' == 1
             return button.value == this.value;
@@ -243,9 +247,13 @@ export class RadioGroup extends LitElement {
 
     private readonly _onButtonChange = (event: Event) => {
         const button = event.target as RadioButton | null;
-        if (button !== null && button.checked) {
-            this.value = button.value;
+        if (button === null || !button.checked) {
+            return;
         }
+        // Multiple buttons may share the same value (e.g. undefined), so always uncheck the other buttons.
+        this._value = button.value;
+        this.setCheckedRadioButton(button);
+        this.dispatchEvent(createEvent('change', { bubbles: true }));
     };
 
     protected override render(): HTMLTemplateResult {
