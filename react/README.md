@@ -108,6 +108,18 @@ const App = () => {
 
 See [custom-ui/demo.html](https://github.com/THEOplayer/web-ui/blob/main/docs/static/open-video-ui/v1/examples/react/custom-ui/demo.html) for a complete example.
 
+### Preact
+
+Open Video UI for React also works with [Preact](https://preactjs.com/) without any changes, as long as `react` is aliased to `preact/compat`.
+See [Preact's documentation on aliasing](https://preactjs.com/guide/v10/getting-started#aliasing-react-to-preact) for how to set this up with your bundler, or with an import map.
+
+```tsx
+// With `react` aliased to `preact/compat`, this just works:
+import { DefaultUI } from '@theoplayer/react-ui';
+```
+
+See [examples/preact/default-ui.html](https://github.com/THEOplayer/web-ui/blob/main/examples/preact/default-ui.html) for a complete example using an import map.
+
 ### Legacy browser support
 
 By default, Open Video UI for React targets modern browsers that support modern JavaScript syntax (such as [async/await](https://caniuse.com/async-functions)) and native [Custom Elements](https://caniuse.com/custom-elementsv1). This keeps the download size small, so your viewers can spend less time waiting for your page to load and start watching their video faster.
