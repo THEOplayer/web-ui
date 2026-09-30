@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>THEOplayer Open Video UI for React: Default UI (Preact)</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+        <style>
+            theoplayer-default-ui:not(:defined) {
+                display: inline-block;
+                box-sizing: border-box;
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                background: #000;
+            }
+
+            theoplayer-default-ui {
+                font-family: 'Noto Sans', sans-serif;
+                width: 100%;
+                --theoplayer-aspect-ratio: 16 / 9;
+            }
+
+            .my-time-display {
+                color: white;
+                padding: 10px;
+                font-size: 14px;
+                line-height: 24px;
+            }
+        </style>
+        <!-- WebXR polyfill: enables Cardboard VR on desktop and older mobile devices. -->
+        <script src="https://cdn.theoplayer.com/webxr/webxr-polyfill-patched.js"></script>
+        <script>
+            new WebXRPolyfill({ allowCardboardOnDesktop: true });
+        </script>
+        <!-- The `react` and `react-dom/client` specifiers are aliased to `preact/compat` below,
+             so `@theoplayer/react-ui` (and `@lit/react`) run on Preact unchanged.
+             See https://preactjs.com/guide/v10/getting-started#aliasing-with-import-maps -->
+        <script type="importmap">
+            {
+                "imports": {
+                    "theoplayer/chromeless": "../../node_modules/theoplayer/THEOplayer.chromeless.esm.js",
+                    "@theoplayer/web-ui": "../../dist/THEOplayerUI.mjs",
+                    "@theoplayer/react-ui": "../../react/dist/THEOplayerReactUI.mjs",
+                    "lit": "https://ga.jspm.io/npm:lit@3.3.1/index.js",
+                    "lit/decorators.js": "https://ga.jspm.io/npm:lit@3.3.1/decorators.js",
+                    "lit/directives/": "https://ga.jspm.io/npm:lit@3.3.1/directives/",
+                    "@lit/react": "https://ga.jspm.io/npm:@lit/react@1.0.7/development/index.js",
+                    "preact": "https://ga.jspm.io/npm:preact@10.29.8/dist/preact.module.js",
+                    "preact/hooks": "https://ga.jspm.io/npm:preact@10.29.8/hooks/dist/hooks.module.js",
+                    "preact/compat": "https://ga.jspm.io/npm:preact@10.29.8/compat/dist/compat.module.js",
+                    "react": "https://ga.jspm.io/npm:preact@10.29.8/compat/dist/compat.module.js",
+                    "react-dom/client": "https://ga.jspm.io/npm:preact@10.29.8/compat/client.mjs"
+                },
+                "scopes": {
+                    "https://ga.jspm.io/": {
+                        "@lit/reactive-element": "https://ga.jspm.io/npm:@lit/reactive-element@2.1.1/development/reactive-element.js",
+                        "@lit/reactive-element/decorators/": "https://ga.jspm.io/npm:@lit/reactive-element@2.1.1/development/decorators/",
+                        "lit-element/lit-element.js": "https://ga.jspm.io/npm:lit-element@4.2.1/development/lit-element.js",
+                        "lit-html": "https://ga.jspm.io/npm:lit-html@3.3.1/development/lit-html.js",
+                        "lit-html/": "https://ga.jspm.io/npm:lit-html@3.3.1/development/"
+                    }
+                }
+            }
+        </script>
+        <script async src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js" crossorigin="anonymous"></script>
+        <!-- Use Babel for JSX in <script> tags -->
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <!-- Polyfills for older browsers -->
+        <script nomodule src="../../dist/THEOplayerUI.polyfills.js"></script>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="text/babel" data-type="module">
+            import * as React from 'react';
+            import { createRoot } from 'react-dom/client';
+            import { DefaultUI, useCurrentTime } from '@theoplayer/react-ui';
+            import '../locale/nl.js';
+
+            const configuration = {
+                libraryLocation: '../../node_modules/theoplayer/',
+                license: ''
+            };
+
+            const sources = {
+                bigBuckBunny: {
+                    sources: { src: 'https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8' },
+                    metadata: { title: 'Big Buck Bunny' },
+                    textTracks: [
+                        {
+                            default: true,
+                            src: 'https://cdn.theoplayer.com/video/big_buck_bunny/thumbnails.vtt',
+                            label: 'thumbnails',
+                            kind: 'metadata'
+                        }
+                    ]
+                },
+                elephantsDream: {
+                    sources: { src: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8' },
+                    metadata: { title: "Elephant's Dream" },
+                    textTracks: [
+                        {
+                            default: true,
+                            src: 'https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt',
+                            label: 'thumbnails',
+                            kind: 'metadata'
+                        }
+                    ]
+                },
+                starWarsTrailer: {
+                    sources: {
+                        src: 'https://cdn.theoplayer.com/video/star_wars_episode_vii-the_force_awakens_official_comic-con_2015_reel_(2015)/index.m3u8'
+                    },
+                    metadata: {
+                        title: 'Star Wars Episode VII Trailer'
+                    },
+                    poster: 'https://cdn.theoplayer.com/video/star_wars_episode_vii-the_force_awakens_official_comic-con_2015_reel_(2015)/poster.jpg'
+                },
+                vr: {
+                    sources: {
+                        src: 'https://demo.theoplayer.com/hubfs/videos/natgeo/playlist.m3u8'
+                    },
+                    metadata: { title: 'VR' },
+                    vr: {
+                        360: true
+                    },
+                    poster: 'https://demo.theoplayer.com/hubfs/videos/natgeo/poster.jpg'
+                },
+                optiViewLive: {
+                    sources: {
+                        src: '3aa5qylwwk7gijsobayq09yee',
+                        type: 'theolive'
+                    },
+                    metadata: { title: 'OptiView Live demo' }
+                },
+                optiViewRealtime: {
+                    sources: {
+                        src: 'multiview',
+                        streamAccountId: 'k9Mwad',
+                        type: 'millicast'
+                    },
+                    metadata: { title: 'OptiView Realtime demo' }
+                }
+            };
+            const languages = {
+                en: 'English',
+                nl: 'Nederlands (Dutch)'
+            };
+
+            // A custom React component using THEOplayer.
+            const MyTimeDisplay = () => {
+                const time = useCurrentTime();
+                return <span className="my-time-display">current time: {time.toFixed(3)}s</span>;
+            };
+
+            const App = () => {
+                const [sourceId, setSourceId] = React.useState('bigBuckBunny');
+                const [lang, setLang] = React.useState('en');
+                const source = sources[sourceId];
+                return (
+                    <>
+                        <h1>Default UI with Preact</h1>
+                        <DefaultUI
+                            configuration={configuration}
+                            source={source}
+                            title={<span>{source.metadata.title}</span>}
+                            lang={lang}
+                            bottomControlBar={<MyTimeDisplay />}
+                        />
+                        <div>
+                            <label style={{ userSelect: 'none' }}>
+                                Source:{' '}
+                                <select value={sourceId} onChange={(e) => setSourceId(e.target.value)}>
+                                    {Object.entries(sources).map(([id, value]) => (
+                                        <option key={id} value={id}>
+                                            {value.metadata.title}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                        </div>
+                        <div>
+                            <label style={{ userSelect: 'none' }}>
+                                Language:{' '}
+                                <select value={lang} onChange={(e) => setLang(e.target.value)}>
+                                    {Object.entries(languages).map(([id, label]) => (
+                                        <option key={id} value={id}>
+                                            {label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                        </div>
+                    </>
+                );
+            };
+
+            const root = createRoot(document.getElementById('app'));
+            root.render(<App />);
+        </script>
+    </body>
+</html>
