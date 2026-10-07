@@ -7,19 +7,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=bug_report"
-            rel="stylesheet"
-        />
         <style>
-            .material-symbols-rounded {
-                font-variation-settings:
-                    'FILL' 0,
-                    'wght' 400,
-                    'GRAD' 0,
-                    'opsz' 24;
-            }
-
             theoplayer-default-ui:not(:defined) {
                 display: inline-block;
                 box-sizing: border-box;
@@ -81,9 +69,7 @@
         <h1>Default UI</h1>
         <theoplayer-default-ui configuration='{"libraryLocation":"../node_modules/theoplayer/","license":""}'>
             <theoplayer-debug-display slot="overlay" hidden></theoplayer-debug-display>
-            <theoplayer-button id="debug-button" slot="bottom-control-bar">
-                <span class="material-symbols-rounded">bug_report</span>
-            </theoplayer-button>
+            <theoplayer-debug-button slot="bottom-control-bar"></theoplayer-debug-button>
         </theoplayer-default-ui>
         <div>
             <label style="user-select: none">
@@ -178,10 +164,6 @@
             });
             document.querySelector('#language-select').addEventListener('change', (e) => {
                 ui.lang = e.target.value;
-            });
-            document.querySelector('#debug-button').addEventListener('click', (e) => {
-                const debugDisplay = document.querySelector('theoplayer-debug-display');
-                debugDisplay.hidden = !debugDisplay.hidden;
             });
         </script>
     </body>
