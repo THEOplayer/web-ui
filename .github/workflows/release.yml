@@ -52,6 +52,7 @@ jobs:
           publish-script: npx changeset publish
           create-github-releases: true
         env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           # see https://github.com/changesets/changesets/issues/1152#issuecomment-3190884868
           NPM_TOKEN: ''
           NPM_CONFIG_PROVENANCE: true
