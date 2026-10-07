@@ -193,6 +193,10 @@
     display: none !important;
 }
 
+:host([menu-opened]) [part~='overlay-layer'] {
+    display: none !important;
+}
+
 /* When player is small, make menu fill entire player */
 @container theoplayer-ui-container (max-width: 500px) or (max-height: 300px) {
     :host(:not([mobile]):not([tv])) [part~='menu-layer'] {

@@ -3,12 +3,11 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { join } from 'lit/directives/join.js';
 import debugDisplayCss from './DebugDisplay.css';
-import { stateReceiver } from './StateReceiverMixin';
 import type { AudioQuality, ChromelessPlayer, CurrentSourceChangeEvent, MediaTrack, TextTrack, VideoQuality } from 'theoplayer/chromeless';
 import type { RollingChart } from './RollingChart';
 import { bandwidthFormatterForLocale } from '../i18n/BandwidthFormatter';
 import { isSubtitleTrack } from '../util/TrackUtils';
-import { Attribute } from '../util/Attribute';
+import { Attribute, stateReceiver } from '../index';
 
 const formatBandwidth = bandwidthFormatterForLocale('en-US');
 

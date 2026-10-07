@@ -32,17 +32,6 @@
                 font-family: 'Noto Sans', sans-serif;
                 background: #000;
             }
-
-            theoplayer-debug-display {
-                color: #fff;
-                background: rgba(0, 0, 0, 0.75);
-                margin: 0.5em;
-                padding: 0.5em;
-            }
-
-            theoplayer-default-ui[menu-opened] theoplayer-debug-display {
-                display: none !important;
-            }
         </style>
         <!-- WebXR polyfill: enables Cardboard VR on desktop and older mobile devices. -->
         <script src="https://cdn.theoplayer.com/webxr/webxr-polyfill-patched.js"></script>
@@ -55,6 +44,7 @@
                 "imports": {
                     "theoplayer/chromeless": "../node_modules/theoplayer/THEOplayer.chromeless.esm.js",
                     "@theoplayer/web-ui": "../dist/THEOplayerUI.mjs",
+                    "@theoplayer/web-ui/debug": "../dist/THEOplayerUI.debug.mjs",
                     "lit": "https://ga.jspm.io/npm:lit@3.3.1/index.js",
                     "lit/decorators.js": "https://ga.jspm.io/npm:lit@3.3.1/decorators.js",
                     "lit/directives/": "https://ga.jspm.io/npm:lit@3.3.1/directives/"
@@ -74,6 +64,7 @@
         <script async src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js" crossorigin="anonymous"></script>
         <script type="module">
             import * as THEOplayerUI from '@theoplayer/web-ui';
+            import '@theoplayer/web-ui/debug';
             import './locale/nl.js';
             self.THEOplayerUI = THEOplayerUI;
         </script>

@@ -18,6 +18,10 @@
       "import": "./dist/THEOplayerUI.es5.mjs",
       "default": "./dist/THEOplayerUI.es5.js"
     },
+    "./debug": {
+      "types": "./dist/THEOplayerUI.debug.d.ts",
+      "import": "./dist/THEOplayerUI.debug.mjs"
+    },
     "./polyfills": "./dist/THEOplayerUI.polyfills.js",
     "./dist/*": "./dist/*",
     "./package": "./package.json",

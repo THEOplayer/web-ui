@@ -32,6 +32,7 @@ const globals = {
 };
 const theoplayerExternals = [theoplayerModule];
 const litExternals = [/^lit/, /^@lit/];
+const uiEntry = path.resolve('./src/index.ts');
 
 /**
  * @param {{configOutputDir?: string}} cliArgs
@@ -42,6 +43,7 @@ export default (cliArgs) => {
     return defineConfig([
         ...jsConfig(outputDir, { es5: false, node: true, production, sourcemap: true }),
         ...jsConfig(outputDir, { es5: true, production, sourcemap: false }),
+        ...debugConfig(outputDir, { production }),
         {
             input: './src/polyfills.ts',
             output: {
@@ -68,6 +70,67 @@ export default (cliArgs) => {
         }
     ]);
 };
+
+/**
+ * Build the standalone ESM debug entry and its declarations.
+ *
+ * @param {string} outputDir
+ * @param {{production?: boolean}} options
+ * @return {import("rollup").RollupOptions[]}
+ */
+function debugConfig(outputDir, { production = false }) {
+    return [
+        {
+            input: './src/debug/index.ts',
+            output: {
+                file: path.join(outputDir, `${fileName}.debug.mjs`),
+                format: 'es',
+                sourcemap: true,
+                indent: false,
+                banner
+            },
+            context: 'self',
+            external: debugExternal,
+            plugins: [externalizeMainEntry(), ...jsPlugins({ es5: false, module: true, production, sourcemap: true })]
+        },
+        {
+            input: './src/debug/index.ts',
+            output: {
+                file: path.join(outputDir, `${fileName}.debug.d.ts`),
+                format: 'es',
+                indent: false,
+                banner
+            },
+            context: 'self',
+            external: debugExternal,
+            plugins: [externalizeMainEntry(), dts()]
+        }
+    ];
+}
+
+/**
+ * Externalize THEOplayer and Lit imports from the debug bundle.
+ *
+ * @param {string} id
+ * @return {boolean}
+ */
+function debugExternal(id) {
+    return id === theoplayerModule || litExternals.some((external) => external.test(id));
+}
+
+/**
+ * Resolve imports of the main entry to the published `@theoplayer/web-ui` package.
+ */
+function externalizeMainEntry() {
+    return {
+        name: 'externalize-main-entry',
+        async resolveId(source, importer, options) {
+            if (!importer) return null;
+            const resolved = await this.resolve(source, importer, { ...options, skipSelf: true });
+            return resolved && path.resolve(resolved.id) === uiEntry ? { id: '@theoplayer/web-ui', external: true } : null;
+        }
+    };
+}
 
 /**
  * @return {import("rollup").RollupOptions[]}
