@@ -9,6 +9,7 @@ import { html, type HTMLTemplateResult, LitElement } from 'lit';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { property, state } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
+import { classMap } from 'lit/directives/class-map.js';
 
 /**
  * A slider to select a value from a range.
@@ -61,15 +62,23 @@ export abstract class Range extends LitElement {
     @state()
     private accessor _pointerWidth: number = 0;
 
+    @state()
+    private accessor _pointerDown: boolean = false;
+
     connectedCallback(): void {
         super.connectedCallback();
 
         this._updateRange();
         this.addEventListener('pointermove', this._updatePointerBar);
+        this.addEventListener('pointerdown', this._onPointerDown);
     }
 
     disconnectedCallback(): void {
+        super.disconnectedCallback();
         this.removeEventListener('pointermove', this._updatePointerBar);
+        this.removeEventListener('pointerdown', this._onPointerDown);
+        document.removeEventListener('pointerup', this._onPointerUp);
+        document.removeEventListener('pointercancel', this._onPointerUp);
     }
 
     /**
@@ -325,6 +334,20 @@ export abstract class Range extends LitElement {
         this._pointerWidth = this.getThumbPosition_(mousePercent, rangeRect.width);
     }
 
+    private readonly _onPointerDown = (e: PointerEvent): void => {
+        this._updatePointerBar(e);
+        if (this.disabled || this.inert) return;
+        this._pointerDown = true;
+        document.addEventListener('pointerup', this._onPointerUp);
+        document.addEventListener('pointercancel', this._onPointerUp);
+    };
+
+    private readonly _onPointerUp = (): void => {
+        this._pointerDown = false;
+        document.removeEventListener('pointerup', this._onPointerUp);
+        document.removeEventListener('pointercancel', this._onPointerUp);
+    };
+
     private readonly _onKeyDown = (e: KeyboardEvent): void => {
         this.handleKeyDown_(e);
     };
@@ -344,7 +367,7 @@ export abstract class Range extends LitElement {
     }
 
     protected override render(): HTMLTemplateResult {
-        return html`<div part="container">
+        return html`<div part="container" class=${classMap({ 'theoplayer-range-pointer-down': this._pointerDown })}>
             <div part="background"></div>
             <div part="pointer" style=${styleMap({ width: `${this._pointerWidth}px` })}></div>
             <input
