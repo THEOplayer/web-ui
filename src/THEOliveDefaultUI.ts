@@ -127,6 +127,7 @@ export class THEOliveDefaultUI extends DefaultUI {
                 <theoplayer-quality-radio-group></theoplayer-quality-radio-group>
             </theoplayer-menu>
             <theoplayer-error-display slot="error" part="error-display" style=${styleMap(errorDisplayStyles)}></theoplayer-error-display>
+            <slot name="overlay" slot="overlay"></slot>
         `;
     }
 }

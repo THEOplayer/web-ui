@@ -27,6 +27,10 @@ export interface THEOliveDefaultUIProps extends PropsWithoutRef<WebComponentProp
      */
     offlineAnnouncement?: ReactNode;
     /**
+     * A slot layered over the player UI.
+     */
+    overlay?: ReactNode;
+    /**
      * Use a named slot instead, such as:
      *  - {@link loadingAnnouncement}
      *  - {@link offlineAnnouncement}
@@ -46,7 +50,7 @@ export interface THEOliveDefaultUIProps extends PropsWithoutRef<WebComponentProp
  * @group Components
  */
 export const THEOliveDefaultUI = (props: THEOliveDefaultUIProps) => {
-    const { loadingAnnouncement, offlineAnnouncement, onReady, ...otherProps } = props;
+    const { loadingAnnouncement, offlineAnnouncement, overlay, onReady, ...otherProps } = props;
     const [ui, setUi] = useState<THEOliveDefaultUIElement | null>(null);
     const player = usePlayer(ui, onReady);
     return (
@@ -54,6 +58,7 @@ export const THEOliveDefaultUI = (props: THEOliveDefaultUIProps) => {
             <PlayerContext.Provider value={player}>
                 {loadingAnnouncement && <SlotContainer slot="loading-announcement">{loadingAnnouncement}</SlotContainer>}
                 {offlineAnnouncement && <SlotContainer slot="offline-announcement">{offlineAnnouncement}</SlotContainer>}
+                {overlay && <SlotContainer slot="overlay">{overlay}</SlotContainer>}
             </PlayerContext.Provider>
         </RawTHEOliveDefaultUI>
     );
