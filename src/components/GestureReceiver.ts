@@ -75,6 +75,9 @@ export class GestureReceiver extends LitElement {
 
     handleMouseClick(_event: MouseEvent): void {
         if (this.deviceType !== 'desktop') return;
+        if (_event.composedPath().some((target) => target instanceof Element && target.localName === 'theoplayer-debug-display')) {
+            return;
+        }
         // Toggle play/pause.
         if (this._player !== undefined) {
             if (this._player.source === undefined) {
