@@ -16,6 +16,7 @@ import { READY_EVENT } from './events/ReadyEvent';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
 import { closestRecursive, toggleAttribute } from './util/CommonUtils';
 import { createCustomEvent } from './util/EventUtils';
+import { version } from './version';
 
 /**
  * A default UI for THEOplayer.
@@ -125,6 +126,13 @@ export class DefaultUI extends LitElement {
      */
     get player(): ChromelessPlayer | undefined {
         return this._uiRef.value?.player;
+    }
+
+    /**
+     * The version of Open Video UI for Web.
+     */
+    get version(): string {
+        return version;
     }
 
     /**

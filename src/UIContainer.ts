@@ -41,6 +41,7 @@ import { isArrowKey, isBackKey, isPauseKey, isPlayKey, KeyCode } from './util/Ke
 import { READY_EVENT } from './events/ReadyEvent';
 import { addGlobalStyles } from './Global';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
+import { version } from './version';
 import { type addLocale, type Locale } from './i18n';
 
 // Load components used in template
@@ -192,6 +193,13 @@ export class UIContainer extends LitElement {
      */
     get player(): ChromelessPlayer | undefined {
         return this._player;
+    }
+
+    /**
+     * The version of Open Video UI for Web.
+     */
+    get version(): string {
+        return version;
     }
 
     /**
