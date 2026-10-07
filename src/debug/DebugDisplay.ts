@@ -1,5 +1,5 @@
 import { html, LitElement, nothing } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { join } from 'lit/directives/join.js';
@@ -8,10 +8,14 @@ import closeIcon from '../icons/close.svg';
 import debugDisplayCss from './DebugDisplay.css';
 import type { AudioQuality, ChromelessPlayer, CurrentSourceChangeEvent, MediaTrack, TextTrack, VideoQuality } from 'theoplayer/chromeless';
 import type { RollingChart } from './RollingChart';
-import { Attribute, stateReceiver, version } from '../index';
+import { Attribute } from '../util/Attribute';
+import { closestRecursive } from '../util/CommonUtils';
+import { stateReceiver } from '../components/StateReceiverMixin';
+import { version } from '../version';
 import { bandwidthFormatterForLocale } from '../i18n/BandwidthFormatter';
 import { isSubtitleTrack } from '../util/TrackUtils';
 import type { StreamType } from '../util/StreamType';
+import { defineElementOnce } from './defineElementOnce';
 
 const formatBandwidth = bandwidthFormatterForLocale('en-US');
 
@@ -105,7 +109,6 @@ function formatAudioQuality(quality: AudioQuality): string {
     return quality.bandwidth > 0 ? formatBandwidth(quality.bandwidth) : '';
 }
 
-@customElement('theoplayer-debug-display')
 @stateReceiver(['player', 'streamType'])
 export class DebugDisplay extends LitElement {
     static override styles = [debugDisplayCss];
@@ -484,6 +487,14 @@ export class DebugDisplay extends LitElement {
     }
 
     /**
+     * Read the version exposed by the containing UI.
+     */
+    private getUiVersion_(): string {
+        const ui = closestRecursive<HTMLElement & { version?: unknown }>(this, 'theoplayer-default-ui, theolive-default-ui, theoplayer-ui');
+        return typeof ui?.version === 'string' ? ui.version : version;
+    }
+
+    /**
      * Create a JSON-safe snapshot of the displayed player values.
      */
     private createSnapshot_(): Record<string, unknown> {
@@ -491,7 +502,7 @@ export class DebugDisplay extends LitElement {
         return {
             player: {
                 version: player?.version,
-                uiVersion: version,
+                uiVersion: this.getUiVersion_(),
                 state: player ? getPlaybackState(player) : undefined,
                 readyState: player?.readyState,
                 playbackRate: player?.playbackRate
@@ -617,7 +628,8 @@ export class DebugDisplay extends LitElement {
      */
     private renderPlayerRows_(): unknown {
         const player = this._player;
-        const playerInfo = player?.version ? `THEOplayer ${player.version} / UI ${version}` : `UI ${version}`;
+        const uiVersion = this.getUiVersion_();
+        const playerInfo = player?.version ? `THEOplayer ${player.version} / UI ${uiVersion}` : `UI ${uiVersion}`;
         const playbackState = player ? `${getPlaybackState(player)} · readyState ${player.readyState}` : undefined;
         const playbackRate = player && player.playbackRate !== 1 ? `${player.playbackRate}×` : undefined;
         return html`
@@ -740,6 +752,8 @@ export class DebugDisplay extends LitElement {
         `;
     }
 }
+
+defineElementOnce('theoplayer-debug-display', DebugDisplay);
 
 declare global {
     interface HTMLElementTagNameMap {

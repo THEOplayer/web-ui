@@ -1,11 +1,10 @@
 import { html, type HTMLTemplateResult } from 'lit';
-import { customElement } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { Button } from '../index';
 import { closestRecursive } from '../util/CommonUtils';
 import bugReportIcon from './bug.svg';
+import { defineElementOnce } from './defineElementOnce';
 
-@customElement('theoplayer-debug-button')
 export class DebugButton extends Button {
     private _displayObserver: MutationObserver | undefined;
 
@@ -58,6 +57,8 @@ export class DebugButton extends Button {
         return html`<span part="icon"><slot name="icon">${unsafeSVG(bugReportIcon)}</slot></span>`;
     }
 }
+
+defineElementOnce('theoplayer-debug-button', DebugButton);
 
 declare global {
     interface HTMLElementTagNameMap {

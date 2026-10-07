@@ -1,10 +1,10 @@
 import { html, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import rollingChartCss from './RollingChart.css';
+import { defineElementOnce } from './defineElementOnce';
 
-@customElement('theoplayer-rolling-chart')
 export class RollingChart extends LitElement {
     static override styles = [rollingChartCss];
 
@@ -180,6 +180,8 @@ export class RollingChart extends LitElement {
         return html`<canvas ${ref(this._canvasRef)} style=${styleMap({ width: `${this.width}px`, height: `${this.height}px` })}></canvas>`;
     }
 }
+
+defineElementOnce('theoplayer-rolling-chart', RollingChart);
 
 declare global {
     interface HTMLElementTagNameMap {
