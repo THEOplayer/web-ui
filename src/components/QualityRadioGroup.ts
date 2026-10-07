@@ -1,4 +1,4 @@
-import { html, type HTMLTemplateResult, LitElement } from 'lit';
+import { html, nothing, type HTMLTemplateResult, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import verticalRadioGroupCss from './VerticalRadioGroup.css';
 import { stateReceiver } from './StateReceiverMixin';
@@ -73,17 +73,18 @@ export class QualityRadioGroup extends LitElement {
                 <theoplayer-quality-radio-button lang=${this.lang} .track=${this._track} .quality=${undefined}></theoplayer-quality-radio-button>
                 ${
                     /* If there is only one available quality, *only* show the "Automatic" option (without the single quality). */
-                    qualities.length !== 1 &&
-                    repeat(
-                        qualities,
-                        (quality) => quality.uid,
-                        (quality) =>
-                            html`<theoplayer-quality-radio-button
-                                lang=${this.lang}
-                                .track=${this._track}
-                                .quality=${quality}
-                            ></theoplayer-quality-radio-button>`
-                    )
+                    qualities.length !== 1
+                        ? repeat(
+                              qualities,
+                              (quality) => quality.uid,
+                              (quality) =>
+                                  html`<theoplayer-quality-radio-button
+                                      lang=${this.lang}
+                                      .track=${this._track}
+                                      .quality=${quality}
+                                  ></theoplayer-quality-radio-button>`
+                          )
+                        : nothing
                 }
             </theoplayer-radio-group>
         `;
