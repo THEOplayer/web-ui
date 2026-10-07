@@ -20,6 +20,7 @@ const pullRequestFields = `fragment PullRequestFields on PullRequest {
 }`;
 
 /**
+ * Parses a comma- or whitespace-separated list of issue references (`#123` or `owner/repo#123`).
  * @param {string} text
  * @param {string} repo
  * @returns {Issue[]}
@@ -42,6 +43,7 @@ function parseIssueReferences(text, repo) {
 }
 
 /**
+ * Splits a changeset summary into lines, and extracts any `pr:` and `issue:` override lines.
  * @param {string} summary
  * @param {string} repo
  * @returns {{ lines: string[], pullRequestNumber: number | undefined, issues: Issue[] | undefined }}
@@ -79,6 +81,7 @@ function parseSummary(summary, repo) {
 }
 
 /**
+ * Sends a query to the GitHub GraphQL API, authenticated with `GITHUB_TOKEN`.
  * @param {string} query
  * @param {Record<string, string | number>} variables
  * @returns {Promise<any>}
@@ -108,6 +111,7 @@ async function queryGitHub(query, variables) {
 }
 
 /**
+ * Looks up a pull request by its number.
  * @param {string} repo
  * @param {number} number
  * @returns {Promise<PullRequest | undefined>}
@@ -127,6 +131,7 @@ async function getPullRequestByNumber(repo, number) {
 }
 
 /**
+ * Looks up the pull request associated with a commit, preferring the earliest merged one.
  * @param {string} repo
  * @param {string} commit
  * @returns {Promise<PullRequest | undefined>}
@@ -158,6 +163,7 @@ async function getPullRequestForCommit(repo, commit) {
 }
 
 /**
+ * Returns the issues that a pull request will close.
  * @param {PullRequest | undefined} pullRequest
  * @returns {Issue[]}
  */
@@ -170,6 +176,7 @@ function getIssues(pullRequest) {
 }
 
 /**
+ * Formats Markdown links to the given issues (without duplicates), followed by the pull request.
  * @param {Issue[]} issues
  * @param {PullRequest | undefined} pullRequest
  * @param {string} repo
@@ -194,6 +201,7 @@ function formatLinks(issues, pullRequest, repo) {
 }
 
 /**
+ * Formats a changelog entry for a changeset, with links to its issues and pull request at the end.
  * @type {import('@changesets/types').GetReleaseLine}
  */
 export async function getReleaseLine(changeset, type, changelogOpts) {
@@ -220,6 +228,7 @@ export async function getReleaseLine(changeset, type, changelogOpts) {
 }
 
 /**
+ * Formats a changelog entry for updated dependencies.
  * @type {import('@changesets/types').GetDependencyReleaseLine}
  */
 export async function getDependencyReleaseLine(changesets, dependenciesUpdated, changelogOpts) {
