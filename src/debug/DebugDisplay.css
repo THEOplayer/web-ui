@@ -5,6 +5,7 @@
     grid-template-columns: max-content minmax(0, 1fr);
     grid-auto-rows: min-content;
     width: max-content;
+    max-width: 480px;
     max-width: min(480px, 60%);
     max-height: calc(100% - 16px);
     overflow-x: hidden;
@@ -149,4 +150,10 @@
     width: 2px;
     background: #fff;
     transform: translateX(-1px);
+}
+
+@container (max-width: 500px) {
+    :host {
+        max-width: calc(100% - 16px);
+    }
 }
