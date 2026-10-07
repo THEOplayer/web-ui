@@ -118,11 +118,9 @@ export class DebugDisplay extends LitElement {
     private _hidden: boolean = false;
     private _sampleTimer: number = 0;
     private _copyTimeout: number = 0;
-    private _lastDroppedFrames: number | undefined;
     private _downloadSpeedRef: Ref<RollingChart> = createRef();
     private _bufferHealthRef: Ref<RollingChart> = createRef();
     private _latencyRef: Ref<RollingChart> = createRef();
-    private _droppedFramesRef: Ref<RollingChart> = createRef();
 
     @state()
     private accessor _currentSrc: string = '';
@@ -212,7 +210,6 @@ export class DebugDisplay extends LitElement {
         this._player = player;
         this._currentSrc = player?.src ?? '';
         this._currentSourceType = player ? getCurrentSourceType(player) : '';
-        this._lastDroppedFrames = undefined;
         if (!player) {
             this._liveState = false;
             this._currentBandwidthEstimate = undefined;
@@ -251,8 +248,6 @@ export class DebugDisplay extends LitElement {
     private readonly _onCurrentSourceChange = (event: CurrentSourceChangeEvent): void => {
         this._currentSrc = event.currentSource?.src ?? this._player?.src ?? '';
         this._currentSourceType = event.currentSource?.type ?? '';
-        this._lastDroppedFrames = undefined;
-        this._droppedFramesRef.value?.clearSamples();
     };
 
     private readonly _onDurationChange = (): void => {
@@ -381,23 +376,11 @@ export class DebugDisplay extends LitElement {
         this._currentBandwidthEstimate = metrics.currentBandwidthEstimate;
         this._currentBufferHealth = this.getBufferHealth_(player);
         this._currentLatency = player.latency.currentLatency;
-        this.addDroppedFrameSample_(droppedFrames);
         this._downloadSpeedRef.value?.addSample(metrics.currentBandwidthEstimate);
         this._bufferHealthRef.value?.addSample(this._currentBufferHealth);
         if (this._currentLatency !== undefined) {
             this._latencyRef.value?.addSample(this._currentLatency);
         }
-    }
-
-    /**
-     * Add the difference from the previous dropped-frame count.
-     */
-    private addDroppedFrameSample_(droppedFrames: number): void {
-        if (this._lastDroppedFrames !== undefined) {
-            const delta = Math.max(0, droppedFrames - this._lastDroppedFrames);
-            this._droppedFramesRef.value?.addSample(delta);
-        }
-        this._lastDroppedFrames = droppedFrames;
     }
 
     /**
@@ -420,8 +403,6 @@ export class DebugDisplay extends LitElement {
         this._downloadSpeedRef.value?.clearSamples();
         this._bufferHealthRef.value?.clearSamples();
         this._latencyRef.value?.clearSamples();
-        this._droppedFramesRef.value?.clearSamples();
-        this._lastDroppedFrames = undefined;
     }
 
     /**
@@ -664,20 +645,9 @@ export class DebugDisplay extends LitElement {
         }
         return html`
             <div class="label">Frames</div>
-            <div class="value value-chart">
-                <span>
-                    ${this._droppedFrames} dropped / ${this._totalFrames} total
-                    ${this._corruptedFrames && this._corruptedFrames > 0 ? html` · ${this._corruptedFrames} corrupted` : nothing}
-                </span>
-                <theoplayer-rolling-chart
-                    ${ref(this._droppedFramesRef)}
-                    width="80"
-                    height="20"
-                    max-samples="200"
-                    min-resolution="1"
-                    max-resolution="10"
-                    sample-color="#ff7474"
-                ></theoplayer-rolling-chart>
+            <div class="value">
+                ${this._droppedFrames} dropped / ${this._totalFrames} total
+                ${this._corruptedFrames && this._corruptedFrames > 0 ? html` · ${this._corruptedFrames} corrupted` : nothing}
             </div>
         `;
     }
