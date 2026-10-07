@@ -1,5 +1,17 @@
 # @theoplayer/web-ui
 
+## 2.5.0
+
+### ✨ Features
+
+- Qualities that are currently not [available](https://optiview.dolby.com/docs/theoplayer/v11/api-reference/web/interfaces/Quality.html#available) are now greyed out and can no longer be selected in the quality menu. ([#77](https://github.com/THEOplayer/web-ui/issues/77), [#194](https://github.com/THEOplayer/web-ui/pull/194))
+
+### 🐛 Issues
+
+- Fixed `<theoplayer-preview-time-display>` getting stuck when tapping the seek bar on iOS Safari. ([#173](https://github.com/THEOplayer/web-ui/issues/173), [#197](https://github.com/THEOplayer/web-ui/pull/197))
+- Fixed an issue where a "false" string was shown in the quality menu for videos with a single quality. ([#193](https://github.com/THEOplayer/web-ui/pull/193))
+- Fixed a bug where the preview time shown while hovering the seek bar did not match the time that the player actually seeks to when clicking. ([#121](https://github.com/THEOplayer/web-ui/issues/121), [#196](https://github.com/THEOplayer/web-ui/pull/196))
+
 ## 2.4.1
 
 ### 🐛 Issues
