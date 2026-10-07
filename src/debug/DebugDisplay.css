@@ -1,9 +1,24 @@
 :host {
+    box-sizing: border-box;
     display: grid;
-    grid-template-columns: min-content 1fr;
+    align-self: flex-start;
+    grid-template-columns: max-content minmax(0, 1fr);
     grid-auto-rows: min-content;
-    column-gap: var(--theoplayer-debug-column-gap, 5px);
-    row-gap: var(--theoplayer-debug-column-row, 2px);
+    width: max-content;
+    max-width: min(480px, 60%);
+    max-height: calc(100% - 16px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    margin: 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: var(--theoplayer-debug-background, rgba(0, 0, 0, 0.7));
+    backdrop-filter: blur(4px);
+    color: #fff;
+    pointer-events: auto;
+    column-gap: var(--theoplayer-debug-column-gap, 8px);
+    row-gap: var(--theoplayer-debug-row-gap, 3px);
     align-items: center;
     font-size: var(--theoplayer-debug-font-size, 12px);
     line-height: var(--theoplayer-debug-row-height, 16px);
@@ -14,29 +29,124 @@
     display: none !important;
 }
 
+.header {
+    display: flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    margin-bottom: 2px;
+}
+
+.header h2 {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: inherit;
+    font-weight: 600;
+}
+
+.header button {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    min-height: 24px;
+    padding: 2px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.header button:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.close-button {
+    width: 24px;
+    padding: 3px !important;
+}
+
+.close-button svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
 .label {
     grid-column: 1;
     white-space: nowrap;
     user-select: none;
+    opacity: 0.7;
 }
 
 .value {
     grid-column: 2;
+    min-width: 0;
     overflow-x: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+    user-select: text;
 }
 
 .value a {
     color: inherit;
 }
 
+.separator {
+    opacity: 0.65;
+}
+
 .value-chart {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 0.5em;
+    gap: 6px;
+    overflow: visible;
 }
 
 .value-chart theoplayer-rolling-chart {
-    height: var(--theoplayer-debug-row-height, 16px);
+    flex: 0 0 auto;
+}
+
+.metric-value {
+    flex: 0 0 6.5em;
+    overflow: hidden;
+    text-align: right;
+    text-overflow: ellipsis;
+}
+
+.timeline {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    overflow: hidden;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.timeline-seekable,
+.timeline-buffered,
+.timeline-playhead {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.timeline-seekable {
+    background: rgba(255, 255, 255, 0.24);
+}
+
+.timeline-buffered {
+    background: #52a5ff;
+}
+
+.timeline-playhead {
+    width: 2px;
+    background: #fff;
+    transform: translateX(-1px);
 }
