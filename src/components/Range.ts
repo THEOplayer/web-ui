@@ -298,16 +298,31 @@ export abstract class Range extends LitElement {
         if (this.disabled || this.inert || !rangeEl) {
             return;
         }
-        // Get mouse position percent
+        // Get mouse position percent.
+        // The native range maps its value onto the position of the thumb's center,
+        // which is inset by half the thumb's width from either edge.
         const rangeRect = rangeEl.getBoundingClientRect();
-        let mousePercent = (e.clientX - rangeRect.left) / rangeRect.width;
+        const thumbWidth = Math.min(this._thumbWidth, rangeRect.width);
+        let mousePercent = (e.clientX - rangeRect.left - thumbWidth / 2) / (rangeRect.width - thumbWidth);
         // Lock between 0 and 1
         mousePercent = Math.max(0, Math.min(1, mousePercent));
+        if (isNaN(mousePercent)) {
+            mousePercent = 0;
+        }
         this.updatePointer_(mousePercent, rangeRect);
     };
 
+    /**
+     * Get the horizontal offset (in pixels) from the left edge of the range
+     * at which the thumb's center would be positioned for the given value percent.
+     */
+    protected getThumbPosition_(percent: number, rangeWidth: number): number {
+        const thumbWidth = Math.min(this._thumbWidth, rangeWidth);
+        return thumbWidth / 2 + percent * (rangeWidth - thumbWidth);
+    }
+
     protected updatePointer_(mousePercent: number, rangeRect: DOMRectReadOnly): void {
-        this._pointerWidth = mousePercent * rangeRect.width;
+        this._pointerWidth = this.getThumbPosition_(mousePercent, rangeRect.width);
     }
 
     private readonly _onKeyDown = (e: KeyboardEvent): void => {

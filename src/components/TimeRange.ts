@@ -299,7 +299,7 @@ export class TimeRange extends Range {
         super.updatePointer_(mousePercent, rangeRect);
 
         // Update preview rail, keeping the preview box within bounds
-        let previewPos = rangeRect.left + mousePercent * rangeRect.width;
+        let previewPos = rangeRect.left + this.getThumbPosition_(mousePercent, rangeRect.width);
         const previewBoxEl = this._previewBoxEl.value;
         if (previewBoxEl) {
             const previewBoxRect = previewBoxEl.getBoundingClientRect();
