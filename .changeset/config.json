@@ -5,7 +5,6 @@
   "fixed": [["@theoplayer/web-ui", "@theoplayer/react-ui"]],
   "linked": [],
   "access": "public",
-  "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": []
 }

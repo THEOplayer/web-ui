@@ -62,7 +62,7 @@
     "theoplayer": "^7 || ^8 || ^9 || ^10 || ^11"
   },
   "devDependencies": {
-    "@changesets/cli": "^3.0.1",
+    "@changesets/cli": "^3.0.3",
     "@changesets/types": "^7.0.0",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
