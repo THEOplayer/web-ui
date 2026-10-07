@@ -87,6 +87,7 @@ addLocale('nl', {
     },
     automaticQualityLabel: 'Automatisch',
     unknownQualityLabel: 'Onbekend',
+    unavailableQualityTitle: 'Deze kwaliteit is momenteel niet beschikbaar',
     highQualityLabel: 'Hoge kwaliteit',
     lowQualityLabel: 'Lage kwaliteit',
     errorHeading: 'Er is een fout opgetreden',

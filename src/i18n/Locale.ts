@@ -332,6 +332,11 @@ export interface Locale {
      */
     unknownQualityLabel: string;
     /**
+     * The tooltip for a {@link QualityRadioButton} when its quality is currently unavailable,
+     * for example due to a DRM restriction.
+     */
+    unavailableQualityTitle: string;
+    /**
      * The label for an {@link AutomaticQualitySelector} for THEOlive's {@link BadNetworkModeMenu}.
      */
     highQualityLabel: string;
@@ -548,6 +553,7 @@ export const defaultLocale: Locale = {
     },
     automaticQualityLabel: 'Automatic',
     unknownQualityLabel: 'Unknown',
+    unavailableQualityTitle: 'This quality is currently unavailable',
     highQualityLabel: 'High Quality',
     lowQualityLabel: 'Low Quality',
     errorHeading: 'An error occurred',

@@ -1,4 +1,4 @@
-import { html, type HTMLTemplateResult } from 'lit';
+import { html, type HTMLTemplateResult, type PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { RadioButton } from './RadioButton';
 import type { MediaTrack, VideoQuality } from 'theoplayer/chromeless';
@@ -13,6 +13,8 @@ const QUALITY_EVENTS = ['update'] as const;
 /**
  * A radio button that shows the label of a given video quality,
  * and switches the video track's {@link theoplayer!MediaTrack.targetQuality | target quality} to that quality when clicked.
+ *
+ * The button is disabled while the quality is not {@link theoplayer!Quality.available | available}.
  */
 @customElement('theoplayer-quality-radio-button')
 @stateReceiver(['lang'])
@@ -99,6 +101,19 @@ export class QualityRadioButton extends RadioButton {
     private _updateTargetQuality(): void {
         if (this._track && this.checked) {
             this._track.targetQuality = this._quality;
+        }
+    }
+
+    protected override willUpdate(changedProperties: PropertyValues): void {
+        super.willUpdate(changedProperties);
+        const disabled = this._quality !== undefined && this._quality.available === false;
+        if (this.disabled !== disabled) {
+            this.disabled = disabled;
+        }
+        if (disabled) {
+            this.title = getLocale(this.lang).unavailableQualityTitle;
+        } else {
+            this.removeAttribute('title');
         }
     }
 

@@ -113,7 +113,7 @@ export class RadioGroup extends LitElement {
     private readonly _onKeyDown = (event: KeyboardEvent) => {
         if (this.deviceType === 'tv' && isArrowKey(event.keyCode)) {
             const focusedRadioButton = this.focusedRadioButton;
-            if (focusedRadioButton && navigateByArrowKey(this, focusedRadioButton, this._radioButtons, event.keyCode)) {
+            if (focusedRadioButton && navigateByArrowKey(this, focusedRadioButton, this._enabledRadioButtons(), event.keyCode)) {
                 event.preventDefault();
                 event.stopPropagation();
             }
@@ -136,12 +136,13 @@ export class RadioGroup extends LitElement {
             }
             case KeyCode.HOME: {
                 event.preventDefault();
-                this.setFocusedRadioButton(this.firstRadioButton);
+                this.setFocusedRadioButton(this._enabledRadioButtons()[0] ?? null);
                 break;
             }
             case KeyCode.END: {
                 event.preventDefault();
-                this.setFocusedRadioButton(this.lastRadioButton);
+                const enabledButtons = this._enabledRadioButtons();
+                this.setFocusedRadioButton(enabledButtons[enabledButtons.length - 1] ?? null);
                 break;
             }
             default: {
@@ -171,45 +172,27 @@ export class RadioGroup extends LitElement {
         return this._radioButtons;
     }
 
-    private _prevRadioButton(node: RadioButton): RadioButton | null {
-        const index = this._radioButtons.indexOf(node);
-        if (index > 0) {
-            return this._radioButtons[index - 1];
-        }
-        return null;
-    }
-
-    private _nextRadioButton(node: RadioButton): RadioButton | null {
-        const index = this._radioButtons.indexOf(node);
-        if (index >= 0 && index < this._radioButtons.length - 1) {
-            return this._radioButtons[index + 1];
-        }
-        return null;
+    private _enabledRadioButtons(): RadioButton[] {
+        return this._radioButtons.filter((button) => !button.disabled);
     }
 
     private _focusPrevButton(): boolean {
-        let focusedButton = this.focusedRadioButton || this.firstRadioButton;
-        if (!focusedButton) {
-            return false;
-        }
-        if (focusedButton === this.firstRadioButton) {
-            this.setFocusedRadioButton(this.lastRadioButton);
-        } else {
-            this.setFocusedRadioButton(this._prevRadioButton(focusedButton));
-        }
-        return true;
+        return this._focusButtonByOffset(-1);
     }
 
     private _focusNextButton(): boolean {
-        let focusedButton = this.focusedRadioButton || this.firstRadioButton;
-        if (!focusedButton) {
+        return this._focusButtonByOffset(1);
+    }
+
+    private _focusButtonByOffset(offset: number): boolean {
+        const enabledButtons = this._enabledRadioButtons();
+        if (enabledButtons.length === 0) {
             return false;
         }
-        if (focusedButton === this.lastRadioButton) {
-            this.setFocusedRadioButton(this.firstRadioButton);
-        } else {
-            this.setFocusedRadioButton(this._nextRadioButton(focusedButton));
-        }
+        const focusedButton = this.focusedRadioButton;
+        const focusedIndex = focusedButton ? Math.max(0, enabledButtons.indexOf(focusedButton)) : 0;
+        const index = (focusedIndex + offset + enabledButtons.length) % enabledButtons.length;
+        this.setFocusedRadioButton(enabledButtons[index]);
         return true;
     }
 
