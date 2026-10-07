@@ -99,6 +99,24 @@
     color: inherit;
 }
 
+.value-url {
+    display: flex;
+    min-width: 0;
+}
+
+.url-start {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.url-end {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
 .separator {
     opacity: 0.65;
 }

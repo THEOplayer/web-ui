@@ -52,17 +52,6 @@ function getCurrentSourceType(player: ChromelessPlayer): string {
 }
 
 /**
- * Shorten a long URL without losing its beginning or end.
- */
-function shortenURL(url: string, maxLength = 64): string {
-    if (url.length <= maxLength) {
-        return url;
-    }
-    const sideLength = Math.floor((maxLength - 1) / 2);
-    return `${url.slice(0, sideLength)}…${url.slice(-sideLength)}`;
-}
-
-/**
  * Return the playback state for display and snapshots.
  */
 function getPlaybackState(player: ChromelessPlayer): string {
@@ -619,7 +608,17 @@ export class DebugDisplay extends LitElement {
      */
     private renderSourceRows_(): unknown {
         return html`
-            ${this.renderRow_('Source', this._currentSrc ? html`<span title=${this._currentSrc}>${shortenURL(this._currentSrc)}</span>` : undefined)}
+            ${this._currentSrc
+                ? html`
+                      <div class="label">Source</div>
+                      <div class="value value-url" title=${this._currentSrc}>
+                          ${this._currentSrc.length <= 24
+                              ? html`<span class="url-start">${this._currentSrc}</span>`
+                              : html`<span class="url-start">${this._currentSrc.slice(0, -24)}</span
+                                    ><span class="url-end">${this._currentSrc.slice(-24)}</span>`}
+                      </div>
+                  `
+                : nothing}
             ${this.renderRow_('Stream type', this._streamType)} ${this.renderRow_('MIME type', this._currentSourceType)}
         `;
     }
