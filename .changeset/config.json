@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@4.0.0/schema.json",
-  "changelog": "./format.mjs",
+  "changelog": ["./format.mjs", { "repo": "THEOplayer/web-ui" }],
   "commit": false,
   "fixed": [["@theoplayer/web-ui", "@theoplayer/react-ui"]],
   "linked": [],
