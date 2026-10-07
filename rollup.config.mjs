@@ -44,6 +44,7 @@ export default (cliArgs) => {
         ...jsConfig(outputDir, { es5: false, node: true, production, sourcemap: true }),
         ...jsConfig(outputDir, { es5: true, production, sourcemap: false }),
         ...debugConfig(outputDir, { production }),
+        ...bookmarkletConfig(outputDir, { production }),
         {
             input: './src/polyfills.ts',
             output: {
@@ -104,6 +105,30 @@ function debugConfig(outputDir, { production = false }) {
             context: 'self',
             external: debugExternal,
             plugins: [externalizeMainEntry(), dts()]
+        }
+    ];
+}
+
+/**
+ * Build a standalone IIFE bookmarklet that includes its runtime dependencies.
+ *
+ * @param {string} outputDir
+ * @param {{production?: boolean}} options
+ * @return {import("rollup").RollupOptions[]}
+ */
+function bookmarkletConfig(outputDir, { production = false }) {
+    return [
+        {
+            input: './src/debug/bookmarklet.ts',
+            output: {
+                file: path.join(outputDir, `${fileName}.debug.bookmarklet.js`),
+                format: 'iife',
+                sourcemap: false,
+                indent: false,
+                banner
+            },
+            context: 'self',
+            plugins: jsPlugins({ es5: false, module: false, production, sourcemap: false })
         }
     ];
 }
