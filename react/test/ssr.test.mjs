@@ -31,6 +31,23 @@ describe('Server-side rendering (SSR)', () => {
         assert.equal(actual, expected);
     });
 
+    it('can render <DebugDisplay> and <DebugButton> to string', async () => {
+        const { DefaultUI } = await import('@theoplayer/react-ui');
+        const { DebugDisplay, DebugButton } = await import('@theoplayer/react-ui/debug');
+        const actual = renderToString(
+            React.createElement(DefaultUI, {
+                overlay: React.createElement(DebugDisplay),
+                bottomControlBar: React.createElement(DebugButton)
+            })
+        );
+        const expected =
+            '<theoplayer-default-ui>' +
+            '<theoplayer-slot-container slot="bottom-control-bar"><theoplayer-debug-button></theoplayer-debug-button></theoplayer-slot-container>' +
+            '<theoplayer-slot-container slot="overlay"><theoplayer-debug-display></theoplayer-debug-display></theoplayer-slot-container>' +
+            '</theoplayer-default-ui>';
+        assert.equal(actual, expected);
+    });
+
     it('can render <UIContainer> to string', async () => {
         const { UIContainer, PlayButton, TimeRange } = await import('@theoplayer/react-ui');
         const actual = renderToString(

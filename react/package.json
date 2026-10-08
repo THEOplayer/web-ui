@@ -16,6 +16,10 @@
       "import": "./dist/THEOplayerReactUI.es5.mjs",
       "default": "./dist/THEOplayerReactUI.es5.js"
     },
+    "./debug": {
+      "types": "./dist/THEOplayerReactUI.debug.d.ts",
+      "import": "./dist/THEOplayerReactUI.debug.mjs"
+    },
     "./dist/*": "./dist/*",
     "./package": "./package.json",
     "./package.json": "./package.json"
