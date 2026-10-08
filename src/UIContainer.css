@@ -73,11 +73,13 @@
  * but re-enable them on all elements slotted into those layers.
  */
 [part~='gesture-layer'],
+[part~='overlay-layer'],
 [part~='vertical-layer'],
 [part~='chrome'] {
     pointer-events: none;
 }
 
+[part~='overlay-layer'] ::slotted(*),
 [part~='chrome'] ::slotted(*) {
     pointer-events: auto;
 }
@@ -107,6 +109,7 @@
     display: none !important;
 }
 
+[part~='overlay-layer'],
 [part~='vertical-layer'],
 [part~='chrome'] {
     flex-flow: column nowrap;
@@ -187,6 +190,10 @@
 :host(:not([menu-opened])) [part~='menu-layer'],
 :host([menu-opened][tv]) [part~='vertical-layer'],
 :host([menu-opened][mobile]) [part~='vertical-layer'] {
+    display: none !important;
+}
+
+:host([menu-opened]) [part~='overlay-layer'] {
     display: none !important;
 }
 

@@ -1,5 +1,4 @@
 import { Attribute } from './Attribute';
-import { isSlotContainer } from '../components/SlotContainer';
 
 export type Constructor<T> = abstract new (...args: any[]) => T;
 
@@ -153,7 +152,7 @@ export function getSlottedElements(slot: HTMLSlotElement): Element[] {
     for (const node of slot.assignedNodes({ flatten: true })) {
         if (isElement(node)) {
             elements.push(node);
-            if (isSlotContainer(node)) {
+            if (node.localName === 'theoplayer-slot-container') {
                 elements.push(...fromArrayLike(node.children));
             }
         }

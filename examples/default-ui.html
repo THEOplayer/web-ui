@@ -32,6 +32,7 @@
                 "imports": {
                     "theoplayer/chromeless": "../node_modules/theoplayer/THEOplayer.chromeless.esm.js",
                     "@theoplayer/web-ui": "../dist/THEOplayerUI.mjs",
+                    "@theoplayer/web-ui/debug": "../dist/THEOplayerUI.debug.mjs",
                     "lit": "https://ga.jspm.io/npm:lit@3.3.1/index.js",
                     "lit/decorators.js": "https://ga.jspm.io/npm:lit@3.3.1/decorators.js",
                     "lit/directives/": "https://ga.jspm.io/npm:lit@3.3.1/directives/"
@@ -51,8 +52,8 @@
         <script async src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js" crossorigin="anonymous"></script>
         <script type="module">
             import * as THEOplayerUI from '@theoplayer/web-ui';
+            import '@theoplayer/web-ui/debug';
             import './locale/nl.js';
-
             self.THEOplayerUI = THEOplayerUI;
         </script>
         <!-- Legacy browsers -->
@@ -66,7 +67,10 @@
     </head>
     <body>
         <h1>Default UI</h1>
-        <theoplayer-default-ui configuration='{"libraryLocation":"../node_modules/theoplayer/","license":""}'></theoplayer-default-ui>
+        <theoplayer-default-ui configuration='{"libraryLocation":"../node_modules/theoplayer/","license":""}'>
+            <theoplayer-debug-display slot="overlay" hidden></theoplayer-debug-display>
+            <theoplayer-debug-button slot="bottom-control-bar"></theoplayer-debug-button>
+        </theoplayer-default-ui>
         <div>
             <label style="user-select: none">
                 Source:

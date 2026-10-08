@@ -30,6 +30,8 @@ import type { StreamType } from './util/StreamType';
 import type { StreamTypeChangeEvent } from './events/StreamTypeChangeEvent';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
 import { USER_IDLE_CHANGE_EVENT } from './events/UserIdleChangeEvent';
+import type { CloseMenuEvent } from './events/CloseMenuEvent';
+import type { MenuChangeEvent } from './events/MenuChangeEvent';
 import { createCustomEvent } from './util/EventUtils';
 import { getTargetQualities } from './util/TrackUtils';
 import { MenuGroup } from './components/MenuGroup';
@@ -39,6 +41,7 @@ import { isArrowKey, isBackKey, isPauseKey, isPlayKey, KeyCode } from './util/Ke
 import { READY_EVENT } from './events/ReadyEvent';
 import { addGlobalStyles } from './Global';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
+import { version } from './version';
 import { type addLocale, type Locale } from './i18n';
 
 // Load components used in template
@@ -190,6 +193,13 @@ export class UIContainer extends LitElement {
      */
     get player(): ChromelessPlayer | undefined {
         return this._player;
+    }
+
+    /**
+     * The version of Open Video UI for Web.
+     */
+    get version(): string {
+        return version;
     }
 
     /**
@@ -755,12 +765,12 @@ export class UIContainer extends LitElement {
     /**
      * Whether any {@link Menu | menu} is currently open.
      */
-    private get menuOpened_(): boolean {
+    get menuOpened(): boolean {
         return this._menuOpened;
     }
 
     @property({ reflect: true, state: true, type: Boolean, attribute: Attribute.MENU_OPENED })
-    private set menuOpened_(menuOpened: boolean) {
+    private set menuOpened(menuOpened: boolean) {
         if (this._menuOpened === menuOpened) return;
         this._menuOpened = menuOpened;
         // Toggle manually, so the menu layer immediately becomes visible and can receive focus.
@@ -825,21 +835,21 @@ export class UIContainer extends LitElement {
         }
     };
 
-    private readonly _onCloseMenu = (event: Event): void => {
+    private readonly _onCloseMenu = (event: CloseMenuEvent): void => {
         event.stopPropagation();
         this.closeMenu_();
     };
 
-    private readonly _onMenuChange = (): void => {
+    private readonly _onMenuChange = (event: MenuChangeEvent): void => {
         const menuEl = this._menuRef.value!;
         menuEl.removeEventListener('pointerdown', this._onMenuPointerDown);
         menuEl.removeEventListener('click', this._onMenuClick);
         if (this._menuGroupRef.value!.hasCurrentMenu()) {
             menuEl.addEventListener('pointerdown', this._onMenuPointerDown);
             menuEl.addEventListener('click', this._onMenuClick);
-            this.menuOpened_ = true;
+            this.menuOpened = true;
         } else {
-            this.menuOpened_ = false;
+            this.menuOpened = false;
         }
         this.updateUserIdle_();
     };
@@ -1405,6 +1415,9 @@ export class UIContainer extends LitElement {
                         ><!-- default, effectively "bottom-chrome" --></slot
                     >
                 </div>
+            </div>
+            <div part="layer overlay-layer">
+                <slot name="overlay"></slot>
             </div>
             <div part="layer menu-layer" ${ref(this._menuRef)}>
                 <theoplayer-menu-group

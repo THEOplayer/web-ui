@@ -11,10 +11,12 @@ import { isMobile, isTv } from './util/Environment';
 import type { DeviceType } from './util/DeviceType';
 import type { StreamType } from './util/StreamType';
 import { USER_IDLE_CHANGE_EVENT } from './events/UserIdleChangeEvent';
+import { MENU_CHANGE_EVENT } from './events/MenuChangeEvent';
 import { READY_EVENT } from './events/ReadyEvent';
 import { ACCIDENTAL_CLICK_DELAY } from './util/Constants';
-import { closestRecursive } from './util/CommonUtils';
+import { closestRecursive, toggleAttribute } from './util/CommonUtils';
 import { createCustomEvent } from './util/EventUtils';
+import { version } from './version';
 
 /**
  * A default UI for THEOplayer.
@@ -124,6 +126,13 @@ export class DefaultUI extends LitElement {
      */
     get player(): ChromelessPlayer | undefined {
         return this._uiRef.value?.player;
+    }
+
+    /**
+     * The version of Open Video UI for Web.
+     */
+    get version(): string {
+        return version;
     }
 
     /**
@@ -314,6 +323,13 @@ export class DefaultUI extends LitElement {
         this._hasFirstPlay = hasFirstPlay;
     }
 
+    /**
+     * Whether a menu is currently open.
+     */
+    get menuOpened(): boolean {
+        return this._uiRef.value ? this._uiRef.value.menuOpened : false;
+    }
+
     @state()
     private accessor _hasTitle: boolean = false;
 
@@ -388,9 +404,16 @@ export class DefaultUI extends LitElement {
         }
     };
 
+    private readonly _updateMenuOpened = () => {
+        toggleAttribute(this, Attribute.MENU_OPENED, this.menuOpened);
+        this.dispatchEvent(createCustomEvent(MENU_CHANGE_EVENT));
+    };
+
     private readonly _updateUserIdle = () => {
         clearTimeout(this._timeRangeInertTimeout);
-        if (this.userIdle) {
+        const userIdle = this.userIdle;
+        toggleAttribute(this, Attribute.USER_IDLE, userIdle);
+        if (userIdle) {
             // Disable seekbar when user is idle
             this._timeRangeInert = true;
         } else {
@@ -422,6 +445,7 @@ export class DefaultUI extends LitElement {
             @theoplayerready=${this._onUiReady}
             @theoplayeruseridlechange=${this._updateUserIdle}
             @theoplayerstreamtypechange=${this._updateStreamType}
+            @theoplayermenuchange=${this._updateMenuOpened}
             >${this.renderUiContent()}
         </theoplayer-ui>`;
     }
@@ -508,6 +532,7 @@ export class DefaultUI extends LitElement {
             <theoplayer-settings-menu id="settings-menu" slot="menu" hidden></theoplayer-settings-menu>
             <slot name="error" slot="error"><theoplayer-error-display></theoplayer-error-display></slot>
             <slot name="menu" slot="menu"></slot>
+            <slot name="overlay" slot="overlay"></slot>
         `;
     }
 }

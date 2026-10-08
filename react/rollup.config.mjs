@@ -30,6 +30,7 @@ const esmExternal = [
     // Don't bundle it ourselves, otherwise we'll always ship the browser version.
     '@lit/react'
 ];
+const debugExternal = [...esmExternal, '@theoplayer/web-ui/debug'];
 
 /**
  * @param {{configOutputDir?: string}} cliArgs
@@ -40,6 +41,7 @@ export default (cliArgs) => {
     return defineConfig([
         ...jsConfig(outputDir, { es5: false, production, sourcemap: true }),
         ...jsConfig(outputDir, { es5: true, production, sourcemap: false }),
+        ...debugConfig(outputDir, { production }),
         {
             input: './src/index.ts',
             output: {
@@ -54,6 +56,39 @@ export default (cliArgs) => {
         }
     ]);
 };
+
+/**
+ * Build the ESM-only debug entry point.
+ *
+ * @return {import("rollup").RollupOptions[]}
+ */
+function debugConfig(outputDir, { production = false }) {
+    return [
+        {
+            input: './src/debug/index.ts',
+            output: {
+                file: path.join(outputDir, `${fileName}.debug.mjs`),
+                format: 'es',
+                sourcemap: true,
+                indent: false
+            },
+            context: 'self',
+            external: debugExternal,
+            plugins: jsPlugins({ es5: false, module: true, production, sourcemap: true })
+        },
+        {
+            input: './src/debug/index.ts',
+            output: {
+                file: path.join(outputDir, `${fileName}.debug.d.ts`),
+                format: 'es',
+                indent: false,
+                banner
+            },
+            external: debugExternal,
+            plugins: [nodeResolve(), dts()]
+        }
+    ];
+}
 
 /**
  * @return {import("rollup").RollupOptions[]}

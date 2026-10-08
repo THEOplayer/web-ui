@@ -1,0 +1,15 @@
+:host {
+    box-sizing: border-box;
+    display: inline-flex;
+    flex: none;
+    width: max-content;
+    overflow: hidden;
+}
+
+:host([hidden]) {
+    display: none !important;
+}
+
+canvas {
+    display: block;
+}
