@@ -25,6 +25,12 @@ interface BufferTimeline {
     playhead: number;
 }
 
+interface TimelineSnapshot {
+    currentTime: number;
+    seekable: Array<{ start: number; end: number }>;
+    buffered: Array<{ start: number; end: number }>;
+}
+
 /**
  * Format a local wall-clock timestamp with milliseconds.
  */
@@ -402,7 +408,7 @@ export class DebugDisplay extends LitElement {
     }
 
     /**
-     * Return the panel's buffer timeline as percentages.
+     * Return the rendered buffer timeline as percentages.
      */
     private getBufferTimeline_(): BufferTimeline | undefined {
         const player = this._player;
@@ -422,6 +428,21 @@ export class DebugDisplay extends LitElement {
             seekable: seekable.map((range) => toPercentRange(range.start, range.end, start, end)),
             buffered: readTimeRanges(player.buffered).map((range) => toPercentRange(range.start, range.end, start, end)),
             playhead: Math.max(0, Math.min(100, ((player.currentTime - start) / (end - start)) * 100))
+        };
+    }
+
+    /**
+     * Return the playback timeline values for the JSON snapshot.
+     */
+    private getTimelineSnapshot_(): TimelineSnapshot | undefined {
+        const player = this._player;
+        if (!player) {
+            return undefined;
+        }
+        return {
+            currentTime: player.currentTime,
+            seekable: readTimeRanges(player.seekable),
+            buffered: readTimeRanges(player.buffered)
         };
     }
 
@@ -500,7 +521,7 @@ export class DebugDisplay extends LitElement {
             downloadSpeed: this._currentBandwidthEstimate,
             bufferHealth: this._currentBufferHealth,
             latency: this._currentLatency,
-            bufferTimeline: this.getBufferTimeline_(),
+            timeline: this.getTimelineSnapshot_(),
             time: this._sampleTime || undefined
         };
     }
