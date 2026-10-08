@@ -46,3 +46,4 @@ Click the bookmark on a page with an Open Video UI player to show the debug disp
 The bookmarklet requires Open Video UI for Web 2.6.0 or higher.
 It does not work on websites whose [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) blocks scripts from `cdn.jsdelivr.net`,
 nor on players inside a cross-origin iframe.
+It works on players inside same-origin iframes.
