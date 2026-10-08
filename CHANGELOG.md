@@ -1,5 +1,14 @@
 # @theoplayer/web-ui
 
+## 2.6.0
+
+### ✨ Features
+
+- Added `overlay` slot to `<theoplayer-ui>` and `<theoplayer-default-ui>`. ([#200](https://github.com/THEOplayer/web-ui/pull/200))
+- Added `<theoplayer-debug-display>`, available from the new `@theoplayer/web-ui/debug` entry point (ESM only). ([#200](https://github.com/THEOplayer/web-ui/pull/200))
+- Added `version` property to `<theoplayer-ui>`, `<theoplayer-default-ui>` and `<theolive-default-ui>`. ([#201](https://github.com/THEOplayer/web-ui/pull/201))
+- Added the `THEOplayerUI.debug.bookmarklet.js` script to inject the debug display into pages with Open Video UI. ([#201](https://github.com/THEOplayer/web-ui/pull/201))
+
 ## 2.5.0
 
 ### ✨ Features

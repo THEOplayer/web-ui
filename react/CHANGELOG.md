@@ -1,5 +1,16 @@
 # @theoplayer/react-ui
 
+## 2.6.0
+
+### ✨ Features
+
+- Added `overlay` prop to `DefaultUI` (and `THEOliveDefaultUI`). ([#200](https://github.com/THEOplayer/web-ui/pull/200))
+- Added `@theoplayer/react-ui/debug` entry point with `DebugDisplay` and `DebugButton` components. ([#201](https://github.com/THEOplayer/web-ui/pull/201))
+
+### 📦 Dependency Updates
+
+- See changes to [Open Video UI for Web v2.6.0](https://github.com/THEOplayer/web-ui/blob/%40theoplayer%2Fweb-ui%402.6.0/CHANGELOG.md)
+
 ## 2.5.0
 
 ### 📦 Dependency Updates
