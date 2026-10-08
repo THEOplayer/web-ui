@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 2.6.1
+
+### 🐛 Issues
+
+- Fixed the debug display bookmarklet to also find players inside same-origin iframes. ([#206](https://github.com/THEOplayer/web-ui/pull/206))
+
 ## 2.6.0
 
 ### ✨ Features
