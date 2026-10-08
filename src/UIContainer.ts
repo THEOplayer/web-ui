@@ -1381,9 +1381,6 @@ export class UIContainer extends LitElement {
             <div part="layer gesture-layer">
                 <theoplayer-gesture-receiver></theoplayer-gesture-receiver>
             </div>
-            <div part="layer overlay-layer">
-                <slot name="overlay"></slot>
-            </div>
             <div part="layer vertical-layer">
                 <div part="top chrome" ${ref(this._topChromeRef)}>
                     <slot
@@ -1410,6 +1407,9 @@ export class UIContainer extends LitElement {
                         ><!-- default, effectively "bottom-chrome" --></slot
                     >
                 </div>
+            </div>
+            <div part="layer overlay-layer">
+                <slot name="overlay"></slot>
             </div>
             <div part="layer menu-layer" ${ref(this._menuRef)}>
                 <theoplayer-menu-group
