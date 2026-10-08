@@ -10,6 +10,8 @@ sidebar_custom_props: { 'icon': '🐞' }
 The debug display is an overlay panel that shows playback diagnostics, such as the current source, quality, buffer health and live latency.
 It is meant for developers, and is not part of the main Open Video UI bundle.
 
+![Screenshot of the debug display](../assets/debug-display.png)
+
 ## Add it to your player
 
 Import the separate `@theoplayer/web-ui/debug` entry point. This entry point is only available as an ES module.
