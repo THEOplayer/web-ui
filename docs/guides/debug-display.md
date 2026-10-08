@@ -30,7 +30,7 @@ Optionally, add a `<theoplayer-debug-button>` to toggle the panel from the contr
 </theoplayer-default-ui>
 ```
 
-In React, pass the debug display to the `overlay` prop of `DefaultUI` or `THEOliveDefaultUI`.
+If you use Open Video UI for React, see [Debug display in React](../react/guides/debug-display.md).
 
 ## Bookmarklet
 
