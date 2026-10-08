@@ -118,6 +118,7 @@
 }
 
 .separator {
+    margin: 0 1ch;
     opacity: 0.65;
 }
 

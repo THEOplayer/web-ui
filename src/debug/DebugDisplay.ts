@@ -471,7 +471,7 @@ export class DebugDisplay extends LitElement {
         const video = this._activeVideoQuality ? formatVideoQuality(this._activeVideoQuality) : '';
         const audio = this._activeAudioQuality ? formatAudioQuality(this._activeAudioQuality) : '';
         const values = [video && html`<span>Video ${video}</span>`, audio && html`<span>Audio ${audio}</span>`].filter(Boolean);
-        return values.length > 0 ? join(values, html`<span class="separator"> / </span>`) : undefined;
+        return values.length > 0 ? join(values, html`<span class="separator">/</span>`) : undefined;
     }
 
     /**
@@ -652,7 +652,7 @@ export class DebugDisplay extends LitElement {
         const codecs = this.getCodecs_();
         return html`
             ${this.renderRow_('Viewport', this.getViewportText_())} ${this.renderRow_('Quality', this.getQualityContent_())}
-            ${this.renderRow_('Codecs', codecs.length > 0 ? join(codecs, html`<span class="separator"> / </span>`) : undefined)}
+            ${this.renderRow_('Codecs', codecs.length > 0 ? join(codecs, html`<span class="separator">/</span>`) : undefined)}
         `;
     }
 
@@ -667,8 +667,10 @@ export class DebugDisplay extends LitElement {
         return html`
             <div class="label">Frames</div>
             <div class="value">
-                ${this._droppedFrames} dropped / ${this._totalFrames} total
-                ${this._corruptedFrames && this._corruptedFrames > 0 ? html` · ${this._corruptedFrames} corrupted` : nothing}
+                ${this._droppedFrames} dropped / ${this._totalFrames}
+                total${this._corruptedFrames && this._corruptedFrames > 0
+                    ? html`<span class="separator">·</span>${this._corruptedFrames} corrupted`
+                    : nothing}
             </div>
         `;
     }
