@@ -3,6 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
 import { join } from 'lit/directives/join.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import closeIcon from '../icons/close.svg';
 import debugDisplayCss from './DebugDisplay.css';
 import type { AudioQuality, ChromelessPlayer, CurrentSourceChangeEvent, MediaTrack, TextTrack, VideoQuality } from 'theoplayer/chromeless';
@@ -716,12 +717,14 @@ export class DebugDisplay extends LitElement {
                   <div class="value">
                       <div class="timeline" role="img" aria-label="Seekable and buffered timeline">
                           ${timeline.seekable.map(
-                              ({ left, width }) => html`<div class="timeline-seekable" style="left:${left}%;width:${width}%"></div>`
+                              ({ left, width }) =>
+                                  html`<div class="timeline-seekable" style=${styleMap({ left: `${left}%`, width: `${width}%` })}></div>`
                           )}
                           ${timeline.buffered.map(
-                              ({ left, width }) => html`<div class="timeline-buffered" style="left:${left}%;width:${width}%"></div>`
+                              ({ left, width }) =>
+                                  html`<div class="timeline-buffered" style=${styleMap({ left: `${left}%`, width: `${width}%` })}></div>`
                           )}
-                          <div class="timeline-playhead" style="left:${timeline.playhead}%"></div>
+                          <div class="timeline-playhead" style=${styleMap({ left: `${timeline.playhead}%` })}></div>
                       </div>
                   </div>
               `

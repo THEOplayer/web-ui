@@ -1,6 +1,7 @@
 import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import rollingChartCss from './RollingChart.css';
 
 @customElement('theoplayer-rolling-chart')
@@ -176,7 +177,7 @@ export class RollingChart extends LitElement {
     }
 
     protected override render(): unknown {
-        return html`<canvas ${ref(this._canvasRef)} style="width:${this.width}px;height:${this.height}px"></canvas>`;
+        return html`<canvas ${ref(this._canvasRef)} style=${styleMap({ width: `${this.width}px`, height: `${this.height}px` })}></canvas>`;
     }
 }
 
