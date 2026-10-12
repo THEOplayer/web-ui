@@ -34,21 +34,28 @@ const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak
  */
 const AD_MARKER_WIDTH = 1;
 
-interface ChapterCueSnapshot {
-    cue: TextTrackCue;
-    startTime: number;
-    endTime: number;
-    content: unknown;
-    atStart: boolean;
-    atEnd: boolean;
-}
-
 interface ChapterMarkerSegment {
     left: number;
     width: number;
     parts: string;
     atStart: boolean;
     atEnd: boolean;
+}
+
+function sameSegments(a: ChapterMarkerSegment[], b: ChapterMarkerSegment[]): boolean {
+    return (
+        a.length === b.length &&
+        a.every((segment, index) => {
+            const other = b[index];
+            return (
+                segment.left === other.left &&
+                segment.width === other.width &&
+                segment.parts === other.parts &&
+                segment.atStart === other.atStart &&
+                segment.atEnd === other.atEnd
+            );
+        })
+    );
 }
 
 /**
@@ -84,19 +91,11 @@ export class TimeRange extends Range {
     private _pausedWhileScrubbing: boolean = false;
     private _chapterTrackObserver: ChapterTrackObserver | undefined;
     private _rangeResizeObserver: ResizeObserver | undefined;
-    private _resizeFallbackAttached: boolean = false;
     private _measuredRangeWidth: number = 0;
     private _previewTime: number = NaN;
     private _previewActive: boolean = false;
     private _isPointerOver: boolean = false;
     private _activePointerId: number | undefined;
-    private _lastChapterTrack: TextTrack | undefined;
-    private _lastChapterCues: ChapterCueSnapshot[] = [];
-    private _lastChapterMin: number = NaN;
-    private _lastChapterMax: number = NaN;
-    private _lastChapterRangeWidth: number = NaN;
-    private _lastChapterActiveCue: TextTrackCue | undefined;
-    private _lastChapterHoveredCue: TextTrackCue | undefined;
 
     @state()
     private accessor _chapterSegments: ChapterMarkerSegment[] = [];
@@ -146,10 +145,6 @@ export class TimeRange extends Range {
         this.removeEventListener('pointerdown', this._onTimeRangePointerDown);
         this._detachRangeListeners_();
         this._rangeResizeObserver?.disconnect();
-        if (this._resizeFallbackAttached) {
-            window.removeEventListener('resize', this._updateRangeWidth_);
-            this._resizeFallbackAttached = false;
-        }
         document.removeEventListener('pointerup', this._onPointerEnd);
         document.removeEventListener('pointercancel', this._onPointerEnd);
         this._activePointerId = undefined;
@@ -408,10 +403,7 @@ export class TimeRange extends Range {
 
         const { min, max } = this;
         this._previewTime = min + mousePercent * (max - min);
-        const hoveredCue = this._getHoveredChapter_();
-        if (hoveredCue !== this._lastChapterHoveredCue) {
-            this._refreshChapterSegments_();
-        }
+        this._refreshChapterSegments_();
 
         // Propagate preview time to parent
         if (this._player === undefined) {
@@ -542,9 +534,6 @@ export class TimeRange extends Range {
         if (typeof ResizeObserver !== 'undefined') {
             this._rangeResizeObserver ??= new ResizeObserver(this._updateRangeWidth_);
             this._rangeResizeObserver.observe(range);
-        } else if (!this._resizeFallbackAttached) {
-            window.addEventListener('resize', this._updateRangeWidth_);
-            this._resizeFallbackAttached = true;
         }
     }
 
@@ -560,88 +549,44 @@ export class TimeRange extends Range {
         const track = this._chapterTrackObserver?.track;
         const min = this.min;
         const max = this.max;
-        const cues: ChapterCueSnapshot[] = Array.from(track?.cues ?? [], (cue) => {
-            const startTime = cue.startTime;
-            const endTime = cue.endTime;
-            const overlapsRange = endTime >= min && startTime <= max;
-            return {
-                cue,
-                startTime,
-                endTime,
-                content: cue.content,
-                atStart: overlapsRange && Math.max(min, startTime) === min,
-                atEnd: overlapsRange && Math.min(max, endTime) === max
-            };
-        });
-        const activeCue = track?.activeCues?.[0];
-        const hoveredCue = this._getHoveredChapter_();
-        const cuesChanged =
-            cues.length !== this._lastChapterCues.length ||
-            cues.some((cue, index) => {
-                const previousCue = this._lastChapterCues[index];
-                return (
-                    cue.cue !== previousCue?.cue ||
-                    cue.startTime !== previousCue.startTime ||
-                    cue.endTime !== previousCue.endTime ||
-                    cue.content !== previousCue.content ||
-                    cue.atStart !== previousCue.atStart ||
-                    cue.atEnd !== previousCue.atEnd
-                );
-            });
         const rangeWidth = this._measuredRangeWidth;
-        // Playback updates can reach this path without changing chapter state; keep Lit state stable then.
-        if (
-            track === this._lastChapterTrack &&
-            !cuesChanged &&
-            min === this._lastChapterMin &&
-            max === this._lastChapterMax &&
-            rangeWidth === this._lastChapterRangeWidth &&
-            activeCue === this._lastChapterActiveCue &&
-            hoveredCue === this._lastChapterHoveredCue
-        ) {
-            return;
-        }
-
-        this._lastChapterTrack = track;
-        this._lastChapterCues = cues;
-        this._lastChapterMin = min;
-        this._lastChapterMax = max;
-        this._lastChapterRangeWidth = rangeWidth;
-        this._lastChapterActiveCue = activeCue;
-        this._lastChapterHoveredCue = hoveredCue;
-
         const span = max - min;
-        if (!Number.isFinite(min) || !Number.isFinite(max) || span <= 0 || rangeWidth <= 0) {
-            this._chapterSegments = [];
-            return;
-        }
-
         const segments: ChapterMarkerSegment[] = [];
-        for (let index = 0; index < cues.length; index++) {
-            const { cue, startTime: cueStartTime, endTime: cueEndTime, atStart, atEnd } = cues[index];
-            if (cueEndTime < min || cueStartTime > max) {
-                continue;
+        if (Number.isFinite(min) && Number.isFinite(max) && span > 0 && rangeWidth > 0) {
+            const cues = Array.from(track?.cues ?? []);
+            const activeCue = track?.activeCues?.[0];
+            const hoveredCue = this._getHoveredChapter_();
+            for (let index = 0; index < cues.length; index++) {
+                const cue = cues[index];
+                if (cue.endTime < min || cue.startTime > max) {
+                    continue;
+                }
+                const startTime = Math.max(min, cue.startTime);
+                const endTime = Math.min(max, cue.endTime);
+                const atStart = cue.startTime <= min;
+                const atEnd = cue.endTime >= max;
+                // Interior boundaries follow the inset thumb; clamped outer edges align with the full-width track.
+                const left = atStart ? 0 : this.getThumbPosition_((startTime - min) / span, rangeWidth);
+                const right = atEnd ? rangeWidth : this.getThumbPosition_((endTime - min) / span, rangeWidth);
+                const nextCue = cues[index + 1];
+                let parts = 'chapter';
+                if (cue === activeCue) {
+                    parts += ' active';
+                }
+                if (cue === hoveredCue) {
+                    parts += ' hover';
+                }
+                // Draw a closing boundary when the next chapter does not start where this one ends, and after the last chapter.
+                if (nextCue === undefined || nextCue.startTime !== cue.endTime) {
+                    parts += ' discontinuous';
+                }
+                segments.push({ left, width: right - left, parts, atStart, atEnd });
             }
-            const startTime = Math.max(min, cueStartTime);
-            const endTime = Math.min(max, cueEndTime);
-            // Interior boundaries follow the inset thumb; clamped outer edges align with the full-width track.
-            const left = atStart ? 0 : this.getThumbPosition_((startTime - min) / span, rangeWidth);
-            const right = atEnd ? rangeWidth : this.getThumbPosition_((endTime - min) / span, rangeWidth);
-            const nextCue = cues[index + 1]?.cue;
-            let parts = 'chapter';
-            if (cue === activeCue) {
-                parts += ' active';
-            }
-            if (cue === hoveredCue) {
-                parts += ' hover';
-            }
-            // Draw a closing boundary when the next chapter does not start where this one ends, and after the last chapter.
-            if (nextCue === undefined || nextCue.startTime !== cue.endTime) {
-                parts += ' discontinuous';
-            }
-            segments.push({ left, width: right - left, parts, atStart, atEnd });
         }
-        this._chapterSegments = segments;
+        if (!sameSegments(this._chapterSegments, segments)) {
+            // Only assign when something changed, so playback updates do not re-render the markers.
+            this._chapterSegments = segments;
+        }
     };
 
     protected override handleKeyDown_(e: KeyboardEvent) {

@@ -43,7 +43,7 @@ export class ChapterTrackObserver {
     private _observedTracks: TextTrack[] = [];
     private _destroyed = false;
 
-    constructor(private readonly _onChange: () => void) {}
+    constructor(private readonly _onTrackChange: () => void) {}
 
     get track(): TextTrack | undefined {
         return this._track;
@@ -57,8 +57,8 @@ export class ChapterTrackObserver {
         this.detachPlayer_();
         this._player = player;
         if (player !== undefined) {
-            player.addEventListener(PLAYER_EVENTS, this._onPlayerChange);
-            player.textTracks.addEventListener(TEXT_TRACK_LIST_EVENTS, this._onTextTrackListChange);
+            player.addEventListener(PLAYER_EVENTS, this._onChange);
+            player.textTracks.addEventListener(TEXT_TRACK_LIST_EVENTS, this._onChange);
         }
         this.updateTrack_();
     }
@@ -73,29 +73,21 @@ export class ChapterTrackObserver {
         this._destroyed = true;
     }
 
-    private readonly _onPlayerChange = (): void => {
-        this.updateTrack_();
-    };
-
-    private readonly _onTextTrackListChange = (): void => {
-        this.updateTrack_();
-    };
-
-    private readonly _onChapterTrackChange = (): void => {
+    private readonly _onChange = (): void => {
         this.updateTrack_();
     };
 
     private detachPlayer_(): void {
         const player = this._player;
         if (player !== undefined) {
-            player.removeEventListener(PLAYER_EVENTS, this._onPlayerChange);
-            player.textTracks.removeEventListener(TEXT_TRACK_LIST_EVENTS, this._onTextTrackListChange);
+            player.removeEventListener(PLAYER_EVENTS, this._onChange);
+            player.textTracks.removeEventListener(TEXT_TRACK_LIST_EVENTS, this._onChange);
         }
         for (const track of this._observedTracks) {
-            track.removeEventListener(CHAPTER_TRACK_EVENTS, this._onChapterTrackChange);
+            track.removeEventListener(CHAPTER_TRACK_EVENTS, this._onChange);
         }
         this._observedTracks = [];
-        this._track?.removeEventListener('cuechange', this._onChapterTrackChange);
+        this._track?.removeEventListener('cuechange', this._onChange);
         this._track = undefined;
     }
 
@@ -108,22 +100,22 @@ export class ChapterTrackObserver {
         const chapterTracks = this._player ? Array.from(this._player.textTracks).filter((track) => track.kind === 'chapters') : [];
         for (const track of this._observedTracks) {
             if (chapterTracks.indexOf(track) < 0) {
-                track.removeEventListener(CHAPTER_TRACK_EVENTS, this._onChapterTrackChange);
+                track.removeEventListener(CHAPTER_TRACK_EVENTS, this._onChange);
             }
         }
         for (const track of chapterTracks) {
             if (this._observedTracks.indexOf(track) < 0) {
-                track.addEventListener(CHAPTER_TRACK_EVENTS, this._onChapterTrackChange);
+                track.addEventListener(CHAPTER_TRACK_EVENTS, this._onChange);
             }
         }
         this._observedTracks = chapterTracks;
 
         const track = this._player ? getChaptersTrack(this._player) : undefined;
         if (this._track !== track) {
-            this._track?.removeEventListener('cuechange', this._onChapterTrackChange);
+            this._track?.removeEventListener('cuechange', this._onChange);
             this._track = track;
-            this._track?.addEventListener('cuechange', this._onChapterTrackChange);
+            this._track?.addEventListener('cuechange', this._onChange);
         }
-        this._onChange();
+        this._onTrackChange();
     }
 }
