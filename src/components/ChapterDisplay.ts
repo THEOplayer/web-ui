@@ -7,6 +7,11 @@ import chapterDisplayCss from './ChapterDisplay.css';
 
 const PLAYER_EVENTS = ['timeupdate', 'seeking', 'seeked'] as const;
 
+/**
+ * Displays the current chapter title.
+ *
+ * @cssproperty `--theoplayer-chapter-display-font-size` - The font size of the chapter title. Defaults to `16px`.
+ */
 @customElement('theoplayer-chapter-display')
 @stateReceiver(['player', 'previewTime', 'previewActive'])
 export class ChapterDisplay extends LitElement {
