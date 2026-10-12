@@ -153,6 +153,14 @@ export interface Locale {
      */
     timeOfTotalAria(time: string, totalDuration: string): string;
     /**
+     * The {@link HTMLElement.ariaValueText | `aria-valuetext`} for a {@link TimeRange}
+     * when the current value is within a chapter.
+     *
+     * @param valueText The time range's existing accessible value text.
+     * @param chapterTitle The title of the chapter at the current value.
+     */
+    timeRangeChapterAriaValueText(valueText: string, chapterTitle: string): string;
+    /**
      * The {@link HTMLElement.ariaLabel | `aria-label`} for a {@link TimeDisplay}.
      */
     playbackTimeAria: string;
@@ -493,6 +501,7 @@ export const defaultLocale: Locale = {
     chromecastHeading: 'Playing on',
     chromecastDefaultReceiverName: 'Chromecast',
     timeOfTotalAria: (currentTime: string, totalDuration: string) => `${currentTime} of ${totalDuration}`,
+    timeRangeChapterAriaValueText: (valueText: string, chapterTitle: string) => `${valueText}, ${chapterTitle}`,
     playbackTimeAria: 'playback time',
     unknownTimeAria: 'video not loaded, unknown time',
     adText: 'Ad',

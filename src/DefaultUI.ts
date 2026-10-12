@@ -498,12 +498,14 @@ export class DefaultUI extends LitElement {
                     <span class="theoplayer-spacer"></span>
                     <theoplayer-ad-skip-button></theoplayer-ad-skip-button>
                 </theoplayer-control-bar>
+                <theoplayer-chapter-display part="chapter-display" ad-hidden></theoplayer-chapter-display>
                 <theoplayer-control-bar>
                     <theoplayer-play-button part="play-button" mobile-hidden ad-only class="theoplayer-ad-control"></theoplayer-play-button>
                     <theoplayer-mute-button part="mute-button" ad-only class="theoplayer-ad-control"></theoplayer-mute-button>
                     <theoplayer-time-range
                         part="time-range"
                         show-ad-markers
+                        show-chapter-markers
                         ?tv-focus=${this.hasFirstPlay}
                         .inert=${this._timeRangeInert}
                         class="theoplayer-ad-control"

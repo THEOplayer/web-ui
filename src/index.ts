@@ -1,4 +1,5 @@
 export * from './components/index';
+export * from './events/PreviewActiveChangeEvent';
 export * from './extensions/index';
 export { UIContainer } from './UIContainer';
 export { DefaultUI } from './DefaultUI';

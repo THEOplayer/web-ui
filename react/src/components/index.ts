@@ -45,6 +45,7 @@ export * from './AirPlayButton';
 export * from './LoadingIndicator';
 export * from './GestureReceiver';
 export * from './PreviewTimeDisplay';
+export * from './ChapterDisplay';
 export * from './PreviewThumbnail';
 export * from './LiveButton';
 export * from './SlotContainer';

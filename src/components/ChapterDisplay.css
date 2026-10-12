@@ -1,0 +1,11 @@
+:host {
+    display: block;
+    text-align: center;
+    color: var(--theoplayer-text-color, #fff);
+    font-size: var(--theoplayer-text-font-size, 14px);
+    line-height: var(--theoplayer-text-content-height, var(--theoplayer-control-height, 24px));
+}
+
+:host([hidden]) {
+    display: none;
+}

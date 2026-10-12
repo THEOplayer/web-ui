@@ -16,6 +16,7 @@ export interface StateReceiverPropertyMap {
     targetVideoQualities: VideoQuality[] | undefined;
     error: THEOplayerError | undefined;
     previewTime: number;
+    previewActive: boolean;
     lang: string;
 }
 
