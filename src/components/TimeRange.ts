@@ -468,6 +468,7 @@ export class TimeRange extends Range {
     };
 
     private readonly _onPointerEnter = (event: PointerEvent): void => {
+        // Touch has no hover state; a pressed pointer stays active until its document-level end event.
         this._isPointerOver = event.pointerType !== 'touch';
         this._setPreviewActive_(this._isPointerOver || this._activePointerId !== undefined);
     };
@@ -588,6 +589,7 @@ export class TimeRange extends Range {
                 );
             });
         const rangeWidth = this._measuredRangeWidth;
+        // Playback updates can reach this path without changing chapter state; keep Lit state stable then.
         if (
             track === this._lastChapterTrack &&
             !cuesChanged &&
@@ -622,6 +624,7 @@ export class TimeRange extends Range {
             }
             const startTime = Math.max(min, cueStartTime);
             const endTime = Math.min(max, cueEndTime);
+            // Interior boundaries follow the inset thumb; clamped outer edges align with the full-width track.
             const left = atStart ? 0 : this.getThumbPosition_((startTime - min) / span, rangeWidth);
             const right = atEnd ? rangeWidth : this.getThumbPosition_((endTime - min) / span, rangeWidth);
             const nextCue = cues[index + 1]?.cue;
@@ -632,6 +635,7 @@ export class TimeRange extends Range {
             if (cue === hoveredCue) {
                 parts += ' hover';
             }
+            // Match the legacy chapter bar: gaps and the final cue keep a right boundary.
             if (nextCue === undefined || nextCue.startTime !== cue.endTime) {
                 parts += ' discontinuous';
             }
@@ -654,6 +658,7 @@ export class TimeRange extends Range {
     }
 
     protected override renderRangeExtras(): HTMLTemplateResult {
+        // Match ad-marker behavior: only linear ads hide chapter markers.
         return html`
             ${this.showChapterMarkers && !this._player?.ads?.playing
                 ? html`<div part="chapters" aria-hidden="true">

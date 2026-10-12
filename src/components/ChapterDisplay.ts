@@ -67,6 +67,7 @@ export class ChapterDisplay extends LitElement {
 
     private readonly _updateTitle = (): void => {
         const track = this._chapterTrackObserver?.track;
+        // A finite preview time, including 0, wins during preview; otherwise follow playback.
         const time = this.previewActive && Number.isFinite(this.previewTime) ? this.previewTime : this._player?.currentTime;
         const content = this._player && track && time !== undefined ? findChapterAt(track, time)?.content : undefined;
         const title = typeof content === 'string' ? content : '';

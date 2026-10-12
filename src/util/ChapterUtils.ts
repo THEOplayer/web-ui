@@ -1,5 +1,6 @@
 import type { ChromelessPlayer, TextTrack, TextTrackCue, TextTrackReadyState } from 'theoplayer/chromeless';
 
+// These checks use SDK ready-state numbers; TextTrackReadyState has no runtime enum member.
 const HAVE_METADATA = 1;
 const TEXT_TRACK_READY_STATE_ERROR: TextTrackReadyState = 3;
 
@@ -7,6 +8,7 @@ const PLAYER_EVENTS = ['sourcechange', 'loadedmetadata', 'loadeddata'] as const;
 const TEXT_TRACK_LIST_EVENTS = ['addtrack', 'removetrack', 'change'] as const;
 const CHAPTER_TRACK_EVENTS = ['addcue', 'removecue', 'readystatechange'] as const;
 
+// Keep chapter selection aligned with the legacy VJS ChapterBar.getShowingChapterTrack_ rule.
 export function getChaptersTrack(player: ChromelessPlayer): TextTrack | undefined {
     if (player.readyState < HAVE_METADATA) {
         return undefined;
@@ -102,6 +104,7 @@ export class ChapterTrackObserver {
             return;
         }
 
+        // A non-selected chapter track can become eligible after a mode, cue, or ready-state change.
         const chapterTracks = this._player ? Array.from(this._player.textTracks).filter((track) => track.kind === 'chapters') : [];
         for (const track of this._observedTracks) {
             if (chapterTracks.indexOf(track) < 0) {

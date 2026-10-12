@@ -1341,6 +1341,7 @@ export class UIContainer extends LitElement {
         const event = rawEvent as PreviewActiveChangeEvent;
         this._previewActive = event.detail.previewActive;
 
+        // previewTime remains at its last pointer position after leave, so receivers need activity separately.
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('previewActive') >= 0) {
                 receiver.previewActive = this._previewActive;
