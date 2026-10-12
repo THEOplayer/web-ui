@@ -61,8 +61,9 @@ interface ChapterMarkerSegment {
  *   Defaults to `rgba(0, 0, 0, 0.75)`.
  * @cssproperty `--theoplayer-time-range-chapter-marker-width` - The width of chapter marker boundaries. Defaults to `2px`.
  * @cssproperty `--theoplayer-time-range-chapter-highlight-color` - The color of the hovered chapter highlight. Defaults to `#fff`.
- * @csspart `chapters` - The overlay containing chapter markers on the seek bar.
- * @csspart `chapter` - A chapter segment; also exposes the `active`, `hover`, and `discontinuous` part tokens.
+ *
+ * The shadow DOM exposes a `chapters` part for the chapter marker overlay and a `chapter` part for each cue segment.
+ * Chapter segments also expose the `active`, `hover`, and `discontinuous` part tokens.
  */
 @customElement('theoplayer-time-range')
 @stateReceiver(['player', 'streamType', 'deviceType', 'lang'])
@@ -79,6 +80,7 @@ export class TimeRange extends Range {
     private _pausedWhileScrubbing: boolean = false;
     private _chapterTrackObserver: ChapterTrackObserver | undefined;
     private _rangeResizeObserver: ResizeObserver | undefined;
+    private _resizeFallbackAttached: boolean = false;
     private _measuredRangeWidth: number = 0;
     private _previewTime: number = NaN;
     private _previewActive: boolean = false;
@@ -140,7 +142,10 @@ export class TimeRange extends Range {
         this.removeEventListener('pointerdown', this._onTimeRangePointerDown);
         this._detachRangeListeners_();
         this._rangeResizeObserver?.disconnect();
-        window.removeEventListener('resize', this._updateRangeWidth_);
+        if (this._resizeFallbackAttached) {
+            window.removeEventListener('resize', this._updateRangeWidth_);
+            this._resizeFallbackAttached = false;
+        }
         document.removeEventListener('pointerup', this._onPointerEnd);
         document.removeEventListener('pointercancel', this._onPointerEnd);
         this._activePointerId = undefined;
@@ -532,8 +537,9 @@ export class TimeRange extends Range {
         if (typeof ResizeObserver !== 'undefined') {
             this._rangeResizeObserver ??= new ResizeObserver(this._updateRangeWidth_);
             this._rangeResizeObserver.observe(range);
-        } else {
+        } else if (!this._resizeFallbackAttached) {
             window.addEventListener('resize', this._updateRangeWidth_);
+            this._resizeFallbackAttached = true;
         }
     }
 

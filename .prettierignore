@@ -1,5 +1,4 @@
 .changeset/pre.json
-.devin/
 node_modules/
 dist/
 _site/

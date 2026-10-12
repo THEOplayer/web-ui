@@ -24,13 +24,9 @@ export class ChapterDisplay extends LitElement {
     @state()
     accessor previewActive: boolean = false;
 
-    constructor() {
-        super();
-        this.hidden = true;
-    }
-
     override connectedCallback(): void {
         super.connectedCallback();
+        this.hidden = true;
         this._chapterTrackObserver = new ChapterTrackObserver(this._updateTitle);
         this._chapterTrackObserver.setPlayer(this._player);
         this._player?.addEventListener(PLAYER_EVENTS, this._updateTitle);
