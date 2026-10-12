@@ -77,6 +77,7 @@
                 <select id="source-select">
                     <option value="bigBuckBunny" selected>Big Buck Bunny</option>
                     <option value="elephantsDream">Elephant's Dream</option>
+                    <option value="sintelWithChapters">Sintel with Side-loaded Chapters</option>
                     <option value="starWarsTrailer">Star Wars Episode VII Trailer</option>
                     <option value="vr">National Geographic (VR)</option>
                     <option value="optiViewLive">OptiView Live demo</option>
@@ -120,6 +121,21 @@
                             src: 'https://cdn.theoplayer.com/video/elephants-dream/thumbnails.vtt',
                             label: 'thumbnails',
                             kind: 'metadata'
+                        }
+                    ]
+                },
+                sintelWithChapters: {
+                    sources: { src: 'https://cdn.theoplayer.com/video/sintel/nosubs.m3u8' },
+                    metadata: { title: 'Sintel with Side-loaded Chapters' },
+                    poster: 'https://cdn.theoplayer.com/video/posters/sintel.jpg',
+                    textTracks: [
+                        {
+                            kind: 'chapters',
+                            src: 'https://cdn.theoplayer.com/video/sintel/chapters.vtt',
+                            format: 'webvtt',
+                            srclang: 'en',
+                            label: 'Chapters',
+                            default: true
                         }
                     ]
                 },

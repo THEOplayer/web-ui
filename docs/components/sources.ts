@@ -47,6 +47,21 @@ export const sources = {
             }
         ]
     },
+    sintelWithChapters: {
+        sources: { src: 'https://cdn.theoplayer.com/video/sintel/nosubs.m3u8' },
+        metadata: { title: 'Sintel with Side-loaded Chapters' },
+        poster: 'https://cdn.theoplayer.com/video/posters/sintel.jpg',
+        textTracks: [
+            {
+                kind: 'chapters',
+                src: 'https://cdn.theoplayer.com/video/sintel/chapters.vtt',
+                format: 'webvtt',
+                srclang: 'en',
+                label: 'Chapters',
+                default: true
+            }
+        ]
+    },
     starWarsTrailer: {
         sources: {
             src: 'https://cdn.theoplayer.com/video/star_wars_episode_vii-the_force_awakens_official_comic-con_2015_reel_(2015)/index.m3u8'

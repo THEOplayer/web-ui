@@ -8,7 +8,8 @@ type CollapsibleTag = { tag: `@${string}`; heading: string; columnHeading: strin
 const collapsibleTags: ReadonlyArray<CollapsibleTag> = [
     { tag: '@attribute', heading: 'Attributes', columnHeading: 'Attribute' },
     { tag: '@slot', heading: 'Slots', columnHeading: 'Slot' },
-    { tag: '@cssproperty', heading: 'CSS Custom Properties', columnHeading: 'Property' }
+    { tag: '@cssproperty', heading: 'CSS Custom Properties', columnHeading: 'Property' },
+    { tag: '@csspart', heading: 'CSS Shadow Parts', columnHeading: 'Part' }
 ];
 
 /**

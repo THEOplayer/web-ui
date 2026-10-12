@@ -21,6 +21,11 @@
       "tagName": "@cssproperty",
       "syntaxKind": "block",
       "allowMultiple": true
+    },
+    {
+      "tagName": "@csspart",
+      "syntaxKind": "block",
+      "allowMultiple": true
     }
   ]
 }
