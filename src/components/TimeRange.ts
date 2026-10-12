@@ -5,7 +5,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { Range } from './Range';
 import timeRangeCss from './TimeRange.css';
 import { stateReceiver } from './StateReceiverMixin';
-import type { Ads, ChromelessPlayer, TextTrackCue, TimeRanges } from 'theoplayer/chromeless';
+import type { Ads, ChromelessPlayer, TimeRanges } from 'theoplayer/chromeless';
 import { formatAsTimePhrase } from '../util/TimeUtils';
 import { createCustomEvent } from '../util/EventUtils';
 import type { PreviewTimeChangeEvent } from '../events/PreviewTimeChangeEvent';
@@ -18,11 +18,12 @@ import { isLinearAd } from '../util/AdUtils';
 import type { ColorStops } from '../util/ColorStops';
 import { KeyCode } from '../util/KeyCode';
 import { getLocale } from '../i18n';
-import { ChapterTrackObserver, findChapterAt } from '../util/ChapterUtils';
+import { getChaptersTrack, findChapterAt } from '../util/ChapterUtils';
 
 // Load components used in template
 import './PreviewThumbnail';
 import './PreviewTimeDisplay';
+import './TimeRangeChapterMarkers';
 
 const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 'seeked'] as const;
 const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'durationchange', 'readystatechange', 'error'] as const;
@@ -32,30 +33,6 @@ const AD_EVENTS = ['adbreakbegin', 'adbreakend', 'adbreakchange', 'updateadbreak
  * Width of an ad marker on the progress bar, in percent of the total bar width.
  */
 const AD_MARKER_WIDTH = 1;
-
-interface ChapterMarkerSegment {
-    left: number;
-    width: number;
-    parts: string;
-    atStart: boolean;
-    atEnd: boolean;
-}
-
-function sameSegments(a: ChapterMarkerSegment[], b: ChapterMarkerSegment[]): boolean {
-    return (
-        a.length === b.length &&
-        a.every((segment, index) => {
-            const other = b[index];
-            return (
-                segment.left === other.left &&
-                segment.width === other.width &&
-                segment.parts === other.parts &&
-                segment.atStart === other.atStart &&
-                segment.atEnd === other.atEnd
-            );
-        })
-    );
-}
 
 /**
  * A seek bar, showing the current time of the player,
@@ -88,16 +65,14 @@ export class TimeRange extends Range {
     private _showChapterMarkers: boolean = false;
     private _ads: Ads | undefined;
     private _pausedWhileScrubbing: boolean = false;
-    private _chapterTrackObserver: ChapterTrackObserver | undefined;
-    private _rangeResizeObserver: ResizeObserver | undefined;
-    private _measuredRangeWidth: number = 0;
-    private _previewTime: number = NaN;
-    private _previewActive: boolean = false;
     private _isPointerOver: boolean = false;
     private _activePointerId: number | undefined;
 
     @state()
-    private accessor _chapterSegments: ChapterMarkerSegment[] = [];
+    private accessor _previewTime: number = NaN;
+
+    @state()
+    private accessor _previewActive: boolean = false;
 
     private _autoAdvanceId: number = 0;
     private _lastUpdateTime: number = 0;
@@ -114,9 +89,7 @@ export class TimeRange extends Range {
         this.addEventListener('pointerenter', this._onPointerEnter);
         this.addEventListener('pointerleave', this._onPointerLeave);
         this.addEventListener('pointerdown', this._onTimeRangePointerDown);
-        this._connectChapterTrackObserver_();
         this._attachRangeListeners_();
-        this._observeRangeWidth_();
 
         if (!this.hasAttribute('min')) {
             this.min = 0;
@@ -133,7 +106,6 @@ export class TimeRange extends Range {
 
     protected override firstUpdated(_changedProperties: PropertyValues) {
         this._attachRangeListeners_();
-        this._observeRangeWidth_();
     }
 
     override disconnectedCallback(): void {
@@ -143,14 +115,11 @@ export class TimeRange extends Range {
         this.removeEventListener('pointerleave', this._onPointerLeave);
         this.removeEventListener('pointerdown', this._onTimeRangePointerDown);
         this._detachRangeListeners_();
-        this._rangeResizeObserver?.disconnect();
         document.removeEventListener('pointerup', this._onPointerEnd);
         document.removeEventListener('pointercancel', this._onPointerEnd);
         this._activePointerId = undefined;
         this._isPointerOver = false;
         this._setPreviewActive_(false);
-        this._chapterTrackObserver?.destroy();
-        this._chapterTrackObserver = undefined;
 
         this._toggleAutoAdvance();
     }
@@ -171,7 +140,6 @@ export class TimeRange extends Range {
         this._ads?.removeEventListener(AD_EVENTS, this._onAdChange);
         this._player = player;
         this._ads = player?.ads;
-        this._chapterTrackObserver?.setPlayer(player);
         this._updateFromPlayer();
         this._toggleAutoAdvance();
         if (this._player !== undefined) {
@@ -221,13 +189,6 @@ export class TimeRange extends Range {
     set showChapterMarkers(showChapterMarkers: boolean) {
         this._showChapterMarkers = showChapterMarkers;
         this._updateRange();
-    }
-
-    protected override willUpdate(changedProperties: PropertyValues<this>): void {
-        super.willUpdate(changedProperties);
-        if (changedProperties.has('min') || changedProperties.has('max')) {
-            this._refreshChapterSegments_();
-        }
     }
 
     private readonly _updateFromPlayer = () => {
@@ -281,7 +242,7 @@ export class TimeRange extends Range {
         } else {
             valueText = locale.unknownTimeAria;
         }
-        const track = this._chapterTrackObserver?.track;
+        const track = this._player && getChaptersTrack(this._player);
         const chapterTitle = track && findChapterAt(track, this.value)?.content;
         return typeof chapterTitle === 'string' && chapterTitle.length > 0
             ? locale.timeRangeChapterAriaValueText(valueText, chapterTitle)
@@ -402,7 +363,6 @@ export class TimeRange extends Range {
 
         const { min, max } = this;
         this._previewTime = min + mousePercent * (max - min);
-        this._refreshChapterSegments_();
 
         // Propagate preview time to parent
         if (this._player === undefined) {
@@ -493,25 +453,12 @@ export class TimeRange extends Range {
             return;
         }
         this._previewActive = previewActive;
-        this._refreshChapterSegments_();
         const event: PreviewActiveChangeEvent = createCustomEvent(PREVIEW_ACTIVE_CHANGE_EVENT, {
             bubbles: true,
             composed: true,
             detail: { previewActive }
         });
         this.dispatchEvent(event);
-    }
-
-    private _getHoveredChapter_(): TextTrackCue | undefined {
-        const track = this._chapterTrackObserver?.track;
-        return this._previewActive && isFinite(this._previewTime) && track ? findChapterAt(track, this._previewTime) : undefined;
-    }
-
-    private _connectChapterTrackObserver_(): void {
-        if (this._chapterTrackObserver === undefined) {
-            this._chapterTrackObserver = new ChapterTrackObserver(this._refreshChapterSegments_);
-        }
-        this._chapterTrackObserver.setPlayer(this._player);
     }
 
     private _attachRangeListeners_(): void {
@@ -523,70 +470,6 @@ export class TimeRange extends Range {
         this._rangeRef.value?.removeEventListener('mousedown', this._pauseOnScrubStart);
         this._rangeRef.value?.removeEventListener('pointerdown', this._pauseOnScrubStart);
     }
-
-    private _observeRangeWidth_(): void {
-        const range = this._rangeRef.value;
-        if (range === undefined) {
-            return;
-        }
-        this._updateRangeWidth_();
-        if (typeof ResizeObserver !== 'undefined') {
-            this._rangeResizeObserver ??= new ResizeObserver(this._updateRangeWidth_);
-            this._rangeResizeObserver.observe(range);
-        }
-    }
-
-    private readonly _updateRangeWidth_ = (): void => {
-        const rangeWidth = this._rangeRef.value?.getBoundingClientRect().width ?? 0;
-        if (this._measuredRangeWidth !== rangeWidth) {
-            this._measuredRangeWidth = rangeWidth;
-            this._refreshChapterSegments_();
-        }
-    };
-
-    private readonly _refreshChapterSegments_ = (): void => {
-        const track = this._chapterTrackObserver?.track;
-        const min = this.min;
-        const max = this.max;
-        const rangeWidth = this._measuredRangeWidth;
-        const span = max - min;
-        const segments: ChapterMarkerSegment[] = [];
-        if (Number.isFinite(min) && Number.isFinite(max) && span > 0 && rangeWidth > 0) {
-            const cues = Array.from(track?.cues ?? []);
-            const activeCue = track?.activeCues?.[0];
-            const hoveredCue = this._getHoveredChapter_();
-            for (let index = 0; index < cues.length; index++) {
-                const cue = cues[index];
-                if (cue.endTime < min || cue.startTime > max) {
-                    continue;
-                }
-                const startTime = Math.max(min, cue.startTime);
-                const endTime = Math.min(max, cue.endTime);
-                const atStart = cue.startTime <= min;
-                const atEnd = cue.endTime >= max;
-                // Interior boundaries follow the inset thumb; clamped outer edges align with the full-width track.
-                const left = atStart ? 0 : this.getThumbPosition_((startTime - min) / span, rangeWidth);
-                const right = atEnd ? rangeWidth : this.getThumbPosition_((endTime - min) / span, rangeWidth);
-                const nextCue = cues[index + 1];
-                let parts = 'chapter';
-                if (cue === activeCue) {
-                    parts += ' active';
-                }
-                if (cue === hoveredCue) {
-                    parts += ' hover';
-                }
-                // Draw a closing boundary when the next chapter does not start where this one ends, and after the last chapter.
-                if (nextCue === undefined || nextCue.startTime !== cue.endTime) {
-                    parts += ' discontinuous';
-                }
-                segments.push({ left, width: right - left, parts, atStart, atEnd });
-            }
-        }
-        if (!sameSegments(this._chapterSegments, segments)) {
-            // Only assign when something changed, so playback updates do not re-render the markers.
-            this._chapterSegments = segments;
-        }
-    };
 
     protected override handleKeyDown_(e: KeyboardEvent) {
         super.handleKeyDown_(e);
@@ -605,20 +488,15 @@ export class TimeRange extends Range {
         // Do not render chapter markers while a linear ad is playing.
         return html`
             ${this.showChapterMarkers && !this._player?.ads?.playing
-                ? html`<div part="chapters" aria-hidden="true">
-                      ${this._chapterSegments.map(
-                          (segment) =>
-                              html`<div
-                                  part=${segment.parts}
-                                  style=${styleMap({
-                                      left: `${segment.left}px`,
-                                      width: `${segment.width}px`,
-                                      borderLeftWidth: segment.atStart ? '0' : undefined,
-                                      borderRightWidth: segment.atEnd ? '0' : undefined
-                                  })}
-                              ></div>`
-                      )}
-                  </div>`
+                ? html`<theoplayer-time-range-chapter-markers
+                      part="chapters"
+                      exportparts="chapter, active, hover, discontinuous"
+                      aria-hidden="true"
+                      .player=${this._player}
+                      .min=${this.min}
+                      .max=${this.max}
+                      .hoverTime=${this._previewActive && Number.isFinite(this._previewTime) ? this._previewTime : NaN}
+                  ></theoplayer-time-range-chapter-markers>`
                 : ''}
             <div class="theoplayer-time-range-preview-rail" style=${styleMap({ transform: this._previewRailTransform })}>
                 <div part="box preview-box" ${ref(this._previewBoxEl)}>

@@ -7,37 +7,6 @@ input[type='range'] {
     direction: ltr;
 }
 
-[part='chapters'] {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-}
-
-[part~='chapter'] {
-    position: absolute;
-    top: 50%;
-    box-sizing: border-box;
-    height: var(--track-height);
-    transform: translateY(-50%);
-    border-left: var(--theoplayer-time-range-chapter-marker-width, 1px) solid var(--theoplayer-time-range-chapter-marker-color, rgba(0, 0, 0, 0.75));
-    pointer-events: none;
-}
-
-[part~='chapter'][part~='discontinuous'] {
-    border-right: var(--theoplayer-time-range-chapter-marker-width, 1px) solid var(--theoplayer-time-range-chapter-marker-color, rgba(0, 0, 0, 0.75));
-}
-
-[part~='chapter'][part~='hover']::before {
-    content: '';
-    position: absolute;
-    right: 0;
-    bottom: 100%;
-    left: 0;
-    height: 2px;
-    background: var(--theoplayer-time-range-chapter-highlight-color, #fff);
-    pointer-events: none;
-}
-
 .theoplayer-time-range-preview-rail {
     position: absolute;
     left: 0;

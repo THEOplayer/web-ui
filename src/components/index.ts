@@ -36,6 +36,7 @@ export * from './VRButton';
 export * from './VRCompass';
 export * from './Range';
 export * from './TimeRange';
+export * from './TimeRangeChapterMarkers';
 export * from './VolumeRange';
 export * from './ErrorDisplay';
 export * from './CastButton';
