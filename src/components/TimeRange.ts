@@ -39,12 +39,16 @@ interface ChapterCueSnapshot {
     startTime: number;
     endTime: number;
     content: unknown;
+    atStart: boolean;
+    atEnd: boolean;
 }
 
 interface ChapterMarkerSegment {
     left: number;
     width: number;
     parts: string;
+    atStart: boolean;
+    atEnd: boolean;
 }
 
 /**
@@ -59,7 +63,7 @@ interface ChapterMarkerSegment {
  *   Defaults to `0 0 4px rgba(0, 0, 0, 0.75)`.
  * @cssproperty `--theoplayer-time-range-chapter-marker-color` - The color of chapter marker boundaries.
  *   Defaults to `rgba(0, 0, 0, 0.75)`.
- * @cssproperty `--theoplayer-time-range-chapter-marker-width` - The width of chapter marker boundaries. Defaults to `2px`.
+ * @cssproperty `--theoplayer-time-range-chapter-marker-width` - The width of chapter marker boundaries. Defaults to `1px`.
  * @cssproperty `--theoplayer-time-range-chapter-highlight-color` - The color of the hovered chapter highlight. Defaults to `#fff`.
  *
  * The shadow DOM exposes a `chapters` part for the chapter marker overlay and a `chapter` part for each cue segment.
@@ -553,12 +557,21 @@ export class TimeRange extends Range {
 
     private readonly _refreshChapterSegments_ = (): void => {
         const track = this._chapterTrackObserver?.track;
-        const cues: ChapterCueSnapshot[] = Array.from(track?.cues ?? [], (cue) => ({
-            cue,
-            startTime: cue.startTime,
-            endTime: cue.endTime,
-            content: cue.content
-        }));
+        const min = this.min;
+        const max = this.max;
+        const cues: ChapterCueSnapshot[] = Array.from(track?.cues ?? [], (cue) => {
+            const startTime = cue.startTime;
+            const endTime = cue.endTime;
+            const overlapsRange = endTime >= min && startTime <= max;
+            return {
+                cue,
+                startTime,
+                endTime,
+                content: cue.content,
+                atStart: overlapsRange && Math.max(min, startTime) === min,
+                atEnd: overlapsRange && Math.min(max, endTime) === max
+            };
+        });
         const activeCue = track?.activeCues?.[0];
         const hoveredCue = this._getHoveredChapter_();
         const cuesChanged =
@@ -569,11 +582,11 @@ export class TimeRange extends Range {
                     cue.cue !== previousCue?.cue ||
                     cue.startTime !== previousCue.startTime ||
                     cue.endTime !== previousCue.endTime ||
-                    cue.content !== previousCue.content
+                    cue.content !== previousCue.content ||
+                    cue.atStart !== previousCue.atStart ||
+                    cue.atEnd !== previousCue.atEnd
                 );
             });
-        const min = this.min;
-        const max = this.max;
         const rangeWidth = this._measuredRangeWidth;
         if (
             track === this._lastChapterTrack &&
@@ -603,14 +616,14 @@ export class TimeRange extends Range {
 
         const segments: ChapterMarkerSegment[] = [];
         for (let index = 0; index < cues.length; index++) {
-            const { cue } = cues[index];
-            if (cue.endTime < min || cue.startTime > max) {
+            const { cue, startTime: cueStartTime, endTime: cueEndTime, atStart, atEnd } = cues[index];
+            if (cueEndTime < min || cueStartTime > max) {
                 continue;
             }
-            const startTime = Math.max(min, cue.startTime);
-            const endTime = Math.min(max, cue.endTime);
-            const left = this.getThumbPosition_((startTime - min) / span, rangeWidth);
-            const right = this.getThumbPosition_((endTime - min) / span, rangeWidth);
+            const startTime = Math.max(min, cueStartTime);
+            const endTime = Math.min(max, cueEndTime);
+            const left = atStart ? 0 : this.getThumbPosition_((startTime - min) / span, rangeWidth);
+            const right = atEnd ? rangeWidth : this.getThumbPosition_((endTime - min) / span, rangeWidth);
             const nextCue = cues[index + 1]?.cue;
             let parts = 'chapter';
             if (cue === activeCue) {
@@ -622,7 +635,7 @@ export class TimeRange extends Range {
             if (nextCue === undefined || nextCue.startTime !== cue.endTime) {
                 parts += ' discontinuous';
             }
-            segments.push({ left, width: right - left, parts });
+            segments.push({ left, width: right - left, parts, atStart, atEnd });
         }
         this._chapterSegments = segments;
     };
@@ -646,7 +659,15 @@ export class TimeRange extends Range {
                 ? html`<div part="chapters" aria-hidden="true">
                       ${this._chapterSegments.map(
                           (segment) =>
-                              html`<div part=${segment.parts} style=${styleMap({ left: `${segment.left}px`, width: `${segment.width}px` })}></div>`
+                              html`<div
+                                  part=${segment.parts}
+                                  style=${styleMap({
+                                      left: `${segment.left}px`,
+                                      width: `${segment.width}px`,
+                                      borderLeftWidth: segment.atStart ? '0' : undefined,
+                                      borderRightWidth: segment.atEnd ? '0' : undefined
+                                  })}
+                              ></div>`
                       )}
                   </div>`
                 : ''}

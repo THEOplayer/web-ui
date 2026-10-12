@@ -19,12 +19,12 @@ input[type='range'] {
     box-sizing: border-box;
     height: var(--track-height);
     transform: translateY(-50%);
-    border-left: var(--theoplayer-time-range-chapter-marker-width, 2px) solid var(--theoplayer-time-range-chapter-marker-color, rgba(0, 0, 0, 0.75));
+    border-left: var(--theoplayer-time-range-chapter-marker-width, 1px) solid var(--theoplayer-time-range-chapter-marker-color, rgba(0, 0, 0, 0.75));
     pointer-events: none;
 }
 
 [part~='chapter'][part~='discontinuous'] {
-    border-right: var(--theoplayer-time-range-chapter-marker-width, 2px) solid var(--theoplayer-time-range-chapter-marker-color, rgba(0, 0, 0, 0.75));
+    border-right: var(--theoplayer-time-range-chapter-marker-width, 1px) solid var(--theoplayer-time-range-chapter-marker-color, rgba(0, 0, 0, 0.75));
 }
 
 [part~='chapter'][part~='hover']::before {
