@@ -225,8 +225,8 @@ export class TimeRange extends Range {
         this._updateRange();
     }
 
-    protected override updated(changedProperties: PropertyValues<this>): void {
-        super.updated(changedProperties);
+    protected override willUpdate(changedProperties: PropertyValues<this>): void {
+        super.willUpdate(changedProperties);
         if (changedProperties.has('min') || changedProperties.has('max')) {
             this._refreshChapterSegments_();
         }

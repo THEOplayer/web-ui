@@ -58,8 +58,8 @@ export class ChapterDisplay extends LitElement {
         this._updateTitle();
     }
 
-    protected override updated(changedProperties: PropertyValues<this>): void {
-        super.updated(changedProperties);
+    protected override willUpdate(changedProperties: PropertyValues<this>): void {
+        super.willUpdate(changedProperties);
         if (changedProperties.has('previewTime') || changedProperties.has('previewActive')) {
             this._updateTitle();
         }
