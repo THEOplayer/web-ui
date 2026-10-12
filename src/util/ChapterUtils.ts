@@ -8,7 +8,7 @@ const PLAYER_EVENTS = ['sourcechange', 'loadedmetadata', 'loadeddata'] as const;
 const TEXT_TRACK_LIST_EVENTS = ['addtrack', 'removetrack', 'change'] as const;
 const CHAPTER_TRACK_EVENTS = ['addcue', 'removecue', 'readystatechange'] as const;
 
-// Keep chapter selection aligned with the legacy VJS ChapterBar.getShowingChapterTrack_ rule.
+// Returns the first showing chapters track that has cues and has not failed to load.
 export function getChaptersTrack(player: ChromelessPlayer): TextTrack | undefined {
     if (player.readyState < HAVE_METADATA) {
         return undefined;

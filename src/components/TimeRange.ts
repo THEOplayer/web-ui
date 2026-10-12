@@ -635,7 +635,7 @@ export class TimeRange extends Range {
             if (cue === hoveredCue) {
                 parts += ' hover';
             }
-            // Match the legacy chapter bar: gaps and the final cue keep a right boundary.
+            // Draw a closing boundary when the next chapter does not start where this one ends, and after the last chapter.
             if (nextCue === undefined || nextCue.startTime !== cue.endTime) {
                 parts += ' discontinuous';
             }
@@ -658,7 +658,7 @@ export class TimeRange extends Range {
     }
 
     protected override renderRangeExtras(): HTMLTemplateResult {
-        // Match ad-marker behavior: only linear ads hide chapter markers.
+        // Do not render chapter markers while a linear ad is playing.
         return html`
             ${this.showChapterMarkers && !this._player?.ads?.playing
                 ? html`<div part="chapters" aria-hidden="true">
