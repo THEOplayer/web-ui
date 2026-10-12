@@ -13,6 +13,10 @@ interface ChapterMarkerSegment {
     atEnd: boolean;
 }
 
+function thumbPosition(fraction: number): string {
+    return `calc(var(--theoplayer-range-thumb-width, 10px) / 2 + ${fraction} * (100% - var(--theoplayer-range-thumb-width, 10px)))`;
+}
+
 /**
  * Renders chapter markers for a time range.
  *
@@ -45,13 +49,13 @@ export class TimeRangeChapterMarkers extends LitElement {
     @property({ attribute: false })
     accessor hoverTime: number = NaN;
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
         super.connectedCallback();
         this._chapterTrackObserver = new ChapterTrackObserver(() => this.requestUpdate());
         this._chapterTrackObserver.setPlayer(this.player);
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
         super.disconnectedCallback();
         this._chapterTrackObserver?.destroy();
         this._chapterTrackObserver = undefined;
@@ -77,10 +81,8 @@ export class TimeRangeChapterMarkers extends LitElement {
                 const startTime = Math.max(min, cue.startTime);
                 const endTime = Math.min(max, cue.endTime);
                 // Boundaries use the same inset as the slider thumb; the outer edges stay flush with the track.
-                const position = (fraction: number): string =>
-                    `calc(var(--theoplayer-range-thumb-width, 10px) / 2 + ${fraction} * (100% - var(--theoplayer-range-thumb-width, 10px)))`;
-                const left = atStart ? '0' : position((startTime - min) / span);
-                const right = atEnd ? '0' : `calc(100% - ${position((endTime - min) / span)})`;
+                const left = atStart ? '0' : thumbPosition((startTime - min) / span);
+                const right = atEnd ? '0' : `calc(100% - ${thumbPosition((endTime - min) / span)})`;
                 const nextCue: TextTrackCue | undefined = cues[index + 1];
                 let parts = 'chapter';
                 if (cue === activeCue) {
