@@ -1,5 +1,18 @@
 # @theoplayer/web-ui
 
+## 2.7.0
+
+### ✨ Features
+
+- Added chapter support.
+    - The seek bar shows chapter markers when enabled with `<theoplayer-time-range show-chapter-markers>`.
+    - `<theoplayer-chapter-display>` shows the current chapter title.
+    - `<theoplayer-default-ui>` has both enabled by default. ([#208](https://github.com/THEOplayer/web-ui/pull/208))
+
+### 🐛 Issues
+
+- Fixed errors being thrown when removing `<theoplayer-ui>` or `<theoplayer-default-ui>` from the page. ([#208](https://github.com/THEOplayer/web-ui/pull/208))
+
 ## 2.6.1
 
 ### 🐛 Issues
