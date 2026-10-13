@@ -660,10 +660,12 @@ export class UIContainer extends LitElement {
         this.removeEventListener('mouseleave', this._onMouseLeave);
 
         if (this._player) {
-            this.removePlayerListeners_(this._player);
-            this._player.destroy();
+            const player = this._player;
+            this.removePlayerListeners_(player);
             this._player = undefined;
+            // Detach all components from the player before destroying it, so they don't access a destroyed player.
             this.propagatePlayerToAllReceivers_();
+            player.destroy();
         }
 
         this._stateReceivers.length = 0;

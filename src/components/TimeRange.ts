@@ -19,6 +19,7 @@ import type { ColorStops } from '../util/ColorStops';
 import { KeyCode } from '../util/KeyCode';
 import { getLocale } from '../i18n';
 import { getChaptersTrack, findChapterAt } from '../util/ChapterUtils';
+import type { TimeRangeChapterMarkers } from './TimeRangeChapterMarkers';
 
 // Load components used in template
 import './PreviewThumbnail';
@@ -58,6 +59,7 @@ export class TimeRange extends Range {
     static override styles = [...Range.styles, timeRangeCss];
 
     private readonly _previewBoxEl: Ref<HTMLElement> = createRef<HTMLElement>();
+    private readonly _chapterMarkersRef: Ref<TimeRangeChapterMarkers> = createRef<TimeRangeChapterMarkers>();
 
     private _player: ChromelessPlayer | undefined;
     private _streamType: StreamType = 'vod';
@@ -139,6 +141,11 @@ export class TimeRange extends Range {
         }
         this._ads?.removeEventListener(AD_EVENTS, this._onAdChange);
         this._player = player;
+        // Pass the player to the chapter markers immediately rather than on the next render,
+        // so they stop observing it before it is destroyed.
+        if (this._chapterMarkersRef.value) {
+            this._chapterMarkersRef.value.player = player;
+        }
         this._ads = player?.ads;
         this._updateFromPlayer();
         this._toggleAutoAdvance();
@@ -489,6 +496,7 @@ export class TimeRange extends Range {
         return html`
             ${this.showChapterMarkers && !this._player?.ads?.playing
                 ? html`<theoplayer-time-range-chapter-markers
+                      ${ref(this._chapterMarkersRef)}
                       part="chapters"
                       exportparts="chapter, active, hover, discontinuous"
                       aria-hidden="true"
