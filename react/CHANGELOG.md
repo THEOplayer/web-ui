@@ -1,5 +1,15 @@
 # @theoplayer/react-ui
 
+## 2.7.0
+
+### ✨ Features
+
+- Added `ChapterDisplay` component. ([#208](https://github.com/THEOplayer/web-ui/pull/208))
+
+### 📦 Dependency Updates
+
+- See changes to [Open Video UI for Web v2.7.0](https://github.com/THEOplayer/web-ui/blob/%40theoplayer%2Fweb-ui%402.7.0/CHANGELOG.md)
+
 ## 2.6.1
 
 ### 📦 Dependency Updates
