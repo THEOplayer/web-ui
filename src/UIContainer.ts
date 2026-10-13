@@ -26,6 +26,7 @@ import { Attribute } from './util/Attribute';
 import { isIOS, isMobile, isTv } from './util/Environment';
 import { Rectangle } from './util/GeometryUtils';
 import { PREVIEW_TIME_CHANGE_EVENT, type PreviewTimeChangeEvent } from './events/PreviewTimeChangeEvent';
+import { PREVIEW_ACTIVE_CHANGE_EVENT, type PreviewActiveChangeEvent } from './events/PreviewActiveChangeEvent';
 import type { StreamType } from './util/StreamType';
 import type { StreamTypeChangeEvent } from './events/StreamTypeChangeEvent';
 import { STREAM_TYPE_CHANGE_EVENT } from './events/StreamTypeChangeEvent';
@@ -161,6 +162,7 @@ export class UIContainer extends LitElement {
     private _dvrThreshold: number = DEFAULT_DVR_THRESHOLD;
     private _hasFirstPlay: boolean = false;
     private _previewTime: number = NaN;
+    private _previewActive: boolean = false;
     private _activeVideoTrack: MediaTrack | undefined = undefined;
     // Track user margins separately so temporary UI margins can be restored.
     private _userTextTrackMargins: TextTrackMargins = { marginTop: undefined, marginBottom: undefined };
@@ -616,6 +618,7 @@ export class UIContainer extends LitElement {
         root.addEventListener(ENTER_FULLSCREEN_EVENT, this._onEnterFullscreen);
         root.addEventListener(EXIT_FULLSCREEN_EVENT, this._onExitFullscreen);
         root.addEventListener(PREVIEW_TIME_CHANGE_EVENT, this._onPreviewTimeChange);
+        root.addEventListener(PREVIEW_ACTIVE_CHANGE_EVENT, this._onPreviewActiveChange);
         return root;
     }
 
@@ -657,10 +660,12 @@ export class UIContainer extends LitElement {
         this.removeEventListener('mouseleave', this._onMouseLeave);
 
         if (this._player) {
-            this.removePlayerListeners_(this._player);
-            this._player.destroy();
+            const player = this._player;
+            this.removePlayerListeners_(player);
             this._player = undefined;
+            // Detach all components from the player before destroying it, so they don't access a destroyed player.
             this.propagatePlayerToAllReceivers_();
+            player.destroy();
         }
 
         this._stateReceivers.length = 0;
@@ -743,6 +748,9 @@ export class UIContainer extends LitElement {
         }
         if (receiverProps.indexOf('previewTime') >= 0) {
             receiver.previewTime = this._previewTime;
+        }
+        if (receiverProps.indexOf('previewActive') >= 0) {
+            receiver.previewActive = this._previewActive;
         }
     }
 
@@ -1327,6 +1335,18 @@ export class UIContainer extends LitElement {
         for (const receiver of this._stateReceivers) {
             if (receiver[StateReceiverProps].indexOf('previewTime') >= 0) {
                 receiver.previewTime = this._previewTime;
+            }
+        }
+    };
+
+    private readonly _onPreviewActiveChange = (rawEvent: Event): void => {
+        const event = rawEvent as PreviewActiveChangeEvent;
+        this._previewActive = event.detail.previewActive;
+
+        // previewTime remains at its last pointer position after leave, so receivers need activity separately.
+        for (const receiver of this._stateReceivers) {
+            if (receiver[StateReceiverProps].indexOf('previewActive') >= 0) {
+                receiver.previewActive = this._previewActive;
             }
         }
     };

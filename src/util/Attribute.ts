@@ -55,6 +55,7 @@ export enum Attribute {
     SHOW_OFF = 'show-off',
     PLAYING_AD = 'playing-ad',
     SHOW_AD_MARKERS = 'show-ad-markers',
+    SHOW_CHAPTER_MARKERS = 'show-chapter-markers',
     CLICKTHROUGH = 'clickthrough',
     PROPERTY = 'property',
     VALUE = 'value',

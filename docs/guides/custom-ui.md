@@ -106,6 +106,9 @@ theoplayer-ui:not([mobile]) [mobile-only] {
 </theoplayer-ui>
 ```
 
+To show chapter markers on a time range, add the `show-chapter-markers` attribute. Add a
+`<theoplayer-chapter-display>` next to the seek bar to display the current chapter title.
+
 > **Why do I need to add the styles for `[mobile-hidden]` and `[mobile-only]` to my own CSS?**
 >
 > Due to limitations of the `::slotted()` CSS selector, `<theoplayer-ui>`'s own CSS rules can only affect _directly_ slotted elements. Descendant elements of a slotted element, such as a `<theoplayer-play-button mobile-hidden>` inside of a slotted `<theoplayer-control-bar>` cannot be targeted by such selectors.

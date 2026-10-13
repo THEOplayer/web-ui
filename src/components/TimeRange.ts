@@ -10,16 +10,21 @@ import { formatAsTimePhrase } from '../util/TimeUtils';
 import { createCustomEvent } from '../util/EventUtils';
 import type { PreviewTimeChangeEvent } from '../events/PreviewTimeChangeEvent';
 import { PREVIEW_TIME_CHANGE_EVENT } from '../events/PreviewTimeChangeEvent';
+import type { PreviewActiveChangeEvent } from '../events/PreviewActiveChangeEvent';
+import { PREVIEW_ACTIVE_CHANGE_EVENT } from '../events/PreviewActiveChangeEvent';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
 import { isLinearAd } from '../util/AdUtils';
 import type { ColorStops } from '../util/ColorStops';
 import { KeyCode } from '../util/KeyCode';
 import { getLocale } from '../i18n';
+import { getChaptersTrack, findChapterAt } from '../util/ChapterUtils';
+import type { TimeRangeChapterMarkers } from './TimeRangeChapterMarkers';
 
 // Load components used in template
 import './PreviewThumbnail';
 import './PreviewTimeDisplay';
+import './TimeRangeChapterMarkers';
 
 const UPDATE_EVENTS = ['timeupdate', 'durationchange', 'ratechange', 'seeking', 'seeked'] as const;
 const AUTO_ADVANCE_EVENTS = ['play', 'pause', 'ended', 'durationchange', 'readystatechange', 'error'] as const;
@@ -40,6 +45,13 @@ const AD_MARKER_WIDTH = 1;
  *
  * @cssproperty `--theoplayer-preview-text-shadow` - The text shadow applied to the preview box shown while hovering the seek bar.
  *   Defaults to `0 0 4px rgba(0, 0, 0, 0.75)`.
+ * @cssproperty `--theoplayer-time-range-chapter-marker-color` - The color of chapter marker boundaries.
+ *   Defaults to `rgba(0, 0, 0, 0.75)`.
+ * @cssproperty `--theoplayer-time-range-chapter-marker-width` - The width of chapter marker boundaries. Defaults to `1px`.
+ * @cssproperty `--theoplayer-time-range-chapter-highlight-color` - The color of the hovered chapter highlight. Defaults to `#fff`.
+ *
+ * The shadow DOM exposes a `chapters` part for the chapter marker overlay and a `chapter` part for each cue segment.
+ * Chapter segments also expose the `active`, `hover`, and `discontinuous` part tokens.
  */
 @customElement('theoplayer-time-range')
 @stateReceiver(['player', 'streamType', 'deviceType', 'lang'])
@@ -47,12 +59,22 @@ export class TimeRange extends Range {
     static override styles = [...Range.styles, timeRangeCss];
 
     private readonly _previewBoxEl: Ref<HTMLElement> = createRef<HTMLElement>();
+    private readonly _chapterMarkersRef: Ref<TimeRangeChapterMarkers> = createRef<TimeRangeChapterMarkers>();
 
     private _player: ChromelessPlayer | undefined;
     private _streamType: StreamType = 'vod';
     private _showAdMarkers: boolean = false;
+    private _showChapterMarkers: boolean = false;
     private _ads: Ads | undefined;
     private _pausedWhileScrubbing: boolean = false;
+    private _isPointerOver: boolean = false;
+    private _activePointerId: number | undefined;
+
+    @state()
+    private accessor _previewTime: number = NaN;
+
+    @state()
+    private accessor _previewActive: boolean = false;
 
     private _autoAdvanceId: number = 0;
     private _lastUpdateTime: number = 0;
@@ -65,6 +87,11 @@ export class TimeRange extends Range {
 
     override connectedCallback(): void {
         super.connectedCallback();
+
+        this.addEventListener('pointerenter', this._onPointerEnter);
+        this.addEventListener('pointerleave', this._onPointerLeave);
+        this.addEventListener('pointerdown', this._onTimeRangePointerDown);
+        this._attachRangeListeners_();
 
         if (!this.hasAttribute('min')) {
             this.min = 0;
@@ -80,15 +107,21 @@ export class TimeRange extends Range {
     }
 
     protected override firstUpdated(_changedProperties: PropertyValues) {
-        this._rangeRef.value?.addEventListener('mousedown', this._pauseOnScrubStart);
-        this._rangeRef.value?.addEventListener('pointerdown', this._pauseOnScrubStart);
+        this._attachRangeListeners_();
     }
 
     override disconnectedCallback(): void {
         super.disconnectedCallback();
 
-        this._rangeRef.value?.removeEventListener('mousedown', this._pauseOnScrubStart);
-        this._rangeRef.value?.removeEventListener('pointerdown', this._pauseOnScrubStart);
+        this.removeEventListener('pointerenter', this._onPointerEnter);
+        this.removeEventListener('pointerleave', this._onPointerLeave);
+        this.removeEventListener('pointerdown', this._onTimeRangePointerDown);
+        this._detachRangeListeners_();
+        document.removeEventListener('pointerup', this._onPointerEnd);
+        document.removeEventListener('pointercancel', this._onPointerEnd);
+        this._activePointerId = undefined;
+        this._isPointerOver = false;
+        this._setPreviewActive_(false);
 
         this._toggleAutoAdvance();
     }
@@ -108,6 +141,11 @@ export class TimeRange extends Range {
         }
         this._ads?.removeEventListener(AD_EVENTS, this._onAdChange);
         this._player = player;
+        // Pass the player to the chapter markers immediately rather than on the next render,
+        // so they stop observing it before it is destroyed.
+        if (this._chapterMarkersRef.value) {
+            this._chapterMarkersRef.value.player = player;
+        }
         this._ads = player?.ads;
         this._updateFromPlayer();
         this._toggleAutoAdvance();
@@ -144,6 +182,19 @@ export class TimeRange extends Range {
     @property({ reflect: true, type: Boolean, attribute: Attribute.SHOW_AD_MARKERS })
     set showAdMarkers(showAdMarkers: boolean) {
         this._showAdMarkers = showAdMarkers;
+        this._updateRange();
+    }
+
+    /**
+     * Whether to show chapter markers on the seek bar.
+     */
+    get showChapterMarkers(): boolean {
+        return this._showChapterMarkers;
+    }
+
+    @property({ reflect: true, type: Boolean, attribute: Attribute.SHOW_CHAPTER_MARKERS })
+    set showChapterMarkers(showChapterMarkers: boolean) {
+        this._showChapterMarkers = showChapterMarkers;
         this._updateRange();
     }
 
@@ -192,10 +243,17 @@ export class TimeRange extends Range {
         const locale = getLocale(this.lang);
         const currentTimePhrase = formatAsTimePhrase(locale, this.value);
         const totalTimePhrase = formatAsTimePhrase(locale, this.max);
+        let valueText: string;
         if (currentTimePhrase && totalTimePhrase) {
-            return locale.timeOfTotalAria(currentTimePhrase, totalTimePhrase);
+            valueText = locale.timeOfTotalAria(currentTimePhrase, totalTimePhrase);
+        } else {
+            valueText = locale.unknownTimeAria;
         }
-        return locale.unknownTimeAria;
+        const track = this._player && getChaptersTrack(this._player);
+        const chapterTitle = track && findChapterAt(track, this.value)?.content;
+        return typeof chapterTitle === 'string' && chapterTitle.length > 0
+            ? locale.timeRangeChapterAriaValueText(valueText, chapterTitle)
+            : valueText;
     }
 
     protected override handleInput(): void {
@@ -310,16 +368,17 @@ export class TimeRange extends Range {
             this._previewRailTransform = `translateX(${(previewPosFraction * 100 * 100).toFixed(6)}%)`;
         }
 
+        const { min, max } = this;
+        this._previewTime = min + mousePercent * (max - min);
+
         // Propagate preview time to parent
         if (this._player === undefined) {
             return;
         }
-        const { min, max } = this;
-        const previewTime = min + mousePercent * (max - min);
         const previewTimeChangeEvent: PreviewTimeChangeEvent = createCustomEvent(PREVIEW_TIME_CHANGE_EVENT, {
             bubbles: true,
             composed: true,
-            detail: { previewTime }
+            detail: { previewTime: this._previewTime }
         });
         this.dispatchEvent(previewTimeChangeEvent);
     }
@@ -363,7 +422,61 @@ export class TimeRange extends Range {
 
     private readonly _onAdChange = () => {
         this._updateRange();
+        this.requestUpdate();
     };
+
+    private readonly _onPointerEnter = (event: PointerEvent): void => {
+        // Touch has no hover state; a pressed pointer stays active until its document-level end event.
+        this._isPointerOver = event.pointerType !== 'touch';
+        this._setPreviewActive_(this._isPointerOver || this._activePointerId !== undefined);
+    };
+
+    private readonly _onPointerLeave = (event: PointerEvent): void => {
+        if (event.pointerType !== 'touch') {
+            this._isPointerOver = false;
+            this._setPreviewActive_(this._activePointerId !== undefined);
+        }
+    };
+
+    private readonly _onTimeRangePointerDown = (event: PointerEvent): void => {
+        this._activePointerId = event.pointerId;
+        document.addEventListener('pointerup', this._onPointerEnd);
+        document.addEventListener('pointercancel', this._onPointerEnd);
+        this._setPreviewActive_(true);
+    };
+
+    private readonly _onPointerEnd = (event: PointerEvent): void => {
+        if (this._activePointerId !== undefined && event.pointerId !== this._activePointerId) {
+            return;
+        }
+        this._activePointerId = undefined;
+        document.removeEventListener('pointerup', this._onPointerEnd);
+        document.removeEventListener('pointercancel', this._onPointerEnd);
+        this._setPreviewActive_(this._isPointerOver);
+    };
+
+    private _setPreviewActive_(previewActive: boolean): void {
+        if (this._previewActive === previewActive) {
+            return;
+        }
+        this._previewActive = previewActive;
+        const event: PreviewActiveChangeEvent = createCustomEvent(PREVIEW_ACTIVE_CHANGE_EVENT, {
+            bubbles: true,
+            composed: true,
+            detail: { previewActive }
+        });
+        this.dispatchEvent(event);
+    }
+
+    private _attachRangeListeners_(): void {
+        this._rangeRef.value?.addEventListener('mousedown', this._pauseOnScrubStart);
+        this._rangeRef.value?.addEventListener('pointerdown', this._pauseOnScrubStart);
+    }
+
+    private _detachRangeListeners_(): void {
+        this._rangeRef.value?.removeEventListener('mousedown', this._pauseOnScrubStart);
+        this._rangeRef.value?.removeEventListener('pointerdown', this._pauseOnScrubStart);
+    }
 
     protected override handleKeyDown_(e: KeyboardEvent) {
         super.handleKeyDown_(e);
@@ -379,7 +492,20 @@ export class TimeRange extends Range {
     }
 
     protected override renderRangeExtras(): HTMLTemplateResult {
+        // Do not render chapter markers while a linear ad is playing.
         return html`
+            ${this.showChapterMarkers && !this._player?.ads?.playing
+                ? html`<theoplayer-time-range-chapter-markers
+                      ${ref(this._chapterMarkersRef)}
+                      part="chapters"
+                      exportparts="chapter, active, hover, discontinuous"
+                      aria-hidden="true"
+                      .player=${this._player}
+                      .min=${this.min}
+                      .max=${this.max}
+                      .hoverTime=${this._previewActive && Number.isFinite(this._previewTime) ? this._previewTime : NaN}
+                  ></theoplayer-time-range-chapter-markers>`
+                : ''}
             <div class="theoplayer-time-range-preview-rail" style=${styleMap({ transform: this._previewRailTransform })}>
                 <div part="box preview-box" ${ref(this._previewBoxEl)}>
                     <slot name="preview">
