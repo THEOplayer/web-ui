@@ -3,6 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import textDisplayCss from './TextDisplay.css';
 import { stateReceiver } from './StateReceiverMixin';
 import { formatTime } from '../util/TimeUtils';
+import { getClipEndTime } from '../util/ClipUtils';
 import { Attribute } from '../util/Attribute';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import type { StreamType } from '../util/StreamType';
@@ -56,25 +57,32 @@ export class PreviewTimeDisplay extends LitElement {
         }
         if (this._player !== undefined) {
             this._player.removeEventListener(PLAYER_EVENTS, this._updateFromPlayer);
+            this._player.clip.removeEventListener('change', this._updateFromPlayer);
         }
         this._player = player;
         this._updateFromPlayer();
         if (this._player !== undefined) {
             this._player.addEventListener(PLAYER_EVENTS, this._updateFromPlayer);
+            this._player.clip.addEventListener('change', this._updateFromPlayer);
         }
     }
+
+    @state()
+    private accessor _startTime: number = 0;
 
     @state()
     private accessor _endTime: number = 0;
 
     private readonly _updateFromPlayer = (): void => {
-        const duration = this._player ? this._player.duration : NaN;
+        const start = this._player?.clip.startTime ?? 0;
+        const duration = this._player ? getClipEndTime(this._player) : NaN;
         const seekable = this._player?.seekable;
-        this._endTime = isFinite(duration) ? duration : seekable && seekable.length > 0 ? seekable.end(0) : NaN;
+        this._startTime = start;
+        this._endTime = (isFinite(duration) ? duration : seekable && seekable.length > 0 ? seekable.end(0) : NaN) - start;
     };
 
     protected override render(): HTMLTemplateResult {
-        let previewTime = this.previewTime;
+        let previewTime = this.previewTime - this._startTime;
         const endTime = this._endTime;
         const remaining = this.remaining || (this.remainingWhenLive && this.streamType !== 'vod');
         if (remaining) {
