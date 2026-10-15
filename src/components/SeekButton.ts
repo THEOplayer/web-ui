@@ -9,6 +9,7 @@ import { Attribute } from '../util/Attribute';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { getLocale } from '../i18n';
 import { toDuration } from '../util/TimeUtils';
+import { getClipEndTime } from '../util/ClipUtils';
 
 const DEFAULT_SEEK_OFFSET = 10;
 
@@ -50,7 +51,10 @@ export class SeekButton extends Button {
         if (isNaN(duration)) {
             return;
         }
-        this._player.currentTime = Math.max(0, Math.min(duration, this._player.currentTime + this.seekOffset));
+        this._player.currentTime = Math.max(
+            this._player.clip.startTime,
+            Math.min(getClipEndTime(this._player), this._player.currentTime + this.seekOffset)
+        );
     }
 
     override willUpdate(changedProperties: PropertyValues) {

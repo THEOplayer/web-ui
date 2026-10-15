@@ -1,3 +1,4 @@
+export * from './useClip';
 export * from './useCurrentTime';
 export * from './useDuration';
 export * from './useMuted';

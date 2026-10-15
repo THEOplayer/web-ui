@@ -4,6 +4,7 @@ import textDisplayCss from './TextDisplay.css';
 import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { formatAsTimePhrase, formatTime } from '../util/TimeUtils';
+import { getClipEndTime } from '../util/ClipUtils';
 import { Attribute } from '../util/Attribute';
 import type { StreamType } from '../util/StreamType';
 import { getLocale } from '../i18n';
@@ -43,11 +44,13 @@ export class TimeDisplay extends LitElement {
         }
         if (this._player !== undefined) {
             this._player.removeEventListener(PLAYER_EVENTS, this._updateFromPlayer);
+            this._player.clip.removeEventListener('change', this._updateFromPlayer);
         }
         this._player = player;
         this._updateFromPlayer();
         if (this._player !== undefined) {
             this._player.addEventListener(PLAYER_EVENTS, this._updateFromPlayer);
+            this._player.clip.addEventListener('change', this._updateFromPlayer);
         }
     }
 
@@ -88,10 +91,12 @@ export class TimeDisplay extends LitElement {
     private accessor _endTime: number = 0;
 
     private readonly _updateFromPlayer = () => {
-        const currentTime = this._player ? this._player.currentTime : 0;
+        const start = this._player?.clip.startTime ?? 0;
+        const currentTime = this._player ? Math.max(0, this._player.currentTime - start) : 0;
         const duration = this._player ? this._player.duration : NaN;
+        const clipEnd = this._player ? getClipEndTime(this._player) : NaN;
         const seekable = this._player?.seekable;
-        const endTime = isFinite(duration) ? duration : seekable && seekable.length > 0 ? seekable.end(0) : NaN;
+        const endTime = (isFinite(clipEnd) ? clipEnd : seekable && seekable.length > 0 ? seekable.end(0) : NaN) - start;
         this._currentTime = currentTime;
         this._duration = duration;
         this._endTime = endTime;
