@@ -138,6 +138,7 @@ export class TimeRange extends Range {
         if (this._player !== undefined) {
             this._player.removeEventListener(UPDATE_EVENTS, this._updateFromPlayer);
             this._player.removeEventListener(AUTO_ADVANCE_EVENTS, this._toggleAutoAdvance);
+            this._player.clip.removeEventListener('change', this._updateFromPlayer);
         }
         this._ads?.removeEventListener(AD_EVENTS, this._onAdChange);
         this._player = player;
@@ -152,6 +153,7 @@ export class TimeRange extends Range {
         if (this._player !== undefined) {
             this._player.addEventListener(UPDATE_EVENTS, this._updateFromPlayer);
             this._player.addEventListener(AUTO_ADVANCE_EVENTS, this._toggleAutoAdvance);
+            this._player.clip.addEventListener('change', this._updateFromPlayer);
         }
         this._ads?.addEventListener(AD_EVENTS, this._onAdChange);
     }
@@ -241,8 +243,9 @@ export class TimeRange extends Range {
 
     protected override getAriaValueText(): string {
         const locale = getLocale(this.lang);
-        const currentTimePhrase = formatAsTimePhrase(locale, this.value);
-        const totalTimePhrase = formatAsTimePhrase(locale, this.max);
+        const clipStart = this._player?.clip.startTime ?? 0;
+        const currentTimePhrase = formatAsTimePhrase(locale, Math.max(0, this.value - clipStart));
+        const totalTimePhrase = formatAsTimePhrase(locale, this.max - clipStart);
         let valueText: string;
         if (currentTimePhrase && totalTimePhrase) {
             valueText = locale.timeOfTotalAria(currentTimePhrase, totalTimePhrase);
