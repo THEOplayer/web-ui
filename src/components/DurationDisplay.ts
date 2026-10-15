@@ -4,6 +4,7 @@ import textDisplayCss from './TextDisplay.css';
 import { stateReceiver } from './StateReceiverMixin';
 import type { ChromelessPlayer } from 'theoplayer/chromeless';
 import { formatTime } from '../util/TimeUtils';
+import { getClipEndTime } from '../util/ClipUtils';
 import { Attribute } from '../util/Attribute';
 
 const PLAYER_EVENTS = ['durationchange'] as const;
@@ -38,11 +39,13 @@ export class DurationDisplay extends LitElement {
         }
         if (this._player !== undefined) {
             this._player.removeEventListener(PLAYER_EVENTS, this._updateFromPlayer);
+            this._player.clip.removeEventListener('change', this._updateFromPlayer);
         }
         this._player = player;
         this._updateFromPlayer();
         if (this._player !== undefined) {
             this._player.addEventListener(PLAYER_EVENTS, this._updateFromPlayer);
+            this._player.clip.addEventListener('change', this._updateFromPlayer);
         }
     }
 
@@ -53,7 +56,7 @@ export class DurationDisplay extends LitElement {
     accessor duration: number = NaN;
 
     private readonly _updateFromPlayer = () => {
-        this.duration = this._player ? this._player.duration : NaN;
+        this.duration = this._player ? getClipEndTime(this._player) - this._player.clip.startTime : NaN;
     };
 
     protected override render() {
