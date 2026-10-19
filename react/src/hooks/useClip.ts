@@ -1,16 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
-import type { ChromelessPlayer } from 'theoplayer/chromeless';
+import { useCallback, useContext, useMemo, useSyncExternalStore } from 'react';
 import { PlayerContext } from '../context';
 
 export interface ClipTimes {
     startTime: number;
     endTime: number;
 }
-
-const getClipTimes = (player: ChromelessPlayer | undefined): ClipTimes => ({
-    startTime: player?.clip.startTime ?? 0,
-    endTime: player?.clip.endTime ?? Infinity
-});
 
 /**
  * Returns the start and end time of {@link theoplayer!ChromelessPlayer.clip | the player's clip}, automatically updating whenever it changes.
@@ -25,15 +19,22 @@ const getClipTimes = (player: ChromelessPlayer | undefined): ClipTimes => ({
  */
 export function useClip(): ClipTimes {
     const player = useContext(PlayerContext);
-    const [clip, setClip] = useState<ClipTimes>(() => getClipTimes(player));
-    useEffect(() => {
-        const update = () => {
-            const { startTime, endTime } = getClipTimes(player);
-            setClip((prev) => (prev.startTime === startTime && prev.endTime === endTime ? prev : { startTime, endTime }));
-        };
-        update();
-        player?.clip.addEventListener('change', update);
-        return () => player?.clip.removeEventListener('change', update);
-    }, [player]);
-    return clip;
+    const subscribe = useCallback(
+        (callback: () => void) => {
+            player?.clip.addEventListener('change', callback);
+            return () => player?.clip.removeEventListener('change', callback);
+        },
+        [player]
+    );
+    const startTime = useSyncExternalStore(
+        subscribe,
+        () => player?.clip.startTime ?? 0,
+        () => 0
+    );
+    const endTime = useSyncExternalStore(
+        subscribe,
+        () => player?.clip.endTime ?? Infinity,
+        () => Infinity
+    );
+    return useMemo(() => ({ startTime, endTime }), [startTime, endTime]);
 }
