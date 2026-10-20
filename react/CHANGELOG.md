@@ -1,5 +1,15 @@
 # @theoplayer/react-ui
 
+## 2.8.0
+
+### ✨ Features
+
+- Added `useClip` hook to get the start and end time of the player's [Clip API](https://optiview.dolby.com/docs/theoplayer/v11/api-reference/web/interfaces/Clip.html). ([#211](https://github.com/THEOplayer/web-ui/pull/211))
+
+### 📦 Dependency Updates
+
+- See changes to [Open Video UI for Web v2.8.0](https://github.com/THEOplayer/web-ui/blob/%40theoplayer%2Fweb-ui%402.8.0/CHANGELOG.md)
+
 ## 2.7.0
 
 ### ✨ Features
