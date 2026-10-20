@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 2.8.0
+
+### ✨ Features
+
+- Added support for the player's [Clip API](https://optiview.dolby.com/docs/theoplayer/v11/api-reference/web/interfaces/Clip.html). ([#211](https://github.com/THEOplayer/web-ui/pull/211))
+
 ## 2.7.0
 
 ### ✨ Features
