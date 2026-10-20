@@ -6,6 +6,8 @@ export interface ClipTimes {
     endTime: number;
 }
 
+const DEFAULT_CLIP: ClipTimes = { startTime: 0, endTime: Infinity };
+
 /**
  * Returns the start and end time of {@link theoplayer!ChromelessPlayer.clip | the player's clip}, automatically updating whenever it changes.
  *
@@ -26,15 +28,16 @@ export function useClip(): ClipTimes {
         },
         [player]
     );
-    const startTime = useSyncExternalStore(
-        subscribe,
-        () => player?.clip.startTime ?? 0,
-        () => 0
-    );
-    const endTime = useSyncExternalStore(
-        subscribe,
-        () => player?.clip.endTime ?? Infinity,
-        () => Infinity
-    );
-    return useMemo(() => ({ startTime, endTime }), [startTime, endTime]);
+    const getSnapshot = useMemo(() => {
+        let snapshot = DEFAULT_CLIP;
+        return (): ClipTimes => {
+            const startTime = player?.clip.startTime ?? 0;
+            const endTime = player?.clip.endTime ?? Infinity;
+            if (!Object.is(snapshot.startTime, startTime) || !Object.is(snapshot.endTime, endTime)) {
+                snapshot = { startTime, endTime };
+            }
+            return snapshot;
+        };
+    }, [player]);
+    return useSyncExternalStore(subscribe, getSnapshot, () => DEFAULT_CLIP);
 }
