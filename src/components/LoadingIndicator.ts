@@ -6,7 +6,7 @@ import { Attribute } from '../util/Attribute';
 import { customElement, property } from 'lit/decorators.js';
 import { type HTMLTemplateResult, LitElement } from 'lit';
 
-const PLAYER_EVENTS = ['readystatechange', 'play', 'pause', 'playing', 'seeking', 'seeked'] as const;
+const PLAYER_EVENTS = ['readystatechange', 'play', 'pause', 'playing', 'seeking', 'seeked', 'emptied', 'sourcechange'] as const;
 
 /**
  * An indicator that shows whether the player is currently waiting for more data to resume playback.
