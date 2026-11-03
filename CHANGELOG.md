@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 2.8.1
+
+### 🐛 Issues
+
+- Fixed an issue where `<theoplayer-loading-indicator>` kept showing after a new source was set while the player was paused. ([#215](https://github.com/THEOplayer/web-ui/pull/215))
+
 ## 2.8.0
 
 ### ✨ Features
