@@ -1,5 +1,11 @@
 # @theoplayer/web-ui
 
+## 2.8.2
+
+### 🐛 Issues
+
+- Fixed an issue where the error layer could remain visible after the player had already recovered from the error when a new source started playing. ([#217](https://github.com/THEOplayer/web-ui/pull/217))
+
 ## 2.8.1
 
 ### 🐛 Issues
