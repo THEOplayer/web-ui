@@ -1354,7 +1354,7 @@ export class UIContainer extends LitElement {
     private addPlayerListeners_(player: ChromelessPlayer): void {
         player.addEventListener('destroy', this._onDestroy);
         player.addEventListener('resize', this._updateAspectRatio);
-        player.addEventListener(['error', 'sourcechange', 'emptied'], this._updateError);
+        player.addEventListener(['error', 'sourcechange', 'emptied', 'loadedmetadata'], this._updateError);
         player.addEventListener('volumechange', this._updateMuted);
         player.addEventListener('play', this._onPlay);
         player.addEventListener('pause', this._onPause);
@@ -1374,7 +1374,7 @@ export class UIContainer extends LitElement {
     private removePlayerListeners_(player: ChromelessPlayer): void {
         player.removeEventListener('destroy', this._onDestroy);
         player.removeEventListener('resize', this._updateAspectRatio);
-        player.removeEventListener(['error', 'sourcechange', 'emptied'], this._updateError);
+        player.removeEventListener(['error', 'sourcechange', 'emptied', 'loadedmetadata'], this._updateError);
         player.removeEventListener('volumechange', this._updateMuted);
         player.removeEventListener('play', this._onPlay);
         player.removeEventListener('pause', this._onPause);
